@@ -1,0 +1,25 @@
+Package: mapme.biodiversity
+Title: Efficient monitoring of global biodiversity areas
+Version: 0.0.0.9000
+Authors@R: 
+    c(person("Darius", "Görgen", , "darius2402@web.de", role = c("aut", "cre")),
+    person("Om Prakash", "Bahandri", , "", role = "aut"))
+Description: Biodiversity areas, especially primary forest, serve a multitude
+  of functions for local economy, regional functionality of the ecosystems as well 
+  as the global health of our planet. Recently, adverse changes in human landuse
+  practices and climatic responses to increased greenhouse gas emissions, put 
+  these biodiversity areas under a variety of different threats. mapme.biodiversity
+  helps to analyse a number of biodiversity indicators based on freely available
+  geodatasets. It supports computational efficient routines that allow the analysis
+  of potentially global biodiversity portfolios. The primary use case of the 
+  package is to support evidence based reporting of an organization's effort to 
+  protect biodiversity areas under threat and to identify regions were intervention
+  is most duly needed.
+Imports:
+  sf,
+  terra,
+  dplyr
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
