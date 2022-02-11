@@ -18,7 +18,10 @@ Description: Biodiversity areas, especially primary forest, serve a multitude
 Imports:
   sf,
   terra,
-  dplyr
+  dplyr,
+  parallel,
+  magrittr,
+  tidyr
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
