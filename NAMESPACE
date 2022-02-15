@@ -2,7 +2,7 @@
 
 export(.calc_cover)
 export(init_portfolio)
-import(doParallel)
-import(dplyr)
 import(sf)
 import(terra)
+importFrom(magrittr,"%>%")
+importFrom(tibble,tibble)

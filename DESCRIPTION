@@ -3,7 +3,7 @@ Title: Efficient monitoring of global biodiversity areas
 Version: 0.0.0.9000
 Authors@R: 
     c(person("Darius", "Görgen", , "darius2402@web.de", role = c("aut", "cre")),
-    person("Om Prakash", "Bahandri", , "", role = "aut"))
+    person("Om Prakash", "Bahandri", role = "aut"))
 Description: Biodiversity areas, especially primary forest, serve a multitude
   of functions for local economy, regional functionality of the ecosystems as well 
   as the global health of our planet. Recently, adverse changes in human landuse
@@ -17,11 +17,13 @@ Description: Biodiversity areas, especially primary forest, serve a multitude
   is most duly needed.
 Imports:
   sf,
-  terra,
-  dplyr,
+  terra
+Depends: 
+  tibble,
   parallel,
-  magrittr,
-  tidyr
+  dplyr,
+  tidyr,
+  magrittr
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

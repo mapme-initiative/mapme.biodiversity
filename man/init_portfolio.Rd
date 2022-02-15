@@ -2,25 +2,46 @@
 % Please edit documentation in R/portfolio.R
 \name{init_portfolio}
 \alias{init_portfolio}
-\title{Conversion method for sf objects}
+\title{Initialization of a biodiversity portfolio object}
 \usage{
-init_portfolio(x, years, outdir, tmpdir = tempdir())
+init_portfolio(
+  x,
+  years,
+  outdir = getwd(),
+  tmpdir = tempdir(),
+  cores = parallel::detectCores() - 1
+)
 }
 \arguments{
 \item{x}{The sf object to be transformed to a portfolio}
 
-\item{years}{Numeric vector for the analysis years}
+\item{years}{Numeric vector for time frame of the analysis handed over as a
+vector of consecutive years}
 
-\item{outdir}{Character indicating the directory where resources are written}
+\item{outdir}{Character indicating the directory where resources will be written to.
+If the directory does not exist, we will attempt to create it. The output
+director cannot be equal to the temporary directory. Defaults to the current
+working directory.}
 
 \item{tmpdir}{Character vector to a directory used for intermediate files.
-Defaults to the output of tempdir(). Should not be identical with outdir.}
+Defaults to the output of \code{tempdir()}, e.g. the current R session's
+temporal directory. If a custom file path does not exist, we will attempt to
+create it. Cannot be equal to the output directory.}
+
+\item{cores}{An integer value indicating the number of cores on the host machine
+available for indicator calculation. It defaults to \code{parallel::detectCores() - 1}
+cores, i.e. one core less than all available cores.}
 }
 \description{
-Checks to be performed:
-\itemize{
-\item has at least one asset
-\item all assets are either Polygon or MultiPolygon (TODO)
-\item is Lat/Lon, otherwise transform to EPSG:4326
-}
+This function expects an \code{sf} object as its first argument that contains
+only geometry of type \code{POLYGON} or \code{MULTIPOLYGON}. Each row of the
+object is considered a single asset in the portfolio for which biodiversity
+indicators will be calculated further down the processing chain. Some preliminary
+checks are conducted, e.g. that the CRS of the object is EPSG:4326 otherwise
+it will be transformed. Some portfolio wide parameters such as the output
+directory for downloaded data sets, a temporal directory for intermediate
+calculation of the number of cores available for the indicator calculation
+can be set by the user to have more fine-control of the workflow. However,
+these parameters are also set to sensible defaults and thus can be omitted
+during portfolio initialization.
 }
