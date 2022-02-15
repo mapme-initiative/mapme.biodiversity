@@ -60,7 +60,7 @@ get_resources <- function(x, resources, ...){
   # conduct download function, TODO: we can think of an efficient way for parallel downloads here or further upstream
   filename = ifelse(selected_resource[[1]]$type == "raster",
                     file.path(outdir, paste0(resource, ".tif")),
-                    file.path(atts$outdir, paste0(resource, ".gpkg"))
+                    file.path(outdir, paste0(resource, ".gpkg"))
   )
 
   if (file.exists(filename)) {
