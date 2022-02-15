@@ -52,6 +52,8 @@ get_resources <- function(x, resources, ...){
   atts = attributes(x)
   outdir = atts$outdir
   tmpdir = atts$tmpdir
+  rundir = tempfile(tmpdir = tmpdir)
+  dir.create(rundir, showWarnings = FALSE)
   selected_resource = available_resources(resource)
   # match function
   fun = match.fun(selected_resource[[1]]$downloader)
@@ -69,7 +71,7 @@ get_resources <- function(x, resources, ...){
   } else { # if files to not exist use download function to download to tmpdir
 
     downloaded_files = tryCatch({
-      fun(st_bbox(x), relevant_args, tmpdir = tmpdir)
+      fun(st_bbox(x), relevant_args, rundir)
     },
     error = function(e){
       e
@@ -92,6 +94,7 @@ get_resources <- function(x, resources, ...){
       .vec2GPKG(downloaded_files, filename, tmpdir)
     }
   }
+  unlink(rundir, recursive = TRUE, force = TRUE)
 
   # add the new resource to the attributes of the portfolio object
   if(is.na(atts$resources)){
