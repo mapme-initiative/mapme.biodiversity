@@ -52,56 +52,62 @@ get_resources <- function(x, resources, ...){
   atts = attributes(x)
   outdir = atts$outdir
   tmpdir = atts$tmpdir
-  rundir = tempfile(tmpdir = tmpdir)
+  rundir = file.path(tmpdir, resource)
   dir.create(rundir, showWarnings = FALSE)
   selected_resource = available_resources(resource)
   # match function
   fun = match.fun(selected_resource[[1]]$downloader)
   # matching the specified arguments to the required arguments
-  relevant_args = .check_resource_arguments(selected_resource, args)
+  params = .check_resource_arguments(selected_resource, args)
+  params$x = x
+  params$rundir = rundir
+  params$verbose = atts$verbose
   # conduct download function, TODO: we can think of an efficient way for parallel downloads here or further upstream
-  filename = ifelse(selected_resource[[1]]$type == "raster",
-                    file.path(outdir, paste0(resource, ".tif")),
-                    file.path(outdir, paste0(resource, ".gpkg"))
-  )
 
-  if (file.exists(filename)) {
-    message(sprintf("Resource '%s' exists in output directory. Remove if you wish to re-download", filename))
+  resource_dir = file.path(outdir, resource)
+  dir.create(resource_dir, showWarnings = FALSE)
+
+  if (length(list.files(resource_dir)) > 0) {
+    message(sprintf("Output directory for resource '%s' is not empty. Remove if you wish to re-download", resource))
 
   } else { # if files to not exist use download function to download to tmpdir
-
+    message(sprintf("Starting process to download resource '%s'........", resource))
     downloaded_files = tryCatch({
-      fun(st_bbox(x), relevant_args, rundir)
+      do.call(fun, args = params)
+      # fun(st_bbox(x), relevant_args, rundir = rundir)
     },
-    error = function(e){
-      e
+    error = function(cond){
+      print(cond)
+      warning(sprintf("Download for resource %s failed. Returning unmodified portfolio object.", resource))
+      return(NA)
     },
-    warning = function(e){
-      e
+    warning = function(cond){
+      print(cond)
+      warning(sprintf("Download for resource %s failed. Returning unmodified portfolio object.", resource))
+      return(NA)
     })
 
     # we included an error checker so that we can still return a valid object
     # even in cases that one or more downloads fail
-    if(inherits(downloaded_files, c("error", "warning"))){
-      warning(sprintf("Download for resource %s failed. Returning unmodified portfolio object.", resource))
-      return(x)
-    }
+    if(is.na(downloaded_files[1])) return(x)
 
     # we translate rasters to a single COG and vectors to a GPKG
-    if(tools::file_ext(filename) == "tif"){
-      .tiffs2COGs(downloaded_files, filename, tmpdir)
+    if(selected_resource[[1]]$type == "raster"){
+      message("Translating resource to Cloud Optimized GeoTiff.")
+      .tiffs2COGs(downloaded_files, resource_dir)
     } else {
-      .vec2GPKG(downloaded_files, filename, tmpdir)
+      message("Translating resource to GeoPackage.")
+      .vec2GPKG(downloaded_files, resource_dir)
     }
   }
   unlink(rundir, recursive = TRUE, force = TRUE)
 
   # add the new resource to the attributes of the portfolio object
   if(is.na(atts$resources)){
-    atts$resources = filename
+    atts$resources = resource_dir
     names(atts$resources) = resource
   }
-  atts$resources[resource] = filename
+  atts$resources[resource] = resource_dir
   attributes(x) = atts
   x
 }

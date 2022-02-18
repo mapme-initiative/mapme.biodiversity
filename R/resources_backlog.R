@@ -19,15 +19,22 @@ available_resources <- function(resources = NULL){
                        "source" = "Global Forest Watch  (GFW)",
                        "downloader" = ".get_treecover",
                        "arguments" = list(
-                         "vers" = "GFC-2018-v1.6")
+                         "vers_treecover" = "GFC-2018-v1.6")
     ),
     "lossyear" = list("type" = "raster",
                       "source" = "Global Forest Watch  (GFW)",
                       "downloader" = ".get_lossyear",
                       "arguments" = list(
-                        "vers" = "GFC-2018-v1.6"
+                        "vers_lossyear" = "GFC-2018-v1.6"
                       )
-    )
+    ),
+    "greenhouse" = list("type" = "raster",
+                        "source" = "Global Forest Watch (GFW)",
+                        "downloader" = ".get_greenhouse",
+                        "arguments" = list(
+                          "vers_greenhouse" = "v20211022",
+                          "api_key_gfw" = NA
+                        ))
 
   )
 

@@ -55,20 +55,62 @@
 
 
 
-.tiffs2COGs <- function(tifs, filename, tmpdir){
+.tiffs2COGs <- function(tifs, resource_dir){
 
-  if(length(tifs)>1){ # we need to create a mosaic first
-    command = sprintf("gdal_merge.py -o %s %s", file.path(tmpdir,  "mapme-tmp-mosaic.tif"), paste(tifs, collapse = " "))
+  for(tif in tifs){
+    command = sprintf("gdal_translate %s %s -of COG -co COMPRESS=LZW", tif, file.path(resource_dir, basename(tif)))
     system(command)
-    tifs = file.path(tmpdir,  "mapme-tmp-mosaic.tif")
   }
 
-  command = sprintf("gdal_translate %s %s -of COG -co COMPRESS=LZW", tifs, filename)
-  system(command)
+  # if(length(tifs)>1){ # we need to create a mosaic first
+  #   #command = sprintf("gdal_merge.py -o %s %s", file.path(tmpdir,  "mapme-tmp-mosaic.tif"), paste(tifs, collapse = " "))
+  #   #system(command)
+  #   #tifs = file.path(tmpdir,  "mapme-tmp-mosaic.tif")
+  # }
+
+  # command = sprintf("gdal_translate %s %s -of COG -co COMPRESS=LZW", tifs, filename)
+  # system(command)
 
 }
 
 .vec2GPKG <- function(vecs, filename, tmpdir){
   # TODO
   NULL
+}
+
+
+.makeGFWGrid <- function(xmin=-180, xmax=170, dx=10, ymin=-50, ymax=80, dy=10,
+                         proj=NULL) {
+  if (is.null(proj)) proj = st_crs(4326)
+  ncells = c((xmax - xmin) / dx,
+             (ymax - ymin) / dy)
+
+  bbox = st_bbox(c(xmin = xmin, xmax = xmax, ymax = ymax, ymin = ymin))
+  st_as_sf(st_make_grid(bbox, cellsize = 10, n = ncells, crs = "EPSG:4326", what = "polygons"))
+
+}
+
+.getGFWTileId <- function(tile){
+  min_x = st_bbox(tile)[1]
+  max_y = st_bbox(tile)[4]
+
+  # prepare tile names
+  if (min_x < 0) {
+    min_x = paste0(sprintf('%03i', abs(min_x)), 'W')
+  } else {
+    min_x = paste0(sprintf('%03i', min_x), 'E')
+  }
+  if (max_y < 0) {
+    max_y = paste0(sprintf('%02i', abs(max_y)), 'S')
+  } else {
+    max_y = paste0(sprintf('%02i', max_y), 'N')
+  }
+
+  paste0(max_y, "_", min_x)
+
+  # baseurl = paste0(url, vers, "/")
+  # filename = paste0("Hansen_", vers, "_", parameter, "_", max_y, "_", min_x, ".tif")
+  # url = paste0(baseurl, filename)
+  # url
+
 }

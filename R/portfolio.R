@@ -26,12 +26,14 @@
 #' @param cores An integer value indicating the number of cores on the host machine
 #'   available for indicator calculation. It defaults to \code{parallel::detectCores() - 1}
 #'   cores, i.e. one core less than all available cores.
+#' @param verbose Logical, defaults to TRUE, indicating if progress information is printed.
 #' @export
 init_portfolio = function(x,
                           years,
                           outdir = getwd(),
                           tmpdir = tempdir(),
-                          cores = parallel::detectCores() - 1){
+                          cores = parallel::detectCores() - 1,
+                          verbose = TRUE){
   if(outdir == tmpdir) stop("Parameters outdir and tmpdir need to point to different directories.")
   if(!dir.exists(outdir)) dir.create(outdir, recursive = TRUE)
   if(!dir.exists(tmpdir)) dir.create(tmpdir, recursive = TRUE)
@@ -60,5 +62,6 @@ init_portfolio = function(x,
   attr(x, "outdir") = outdir
   attr(x, "tmpdir") = tmpdir
   attr(x, "cores") = cores
+  attr(x, "verbose") = verbose
   x
 }

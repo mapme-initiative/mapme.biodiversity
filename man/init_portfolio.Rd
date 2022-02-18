@@ -9,7 +9,8 @@ init_portfolio(
   years,
   outdir = getwd(),
   tmpdir = tempdir(),
-  cores = parallel::detectCores() - 1
+  cores = parallel::detectCores() - 1,
+  verbose = TRUE
 )
 }
 \arguments{
