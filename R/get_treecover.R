@@ -5,7 +5,7 @@
 
   # TODO: check that version is correct
   # make the GFW grid and construct urls for intersecting tiles
-  bbox = attributes(x)$bbox
+  bbox = st_bbox(x)
   baseurl = sprintf("https://storage.googleapis.com/earthenginepartners-hansen/%s/", vers_treecover)
   grid_GFC = .makeGFWGrid()
   tile_ids = st_intersects(st_as_sfc(bbox), grid_GFC)[[1]]

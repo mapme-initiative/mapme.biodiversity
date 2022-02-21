@@ -55,11 +55,14 @@
 
 
 
-.tiffs2COGs <- function(tifs, resource_dir){
+.tiffs2COGs <- function(tifs, resource_dir, verbose = TRUE){
 
+  if(verbose) pb = progress_bar$new(total = length(tifs))
   for(tif in tifs){
+    if(verbose) pb$tick(0)
     command = sprintf("gdal_translate %s %s -of COG -co COMPRESS=LZW", tif, file.path(resource_dir, basename(tif)))
-    system(command)
+    system(command, intern = TRUE)
+    if(verbose) pb$tick()
   }
 
   # if(length(tifs)>1){ # we need to create a mosaic first
@@ -73,7 +76,7 @@
 
 }
 
-.vec2GPKG <- function(vecs, filename, tmpdir){
+.vec2GPKG <- function(vecs, resource_dir, verbose = TRUE){
   # TODO
   NULL
 }

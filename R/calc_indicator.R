@@ -3,7 +3,7 @@ calc_indicator <- function(x, indicator, cores=parallel::detectCores()-1, ...){
   args = list(...)
   atts = attributes(x)
   # get sources
-  sources = atts$sources
+  sources = atts$resources
   # call to get info about all implemented indicator functions
   implemented_funs = .calc_funs()
   # select function information based on names

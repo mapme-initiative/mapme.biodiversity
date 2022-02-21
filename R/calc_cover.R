@@ -13,9 +13,28 @@
 #' @param years The years for which to apply the analysis.
 #'
 #' @return A tibble
+#' @importFrom stringr str_sub
 #' @export
 #'
 .calc_cover <- function(shp, treecover, lossyear, minSize = 10, minCover = 35, years = 2010:2018){
+
+  minCover_msg = "Argument 'minCover' for indicator 'cover' must be a numeric value between 0 and 100."
+  if(is.numeric(minCover)){
+    minCover = as.integer(round(minCover))
+  } else {
+    stop(minCover_msg)
+  }
+  if(minCover < 0 || minCover > 100){
+    stop(minCover_msg)
+  }
+
+  minSize_msg = "Argument 'minSize' for indicator 'cover' must be a numeric value greater 0."
+  if(is.numeric(minSize)){
+    minSize = as.integer(round(minSize))
+  } else {
+    stop(minSize_msg)
+  }
+  if(minSize <= 0) stop(minSize_msg)
 
   treecover = classify(treecover, rcl = matrix(c(0, minCover, 0, minCover, 100, 1), ncol = 3, byrow = TRUE))
   patched = patches(treecover, directions = 8, zeroAsNA = TRUE)
@@ -41,6 +60,9 @@
   area_raster =  cover_layers * cellSize(treecover, unit = "ha")
 
   stats = terra::extract(area_raster, vect(shp$geom), "sum")
+  # stats %<>%
+  #   pivot_longer(2:ncol(stats), names_to = "year", values_to = "cover") %>%
+  #   mutate(year = as.numeric(str_sub(year, -4, -1)))
   stats$ID = NULL
   stats
 }

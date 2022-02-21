@@ -78,12 +78,12 @@ get_resources <- function(x, resources, ...){
     },
     error = function(cond){
       print(cond)
-      warning(sprintf("Download for resource %s failed. Returning unmodified portfolio object.", resource))
+      warning(sprintf("Download for resource %s failed. Returning unmodified portfolio object.", resource), call. = FALSE)
       return(NA)
     },
     warning = function(cond){
       print(cond)
-      warning(sprintf("Download for resource %s failed. Returning unmodified portfolio object.", resource))
+      warning(sprintf("Download for resource %s failed. Returning unmodified portfolio object.", resource), call. = FALSE)
       return(NA)
     })
 
@@ -93,11 +93,11 @@ get_resources <- function(x, resources, ...){
 
     # we translate rasters to a single COG and vectors to a GPKG
     if(selected_resource[[1]]$type == "raster"){
-      message("Translating resource to Cloud Optimized GeoTiff.")
-      .tiffs2COGs(downloaded_files, resource_dir)
+      message("Translating resource to Cloud Optimized GeoTiff....")
+      .tiffs2COGs(downloaded_files, resource_dir, atts$verbose)
     } else {
       message("Translating resource to GeoPackage.")
-      .vec2GPKG(downloaded_files, resource_dir)
+      .vec2GPKG(downloaded_files, resource_dir, atts$verbose)
     }
   }
   unlink(rundir, recursive = TRUE, force = TRUE)
