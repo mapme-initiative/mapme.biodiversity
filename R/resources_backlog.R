@@ -15,13 +15,13 @@
 #'
 available_resources <- function(resources = NULL){
   all_resources = list(
-    "treecover" = list("type" = "raster",
-                       "source" = "Global Forest Watch  (GFW)",
-                       "downloader" = ".get_treecover",
-                       "arguments" = list(
+    "treecover" = list(type = "raster",
+                       source = "Global Forest Watch  (GFW)",
+                       downloader = ".get_treecover",
+                       arguments = list(
                          "vers_treecover" = "GFC-2019-v1.7")
     ),
-    "lossyear" = list("type" = "raster",
+    "lossyear" = list(type = "raster",
                       "source" = "Global Forest Watch  (GFW)",
                       "downloader" = ".get_lossyear",
                       "arguments" = list(

@@ -32,6 +32,8 @@ create it. Cannot be equal to the output directory.}
 \item{cores}{An integer value indicating the number of cores on the host machine
 available for indicator calculation. It defaults to \code{parallel::detectCores() - 1}
 cores, i.e. one core less than all available cores.}
+
+\item{verbose}{Logical, defaults to TRUE, indicating if progress information is printed.}
 }
 \description{
 This function expects an \code{sf} object as its first argument that contains

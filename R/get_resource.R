@@ -103,7 +103,7 @@ get_resources <- function(x, resources, ...){
   unlink(rundir, recursive = TRUE, force = TRUE)
 
   # add the new resource to the attributes of the portfolio object
-  if(is.na(atts$resources)){
+  if(is.na(atts$resources[[1]])){
     atts$resources = resource_dir
     names(atts$resources) = resource
   }

@@ -14,6 +14,19 @@
   }
 }
 
+
+.check_requested_indicator <- function(indicator){
+  names_indicators = names(available_indicators())
+  # check for unsupported resources
+  if(any(!indicator %in% names_indicators)){
+    unsupported = indicator[which(!indicator %in% names_indicators)]
+    base_msg = "The following requested %s not supported: %s."
+    mid_msg = ifelse(length(unsupported)==1, "indicator is", "indicators are")
+    end_msg = paste(unsupported, collapse = ", ")
+    stop(sprintf(base_msg, mid_msg, end_msg))
+  }
+}
+
 .check_existing_resources <- function(existing_resources, requested_resources){
 
   if(any(requested_resources %in% existing_resources)){
@@ -40,12 +53,13 @@
   # function
   if(length(specified_args) == length(required_args)) return(specified_args)
   if(length(specified_args) == 0) unspecified_args = names(required_args)
-  if(length(specified_args) > 0) unspecified_args = required_args[!names(args) %in% names(required_args)]
+  if(length(specified_args) > 0) unspecified_args = names(required_args)[!names(required_args) %in% names(args)]
   base_msg = "Argument '%s' for resource '%s' was not specified. Setting to default value of '%s'."
   default_args = as.list(sapply(unspecified_args, function(arg_name){
-    message(sprintf(base_msg, arg_name, resource_name, required_args[[arg_name]]))
+    message(sprintf(base_msg, arg_name, resource_name, paste0(required_args[[arg_name]], collapse = ", ")))
     required_args[[arg_name]]
     }))
+
   if(length(specified_args) > 0){
     append(specified_args, default_args)
   } else {

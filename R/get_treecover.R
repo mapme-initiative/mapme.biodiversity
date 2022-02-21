@@ -14,15 +14,12 @@
   urls = sprintf("%sHansen_%s_treecover2000_%s.tif", baseurl, vers_treecover, ids)
 
   #start download in a temporal directory within tmpdir
-  #rundir = tempfile(tmpdir = tmpdir)
-  #dir.create(rundir)
+  # TODO: parallel downloads
   if(verbose) pb = progress_bar$new(total = length(urls))
   for (url in urls){
     if(verbose) pb$tick(0)
-    download.file(url, file.path(rundir, basename(url)),  quiet = TRUE)
+    download.file(url, file.path(rundir, basename(url)), quiet = TRUE)
     if(verbose) pb$tick()
-    #command = sprintf("gdal_translate %s %s -of COG -co COMPRESS=LZW", url, file.path(rundir, basename(url)))
-    #system(command)
   }
   # return all paths to the downloaded files
   list.files(rundir, full.names = T)

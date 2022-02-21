@@ -16,6 +16,7 @@
   baseurl = sprintf("https://data-api.globalforestwatch.org/dataset/gfw_forest_carbon_gross_emissions/%s/download/geotiff", vers_greenhouse)
   urls = sprintf("%s?grid=10/40000&tile_id=%s&pixel_meaning=Mg_CO2e_px&x-api-key=%s", baseurl, tileids, api_key_gfw)
 
+  # TODO: Parallel downloads
   if(verbose) pb = progress_bar$new(total = length(tileids))
   for (i in 1:length(urls)){
     if(verbose) pb$tick(0)
