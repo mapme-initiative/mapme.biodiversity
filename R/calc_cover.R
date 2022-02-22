@@ -30,17 +30,15 @@
   years = attributes(shp)$years
   # handling of return value if resources are missing, e.g. no overlap
   if(any(missing(treecover), missing(lossyear))){
-    colnames = paste0("cover_", years)
-    data = rep(NA, length(colnames))
-    names(data) =  colnames
-    return(data)
+    return(as.data.frame(lapply(1:length(years), function(x) NA),
+                         col.names =  paste0("cover_", years))
+    )
   }
   # check if treecover only contains 0s, e.g. on the ocean
   if(all(length(unique(unlist(minmax(treecover)))) == 1, unique(unlist(minmax(treecover))) == 0)){
-    colnames = paste0("cover_", years)
-    data = rep(0, length(colnames))
-    names(data) =  colnames
-    return(data)
+    return(as.data.frame(lapply(1:length(years), function(x) 0),
+                         col.names =  paste0("cover_", years))
+    )
   }
 
   # check additional arguments

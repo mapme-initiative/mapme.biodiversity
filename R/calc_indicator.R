@@ -21,54 +21,66 @@ calc_indicator <- function(x, indicator, cores=parallel::detectCores()-1, ...){
   resources = selected_indicator[[1]]$inputs
   x = x[order(st_area(st_convex_hull(x)), decreasing = FALSE), ]
 
+  progressr::handlers(global = TRUE)
+  progressr::handlers(
+    progressr::handler_progress(
+      format = sprintf(" Calculating indicator '%s' [:bar] :percent", indicator),
+      clear = FALSE,
+      width= 60
+    ))
+
   # apply function with parameters and add hidden id column
   if(cores > 1){
-    if(verbose) message(sprintf("Starting calculation of indicator %s.... ", indicator))
-    results = pblapply(1:nrow(x), function(i){
-      iddir = file.path(rundir, i)
-      dir.create(iddir)
-      parameters = params
-      parameters$rundir = iddir
-      parameters$shp = x[i,]
-      for(j in 1:length(resources)){
-        new_source =  .read_source(parameters$shp, resources[j], iddir, outdir)
-        if(!is.null(new_source)){
-          parameters = append(parameters, new_source)
-          names(parameters)[length(names(parameters))] = names(resources)[j]
+    progressr::with_progress({
+      p = progressr::progressor(along = 1:nrow(x))
+      future::plan(future::multisession, workers = cores)
+      results = furrr::future_map(1:nrow(x), function(i){
+        p()
+        iddir = file.path(rundir, i)
+        dir.create(iddir)
+        parameters = params
+        parameters$rundir = iddir
+        parameters$shp = x[i,]
+        for(j in 1:length(resources)){
+          new_source =  mapme.biodiversity:::.read_source(parameters$shp, resources[j], iddir, outdir)
+          if(!is.null(new_source)){
+            parameters = append(parameters, new_source)
+            names(parameters)[length(names(parameters))] = names(resources)[j]
+          }
         }
-      }
-      out = do.call(fun, args = parameters)
-      out$.id = i
-      unlink(iddir, recursive = TRUE, force = TRUE)
-      out
-    }, cl = cores, mc.preschedule = FALSE)
+        out = do.call(fun, args = parameters)
+        out$.id = i
+        unlink(iddir, recursive = TRUE, force = TRUE)
+        out
+      })
+    })
+    future::plan(future::sequential)
 
   } else {
-
-    if(verbose) message(sprintf("Starting calculation of indicator %s.... ", indicator))
-    if(verbose) pb = progress_bar$new(total = nrow(x))
-    results = lapply(1:nrow(x), function(i){
-      iddir = file.path(rundir, i)
-      dir.create(iddir)
-      if(verbose) pb$tick(0)
-      parameters = params
-      parameters$rundir = iddir
-      parameters$shp = x[i,]
-      for(j in 1:length(resources)){
-        new_source =  .read_source(parameters$shp, resources[j], iddir, outdir)
-        if(!is.null(new_source)){
-          parameters = append(parameters, new_source)
-          names(parameters)[length(names(parameters))] = names(resources)[j]
+    progressr::with_progress({
+      p = progressr::progressor(along = 1:nrow(x))
+      results = purrr::map(1:nrow(x), function(i){
+        p()
+        iddir = file.path(rundir, i)
+        dir.create(iddir)
+        parameters = params
+        parameters$rundir = iddir
+        parameters$shp = x[i,]
+        for(j in 1:length(resources)){
+          new_source =  mapme.biodiversity::.read_source(parameters$shp, resources[j], iddir, outdir)
+          if(!is.null(new_source)){
+            parameters = append(parameters, new_source)
+            names(parameters)[length(names(parameters))] = names(resources)[j]
+          }
         }
-      }
-      out = do.call(fun, args = parameters)
-      if(verbose) pb$tick()
-      out$.id = i
-      unlink(iddir, recursive = TRUE, force = TRUE)
-      out
+        out = do.call(fun, args = parameters)
+        out$.id = i
+        unlink(iddir, recursive = TRUE, force = TRUE)
+        out
+      })
     })
-
   }
+
   # cleanup the rundir
   unlink(rundir, recursive = TRUE, force = TRUE)
   # bind results to data.frame
@@ -101,11 +113,11 @@ calc_indicator <- function(x, indicator, cores=parallel::detectCores()-1, ...){
       stop("Does not intersect.")
     } else if(length(target_files) == 1){
       out = rast(target_files)
-      out = crop(out, vect(shp))
+      # out = crop(out, vect(shp))
     } else {
       # create a vrt for multiple targets
       bbox = as.numeric(st_bbox(shp))
-      vrt_name = tempfile("vrt", fileext = ".vrt", tmpdir = rundir)
+      vrt_name = tempfile("vrt", fileext = ".vrt", tempdir = rundir)
       out = vrt(target_files, vrt_name)
       # info = system(sprintf("gdalinfo %s", vrt_name), intern= TRUE)
       # cog_name = tempfile("cog", fileext = ".tif", tmpdir = rundir)
@@ -118,19 +130,19 @@ calc_indicator <- function(x, indicator, cores=parallel::detectCores()-1, ...){
     # crop the source to the extent of the current polygon
     out = tryCatch({
       crop(out, vect(shp), tempdir = rundir)
-      },
-      error = function(cond){
-        print(cond)
-        warning("Cropping failed.", call. = FALSE)
-        return(NULL)
-      },
-      warning = function(cond){
-        print(cond)
-        warning("Cropping failed.", call. = FALSE)
-        return(NULL)
-      })
+    },
+    error = function(cond){
+      print(cond)
+      warning("Cropping failed.", call. = FALSE)
+      return(NULL)
+    },
+    warning = function(cond){
+      print(cond)
+      warning("Cropping failed.", call. = FALSE)
+      return(NULL)
+    })
 
-    }
+  }
 
   if(resource == "vector"){
     out = st_read(source, wkt_filter = st_as_text(st_geometry(shp)))
