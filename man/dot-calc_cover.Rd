@@ -17,7 +17,7 @@
 \arguments{
 \item{shp}{A single polygon for which to calculate the tree cover statistic}
 
-\item{minSize}{The minimum size of a patch of pixels to be considered as forest area (in pixels)}
+\item{minSize}{The minimum size of a forest patch in ha.}
 
 \item{minCover}{The minimum threshold of stand density for a pixel to be considered forest in the year 2000.}
 
