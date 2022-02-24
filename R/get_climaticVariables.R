@@ -1,64 +1,98 @@
-.get_climaticVariables <- function(bbox,
-                                   layer = "prec",
-                                   year = 2018,
-                                   month = "01",
-                                   rundir = tempdir()) {
-  # check available layers
-  available_layers = c("tmin", "tmax", "prec")
-  if(!layer %in% available_layers) {
-    stop(sprintf("Layer %s is not an available climatic layer. Please choose one of: %s", layer, paste(available_layers, collapse = ", ")))
+.get_minTemperature <- function(x,
+                                rundir = tempdir(),
+                                verbose = TRUE) {
+
+  .get_climaticVariables(x = x, layer = "tmin")
+  list.files(rundir, full.names = T)
+}
+
+
+
+.get_maxTemperature <- function(x,
+                                rundir = tempdir(),
+                                verbose = TRUE) {
+
+  .get_climaticVariables(x = x, layer = "tmax")
+  list.files(rundir, full.names = T)
+}
+
+
+
+
+.get_precipitation <- function(x,
+                               rundir = tempdir(),
+                               verbose = TRUE) {
+
+  .get_climaticVariables(x = x, layer = "prec")
+  list.files(rundir, full.names = T)
+}
+
+
+
+
+.get_climaticVariables <- function(x,
+                                   layer = c("tmin", "tmax", "prec"),
+                                   rundir = tempdir(),
+                                   verbose = TRUE) {
+
+  target_years = attributes(x)$years
+  all_urls = unlist(sapply(target_years, function(year) .getClimateURL(layer, year)))
+  urls = unique(all_urls)
+
+  # start download in a temporal directory within tmpdir
+  if(verbose) pb = progress_bar$new(total = length(urls))
+  for (url in urls){
+
+    tryCatch(
+      {
+        if(verbose) pb$tick(0)
+        download.file(url, file.path(rundir, basename(paste0(layer, "_", gsub("\\D", "", basename(url)),".zip"))), quiet = TRUE)
+        if(verbose) pb$tick()
+
+      }, error = function(e) {
+        message('reading URLs!')
+      }
+    )
   }
 
-  # check years
-  available_years = c(2000:2018)
-  if(!year %in% available_years) {
-    stop(sprintf("Year %s is not an available climatic layer. Please choose one of: %s", year, paste(available_years, collapse = ", ")))
-  }
+  all_zips = list.files(rundir, full.names = T)
+  sapply(all_zips, function(zip) .unzipClimate(zip, rundir))
 
-  # check years
-  available_months = c("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12")
-  if(!month %in% available_months) {
-    stop(sprintf("Month %s is not an available climatic layer. Please choose (as string) one of: %s", month, paste(available_months, collapse = ", ")))
-  }
-
-  # get url
-  url = .getClimateURL(layer, year)
-  # download the file
-  download.file(url, file.path(rundir, basename(paste0(layer, "_", year,".zip"))))
-  # unzip
-  unzip(zipfile = file.path(rundir, basename(paste0(layer, "_", year,".zip"))),
-        exdir = rundir)
   # remove all except desired layers
   all_files = list.files(rundir, full.names = T)
-  unlink(grep(paste0("wc2.1_2.5m_",layer,"_",year,"-",month,".tif"), all_files, value = T, invert = T), recursive = T, force = T)
+  available_years = 2000:2018
+  nontarget_years = available_years[!available_years %in% target_years]
+
+  for (i in 1:length(nontarget_years)) {
+
+    unlink(paste0(rundir, "/wc2.1_2.5m_",layer,"_",nontarget_years[i],"*.tif"), recursive = T, force = T)
+  }
+
   # return paths to the raster
   list.files(rundir, full.names = T)
-
 }
 
 
-.getClimateURL <- function(layer, year){
 
-  if (layer == "tmin") {
-    if (year %in% 2000:2009) {
-      url = paste0("https://biogeo.ucdavis.edu/data/worldclim/v2.1/hist/wc2.1_2.5m_tmin_2000-2009.zip")
-    } else {
-      url = paste0("https://biogeo.ucdavis.edu/data/worldclim/v2.1/hist/wc2.1_2.5m_tmin_2010-2018.zip")}
-  }
+.unzipClimate <- function(zips, rundir) {
 
-  if (layer == "tmax") {
-    if (year %in% 2000:2009) {
-      url = paste0("https://biogeo.ucdavis.edu/data/worldclim/v2.1/hist/wc2.1_2.5m_tmax_2000-2009.zip")
-    } else {
-      url = paste0("https://biogeo.ucdavis.edu/data/worldclim/v2.1/hist/wc2.1_2.5m_tmax_2010-2018.zip")}
-  }
-
-  if (layer == "prec") {
-    if (year %in% 2000:2009) {
-      url = paste0("https://biogeo.ucdavis.edu/data/worldclim/v2.1/hist/wc2.1_2.5m_prec_2000-2009.zip")
-    } else {
-      url = paste0("https://biogeo.ucdavis.edu/data/worldclim/v2.1/hist/wc2.1_2.5m_prec_2010-2018.zip")}
-  }
-
-  url
+  unzip(zipfile = file.path(rundir, basename(zips)),
+        exdir = rundir)
+  unlink(paste0(rundir, "/", basename(zips)))
 }
+
+
+.getClimateURL <- function(layer, year) {
+
+  if (year %in% c(2000:2009)) {
+    url <- paste0("https://biogeo.ucdavis.edu/data/worldclim/v2.1/hist/wc2.1_2.5m_", layer, "_2000-2009.zip")
+    url
+  } else if (year %in% c(2010:2018)) {
+    url <- paste0("https://biogeo.ucdavis.edu/data/worldclim/v2.1/hist/wc2.1_2.5m_", layer, "_2010-2018.zip")
+    url
+  } else {
+    warning(sprintf("Climate raster not available for target year %s", year))
+    NULL
+  }
+}
+
