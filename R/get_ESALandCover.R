@@ -1,27 +1,37 @@
-.get_ESALandCover <- function(bbox,
-                              year = 2019,
-                              rundir = tempdir()) {
+.get_ESALandCover <- function(x,
+                              rundir = tempdir(),
+                              verbose = TRUE) {
 
-  available_years = c(2015:2019)
-  if(!year %in% available_years) {
-    stop(sprintf("Year %s is not an available land cover layer. Please choose one of: %s", year, paste(available_years, collapse = ", ")))
-  }
+  bbox = st_bbox(x)
+  target_years = attributes(x)$years
 
   # make the GFW grid and construct urls for intersecting tiles
   grid_esa = .makeESAGrid()
-  tile_ids = st_intersects(bbox, grid_esa)[[1]]
+  tile_ids = st_intersects(st_as_sfc(bbox), grid_esa)[[1]]
   if(length(tile_ids) == 0) stop("The extent of the portfolio does not intersect with the Land Cover grid.")
-  urls = sapply(tile_ids, function(n) .getEsaURL(grid_esa[n, ], year))
+  urls = unlist(mapply(.getEsaURL, grid_esa[tile_ids, ], target_years))
 
+  # start download in a temporal directory within tmpdir
+  if(verbose) pb = progress_bar$new(total = length(urls))
   for (url in urls){
-    download.file(url, file.path(rundir, basename(url)))
-    #command = sprintf("gdal_translate %s %s -of COG -co COMPRESS=LZW", url, file.path(rundir, basename(url)))
-    #system(command)
+
+    tryCatch(
+      {
+        if(verbose) pb$tick(0)
+        download.file(url, file.path(rundir, basename(url)), quiet = TRUE)
+        if(verbose) pb$tick()
+
+      }, error = function(e) {
+        message('reading URLs!')
+      }
+    )
   }
+
   # return all paths to the downloaded files
   list.files(rundir, full.names = T)
 
 }
+
 
 
 .makeESAGrid <- function(xmin=-180, xmax=180, dx=20, ymin=-60, ymax=80, dy=20,
@@ -55,14 +65,21 @@
 
   grid = paste0(min_x, max_y)
 
-  if (year == 2015) {
-    url = paste0("https://s3-eu-west-1.amazonaws.com/vito.landcover.global/v3.0.1/", year, "/", grid, "/", grid, "_PROBAV_LC100_global_v3.0.1_", year, "-base_Discrete-Classification-map_EPSG-4326.tif")
-  } else if (year == 2019) {
-    url <- paste0("https://s3-eu-west-1.amazonaws.com/vito.landcover.global/v3.0.1/", year, "/", grid, "/", grid, "_PROBAV_LC100_global_v3.0.1_", year, "-nrt_Discrete-Classification-map_EPSG-4326.tif")
-  } else {
-    url <- paste0("https://s3-eu-west-1.amazonaws.com/vito.landcover.global/v3.0.1/", year, "/", grid, "/", grid, "_PROBAV_LC100_global_v3.0.1_", year, "-conso_Discrete-Classification-map_EPSG-4326.tif")
-  }
-  url
+  if (year %in% c(2015:2019)) {
 
+    if (year == 2015) {
+      url = paste0("https://s3-eu-west-1.amazonaws.com/vito.landcover.global/v3.0.1/", year, "/", grid, "/", grid, "_PROBAV_LC100_global_v3.0.1_", year, "-base_Discrete-Classification-map_EPSG-4326.tif")
+      url
+    } else if (year == 2019) {
+      url = paste0("https://s3-eu-west-1.amazonaws.com/vito.landcover.global/v3.0.1/", year, "/", grid, "/", grid, "_PROBAV_LC100_global_v3.0.1_", year, "-nrt_Discrete-Classification-map_EPSG-4326.tif")
+      url
+    } else {
+      url = paste0("https://s3-eu-west-1.amazonaws.com/vito.landcover.global/v3.0.1/", year, "/", grid, "/", grid, "_PROBAV_LC100_global_v3.0.1_", year, "-conso_Discrete-Classification-map_EPSG-4326.tif")
+      url
+    }
+  } else {
+    warning(sprintf("Copernicus land cover not available for target year %s", year))
+    NULL
+  }
 }
 

@@ -34,7 +34,71 @@ available_resources <- function(resources = NULL){
                         "arguments" = list(
                           "vers_greenhouse" = "v20211022",
                           "api_key_gfw" = NA
-                        ))
+                        )),
+    "populationcount" = list("type" = "raster",
+                             "source" = "WorldPop",
+                             "downloader" = ".get_popCount",
+                             "arguments" = list(
+
+                             )
+    ),
+    "esalandcover" = list("type" = "raster",
+                          "source" = "Copernicus (ESA)",
+                          "downloader" = ".get_ESALandCover",
+                          "arguments" = list(
+
+                          )
+    ),
+    "accessibility" = list("type" = "raster",
+                           "source" = "Travel Time to Cities and Ports 2015 (Weiß et al. (2018))",
+                           "downloader" = ".get_accessibility",
+                           "arguments" = list(
+                             "range" = "20k_50k"
+                           )
+    ),
+    "droughtindicators" = list("type" = "raster",
+                               "source" = "NASA GRACE",
+                               "downloader" = ".get_droughtInd",
+                               "arguments" = list(
+
+                               )
+    ),
+    "mintemperature" = list("type" = "raster",
+                            "source" = "WorldClim",
+                            "downloader" = ".get_minTemperature",
+                            "arguments" = list(
+
+                            )
+    ),
+    "maxtemperature" = list("type" = "raster",
+                            "source" = "WorldClim",
+                            "downloader" = ".get_maxTemperature",
+                            "arguments" = list(
+
+                            )
+    ),
+    "precipitation" = list("type" = "raster",
+                           "source" = "WorldClim",
+                           "downloader" = ".get_precipitation",
+                           "arguments" = list(
+
+                           )
+    ),
+    "ecoregions" = list("type" = "vector",
+                        "source" = "WWF",
+                        "downloader" = ".get_ecoregions",
+                        "arguments" = list(
+
+                        )
+    ),
+    "mangroveextent" = list("type" = "vector",
+                            "source" = "Global Mangrove Watch",
+                            "downloader" = ".get_mangrove",
+                            "arguments" = list(
+
+                            )
+    )
+
 
   )
 
