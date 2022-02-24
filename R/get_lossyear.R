@@ -1,19 +1,24 @@
-.get_lossyear <- function(bbox,
-                           vers = "GFC-2018-v1.6",
-                           rundir = tempdir()){
+.get_lossyear <- function(x,
+                          vers_lossyear = "GFC-2018-v1.6",
+                          rundir = tempdir(),
+                          verbose = TRUE){
+  # TODO: check that version is correct
   # make the GFW grid and construct urls for intersecting tiles
+  bbox = st_bbox(x)
+  baseurl = sprintf("https://storage.googleapis.com/earthenginepartners-hansen/%s/", vers_lossyear)
   grid_GFC = .makeGFWGrid()
   tile_ids = st_intersects(st_as_sfc(bbox), grid_GFC)[[1]]
-  if(length(tile_ids) == 0) stop("The extent of the portfolio does not intersect with the GFW grid.")
-  urls = sapply(tile_ids, function(n) .getGFWTileURL(grid_GFC[n,], vers, "lossyear"))
+  if(length(tile_ids) == 0) stop("The extent of the portfolio does not intersect with the GFW grid.", call. = FALSE)
+  ids = sapply(tile_ids, function(n) .getGFWTileId(grid_GFC[n,]))
+  urls = sprintf("%sHansen_%s_lossyear_%s.tif", baseurl, vers_lossyear, ids)
 
   # start download in a temporal directory within tmpdir
-  #rundir = tempfile(tmpdir = tmpdir)
-  #dir.create(rundir)
+  # TODO: Parallel downloads
+  if(verbose) pb = progress_bar$new(total = length(urls))
   for (url in urls){
-    download.file(url, file.path(rundir, basename(url)))
-    #command = sprintf("gdal_translate %s %s -of COG -co COMPRESS=LZW", url, file.path(rundir, basename(url)))
-    #system(command)
+    if(verbose) pb$tick(0)
+    download.file(url, file.path(rundir, basename(url)), quiet = TRUE)
+    if(verbose) pb$tick()
   }
   # return all paths to the downloaded files
   list.files(rundir, full.names = T)

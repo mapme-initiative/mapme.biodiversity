@@ -1,11 +1,18 @@
-.calc_funs <- function(){
-  list(
+available_indicators <- function(indicator = NULL){
+  all_indicators = list(
     "cover" = list(
       name = ".calc_cover",
       inputs = list("treecover" = "raster", "lossyear" = "raster"),
-      args = list("minSize" = 0:9999,
-                  "minCover" = c(15,25,50,75,100),
-                  "years" = 2000:2020)
+      arguments = list("minSize" = 10,
+                  "minCover" = 30)
     )
   )
+
+  # determine what to return
+  if(is.null(indicator)) {
+    return(all_indicators)
+  } else {
+    .check_requested_indicator(indicator)
+    all_indicators[indicator]
+  }
 }

@@ -99,8 +99,6 @@ available_resources <- function(resources = NULL){
 
                             )
     )
-
-
   )
 
   # determine what to return

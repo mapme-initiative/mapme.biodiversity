@@ -10,21 +10,22 @@
   lossyear,
   minSize = 10,
   minCover = 35,
-  years = 2010:2018
+  rundir = tempdir(),
+  verbose = TRUE
 )
 }
 \arguments{
 \item{shp}{A single polygon for which to calculate the tree cover statistic}
 
-\item{minSize}{The minimum size of a patch of pixels to be considered as forest area (in pixels)}
+\item{minSize}{The minimum size of a forest patch in ha.}
 
 \item{minCover}{The minimum threshold of stand density for a pixel to be considered forest in the year 2000.}
-
-\item{years}{The years for which to apply the analysis.}
 
 \item{cover}{The treecover 2000 resource from GFW}
 
 \item{loss}{The lossyear resource from GFW}
+
+\item{years}{The years for which to apply the analysis.}
 }
 \value{
 A tibble
