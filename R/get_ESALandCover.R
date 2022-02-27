@@ -5,7 +5,7 @@
   bbox = st_bbox(x)
   target_years = attributes(x)$years
 
-  # make the GFW grid and construct urls for intersecting tiles
+  # make the ESA grid and construct urls for intersecting tiles
   grid_esa = .makeESAGrid()
   tile_ids = st_intersects(st_as_sfc(bbox), grid_esa)[[1]]
   if(length(tile_ids) == 0) stop("The extent of the portfolio does not intersect with the Land Cover grid.")
