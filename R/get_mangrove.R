@@ -24,7 +24,7 @@
 
   # unzip and convert shp to gpkg
   all_zips = list.files(rundir, full.names = T)
-  sapply(all_zips, function(zip) .unzipMangrove(zip))
+  sapply(all_zips, function(zip) .unzipMangrove(zip, rundir))
 
   # delete unneccessary files
   d_files = list.files(rundir, full.names = T)
@@ -36,7 +36,7 @@
 
 
 
-.unzipMangrove <- function(zip_files) {
+.unzipMangrove <- function(zip_files, rundir) {
 
   bn = basename(zip_files)
   if (bn == "gmw-extent_2007.zip") {
