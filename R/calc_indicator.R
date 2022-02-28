@@ -8,6 +8,7 @@
 #' @export
 #' @importFrom dplyr relocate last_col
 #' @importFrom tidyr nest
+#' @importFrom future plan multisession sequential
 calc_indicator <- function(x, indicator, ...){
 
   # get arguments from function call and portfolio object
