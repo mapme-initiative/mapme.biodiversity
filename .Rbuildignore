@@ -3,3 +3,4 @@
 ^LICENSE\.md$
 devel
 inst/extdata/resources
+^\.github$

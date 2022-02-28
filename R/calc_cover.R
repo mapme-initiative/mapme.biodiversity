@@ -6,12 +6,12 @@
 #' forest pixels. Patches below this threshold will not be considered as forest area.
 #'
 #' @param shp A single polygon for which to calculate the tree cover statistic
-#' @param cover The treecover 2000 resource from GFW
-#' @param loss The lossyear resource from GFW
+#' @param treecover The treecover 2000 resource from GFW
+#' @param lossyear The lossyear resource from GFW
 #' @param minSize The minimum size of a forest patch in ha.
 #' @param minCover The minimum threshold of stand density for a pixel to be considered forest in the year 2000.
-#' @param years The years for which to apply the analysis.
-#'
+#' @param rundir A directory where intermediate files are written to.
+#' @param verbose A directory where intermediate files are written to.
 #' @return A tibble
 #' @importFrom stringr str_sub
 #' @export

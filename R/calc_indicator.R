@@ -1,4 +1,14 @@
-calc_indicator <- function(x, indicator, cores=parallel::detectCores()-1, ...){
+#' Calculation of an indicator
+#'
+#' This functions let's users calculate on or more biodiversity indicators for a portfolio.
+#' @param x A sf object returned by init_portfolio().
+#' @param indicator A variable length charcter vector with the indicators to calculate.
+#' @param ... Additional arguments required by the requested indicators.
+#'
+#' @export
+#' @importFrom dplyr relocate last_col
+#' @importFrom tidyr nest
+calc_indicator <- function(x, indicator, ...){
 
   # get arguments from function call and portfolio object
   args = list(...)
@@ -92,8 +102,7 @@ calc_indicator <- function(x, indicator, cores=parallel::detectCores()-1, ...){
   # bind results to data.frame
   results = do.call(rbind, results)
   # nest the results
-  results %<>%
-    nest(!!indicator := !.id)
+  results = nest(results, !!indicator := !.id)
   # attach results
   x[indicator] = results[indicator]
   # sent sf column to back and return

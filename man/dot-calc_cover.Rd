@@ -17,15 +17,17 @@
 \arguments{
 \item{shp}{A single polygon for which to calculate the tree cover statistic}
 
+\item{treecover}{The treecover 2000 resource from GFW}
+
+\item{lossyear}{The lossyear resource from GFW}
+
 \item{minSize}{The minimum size of a forest patch in ha.}
 
 \item{minCover}{The minimum threshold of stand density for a pixel to be considered forest in the year 2000.}
 
-\item{cover}{The treecover 2000 resource from GFW}
+\item{rundir}{A directory where intermediate files are written to.}
 
-\item{loss}{The lossyear resource from GFW}
-
-\item{years}{The years for which to apply the analysis.}
+\item{verbose}{A directory where intermediate files are written to.}
 }
 \value{
 A tibble
