@@ -97,6 +97,13 @@ available_resources <- function(resources = NULL){
                             "arguments" = list(
 
                             )
+    ),
+    "srtmelevation" = list("type" = "raster",
+                           "source" = "SRTM",
+                           "downloader" = ".get_SRTMdem",
+                           "arguments" = list(
+
+                            )
     )
 
 
