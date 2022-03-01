@@ -30,18 +30,18 @@
   # handling of return value if resources are missing, e.g. no overlap
   if(any(missing(treecover), missing(lossyear))){
     return(as.data.frame(lapply(1:length(years), function(x) NA),
-                         col.names =  paste0("cover_", years))
+                         col.names =  paste0("treecover_", years))
     )
   }
   # check if treecover only contains 0s, e.g. on the ocean
   if(all(length(unique(unlist(minmax(treecover)))) == 1, unique(unlist(minmax(treecover))) == 0)){
     return(as.data.frame(lapply(1:length(years), function(x) 0),
-                         col.names =  paste0("cover_", years))
+                         col.names =  paste0("treecover_", years))
     )
   }
 
   # check additional arguments
-  minCover_msg = "Argument 'minCover' for indicator 'cover' must be a numeric value between 0 and 100."
+  minCover_msg = "Argument 'minCover' for indicator 'treecover' must be a numeric value between 0 and 100."
   if(is.numeric(minCover)){
     minCover = as.integer(round(minCover))
   } else {
@@ -51,7 +51,7 @@
     stop(minCover_msg)
   }
 
-  minSize_msg = "Argument 'minSize' for indicator 'cover' must be a numeric value greater 0."
+  minSize_msg = "Argument 'minSize' for indicator 'treecover' must be a numeric value greater 0."
   if(is.numeric(minSize)){
     minSize = as.integer(round(minSize))
   } else {
@@ -60,9 +60,11 @@
   if(minSize <= 0) stop(minSize_msg)
 
   if(any(years < 2000)){
-    warning("Cannot calculate tree cover statistics for years smaller than 2000.")
+    warning("Cannot calculate treecover statistics for years smaller than 2000.")
     years = years[years>=2000]
   }
+
+  # skip if the area of the
 
   #------------------------------------------------------------------------------
   # start calculation if everything is set up correctly
@@ -73,27 +75,33 @@
                         overwrite = TRUE)
   # binarize the treecover layer based on minCover argument
   binary_treecover = classify(treecover,
-                       rcl = matrix(c(0, minCover, 0, minCover, 100, 1), ncol = 3, byrow = TRUE),
-                       filename = file.path(rundir, "binary_treecover.tif"),
-                       datatype = "INT1U",
-                       overwrite = TRUE)
+                              rcl = matrix(c(0, minCover, NA, minCover, 100, 1), ncol = 3, byrow = TRUE),
+                              include.lowest = TRUE,
+                              filename = file.path(rundir, "binary_treecover.tif"),
+                              datatype = "INT1U",
+                              overwrite = TRUE)
   # retrieve patches of comprehensive forest areas
-  patched = patches(binary_treecover, directions = 8, zeroAsNA = TRUE,
+  patched = patches(binary_treecover, directions = 4, zeroAsNA = TRUE,
                     filename = file.path(rundir, "patched.tif"),
                     datatype = "INT4U",
                     overwrite = TRUE)
   # get the sizes of the patches
   patchsizes = zonal(arearaster, patched, sum, as.raster = TRUE,
-                    filename = file.path(rundir, "patchsizes.tif"),
-                    datatype = "FLT4S",
-                    overwrite = TRUE)
+                     filename = file.path(rundir, "patchsizes.tif"),
+                     datatype = "FLT4S",
+                     overwrite = TRUE)
   # remove patches smaller than threshold
-  binary_treecover = ifel(patchsizes < minSize, 0, binary_treecover,
-                   filename = file.path(rundir, "binary_treecover.tif"),
-                   datatype = "INT1U",
-                   overwrite = TRUE)
+  binary_treecover = ifel(patchsizes < minSize, NA, binary_treecover,
+                          filename = file.path(rundir, "binary_treecover.tif"),
+                          datatype = "INT1U",
+                          overwrite = TRUE)
   # set no loss occurrences to NA
   lossyear = ifel(lossyear == 0, NA, lossyear,
+                  filename = file.path(rundir, "lossyear.tif"),
+                  datatype = "INT1U",
+                  overwrite = TRUE)
+  # exclude non-tree pixels from lossyear layer
+  lossyear = mask(lossyear, binary_treecover,
                   filename = file.path(rundir, "lossyear.tif"),
                   datatype = "INT1U",
                   overwrite = TRUE)
@@ -106,23 +114,21 @@
   # get forest cover statistics for each year
   yearly_cover_values = lapply(years, function(y){
     y = y - 2000
-    current_treecover = ifel(lossyear <= y , 0, binary_treecover,
+    current_treecover = ifel(lossyear <= y , NA, binary_treecover,
                              filename = file.path(rundir, "current_treecover.tif"),
                              datatype = "INT1U",
                              overwrite = TRUE)
-    current_treecover = mask(current_treecover, polyraster,
-                             filename = file.path(rundir, "current_treecover_masked.tif"),
-                             datatype = "INT1U",
-                             overwrite = TRUE)
-    ha_sum_treecover = zonal(arearaster, current_treecover, sum)
-    ha_sum_treecover = ha_sum_treecover$area[which(ha_sum_treecover[,1] == 1)]
-    if(length(ha_sum_treecover) == 0) ha_sum_treecover = 0
-    ha_sum_treecover
+    current_arearaster = mask(arearaster, current_treecover,
+                              filename = file.path(rundir, "current_arearaster.tif"),
+                              datatype = "FLT4S",
+                              overwrite = TRUE)
+    ha_sum_treecover = zonal(current_arearaster, polyraster, sum, na.rm = TRUE)[2]
+    as.numeric(ha_sum_treecover)
   })
 
   # memory clean up
   rm(arearaster, binary_treecover, patchsizes, patched, polyraster); gc()
   # return a data-frame
-  as.data.frame(yearly_cover_values, col.names =  paste0("cover_", years))
+  as.data.frame(yearly_cover_values, col.names =  paste0("treecover_", years))
 
 }
