@@ -17,13 +17,17 @@ Description: Biodiversity areas, especially primary forest, serve a multitude
   is most duly needed.
 Imports:
   sf,
-  terra
-Depends: 
-  tibble,
-  parallel,
+  terra,
   dplyr,
   tidyr,
-  magrittr
+  magrittr,
+  stringr,
+  tibble,
+  future,
+  furrr,
+  purrr,
+  progressr,
+  progress
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

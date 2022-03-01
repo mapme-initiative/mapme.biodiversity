@@ -1,5 +1,8 @@
-# mapme.biodiversity <img src="man/figures/logo.png" align="right" height="110"/>
+<!-- badges: start -->
+  [![R-CMD-check](https://github.com/mapme-initiative/mapme.biodiversity/workflows/R-CMD-check/badge.svg)](https://github.com/mapme-initiative/mapme.biodiversity/actions)
+  <!-- badges: end -->
 
+# mapme.biodiversity <img src="man/figures/logo.png" align="right" height="110"/>
 
 ## About
 
