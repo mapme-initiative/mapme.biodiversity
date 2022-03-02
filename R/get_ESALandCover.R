@@ -16,24 +16,42 @@
                               verbose = TRUE) {
   bbox <- st_bbox(x)
   target_years <- attributes(x)$years
+  available_years = c(2015:2019)
+  target_years = .check_available_years(target_years, available_years, "esalandcover")
 
   # make the ESA grid and construct urls for intersecting tiles
-  grid_esa <- .makeESAGrid()
+  grid_esa <- .makeGlobalGrid(xmin = -180, xmax = 180, dx = 20, ymin = -60, ymax = 80, dy = 20)
   tile_ids <- st_intersects(st_as_sfc(bbox), grid_esa)[[1]]
   if (length(tile_ids) == 0) stop("The extent of the portfolio does not intersect with the Land Cover grid.")
-  urls <- unlist(mapply(.getEsaURL, grid_esa[tile_ids, ], target_years))
+  # create all urls for target years and per tile
+  urls <- lapply(target_years, function(year){
+    out = vector(length = length(tile_ids))
+    for(i in 1:length(tile_ids)){
+      out[i] = .getEsaURL(grid_esa[tile_ids[i], ], year)
+    }
+    out
+  })
+  # urls to vector
+  urls = unlist(urls)
+  # check availability of urls, e.g. there are no tiles on the ocean
+  is_available = sapply(urls, function(url) RCurl::url.exists(url))
+  urls = urls[is_available]
+
+  if(length(urls) == 0){
+    stop("For the given portfolios spatial extent there are no available ESA Land Cover tiles.")
+  }
 
   # start download in a temporal directory within tmpdir
   if (verbose) pb <- progress_bar$new(total = length(urls))
+  if (verbose) pb$tick(0)
   for (url in urls) {
     tryCatch(
       {
-        if (verbose) pb$tick(0)
-        download.file(url, file.path(rundir, basename(url)), quiet = TRUE)
+        download.file(url, file.path(rundir, basename(url)), quiet = TRUE, method = "curl")
         if (verbose) pb$tick()
       },
       error = function(e) {
-        message("reading URLs!")
+        stop(e)
       }
     )
   }
@@ -42,20 +60,13 @@
   list.files(rundir, full.names = T)
 }
 
-
-.makeESAGrid <- function(xmin = -180, xmax = 180, dx = 20, ymin = -60, ymax = 80, dy = 20,
-                         proj = NULL) {
-  if (is.null(proj)) proj <- st_crs(4326)
-  ncells <- c(
-    (xmax - xmin) / dx,
-    (ymax - ymin) / dy
-  )
-
-  bbox <- st_bbox(c(xmin = xmin, xmax = xmax, ymax = ymax, ymin = ymin))
-  st_as_sf(st_make_grid(bbox, cellsize = 20, n = ncells, crs = "EPSG:4326", what = "polygons"))
-}
-
-
+#' Helper function to create ESA land cover urls
+#'
+#' @param tile An sf object representing the spatial extent of the a tile
+#' @param year A single numeric value indicating the target year
+#'
+#' @return A charchter vector
+#' @keywords internal
 .getEsaURL <- function(tile, year) {
   min_x <- st_bbox(tile)[1]
   max_y <- st_bbox(tile)[4]
@@ -77,17 +88,15 @@
   if (year %in% c(2015:2019)) {
     if (year == 2015) {
       url <- paste0("https://s3-eu-west-1.amazonaws.com/vito.landcover.global/v3.0.1/", year, "/", grid, "/", grid, "_PROBAV_LC100_global_v3.0.1_", year, "-base_Discrete-Classification-map_EPSG-4326.tif")
-      url
     } else if (year == 2019) {
       url <- paste0("https://s3-eu-west-1.amazonaws.com/vito.landcover.global/v3.0.1/", year, "/", grid, "/", grid, "_PROBAV_LC100_global_v3.0.1_", year, "-nrt_Discrete-Classification-map_EPSG-4326.tif")
-      url
     } else {
       url <- paste0("https://s3-eu-west-1.amazonaws.com/vito.landcover.global/v3.0.1/", year, "/", grid, "/", grid, "_PROBAV_LC100_global_v3.0.1_", year, "-conso_Discrete-Classification-map_EPSG-4326.tif")
-      url
     }
   } else {
     warning(sprintf("Copernicus land cover not available for target year %s", year))
-    NULL
+    return(NULL)
   }
+  url
 }
 

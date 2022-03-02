@@ -23,7 +23,7 @@
   # make the GFW grid and construct urls for intersecting tiles
   bbox = st_bbox(x)
   baseurl = sprintf("https://storage.googleapis.com/earthenginepartners-hansen/%s/", vers_treecover)
-  grid_GFC = .makeGFWGrid()
+  grid_GFC = .makeGlobalGrid(xmin=-180, xmax=170, dx=10, ymin=-50, ymax=80, dy=10)
   tile_ids = st_intersects(st_as_sfc(bbox), grid_GFC)[[1]]
   if(length(tile_ids) == 0) stop("The extent of the portfolio does not intersect with the GFW grid.", call. = FALSE)
   ids = sapply(tile_ids, function(n) .getGFWTileId(grid_GFC[n,]))

@@ -1,3 +1,5 @@
+^renv$
+^renv\.lock$
 ^mapme\.biodiversity\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$

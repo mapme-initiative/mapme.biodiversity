@@ -8,6 +8,7 @@
 #' @param shp A single polygon for which to calculate the tree cover statistic
 #' @param treecover The treecover 2000 resource from GFW
 #' @param lossyear The lossyear resource from GFW
+#' @param greenhouse The greenhouse emission layer from GFW
 #' @param minSize The minimum size of a forest patch in ha.
 #' @param minCover The minimum threshold of stand density for a pixel to be considered forest in the year 2000.
 #' @param rundir A directory where intermediate files are written to.

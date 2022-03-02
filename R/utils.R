@@ -58,7 +58,7 @@
   default_args = as.list(sapply(unspecified_args, function(arg_name){
     message(sprintf(base_msg, arg_name, resource_name, paste0(required_args[[arg_name]], collapse = ", ")))
     required_args[[arg_name]]
-    }))
+  }))
 
   if(length(specified_args) > 0){
     append(specified_args, default_args)
@@ -96,14 +96,13 @@
 }
 
 
-.makeGFWGrid <- function(xmin=-180, xmax=170, dx=10, ymin=-50, ymax=80, dy=10,
-                         proj=NULL) {
+.makeGlobalGrid <- function(xmin=-180, xmax=170, dx=10, ymin=-50, ymax=80, dy=10, proj=NULL) {
   if (is.null(proj)) proj = st_crs(4326)
   ncells = c((xmax - xmin) / dx,
              (ymax - ymin) / dy)
 
   bbox = st_bbox(c(xmin = xmin, xmax = xmax, ymax = ymax, ymin = ymin))
-  st_as_sf(st_make_grid(bbox, cellsize = 10, n = ncells, crs = "EPSG:4326", what = "polygons"))
+  st_as_sf(st_make_grid(bbox, n = ncells, crs = "EPSG:4326", what = "polygons"))
 
 }
 
@@ -130,4 +129,23 @@
   # url = paste0(baseurl, filename)
   # url
 
+}
+
+
+.UnzipAndRemove <- function(zip, rundir) {
+  unzip(
+    zipfile = file.path(rundir, basename(zip)),
+    exdir = rundir
+  )
+  unlink(file.path(rundir, basename(zip)))
+}
+
+.check_available_years <- function(target_years, available_years, indicator){
+
+  if(any(!target_years %in% available_years)){
+    message(sprintf("Some target years are not available for %s.", indicator))
+    target_years = target_years[target_years %in% available_years]
+    if(length(target_years) == 0 ) stop("The target years do not intersect with the availability of %s.", indicator)
+  }
+  target_years
 }

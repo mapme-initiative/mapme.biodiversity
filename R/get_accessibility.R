@@ -18,19 +18,27 @@
                                rundir = tempdir(),
                                verbose = TRUE) {
 
-  # get url
+  # get url for accessibility layer
   url <- .getaccessibilityURL(range_accessibility)
   # start download in a temporal directory within tmpdir
-  if (verbose) pb <- progress_bar$new(total = length(url))
-  if (verbose) pb$tick(0)
+  sucess = tryCatch({
   download.file(url, file.path(rundir, basename(paste0("accessibility-", range_accessibility, ".tif"))), quiet = TRUE)
-  if (verbose) pb$tick()
-
+  }, error = function(cond){
+    stop(cond)
+  }, warning = function(cond){
+    warning(cond)
+  })
   # return paths to the raster
   list.files(rundir, full.names = T)
 }
 
 
+#' Helper for accessibility urls generation
+#'
+#' @param range A valid range that is translated to an url
+#'
+#' @return A character string
+#' @keywords internal
 .getaccessibilityURL <- function(range) {
   df.index <- data.frame(
     range = c(

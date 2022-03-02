@@ -15,19 +15,22 @@
                           rundir = tempdir(),
                           verbose = TRUE) {
   target_years <- attributes(x)$years
+  available_years = 2000:2020
+  target_years = .check_available_years(target_years, available_years, "popcount")
   urls <- unlist(sapply(target_years, function(year) .getPopCountURL(year)))
 
   # start download in a temporal directory within tmpdir
   if (verbose) pb <- progress_bar$new(total = length(urls))
+  if (verbose) pb$tick(0)
   for (url in urls) {
     tryCatch(
       {
-        if (verbose) pb$tick(0)
-        download.file(url, file.path(rundir, basename(url)), quiet = TRUE)
         if (verbose) pb$tick()
+        download.file(url, file.path(rundir, basename(url)), quiet = TRUE, method = "curl")
+
       },
       error = function(e) {
-        message("reading URLs!")
+        stop(e)
       }
     )
   }
@@ -36,6 +39,12 @@
 }
 
 
+#' Helper function to concstruch population layer urls
+#'
+#' @param target_year A numeric indicating the target year
+#'
+#' @return A charchter vector.
+#' @keywords internal
 .getPopCountURL <- function(target_year) {
   available_years <- c(2000:2020)
   if (target_year %in% available_years) {

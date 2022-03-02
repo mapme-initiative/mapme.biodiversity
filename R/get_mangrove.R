@@ -17,26 +17,31 @@
                           rundir = tempdir(),
                           verbose = TRUE) {
   target_years <- attributes(x)$years
+  available_years = c(1996, 2007:2010, 2015, 2016)
+  target_years = .check_available_years(target_years, available_years, "mangroveextent")
   urls <- unlist(sapply(target_years, function(year) .getMangroveURL(year)))
 
   # start download in a temporal directory within tmpdir
   if (verbose) pb <- progress_bar$new(total = length(urls))
+  if (verbose) pb$tick(0)
   for (url in urls) {
     tryCatch(
       {
-        if (verbose) pb$tick(0)
+        if (verbose) pb$tick()
         year <- gsub(".*?([0-9]+).*", "\\1", url)
         download.file(url, file.path(rundir, basename(paste0("gmw-extent_", year, ".zip"))), quiet = TRUE)
-        if (verbose) pb$tick()
+
       },
       error = function(e) {
-        message("reading URLs!")
+        message(e)
       }
     )
   }
 
   # unzip and convert shp to gpkg
   all_zips <- list.files(rundir, full.names = T)
+  #
+  message("Translating ESRI Shapefiles to GeoPackages. This may take a while....")
   sapply(all_zips, function(zip) .unzipMangrove(zip, rundir))
 
   # delete unneccessary files
@@ -47,31 +52,45 @@
 }
 
 
+#' Helper function to correctly unzip a mangrove layer zip file
+#'
+#'
+#' @param zip_files A charchter vector with potentially multiple zip files
+#' @param rundir The directory to where the files are unzipped
+#'
+#' @return Nothing.
+#' @keywords internal
 .unzipMangrove <- function(zip_files, rundir) {
   bn <- basename(zip_files)
   if (bn == "gmw-extent_2007.zip") {
-    unzip(
+    utils::unzip(
       zipfile = file.path(rundir, basename(paste0("gmw-extent_2007.zip"))),
       exdir = rundir
     )
     shp <- read_sf(paste0(rundir, "/GMW_2007_v2.0.shp"))
-    st_write(shp, file.path(rundir, basename("gmw-extent_2007.gpkg")))
+    write_sf(shp, file.path(rundir, basename("gmw-extent_2007.gpkg")))
     d_files <- list.files(rundir, full.names = T)
     unlink(grep("gmw-extent*", d_files, value = T, invert = T), recursive = T, force = T)
   } else {
     year <- gsub(".*?([0-9]+).*", "\\1", bn)
-    unzip(
+    utils::unzip(
       zipfile = file.path(rundir, basename(paste0("gmw-extent_", year, ".zip"))),
       exdir = rundir
     )
     shp <- read_sf(paste0(rundir, "/GMW_001_GlobalMangroveWatch_", year, "/01_Data/GMW_", year, "_v2.shp"))
-    st_write(shp, file.path(rundir, basename(paste0("gmw-extent_", year, ".gpkg"))))
+    write_sf(shp, file.path(rundir, basename(paste0("gmw-extent_", year, ".gpkg"))))
     d_files <- list.files(rundir, full.names = T)
     unlink(grep("gmw-extent*", d_files, value = T, invert = T), recursive = T, force = T)
   }
 }
 
 
+#' A helper function to construct correct mangrove layer urls
+#'
+#' @param target_year A numeric indicating the target year
+#'
+#' @return A character vector
+#' @keywords internal
 .getMangroveURL <- function(target_year) {
   available_years <- c(1996, 2007:2010, 2015, 2016)
   if (target_year %in% available_years) {

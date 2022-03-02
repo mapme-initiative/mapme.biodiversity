@@ -16,19 +16,23 @@
                             rundir = tempdir(),
                             verbose = TRUE) {
   target_years <- attributes(x)$years
-  urls <- unlist(sapply(target_years, function(year) .getDroughtIndURL(year)))
+  available_years = 2003:2022
+  target_years = .check_available_years(target_years, available_years, "droughtindicators")
 
-  # start download in a temporal directory within tmpdir
+  urls <- unlist(sapply(target_years, function(year) .getDroughtIndURL(year)))
+  # start download in a temporal directory within rundir
   if (verbose) pb <- progress_bar$new(total = length(urls))
+  if (verbose) pb$tick(0)
   for (url in urls) {
-    tryCatch(
-      {
-        if (verbose) pb$tick(0)
-        download.file(url, file.path(rundir, basename(url)), quiet = TRUE)
+    tryCatch({
         if (verbose) pb$tick()
+        download.file(url, file.path(rundir, basename(url)), quiet = TRUE)
       },
       error = function(e) {
-        message("reading URLs!")
+        warning(e)
+      },
+      warning = function(e){
+        warning(e)
       }
     )
   }
@@ -37,11 +41,16 @@
 }
 
 
+#' Helper function to construct GRACE urls
+#'
+#' @param target_year
+#'
+#' @return A character vector
+#' @keywords internal
 .getDroughtIndURL <- function(target_year) {
   available_years <- c(2003:2022)
   dates <- seq.Date(as.Date("2003/02/03"), as.Date("2022/02/28"), by = "week")
   available_dates <- as.integer(format(dates, "%Y%m%d"))
-
   if (target_year %in% available_years) {
     target_dates <- subset(available_dates, substr(available_dates, 1, 4) == target_year)
     url <- paste0("https://nasagrace.unl.edu/globaldata/", target_dates, "/gws_perc_025deg_GL_", target_dates, ".tif")

@@ -69,30 +69,42 @@
 
 
 .get_climaticVariables <- function(x,
-                                   layer = c("tmin", "tmax", "prec"),
+                                   layer,
                                    rundir = tempdir(),
                                    verbose = TRUE) {
+  if(missing(layer)){
+    stop("No target layer has been specified. Please select one of 'tmin', 'tmax', 'prec'.")
+  }
+
   target_years <- attributes(x)$years
+  available_years = 2000:2018
+  target_years = .check_available_years(target_years, available_years, "mangroveextent")
   all_urls <- unlist(sapply(target_years, function(year) .getClimateURL(layer, year)))
   urls <- unique(all_urls)
 
   # start download in a temporal directory within tmpdir
   if (verbose) pb <- progress_bar$new(total = length(urls))
-  for (url in urls) {
-    tryCatch(
-      {
-        if (verbose) pb$tick(0)
-        download.file(url, file.path(rundir, basename(paste0(layer, "_", gsub("\\D", "", basename(url)), ".zip"))), quiet = TRUE)
-        if (verbose) pb$tick()
-      },
-      error = function(e) {
-        message("reading URLs!")
-      }
+  if (verbose) pb$tick(0)
+  downloads = lapply(urls, function(url){
+    tryCatch({
+      if (verbose) pb$tick()
+      download.file(url,
+                    file.path(rundir, basename(paste0(layer, "_", gsub("\\D", "", basename(url)), ".zip"))),
+                    quiet = F,
+                    method = "curl")
+    }, error = function(cond) {
+      cond
+    }, warning = function(cond){
+      cond
+    }
     )
+  })
+  if(any(sapply(downloads, function(x) inherits(x, "error")))){
+    stop(sprintf("Some download for layer %s failed.", layer))
   }
 
   all_zips <- list.files(rundir, full.names = T)
-  sapply(all_zips, function(zip) .unzipClimate(zip, rundir))
+  sapply(all_zips, function(zip) .UnzipAndRemove(zip, rundir))
 
   # remove all except desired layers
   all_files <- list.files(rundir, full.names = T)
@@ -105,15 +117,6 @@
 
   # return paths to the raster
   list.files(rundir, full.names = T)
-}
-
-
-.unzipClimate <- function(zips, rundir) {
-  unzip(
-    zipfile = file.path(rundir, basename(zips)),
-    exdir = rundir
-  )
-  unlink(paste0(rundir, "/", basename(zips)))
 }
 
 

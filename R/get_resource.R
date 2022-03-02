@@ -15,6 +15,8 @@
 #'  their arguments.
 #' @export
 get_resources <- function(x, resources, ...){
+  connection_available = curl::has_internet()
+  if(!connection_available) stop("There seems to be no internet connection. Cannot download resources.")
   # check if the requested resource is supported
   .check_requested_resources(resources)
   # check if any of the requested resources is already locally available
@@ -52,7 +54,7 @@ get_resources <- function(x, resources, ...){
   atts = attributes(x)
   outdir = atts$outdir
   tmpdir = atts$tmpdir
-  rundir = file.path(tmpdir, resource)
+  rundir = file.path(outdir, resource)
   dir.create(rundir, showWarnings = FALSE)
   selected_resource = available_resources(resource)
   # match function
@@ -64,10 +66,7 @@ get_resources <- function(x, resources, ...){
   params$verbose = atts$verbose
   # conduct download function, TODO: we can think of an efficient way for parallel downloads here or further upstream
 
-  resource_dir = file.path(outdir, resource)
-  dir.create(resource_dir, showWarnings = FALSE)
-
-  if (length(list.files(resource_dir)) > 0) {
+  if (length(list.files(rundir)) > 0) {
     message(sprintf("Output directory for resource '%s' is not empty. Remove if you wish to re-download", resource))
 
   } else { # if files to not exist use download function to download to tmpdir
@@ -90,24 +89,15 @@ get_resources <- function(x, resources, ...){
     # we included an error checker so that we can still return a valid object
     # even in cases that one or more downloads fail
     if(is.na(downloaded_files[1])) return(x)
-
-    # we translate rasters to a single COG and vectors to a GPKG
-    if(selected_resource[[1]]$type == "raster"){
-      message("Translating resource to Cloud Optimized GeoTiff....")
-      .tiffs2COGs(downloaded_files, resource_dir, atts$verbose)
-    } else {
-      message("Translating resource to GeoPackage.")
-      .vec2GPKG(downloaded_files, resource_dir, atts$verbose)
-    }
   }
-  unlink(rundir, recursive = TRUE, force = TRUE)
+  # unlink(rundir, recursive = TRUE, force = TRUE)
 
   # add the new resource to the attributes of the portfolio object
   if(is.na(atts$resources[[1]])){
-    atts$resources = resource_dir
+    atts$resources = rundir
     names(atts$resources) = resource
   }
-  atts$resources[resource] = resource_dir
+  atts$resources[resource] = rundir
   attributes(x) = atts
   x
 }

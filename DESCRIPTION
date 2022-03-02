@@ -27,7 +27,9 @@ Imports:
   furrr,
   purrr,
   progressr,
-  progress
+  progress,
+  RCurl,
+  curl
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
