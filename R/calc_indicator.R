@@ -1,3 +1,19 @@
+calc_indicators <- function(x, indicators, ...){
+  # check if the requested resource is supported
+  .check_requested_indicator(indicators)
+  # check if any of the requested resources is already locally available
+  #existing_resources = attributes(x)$resources
+  #resources = .check_existing_resources(names(existing_resources), resources)
+  #if(length(resources) == 0) return(x)
+  # get the resources
+  ## TODO: check if we can go parallel here. Problem is when errors occur
+  # for one resource and it terminates the complete process. We would have
+  # to catch that so other processes can terminate successfully.
+  for(indicator in indicators) x = .get_single_indicator(x, indicator, ...)
+  x
+}
+
+
 #' Calculation of an indicator
 #'
 #' This functions let's users calculate on or more biodiversity indicators for a portfolio.
@@ -9,7 +25,7 @@
 #' @importFrom dplyr relocate last_col
 #' @importFrom tidyr nest
 #' @importFrom future plan multisession sequential
-calc_indicator <- function(x, indicator, ...){
+.get_single_indicator <- function(x, indicator, ...){
 
   # get arguments from function call and portfolio object
   args = list(...)
@@ -47,7 +63,7 @@ calc_indicator <- function(x, indicator, ...){
       future::plan(future::multisession, workers = cores)
       results = furrr::future_map(1:nrow(x), function(i){
         iddir = file.path(rundir, i) # create a rundir name
-        dir.create(iddir) # create the current rundir
+        dir.create(iddir, showWarnings = FALSE) # create the current rundir
         parameters = params # new parameters object
         parameters$rundir = iddir # change rundir
         parameters$shp = x[i,] # enter specific polygon
@@ -75,7 +91,7 @@ calc_indicator <- function(x, indicator, ...){
       p = progressr::progressor(along = 1:nrow(x))
       results = purrr::map(1:nrow(x), function(i){
         iddir = file.path(rundir, i) # create a rundir name
-        dir.create(iddir) # create the current rundir
+        dir.create(iddir, showWarnings = FALSE) # create the current rundir
         parameters = params # new parameters object
         parameters$rundir = iddir # change rundir
         parameters$shp = x[i,] # enter specific polygon
@@ -128,18 +144,18 @@ calc_indicator <- function(x, indicator, ...){
     if(length(target_files) == 0 ){
       stop("Does not intersect.")
     } else if(length(target_files) == 1){
-      out = rast(target_files)
+      out = terra::rast(target_files)
       # out = crop(out, vect(shp))
     } else {
       # create a vrt for multiple targets
       bbox = as.numeric(st_bbox(shp))
       vrt_name = tempfile("vrt", fileext = ".vrt", tmpdir = rundir)
-      out = vrt(target_files, filename = vrt_name)
+      out = terra::vrt(target_files, filename = vrt_name)
     }
 
     # crop the source to the extent of the current polygon
     out = tryCatch({
-      crop(out, vect(shp), tempdir = rundir)
+      terra::crop(out, terra::vect(shp), tempdir = rundir)
     },
     error = function(cond){
       print(cond)

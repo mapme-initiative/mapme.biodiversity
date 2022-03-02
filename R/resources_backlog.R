@@ -1,13 +1,13 @@
 #' Backlog function for available resources
 #'
-#' This function returns a list of either all available ressources and some
+#' This function returns a list of either all available resources and some
 #' additional metadata or for one or more requested resources. It can be used
 #' by users of the package to inform themselves about the available data sets
 #' and to learn about potentially additional arguments that should be specified
 #' when requesting the resource.
 #'
 #' @param resources Defaults to NULL meaning that a list with all available
-#'   resources will be returned. If a charachter vector is specified only the
+#'   resources will be returned. If a character vector is specified only the
 #'   information about the requested resource will be returned.
 #'
 #' @return A list object.
@@ -34,19 +34,18 @@ available_resources <- function(resources = NULL){
                         "arguments" = list(
                           "vers_greenhouse" = "v20211022",
                           "api_key_gfw" = NA
-                        )),
+                        )
+    ),
     "populationcount" = list("type" = "raster",
                              "source" = "WorldPop",
                              "downloader" = ".get_popCount",
                              "arguments" = list(
-
                              )
     ),
     "esalandcover" = list("type" = "raster",
                           "source" = "Copernicus (ESA)",
                           "downloader" = ".get_ESALandCover",
                           "arguments" = list(
-
                           )
     ),
     "accessibility" = list("type" = "raster",
@@ -67,46 +66,38 @@ available_resources <- function(resources = NULL){
                             "source" = "WorldClim",
                             "downloader" = ".get_minTemperature",
                             "arguments" = list(
-
                             )
     ),
     "maxtemperature" = list("type" = "raster",
                             "source" = "WorldClim",
                             "downloader" = ".get_maxTemperature",
                             "arguments" = list(
-
                             )
     ),
     "precipitation" = list("type" = "raster",
                            "source" = "WorldClim",
                            "downloader" = ".get_precipitation",
                            "arguments" = list(
-
                            )
     ),
     "ecoregions" = list("type" = "vector",
                         "source" = "WWF",
                         "downloader" = ".get_ecoregions",
                         "arguments" = list(
-
                         )
     ),
     "mangroveextent" = list("type" = "vector",
                             "source" = "Global Mangrove Watch",
                             "downloader" = ".get_mangrove",
                             "arguments" = list(
-
                             )
     ),
     "srtmelevation" = list("type" = "raster",
                            "source" = "SRTM",
                            "downloader" = ".get_SRTMdem",
                            "arguments" = list(
-
-                            )
+                           )
     )
-
-
   )
 
   # determine what to return

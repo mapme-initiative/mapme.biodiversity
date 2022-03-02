@@ -1,10 +1,23 @@
 available_indicators <- function(indicator = NULL){
   all_indicators = list(
-    "cover" = list(
+    treecover = list(
       name = ".calc_cover",
-      inputs = list("treecover" = "raster", "lossyear" = "raster"),
-      arguments = list("minSize" = 10,
-                  "minCover" = 30)
+      inputs = list(treecover =
+                      "raster",
+                      lossyear = "raster"),
+      arguments = list(
+        minSize = 10,
+        minCover = 30)
+    ),
+    emissions = list(
+      name = ".calc_emissions",
+      inputs = list(treecover = "raster",
+                    lossyear = "raster",
+                    greenhouse = "raster"),
+      arguments = list(
+        minSize = 10,
+        minCover = 30
+      )
     )
   )
 
