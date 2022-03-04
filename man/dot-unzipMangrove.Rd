@@ -4,12 +4,12 @@
 \alias{.unzipMangrove}
 \title{Helper function to correctly unzip a mangrove layer zip file}
 \usage{
-.unzipMangrove(zip_files, rundir)
+.unzipMangrove(zip, rundir)
 }
 \arguments{
-\item{zip_files}{A charchter vector with potentially multiple zip files}
-
 \item{rundir}{The directory to where the files are unzipped}
+
+\item{zip_files}{A charchter vector with potentially multiple zip files}
 }
 \value{
 Nothing.

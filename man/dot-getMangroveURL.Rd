@@ -9,6 +9,9 @@
 \arguments{
 \item{target_year}{A numeric indicating the target year}
 }
+\value{
+A character vector
+}
 \description{
 A helper function to construct correct mangrove layer urls
 }

@@ -17,9 +17,12 @@
                             rundir = tempdir(),
                             verbose = TRUE) {
 
-  # get url
-  url <- "https://files.worldwildlife.org/wwfcmsprod/files/Publication/file/6kcchn7e3u_official_teow.zip"
+  filename = file.path(rundir, "wwf_terr_ecos.gpkg")
+  # check if output file exists
+  if(file.exists(filename)) return(filename)
 
+  #get url
+  url <- "https://files.worldwildlife.org/wwfcmsprod/files/Publication/file/6kcchn7e3u_official_teow.zip"
   # start download in a temporal directory within rundir
   downloads = tryCatch({
     download.file(url, file.path(rundir, basename(paste0("TEOW_global.zip"))), quiet = TRUE)
@@ -33,10 +36,10 @@
   # load shp
   shp <- read_sf(file.path(rundir, "official/wwf_terr_ecos.shp"))
   # write as gpkg
-  st_write(shp, file.path(rundir, "wwf_terr_ecos.gpkg"))
+  write_sf(shp, file.path(rundir, "wwf_terr_ecos.gpkg"))
   # remove all except desired layers
   all_files <- list.files(rundir, full.names = T)
   unlink(grep(paste0("wwf_terr_ecos.gpkg"), all_files, value = T, invert = T), recursive = T, force = T)
   # return paths to the gpkg
-  list.files(rundir, full.names = T)
+  filename
 }

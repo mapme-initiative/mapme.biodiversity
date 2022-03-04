@@ -81,34 +81,18 @@
   target_years = .check_available_years(target_years, available_years, "mangroveextent")
   all_urls <- unlist(sapply(target_years, function(year) .getClimateURL(layer, year)))
   urls <- unique(all_urls)
-
+  filenames = file.path(rundir, basename(urls))
+  if(any(file.exists(filenames))) message("Skipping existing files in output directory.")
   # start download in a temporal directory within tmpdir
-  if (verbose) pb <- progress_bar$new(total = length(urls))
-  if (verbose) pb$tick(0)
-  downloads = lapply(urls, function(url){
-    tryCatch({
-      if (verbose) pb$tick()
-      download.file(url,
-                    file.path(rundir, basename(paste0(layer, "_", gsub("\\D", "", basename(url)), ".zip"))),
-                    quiet = F,
-                    method = "curl")
-    }, error = function(cond) {
-      cond
-    }, warning = function(cond){
-      cond
-    }
-    )
-  })
-  if(any(sapply(downloads, function(x) inherits(x, "error")))){
-    stop(sprintf("Some download for layer %s failed.", layer))
-  }
+  # TODO: Parallel downloads
+  .downloadOrSkip(urls, filenames, verbose)
 
+  # unzip the downloaded file
   all_zips <- list.files(rundir, full.names = T)
-  sapply(all_zips, function(zip) .UnzipAndRemove(zip, rundir))
+  sapply(all_zips, function(zip) .UnzipAndRemove(zip, rundir, remove = FALSE))
 
   # remove all except desired layers
   all_files <- list.files(rundir, full.names = T)
-  available_years <- 2000:2018
   nontarget_years <- available_years[!available_years %in% target_years]
 
   for (i in 1:length(nontarget_years)) {
@@ -116,7 +100,7 @@
   }
 
   # return paths to the raster
-  list.files(rundir, full.names = T)
+  list.files(rundir, full.names = T, pattern = ".tif")
 }
 
 

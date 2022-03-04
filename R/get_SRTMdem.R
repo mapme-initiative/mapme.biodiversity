@@ -16,36 +16,21 @@
 .get_SRTMdem <- function(x,
                          rundir = tempdir(),
                          verbose = TRUE) {
-  bbox <- st_bbox(x)
+  bbox = st_bbox(x)
   # make the SRTM grid and construct urls for intersecting tiles
-  grid_srtm <- .makeGlobalGrid(xmin = -180, xmax = 180, dx = 5, ymin = -60, ymax = 60, dy = 5)
-  tile_ids <- st_intersects(st_as_sfc(bbox), grid_srtm)[[1]]
+  grid_srtm = .makeGlobalGrid(xmin = -180, xmax = 180, dx = 5, ymin = -60, ymax = 60, dy = 5)
+  tile_ids = st_intersects(st_as_sfc(bbox), grid_srtm)[[1]]
   if (length(tile_ids) == 0) stop("The extent of the portfolio does not intersect with the SRTM grid.")
-  urls <- unlist(sapply(tile_ids, function(tile) .getSrtmURL(tile)))
-
+  urls = unlist(sapply(tile_ids, function(tile) .getSrtmURL(tile)))
+  filenames = file.path(rundir, basename(urls))
+  if(any(file.exists(filenames))) message("Skipping existing files in output directory.")
   # start download in a temporal directory within tmpdir
-  if (verbose) pb <- progress_bar$new(total = length(urls))
-  if (verbose) pb$tick(0)
-  for (url in urls) {
-    if(!RCurl::url.exists(url)) next
-    tryCatch({
-      if (verbose) pb$tick()
-      download.file(url, file.path(rundir, basename(url)), quiet = TRUE, method = "curl")
-    },
-    error = function(e) {
-      stop(e)
-    }
-    )
-  }
-
+  .downloadOrSkip(urls, filenames, verbose)
   # get path of all the zip files
   all_zips <- list.files(rundir, full.names = T)
   sapply(all_zips, function(zip) .UnzipAndRemove(zip, rundir))
-  # remove all except desired layers
-  d_files <- list.files(rundir, full.names = T)
-  unlink(grep("*tif", d_files, value = T, invert = T), recursive = T, force = T)
   # return paths to the rasters
-  list.files(rundir, full.names = T)
+  list.files(rundir, full.names = T, pattern = ".tif")
 }
 
 

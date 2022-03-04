@@ -28,15 +28,11 @@
   if(length(tile_ids) == 0) stop("The extent of the portfolio does not intersect with the GFW grid.", call. = FALSE)
   ids = sapply(tile_ids, function(n) .getGFWTileId(grid_GFC[n,]))
   urls = sprintf("%sHansen_%s_treecover2000_%s.tif", baseurl, vers_treecover, ids)
-
-  #start download in a temporal directory within tmpdir
+  filenames = file.path(rundir, basename(urls))
+  if(any(file.exists(filenames))) message("Skipping existing files in output directory.")
+  #start download and skip files that exist
   # TODO: parallel downloads
-  if(verbose) pb = progress::progress_bar$new(total = length(urls))
-  if(verbose) pb$tick(0)
-  for (url in urls){
-    download.file(url, file.path(rundir, basename(url)), quiet = TRUE)
-    if(verbose) pb$tick()
-  }
+  .downloadOrSkip(urls, filenames, verbose)
   # return all paths to the downloaded files
   list.files(rundir, full.names = T)
 }
@@ -44,3 +40,5 @@
 .available_GFW_versions <- function(){
   c("GFC-2015-v1.3", "GFC-2016-v1.4", "GFC-2017-v1.5", "GFC-2018-v1.6", "GFC-2019-v1.7", "GFC-2020-v1.8")
 }
+
+

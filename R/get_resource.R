@@ -65,32 +65,25 @@ get_resources <- function(x, resources, ...){
   params$rundir = rundir
   params$verbose = atts$verbose
   # conduct download function, TODO: we can think of an efficient way for parallel downloads here or further upstream
+  # if files to not exist use download function to download to tmpdir
+  message(sprintf("Starting process to download resource '%s'........", resource))
+  downloaded_files = tryCatch({
+    do.call(fun, args = params)
+  },
+  error = function(cond){
+    print(cond)
+    warning(sprintf("Download for resource %s failed. Returning unmodified portfolio object.", resource), call. = FALSE)
+    return(NA)
+  },
+  warning = function(cond){
+    print(cond)
+    warning(sprintf("Download for resource %s failed. Returning unmodified portfolio object.", resource), call. = FALSE)
+    return(NA)
+  })
 
-  if (length(list.files(rundir)) > 0) {
-    message(sprintf("Output directory for resource '%s' is not empty. Remove if you wish to re-download", resource))
-
-  } else { # if files to not exist use download function to download to tmpdir
-    message(sprintf("Starting process to download resource '%s'........", resource))
-    downloaded_files = tryCatch({
-      do.call(fun, args = params)
-      # fun(st_bbox(x), relevant_args, rundir = rundir)
-    },
-    error = function(cond){
-      print(cond)
-      warning(sprintf("Download for resource %s failed. Returning unmodified portfolio object.", resource), call. = FALSE)
-      return(NA)
-    },
-    warning = function(cond){
-      print(cond)
-      warning(sprintf("Download for resource %s failed. Returning unmodified portfolio object.", resource), call. = FALSE)
-      return(NA)
-    })
-
-    # we included an error checker so that we can still return a valid object
-    # even in cases that one or more downloads fail
-    if(is.na(downloaded_files[1])) return(x)
-  }
-  # unlink(rundir, recursive = TRUE, force = TRUE)
+  # we included an error checker so that we can still return a valid object
+  # even in cases that one or more downloads fail
+  if(is.na(downloaded_files[1])) return(x)
 
   # add the new resource to the attributes of the portfolio object
   if(is.na(atts$resources[[1]])){

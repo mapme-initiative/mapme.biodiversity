@@ -19,21 +19,19 @@ available_resources <- function(resources = NULL){
                      source = "Global Forest Watch  (GFW)",
                      downloader = ".get_treecover",
                      arguments = list(
-                       vers_treecover = "GFC-2019-v1.7")
+                       vers_treecover = "GFC-2020-v1.8")
     ),
     lossyear = list(type = "raster",
                     source = "Global Forest Watch  (GFW)",
                     downloader = ".get_lossyear",
                     arguments = list(
-                      vers_lossyear = "GFC-2019-v1.7"
+                      vers_lossyear = "GFC-2020-v1.8"
                     )
     ),
     greenhouse = list("type" = "raster",
                       source = "Global Forest Watch (GFW)",
                       downloader = ".get_greenhouse",
                       arguments = list(
-                        vers_greenhouse = "v20211022",
-                        api_key_gfw = NA
                       )
     ),
     populationcount = list(type = "raster",
@@ -97,6 +95,160 @@ available_resources <- function(resources = NULL){
                          downloader = ".get_SRTMdem",
                          arguments = list(
                          )
+    ),
+    bdod = list(type = "raster",
+                source = "SoilGrids",
+                downloader = ".get_bdod",
+                arguments =  list(
+                  depth = "0-5cm",
+                  stat = "mean"
+                ),
+                description = list(
+                  long_name = "Bulk density of the fine earth fraction",
+                  mapped_units = "cg/cm3",
+                  conversion_factor = 100,
+                  conventional_units = "kg/dm3"
+                )
+    ),
+    cec = list(type = "raster",
+               source = "SoilGrids",
+               downloader = ".get_cec",
+               arguments =  list(
+                 depth = "0-5cm",
+                 stat = "mean"
+               ),
+               description = list(
+                 long_name = "Cation Exchange Capacity of the soil",
+                 mapped_units = "mmol(c)/kg",
+                 conversion_factor = 10,
+                 conventional_units = "cmol(c)/kg"
+               )
+    ),
+    cfvo = list(type = "raster",
+                source = "SoilGrids",
+                downloader = ".get_cfvo",
+                arguments =  list(
+                  depth = "0-5cm",
+                  stat = "mean"
+                ),
+                description = list(
+                  long_name = "Volumetric fraction of coarse fragments (> 2 mm)",
+                  mapped_units = "cm3/dm3 (volPerc)",
+                  conversion_factor = 10,
+                  conventional_units = "cm3/100cm3 (volperc)"
+                )
+    ),
+    clay = list(type = "raster",
+                source = "SoilGrids",
+                downloader = ".get_clay",
+                arguments =  list(
+                  depth = "0-5cm",
+                  stat = "mean"
+                ),
+                description = list(
+                  long_name = "Proportion of clay particles (< 0.002 mm) in the fine earth fraction",
+                  mapped_units = "g/kg",
+                  conversion_factor = 10,
+                  conventional_units = "g/100g (Perc)"
+                )
+    ),
+    nitrogen = list(type = "raster",
+                    source = "SoilGrids",
+                    downloader = ".get_nitrogen",
+                    arguments =  list(
+                      depth = "0-5cm",
+                      stat = "mean"
+                    ),
+                    description = list(
+                      long_name = "Total nitrogen (N)",
+                      mapped_units = "cg/kg",
+                      conversion_factor = 100,
+                      conventional_units = "g/kg"
+                    )
+    ),
+    phh2o = list(type = "raster",
+                 source = "SoilGrids",
+                 downloader = ".get_phh2o",
+                 arguments =  list(
+                   depth = "0-5cm",
+                   stat = "mean"
+                 ),
+                 description = list(
+                   long_name = "Soil pH",
+                   mapped_units = "pHx10",
+                   conversion_factor = 100,
+                   conventional_units = "pH"
+                 )
+    ),
+    sand = list(type = "raster",
+                source = "SoilGrids",
+                downloader = ".get_sand",
+                arguments =  list(
+                  depth = "0-5cm",
+                  stat = "mean"
+                ),
+                description = list(
+                  long_name = "Proportion of sand particles (> 0.05 mm) in the fine earth fraction",
+                  mapped_units = "g/kg",
+                  conversion_factor = 10,
+                  conventional_units = "g/100g (perc)"
+                )
+    ),
+    silt = list(type = "raster",
+                source = "SoilGrids",
+                downloader = ".get_silt",
+                arguments =  list(
+                  depth = "0-5cm",
+                  stat = "mean"
+                ),
+                description = list(
+                  long_name = "Proportion of silt particles (>= 0.002 mm and <= 0.05 mm) in the fine earth fraction",
+                  mapped_units = "g/kg",
+                  conversion_factor = 10,
+                  conventional_units = "g/100g (perc)"
+                )
+    ),
+    soc = list(type = "raster",
+               source = "SoilGrids",
+               downloader = ".get_silt",
+               arguments =  list(
+                 depth = "0-5cm",
+                 stat = "mean"
+               ),
+               description = list(
+                 long_name = "Soil organic carbon content in the fine earth fraction",
+                 mapped_units = "dg/kg",
+                 conversion_factor = 10,
+                 conventional_units = "g/kg"
+               )
+    ),
+    ocd = list(type = "raster",
+               source = "SoilGrids",
+               downloader = ".get_cec",
+               arguments =  list(
+                 depth = "0-5cm",
+                 stat = "mean"
+               ),
+               description = list(
+                 long_name = "Organic carbon density",
+                 mapped_units = "kg/m3",
+                 conversion_factor = 10,
+                 conventional_units = "kg/m3"
+               )
+    ),
+    ocs = list(type = "raster",
+               source = "SoilGrids",
+               downloader = ".get_ocs",
+               arguments =  list(
+                 depth = "0-30cm",
+                 stat = "mean"
+               ),
+               description = list(
+                 long_name = "Organic carbon stocks",
+                 mapped_units = "t/ha",
+                 conversion_factor = 10,
+                 conventional_units = "kg/m2"
+               )
     )
   )
 

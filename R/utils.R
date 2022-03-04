@@ -132,12 +132,13 @@
 }
 
 
-.UnzipAndRemove <- function(zip, rundir) {
+.UnzipAndRemove <- function(zip, rundir, remove = TRUE) {
   unzip(
     zipfile = file.path(rundir, basename(zip)),
     exdir = rundir
   )
-  unlink(file.path(rundir, basename(zip)))
+  if(remove)
+    unlink(file.path(rundir, basename(zip)))
 }
 
 .check_available_years <- function(target_years, available_years, indicator){
@@ -148,4 +149,41 @@
     if(length(target_years) == 0 ) stop("The target years do not intersect with the availability of %s.", indicator)
   }
   target_years
+}
+
+
+
+.downloadOrSkip <- function(urls, filenames, verbose, stubbornnes = 6, check_existence = TRUE){
+  options(timeout = max(600, getOption("timeout")))
+  retry = TRUE
+  counter = 1
+  if(length(urls) < 10) verbose = FALSE
+  while(retry){
+    if(verbose) pb = progress::progress_bar$new(total = length(urls))
+    if(verbose) pb$tick(0)
+    unsuccessful = lapply(seq_along(urls), function(i){
+
+      if(file.exists(filenames[i])){
+        if(verbose) pb$tick()
+        return(NULL) # file exists locally
+      }
+      if(check_existence)
+        if(!RCurl::url.exists(urls[i])) return(NULL) # file does not exist remotley
+
+      status = download.file(urls[i], filenames[i], quiet = TRUE, "libcurl")
+      if(status != 0 ) return(list(urls = urls[i], filenames = filenames[i]))
+
+      if(verbose) pb$tick()
+      NULL
+    })
+    counter = counter + 1
+
+    unsuccessful = unsuccessful[which(sapply(unsuccessful, function(x) !is.null(x)))]
+    if(length(unsuccessful) > 0 & counter <= stubbornnes){
+      warning("Some target files have not been downloaded correctly. Download will be retried.")
+      urls = sapply(unsuccessful, function(x) x$urls)
+      filenames = sapply(unsuccessful, function(x) x$filenames)
+    }
+    if(counter > stubbornnes | length(unsuccessful) == 0) retry = FALSE
+  }
 }

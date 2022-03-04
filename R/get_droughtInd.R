@@ -20,23 +20,10 @@
   target_years = .check_available_years(target_years, available_years, "droughtindicators")
 
   urls <- unlist(sapply(target_years, function(year) .getDroughtIndURL(year)))
+  filenames = file.path(rundir, basename(urls))
+  if(any(file.exists(filenames))) message("Skipping existing files in output directory.")
   # start download in a temporal directory within rundir
-  if (verbose) pb <- progress_bar$new(total = length(urls))
-  if (verbose) pb$tick(0)
-  for (url in urls) {
-    tryCatch({
-        if (verbose) pb$tick()
-        download.file(url, file.path(rundir, basename(url)), quiet = TRUE)
-      },
-      error = function(e) {
-        warning(e)
-      },
-      warning = function(e){
-        warning(e)
-      }
-    )
-  }
-  # return paths to the raster
+  .downloadOrSkip(urls, filenames, verbose)
   list.files(rundir, full.names = T)
 }
 

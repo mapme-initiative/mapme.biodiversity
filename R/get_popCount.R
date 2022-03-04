@@ -18,22 +18,10 @@
   available_years = 2000:2020
   target_years = .check_available_years(target_years, available_years, "popcount")
   urls <- unlist(sapply(target_years, function(year) .getPopCountURL(year)))
-
+  filenames =  file.path(rundir, basename(urls))
+  if(any(file.exists(filenames))) message("Skipping existing files in output directory.")
   # start download in a temporal directory within tmpdir
-  if (verbose) pb <- progress_bar$new(total = length(urls))
-  if (verbose) pb$tick(0)
-  for (url in urls) {
-    tryCatch(
-      {
-        if (verbose) pb$tick()
-        download.file(url, file.path(rundir, basename(url)), quiet = TRUE, method = "curl")
-
-      },
-      error = function(e) {
-        stop(e)
-      }
-    )
-  }
+  .downloadOrSkip(urls, filenames, verbose)
   # return paths to the raster
   list.files(rundir, full.names = T)
 }

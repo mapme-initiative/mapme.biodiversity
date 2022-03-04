@@ -20,35 +20,19 @@
   available_years = c(1996, 2007:2010, 2015, 2016)
   target_years = .check_available_years(target_years, available_years, "mangroveextent")
   urls <- unlist(sapply(target_years, function(year) .getMangroveURL(year)))
+  filenames = file.path(rundir, basename(paste0("gmw-extent_", target_years, ".zip")))
+  if(any(file.exists(filenames))) message("Skipping existing files in output directory.")
 
   # start download in a temporal directory within tmpdir
-  if (verbose) pb <- progress_bar$new(total = length(urls))
-  if (verbose) pb$tick(0)
-  for (url in urls) {
-    tryCatch(
-      {
-        if (verbose) pb$tick()
-        year <- gsub(".*?([0-9]+).*", "\\1", url)
-        download.file(url, file.path(rundir, basename(paste0("gmw-extent_", year, ".zip"))), quiet = TRUE)
-
-      },
-      error = function(e) {
-        message(e)
-      }
-    )
-  }
+  .downloadOrSkip(urls, filenames, verbose)
 
   # unzip and convert shp to gpkg
-  all_zips <- list.files(rundir, full.names = T)
-  #
+  all_zips <- list.files(rundir, full.names = T, pattern = ".zip")
   message("Translating ESRI Shapefiles to GeoPackages. This may take a while....")
   sapply(all_zips, function(zip) .unzipMangrove(zip, rundir))
 
-  # delete unneccessary files
-  d_files <- list.files(rundir, full.names = T)
-  unlink(grep("*gpkg", d_files, value = T, invert = T), recursive = T, force = T)
   # return paths to the gpkg
-  list.files(rundir, full.names = T)
+  list.files(rundir, full.names = T, pattern = ".gpkg")
 }
 
 
@@ -60,15 +44,18 @@
 #'
 #' @return Nothing.
 #' @keywords internal
-.unzipMangrove <- function(zip_files, rundir) {
-  bn <- basename(zip_files)
+.unzipMangrove <- function(zip, rundir) {
+  bn <- basename(zip)
   if (bn == "gmw-extent_2007.zip") {
     utils::unzip(
       zipfile = file.path(rundir, basename(paste0("gmw-extent_2007.zip"))),
       exdir = rundir
     )
-    shp <- read_sf(paste0(rundir, "/GMW_2007_v2.0.shp"))
+    shp = file.path(rundir, "GMW_2007_v2.0.shp")
+    gpkg = file.path(rundir, "gmw-extent_2007.gpkg")
     write_sf(shp, file.path(rundir, basename("gmw-extent_2007.gpkg")))
+    command = sprintf("ogr2ogr %s %s", gpkg, shp)
+    system(command)
     d_files <- list.files(rundir, full.names = T)
     unlink(grep("gmw-extent*", d_files, value = T, invert = T), recursive = T, force = T)
   } else {
@@ -77,8 +64,10 @@
       zipfile = file.path(rundir, basename(paste0("gmw-extent_", year, ".zip"))),
       exdir = rundir
     )
-    shp <- read_sf(paste0(rundir, "/GMW_001_GlobalMangroveWatch_", year, "/01_Data/GMW_", year, "_v2.shp"))
-    write_sf(shp, file.path(rundir, basename(paste0("gmw-extent_", year, ".gpkg"))))
+    shp = paste0(rundir, "/GMW_001_GlobalMangroveWatch_", year, "/01_Data/GMW_", year, "_v2.shp")
+    gpkg = file.path(rundir, paste0("gmw-extent_", year, ".gpkg"))
+    command = sprintf("ogr2ogr %s %s", gpkg, shp)
+    system(command)
     d_files <- list.files(rundir, full.names = T)
     unlink(grep("gmw-extent*", d_files, value = T, invert = T), recursive = T, force = T)
   }

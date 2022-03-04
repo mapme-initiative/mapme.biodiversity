@@ -20,14 +20,9 @@
 
   # get url for accessibility layer
   url <- .getaccessibilityURL(range_accessibility)
+  filename = file.path(rundir, paste0("accessibility-", range_accessibility, ".tif"))
   # start download in a temporal directory within tmpdir
-  sucess = tryCatch({
-  download.file(url, file.path(rundir, basename(paste0("accessibility-", range_accessibility, ".tif"))), quiet = TRUE)
-  }, error = function(cond){
-    stop(cond)
-  }, warning = function(cond){
-    warning(cond)
-  })
+  .downloadOrSkip(url, filename, verbose)
   # return paths to the raster
   list.files(rundir, full.names = T)
 }

@@ -8,7 +8,6 @@
 .get_greenhouse(
   x,
   vers_greenhouse = "latest",
-  api_key_gfw = NA,
   verbose = TRUE,
   rundir = tempdir()
 )
@@ -17,8 +16,6 @@
 \item{x}{An sf object returned by init_portfolio}
 
 \item{vers_greenhouse}{The version of the data set to download, defaults to the latest.}
-
-\item{api_key_gfw}{A character vector representing a user's GFW API key for authentications.}
 
 \item{verbose}{Logical controlling verbosity.}
 

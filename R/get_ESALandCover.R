@@ -33,29 +33,9 @@
   })
   # urls to vector
   urls = unlist(urls)
-  # check availability of urls, e.g. there are no tiles on the ocean
-  is_available = sapply(urls, function(url) RCurl::url.exists(url))
-  urls = urls[is_available]
-
-  if(length(urls) == 0){
-    stop("For the given portfolios spatial extent there are no available ESA Land Cover tiles.")
-  }
-
-  # start download in a temporal directory within tmpdir
-  if (verbose) pb <- progress_bar$new(total = length(urls))
-  if (verbose) pb$tick(0)
-  for (url in urls) {
-    tryCatch(
-      {
-        download.file(url, file.path(rundir, basename(url)), quiet = TRUE, method = "curl")
-        if (verbose) pb$tick()
-      },
-      error = function(e) {
-        stop(e)
-      }
-    )
-  }
-
+  filenames =  file.path(rundir, basename(urls))
+  if(any(file.exists(filenames))) message("Skipping existing files in output directory.")
+  .downloadOrSkip(urls, filenames, verbose)
   # return all paths to the downloaded files
   list.files(rundir, full.names = T)
 }
