@@ -22,6 +22,8 @@
 
 \item{lossyear}{The lossyear resource from GFW}
 
+\item{greenhouse}{The greenhouse emission layer from GFW}
+
 \item{minSize}{The minimum size of a forest patch in ha.}
 
 \item{minCover}{The minimum threshold of stand density for a pixel to be considered forest in the year 2000.}

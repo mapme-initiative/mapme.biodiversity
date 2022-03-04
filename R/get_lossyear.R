@@ -23,20 +23,16 @@
   # make the GFW grid and construct urls for intersecting tiles
   bbox = st_bbox(x)
   baseurl = sprintf("https://storage.googleapis.com/earthenginepartners-hansen/%s/", vers_lossyear)
-  grid_GFC = .makeGFWGrid()
+  grid_GFC = .makeGlobalGrid(xmin=-180, xmax=170, dx=10, ymin=-50, ymax=80, dy=10)
   tile_ids = st_intersects(st_as_sfc(bbox), grid_GFC)[[1]]
   if(length(tile_ids) == 0) stop("The extent of the portfolio does not intersect with the GFW grid.", call. = FALSE)
   ids = sapply(tile_ids, function(n) .getGFWTileId(grid_GFC[n,]))
   urls = sprintf("%sHansen_%s_lossyear_%s.tif", baseurl, vers_lossyear, ids)
-
+  filenames = file.path(rundir, basename(urls))
+  if(any(file.exists(filenames))) message("Skipping existing files in output directory.")
   # start download in a temporal directory within tmpdir
   # TODO: Parallel downloads
-  if(verbose) pb = progress::progress_bar$new(total = length(urls))
-  if(verbose) pb$tick(0)
-  for (url in urls){
-    download.file(url, file.path(rundir, basename(url)), quiet = TRUE)
-    if(verbose) pb$tick()
-  }
+  .downloadOrSkip(urls, filenames, verbose)
   # return all paths to the downloaded files
   list.files(rundir, full.names = T)
 }
