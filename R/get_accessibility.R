@@ -46,13 +46,32 @@
     )
   )
 
-  if (range %in% df.index$range) {
-    index <- df.index$index[df.index$range == range]
-    url <- paste0("https://ndownloader.figshare.com/files/", index)
-    url
-  } else {
-    warning(sprintf("Accessibility layer not available for range %s", range))
-    NULL
+  if(any(!range %in% df.index$range)){
+    index = which(!range %in% df.index$range)
+    basemsg = "The selected %s not available ranges for accessibility. Available ranges are %s."
+    if(length(index) == 1){
+      body = sprintf("range '%s' is", range[index])
+    } else {
+      body = sprintf("ranges '%s' are", paste(range[index], collapse = "', '"))
+    }
+    message(sprintf(basemsg, body, paste(df.index$range, collapse = ", ")))
+    range = range[-index]
+    if(length(range) == 0){
+      stop("No supoorted ranges have been specified.")
+    } else {
+      basemsg = "Reduced to the available %s"
+      if(length(range) == 1){
+        body = sprintf("range of %s.", range)
+      } else {
+        body = sprintf("ranges of %s.", paste(range, collapse = ", "))
+      }
+      message(sprintf(basemsg, body))
+    }
   }
+
+  unlist(lapply(range, function(x){
+    index = df.index$index[df.index$range == x]
+    paste0("https://ndownloader.figshare.com/files/", index)
+  }))
 }
 
