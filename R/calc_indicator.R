@@ -144,7 +144,8 @@ calc_indicators <- function(x, indicators, ...){
     file.remove(tindex_file)
 
     if(length(target_files) == 0 ){
-      stop("Does not intersect.")
+      warning("Does not intersect.")
+      return(NULL)
     } else if(length(target_files) == 1){
       out = terra::rast(target_files)
       # out = crop(out, vect(shp))
