@@ -80,6 +80,11 @@
                               filename = file.path(rundir, "binary_treecover.tif"),
                               datatype = "INT1U",
                               overwrite = TRUE)
+  unique_vals = unique(as.vector(minmax(binary_treecover)))
+  if(length(unique_vals) == 1 & is.nan(unique_vals)){
+    return(as.data.frame(lapply(1:length(years), function(x) 0),
+                         col.names =  paste0("treecover_", years))
+  }
   # retrieve patches of comprehensive forest areas
   patched = patches(binary_treecover, directions = 4, zeroAsNA = TRUE,
                     filename = file.path(rundir, "patched.tif"),
