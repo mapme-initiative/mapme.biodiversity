@@ -23,7 +23,7 @@
                         minCover = 35,
                         rundir = tempdir(),
                         verbose = TRUE){
-
+  
   # initial argument checks
   # retrieve years from portfolio
   years = attributes(shp)$years
@@ -39,7 +39,7 @@
                          col.names =  paste0("treecover_", years))
     )
   }
-
+  
   # check additional arguments
   minCover_msg = "Argument 'minCover' for indicator 'treecover' must be a numeric value between 0 and 100."
   if(is.numeric(minCover)){
@@ -50,7 +50,7 @@
   if(minCover < 0 || minCover > 100){
     stop(minCover_msg)
   }
-
+  
   minSize_msg = "Argument 'minSize' for indicator 'treecover' must be a numeric value greater 0."
   if(is.numeric(minSize)){
     minSize = as.integer(round(minSize))
@@ -58,14 +58,14 @@
     stop(minSize_msg)
   }
   if(minSize <= 0) stop(minSize_msg)
-
+  
   if(any(years < 2000)){
     warning("Cannot calculate treecover statistics for years smaller than 2000.")
     years = years[years>=2000]
   }
-
+  
   # skip if the area of the
-
+  
   #------------------------------------------------------------------------------
   # start calculation if everything is set up correctly
   # retrieve an area raster
@@ -83,7 +83,7 @@
   unique_vals = unique(as.vector(minmax(binary_treecover)))
   if(length(unique_vals) == 1 & is.nan(unique_vals)){
     return(as.data.frame(lapply(1:length(years), function(x) 0),
-                         col.names =  paste0("treecover_", years))
+                         col.names =  paste0("treecover_", years)))
   }
   # retrieve patches of comprehensive forest areas
   patched = patches(binary_treecover, directions = 4, zeroAsNA = TRUE,
@@ -115,7 +115,7 @@
                          filename = file.path(rundir, "polygon.tif"),
                          datatype = "INT1U",
                          overwrite = TRUE)
-
+  
   # get forest cover statistics for each year
   yearly_cover_values = lapply(years, function(y){
     y = y - 2000
@@ -130,10 +130,10 @@
     ha_sum_treecover = zonal(current_arearaster, polyraster, sum, na.rm = TRUE)[2]
     as.numeric(ha_sum_treecover)
   })
-
+  
   # memory clean up
   rm(arearaster, binary_treecover, patchsizes, patched, polyraster); gc()
   # return a data-frame
   as.data.frame(yearly_cover_values, col.names =  paste0("treecover_", years))
-
+  
 }
