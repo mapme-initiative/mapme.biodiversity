@@ -28,7 +28,7 @@
   tileids = spatialindex$tile_id[targets]
   #baseurl = sprintf("https://data-api.globalforestwatch.org/dataset/gfw_forest_carbon_gross_emissions/%s/download/geotiff", vers_greenhouse)
   #urls = sprintf("%s?grid=10/40000&tile_id=%s&pixel_meaning=Mg_CO2e_px&x-api-key=%s", baseurl, tileids, api_key_gfw)
-  urls = spatialindex$Mg_CO2e_px_download[spatialindex$tile_id %in% tileids]
+  urls = as.character(spatialindex$Mg_CO2e_px_download[spatialindex$tile_id %in% tileids])
   filenames = file.path(rundir, sprintf("gfw_forest_carbon_gross_emissions_Mg_CO2e_px_%s.tif", tileids))
   if(any(file.exists(filenames))) message("Skipping existing files in output directory.")
   # TODO: Parallel downloads
