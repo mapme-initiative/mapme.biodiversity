@@ -126,7 +126,7 @@ calc_indicators <- function(x, indicators, ...){
   x
 }
 
-.read_source <- function(shp, resource, outdir, rundir){
+.read_source <- function(shp, resource, rundir, outdir){
 
   resource_type = resource[[1]]
   resource = names(resource)
