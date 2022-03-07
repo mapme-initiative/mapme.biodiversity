@@ -46,7 +46,7 @@ calc_indicators <- function(x, indicators, ...){
   params$rundir = rundir
   params$verbose = atts$verbose
   resources = selected_indicator[[1]]$inputs
-  x = x[order(st_area(st_convex_hull(x)), decreasing = FALSE), ]
+  # x = x[order(st_area(st_convex_hull(x)), decreasing = FALSE), ]
 
   progressr::handlers(global = TRUE)
   progressr::handlers(
@@ -98,7 +98,7 @@ calc_indicators <- function(x, indicators, ...){
         # loop to read through the ressource
         #.read_source should return NULL if an error occurs
         for(j in 1:length(resources)){
-          new_source = .read_source(parameters$shp, resources[j], iddir, outdir)
+          new_source = .read_source(parameters$shp, resources[j], outdir, iddir)
           if(!is.null(new_source)){
             parameters = append(parameters, new_source)
             names(parameters)[length(names(parameters))] = names(resources)[j]
@@ -127,18 +127,19 @@ calc_indicators <- function(x, indicators, ...){
   x
 }
 
-.read_source <- function(shp, resource, rundir, outdir){
+.read_source <- function(shp, resource, outdir, rundir){
 
   if(resource == "raster"){
     # create a temporary tile-index
     tindex_file = tempfile(pattern = "tileindex", fileext = ".gpkg", tmpdir = rundir)
-    command = sprintf("gdaltindex -t_srs EPSG:4326 %s %s/*.tif", tindex_file, file.path(outdir, names(resource)))
+    command = sprintf("gdaltindex -t_srs EPSG:4326 %s %s/*.tif", tindex_file, file.path(outdir, resource))
     # print(command)
     system(command, intern = TRUE)
 
     # retrieve tiles that intersect with the shp extent
     tindex = st_read(tindex_file, quiet = TRUE)
     target_files = tindex$location[unlist(st_intersects(shp, tindex))]
+    rm(tindex); gc()
     file.remove(tindex_file)
 
     if(length(target_files) == 0 ){
