@@ -138,7 +138,7 @@ calc_indicators <- function(x, indicators, ...){
     system(command, intern = TRUE)
 
     # retrieve tiles that intersect with the shp extent
-    tindex = st_read(tindex_file, quiet = TRUE)
+    tindex = read_sf(tindex_file, quiet = TRUE)
     target_files = tindex$location[unlist(st_intersects(shp, tindex))]
     rm(tindex); gc()
     file.remove(tindex_file)
@@ -173,7 +173,7 @@ calc_indicators <- function(x, indicators, ...){
   }
 
   if(resource_type == "vector"){
-    out = st_read(source, wkt_filter = st_as_text(st_geometry(shp)))
+    out = read_sf(source, wkt_filter = st_as_text(st_geometry(shp)))
   }
   out
 }
