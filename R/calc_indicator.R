@@ -43,7 +43,6 @@ calc_indicators <- function(x, indicators, ...){
   # matching the specified arguments to the required arguments
   params = .check_resource_arguments(selected_indicator, args)
   # append parameters
-  params$rundir = rundir
   params$verbose = atts$verbose
   resources = selected_indicator[[1]]$inputs
   # x = x[order(st_area(st_convex_hull(x)), decreasing = FALSE), ]
@@ -98,7 +97,7 @@ calc_indicators <- function(x, indicators, ...){
         # loop to read through the ressource
         #.read_source should return NULL if an error occurs
         for(j in 1:length(resources)){
-          new_source = .read_source(parameters$shp, resources[j], outdir, iddir)
+          new_source = .read_source(parameters$shp, resources[j], iddir, outdir)
           if(!is.null(new_source)){
             parameters = append(parameters, new_source)
             names(parameters)[length(names(parameters))] = names(resources)[j]
@@ -129,7 +128,9 @@ calc_indicators <- function(x, indicators, ...){
 
 .read_source <- function(shp, resource, outdir, rundir){
 
-  if(resource == "raster"){
+  resource_type = resource[[1]]
+  resource = names(resource)
+  if(resource_type == "raster"){
     # create a temporary tile-index
     tindex_file = tempfile(pattern = "tileindex", fileext = ".gpkg", tmpdir = rundir)
     command = sprintf("gdaltindex -t_srs EPSG:4326 %s %s/*.tif", tindex_file, file.path(outdir, resource))
@@ -171,7 +172,7 @@ calc_indicators <- function(x, indicators, ...){
 
   }
 
-  if(resource == "vector"){
+  if(resource_type == "vector"){
     out = st_read(source, wkt_filter = st_as_text(st_geometry(shp)))
   }
   out
