@@ -32,6 +32,8 @@
 \item{rundir}{A directory where intermediate files are written to.}
 
 \item{verbose}{A directory where intermediate files are written to.}
+
+\item{todisk}{Logical indicating whether or not temporary raster files shall be written to disk}
 }
 \value{
 A tibble

@@ -84,6 +84,12 @@
                     filename = ifelse(todisk, file.path(rundir, "patched.tif"), ""),
                     datatype = "INT4U",
                     overwrite = TRUE)
+  unique_vals = unique(as.vector(minmax(patched)))
+  if(length(unique_vals) == 1) {
+    if(is.nan(unique_vals)){
+      return(tibble(years = years, treecover = rep(0, length(years))))
+    }
+  }
   # get the sizes of the patches
   patchsizes = zonal(arearaster, patched, sum, as.raster = TRUE,
                      filename = ifelse(todisk, file.path(rundir, "patchsizes.tif"), ""),
