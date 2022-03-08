@@ -1,11 +1,9 @@
 calc_indicators <- function(x, indicators, ...){
   # check if the requested resource is supported
-  .check_requested_indicator(indicators)
+  required_resources = .check_requested_indicator(indicators)
   # check if any of the requested resources is already locally available
-  #existing_resources = attributes(x)$resources
-  #resources = .check_existing_resources(names(existing_resources), resources)
-  #if(length(resources) == 0) return(x)
-  # get the resources
+  existing_resources = names(attributes(x)$resources)
+  .check_existing_resources(existing_resources, required_resources, needed = TRUE)
   ## TODO: check if we can go parallel here. Problem is when errors occur
   # for one resource and it terminates the complete process. We would have
   # to catch that so other processes can terminate successfully.
@@ -30,22 +28,21 @@ calc_indicators <- function(x, indicators, ...){
   # get arguments from function call and portfolio object
   args = list(...)
   atts = attributes(x)
-  outdir = atts$outdir
-  tmpdir = atts$tmpdir
-  rundir = file.path(tmpdir, indicator)
+  resource_dir = atts$outdir
+  tmpdir = file.path(atts$tmpdir, indicator)
+  dir.create(tmpdir, showWarnings = FALSE)
   cores = atts$cores
   verbose = atts$verbose
-  dir.create(rundir, showWarnings = FALSE)
+
   # retrieve the selected indicator
   selected_indicator = available_indicators(indicator)
   # match function call
   fun = match.fun(selected_indicator[[1]]$name)
   # matching the specified arguments to the required arguments
-  params = .check_resource_arguments(selected_indicator, args)
+  baseparams = .check_resource_arguments(selected_indicator, args)
   # append parameters
-  params$verbose = atts$verbose
+  baseparams$verbose = atts$verbose
   resources = selected_indicator[[1]]$inputs
-  # x = x[order(st_area(st_convex_hull(x)), decreasing = FALSE), ]
 
   progressr::handlers(global = TRUE)
   progressr::handlers(
@@ -61,25 +58,25 @@ calc_indicators <- function(x, indicators, ...){
       p = progressr::progressor(along = 1:nrow(x))
       future::plan(future::multisession, workers = cores)
       results = furrr::future_map(1:nrow(x), function(i){
-        iddir = file.path(rundir, i) # create a rundir name
-        dir.create(iddir, showWarnings = FALSE) # create the current rundir
-        parameters = params # new parameters object
-        parameters$rundir = iddir # change rundir
-        parameters$shp = x[i,] # enter specific polygon
+        rundir = file.path(tmpdir, i) # create a rundir name
+        dir.create(rundir, showWarnings = FALSE) # create the current rundir
+        params = baseparams # new parameters object
+        params$rundir = rundir # change rundir
+        params$shp = x[i,] # enter specific polygon
         # loop to read through the ressource
         #.read_source should return NULL if an error occurs
         for(j in 1:length(resources)){
-          new_source = .read_source(parameters$shp, resources[j], iddir, outdir)
+          new_source = .read_source(params$shp, resources[j], rundir, resource_dir)
           if(!is.null(new_source)){
-            parameters = append(parameters, new_source)
-            names(parameters)[length(names(parameters))] = names(resources)[j]
+            params = append(params, new_source)
+            names(params)[length(names(params))] = names(resources)[j]
           }
         }
         # call the indicator function with the associated parameters
-        out = do.call(fun, args = parameters)
+        out = do.call(fun, args = params)
         p() # progress tick
         out$.id = i # add an id variable
-        unlink(iddir, recursive = TRUE, force = TRUE) # delete the current rundir
+        unlink(rundir, recursive = TRUE, force = TRUE) # delete the current rundir
         out # return
       })
     })
@@ -89,32 +86,32 @@ calc_indicators <- function(x, indicators, ...){
     progressr::with_progress({
       p = progressr::progressor(along = 1:nrow(x))
       results = purrr::map(1:nrow(x), function(i){
-        iddir = file.path(rundir, i) # create a rundir name
-        dir.create(iddir, showWarnings = FALSE) # create the current rundir
-        parameters = params # new parameters object
-        parameters$rundir = iddir # change rundir
-        parameters$shp = x[i,] # enter specific polygon
+        rundir = file.path(tmpdir, i) # create a rundir name
+        dir.create(rundir, showWarnings = FALSE) # create the current rundir
+        params = baseparams # new parameters object
+        params$rundir = rundir # change rundir
+        params$shp = x[i,] # enter specific polygon
         # loop to read through the ressource
         #.read_source should return NULL if an error occurs
         for(j in 1:length(resources)){
-          new_source = .read_source(parameters$shp, resources[j], iddir, outdir)
+          new_source = .read_source(params$shp, resources[j], rundir, resource_dir)
           if(!is.null(new_source)){
-            parameters = append(parameters, new_source)
-            names(parameters)[length(names(parameters))] = names(resources)[j]
+            params = append(params, new_source)
+            names(params)[length(names(params))] = names(resources)[j]
           }
         }
         # call the indicator function with the associated parameters
-        out = do.call(fun, args = parameters)
+        out = do.call(fun, args = params)
         p() # progress tick
         out$.id = i # add an id variable
-        unlink(iddir, recursive = TRUE, force = TRUE) # delete the current rundir
+        unlink(rundir, recursive = TRUE, force = TRUE) # delete the current rundir
         out # return
       })
     })
   }
 
-  # cleanup the rundir
-  unlink(rundir, recursive = TRUE, force = TRUE)
+  # cleanup the tmpdir for indicator
+  unlink(tmpdir, recursive = TRUE, force = TRUE)
   # bind results to data.frame
   results = do.call(rbind, results)
   # nest the results
@@ -126,14 +123,14 @@ calc_indicators <- function(x, indicators, ...){
   x
 }
 
-.read_source <- function(shp, resource, rundir, outdir){
+.read_source <- function(shp, resource, rundir, resource_dir){
 
   resource_type = resource[[1]]
   resource = names(resource)
   if(resource_type == "raster"){
     # create a temporary tile-index
     tindex_file = tempfile(pattern = "tileindex", fileext = ".gpkg", tmpdir = rundir)
-    command = sprintf("gdaltindex -t_srs EPSG:4326 %s %s/*.tif", tindex_file, file.path(outdir, resource))
+    command = sprintf("gdaltindex -t_srs EPSG:4326 %s %s/*.tif", tindex_file, file.path(resource_dir, resource))
     # print(command)
     system(command, intern = TRUE)
 

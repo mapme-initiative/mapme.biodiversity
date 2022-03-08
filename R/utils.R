@@ -14,31 +14,47 @@
   }
 }
 
-
-.check_requested_indicator <- function(indicator){
+.check_requested_indicator <- function(indicators){
   names_indicators = names(available_indicators())
   # check for unsupported resources
-  if(any(!indicator %in% names_indicators)){
-    unsupported = indicator[which(!indicator %in% names_indicators)]
+  if(any(!indicators %in% names_indicators)){
+    unsupported = indicators[which(!indicators %in% names_indicators)]
     base_msg = "The following requested %s not supported: %s."
     mid_msg = ifelse(length(unsupported)==1, "indicator is", "indicators are")
     end_msg = paste(unsupported, collapse = ", ")
     stop(sprintf(base_msg, mid_msg, end_msg))
   }
+  required_resources = sapply(available_indicators()[indicators], function(x) names(x$inputs))
+  required_resources = unique(as.vector(required_resources))
+  required_resources
 }
 
-.check_existing_resources <- function(existing_resources, requested_resources){
+.check_existing_resources <- function(existing_resources, requested_resources, needed = FALSE){
 
-  if(any(requested_resources %in% existing_resources)){
-    existing = requested_resources[which(requested_resources %in% existing_resources)]
-    nonexisting = requested_resources[which(!requested_resources %in% existing_resources)]
-    base_msg = "The following requested %s already available: %s."
-    mid_msg = ifelse(length(existing)==1, "resource is", "resources are")
-    end_msg = paste(existing, collapse = ", ")
-    message(sprintf(base_msg, mid_msg, end_msg))
-    nonexisting
+  if(needed == FALSE){
+    if(any(requested_resources %in% existing_resources)){
+      existing = requested_resources[which(requested_resources %in% existing_resources)]
+      nonexisting = requested_resources[which(!requested_resources %in% existing_resources)]
+      base_msg = "The following requested %s already available: %s."
+      mid_msg = ifelse(length(existing)==1, "resource is", "resources are")
+      end_msg = paste(existing, collapse = ", ")
+      message(sprintf(base_msg, mid_msg, end_msg))
+      nonexisting
+    } else {
+      requested_resources
+    }
   } else {
-    requested_resources
+    if(any(!requested_resources %in% existing_resources)){
+      existing = requested_resources[which(requested_resources %in% existing_resources)]
+      nonexisting = requested_resources[which(!requested_resources %in% existing_resources)]
+      base_msg = "The following required %s not available: %s."
+      mid_msg = ifelse(length(nonexisting)==1, "resource is", "resources are")
+      end_msg = paste(nonexisting, collapse = ", ")
+      stop(sprintf(base_msg, mid_msg, end_msg))
+      nonexisting
+    } else {
+      NULL
+      }
   }
 
 }

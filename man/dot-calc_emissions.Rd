@@ -12,7 +12,8 @@
   minSize = 10,
   minCover = 35,
   rundir = tempdir(),
-  verbose = TRUE
+  verbose = TRUE,
+  todisk = FALSE
 )
 }
 \arguments{
