@@ -32,7 +32,7 @@
   # retrieve years from portfolio
   years = attributes(shp)$years
   # handling of return value if resources are missing, e.g. no overlap
-  if(any(missing(treecover), missing(lossyear))){
+  if(any(missing(treecover), missing(lossyear), missing(greenhouse))){
     return(tibble(years = years, emissions = rep(NA, length(years))))
   }
   # check if treecover only contains 0s, e.g. on the ocean
@@ -82,6 +82,13 @@
                     filename = ifelse(todisk, file.path(rundir, "patched.tif"), ""),
                     datatype = "INT4U",
                     overwrite = TRUE)
+  
+  unique_vals = unique(as.vector(minmax(patched)))
+  if(length(unique_vals) == 1) {
+    if(is.nan(unique_vals)){
+      return(tibble(years = years, emissions = rep(0, length(years))))
+    }
+  }
   # get the sizes of the patches
   patchsizes = zonal(arearaster, patched, sum, as.raster = TRUE,
                      filename = ifelse(todisk, file.path(rundir, "patchsizes.tif"), ""),
