@@ -128,5 +128,5 @@
   # memory clean up
   rm(arearaster, binary_treecover, patchsizes, patched, polyraster); gc()
   # return a data-frame
-  tibble(years = years, emissions = as.vector(yearly_emission_values))
+  tibble(years = years, emissions = as.vector(unlist(yearly_emission_values)))
 }
