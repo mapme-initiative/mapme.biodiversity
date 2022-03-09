@@ -18,6 +18,16 @@ available_indicators <- function(indicator = NULL){
         minSize = 10,
         minCover = 30
       )
+    ),
+    treeloss = list(
+      name = ".calc_treeloss",
+      inputs = list(treecover = "raster",
+                    lossyear = "raster",
+                    greenhouse = "raster"),
+      arguments = list(
+        minSize = 10,
+        minCover = 30
+      )
     )
   )
 

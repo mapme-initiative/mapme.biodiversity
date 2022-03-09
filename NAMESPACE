@@ -2,6 +2,7 @@
 
 export(.calc_cover)
 export(.calc_emissions)
+export(.calc_treeloss)
 export(.get_single_indicator)
 export(available_resources)
 export(get_resources)
