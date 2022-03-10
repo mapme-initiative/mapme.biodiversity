@@ -16,3 +16,4 @@
 \description{
 This functions let's users calculate on or more biodiversity indicators for a portfolio.
 }
+\keyword{internal}

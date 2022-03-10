@@ -1,3 +1,21 @@
+#' Compute specific indicators
+#'
+#' With \code{calc_indicators()} specific biodiversity indicators
+#' can be calculated. A requirment is that the ressources that
+#' are mandatory inputs for the requested indicators are available
+#' locally. Multiple indicators and their respective additional
+#' arguments can be supplied. You can check available indicators and
+#' their requirement via \code{available_indicators()}, but
+#' the function will also gracefully inform you about any misspecifications.
+#' @param x A biodiversity portfolio object constructed via \code{init_portfolio()}
+#' @param indicators A character vector indicating the requested indicators. All
+#'   specified indicators must be supported by the package. You can use \code{available_indicators()}
+#'   to get more information, e.g. additional required arguments and their default
+#'   values, about the supported indicators
+#' @param ... Additional arguments required for the requested indicators. Check
+#'  \code{available_indicators()} to learn more about the supported indicators and
+#'  their arguments.
+#' @export
 calc_indicators <- function(x, indicators, ...){
   # check if the requested resource is supported
   required_resources = .check_requested_indicator(indicators)
@@ -19,12 +37,12 @@ calc_indicators <- function(x, indicators, ...){
 #' @param indicator A variable length charcter vector with the indicators to calculate.
 #' @param ... Additional arguments required by the requested indicators.
 #'
-#' @export
+#' @keywords internal
 #' @importFrom dplyr relocate last_col
 #' @importFrom tidyr nest
-#' @importFrom future plan multisession sequential
 .get_single_indicator <- function(x, indicator, ...){
 
+  i = NULL
   # get arguments from function call and portfolio object
   args = list(...)
   atts = attributes(x)
@@ -38,76 +56,58 @@ calc_indicators <- function(x, indicators, ...){
   selected_indicator = available_indicators(indicator)
   # match function call
   fun = match.fun(selected_indicator[[1]]$name)
+  # required resources
+  resources = selected_indicator[[1]]$inputs
   # matching the specified arguments to the required arguments
   baseparams = .check_resource_arguments(selected_indicator, args)
   # append parameters
   baseparams$verbose = atts$verbose
-  resources = selected_indicator[[1]]$inputs
+  baseparams$tmpdir = tmpdir
+  baseparams$resource_dir = resource_dir
+  baseparams$fun = fun
+  baseparams$resources = resources
 
-  progressr::handlers(global = TRUE)
-  progressr::handlers(
-    progressr::handler_progress(
-      format = sprintf(" Calculating indicator '%s' [:bar] :percent", indicator),
-      clear = FALSE,
-      width= 60
-    ))
-
+  if(verbose){
+    progressr::handlers(global = TRUE)
+    progressr::handlers(
+      progressr::handler_progress(
+        format = sprintf(" Calculating indicator '%s' [:bar] :percent", indicator),
+        clear = FALSE,
+        width= 60
+      ))
+  }
   # apply function with parameters and add hidden id column
   if(cores > 1){
-    progressr::with_progress({
-      p = progressr::progressor(along = 1:nrow(x))
-      future::plan(future::multisession, workers = cores)
-      results = furrr::future_map(1:nrow(x), function(i){
-        rundir = file.path(tmpdir, i) # create a rundir name
-        dir.create(rundir, showWarnings = FALSE) # create the current rundir
-        params = baseparams # new parameters object
-        params$rundir = rundir # change rundir
-        params$shp = x[i,] # enter specific polygon
-        # loop to read through the ressource
-        #.read_source should return NULL if an error occurs
-        for(j in 1:length(resources)){
-          new_source = .read_source(params$shp, resources[j], rundir, resource_dir)
-          if(!is.null(new_source)){
-            params = append(params, new_source)
-            names(params)[length(names(params))] = names(resources)[j]
-          }
-        }
-        # call the indicator function with the associated parameters
-        out = do.call(fun, args = params)
-        p() # progress tick
-        out$.id = i # add an id variable
-        unlink(rundir, recursive = TRUE, force = TRUE) # delete the current rundir
-        out # return
+
+    if(verbose){
+      progressr::with_progress({
+        baseparams$p = progressr::progressor(along = 1:nrow(x))
+        results = parallel::mclapply(1:nrow(x), function(i){
+          .prep_and_compute(x[i,], baseparams, i)
+        }, mc.cores = cores)
       })
-    })
-    future::plan(future::sequential)
+    } else {
+
+      results = parallel::mclapply(1:nrow(x), function(i){
+        .prep_and_compute(x[i,], baseparams, i)
+      }, mc.cores = cores)
+
+    }
 
   } else {
-    progressr::with_progress({
-      p = progressr::progressor(along = 1:nrow(x))
-      results = purrr::map(1:nrow(x), function(i){
-        rundir = file.path(tmpdir, i) # create a rundir name
-        dir.create(rundir, showWarnings = FALSE) # create the current rundir
-        params = baseparams # new parameters object
-        params$rundir = rundir # change rundir
-        params$shp = x[i,] # enter specific polygon
-        # loop to read through the ressource
-        #.read_source should return NULL if an error occurs
-        for(j in 1:length(resources)){
-          new_source = .read_source(params$shp, resources[j], rundir, resource_dir)
-          if(!is.null(new_source)){
-            params = append(params, new_source)
-            names(params)[length(names(params))] = names(resources)[j]
-          }
-        }
-        # call the indicator function with the associated parameters
-        out = do.call(fun, args = params)
-        p() # progress tick
-        out$.id = i # add an id variable
-        unlink(rundir, recursive = TRUE, force = TRUE) # delete the current rundir
-        out # return
+
+    if(verbose){
+      progressr::with_progress({
+        baseparams$p = progressr::progressor(along = 1:nrow(x))
+        results = lapply(1:nrow(x), function(i){
+          .prep_and_compute(x[i,], baseparams, i)
+        })
       })
-    })
+    } else {
+      results = lapply(1:nrow(x), function(i){
+        .prep_and_compute(x[i,], baseparams, i)
+      })
+    }
   }
 
   # cleanup the tmpdir for indicator
@@ -174,4 +174,31 @@ calc_indicators <- function(x, indicators, ...){
     out = read_sf(source, wkt_filter = st_as_text(st_geometry(shp)))
   }
   out
+}
+
+#' Internal indicator routine
+#'
+#' Helper to abstract preparation and computation
+#' of indicators per polygon
+#' @keywords internal
+.prep_and_compute <-  function(shp, params, i){
+  rundir = file.path(params$tmpdir, i) # create a rundir name
+  dir.create(rundir, showWarnings = FALSE) # create the current rundir
+  params$rundir = rundir # change rundir
+  params$shp = shp # enter specific polygon
+  # loop to read through the ressource
+  #.read_source should return NULL if an error occurs
+  for(j in 1:length(params$resources)){
+    new_source = .read_source(params$shp, params$resources[j], rundir, params$resource_dir)
+    if(!is.null(new_source)){
+      params = append(params, new_source)
+      names(params)[length(names(params))] = names(params$resources)[j]
+    }
+  }
+  # call the indicator function with the associated parameters
+  out = do.call(params$fun, args = params)
+  if(params$verbose) params$p() # progress tick
+  out$.id = i # add an id variable
+  unlink(rundir, recursive = TRUE, force = TRUE) # delete the current rundir
+  out # return
 }

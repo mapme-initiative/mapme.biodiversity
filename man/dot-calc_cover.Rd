@@ -12,7 +12,8 @@
   minCover = 35,
   rundir = tempdir(),
   verbose = TRUE,
-  todisk = FALSE
+  todisk = FALSE,
+  ...
 )
 }
 \arguments{
@@ -31,6 +32,8 @@
 \item{verbose}{A directory where intermediate files are written to.}
 
 \item{todisk}{Logical indicating whether or not temporary raster files shall be written to disk}
+
+\item{...}{additional arguments}
 }
 \value{
 A tibble

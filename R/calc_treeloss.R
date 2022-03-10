@@ -15,6 +15,7 @@
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
 #' @param todisk Logical indicating whether or not temporary raster files shall be written to disk
+#' @param ... additional arguments
 #' @return A tibble
 #' @importFrom stringr str_sub
 #' @export
@@ -27,7 +28,8 @@
                             minCover = 35,
                             rundir = tempdir(),
                             verbose = TRUE,
-                            todisk = FALSE){
+                            todisk = FALSE,
+                            ...){
 
   # initial argument checks
   # retrieve years from portfolio

@@ -14,6 +14,7 @@
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
 #' @param todisk Logical indicating whether or not temporary raster files shall be written to disk
+#' @param ... additional arguments
 #' @return A tibble
 #' @importFrom stringr str_sub
 #' @export
@@ -26,7 +27,8 @@
                         minCover = 35,
                         rundir = tempdir(),
                         verbose = TRUE,
-                        todisk = FALSE){
+                        todisk = FALSE,
+                        ...){
 
   # initial argument checks
   # retrieve years from portfolio
@@ -82,7 +84,7 @@
                     filename = ifelse(todisk, file.path(rundir, "patched.tif"), ""),
                     datatype = "INT4U",
                     overwrite = TRUE)
-  
+
   unique_vals = unique(as.vector(minmax(patched)))
   if(length(unique_vals) == 1) {
     if(is.nan(unique_vals)){

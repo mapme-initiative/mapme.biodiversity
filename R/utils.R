@@ -25,7 +25,7 @@
     stop(sprintf(base_msg, mid_msg, end_msg))
   }
   required_resources = sapply(available_indicators()[indicators], function(x) names(x$inputs))
-  required_resources = unique(as.vector(required_resources))
+  required_resources = unique(unlist(required_resources))
   required_resources
 }
 
