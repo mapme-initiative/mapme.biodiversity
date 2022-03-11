@@ -57,7 +57,7 @@ init_portfolio = function(x,
   attr(x, "nitems") =  nrow(x)
   attr(x, "bbox") = st_bbox(x)
   # todo: think about ways how users can specify a pre-existing sources directory
-  attr(x, "resources") = NA
+  attr(x, "resources") = list()
   attr(x, "years") = years
   attr(x, "outdir") = outdir
   attr(x, "tmpdir") = tmpdir

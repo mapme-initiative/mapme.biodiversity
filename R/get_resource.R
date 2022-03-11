@@ -85,12 +85,19 @@ get_resources <- function(x, resources, ...){
   # even in cases that one or more downloads fail
   if(is.na(downloaded_files[1])) return(x)
 
-  # add the new resource to the attributes of the portfolio object
-  if(is.na(atts$resources[[1]])){
-    atts$resources = rundir
-    names(atts$resources) = resource
+  # if the selected resource is a raster resource create tileindex
+  if(selected_resource[[1]]$type == "raster"){
+    tindex_file = file.path(rundir, paste0("tileindex_", resource, ".gpkg"))
+    if(file.exists(tindex_file)) file.remove(tindex_file)
+    command = sprintf("gdaltindex -write_absolute_path -t_srs EPSG:4326 %s %s", tindex_file, paste(downloaded_files, collapse = " "))
+    # print(command)
+    system(command, intern = TRUE)
+    downloaded_files = tindex_file
   }
-  atts$resources[resource] = rundir
+  # add the new resource to the attributes of the portfolio object
+  resource_to_add = list(downloaded_files)
+  names(resource_to_add) = resource
+  atts$resources = append(atts$resources, resource_to_add)
   attributes(x) = atts
   x
 }

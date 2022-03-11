@@ -27,7 +27,7 @@
   # start download in a temporal directory within tmpdir
   .downloadOrSkip(urls, filenames, verbose)
   # get path of all the zip files
-  all_zips <- list.files(rundir, full.names = T)
+  all_zips <- list.files(rundir, full.names = T, pattern = ".zip")
   sapply(all_zips, function(zip) .UnzipAndRemove(zip, rundir))
   # return paths to the rasters
   list.files(rundir, full.names = T, pattern = ".tif")

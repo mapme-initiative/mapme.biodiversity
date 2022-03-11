@@ -54,7 +54,7 @@
       nonexisting
     } else {
       NULL
-      }
+    }
   }
 
 }
@@ -81,34 +81,6 @@
   } else {
     default_args
   }
-}
-
-
-
-.tiffs2COGs <- function(tifs, resource_dir, verbose = TRUE){
-
-  if(verbose) pb = progress_bar$new(total = length(tifs))
-  for(tif in tifs){
-    if(verbose) pb$tick(0)
-    command = sprintf("gdal_translate %s %s -of COG -co COMPRESS=LZW", tif, file.path(resource_dir, basename(tif)))
-    system(command, intern = TRUE)
-    if(verbose) pb$tick()
-  }
-
-  # if(length(tifs)>1){ # we need to create a mosaic first
-  #   #command = sprintf("gdal_merge.py -o %s %s", file.path(tmpdir,  "mapme-tmp-mosaic.tif"), paste(tifs, collapse = " "))
-  #   #system(command)
-  #   #tifs = file.path(tmpdir,  "mapme-tmp-mosaic.tif")
-  # }
-
-  # command = sprintf("gdal_translate %s %s -of COG -co COMPRESS=LZW", tifs, filename)
-  # system(command)
-
-}
-
-.vec2GPKG <- function(vecs, resource_dir, verbose = TRUE){
-  # TODO
-  NULL
 }
 
 
@@ -140,19 +112,16 @@
 
   paste0(max_y, "_", min_x)
 
-  # baseurl = paste0(url, vers, "/")
-  # filename = paste0("Hansen_", vers, "_", parameter, "_", max_y, "_", min_x, ".tif")
-  # url = paste0(baseurl, filename)
-  # url
-
 }
 
 
 .UnzipAndRemove <- function(zip, rundir, remove = TRUE) {
-  unzip(
+
+  suppressWarnings(unzip(
     zipfile = file.path(rundir, basename(zip)),
-    exdir = rundir
-  )
+    exdir = rundir,
+    overwrite = FALSE
+  ))
   if(remove)
     unlink(file.path(rundir, basename(zip)))
 }
@@ -184,7 +153,7 @@
         return(NULL) # file exists locally
       }
       if(check_existence)
-        if(!RCurl::url.exists(urls[i])) return(NULL) # file does not exist remotley
+        if(!RCurl::url.exists(urls[i])) return(NULL) # file does not exist remotely
 
       status = download.file(urls[i], filenames[i], quiet = TRUE, "libcurl")
       if(status != 0 ) return(list(urls = urls[i], filenames = filenames[i]))

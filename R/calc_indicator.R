@@ -46,7 +46,7 @@ calc_indicators <- function(x, indicators, ...){
   # get arguments from function call and portfolio object
   args = list(...)
   atts = attributes(x)
-  resource_dir = atts$outdir
+  available_resources = atts$resources
   tmpdir = file.path(atts$tmpdir, indicator)
   dir.create(tmpdir, showWarnings = FALSE)
   cores = atts$cores
@@ -57,15 +57,15 @@ calc_indicators <- function(x, indicators, ...){
   # match function call
   fun = match.fun(selected_indicator[[1]]$name)
   # required resources
-  resources = selected_indicator[[1]]$inputs
+  required_resources = selected_indicator[[1]]$inputs
   # matching the specified arguments to the required arguments
   baseparams = .check_resource_arguments(selected_indicator, args)
   # append parameters
   baseparams$verbose = atts$verbose
   baseparams$tmpdir = tmpdir
-  baseparams$resource_dir = resource_dir
   baseparams$fun = fun
-  baseparams$resources = resources
+  baseparams$available_resources = available_resources
+  baseparams$required_resources = required_resources
 
   if(verbose){
     progressr::handlers(global = TRUE)
@@ -123,57 +123,57 @@ calc_indicators <- function(x, indicators, ...){
   x
 }
 
-.read_source <- function(shp, resource, rundir, resource_dir){
+.read_source <- function(params, rundir){
 
-  resource_type = resource[[1]]
-  resource = names(resource)
-  if(resource_type == "raster"){
-    # create a temporary tile-index
-    tindex_file = tempfile(pattern = "tileindex", fileext = ".gpkg", tmpdir = rundir)
-    command = sprintf("gdaltindex -t_srs EPSG:4326 %s %s/*.tif", tindex_file, file.path(resource_dir, resource))
-    # print(command)
-    system(command, intern = TRUE)
+  required_resources = params$required_resources
+  available_resources = params$available_resources
+  shp = params$shp
 
-    # retrieve tiles that intersect with the shp extent
-    tindex = read_sf(tindex_file, quiet = TRUE)
-    target_files = tindex$location[unlist(st_intersects(shp, tindex))]
-    rm(tindex); gc()
-    file.remove(tindex_file)
+  processed_resources = lapply(1:length(required_resources), function(i) {
+    resource_type = required_resources[[i]]
+    resource_name = names(required_resources)[[i]]
+    if(resource_type == "raster"){
+      # retrieve tiles that intersect with the shp extent
+      tindex = read_sf(available_resources[resource_name], quiet = TRUE)
+      target_files = tindex$location[unlist(st_intersects(shp, tindex))]
 
-    if(length(target_files) == 0 ){
-      warning("Does not intersect.")
-      return(NULL)
-    } else if(length(target_files) == 1){
-      out = terra::rast(target_files)
-      # out = crop(out, vect(shp))
-    } else {
-      # create a vrt for multiple targets
-      bbox = as.numeric(st_bbox(shp))
-      vrt_name = tempfile("vrt", fileext = ".vrt", tmpdir = rundir)
-      out = terra::vrt(target_files, filename = vrt_name)
+      if(length(target_files) == 0 ){
+        warning("Does not intersect.")
+        return(NULL)
+      } else if(length(target_files) == 1){
+        out = terra::rast(target_files)
+        # out = crop(out, vect(shp))
+      } else {
+        # create a vrt for multiple targets
+        bbox = as.numeric(st_bbox(shp))
+        vrt_name = tempfile("vrt", fileext = ".vrt", tmpdir = rundir)
+        out = terra::vrt(target_files, filename = vrt_name)
+      }
+
+      # crop the source to the extent of the current polygon
+      out = tryCatch({
+        terra::crop(out, terra::vect(shp), tempdir = rundir)
+      },
+      error = function(cond){
+        print(cond)
+        warning("Cropping failed.", call. = FALSE)
+        return(NULL)
+      },
+      warning = function(cond){
+        print(cond)
+        warning("Cropping failed.", call. = FALSE)
+        return(NULL)
+      })
+
     }
 
-    # crop the source to the extent of the current polygon
-    out = tryCatch({
-      terra::crop(out, terra::vect(shp), tempdir = rundir)
-    },
-    error = function(cond){
-      print(cond)
-      warning("Cropping failed.", call. = FALSE)
-      return(NULL)
-    },
-    warning = function(cond){
-      print(cond)
-      warning("Cropping failed.", call. = FALSE)
-      return(NULL)
-    })
-
-  }
-
-  if(resource_type == "vector"){
-    out = read_sf(source, wkt_filter = st_as_text(st_geometry(shp)))
-  }
-  out
+    if(resource_type == "vector"){
+      out = read_sf(source, wkt_filter = st_as_text(st_geometry(shp)))
+    }
+    out
+  })
+  names(processed_resources) = names(required_resources)
+  processed_resources
 }
 
 #' Internal indicator routine
@@ -186,15 +186,9 @@ calc_indicators <- function(x, indicators, ...){
   dir.create(rundir, showWarnings = FALSE) # create the current rundir
   params$rundir = rundir # change rundir
   params$shp = shp # enter specific polygon
-  # loop to read through the ressource
   #.read_source should return NULL if an error occurs
-  for(j in 1:length(params$resources)){
-    new_source = .read_source(params$shp, params$resources[j], rundir, params$resource_dir)
-    if(!is.null(new_source)){
-      params = append(params, new_source)
-      names(params)[length(names(params))] = names(params$resources)[j]
-    }
-  }
+  processed_resources = .read_source(params, rundir)
+  params = append(params, processed_resources)
   # call the indicator function with the associated parameters
   out = do.call(params$fun, args = params)
   if(params$verbose) params$p() # progress tick

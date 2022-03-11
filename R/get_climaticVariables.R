@@ -88,11 +88,11 @@
   .downloadOrSkip(urls, filenames, verbose)
 
   # unzip the downloaded file
-  all_zips <- list.files(rundir, full.names = T)
+  all_zips <- list.files(rundir, full.names = T, pattern = ".zip")
   sapply(all_zips, function(zip) .UnzipAndRemove(zip, rundir, remove = FALSE))
 
   # remove all except desired layers
-  all_files <- list.files(rundir, full.names = T)
+  all_files <- list.files(rundir, full.names = T, pattern = ".tif")
   nontarget_years <- available_years[!available_years %in% target_years]
 
   for (i in 1:length(nontarget_years)) {

@@ -64,20 +64,6 @@
   system(command_to_wgs84, intern = TRUE)
   command_to_gtiff = sprintf("gdal_translate -co TILED=YES -co COMPRESS=DEFLATE -co PREDICTOR=2 -co BIGTIFF=YES %s %s",  file.path(rundir, paste0("proj_", basename(datalayer))), file.path(rundir, filename))
   system(command_to_gtiff)
-  # source_raster = rast(file.path(rundir, basename(datalayer)))
-  # projected_raster = project(source_raster, vect(x), gdal = TRUE,
-  #                            filename = file.path(rundir, filename),
-  #                            wopt = list(gdal=c("TILED=YES", "COMPRESS=DEFLATE", "BIGTIFF=YES", "PREDICTOR=2"),
-  #                                        datatype = "INT2S"))
-  #
-  #   cropped_raster = crop(source_raster, bbox,
-  #                         filename = file.path(rundir, paste0("cropped_", basename(datalayer))),
-  #                         datatype = "INT2S")
-  #   projected_raster = project(cropped_raster, "EPSG:4326",
-  #                              filename = file.path(rundir, filename),
-  #                              wopt = list(gdal=c("TILED=YES", "COMPRESS=DEFLATE", "BIGTIFF=YES", "PREDICTOR=2"),
-  #                                          datatype = "INT2S"))
-  #   rm(source_raster, cropped_raster, projected_raster); gc()
   file.remove(grep(list.files(rundir, full.names = TRUE), pattern = ".tif$", invert = TRUE, value = TRUE))
   file.path(rundir, filename)
 }
