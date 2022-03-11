@@ -24,7 +24,7 @@
   if(any(file.exists(filenames))) message("Skipping existing files in output directory.")
   # start download in a temporal directory within rundir
   .downloadOrSkip(urls, filenames, verbose)
-  list.files(rundir, full.names = T)
+  filenames
 }
 
 

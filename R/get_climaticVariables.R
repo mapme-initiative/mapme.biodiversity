@@ -88,8 +88,7 @@
   .downloadOrSkip(urls, filenames, verbose)
 
   # unzip the downloaded file
-  all_zips <- list.files(rundir, full.names = T, pattern = ".zip")
-  sapply(all_zips, function(zip) .UnzipAndRemove(zip, rundir, remove = FALSE))
+  sapply(filenames, function(zip) .UnzipAndRemove(zip, rundir, remove = FALSE))
 
   # remove all except desired layers
   all_files <- list.files(rundir, full.names = T, pattern = ".tif")

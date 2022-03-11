@@ -26,11 +26,10 @@
   if(any(file.exists(filenames))) message("Skipping existing files in output directory.")
   # start download in a temporal directory within tmpdir
   .downloadOrSkip(urls, filenames, verbose)
-  # get path of all the zip files
-  all_zips <- list.files(rundir, full.names = T, pattern = ".zip")
-  sapply(all_zips, function(zip) .UnzipAndRemove(zip, rundir))
+  # unzip zip files
+  sapply(filenames, function(zip) .UnzipAndRemove(zip, rundir))
   # return paths to the rasters
-  list.files(rundir, full.names = T, pattern = ".tif")
+  gsub(".zip$", ".tif", filenames)
 }
 
 

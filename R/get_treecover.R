@@ -34,7 +34,7 @@
   # TODO: parallel downloads
   .downloadOrSkip(urls, filenames, verbose)
   # return all paths to the downloaded files
-  list.files(rundir, full.names = T)
+  filenames
 }
 
 .available_GFW_versions <- function(){

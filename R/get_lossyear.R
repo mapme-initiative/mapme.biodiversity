@@ -34,5 +34,5 @@
   # TODO: Parallel downloads
   .downloadOrSkip(urls, filenames, verbose)
   # return all paths to the downloaded files
-  list.files(rundir, full.names = T)
+  filenames
 }

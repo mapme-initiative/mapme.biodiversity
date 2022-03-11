@@ -37,7 +37,7 @@
   if(any(file.exists(filenames))) message("Skipping existing files in output directory.")
   .downloadOrSkip(urls, filenames, verbose)
   # return all paths to the downloaded files
-  list.files(rundir, full.names = T)
+  filenames
 }
 
 #' Helper function to create ESA land cover urls

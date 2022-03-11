@@ -23,7 +23,7 @@
   # start download in a temporal directory within tmpdir
   .downloadOrSkip(urls, filenames, verbose)
   # return paths to the raster
-  list.files(rundir, full.names = T)
+  filenames
 }
 
 

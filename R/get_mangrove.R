@@ -27,9 +27,8 @@
   .downloadOrSkip(urls, filenames, verbose)
 
   # unzip and convert shp to gpkg
-  all_zips <- list.files(rundir, full.names = T, pattern = ".zip")
   message("Translating ESRI Shapefiles to GeoPackages. This may take a while....")
-  sapply(all_zips, function(zip) .unzipMangrove(zip, rundir))
+  sapply(filenames, function(zip) .unzipMangrove(zip, rundir))
 
   # return paths to the gpkg
   list.files(rundir, full.names = T, pattern = ".gpkg")
