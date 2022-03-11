@@ -19,10 +19,10 @@
                                verbose = TRUE) {
 
   # get url for accessibility layer
-  url <- .getaccessibilityURL(range_accessibility)
-  filename = file.path(rundir, paste0("accessibility-", range_accessibility, ".tif"))
+  urls = .getaccessibilityURL(range_accessibility)
+  filenames = file.path(rundir, paste0("accessibility-", range_accessibility, ".tif"))
   # start download in a temporal directory within tmpdir
-  .downloadOrSkip(url, filename, verbose)
+  .downloadOrSkip(urls, filenames, verbose,  check_existence = FALSE)
   # return paths to the raster
   list.files(rundir, full.names = T)
 }
