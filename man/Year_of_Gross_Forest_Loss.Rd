@@ -15,7 +15,8 @@
 \arguments{
 \item{x}{An sf object returned by init_portfolio}
 
-\item{vers_lossyear}{The version to download, defaults to \code{"GFC-2020-v1.8"}.}
+\item{vers_lossyear}{The version to download, defaults to
+\code{"GFC-2020-v1.8"}.}
 
 \item{rundir}{A directory where intermediate files are written to.}
 
@@ -23,8 +24,8 @@
 }
 \description{
 The layer is defined as forest loss during the period 2000–2019, defined as
-a stand-replacement disturbance, or a change from a forest to non-forest state.
-Encoded as either 0 (no loss) or else a value in the range 1–17, representing
-loss detected primarily in the year 2001–2019, respectively.
+a stand-replacement disturbance, or a change from a forest to non-forest
+state. Encoded as either 0 (no loss) or else a value in the range 1–19,
+representing loss detected primarily in the year 2001–2019, respectively.
 }
 \keyword{internal}

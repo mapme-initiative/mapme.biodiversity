@@ -7,12 +7,13 @@
 get_resources(x, resources, ...)
 }
 \arguments{
-\item{x}{A biodiversity portfolio object constructed via \code{init_portfolio()}}
+\item{x}{A biodiversity portfolio object constructed via
+\code{init_portfolio()}}
 
 \item{resources}{A character vector indicating the requested resources. All
-specified resources must be supported by the package. You can use \code{available_resources()}
-to get more information, e.g. additional required arguments and their default
-values, about the supported resources.}
+specified resources must be supported by the package. You can use
+\code{available_resources()} to get more information, e.g. additional
+required arguments and their default values, about the supported resources.}
 
 \item{...}{Additional arguments required for the requested resources. Check
 \code{available_resources()} to learn more about the supported resources and
@@ -20,8 +21,9 @@ their arguments.}
 }
 \description{
 With \code{get_resources()} specific biodiversity data sets required for the
-calculation of indicators can be downloaded. The function supports the specification
-of several indicators and their respective additional arguments. You can
-check the required arguments via \code{available_resources()}, but
-the function will gracefully inform you about any misspecifications.
+calculation of indicators can be downloaded. The function supports the
+specification of several indicators and their respective additional
+arguments. You can check the required arguments via
+\code{available_resources()}, but the function will gracefully inform you
+about any misspecifications.
 }

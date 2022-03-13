@@ -2,10 +2,10 @@
 % Please edit documentation in R/get_ESALandCover.R
 \name{ESA_Global_Land_Cover}
 \alias{ESA_Global_Land_Cover}
-\alias{.get_ESALandCover}
+\alias{.get_esa_land_cover}
 \title{Downloads Copernicus Global Land Cover layer}
 \usage{
-.get_ESALandCover(x, rundir = tempdir(), verbose = TRUE)
+.get_esa_land_cover(x, rundir = tempdir(), verbose = TRUE)
 }
 \arguments{
 \item{x}{An sf object returned by init_portfolio}

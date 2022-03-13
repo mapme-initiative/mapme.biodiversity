@@ -16,8 +16,9 @@
 }
 \description{
 This resource indicates the drought, global raster layer available from year
-2003 to present with weekly updates. Encoded as percentile, representing current
-wet or dry conditions showing the probability of occurrence - with lower values
-meaning dryer than normal, and higher values meaning wetter than normal.
+2003 to present with weekly updates. Encoded as percentile, representing
+current wet or dry conditions showing the probability of occurrence - with
+lower values meaning dryer than normal, and higher values meaning wetter than
+normal.
 }
 \keyword{internal}

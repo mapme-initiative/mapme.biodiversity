@@ -15,17 +15,20 @@
 \arguments{
 \item{x}{An sf object returned by init_portfolio}
 
-\item{vers_greenhouse}{The version of the data set to download, defaults to the latest.}
+\item{vers_greenhouse}{The version of the data set to download, defaults to
+the latest.}
 
 \item{verbose}{Logical controlling verbosity.}
 
 \item{rundir}{A directory where intermediate files are written to.}
 }
 \description{
-This dataset is described in \url{Harris et al 2021}{https://www.nature.com/articles/s41558-020-00976-6}
+This dataset is described in
+\url{Harris et al 2021}{https://www.nature.com/articles/s41558-020-00976-6}
 and includes all relevant ecosystem carbon pools (aboveground biomass,
-belowground biomass, dead wood, litter, soil) and greenhouse gases (CO2, CH4, N2O).
-The downloaded layer represents the Mg CO2 equivalent per pixel in order to
-support emission calculations for custom AOIs. To download the resource users
-have to set up an API key with \url{Global Forest Watch}{https://globalforestwatch.org/my-gfw/}
+belowground biomass, dead wood, litter, soil) and greenhouse gases
+(CO2, CH4, N2O). The downloaded layer represents the Mg CO2 equivalent per
+pixel in order to support emission calculations for custom AOIs. To download
+the resource users have to set up an API key with
+\url{Global Forest Watch}{https://globalforestwatch.org/my-gfw/}
 }

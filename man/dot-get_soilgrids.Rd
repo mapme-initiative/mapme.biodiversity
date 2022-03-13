@@ -9,7 +9,8 @@
 \arguments{
 \item{x}{A sf portfolio object}
 
-\item{layer}{A charchter vector indicating the layer to download from soilgrids}
+\item{layer}{A charchter vector indicating the layer to download from
+soilgrids}
 
 \item{depth}{A charachter vector indicating the depth to download}
 
@@ -24,11 +25,12 @@ A charchter vector of the final filenames
 }
 \description{
 This function constructs for a given data layer, depth and stat a data layer
-for the extent of a portfolio and projects the original interrupted  goode homolosine
-projection to Lat/Lon for further processing in the package. Depending on the size
-of a portfolio this process requires a lot of time. If the portfolio extents
-of interrupted areas of the homolosine projection (e.g. over the oceans) gdal
-issues some error messages but proceeds anyway. This is not an issue for
-the scope of the soil grid indicators because they only make sense for land masses.
+for the extent of a portfolio and projects the original interrupted  Goode's
+homolosine projection to Lat/Lon for further processing in the package.
+Depending on the size of a portfolio this process requires a lot of time. If
+the portfolio extents of interrupted areas of the homolosine projection (e.g.
+over the oceans) gdal issues some error messages but proceeds anyway. This is
+not an issue for the scope of the soil grid indicators because they only make
+sense for land masses.
 }
 \keyword{internal}

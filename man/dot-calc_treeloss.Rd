@@ -28,13 +28,15 @@
 
 \item{minSize}{The minimum size of a forest patch in ha.}
 
-\item{minCover}{The minimum threshold of stand density for a pixel to be considered forest in the year 2000.}
+\item{minCover}{The minimum threshold of stand density for a pixel to be
+considered forest in the year 2000.}
 
 \item{rundir}{A directory where intermediate files are written to.}
 
 \item{verbose}{A directory where intermediate files are written to.}
 
-\item{todisk}{Logical indicating whether or not temporary raster files shall be written to disk}
+\item{todisk}{Logical indicating whether or not temporary raster files shall
+be written to disk}
 
 \item{...}{additional arguments}
 }
@@ -44,7 +46,7 @@ A tibble
 \description{
 This is a joint indicator calculating both, treecover and greenhouse
 gas emissions per treecover loss. It actually combines the indicators for
-treecover and emissions into a single function since the computations for both
-indicators are very similar. If a user is interested only in one of these
-two indicators consider applying the respective functions.
+treecover and emissions into a single function since the computations for
+both indicators are very similar. If a user is interested only in one of
+these two indicators consider applying the respective functions.
 }

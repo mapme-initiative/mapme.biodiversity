@@ -15,8 +15,8 @@
 \item{verbose}{Logical controlling verbosity.}
 }
 \description{
-This resource represents the average precipitation, layers available to download for
-the period 2000 - 2018 on monthly basis from WorldClim. Encoded as (mm), representing
-the mean precipitation per output grid cell.
+This resource represents the average precipitation, layers available to
+download for the period 2000 - 2018 on monthly basis from WorldClim. Encoded
+as (mm), representing the mean precipitation per output grid cell.
 }
 \keyword{internal}

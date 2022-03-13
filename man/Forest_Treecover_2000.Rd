@@ -15,7 +15,8 @@
 \arguments{
 \item{x}{An sf object returned by init_portfolio}
 
-\item{vers_treecover}{The version to download, defaults to \code{"GFC-2020-v1.8"}.}
+\item{vers_treecover}{The version to download, defaults to
+\code{"GFC-2020-v1.8"}.}
 
 \item{rundir}{A directory where intermediate files are written to.}
 

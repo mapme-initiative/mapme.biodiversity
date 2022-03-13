@@ -6,3 +6,4 @@
 devel
 inst/extdata/resources
 ^\.github$
+^\.pre-commit-config\.yaml$

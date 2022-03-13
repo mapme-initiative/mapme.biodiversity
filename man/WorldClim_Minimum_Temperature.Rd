@@ -2,10 +2,10 @@
 % Please edit documentation in R/get_climaticVariables.R
 \name{WorldClim_Minimum_Temperature}
 \alias{WorldClim_Minimum_Temperature}
-\alias{.get_minTemperature}
+\alias{.get_min_temperature}
 \title{Downloads WorldClim Minimum Temperature layer}
 \usage{
-.get_minTemperature(x, rundir = tempdir(), verbose = TRUE)
+.get_min_temperature(x, rundir = tempdir(), verbose = TRUE)
 }
 \arguments{
 \item{x}{An sf object returned by init_portfolio}
@@ -15,8 +15,8 @@
 \item{verbose}{Logical controlling verbosity.}
 }
 \description{
-This resource represents the minimum temperature, layers available to download for
-the period 2000 - 2018 on monthly basis from WorldClim. Encoded as (°C), representing
-the minimum temperature per output grid cell.
+This resource represents the minimum temperature, layers available to
+download for the period 2000 - 2018 on monthly basis from WorldClim. Encoded
+as (°C), representing the minimum temperature per output grid cell.
 }
 \keyword{internal}

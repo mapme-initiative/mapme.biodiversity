@@ -7,16 +7,17 @@
 calc_indicators(x, indicators, ...)
 }
 \arguments{
-\item{x}{A biodiversity portfolio object constructed via \code{init_portfolio()}}
+\item{x}{A biodiversity portfolio object constructed via
+\code{init_portfolio()}}
 
 \item{indicators}{A character vector indicating the requested indicators. All
-specified indicators must be supported by the package. You can use \code{available_indicators()}
-to get more information, e.g. additional required arguments and their default
-values, about the supported indicators}
+specified indicators must be supported by the package. You can use
+\code{available_indicators()} to get more information, e.g. additional
+required arguments and their default values, about the supported indicators}
 
 \item{...}{Additional arguments required for the requested indicators. Check
-\code{available_indicators()} to learn more about the supported indicators and
-their arguments.}
+\code{available_indicators()} to learn more about the supported indicators
+and their arguments.}
 }
 \description{
 With \code{calc_indicators()} specific biodiversity indicators

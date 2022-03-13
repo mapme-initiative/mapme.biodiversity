@@ -28,13 +28,15 @@
 
 \item{minSize}{The minimum size of a forest patch in ha.}
 
-\item{minCover}{The minimum threshold of stand density for a pixel to be considered forest in the year 2000.}
+\item{minCover}{The minimum threshold of stand density for a pixel to be
+considered forest in the year 2000.}
 
 \item{rundir}{A directory where intermediate files are written to.}
 
 \item{verbose}{A directory where intermediate files are written to.}
 
-\item{todisk}{Logical indicating whether or not temporary raster files shall be written to disk}
+\item{todisk}{Logical indicating whether or not temporary raster files shall
+be written to disk}
 
 \item{...}{additional arguments}
 }
@@ -45,5 +47,6 @@ A tibble
 Considering the 2000 GFW forest cover density layer users can specify
 a cover threshold above which a pixel is considered to be covered by forest.
 Additionally, users can specify a minimum size of a comprehensive patch of
-forest pixels. Patches below this threshold will not be considered as forest area.
+forest pixels. Patches below this threshold will not be considered as forest
+area.
 }
