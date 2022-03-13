@@ -2,10 +2,10 @@
 % Please edit documentation in R/get_droughtInd.R
 \name{Drought_Indicator}
 \alias{Drought_Indicator}
-\alias{.get_droughtInd}
+\alias{.get_drought_ind}
 \title{Downloads NASA GRACE-based Drought Indicator Layer}
 \usage{
-.get_droughtInd(x, rundir = tempdir(), verbose = TRUE)
+.get_drought_ind(x, rundir = tempdir(), verbose = TRUE)
 }
 \arguments{
 \item{x}{An sf object returned by init_portfolio}

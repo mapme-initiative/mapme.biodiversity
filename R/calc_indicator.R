@@ -73,7 +73,6 @@ calc_indicators <- function(x, indicators, ...) {
   baseparams$required_resources <- required_resources
 
   if (verbose) {
-    progressr::handlers(global = TRUE)
     progressr::handlers(
       progressr::handler_progress(
         format = sprintf(
@@ -89,31 +88,30 @@ calc_indicators <- function(x, indicators, ...) {
   if (cores > 1) {
     if (verbose) {
       progressr::with_progress({
-        baseparams$p <- progressr::progressor(along = seq_along(x))
-        results <- parallel::mclapply(seq_along(x), function(i) {
+        baseparams$p <- progressr::progressor(along = 1:nrow(x))
+        results <- parallel::mclapply(1:nrow(x), function(i) {
           .prep_and_compute(x[i, ], baseparams, i)
         }, mc.cores = cores)
       })
     } else {
-      results <- parallel::mclapply(seq_along(x), function(i) {
+      results <- parallel::mclapply(1:nrow(x), function(i) {
         .prep_and_compute(x[i, ], baseparams, i)
       }, mc.cores = cores)
     }
   } else {
     if (verbose) {
       progressr::with_progress({
-        baseparams$p <- progressr::progressor(along = seq_along(x))
-        results <- lapply(seq_along(x), function(i) {
+        baseparams$p <- progressr::progressor(along = 1:nrow(x))
+        results <- lapply(1:nrow(x), function(i) {
           .prep_and_compute(x[i, ], baseparams, i)
         })
       })
     } else {
-      results <- lapply(seq_along(x), function(i) {
+      results <- lapply(1:nrow(x), function(i) {
         .prep_and_compute(x[i, ], baseparams, i)
       })
     }
   }
-
   # cleanup the tmpdir for indicator
   unlink(tmpdir, recursive = TRUE, force = TRUE)
   # bind results to data.frame

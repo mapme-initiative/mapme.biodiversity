@@ -13,9 +13,9 @@
 #' @keywords internal
 #'
 
-.get_SRTMdem <- function(x,
-                         rundir = tempdir(),
-                         verbose = TRUE) {
+.get_srtm_dem <- function(x,
+                          rundir = tempdir(),
+                          verbose = TRUE) {
   bbox <- st_bbox(x)
   # make the SRTM grid and construct urls for intersecting tiles
   grid_srtm <- .make_global_grid(

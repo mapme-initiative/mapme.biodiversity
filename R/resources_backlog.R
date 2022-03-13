@@ -46,7 +46,7 @@ available_resources <- function(resources = NULL) {
     esalandcover = list(
       type = "raster",
       source = "Copernicus (ESA)",
-      downloader = ".get_ESALandCover",
+      downloader = ".get_esa_land_cover",
       arguments = list()
     ),
     accessibility = list(
@@ -60,19 +60,19 @@ available_resources <- function(resources = NULL) {
     droughtindicators = list(
       type = "raster",
       source = "NASA GRACE",
-      downloader = ".get_droughtInd",
+      downloader = ".get_drought_ind",
       arguments = list()
     ),
     mintemperature = list(
       type = "raster",
       source = "WorldClim",
-      downloader = ".get_minTemperature",
+      downloader = ".get_min_temperature",
       arguments = list()
     ),
     maxtemperature = list(
       type = "raster",
       source = "WorldClim",
-      downloader = ".get_maxTemperature",
+      downloader = ".get_max_temperature",
       arguments = list()
     ),
     precipitation = list(
@@ -96,7 +96,7 @@ available_resources <- function(resources = NULL) {
     srtmelevation = list(
       type = "raster",
       source = "SRTM",
-      downloader = ".get_SRTMdem",
+      downloader = ".get_srtm_dem",
       arguments = list()
     ),
     bdod = list(

@@ -13,9 +13,9 @@
 #' @keywords internal
 #'
 
-.get_droughtInd <- function(x,
-                            rundir = tempdir(),
-                            verbose = TRUE) {
+.get_drought_ind <- function(x,
+                             rundir = tempdir(),
+                             verbose = TRUE) {
   target_years <- attributes(x)$years
   available_years <- 2003:2022
   target_years <- .check_available_years(
