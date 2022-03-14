@@ -31,7 +31,7 @@
     function(x) names(x$inputs)
   )
   required_resources <- unique(unlist(required_resources))
-  required_resources
+  as.vector(required_resources)
 }
 
 .check_existing_resources <- function(ex_resources,

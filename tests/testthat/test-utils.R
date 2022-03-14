@@ -1,0 +1,101 @@
+test_that(".check_requested_resources works", {
+  expect_equal(.check_requested_resources("treecover"), NULL)
+  expect_error(.check_requested_resources("notavailable"))
+  expect_error(.check_requested_resources(c("treecover", "notavailable")), "resource is")
+  expect_error(.check_requested_resources(c("treecover", "notavailable1", "notavailable2")), "resources are")
+})
+
+
+test_that(".check_requested_indicator works", {
+  expect_equal(.check_requested_indicator("treecover"), c("treecover", "lossyear"))
+  expect_equal(.check_requested_indicator(c("treecover", "emissions")), c("treecover", "lossyear", "greenhouse"))
+  expect_error(.check_requested_indicator("notavailable"))
+  expect_error(.check_requested_indicator(c("treecover", "notavailable")), "indicator is")
+  expect_error(.check_requested_indicator(c("treecover", "notavailable1", "notavailable2")), "indicators are")
+})
+
+
+test_that(".check_existing_resources works", {
+  available_resource <- c("treecover", "lossyear")
+  expect_message(.check_existing_resources(available_resource, "treecover"), "is already available")
+  expect_message(.check_existing_resources(available_resource, c("treecover", "lossyear")), "are already available")
+  expect_equal(.check_existing_resources(available_resource, "treecover", needed = T), NULL)
+  expect_equal(.check_existing_resources(available_resource, c("treecover", "lossyear"), needed = T), NULL)
+  expect_equal(.check_existing_resources(available_resource, "srtmelevation"), "srtmelevation")
+  expect_error(.check_existing_resources(available_resource, "srtmelevation", needed = TRUE), "required resource is not available")
+  expect_equal(.check_existing_resources(available_resource, c("srtmelevation", "accessibility")), c("srtmelevation", "accessibility"))
+  expect_error(.check_existing_resources(available_resource, c("srtmelevation", "accessibility"), needed = TRUE), "required resources are not available")
+  expect_equal(.check_existing_resources(available_resource, c("treecover", "srtmelevation", "accessibility")), c("srtmelevation", "accessibility"))
+  expect_message(.check_existing_resources(available_resource, c("treecover", "srtmelevation", "accessibility")), "requested resource is already available")
+  expect_error(.check_existing_resources(available_resource, c("treecover", "srtmelevation", "accessibility"), needed = TRUE), "required resources are not available")
+})
+
+
+test_that(".check_resource_arguments works", {
+  resource <- available_resources("treecover")
+  expect_equal(.check_resource_arguments(resource, args = list()), list(vers_treecover = "GFC-2020-v1.8"))
+  expect_message(.check_resource_arguments(resource, args = list()), "Argument 'vers_treecover' for resource 'treecover' was not specified")
+  expect_equal(.check_resource_arguments(resource, args = list(vers_treecover = "GFC-2020-v1.8")), list(vers_treecover = "GFC-2020-v1.8"))
+  expect_equal(.check_resource_arguments(resource, args = list(vers_treecover = "GFC-2020-v1.8", noarg = NA)), list(vers_treecover = "GFC-2020-v1.8"))
+})
+
+test_that(".make_global_grid works", {
+  standard_grid <- .make_global_grid()
+  nrows <- nrow(standard_grid)
+  bbox <- st_bbox(standard_grid)
+  points <- st_multipoint(matrix(c(-180, -50, -180, 80, 170, 80, 170, -50), ncol = 2, byrow = TRUE))
+  bbox_c <- st_bbox(points)
+  st_crs(bbox_c) <- st_crs("EPSG:4326")
+  expect_equal(nrows, 455)
+  expect_equal(bbox, bbox_c)
+})
+
+
+test_that(".get_gfw_tile_id works", {
+  gfw_grid <- .make_global_grid()
+  expect_equal(.get_gfw_tile_id(gfw_grid[100, ]), "20S_110E")
+})
+
+test_that(".check_available_years works", {
+  expect_equal(
+    .check_available_years(2000:2020, 2000:2020, indicator = "treecover"),
+    2000:2020
+  )
+  expect_equal(
+    .check_available_years(2000:2010, 2000:2020, indicator = "treecover"),
+    2000:2010
+  )
+  expect_error(
+    .check_available_years(2000:2010, 2011:2020, indicator = "treecover"),
+    "The target years do not intersect with the availability of treecover."
+  )
+  expect_message(
+    .check_available_years(2000:2011, 2011:2020, indicator = "treecover"),
+    "Some target years are not available for treecover."
+  )
+  expect_equal(
+    .check_available_years(2000:2011, 2011:2020, indicator = "treecover"),
+    2011
+  )
+})
+
+
+test_that(".download_ors_skip works", {
+  urls <- rep("https://github.com/mapme-initiative/mapme.biodiversity/blob/main/R/utils.R", 3)
+  filenames <- sapply(1:3, function(i) tempfile())
+  expect_equal(
+    .download_or_skip(urls, filenames, verbose = TRUE, check_existence = TRUE),
+    NULL
+  )
+  expect_equal(
+    .download_or_skip(urls, filenames, verbose = TRUE, check_existence = TRUE),
+    NULL
+  )
+  file.remove(filenames)
+  urls[1] <- paste(urls[1], "nonexisting", sep = "")
+  expect_equal(
+    .download_or_skip(urls, filenames, verbose = TRUE, check_existence = TRUE),
+    NULL
+  )
+  file.remove(filenames[2:3])
+})
