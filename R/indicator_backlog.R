@@ -1,7 +1,7 @@
 available_indicators <- function(indicator = NULL) {
   all_indicators <- list(
     treecover = list(
-      name = ".calc_cover",
+      name = ".calc_treecover",
       inputs = list(
         treecover =
           "raster",

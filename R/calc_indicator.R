@@ -64,13 +64,13 @@ calc_indicators <- function(x, indicators, ...) {
   # required resources
   required_resources <- selected_indicator[[1]]$inputs
   # matching the specified arguments to the required arguments
-  baseparams <- .check_resource_arguments(selected_indicator, args)
+  params <- .check_resource_arguments(selected_indicator, args)
   # append parameters
-  baseparams$verbose <- atts$verbose
-  baseparams$tmpdir <- tmpdir
-  baseparams$fun <- fun
-  baseparams$available_resources <- available_resources
-  baseparams$required_resources <- required_resources
+  params$verbose <- atts$verbose
+  params$tmpdir <- tmpdir
+  params$fun <- fun
+  params$available_resources <- available_resources
+  params$required_resources <- required_resources
 
   if (verbose) {
     progressr::handlers(
@@ -88,27 +88,27 @@ calc_indicators <- function(x, indicators, ...) {
   if (cores > 1) {
     if (verbose) {
       progressr::with_progress({
-        baseparams$p <- progressr::progressor(along = 1:nrow(x))
+        params$p <- progressr::progressor(along = 1:nrow(x))
         results <- parallel::mclapply(1:nrow(x), function(i) {
-          .prep_and_compute(x[i, ], baseparams, i)
+          .prep_and_compute(x[i, ], params, i)
         }, mc.cores = cores)
       })
     } else {
       results <- parallel::mclapply(1:nrow(x), function(i) {
-        .prep_and_compute(x[i, ], baseparams, i)
+        .prep_and_compute(x[i, ], params, i)
       }, mc.cores = cores)
     }
   } else {
     if (verbose) {
       progressr::with_progress({
-        baseparams$p <- progressr::progressor(along = 1:nrow(x))
+        params$p <- progressr::progressor(along = 1:nrow(x))
         results <- lapply(1:nrow(x), function(i) {
-          .prep_and_compute(x[i, ], baseparams, i)
+          .prep_and_compute(x[i, ], params, i)
         })
       })
     } else {
       results <- lapply(1:nrow(x), function(i) {
-        .prep_and_compute(x[i, ], baseparams, i)
+        .prep_and_compute(x[i, ], params, i)
       })
     }
   }
@@ -123,6 +123,28 @@ calc_indicators <- function(x, indicators, ...) {
   # sent sf column to back and return
   x <- relocate(x, !!attributes(x)[["sf_column"]], .after = last_col())
   x
+}
+
+
+#' Internal indicator routine
+#'
+#' Helper to abstract preparation and computation
+#' of indicators per polygon
+#' @keywords internal
+.prep_and_compute <- function(shp, params, i) {
+  rundir <- file.path(params$tmpdir, i) # create a rundir name
+  dir.create(rundir, showWarnings = FALSE) # create the current rundir
+  params$rundir <- rundir # change rundir
+  params$shp <- shp # enter specific polygon
+  # .read_source should return NULL if an error occurs
+  processed_resources <- .read_source(params, rundir)
+  params <- append(params, processed_resources)
+  # call the indicator function with the associated parameters
+  out <- do.call(params$fun, args = params)
+  if (params$verbose) params$p() # progress tick
+  out$.id <- i # add an id variable
+  unlink(rundir, recursive = TRUE, force = TRUE) # delete the current rundir
+  out # return
 }
 
 .read_source <- function(params, rundir) {
@@ -174,25 +196,4 @@ calc_indicators <- function(x, indicators, ...) {
   })
   names(processed_resources) <- names(required_resources)
   processed_resources
-}
-
-#' Internal indicator routine
-#'
-#' Helper to abstract preparation and computation
-#' of indicators per polygon
-#' @keywords internal
-.prep_and_compute <- function(shp, params, i) {
-  rundir <- file.path(params$tmpdir, i) # create a rundir name
-  dir.create(rundir, showWarnings = FALSE) # create the current rundir
-  params$rundir <- rundir # change rundir
-  params$shp <- shp # enter specific polygon
-  # .read_source should return NULL if an error occurs
-  processed_resources <- .read_source(params, rundir)
-  params <- append(params, processed_resources)
-  # call the indicator function with the associated parameters
-  out <- do.call(params$fun, args = params)
-  if (params$verbose) params$p() # progress tick
-  out$.id <- i # add an id variable
-  unlink(rundir, recursive = TRUE, force = TRUE) # delete the current rundir
-  out # return
 }

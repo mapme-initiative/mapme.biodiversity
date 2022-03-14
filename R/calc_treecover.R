@@ -21,22 +21,23 @@
 #' @importFrom stringr str_sub
 #' @export
 #'
-.calc_cover <- function(shp,
-                        treecover,
-                        lossyear,
-                        minSize = 10,
-                        minCover = 35,
-                        rundir = tempdir(),
-                        verbose = TRUE,
-                        todisk = FALSE,
-                        ...) {
+.calc_treecover <- function(shp,
+                            treecover,
+                            lossyear,
+                            minSize = 10,
+                            minCover = 35,
+                            rundir = tempdir(),
+                            verbose = TRUE,
+                            todisk = FALSE,
+                            ...) {
   # initial argument checks
   # retrieve years from portfolio
   years <- attributes(shp)$years
   # handling of return value if resources are missing, e.g. no overlap
-  if (any(missing(treecover), missing(lossyear))) {
+  if (any(is.null(treecover), is.null(lossyear))) {
     return(tibble(years = years, treecover = rep(NA, length(years))))
   }
+  if (ncell(treecover) > 1024 * 1024) todisk <- TRUE
   # check if treecover only contains 0s, e.g. on the ocean
   minmax_treecover <- unique(as.vector(minmax(treecover)))
   if (length(minmax_treecover) == 1) {
@@ -91,6 +92,29 @@
     datatype = "FLT4S",
     overwrite = TRUE
   )
+  # rasterize the polygon
+  polyraster <- rasterize(
+    vect(shp), treecover,
+    field = 1, touches = TRUE,
+    filename = ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
+    datatype = "INT1U",
+    overwrite = TRUE
+  )
+  # mask treecover
+  treecover <- mask(
+    treecover, polyraster,
+    filename =  ifelse(todisk, file.path(rundir, "treecover.tif"), ""),
+    datatype = "INT1U",
+    overwrite = TRUE
+  )
+
+  # mask lossyear
+  lossyear <- mask(
+    lossyear, polyraster,
+    filename =  ifelse(todisk, file.path(rundir, "lossyear.tif"), ""),
+    datatype = "INT1U",
+    overwrite = TRUE
+  )
   # binarize the treecover layer based on minCover argument
   binary_treecover <- classify(
     treecover,
@@ -108,6 +132,7 @@
     datatype = "INT4U",
     overwrite = TRUE
   )
+
   unique_vals <- unique(as.vector(minmax(patched)))
   if (length(unique_vals) == 1) {
     if (is.nan(unique_vals)) {
@@ -124,11 +149,23 @@
   )
   # remove patches smaller than threshold
   binary_treecover <- ifel(
-    patchsizes < minSize, NA, binary_treecover,
+    patchsizes < minSize, 0, binary_treecover,
     filename = ifelse(todisk, file.path(rundir, "binary_treecover.tif"), ""),
     datatype = "INT1U",
     overwrite = TRUE
   )
+  # return 0 if binary treecover only consists of 0 or nan
+  minmax_treecover <- unique(as.vector(minmax(binary_treecover)))
+  if (length(minmax_treecover) == 1) {
+    if (minmax_treecover == 0 | is.nan(minmax_treecover)) {
+      return(
+        tibble(
+          years = years,
+          treecover = rep(0, length(years))
+        )
+      )
+    }
+  }
   # set no loss occurrences to NA
   lossyear <- ifel(
     lossyear == 0, NA, lossyear,
@@ -143,22 +180,7 @@
     datatype = "INT1U",
     overwrite = TRUE
   )
-  # rasterize the polygon
-  polyraster <- rasterize(
-    vect(shp), binary_treecover,
-    field = 1, touches = TRUE,
-    filename = ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
-    datatype = "INT1U",
-    overwrite = TRUE
-  )
 
-  # check if binary_treecover only contains 0s or NaN after processing
-  minmax_binary_treecover <- unique(as.vector(minmax(binary_treecover)))
-  if (length(minmax_binary_treecover) == 1) {
-    if (minmax_binary_treecover == 0 | is.nan(minmax_binary_treecover)) {
-      return(tibble(years = years, treecover = rep(0, length(years))))
-    }
-  }
   # get forest cover statistics for each year
   yearly_cover_values <- lapply(years, function(y) {
     y <- y - 2000
