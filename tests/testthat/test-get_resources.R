@@ -56,15 +56,6 @@ test_that("get_resources works", {
     "Skipping existing files in output directory"
   )
 
-  resources <- attributes(get_resources(portfolio,
-    resources = c("treecover", "lossyear", "greenhouse")
-  ))$resources
-  resources <- gsub(".*/mapme", "", resources)
-
-  expect_snapshot(
-    resources
-  )
-
   portfolio2 <- get_resources(portfolio,
     resources = c("treecover", "lossyear", "greenhouse")
   )

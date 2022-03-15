@@ -28,13 +28,12 @@ test_that("multiplication works", {
     "was not specified. Setting to default value"
   )
 
-  expect_snapshot(
-    calc_indicators(portfolio,
-      indicators = "treecover",
-      min_size = 5,
-      min_cover = 30
-    )$treecover[[1]]
-  )
+  stat <- calc_indicators(portfolio,
+    indicators = "treecover",
+    min_size = 5,
+    min_cover = 30
+  )$treecover[[1]]
+  expect_snapshot(stat)
 
   portfolio <- init_portfolio(aoi,
     years = 2000:2005,
@@ -46,11 +45,12 @@ test_that("multiplication works", {
     resources = c("treecover", "lossyear")
   )
 
+  stat <- calc_indicators(portfolio,
+    indicators = "treecover",
+    min_size = 5,
+    min_cover = 30
+  )$treecover[[1]]
   expect_snapshot(
-    calc_indicators(portfolio,
-      indicators = "treecover",
-      min_size = 5,
-      min_cover = 30
-    )$treecover[[1]]
+    stat
   )
 })

@@ -28,7 +28,8 @@ test_that("emissions works", {
   )
 
   attributes(portfolio)$years <- 1999:2005
-  expect_snapshot(calc_indicators(portfolio, "emissions")$emissions[[1]])
+  stat <- calc_indicators(portfolio, "emissions")$emissions[[1]]
+  expect_snapshot(stat)
   attributes(portfolio)$years <- 2000:2005
 
   expect_error(
@@ -41,8 +42,9 @@ test_that("emissions works", {
     "must be a numeric value between 0 and 100"
   )
 
+  stat <- calc_indicators(portfolio, "emissions", min_cover = 50.2)$emissions[[1]]
   expect_snapshot(
-    calc_indicators(portfolio, "emissions", min_cover = 50.2)$emissions[[1]]
+    stat
   )
 
   expect_error(
@@ -50,8 +52,9 @@ test_that("emissions works", {
     "Argument 'min_size' for indicator 'emissions' must be a numeric value greater 0"
   )
 
+  stat <- calc_indicators(portfolio, "emissions", min_size = 1000, min_cover = 100)$emissions[[1]]
   expect_snapshot(
-    calc_indicators(portfolio, "emissions", min_size = 1000, min_cover = 100)$emissions[[1]]
+    stat
   )
 
   attributes(portfolio)$cores <- 2

@@ -28,7 +28,8 @@ test_that("treecover works", {
   )
 
   attributes(portfolio)$years <- 1999:2005
-  expect_snapshot(calc_indicators(portfolio, "treecover")$treecover[[1]])
+  stat <- calc_indicators(portfolio, "treecover")$treecover[[1]]
+  expect_snapshot(stat)
   attributes(portfolio)$years <- 2000:2005
 
   expect_error(
@@ -41,18 +42,16 @@ test_that("treecover works", {
     "must be a numeric value between 0 and 100"
   )
 
-  expect_snapshot(
-    calc_indicators(portfolio, "treecover", min_cover = 50.2)$treecover[[1]]
-  )
+  stat <- calc_indicators(portfolio, "treecover", min_cover = 50.2)$treecover[[1]]
+  expect_snapshot(stat)
 
   expect_error(
     calc_indicators(portfolio, "treecover", min_size = -10),
     "must be anumeric value greater 0"
   )
 
-  expect_snapshot(
-    calc_indicators(portfolio, "treecover", min_size = 1000, min_cover = 100)$treecover[[1]]
-  )
+  stat <- calc_indicators(portfolio, "treecover", min_size = 1000, min_cover = 100)$treecover[[1]]
+  expect_snapshot(stat)
 
   attributes(portfolio)$cores <- 2
   stats_treecover <- calc_indicators(portfolio, "treecover", min_size = 10, min_cover = 30)$treecover[[1]]$treecover

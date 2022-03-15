@@ -24,21 +24,6 @@ test_that("init_portfolio works", {
     "outdir and tmpdir need to point to different directories."
   )
 
-
-  atts <- attributes(init_portfolio(aoi,
-    years = 1980:2020,
-    outdir = outdir,
-    tmpdir = tmpdir,
-    cores = 2,
-    verbose = TRUE
-  ))
-  atts$outdir <- gsub(".*/mapme", "", atts$outdir)
-  atts$tmpdir <- gsub(".*/mapme", "", atts$tmpdir)
-
-  expect_snapshot(
-    atts
-  )
-
   portfolio <- init_portfolio(aoi,
     years = 1980:2020,
     outdir = outdir,
