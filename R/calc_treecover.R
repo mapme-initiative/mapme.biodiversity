@@ -9,8 +9,8 @@
 #' @param shp A single polygon for which to calculate the tree cover statistic
 #' @param treecover The treecover 2000 resource from GFW
 #' @param lossyear The lossyear resource from GFW
-#' @param minSize The minimum size of a forest patch in ha.
-#' @param minCover The minimum threshold of stand density for a pixel to be
+#' @param min_size The minimum size of a forest patch in ha.
+#' @param min_cover The minimum threshold of stand density for a pixel to be
 #'   considered forest in the year 2000.
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
@@ -24,8 +24,8 @@
 .calc_treecover <- function(shp,
                             treecover,
                             lossyear,
-                            minSize = 10,
-                            minCover = 35,
+                            min_size = 10,
+                            min_cover = 35,
                             rundir = tempdir(),
                             verbose = TRUE,
                             todisk = FALSE,
@@ -33,6 +33,19 @@
   # initial argument checks
   # retrieve years from portfolio
   years <- attributes(shp)$years
+
+  if (any(years < 2000)) {
+    warning(paste("Cannot calculate treecover statistics ",
+      "for years smaller than 2000.",
+      sep = ""
+    ))
+    years <- years[years >= 2000]
+    if (length(years) == 0) {
+      return(tibble(years = NA, treecover = NA))
+    }
+  }
+
+
   # handling of return value if resources are missing, e.g. no overlap
   if (any(is.null(treecover), is.null(lossyear))) {
     return(tibble(years = years, treecover = rep(NA, length(years))))
@@ -47,38 +60,30 @@
   }
 
   # check additional arguments
-  minCover_msg <- paste("Argument 'minCover' for indicator 'treecover' ",
+  min_cover_msg <- paste("Argument 'min_cover' for indicator 'treecover' ",
     "must be a numeric value between 0 and 100.",
     sep = ""
   )
 
-  if (is.numeric(minCover)) {
-    minCover <- as.integer(round(minCover))
+  if (is.numeric(min_cover)) {
+    min_cover <- as.integer(round(min_cover))
   } else {
-    stop(minCover_msg)
+    stop(min_cover_msg, call. = FALSE)
   }
-  if (minCover < 0 || minCover > 100) {
-    stop(minCover_msg)
+  if (min_cover < 0 || min_cover > 100) {
+    stop(min_cover_msg, call. = FALSE)
   }
 
-  minSize_msg <- paste("Argument 'minSize' for indicator 'treecover' must be ",
+  min_size_msg <- paste("Argument 'min_size' for indicator 'treecover' must be ",
     "anumeric value greater 0.",
     sep = ""
   )
-  if (is.numeric(minSize)) {
-    minSize <- as.integer(round(minSize))
+  if (is.numeric(min_size)) {
+    min_size <- as.integer(round(min_size))
   } else {
-    stop(minSize_msg)
+    stop(min_size_msg, call. = FALSE)
   }
-  if (minSize <= 0) stop(minSize_msg)
-
-  if (any(years < 2000)) {
-    warning(paste("Cannot calculate treecover statistics ",
-      "for years smaller than 2000.",
-      sep = ""
-    ))
-    years <- years[years >= 2000]
-  }
+  if (min_size <= 0) stop(min_size_msg, call. = FALSE)
 
   # skip if the area of the
 
@@ -115,10 +120,10 @@
     datatype = "INT1U",
     overwrite = TRUE
   )
-  # binarize the treecover layer based on minCover argument
+  # binarize the treecover layer based on min_cover argument
   binary_treecover <- classify(
     treecover,
-    rcl = matrix(c(0, minCover, 0, minCover, 100, 1), ncol = 3, byrow = TRUE),
+    rcl = matrix(c(0, min_cover, 0, min_cover, 100, 1), ncol = 3, byrow = TRUE),
     include.lowest = TRUE,
     filename = ifelse(todisk, file.path(rundir, "binary_treecover.tif"), ""),
     datatype = "INT1U",
@@ -149,7 +154,7 @@
   )
   # remove patches smaller than threshold
   binary_treecover <- ifel(
-    patchsizes < minSize, 0, binary_treecover,
+    patchsizes < min_size, 0, binary_treecover,
     filename = ifelse(todisk, file.path(rundir, "binary_treecover.tif"), ""),
     datatype = "INT1U",
     overwrite = TRUE

@@ -9,8 +9,8 @@
   treecover,
   lossyear,
   greenhouse,
-  minSize = 10,
-  minCover = 35,
+  min_size = 10,
+  min_cover = 35,
   rundir = tempdir(),
   verbose = TRUE,
   todisk = FALSE,
@@ -26,9 +26,9 @@
 
 \item{greenhouse}{The greenhouse emission layer from GFW}
 
-\item{minSize}{The minimum size of a forest patch in ha.}
+\item{min_size}{The minimum size of a forest patch in ha.}
 
-\item{minCover}{The minimum threshold of stand density for a pixel to be
+\item{min_cover}{The minimum threshold of stand density for a pixel to be
 considered forest in the year 2000.}
 
 \item{rundir}{A directory where intermediate files are written to.}

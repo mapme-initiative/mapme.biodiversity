@@ -5,41 +5,13 @@ repos:
     rev: v0.1.3.9014
     hooks: 
     -   id: style-files
-        args: [--style_pkg=styler, --style_fun=tidyverse_style]    
+        args: [--style_pkg=styler, --style_fun=tidyverse_style]
+        exclude: >
+          tests/testthat/_snaps/.*    
     -   id: roxygenize
     # codemeta must be above use-tidy-description when both are used
     # -   id: codemeta-description-updated
     -   id: use-tidy-description
-    -   id: spell-check
-        exclude: >
-          (?x)^(
-          .*\.[rR]|
-          .*\.feather|
-          .*\.jpeg|
-          .*\.pdf|
-          .*\.png|
-          .*\.py|
-          .*\.RData|
-          .*\.rds|
-          .*\.Rds|
-          .*\.Rproj|
-          .*\.sh|
-          (.*/|)\.gitignore|
-          (.*/|)\.gitlab-ci\.yml|
-          (.*/|)\.lintr|
-          (.*/|)\.pre-commit-.*|
-          (.*/|)\.Rbuildignore|
-          (.*/|)\.Renviron|
-          (.*/|)\.Rprofile|
-          (.*/|)\.travis\.yml|
-          (.*/|)appveyor\.yml|
-          (.*/|)NAMESPACE|
-          (.*/|)renv/settings\.dcf|
-          (.*/|)renv\.lock|
-          (.*/|)WORDLIST|
-          \.github/workflows/.*|
-          data/.*|
-          )$
     -   id: lintr
         args: [--warn_only]
         verbose: true
@@ -51,9 +23,7 @@ repos:
     rev: v4.1.0
     hooks: 
     -   id: check-added-large-files
-        args: ['--maxkb=200']
-    -   id: end-of-file-fixer
-        exclude: '\.Rd'
+        args: ['--maxkb=600']
 -   repo: local
     hooks:
     -   id: forbid-to-commit

@@ -58,7 +58,7 @@ init_portfolio <- function(x,
       paste("Found a column named '.assetid'. ",
         "Overwritting its values with a unique identifier.",
         sep = ""
-      ),
+      )
     )
   }
   x$.assetid <- 1:nrow(x)

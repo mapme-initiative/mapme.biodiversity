@@ -23,7 +23,8 @@
       sprintf(
         "Wrong version specified for treecover resource. Select one of %s.",
         .available_gfw_versions()
-      )
+      ),
+      call. = FALSE
     )
   }
   # make the GFW grid and construct urls for intersecting tiles

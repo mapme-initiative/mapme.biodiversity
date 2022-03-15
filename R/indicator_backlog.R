@@ -8,8 +8,8 @@ available_indicators <- function(indicator = NULL) {
         lossyear = "raster"
       ),
       arguments = list(
-        minSize = 10,
-        minCover = 30
+        min_size = 10,
+        min_cover = 30
       )
     ),
     emissions = list(
@@ -20,8 +20,8 @@ available_indicators <- function(indicator = NULL) {
         greenhouse = "raster"
       ),
       arguments = list(
-        minSize = 10,
-        minCover = 30
+        min_size = 10,
+        min_cover = 30
       )
     ),
     treeloss = list(
@@ -32,8 +32,8 @@ available_indicators <- function(indicator = NULL) {
         greenhouse = "raster"
       ),
       arguments = list(
-        minSize = 10,
-        minCover = 30
+        min_size = 10,
+        min_cover = 30
       )
     )
   )

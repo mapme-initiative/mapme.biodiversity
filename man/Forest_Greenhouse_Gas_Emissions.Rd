@@ -5,18 +5,10 @@
 \alias{.get_greenhouse}
 \title{Downloads Forest greenhouse gas emissions layer from GFW}
 \usage{
-.get_greenhouse(
-  x,
-  vers_greenhouse = "latest",
-  verbose = TRUE,
-  rundir = tempdir()
-)
+.get_greenhouse(x, verbose = TRUE, rundir = tempdir())
 }
 \arguments{
 \item{x}{An sf object returned by init_portfolio}
-
-\item{vers_greenhouse}{The version of the data set to download, defaults to
-the latest.}
 
 \item{verbose}{Logical controlling verbosity.}
 

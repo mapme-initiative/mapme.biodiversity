@@ -9,14 +9,10 @@
 #' the resource users have to set up an API key with
 #' \url{Global Forest Watch}{https://globalforestwatch.org/my-gfw/}
 #' @param x An sf object returned by init_portfolio
-#' @param vers_greenhouse The version of the data set to download, defaults to
-#'   the latest.
 #' @param verbose Logical controlling verbosity.
 #' @param rundir A directory where intermediate files are written to.
 #' @name Forest_Greenhouse_Gas_Emissions
 .get_greenhouse <- function(x,
-                            vers_greenhouse = "latest",
-                            # api_key_gfw = NA,
                             verbose = TRUE,
                             rundir = tempdir()) {
   bbox <- st_bbox(x)
