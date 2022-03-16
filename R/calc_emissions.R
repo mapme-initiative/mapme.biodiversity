@@ -22,7 +22,8 @@
 #' @format A tibble with a column for years and emissions (in Mg)
 NULL
 
-
+#' Calculate emissions statistics
+#'
 #' @param shp A single polygon for which to calculate the tree cover statistic
 #' @param treecover2000 The treecover 2000 resource from GFW
 #' @param lossyear The lossyear resource from GFW

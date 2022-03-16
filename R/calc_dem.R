@@ -1,5 +1,6 @@
 #' Calculate elevation based on SRTM rasters
 #'
+#' @keywords internal
 
 .calc_dem <- function(shp,
                       srtmelevation,
@@ -67,6 +68,7 @@
 
 #' function to compute single raster with terra extract
 #'
+#' @keywords internal
 
 .comp_dem_extract <- function(elevation = NULL,
                               shp = NULL,
@@ -92,6 +94,7 @@
 
 #' function to compute single raster with terra zonal
 #'
+#' @keywords internal
 
 .comp_dem_zonal <- function(elevation = NULL,
                             shp = NULL,
@@ -130,6 +133,7 @@
 
 #' function to compute single raster with exactextractr
 #'
+#' @keywords internal
 
 .comp_dem_exact_extractr <- function(elevation = NULL,
                                      shp = NULL,

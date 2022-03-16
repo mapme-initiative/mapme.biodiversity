@@ -1,10 +1,10 @@
 #' Calculate Terrain Ruggedness Index (TRI) based on SRTM rasters
-#'
+#' @keywords internal
 
 .calc_tri <- function(shp,
                       srtmelevation,
                       engine = "zonal",
-                      stats = 'mean',
+                      stats = "mean",
                       rundir = tempdir(),
                       verbose = TRUE,
                       todisk = FALSE,
@@ -35,8 +35,7 @@
       rundir = rundir
     )
     return(tibble_zstats)
-
-  } else if (engine == "exactextract")  {
+  } else if (engine == "exactextract") {
 
     # check if input stats are correct
     if (!stats %in% available_exact_stats) {
@@ -71,7 +70,7 @@
 
 
 #' function to compute single raster with zonal
-#'
+#' @keywords internal
 
 .comp_tri_zonal <- function(elevation = NULL,
                             shp = NULL,
@@ -99,11 +98,11 @@
     overwrite = TRUE
   )
   zstats <- lapply(1:length(stats), function(i) {
-
-    zstats = terra::zonal(tri,
-                          p_raster,
-                          fun = stats[i],
-                          na.rm = T)
+    zstats <- terra::zonal(tri,
+      p_raster,
+      fun = stats[i],
+      na.rm = T
+    )
     tibble_zstats <- tibble(tri = zstats[, 2])
     names(tibble_zstats)[names(tibble_zstats) == "tri"] <-
       paste0("terrain_ruggedness_index_", stats[i])
@@ -116,7 +115,7 @@
 
 
 #' function to compute single raster with terra extract
-#'
+#' @keywords internal
 
 .comp_tri_extract <- function(elevation = NULL,
                               shp = NULL,
@@ -133,11 +132,11 @@
     overwrite = TRUE
   )
   zstats <- lapply(1:length(stats), function(i) {
-
-    zstats = terra::extract(tri,
-                            shp_v,
-                            fun = stats[i],
-                            na.rm = T)
+    zstats <- terra::extract(tri,
+      shp_v,
+      fun = stats[i],
+      na.rm = T
+    )
     tibble_zstats <- tibble(tri = zstats[, 2])
     names(tibble_zstats)[names(tibble_zstats) == "tri"] <-
       paste0("terrain_ruggedness_index_", stats[i])
@@ -150,7 +149,7 @@
 
 
 #' function to compute single raster with exactextractr
-#'
+#' @keywords internal
 
 .comp_tri_exact_extractr <- function(elevation = NULL,
                                      shp = NULL,
@@ -159,11 +158,11 @@
                                      rundir = rundir,
                                      ...) {
   tri <- terra::terrain(elevation,
-                        v = "TRI",
-                        unit = "degrees",
-                        neighbors = 8,
-                        filename = ifelse(todisk, file.path(rundir, "terrain.tif"), ""),
-                        overwrite = TRUE
+    v = "TRI",
+    unit = "degrees",
+    neighbors = 8,
+    filename = ifelse(todisk, file.path(rundir, "terrain.tif"), ""),
+    overwrite = TRUE
   )
   zstats <- lapply(1:length(stats), function(i) {
     zstats <- exactextractr::exact_extract(
@@ -180,5 +179,3 @@
   tibble_zstats <- tibble(unlist_zstats)
   return(tibble_zstats)
 }
-
-

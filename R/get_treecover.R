@@ -30,6 +30,8 @@
 NULL
 
 
+#' Get treecover layer
+#'
 #' @param x An sf object returned by init_portfolio
 #' @param vers_treecover The version to download, defaults to
 #'   \code{"GFC-2020-v1.8"}.
