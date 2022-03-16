@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #' Calculate Terrain Ruggedness Index (TRI) statistics
 #'
 #' Terrain Ruggedness Index is a measurement developed by Riley, et al. (1999).
@@ -56,10 +55,6 @@ NULL
 #' @importFrom exactextractr exactextract
 #' @keywords internal
 #'
-=======
-#' Calculate Terrain Ruggedness Index (TRI) based on SRTM rasters
-#' @keywords internal
->>>>>>> dba4b584f883bb454ed90142b160e86f5398cbab
 
 .calc_tri <- function(shp,
                       srtmelevation,
@@ -93,17 +88,8 @@ NULL
       rundir = rundir
     )
     return(tibble_zstats)
-<<<<<<< HEAD
 
   } else if (engine == "exactextract") {
-=======
-  } else if (engine == "exactextract") {
-
-    # check if input stats are correct
-    if (!stats %in% available_exact_stats) {
-      stop(sprintf("Stat %s is not an available statistics. Please choose one of: %s", stats, paste(available_exact_stats, collapse = ", ")))
-    }
->>>>>>> dba4b584f883bb454ed90142b160e86f5398cbab
 
     tibble_zstats <- .comp_tri_exact_extractr(
       elevation = srtmelevation,
@@ -126,7 +112,7 @@ NULL
   }
 }
 
-<<<<<<< HEAD
+
 #' Helper function to compute statistics using routines from terra zonal
 #'
 #' @param elevation elevation raster from which to compute statistics
@@ -134,11 +120,6 @@ NULL
 #' @return A data-frame
 #' @keywords internal
 #'
-=======
-
-#' function to compute single raster with zonal
-#' @keywords internal
->>>>>>> dba4b584f883bb454ed90142b160e86f5398cbab
 
 .comp_tri_zonal <- function(elevation = NULL,
                             shp = NULL,
@@ -166,20 +147,12 @@ NULL
     overwrite = TRUE
   )
   zstats <- lapply(1:length(stats), function(i) {
-<<<<<<< HEAD
 
     zstats = terra::zonal(tri,
                           p_raster,
                           fun = stats[i],
                           na.rm = T
                           )
-=======
-    zstats <- terra::zonal(tri,
-      p_raster,
-      fun = stats[i],
-      na.rm = T
-    )
->>>>>>> dba4b584f883bb454ed90142b160e86f5398cbab
     tibble_zstats <- tibble(tri = zstats[, 2])
     names(tibble_zstats)[names(tibble_zstats) == "tri"] <-
       paste0("terrain_ruggedness_index_", stats[i])
@@ -191,7 +164,6 @@ NULL
 }
 
 
-<<<<<<< HEAD
 #' Helper function to compute statistics using routines from terra extract
 #'
 #' @param elevation elevation raster from which to compute statistics
@@ -199,10 +171,6 @@ NULL
 #' @return A data-frame
 #' @keywords internal
 #'
-=======
-#' function to compute single raster with terra extract
-#' @keywords internal
->>>>>>> dba4b584f883bb454ed90142b160e86f5398cbab
 
 .comp_tri_extract <- function(elevation = NULL,
                               shp = NULL,
@@ -219,20 +187,12 @@ NULL
     overwrite = TRUE
   )
   zstats <- lapply(1:length(stats), function(i) {
-<<<<<<< HEAD
 
     zstats = terra::extract(tri,
                             shp_v,
                             fun = stats[i],
                             na.rm = T
                             )
-=======
-    zstats <- terra::extract(tri,
-      shp_v,
-      fun = stats[i],
-      na.rm = T
-    )
->>>>>>> dba4b584f883bb454ed90142b160e86f5398cbab
     tibble_zstats <- tibble(tri = zstats[, 2])
     names(tibble_zstats)[names(tibble_zstats) == "tri"] <-
       paste0("terrain_ruggedness_index_", stats[i])
@@ -244,7 +204,6 @@ NULL
 }
 
 
-<<<<<<< HEAD
 #' Helper function to compute statistics using routines from exactextractr
 #'
 #' @param elevation elevation raster from which to compute statistics
@@ -252,10 +211,6 @@ NULL
 #' @return A data-frame
 #' @keywords internal
 #'
-=======
-#' function to compute single raster with exactextractr
-#' @keywords internal
->>>>>>> dba4b584f883bb454ed90142b160e86f5398cbab
 
 .comp_tri_exact_extractr <- function(elevation = NULL,
                                      shp = NULL,
@@ -293,3 +248,4 @@ NULL
   tibble_zstats <- tibble(unlist_zstats)
   return(tibble_zstats)
 }
+
