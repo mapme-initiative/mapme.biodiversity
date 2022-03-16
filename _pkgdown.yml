@@ -1,0 +1,19 @@
+url: ~
+template:
+  bootstrap: 5
+reference:
+- title: Functions
+  desc: User-facing functions
+- contents:
+  - init_portfolio
+  - get_resources
+  - calc_indicators
+- title: Resources
+  desc: Supported resources.
+- contents:
+  - has_keyword("resource")
+- title: Indicators
+  desc: Supported indicators.
+- contents:
+  - has_keyword("indicator")
+

@@ -2,10 +2,10 @@
 % Please edit documentation in R/get_SRTMdem.R
 \name{SRTM_Digital_Elevation_Model}
 \alias{SRTM_Digital_Elevation_Model}
-\alias{.get_SRTMdem}
+\alias{.get_srtm_dem}
 \title{Downloads SRTM 30m Digital Elevation Model (DEM) Layer}
 \usage{
-.get_SRTMdem(x, rundir = tempdir(), verbose = TRUE)
+.get_srtm_dem(x, rundir = tempdir(), verbose = TRUE)
 }
 \arguments{
 \item{x}{An sf object returned by init_portfolio}

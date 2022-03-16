@@ -12,252 +12,276 @@
 #'
 #' @return A list object.
 #' @export
-#'
-available_resources <- function(resources = NULL){
-  all_resources = list(
-    treecover = list(type = "raster",
-                     source = "Global Forest Watch  (GFW)",
-                     downloader = ".get_treecover",
-                     arguments = list(
-                       vers_treecover = "GFC-2020-v1.8")
+#' @keywords resource
+#' @examples
+#' head(available_resources(), 3)
+available_resources <- function(resources = NULL) {
+  all_resources <- list(
+    treecover2000 = list(
+      type = "raster",
+      source = "https://data.globalforestwatch.org/documents/tree-cover-2000/explore",
+      downloader = ".get_treecover",
+      arguments = list(
+        vers_treecover = "GFC-2020-v1.8"
+      )
     ),
-    lossyear = list(type = "raster",
-                    source = "Global Forest Watch  (GFW)",
-                    downloader = ".get_lossyear",
-                    arguments = list(
-                      vers_lossyear = "GFC-2020-v1.8"
-                    )
+    lossyear = list(
+      type = "raster",
+      source = "https://data.globalforestwatch.org/documents/tree-cover-loss/explore",
+      downloader = ".get_lossyear",
+      arguments = list(
+        vers_lossyear = "GFC-2020-v1.8"
+      )
     ),
-    greenhouse = list("type" = "raster",
-                      source = "Global Forest Watch (GFW)",
-                      downloader = ".get_greenhouse",
-                      arguments = list(
-                      )
+    greenhouse = list(
+      "type" = "raster",
+      source = "https://data.globalforestwatch.org/datasets/gfw::forest-greenhouse-gas-emissions/about",
+      downloader = ".get_greenhouse",
+      arguments = list()
     ),
-    populationcount = list(type = "raster",
-                           source = "WorldPop",
-                           downloader = ".get_popCount",
-                           arguments = list(
-                           )
+    populationcount = list(
+      type = "raster",
+      source = "WorldPop",
+      downloader = ".get_popCount",
+      arguments = list()
     ),
-    esalandcover = list(type = "raster",
-                        source = "Copernicus (ESA)",
-                        downloader = ".get_ESALandCover",
-                        arguments = list(
-                        )
+    esalandcover = list(
+      type = "raster",
+      source = "Copernicus (ESA)",
+      downloader = ".get_esa_land_cover",
+      arguments = list()
     ),
-    accessibility = list(type = "raster",
-                         source = "Travel Time to Cities and Ports 2015",
-                         downloader = ".get_accessibility",
-                         arguments = list(
-                           range = "20k_50k"
-                         )
+    accessibility = list(
+      type = "raster",
+      source = "Travel Time to Cities and Ports 2015",
+      downloader = ".get_accessibility",
+      arguments = list(
+        range = "20k_50k"
+      )
     ),
-    droughtindicators = list(type = "raster",
-                             source = "NASA GRACE",
-                             downloader = ".get_droughtInd",
-                             arguments = list(
-
-                             )
+    droughtindicators = list(
+      type = "raster",
+      source = "NASA GRACE",
+      downloader = ".get_drought_ind",
+      arguments = list()
     ),
-    mintemperature = list(type = "raster",
-                          source = "WorldClim",
-                          downloader = ".get_minTemperature",
-                          arguments = list(
-                          )
+    mintemperature = list(
+      type = "raster",
+      source = "WorldClim",
+      downloader = ".get_min_temperature",
+      arguments = list()
     ),
-    maxtemperature = list(type = "raster",
-                          source = "WorldClim",
-                          downloader = ".get_maxTemperature",
-                          arguments = list(
-                          )
+    maxtemperature = list(
+      type = "raster",
+      source = "WorldClim",
+      downloader = ".get_max_temperature",
+      arguments = list()
     ),
-    precipitation = list(type = "raster",
-                         source = "WorldClim",
-                         downloader = ".get_precipitation",
-                         arguments = list(
-                         )
+    precipitation = list(
+      type = "raster",
+      source = "WorldClim",
+      downloader = ".get_precipitation",
+      arguments = list()
     ),
-    ecoregions = list(type = "vector",
-                      source = "WWF",
-                      downloader = ".get_ecoregions",
-                      arguments = list(
-                      )
+    ecoregions = list(
+      type = "vector",
+      source = "WWF",
+      downloader = ".get_ecoregions",
+      arguments = list()
     ),
-    mangroveextent = list(type = "vector",
-                          source = "Global Mangrove Watch",
-                          downloader = ".get_mangrove",
-                          arguments = list(
-                          )
+    mangroveextent = list(
+      type = "vector",
+      source = "Global Mangrove Watch",
+      downloader = ".get_mangrove",
+      arguments = list()
     ),
-    srtmelevation = list(type = "raster",
-                         source = "SRTM",
-                         downloader = ".get_SRTMdem",
-                         arguments = list(
-                         )
+    srtmelevation = list(
+      type = "raster",
+      source = "SRTM",
+      downloader = ".get_srtm_dem",
+      arguments = list()
     ),
-    bdod = list(type = "raster",
-                source = "SoilGrids",
-                downloader = ".get_bdod",
-                arguments =  list(
-                  depth = "0-5cm",
-                  stat = "mean"
-                ),
-                description = list(
-                  long_name = "Bulk density of the fine earth fraction",
-                  mapped_units = "cg/cm3",
-                  conversion_factor = 100,
-                  conventional_units = "kg/dm3"
-                )
+    bdod = list(
+      type = "raster",
+      source = "https://www.isric.org/explore/soilgrids",
+      downloader = ".get_bdod",
+      arguments = list(
+        depth = "0-5cm",
+        stat = "mean"
+      ),
+      description = list(
+        long_name = "Bulk density of the fine earth fraction",
+        mapped_units = "cg/cm3",
+        conversion_factor = 100,
+        conventional_units = "kg/dm3"
+      )
     ),
-    cec = list(type = "raster",
-               source = "SoilGrids",
-               downloader = ".get_cec",
-               arguments =  list(
-                 depth = "0-5cm",
-                 stat = "mean"
-               ),
-               description = list(
-                 long_name = "Cation Exchange Capacity of the soil",
-                 mapped_units = "mmol(c)/kg",
-                 conversion_factor = 10,
-                 conventional_units = "cmol(c)/kg"
-               )
+    cec = list(
+      type = "raster",
+      source = "https://www.isric.org/explore/soilgrids",
+      downloader = ".get_cec",
+      arguments = list(
+        depth = "0-5cm",
+        stat = "mean"
+      ),
+      description = list(
+        long_name = "Cation Exchange Capacity of the soil",
+        mapped_units = "mmol(c)/kg",
+        conversion_factor = 10,
+        conventional_units = "cmol(c)/kg"
+      )
     ),
-    cfvo = list(type = "raster",
-                source = "SoilGrids",
-                downloader = ".get_cfvo",
-                arguments =  list(
-                  depth = "0-5cm",
-                  stat = "mean"
-                ),
-                description = list(
-                  long_name = "Volumetric fraction of coarse fragments (> 2 mm)",
-                  mapped_units = "cm3/dm3 (volPerc)",
-                  conversion_factor = 10,
-                  conventional_units = "cm3/100cm3 (volperc)"
-                )
+    cfvo = list(
+      type = "raster",
+      source = "https://www.isric.org/explore/soilgrids",
+      downloader = ".get_cfvo",
+      arguments = list(
+        depth = "0-5cm",
+        stat = "mean"
+      ),
+      description = list(
+        long_name = "Volumetric fraction of coarse fragments (> 2 mm)",
+        mapped_units = "cm3/dm3 (volPerc)",
+        conversion_factor = 10,
+        conventional_units = "cm3/100cm3 (volperc)"
+      )
     ),
-    clay = list(type = "raster",
-                source = "SoilGrids",
-                downloader = ".get_clay",
-                arguments =  list(
-                  depth = "0-5cm",
-                  stat = "mean"
-                ),
-                description = list(
-                  long_name = "Proportion of clay particles (< 0.002 mm) in the fine earth fraction",
-                  mapped_units = "g/kg",
-                  conversion_factor = 10,
-                  conventional_units = "g/100g (Perc)"
-                )
+    clay = list(
+      type = "raster",
+      source = "https://www.isric.org/explore/soilgrids",
+      downloader = ".get_clay",
+      arguments = list(
+        depth = "0-5cm",
+        stat = "mean"
+      ),
+      description = list(
+        long_name = paste("Proportion of clay particles (< 0.002 mm)",
+          "in the fine earth fraction",
+          sep = ""
+        ),
+        mapped_units = "g/kg",
+        conversion_factor = 10,
+        conventional_units = "g/100g (Perc)"
+      )
     ),
-    nitrogen = list(type = "raster",
-                    source = "SoilGrids",
-                    downloader = ".get_nitrogen",
-                    arguments =  list(
-                      depth = "0-5cm",
-                      stat = "mean"
-                    ),
-                    description = list(
-                      long_name = "Total nitrogen (N)",
-                      mapped_units = "cg/kg",
-                      conversion_factor = 100,
-                      conventional_units = "g/kg"
-                    )
+    nitrogen = list(
+      type = "raster",
+      source = "https://www.isric.org/explore/soilgrids",
+      downloader = ".get_nitrogen",
+      arguments = list(
+        depth = "0-5cm",
+        stat = "mean"
+      ),
+      description = list(
+        long_name = "Total nitrogen (N)",
+        mapped_units = "cg/kg",
+        conversion_factor = 100,
+        conventional_units = "g/kg"
+      )
     ),
-    phh2o = list(type = "raster",
-                 source = "SoilGrids",
-                 downloader = ".get_phh2o",
-                 arguments =  list(
-                   depth = "0-5cm",
-                   stat = "mean"
-                 ),
-                 description = list(
-                   long_name = "Soil pH",
-                   mapped_units = "pHx10",
-                   conversion_factor = 100,
-                   conventional_units = "pH"
-                 )
+    phh2o = list(
+      type = "raster",
+      source = "https://www.isric.org/explore/soilgrids",
+      downloader = ".get_phh2o",
+      arguments = list(
+        depth = "0-5cm",
+        stat = "mean"
+      ),
+      description = list(
+        long_name = "Soil pH",
+        mapped_units = "pHx10",
+        conversion_factor = 100,
+        conventional_units = "pH"
+      )
     ),
-    sand = list(type = "raster",
-                source = "SoilGrids",
-                downloader = ".get_sand",
-                arguments =  list(
-                  depth = "0-5cm",
-                  stat = "mean"
-                ),
-                description = list(
-                  long_name = "Proportion of sand particles (> 0.05 mm) in the fine earth fraction",
-                  mapped_units = "g/kg",
-                  conversion_factor = 10,
-                  conventional_units = "g/100g (perc)"
-                )
+    sand = list(
+      type = "raster",
+      source = "https://www.isric.org/explore/soilgrids",
+      downloader = ".get_sand",
+      arguments = list(
+        depth = "0-5cm",
+        stat = "mean"
+      ),
+      description = list(
+        long_name = paste("Proportion of sand particles (> 0.05 mm) ",
+          "in the fine earth fraction",
+          sep = ""
+        ),
+        mapped_units = "g/kg",
+        conversion_factor = 10,
+        conventional_units = "g/100g (perc)"
+      )
     ),
-    silt = list(type = "raster",
-                source = "SoilGrids",
-                downloader = ".get_silt",
-                arguments =  list(
-                  depth = "0-5cm",
-                  stat = "mean"
-                ),
-                description = list(
-                  long_name = "Proportion of silt particles (>= 0.002 mm and <= 0.05 mm) in the fine earth fraction",
-                  mapped_units = "g/kg",
-                  conversion_factor = 10,
-                  conventional_units = "g/100g (perc)"
-                )
+    silt = list(
+      type = "raster",
+      source = "https://www.isric.org/explore/soilgrids",
+      downloader = ".get_silt",
+      arguments = list(
+        depth = "0-5cm",
+        stat = "mean"
+      ),
+      description = list(
+        long_name = paste("Proportion of silt particles (>= 0.002 mm and ",
+          "<= 0.05 mm) in the fine earth fraction",
+          sep = ""
+        ),
+        mapped_units = "g/kg",
+        conversion_factor = 10,
+        conventional_units = "g/100g (perc)"
+      )
     ),
-    soc = list(type = "raster",
-               source = "SoilGrids",
-               downloader = ".get_silt",
-               arguments =  list(
-                 depth = "0-5cm",
-                 stat = "mean"
-               ),
-               description = list(
-                 long_name = "Soil organic carbon content in the fine earth fraction",
-                 mapped_units = "dg/kg",
-                 conversion_factor = 10,
-                 conventional_units = "g/kg"
-               )
+    soc = list(
+      type = "raster",
+      source = "https://www.isric.org/explore/soilgrids",
+      downloader = ".get_silt",
+      arguments = list(
+        depth = "0-5cm",
+        stat = "mean"
+      ),
+      description = list(
+        long_name = "Soil organic carbon content in the fine earth fraction",
+        mapped_units = "dg/kg",
+        conversion_factor = 10,
+        conventional_units = "g/kg"
+      )
     ),
-    ocd = list(type = "raster",
-               source = "SoilGrids",
-               downloader = ".get_cec",
-               arguments =  list(
-                 depth = "0-5cm",
-                 stat = "mean"
-               ),
-               description = list(
-                 long_name = "Organic carbon density",
-                 mapped_units = "kg/m3",
-                 conversion_factor = 10,
-                 conventional_units = "kg/m3"
-               )
+    ocd = list(
+      type = "raster",
+      source = "https://www.isric.org/explore/soilgrids",
+      downloader = ".get_cec",
+      arguments = list(
+        depth = "0-5cm",
+        stat = "mean"
+      ),
+      description = list(
+        long_name = "Organic carbon density",
+        mapped_units = "kg/m3",
+        conversion_factor = 10,
+        conventional_units = "kg/m3"
+      )
     ),
-    ocs = list(type = "raster",
-               source = "SoilGrids",
-               downloader = ".get_ocs",
-               arguments =  list(
-                 depth = "0-30cm",
-                 stat = "mean"
-               ),
-               description = list(
-                 long_name = "Organic carbon stocks",
-                 mapped_units = "t/ha",
-                 conversion_factor = 10,
-                 conventional_units = "kg/m2"
-               )
+    ocs = list(
+      type = "raster",
+      source = "https://www.isric.org/explore/soilgrids",
+      downloader = ".get_ocs",
+      arguments = list(
+        depth = "0-30cm",
+        stat = "mean"
+      ),
+      description = list(
+        long_name = "Organic carbon stocks",
+        mapped_units = "t/ha",
+        conversion_factor = 10,
+        conventional_units = "kg/m2"
+      )
     )
   )
 
   # determine what to return
-  if(is.null(resources)) {
+  if (is.null(resources)) {
     return(all_resources)
   } else {
     .check_requested_resources(resources)
     all_resources[resources]
   }
-
 }

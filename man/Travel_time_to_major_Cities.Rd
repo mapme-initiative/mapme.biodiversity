@@ -15,16 +15,17 @@
 \arguments{
 \item{x}{An sf object returned by init_portfolio}
 
-\item{range_accessibility}{The city within the defined range of population to download, defaults to \code{"20k_50k"}.}
+\item{range_accessibility}{The city within the defined range of population
+to download, defaults to \code{"20k_50k"}.}
 
 \item{rundir}{A directory where intermediate files are written to.}
 
 \item{verbose}{Logical controlling verbosity.}
 }
 \description{
-Accessibility is the ease with which larger cities can be reached from a certain location.
-This resource represents the travel time to major cities in the year 2015. Encoded as minutes,
-representing the time needed to reach that particular cell from nearby city of population range
-of interest.
+Accessibility is the ease with which larger cities can be reached from a
+certain location. This resource represents the travel time to major cities
+in the year 2015. Encoded as minutes, representing the time needed to reach
+that particular cell from nearby city of population range of interest.
 }
 \keyword{internal}

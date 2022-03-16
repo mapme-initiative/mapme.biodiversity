@@ -1,39 +1,60 @@
-#' Downloads Forest greenhouse gas emissions layer from GFW
+#' Forest greenhouse gas emissions
 #'
-#' This dataset is described in \url{Harris et al 2021}{https://www.nature.com/articles/s41558-020-00976-6}
-#' and includes all relevant ecosystem carbon pools (aboveground biomass,
-#' belowground biomass, dead wood, litter, soil) and greenhouse gases (CO2, CH4, N2O).
-#' The downloaded layer represents the Mg CO2 equivalent per pixel in order to
-#' support emission calculations for custom AOIs. To download the resource users
-#' have to set up an API key with \url{Global Forest Watch}{https://globalforestwatch.org/my-gfw/}
+#' This resource is part of the publication by Harris et al. (2021)
+#' "Global maps of twenty-first century forest carbon fluxes.". It
+#' represents "the greenhouse gas
+#' emissions arising from stand-replacing forest disturbances that occurred in
+#' each modeled year (megagrams CO2 emissions/ha, between 2001 and 2020).
+#' Emissions include all relevant ecosystem carbon pools (aboveground biomass,
+#' belowground biomass, dead wood, litter, soil) and greenhouse gases (CO2, CH4,
+#' N2O)." The area unit that is downloaded here corresponds to the
+#' "megagrams of CO2 emissions/pixel" layer, in order to support the calculation
+#' of area-wise emissions.
+#'
+#' There are no arguments users need to specify. However, users should note
+#' that the spatial extent for this dataset does not totally cover the same
+#' extent as the \code{treecover2000} and \code{lossyear} resources by Hansen
+#' et al. (2013). A missing value (NA) will be inserted for greenhouse gas
+#' emissions for areas where no data is available.
+#'
+#' @name greenhouse
+#' @docType data
+#' @keywords resource
+#' @format A global tiled raster resource available for all land areas.
+#' @references Harris, N.L., Gibbs, D.A., Baccini, A. et al. Global maps of
+#' twenty-first century forest carbon fluxes. Nat. Clim. Chang. 11, 234–240
+#' (2021). https://doi.org/10.1038/s41558-020-00976-6
+#' @source \url{https://data.globalforestwatch.org/datasets/gfw::forest-greenhouse-gas-emissions/about}
+NULL
+
+
 #' @param x An sf object returned by init_portfolio
-#' @param vers_greenhouse The version of the data set to download, defaults to the latest.
 #' @param verbose Logical controlling verbosity.
 #' @param rundir A directory where intermediate files are written to.
-#' @name Forest_Greenhouse_Gas_Emissions
+#' @keywords internal
 .get_greenhouse <- function(x,
-                            vers_greenhouse = "latest",
-                            #api_key_gfw = NA,
                             verbose = TRUE,
-                            rundir = tempdir()){
-
-  bbox = st_bbox(x)
-  # if(is.na(api_key_gfw)){
-  #   stop("For resources 'greenhouse' a valid API key has to be specified.
-  #        If you don have registered yet, please visit https://globalforestwatch.org/my-gfw and order an api-key.", call. = FALSE)
-  # }
-
-  spatialindex = st_read("https://opendata.arcgis.com/datasets/753016096c1d49f0977e7b62533375ee_0.geojson", quiet = TRUE)
-  targets = unlist(st_intersects(st_as_sfc(bbox), spatialindex))
-  tileids = spatialindex$tile_id[targets]
-  #baseurl = sprintf("https://data-api.globalforestwatch.org/dataset/gfw_forest_carbon_gross_emissions/%s/download/geotiff", vers_greenhouse)
-  #urls = sprintf("%s?grid=10/40000&tile_id=%s&pixel_meaning=Mg_CO2e_px&x-api-key=%s", baseurl, tileids, api_key_gfw)
-  urls = spatialindex$Mg_CO2e_px_download[spatialindex$tile_id %in% tileids]
-  filenames = file.path(rundir, sprintf("gfw_forest_carbon_gross_emissions_Mg_CO2e_px_%s.tif", tileids))
-  if(any(file.exists(filenames))) message("Skipping existing files in output directory.")
+                            rundir = tempdir()) {
+  bbox <- st_bbox(x)
+  index_url <- paste("https://opendata.arcgis.com/datasets/",
+    "753016096c1d49f0977e7b62533375ee_0.geojson",
+    sep = ""
+  )
+  spatialindex <- st_read(index_url, quiet = TRUE)
+  targets <- unlist(st_intersects(st_as_sfc(bbox), spatialindex))
+  tileids <- spatialindex$tile_id[targets]
+  urls <- as.character(
+    spatialindex$Mg_CO2e_px_download[spatialindex$tile_id %in% tileids]
+  )
+  filenames <- file.path(
+    rundir,
+    sprintf("gfw_forest_carbon_gross_emissions_Mg_CO2e_px_%s.tif", tileids)
+  )
+  if (any(file.exists(filenames))) {
+    message("Skipping existing files in output directory.")
+  }
   # TODO: Parallel downloads
-  .downloadOrSkip(urls, filenames, verbose, check_existence = FALSE)
+  .download_or_skip(urls, filenames, verbose, check_existence = FALSE)
   # return all paths to the downloaded files
-  list.files(rundir, full.names = T)
+  filenames
 }
-

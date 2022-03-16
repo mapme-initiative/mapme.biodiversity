@@ -15,8 +15,9 @@
 \item{verbose}{Logical controlling verbosity.}
 }
 \description{
-This resource represents the population count, layers available to download from the
-year 2000 to 2020. The dataset is called as WorldPop Unconstrained Global Mosaics.
-The encoded cell value represents the total number of people in that particular cell.
+This resource represents the population count, layers available to download
+from the year 2000 to 2020. The dataset is called as WorldPop Unconstrained
+Global Mosaics. The encoded cell value represents the total number of people
+in that particular cell.
 }
 \keyword{internal}

@@ -15,9 +15,9 @@
 \item{verbose}{Logical controlling verbosity.}
 }
 \description{
-The polygons represent the ecoregions, defined as relatively large units of land
-or inland water sharing a large majority of biodiversity. The datasets is made
-available from World Wildlife Fund (WWF). There are 867 terrestrial ecoregions,
-further classified into 14 different terrestrial biomes.
+The polygons represent the ecoregions, defined as relatively large units of
+land or inland water sharing a large majority of biodiversity. The datasets
+is made available from World Wildlife Fund (WWF). There are 867 terrestrial
+ecoregions, further classified into 14 different terrestrial biomes.
 }
 \keyword{internal}

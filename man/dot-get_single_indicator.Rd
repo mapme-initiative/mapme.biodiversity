@@ -9,10 +9,13 @@
 \arguments{
 \item{x}{A sf object returned by init_portfolio().}
 
-\item{indicator}{A variable length charcter vector with the indicators to calculate.}
+\item{indicator}{A variable length charcter vector with the indicators to
+calculate.}
 
 \item{...}{Additional arguments required by the requested indicators.}
 }
 \description{
-This functions let's users calculate on or more biodiversity indicators for a portfolio.
+This functions let's users calculate on or more biodiversity indicators for
+a portfolio.
 }
+\keyword{internal}

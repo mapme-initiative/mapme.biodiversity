@@ -13,24 +13,30 @@
 #' @keywords internal
 #'
 
-.get_SRTMdem <- function(x,
-                         rundir = tempdir(),
-                         verbose = TRUE) {
-  bbox = st_bbox(x)
+.get_srtm_dem <- function(x,
+                          rundir = tempdir(),
+                          verbose = TRUE) {
+  bbox <- st_bbox(x)
   # make the SRTM grid and construct urls for intersecting tiles
-  grid_srtm = .makeGlobalGrid(xmin = -180, xmax = 180, dx = 5, ymin = -60, ymax = 60, dy = 5)
-  tile_ids = st_intersects(st_as_sfc(bbox), grid_srtm)[[1]]
-  if (length(tile_ids) == 0) stop("The extent of the portfolio does not intersect with the SRTM grid.")
-  urls = unlist(sapply(tile_ids, function(tile) .getSrtmURL(tile)))
-  filenames = file.path(rundir, basename(urls))
-  if(any(file.exists(filenames))) message("Skipping existing files in output directory.")
+  grid_srtm <- .make_global_grid(
+    xmin = -180, xmax = 180, dx = 5,
+    ymin = -60, ymax = 60, dy = 5
+  )
+  tile_ids <- st_intersects(st_as_sfc(bbox), grid_srtm)[[1]]
+  if (length(tile_ids) == 0) {
+    stop("The extent of the portfolio does not intersect with the SRTM grid.")
+  }
+  urls <- unlist(sapply(tile_ids, function(tile) .get_srtm_url(tile)))
+  filenames <- file.path(rundir, basename(urls))
+  if (any(file.exists(filenames))) {
+    message("Skipping existing files in output directory.")
+  }
   # start download in a temporal directory within tmpdir
-  .downloadOrSkip(urls, filenames, verbose)
-  # get path of all the zip files
-  all_zips <- list.files(rundir, full.names = T)
-  sapply(all_zips, function(zip) .UnzipAndRemove(zip, rundir))
+  .download_or_skip(urls, filenames, verbose)
+  # unzip zip files
+  sapply(filenames, function(zip) .unzip_and_remove(zip, rundir))
   # return paths to the rasters
-  list.files(rundir, full.names = T, pattern = ".tif")
+  gsub(".zip$", ".tif", filenames)
 }
 
 
@@ -40,7 +46,7 @@
 #'
 #' @return A charchter vector
 #' @keywords internal
-.getSrtmURL <- function(tile) {
+.get_srtm_url <- function(tile) {
   index.c <- tile %% 72
   index.r <- 24 - floor(tile / 72)
   if (tile %% 72 == 0) {
@@ -49,6 +55,8 @@
   }
 
   tileId <- sprintf("%02d_%02d", index.c, index.r)
-  paste0("https://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_", tileId, ".zip")
+  paste0(
+    "https://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_",
+    tileId, ".zip"
+  )
 }
-

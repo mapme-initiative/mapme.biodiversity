@@ -1,2 +1,6 @@
 .Rproj.user
 devel
+.Rprofile
+renv.lock
+renv
+docs

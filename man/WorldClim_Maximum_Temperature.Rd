@@ -2,10 +2,10 @@
 % Please edit documentation in R/get_climaticVariables.R
 \name{WorldClim_Maximum_Temperature}
 \alias{WorldClim_Maximum_Temperature}
-\alias{.get_maxTemperature}
+\alias{.get_max_temperature}
 \title{Downloads WorldClim Maximum Temperature layer}
 \usage{
-.get_maxTemperature(x, rundir = tempdir(), verbose = TRUE)
+.get_max_temperature(x, rundir = tempdir(), verbose = TRUE)
 }
 \arguments{
 \item{x}{An sf object returned by init_portfolio}
@@ -15,8 +15,8 @@
 \item{verbose}{Logical controlling verbosity.}
 }
 \description{
-This resource represents the maximum temperature, layers available to download for
-the period 2000 - 2018 on monthly basis from WorldClim. Encoded as (°C), representing
-the maximum temperature per output grid cell.
+This resource represents the maximum temperature, layers available to
+download for the period 2000 - 2018 on monthly basis from WorldClim. Encoded
+as (°C), representing the maximum temperature per output grid cell.
 }
 \keyword{internal}

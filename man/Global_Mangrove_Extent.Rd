@@ -16,8 +16,8 @@
 }
 \description{
 The polygons represent the mangrove, which is tropical coastal vegetation
-and considered the most significant part of the marine ecosystem. This resource
-is available for the period 1996- 2016 from Global Mangrove Watch (GMW), providing
-geospatial information about global mangrove extent.
+and considered the most significant part of the marine ecosystem. This
+resource is available for the period 1996- 2016 from Global Mangrove Watch
+(GMW), providing geospatial information about global mangrove extent.
 }
 \keyword{internal}
