@@ -25,17 +25,19 @@ available_indicators <- function(indicator = NULL) {
       )
     ),
     elevation = list(
-      name = ".calc_srtmElevation",
+      name = ".calc_dem",
       inputs = list(srtmelevation = "raster"),
       arguments = list(
-        stats = "mean"
+        stats = "mean",
+        engine = 'zonal'
       )
     ),
     tri <- list(
-      name = ".cal_TRI",
+      name = ".calc_tri",
       inputs = list(srtmelevation = "raster"),
       arguments = list(
-        stats = c("mean", "median", "sd")
+        stats = "mean",
+        engine = 'zonal'
       )
     )
   )
