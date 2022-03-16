@@ -7,3 +7,6 @@ devel
 inst/extdata/resources
 ^\.github$
 ^\.pre-commit-config\.yaml$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

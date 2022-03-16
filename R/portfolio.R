@@ -29,6 +29,7 @@
 #'   available cores.
 #' @param verbose Logical, defaults to TRUE, indicating if progress information
 #'   is printed.
+#' @keywords function
 #' @export
 init_portfolio <- function(x,
                            years,

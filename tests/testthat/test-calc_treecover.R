@@ -18,7 +18,7 @@ test_that("treecover works", {
     tmpdir = tmpdir
   )
   portfolio <- get_resources(portfolio,
-    resources = c("treecover", "lossyear", "greenhouse")
+    resources = c("treecover2000", "lossyear", "greenhouse")
   )
   resources <- attributes(portfolio)$resources
 
@@ -28,7 +28,7 @@ test_that("treecover works", {
   )
 
   attributes(portfolio)$years <- 1999:2005
-  stat <- calc_indicators(portfolio, "treecover")$treecover[[1]]
+  stat <- suppressWarnings(calc_indicators(portfolio, "treecover")$treecover[[1]])
   expect_snapshot(stat)
   attributes(portfolio)$years <- 2000:2005
 

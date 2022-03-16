@@ -16,6 +16,7 @@
 #' @param ... Additional arguments required for the requested indicators. Check
 #'  \code{available_indicators()} to learn more about the supported indicators
 #'  and their arguments.
+#' @keywords function
 #' @export
 calc_indicators <- function(x, indicators, ...) {
   # check if the requested resource is supported

@@ -1,3 +1,25 @@
+#' Calculate treecover statistics
+#'
+#' This functions allows to efficiently calculate treecover statistics for
+#' polygons. For each year in the analysis timeframe, the forest losses in
+#' preceeding and the current years are substracted from the treecover in the
+#' year 2000 and actual treecover figures within the polygon are returned.
+#' The required resources for this indicator are:
+#'  - \code{treecover2000}
+#'  - \code{lossyear}
+#'
+#' The following arguments can be set:
+#' \describe{
+#'   \item{min_size}{The minum size of a forest patch to be considered as forest in ha.}
+#'   \item{min_cover}{The minimum cover percentage per pixel to be considered as forest.}
+#' }
+#'
+#' @name treecover
+#' @docType data
+#' @keywords indicator
+#' @format A tibble with a column for years and treecover (in ha)
+NULL
+
 #' Calculate tree cover per year based on GFW data sets
 #'
 #' Considering the 2000 GFW forest cover density layer users can specify
@@ -7,7 +29,7 @@
 #' area.
 #'
 #' @param shp A single polygon for which to calculate the tree cover statistic
-#' @param treecover The treecover 2000 resource from GFW
+#' @param treecover2000 The treecover 2000 resource from GFW
 #' @param lossyear The lossyear resource from GFW
 #' @param min_size The minimum size of a forest patch in ha.
 #' @param min_cover The minimum threshold of stand density for a pixel to be
@@ -19,10 +41,10 @@
 #' @param ... additional arguments
 #' @return A tibble
 #' @importFrom stringr str_sub
-#' @export
+#' @keywords internal
 #'
 .calc_treecover <- function(shp,
-                            treecover,
+                            treecover2000,
                             lossyear,
                             min_size = 10,
                             min_cover = 35,
@@ -47,14 +69,14 @@
 
 
   # handling of return value if resources are missing, e.g. no overlap
-  if (any(is.null(treecover), is.null(lossyear))) {
+  if (any(is.null(treecover2000), is.null(lossyear))) {
     return(tibble(years = years, treecover = rep(NA, length(years))))
   }
-  if (ncell(treecover) > 1024 * 1024) todisk <- TRUE
-  # check if treecover only contains 0s, e.g. on the ocean
-  minmax_treecover <- unique(as.vector(minmax(treecover)))
-  if (length(minmax_treecover) == 1) {
-    if (minmax_treecover == 0 | is.nan(minmax_treecover)) {
+  if (ncell(treecover2000) > 1024 * 1024) todisk <- TRUE
+  # check if treecover2000 only contains 0s, e.g. on the ocean
+  minmax_treecover2000 <- unique(as.vector(minmax(treecover2000)))
+  if (length(minmax_treecover2000) == 1) {
+    if (minmax_treecover2000 == 0 | is.nan(minmax_treecover2000)) {
       return(tibble(years = years, treecover = rep(0, length(years))))
     }
   }
@@ -91,7 +113,7 @@
   # start calculation if everything is set up correctly
   # retrieve an area raster
   arearaster <- cellSize(
-    treecover,
+    treecover2000,
     unit = "ha",
     filename = ifelse(todisk, file.path(rundir, "arearaster.tif"), ""),
     datatype = "FLT4S",
@@ -99,16 +121,16 @@
   )
   # rasterize the polygon
   polyraster <- rasterize(
-    vect(shp), treecover,
+    vect(shp), treecover2000,
     field = 1, touches = TRUE,
     filename = ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
     datatype = "INT1U",
     overwrite = TRUE
   )
-  # mask treecover
-  treecover <- mask(
-    treecover, polyraster,
-    filename =  ifelse(todisk, file.path(rundir, "treecover.tif"), ""),
+  # mask treecover2000
+  treecover2000 <- mask(
+    treecover2000, polyraster,
+    filename =  ifelse(todisk, file.path(rundir, "treecover2000.tif"), ""),
     datatype = "INT1U",
     overwrite = TRUE
   )
@@ -120,18 +142,18 @@
     datatype = "INT1U",
     overwrite = TRUE
   )
-  # binarize the treecover layer based on min_cover argument
-  binary_treecover <- classify(
-    treecover,
+  # binarize the treecover2000 layer based on min_cover argument
+  binary_treecover2000 <- classify(
+    treecover2000,
     rcl = matrix(c(0, min_cover, 0, min_cover, 100, 1), ncol = 3, byrow = TRUE),
     include.lowest = TRUE,
-    filename = ifelse(todisk, file.path(rundir, "binary_treecover.tif"), ""),
+    filename = ifelse(todisk, file.path(rundir, "binary_treecover2000.tif"), ""),
     datatype = "INT1U",
     overwrite = TRUE
   )
   # retrieve patches of comprehensive forest areas
   patched <- patches(
-    binary_treecover,
+    binary_treecover2000,
     directions = 4, zeroAsNA = TRUE,
     filename = ifelse(todisk, file.path(rundir, "patched.tif"), ""),
     datatype = "INT4U",
@@ -153,16 +175,16 @@
     overwrite = TRUE
   )
   # remove patches smaller than threshold
-  binary_treecover <- ifel(
-    patchsizes < min_size, 0, binary_treecover,
-    filename = ifelse(todisk, file.path(rundir, "binary_treecover.tif"), ""),
+  binary_treecover2000 <- ifel(
+    patchsizes < min_size, 0, binary_treecover2000,
+    filename = ifelse(todisk, file.path(rundir, "binary_treecover2000.tif"), ""),
     datatype = "INT1U",
     overwrite = TRUE
   )
-  # return 0 if binary treecover only consists of 0 or nan
-  minmax_treecover <- unique(as.vector(minmax(binary_treecover)))
-  if (length(minmax_treecover) == 1) {
-    if (minmax_treecover == 0 | is.nan(minmax_treecover)) {
+  # return 0 if binary treecover2000 only consists of 0 or nan
+  minmax_treecover2000 <- unique(as.vector(minmax(binary_treecover2000)))
+  if (length(minmax_treecover2000) == 1) {
+    if (minmax_treecover2000 == 0 | is.nan(minmax_treecover2000)) {
       return(
         tibble(
           years = years,
@@ -180,7 +202,7 @@
   )
   # exclude non-tree pixels from lossyear layer
   lossyear <- mask(
-    lossyear, binary_treecover,
+    lossyear, binary_treecover2000,
     filename = ifelse(todisk, file.path(rundir, "lossyear.tif"), ""),
     datatype = "INT1U",
     overwrite = TRUE
@@ -189,28 +211,28 @@
   # get forest cover statistics for each year
   yearly_cover_values <- lapply(years, function(y) {
     y <- y - 2000
-    current_treecover <- ifel(
-      lossyear <= y, NA, binary_treecover,
-      filename = ifelse(todisk, file.path(rundir, "current_treecover.tif"), ""),
+    current_treecover2000 <- ifel(
+      lossyear <= y, NA, binary_treecover2000,
+      filename = ifelse(todisk, file.path(rundir, "current_treecover2000.tif"), ""),
       datatype = "INT1U",
       overwrite = TRUE
     )
     current_arearaster <- mask(
-      arearaster, current_treecover,
+      arearaster, current_treecover2000,
       maskvalues = c(NA, 0),
       filename = ifelse(todisk, file.path(rundir, "current_area.tif"), ""),
       datatype = "FLT4S",
       overwrite = TRUE
     )
-    ha_sum_treecover <- zonal(
+    ha_sum_treecover2000 <- zonal(
       current_arearaster, polyraster, sum,
       na.rm = TRUE
     )[2]
-    as.numeric(ha_sum_treecover)
+    as.numeric(ha_sum_treecover2000)
   })
 
   # memory clean up
-  rm(arearaster, binary_treecover, patchsizes, patched, polyraster)
+  rm(arearaster, binary_treecover2000, patchsizes, patched, polyraster)
   # return a data-frame
   tibble(years = years, treecover = as.vector(unlist(yearly_cover_values)))
 }

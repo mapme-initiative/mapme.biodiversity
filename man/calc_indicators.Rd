@@ -28,3 +28,4 @@ arguments can be supplied. You can check available indicators and
 their requirement via \code{available_indicators()}, but
 the function will also gracefully inform you about any misspecifications.
 }
+\keyword{function}

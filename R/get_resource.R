@@ -15,6 +15,7 @@
 #' @param ... Additional arguments required for the requested resources. Check
 #'  \code{available_resources()} to learn more about the supported resources and
 #'  their arguments.
+#' @keywords function
 #' @export
 get_resources <- function(x, resources, ...) {
   connection_available <- curl::has_internet()

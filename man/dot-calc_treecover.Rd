@@ -6,7 +6,7 @@
 \usage{
 .calc_treecover(
   shp,
-  treecover,
+  treecover2000,
   lossyear,
   min_size = 10,
   min_cover = 35,
@@ -19,7 +19,7 @@
 \arguments{
 \item{shp}{A single polygon for which to calculate the tree cover statistic}
 
-\item{treecover}{The treecover 2000 resource from GFW}
+\item{treecover2000}{The treecover 2000 resource from GFW}
 
 \item{lossyear}{The lossyear resource from GFW}
 
@@ -47,3 +47,4 @@ Additionally, users can specify a minimum size of a comprehensive patch of
 forest pixels. Patches below this threshold will not be considered as forest
 area.
 }
+\keyword{internal}

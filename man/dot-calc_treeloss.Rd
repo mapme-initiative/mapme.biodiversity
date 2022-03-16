@@ -6,7 +6,7 @@
 \usage{
 .calc_treeloss(
   shp,
-  treecover,
+  treecover2000,
   lossyear,
   greenhouse,
   min_size = 10,
@@ -20,7 +20,7 @@
 \arguments{
 \item{shp}{A single polygon for which to calculate the tree cover statistic}
 
-\item{treecover}{The treecover 2000 resource from GFW}
+\item{treecover2000}{The treecover 2000 resource from GFW}
 
 \item{lossyear}{The lossyear resource from GFW}
 
@@ -50,3 +50,4 @@ treecover and emissions into a single function since the computations for
 both indicators are very similar. If a user is interested only in one of
 these two indicators consider applying the respective functions.
 }
+\keyword{internal}

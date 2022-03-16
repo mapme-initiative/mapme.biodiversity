@@ -1,17 +1,37 @@
-#' Downloads Forest greenhouse gas emissions layer from GFW
+#' Forest greenhouse gas emissions
 #'
-#' This dataset is described in
-#' \url{Harris et al 2021}{https://www.nature.com/articles/s41558-020-00976-6}
-#' and includes all relevant ecosystem carbon pools (aboveground biomass,
-#' belowground biomass, dead wood, litter, soil) and greenhouse gases
-#' (CO2, CH4, N2O). The downloaded layer represents the Mg CO2 equivalent per
-#' pixel in order to support emission calculations for custom AOIs. To download
-#' the resource users have to set up an API key with
-#' \url{Global Forest Watch}{https://globalforestwatch.org/my-gfw/}
+#' This resource is part of the publication by Harris et al. (2021)
+#' "Global maps of twenty-first century forest carbon fluxes.". It
+#' represents "the greenhouse gas
+#' emissions arising from stand-replacing forest disturbances that occurred in
+#' each modeled year (megagrams CO2 emissions/ha, between 2001 and 2020).
+#' Emissions include all relevant ecosystem carbon pools (aboveground biomass,
+#' belowground biomass, dead wood, litter, soil) and greenhouse gases (CO2, CH4,
+#' N2O)." The area unit that is downloaded here corresponds to the
+#' "megagrams of CO2 emissions/pixel" layer, in order to support the calculation
+#' of area-wise emissions.
+#'
+#' There are no arguments users need to specify. However, users should note
+#' that the spatial extent for this dataset does not totally cover the same
+#' extent as the \code{treecover2000} and \code{lossyear} resources by Hansen
+#' et al. (2013). A missing value (NA) will be inserted for greenhouse gas
+#' emissions for areas where no data is available.
+#'
+#' @name greenhouse
+#' @docType data
+#' @keywords resource
+#' @format A global tiled raster resource available for all land areas.
+#' @references Harris, N.L., Gibbs, D.A., Baccini, A. et al. Global maps of
+#' twenty-first century forest carbon fluxes. Nat. Clim. Chang. 11, 234–240
+#' (2021). https://doi.org/10.1038/s41558-020-00976-6
+#' @source \url{https://data.globalforestwatch.org/datasets/gfw::forest-greenhouse-gas-emissions/about}
+NULL
+
+
 #' @param x An sf object returned by init_portfolio
 #' @param verbose Logical controlling verbosity.
 #' @param rundir A directory where intermediate files are written to.
-#' @name Forest_Greenhouse_Gas_Emissions
+#' @keywords internal
 .get_greenhouse <- function(x,
                             verbose = TRUE,
                             rundir = tempdir()) {

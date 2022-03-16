@@ -1,3 +1,58 @@
+#' Soildgrids data layers
+#'
+#' Soilgrids is a project combining global observation data with
+#' machine learning to map the spatial distribution of soil properties across
+#' the globe. It is produced at a spatial resolution of 250 meters and each
+#' parameters is mapped at different depths. In order to be able to assess
+#' prediction uncertainty, besides the mean and median prediction, the 0.05 and
+#' 0.95 percentile predictions are available.
+#' The following parameters are available:
+#' \describe{
+#'   \item{bdod}{Bulk density of the fine earth fraction (cg/cm3)}
+#'   \item{cec}{Cation Exchange Capacity of the soil (mmol(c)/kg)}
+#'   \item{cfvo}{Volumetric fraction of coarse fragments > 2 mm (cm3/dm3 (volPerc))}
+#'   \item{clay}{Proportion of clay particles < 0.002 mm in the fine earth fraction (g/kg)}
+#'   \item{nitrogen}{Total nitrogen (cg/kg)}
+#'   \item{phh2o}{Soil pH (pHx10)}
+#'   \item{sand}{Proportion of sand particles > 0.05 mm in the fine earth fraction (g/kg)}
+#'   \item{silt}{Proportion of silt particles >= 0.002 mm and <= 0.05 mm in the fine earth fraction (g/kg)}
+#'   \item{soc}{Soil organic carbon content in the fine earth fraction (dg/kg)}
+#'   \item{ocd}{Organic carbon density (kg/m3)}
+#'   \item{ocs}{Organic carbon stocks (t/ha)}
+#' }
+#'
+#' Users can specify the following arguments:
+#' \describe{
+#'   \item{layer}{The soil parameter as a single charachter}
+#'   \item{depth}{The requested depth as a single chrachter}
+#'   \item{stat}{The predicted statistic as a single charachter}
+#'   }
+#'
+#' Except for \code{ocs}, which is only available for a depth of \code{"0-30cm"},
+#' all other parameters are available at the following depths:
+#' - "0-5cm"
+#' - "5-15cm"
+#' - "15-30cm"
+#' - "30-60cm"
+#' - "60-100cm"
+#' - "100-200cm"
+#'
+#' Each parameter and depth is available for the following statistics:
+#' - "Q0.05"
+#' - "Q0.50"
+#' - "mean"
+#' - "Q0.95"
+#' @name soilgrids
+#' @docType data
+#' @keywords resource
+#' @format A global tiled raster resource available for all land areas.
+#' @references Hengl T, Mendes de Jesus J, Heuvelink GBM, Ruiperez Gonzalez M,
+#' Kilibarda M, et al. (2017) SoilGrids250m: Global gridded soil information
+#' based on machine learning. PLOS ONE 12(2): e0169748.
+#' \url{https://doi.org/10.1371/journal.pone.0169748}
+#' @source \url{https://www.isric.org/explore/soilgrids}
+NULL
+
 #' Helper function to download any soilgrids data layer
 #'
 #' This function constructs for a given data layer, depth and stat a data layer

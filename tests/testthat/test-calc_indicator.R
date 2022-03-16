@@ -18,7 +18,7 @@ test_that("multiplication works", {
     tmpdir = tmpdir
   )
   portfolio <- get_resources(portfolio,
-    resources = c("treecover", "lossyear")
+    resources = c("treecover2000", "lossyear")
   )
 
   expect_message(
@@ -42,7 +42,7 @@ test_that("multiplication works", {
     tmpdir = tmpdir
   )
   portfolio <- get_resources(portfolio,
-    resources = c("treecover", "lossyear")
+    resources = c("treecover2000", "lossyear")
   )
 
   stat <- calc_indicators(portfolio,

@@ -21,3 +21,7 @@ by users of the package to inform themselves about the available data sets
 and to learn about potentially additional arguments that should be specified
 when requesting the resource.
 }
+\examples{
+head(available_resources(), 3)
+}
+\keyword{resource}

@@ -3,8 +3,7 @@ available_indicators <- function(indicator = NULL) {
     treecover = list(
       name = ".calc_treecover",
       inputs = list(
-        treecover =
-          "raster",
+        treecover2000 = "raster",
         lossyear = "raster"
       ),
       arguments = list(
@@ -15,7 +14,7 @@ available_indicators <- function(indicator = NULL) {
     emissions = list(
       name = ".calc_emissions",
       inputs = list(
-        treecover = "raster",
+        treecover2000 = "raster",
         lossyear = "raster",
         greenhouse = "raster"
       ),
@@ -27,7 +26,7 @@ available_indicators <- function(indicator = NULL) {
     treeloss = list(
       name = ".calc_treeloss",
       inputs = list(
-        treecover = "raster",
+        treecover2000 = "raster",
         lossyear = "raster",
         greenhouse = "raster"
       ),

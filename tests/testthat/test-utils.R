@@ -1,14 +1,14 @@
 test_that(".check_requested_resources works", {
-  expect_equal(.check_requested_resources("treecover"), NULL)
+  expect_equal(.check_requested_resources("treecover2000"), NULL)
   expect_error(.check_requested_resources("notavailable"))
-  expect_error(.check_requested_resources(c("treecover", "notavailable")), "resource is")
-  expect_error(.check_requested_resources(c("treecover", "notavailable1", "notavailable2")), "resources are")
+  expect_error(.check_requested_resources(c("treecover2000", "notavailable")), "resource is")
+  expect_error(.check_requested_resources(c("treecover2000", "notavailable1", "notavailable2")), "resources are")
 })
 
 
 test_that(".check_requested_indicator works", {
-  expect_equal(.check_requested_indicator("treecover"), c("treecover", "lossyear"))
-  expect_equal(.check_requested_indicator(c("treecover", "emissions")), c("treecover", "lossyear", "greenhouse"))
+  expect_equal(.check_requested_indicator("treecover"), c("treecover2000", "lossyear"))
+  expect_equal(.check_requested_indicator(c("treecover", "emissions")), c("treecover2000", "lossyear", "greenhouse"))
   expect_error(.check_requested_indicator("notavailable"))
   expect_error(.check_requested_indicator(c("treecover", "notavailable")), "indicator is")
   expect_error(.check_requested_indicator(c("treecover", "notavailable1", "notavailable2")), "indicators are")
@@ -16,25 +16,25 @@ test_that(".check_requested_indicator works", {
 
 
 test_that(".check_existing_resources works", {
-  available_resource <- c("treecover", "lossyear")
-  expect_message(.check_existing_resources(available_resource, "treecover"), "is already available")
-  expect_message(.check_existing_resources(available_resource, c("treecover", "lossyear")), "are already available")
-  expect_equal(.check_existing_resources(available_resource, "treecover", needed = T), NULL)
-  expect_equal(.check_existing_resources(available_resource, c("treecover", "lossyear"), needed = T), NULL)
+  available_resource <- c("treecover2000", "lossyear")
+  expect_message(.check_existing_resources(available_resource, "treecover2000"), "is already available")
+  expect_message(.check_existing_resources(available_resource, c("treecover2000", "lossyear")), "are already available")
+  expect_equal(.check_existing_resources(available_resource, "treecover2000", needed = T), NULL)
+  expect_equal(.check_existing_resources(available_resource, c("treecover2000", "lossyear"), needed = T), NULL)
   expect_equal(.check_existing_resources(available_resource, "srtmelevation"), "srtmelevation")
   expect_error(.check_existing_resources(available_resource, "srtmelevation", needed = TRUE), "required resource is not available")
   expect_equal(.check_existing_resources(available_resource, c("srtmelevation", "accessibility")), c("srtmelevation", "accessibility"))
   expect_error(.check_existing_resources(available_resource, c("srtmelevation", "accessibility"), needed = TRUE), "required resources are not available")
-  expect_equal(.check_existing_resources(available_resource, c("treecover", "srtmelevation", "accessibility")), c("srtmelevation", "accessibility"))
-  expect_message(.check_existing_resources(available_resource, c("treecover", "srtmelevation", "accessibility")), "requested resource is already available")
-  expect_error(.check_existing_resources(available_resource, c("treecover", "srtmelevation", "accessibility"), needed = TRUE), "required resources are not available")
+  expect_equal(.check_existing_resources(available_resource, c("treecover2000", "srtmelevation", "accessibility")), c("srtmelevation", "accessibility"))
+  expect_message(.check_existing_resources(available_resource, c("treecover2000", "srtmelevation", "accessibility")), "requested resource is already available")
+  expect_error(.check_existing_resources(available_resource, c("treecover2000", "srtmelevation", "accessibility"), needed = TRUE), "required resources are not available")
 })
 
 
 test_that(".check_resource_arguments works", {
-  resource <- available_resources("treecover")
+  resource <- available_resources("treecover2000")
   expect_equal(.check_resource_arguments(resource, args = list()), list(vers_treecover = "GFC-2020-v1.8"))
-  expect_message(.check_resource_arguments(resource, args = list()), "Argument 'vers_treecover' for resource 'treecover' was not specified")
+  expect_message(.check_resource_arguments(resource, args = list()), "Argument 'vers_treecover' for resource 'treecover2000' was not specified")
   expect_equal(.check_resource_arguments(resource, args = list(vers_treecover = "GFC-2020-v1.8")), list(vers_treecover = "GFC-2020-v1.8"))
   expect_equal(.check_resource_arguments(resource, args = list(vers_treecover = "GFC-2020-v1.8", noarg = NA)), list(vers_treecover = "GFC-2020-v1.8"))
 })

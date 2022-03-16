@@ -12,12 +12,14 @@
 #'
 #' @return A list object.
 #' @export
-#'
+#' @keywords resource
+#' @examples
+#' head(available_resources(), 3)
 available_resources <- function(resources = NULL) {
   all_resources <- list(
-    treecover = list(
+    treecover2000 = list(
       type = "raster",
-      source = "Global Forest Watch  (GFW)",
+      source = "https://data.globalforestwatch.org/documents/tree-cover-2000/explore",
       downloader = ".get_treecover",
       arguments = list(
         vers_treecover = "GFC-2020-v1.8"
@@ -25,7 +27,7 @@ available_resources <- function(resources = NULL) {
     ),
     lossyear = list(
       type = "raster",
-      source = "Global Forest Watch  (GFW)",
+      source = "https://data.globalforestwatch.org/documents/tree-cover-loss/explore",
       downloader = ".get_lossyear",
       arguments = list(
         vers_lossyear = "GFC-2020-v1.8"
@@ -33,7 +35,7 @@ available_resources <- function(resources = NULL) {
     ),
     greenhouse = list(
       "type" = "raster",
-      source = "Global Forest Watch (GFW)",
+      source = "https://data.globalforestwatch.org/datasets/gfw::forest-greenhouse-gas-emissions/about",
       downloader = ".get_greenhouse",
       arguments = list()
     ),
@@ -101,7 +103,7 @@ available_resources <- function(resources = NULL) {
     ),
     bdod = list(
       type = "raster",
-      source = "SoilGrids",
+      source = "https://www.isric.org/explore/soilgrids",
       downloader = ".get_bdod",
       arguments = list(
         depth = "0-5cm",
@@ -116,7 +118,7 @@ available_resources <- function(resources = NULL) {
     ),
     cec = list(
       type = "raster",
-      source = "SoilGrids",
+      source = "https://www.isric.org/explore/soilgrids",
       downloader = ".get_cec",
       arguments = list(
         depth = "0-5cm",
@@ -131,7 +133,7 @@ available_resources <- function(resources = NULL) {
     ),
     cfvo = list(
       type = "raster",
-      source = "SoilGrids",
+      source = "https://www.isric.org/explore/soilgrids",
       downloader = ".get_cfvo",
       arguments = list(
         depth = "0-5cm",
@@ -146,14 +148,14 @@ available_resources <- function(resources = NULL) {
     ),
     clay = list(
       type = "raster",
-      source = "SoilGrids",
+      source = "https://www.isric.org/explore/soilgrids",
       downloader = ".get_clay",
       arguments = list(
         depth = "0-5cm",
         stat = "mean"
       ),
       description = list(
-        long_name = paste("Proportion of clay particles (< 0.002 mm) ",
+        long_name = paste("Proportion of clay particles (< 0.002 mm)",
           "in the fine earth fraction",
           sep = ""
         ),
@@ -164,7 +166,7 @@ available_resources <- function(resources = NULL) {
     ),
     nitrogen = list(
       type = "raster",
-      source = "SoilGrids",
+      source = "https://www.isric.org/explore/soilgrids",
       downloader = ".get_nitrogen",
       arguments = list(
         depth = "0-5cm",
@@ -179,7 +181,7 @@ available_resources <- function(resources = NULL) {
     ),
     phh2o = list(
       type = "raster",
-      source = "SoilGrids",
+      source = "https://www.isric.org/explore/soilgrids",
       downloader = ".get_phh2o",
       arguments = list(
         depth = "0-5cm",
@@ -194,7 +196,7 @@ available_resources <- function(resources = NULL) {
     ),
     sand = list(
       type = "raster",
-      source = "SoilGrids",
+      source = "https://www.isric.org/explore/soilgrids",
       downloader = ".get_sand",
       arguments = list(
         depth = "0-5cm",
@@ -212,7 +214,7 @@ available_resources <- function(resources = NULL) {
     ),
     silt = list(
       type = "raster",
-      source = "SoilGrids",
+      source = "https://www.isric.org/explore/soilgrids",
       downloader = ".get_silt",
       arguments = list(
         depth = "0-5cm",
@@ -230,7 +232,7 @@ available_resources <- function(resources = NULL) {
     ),
     soc = list(
       type = "raster",
-      source = "SoilGrids",
+      source = "https://www.isric.org/explore/soilgrids",
       downloader = ".get_silt",
       arguments = list(
         depth = "0-5cm",
@@ -245,7 +247,7 @@ available_resources <- function(resources = NULL) {
     ),
     ocd = list(
       type = "raster",
-      source = "SoilGrids",
+      source = "https://www.isric.org/explore/soilgrids",
       downloader = ".get_cec",
       arguments = list(
         depth = "0-5cm",
@@ -260,7 +262,7 @@ available_resources <- function(resources = NULL) {
     ),
     ocs = list(
       type = "raster",
-      source = "SoilGrids",
+      source = "https://www.isric.org/explore/soilgrids",
       downloader = ".get_ocs",
       arguments = list(
         depth = "0-30cm",

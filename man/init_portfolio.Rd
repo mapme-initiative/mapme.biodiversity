@@ -50,3 +50,4 @@ indicator calculation can be set by the user to have more fine-control of
 the workflow. However, these parameters are also set to sensible defaults
 and thus can be omitted during portfolio initialization.
 }
+\keyword{function}

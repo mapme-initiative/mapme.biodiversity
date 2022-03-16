@@ -27,3 +27,4 @@ arguments. You can check the required arguments via
 \code{available_resources()}, but the function will gracefully inform you
 about any misspecifications.
 }
+\keyword{function}

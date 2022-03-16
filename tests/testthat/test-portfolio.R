@@ -77,3 +77,4 @@ test_that("init_portfolio works", {
     "x must contain at least one asset."
   )
 })
+

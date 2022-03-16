@@ -20,7 +20,7 @@ test_that("get_resources works", {
 
   expect_message(
     get_resources(portfolio,
-      resources = c("treecover", "lossyear", "greenhouse")
+      resources = c("treecover2000", "lossyear", "greenhouse")
     ),
     "Setting to default value of"
   )
@@ -34,7 +34,7 @@ test_that("get_resources works", {
 
   expect_message(
     get_resources(portfolio,
-      resources = c("treecover", "lossyear", "greenhouse"),
+      resources = c("treecover2000", "lossyear", "greenhouse"),
       vers_treecover = "GFC-2020-v1.8",
       vers_lossyear = "GFC-2020-v1.8"
     ),
@@ -51,19 +51,19 @@ test_that("get_resources works", {
 
   expect_message(
     get_resources(portfolio,
-      resources = c("treecover", "lossyear", "greenhouse")
+      resources = c("treecover2000", "lossyear", "greenhouse")
     ),
     "Skipping existing files in output directory"
   )
 
   portfolio2 <- get_resources(portfolio,
-    resources = c("treecover", "lossyear", "greenhouse")
+    resources = c("treecover2000", "lossyear", "greenhouse")
   )
 
   expect_message(
     get_resources(portfolio2,
-      resources = c("treecover", "lossyear", "greenhouse")
+      resources = c("treecover2000", "lossyear", "greenhouse")
     ),
-    "The following requested resources are already available: treecover, lossyear, greenhouse."
+    "The following requested resources are already available: treecover2000, lossyear, greenhouse."
   )
 })

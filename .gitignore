@@ -3,3 +3,4 @@ devel
 .Rprofile
 renv.lock
 renv
+docs
