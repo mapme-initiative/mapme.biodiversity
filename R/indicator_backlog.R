@@ -40,7 +40,7 @@ available_indicators <- function(indicator = NULL) {
       inputs = list(srtmelevation = "raster"),
       arguments = list(
         stats = "mean",
-        engine = 'zonal'
+        engine = "zonal"
       )
     ),
     tri <- list(
@@ -48,7 +48,7 @@ available_indicators <- function(indicator = NULL) {
       inputs = list(srtmelevation = "raster"),
       arguments = list(
         stats = "mean",
-        engine = 'zonal'
+        engine = "zonal"
       )
     )
   )
