@@ -61,3 +61,4 @@ available_indicators <- function(indicator = NULL) {
     all_indicators[indicator]
   }
 }
+
