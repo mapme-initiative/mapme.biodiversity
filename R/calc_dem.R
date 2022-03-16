@@ -42,7 +42,6 @@ NULL
 #' @importFrom exactextractr exactextract
 #' @keywords internal
 #'
-#' @keywords internal
 
 .calc_dem <- function(shp,
                       srtmelevation,
@@ -102,7 +101,6 @@ NULL
 #' @return A data-frame
 #' @keywords internal
 #'
-#' @keywords internal
 
 .comp_dem_extract <- function(elevation = NULL,
                               shp = NULL,
@@ -132,7 +130,6 @@ NULL
 #' @return A data-frame
 #' @keywords internal
 #'
-#' @keywords internal
 
 .comp_dem_zonal <- function(elevation = NULL,
                             shp = NULL,
@@ -175,7 +172,6 @@ NULL
 #' @return A data-frame
 #' @keywords internal
 #'
-#' @keywords internal
 
 .comp_dem_exact_extractr <- function(elevation = NULL,
                                      shp = NULL,
