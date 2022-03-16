@@ -1,4 +1,46 @@
-#' Calculate elevation based on SRTM rasters
+#' Calculate elevation statistics
+#'
+#' This function allows to efficiently calculate elevation statistics for
+#' polygons. For each polygon, the desired statistic/s (mean, median or sd)
+#' is/are returned.
+#' The required resources for this indicator are:
+#'  - \code{srtmelevation}
+#'
+#' The following arguments can be set:
+#' \describe{
+#'   \item{stats}{Function to be applied to compute statistics for polygons either
+#'   one or multiple inputs as character "mean", "median" or "sd".}
+#'   \item{engine}{The preferred processing functions from either one of "zonal",
+#'   "extract" or "exactextract" as character.}
+#' }
+#'
+#' @name srtmdem
+#' @docType data
+#' @keywords indicator
+#' @format A tibble with a column for elevation statistics (in meters)
+NULL
+
+#' Calculate elevation statistics based on SRTM data sets
+#'
+#' Considering the 30m resolution SRTM raster datasets users can specify which
+#' statistics among mean, median or standard deviation to compute. Also, users
+#' can specify the functions i.e. zonal from package terra, extract from package
+#' terra, or exactextract from exactextractr as desired.
+#'
+#' @param shp A single polygon for which to calculate the elevation statistic
+#' @param srtmelevation The elevation raster resource from SRTM
+#' @param stats Function to be applied to compute statistics for polygons either
+#'   one or multiple inputs as character "mean", "median" or "sd".
+#' @param engine The preferred processing functions from either one of "zonal",
+#'   "extract" or "exactextract" as character.
+#' @param rundir A directory where intermediate files are written to.
+#' @param verbose A directory where intermediate files are written to.
+#' @param todisk Logical indicating whether or not temporary raster files shall
+#'   be written to disk
+#' @param ... additional arguments
+#' @return A tibble
+#' @importFrom exactextractr exactextract
+#' @keywords internal
 #'
 #' @keywords internal
 
@@ -18,15 +60,13 @@
   }
 
   if (ncell(srtmelevation) > 1024 * 1024) todisk <- TRUE
-  available_terra_stats <- c("mean", "median", "sd")
-  available_exact_stats <- c("mean", "median", "stdev")
+  available_stats <- c("mean", "median", "sd")
+  # check if input stats are correct
+  if (!stats %in% available_stats) {
+    stop(sprintf("Stat %s is not an available statistics. Please choose one of: %s", stats, paste(available_stats, collapse = ", ")))
+  }
 
   if (engine == "extract") {
-
-    # check if input stats are correct
-    if (!stats %in% available_terra_stats) {
-      stop(sprintf("Stat %s is not an available statistics. Please choose one of: %s", stats, paste(available_terra_stats, collapse = ", ")))
-    }
 
     tibble_zstats <- .comp_dem_extract(
       elevation = srtmelevation,
@@ -36,11 +76,6 @@
     return(tibble_zstats)
   } else if (engine == "exactextract") {
 
-    # check if input stats are correct
-    if (!stats %in% available_exact_stats) {
-      stop(sprintf("Stat %s is not an available statistics. Please choose one of: %s", stats, paste(available_exact_stats, collapse = ", ")))
-    }
-
     tibble_zstats <- .comp_dem_exact_extractr(
       elevation = srtmelevation,
       shp = shp,
@@ -48,11 +83,6 @@
     )
     return(tibble_zstats)
   } else {
-
-    # check if input stats are correct
-    if (!stats %in% available_terra_stats) {
-      stop(sprintf("Stat %s is not an available statistics. Please choose one of: %s", stats, paste(available_terra_stats, collapse = ", ")))
-    }
 
     tibble_zstats <- .comp_dem_zonal(
       elevation = srtmelevation,
@@ -65,8 +95,12 @@
   }
 }
 
-
-#' function to compute single raster with terra extract
+#' Helper function to compute statistics using routines from terra extract
+#'
+#' @param elevation elevation raster from which to compute statistics
+#'
+#' @return A data-frame
+#' @keywords internal
 #'
 #' @keywords internal
 
@@ -91,8 +125,12 @@
   return(tibble_zstats)
 }
 
-
-#' function to compute single raster with terra zonal
+#' Helper function to compute statistics using routines from terra zonal
+#'
+#' @param elevation elevation raster from which to compute statistics
+#'
+#' @return A data-frame
+#' @keywords internal
 #'
 #' @keywords internal
 
@@ -130,8 +168,12 @@
   return(tibble_zstats)
 }
 
-
-#' function to compute single raster with exactextractr
+#' Helper function to compute statistics using routines from exactextractr
+#'
+#' @param elevation elevation raster from which to compute statistics
+#'
+#' @return A data-frame
+#' @keywords internal
 #'
 #' @keywords internal
 
@@ -140,11 +182,19 @@
                                      stats = "mean",
                                      ...) {
   zstats <- lapply(1:length(stats), function(i) {
-    zstats <- exactextractr::exact_extract(
-      elevation,
-      shp,
-      fun = stats[i]
-    )
+    if (stats[i] == "sd") {
+      zstats <- exactextractr::exact_extract(
+        elevation,
+        shp,
+        fun = "stdev"
+      )
+    } else {
+      zstats <- exactextractr::exact_extract(
+        elevation,
+        shp,
+        fun = stats[i]
+      )
+    }
     tibble_zstats <- tibble(elev = zstats)
     names(tibble_zstats)[names(tibble_zstats) == "elev"] <-
       paste0("elevation_", stats[i])
