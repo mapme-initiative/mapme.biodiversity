@@ -1,15 +1,32 @@
-#' Downloads Global Mangrove Extent Polygon
+#' Global Mangrove Extent Polygon
 #'
+#' This resource is part of the publication by Bunting et al. (2018)
+#' "The Global Mangrove Watch—A New 2010 Global Baseline of Mangrove Extent".
 #' The polygons represent the mangrove, which is tropical coastal vegetation
 #' and considered the most significant part of the marine ecosystem. This
 #' resource is available for the period 1996- 2016 from Global Mangrove Watch
 #' (GMW), providing geospatial information about global mangrove extent.
 #'
+#'
+#' @name Global_Mangrove_Extent
+#' @docType data
+#' @keywords resource
+#' @format Global mangrove extent polygon available for years 1996, 2007-2010,
+#'   2015, and 2016.
+#' @references Bunting P., Rosenqvist A., Lucas R., Rebelo L-M., Hilarides L.,
+#' Thomas N., Hardy A., Itoh T., Shimada M. and Finlayson C.M. (2018). The Global
+#' Mangrove Watch – a New 2010 Global Baseline of Mangrove Extent. Remote Sensing
+#' 10(10): 1669. doi:10.3390/rs10101669.
+#' @source \url{https://data.unep-wcmc.org/datasets/45}
+NULL
+
+
+#' Downloads Global Mangrove Extent Polygon
+#'
 #' @param x An sf object returned by init_portfolio
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose Logical controlling verbosity.
 #' @importFrom utils unzip
-#' @name Global_Mangrove_Extent
 #' @keywords internal
 #'
 
@@ -44,7 +61,7 @@
 #' Helper function to correctly unzip a mangrove layer zip file
 #'
 #'
-#' @param zip_files A charchter vector with potentially multiple zip files
+#' @param zip_files A character vector with potentially multiple zip files
 #' @param rundir The directory to where the files are unzipped
 #'
 #' @return Nothing.

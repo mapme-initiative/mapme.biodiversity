@@ -1,15 +1,32 @@
-#' Downloads Terrestrial Ecoregions of the World (TEOW) Polygon
+#' Terrestrial Ecoregions of the World (TEOW) Polygon
 #'
+#' This resource is part of the publication by Olson et al. (2004)
+#' "Terrestrial Ecosystems of the World (TEOW) from WWF-US (Olson)". It
+#' depicts 867 terrestrial ecoregions around the world classified into 14
+#' different terrestrial biomes such as forests, grasslands, or deserts.
 #' The polygons represent the ecoregions, defined as relatively large units of
 #' land or inland water sharing a large majority of biodiversity. The datasets
-#' is made available from World Wildlife Fund (WWF). There are 867 terrestrial
-#' ecoregions, further classified into 14 different terrestrial biomes.
+#' is made available from World Wildlife Fund (WWF) for the year 2001.
+#'
+#' @name Terrestrial_Ecoregions_of_the_World
+#' @docType data
+#' @keywords resource
+#' @format Global terrestrial polygon resource depicting ecoregions.
+#' @references Olson, D. M., Dinerstein, E., Wikramanayake, E. D., Burgess, N. D.,
+#' Powell, G. V. N., Underwood, E. C., D’Amico, J. A., Itoua, I., Strand, H. E.,
+#' Morrison, J. C., Loucks, C. J., Allnutt, T. F., Ricketts, T. H., Kura, Y., Lamoreux,
+#' J. F., Wettengel, W. W., Hedao, P., Kassem, K. R. 2001. Terrestrial ecoregions of
+#' the world: a new map of life on Earth. Bioscience 51(11):933-938.
+#' @source \url{https://www.worldwildlife.org/publications/terrestrial-ecoregions-of-the-world}
+NULL
+
+
+#' Downloads Terrestrial Ecoregions of the World (TEOW) Polygon
 #'
 #' @param x An sf object returned by init_portfolio
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose Logical controlling verbosity.
 #' @importFrom utils unzip
-#' @name Terrestrial_Ecoregions_of_the_World
 #' @keywords internal
 #'
 
@@ -53,3 +70,4 @@
   # return paths to the gpkg
   filename
 }
+

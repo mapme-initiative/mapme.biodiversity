@@ -1,14 +1,25 @@
-#' Downloads Population Count layer
+#' Population Count layer for year 2000-2020
 #'
-#' This resource represents the population count, layers available to download
-#' from the year 2000 to 2020. The dataset is called as WorldPop Unconstrained
-#' Global Mosaics. The encoded cell value represents the total number of people
-#' in that particular cell.
+#' This resource is published by open spatial demographic data and research
+#' organization called WorldPop. This resource represents the population
+#' count, 1 km spatial resolution layers available to download from the year
+#' 2000 to 2020. The dataset is called as WorldPop Unconstrained Global Mosaics.
+#' The encoded cell value represents the total number of people in that particular
+#' grid cell.
+#'
+#' @name PopulationCount_Global_Mosaics
+#' @docType data
+#' @keywords resource
+#' @format Global raster layers available for years 2000-2020.
+#' @source \url{https://www.worldpop.org/geodata/listing?id=64}
+NULL
+
+
+#' Downloads Population Count layer
 #'
 #' @param x An sf object returned by init_portfolio
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose Logical controlling verbosity.
-#' @name PopulationCount_Global_Mosaics
 #' @keywords internal
 #'
 
@@ -32,11 +43,11 @@
 }
 
 
-#' Helper function to concstruch population layer urls
+#' Helper function to construct population layer urls
 #'
 #' @param target_year A numeric indicating the target year
 #'
-#' @return A charchter vector.
+#' @return A character vector.
 #' @keywords internal
 .getPopCountURL <- function(target_year) {
   available_years <- c(2000:2020)

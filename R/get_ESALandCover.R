@@ -1,13 +1,27 @@
-#' Downloads Copernicus Global Land Cover layer
+#' ESA Copernicus Global Land Cover layer
 #'
-#' The resource represents the actual surface cover of ground available
-#' annually for the period 2015 to 2019. The cell values range from 0 to
-#' 200, representing total of 23 discrete classifications from ESA.
+#' This 100 meter spatial resolution land cover resource is published by Buchhorn
+#' et al. (2020) "Copernicus Global Land Cover Layers—Collection 2". The resource
+#' represents the actual surface cover of ground available annually for the period
+#' 2015 to 2019. The cell values range from 0 to 200, representing total of 23
+#' discrete classifications from ESA.
+#'
+#' @name ESA_Global_Land_Cover
+#' @docType data
+#' @keywords resource
+#' @format A global tiled raster resource available for years 2015 to 2019.
+#' @references © European Union, Copernicus Land Monitoring Service <year>,
+#' European Environment Agency (EEA)", f.ex. in 2018: “© European Union,
+#' Copernicus Land Monitoring Service 2018, European Environment Agency (EEA)
+#' @source \url{https://lcviewer.vito.be/download}
+NULL
+
+
+#' Downloads Copernicus Global Land Cover layer
 #'
 #' @param x An sf object returned by init_portfolio
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose Logical controlling verbosity.
-#' @name ESA_Global_Land_Cover
 #' @keywords internal
 #'
 
@@ -57,7 +71,7 @@
 #' @param tile An sf object representing the spatial extent of the a tile
 #' @param year A single numeric value indicating the target year
 #'
-#' @return A charchter vector
+#' @return A character vector
 #' @keywords internal
 .get_esa_url <- function(tile, year) {
   min_x <- st_bbox(tile)[1]
