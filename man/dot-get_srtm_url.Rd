@@ -10,7 +10,7 @@
 \item{tile}{An sf object representing the tile to download}
 }
 \value{
-A charchter vector
+A character vector
 }
 \description{
 Helper function to construct SRTM urls

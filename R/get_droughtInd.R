@@ -6,7 +6,7 @@
 #' probability of occurrence - with lower values meaning dryer than normal, and
 #' higher values meaning wetter than normal.
 #'
-#' @name Drought_Indicator
+#' @name nasagrace
 #' @docType data
 #' @keywords resource
 #' @format Global raster layers available for years 2003 to present.

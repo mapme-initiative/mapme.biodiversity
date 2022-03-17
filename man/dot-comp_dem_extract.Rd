@@ -2,11 +2,17 @@
 % Please edit documentation in R/calc_dem.R
 \name{.comp_dem_extract}
 \alias{.comp_dem_extract}
-\title{function to compute single raster with terra extract}
+\title{Helper function to compute statistics using routines from terra extract}
 \usage{
 .comp_dem_extract(elevation = NULL, shp = NULL, stats = "mean", ...)
 }
+\arguments{
+\item{elevation}{elevation raster from which to compute statistics}
+}
+\value{
+A data-frame
+}
 \description{
-function to compute single raster with terra extract
+Helper function to compute statistics using routines from terra extract
 }
 \keyword{internal}

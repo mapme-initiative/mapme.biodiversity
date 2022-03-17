@@ -8,7 +8,7 @@
 #' (GMW), providing geospatial information about global mangrove extent.
 #'
 #'
-#' @name Global_Mangrove_Extent
+#' @name mangrove
 #' @docType data
 #' @keywords resource
 #' @format Global mangrove extent polygon available for years 1996, 2007-2010,

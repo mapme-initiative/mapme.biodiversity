@@ -6,11 +6,11 @@
 #' 2015 to 2019. The cell values range from 0 to 200, representing total of 23
 #' discrete classifications from ESA.
 #'
-#' @name ESA_Global_Land_Cover
+#' @name esalandcover
 #' @docType data
 #' @keywords resource
 #' @format A global tiled raster resource available for years 2015 to 2019.
-#' @references © European Union, Copernicus Land Monitoring Service <year>,
+#' @references © European Union, Copernicus Land Monitoring Service (year),
 #' European Environment Agency (EEA)", f.ex. in 2018: “© European Union,
 #' Copernicus Land Monitoring Service 2018, European Environment Agency (EEA)
 #' @source \url{https://lcviewer.vito.be/download}

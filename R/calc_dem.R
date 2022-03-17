@@ -14,7 +14,7 @@
 #'   "extract" or "exactextract" as character.}
 #' }
 #'
-#' @name srtmdem
+#' @name heights
 #' @docType data
 #' @keywords indicator
 #' @format A tibble with a column for elevation statistics (in meters)
@@ -39,7 +39,6 @@ NULL
 #'   be written to disk
 #' @param ... additional arguments
 #' @return A tibble
-#' @importFrom exactextractr exactextract
 #' @keywords internal
 #'
 
@@ -66,7 +65,6 @@ NULL
   }
 
   if (engine == "extract") {
-
     tibble_zstats <- .comp_dem_extract(
       elevation = srtmelevation,
       shp = shp,
@@ -74,7 +72,6 @@ NULL
     )
     return(tibble_zstats)
   } else if (engine == "exactextract") {
-
     tibble_zstats <- .comp_dem_exact_extractr(
       elevation = srtmelevation,
       shp = shp,
@@ -82,7 +79,6 @@ NULL
     )
     return(tibble_zstats)
   } else {
-
     tibble_zstats <- .comp_dem_zonal(
       elevation = srtmelevation,
       shp = shp,
@@ -177,6 +173,12 @@ NULL
                                      shp = NULL,
                                      stats = "mean",
                                      ...) {
+  if (!"exactextractr" %in% utils::installed.packages()[, 1]) {
+    stop(paste(
+      "Needs package 'exactextractr' to be installed.",
+      "Consider installing with 'install.packages('exactextractr')"
+    ))
+  }
   zstats <- lapply(1:length(stats), function(i) {
     if (stats[i] == "sd") {
       zstats <- exactextractr::exact_extract(
@@ -200,4 +202,3 @@ NULL
   tibble_zstats <- tibble(unlist_zstats)
   return(tibble_zstats)
 }
-

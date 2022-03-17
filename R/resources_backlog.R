@@ -39,7 +39,7 @@ available_resources <- function(resources = NULL) {
       downloader = ".get_greenhouse",
       arguments = list()
     ),
-    populationcount = list(
+    worldpop = list(
       type = "raster",
       source = "WorldPop",
       downloader = ".get_popCount",
@@ -51,7 +51,7 @@ available_resources <- function(resources = NULL) {
       downloader = ".get_esa_land_cover",
       arguments = list()
     ),
-    accessibility = list(
+    traveltime = list(
       type = "raster",
       source = "Travel Time to Cities and Ports 2015",
       downloader = ".get_accessibility",
@@ -59,7 +59,7 @@ available_resources <- function(resources = NULL) {
         range = "20k_50k"
       )
     ),
-    droughtindicators = list(
+    nasagrace = list(
       type = "raster",
       source = "NASA GRACE",
       downloader = ".get_drought_ind",
@@ -89,13 +89,13 @@ available_resources <- function(resources = NULL) {
       downloader = ".get_ecoregions",
       arguments = list()
     ),
-    mangroveextent = list(
+    mangrove = list(
       type = "vector",
       source = "Global Mangrove Watch",
       downloader = ".get_mangrove",
       arguments = list()
     ),
-    srtmelevation = list(
+    srtmdem = list(
       type = "raster",
       source = "SRTM",
       downloader = ".get_srtm_dem",

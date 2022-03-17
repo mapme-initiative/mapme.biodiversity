@@ -17,7 +17,7 @@
 #'   "extract" or "exactextract" as character.}
 #' }
 #'
-#' @name terrain_ruggedness_index
+#' @name tri
 #' @docType data
 #' @keywords indicator
 #' @format A tibble with a column for terrain ruggedness index statistics (in meters).
@@ -52,7 +52,6 @@ NULL
 #'   be written to disk
 #' @param ... additional arguments
 #' @return A tibble
-#' @importFrom exactextractr exactextract
 #' @keywords internal
 #'
 
@@ -79,7 +78,6 @@ NULL
   }
 
   if (engine == "extract") {
-
     tibble_zstats <- .comp_tri_extract(
       elevation = srtmelevation,
       shp = shp,
@@ -88,9 +86,7 @@ NULL
       rundir = rundir
     )
     return(tibble_zstats)
-
   } else if (engine == "exactextract") {
-
     tibble_zstats <- .comp_tri_exact_extractr(
       elevation = srtmelevation,
       shp = shp,
@@ -100,7 +96,6 @@ NULL
     )
     return(tibble_zstats)
   } else {
-
     tibble_zstats <- .comp_tri_zonal(
       elevation = srtmelevation,
       shp = shp,
@@ -147,12 +142,11 @@ NULL
     overwrite = TRUE
   )
   zstats <- lapply(1:length(stats), function(i) {
-
-    zstats = terra::zonal(tri,
-                          p_raster,
-                          fun = stats[i],
-                          na.rm = T
-                          )
+    zstats <- terra::zonal(tri,
+      p_raster,
+      fun = stats[i],
+      na.rm = T
+    )
     tibble_zstats <- tibble(tri = zstats[, 2])
     names(tibble_zstats)[names(tibble_zstats) == "tri"] <-
       paste0("terrain_ruggedness_index_", stats[i])
@@ -187,12 +181,11 @@ NULL
     overwrite = TRUE
   )
   zstats <- lapply(1:length(stats), function(i) {
-
-    zstats = terra::extract(tri,
-                            shp_v,
-                            fun = stats[i],
-                            na.rm = T
-                            )
+    zstats <- terra::extract(tri,
+      shp_v,
+      fun = stats[i],
+      na.rm = T
+    )
     tibble_zstats <- tibble(tri = zstats[, 2])
     names(tibble_zstats)[names(tibble_zstats) == "tri"] <-
       paste0("terrain_ruggedness_index_", stats[i])
@@ -218,6 +211,12 @@ NULL
                                      todisk = todisk,
                                      rundir = rundir,
                                      ...) {
+  if (!"exactextractr" %in% utils::installed.packages()[, 1]) {
+    stop(paste(
+      "Needs package 'exactextractr' to be installed.",
+      "Consider installing with 'install.packages('exactextractr')"
+    ))
+  }
   tri <- terra::terrain(elevation,
     v = "TRI",
     unit = "degrees",
@@ -230,7 +229,7 @@ NULL
       zstats <- exactextractr::exact_extract(
         tri,
         shp,
-        fun = 'stdev'
+        fun = "stdev"
       )
     } else {
       zstats <- exactextractr::exact_extract(
@@ -248,4 +247,3 @@ NULL
   tibble_zstats <- tibble(unlist_zstats)
   return(tibble_zstats)
 }
-

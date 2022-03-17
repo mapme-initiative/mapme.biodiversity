@@ -2,11 +2,17 @@
 % Please edit documentation in R/calc_dem.R
 \name{.comp_dem_exact_extractr}
 \alias{.comp_dem_exact_extractr}
-\title{function to compute single raster with exactextractr}
+\title{Helper function to compute statistics using routines from exactextractr}
 \usage{
 .comp_dem_exact_extractr(elevation = NULL, shp = NULL, stats = "mean", ...)
 }
+\arguments{
+\item{elevation}{elevation raster from which to compute statistics}
+}
+\value{
+A data-frame
+}
 \description{
-function to compute single raster with exactextractr
+Helper function to compute statistics using routines from exactextractr
 }
 \keyword{internal}

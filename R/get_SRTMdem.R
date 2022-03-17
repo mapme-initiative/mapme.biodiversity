@@ -6,7 +6,7 @@
 #' 5 degree x 5 degree tiles. It is encoded as meter, representing the elevation
 #' at the particular grid cell.
 #'
-#' @name SRTM_Digital_Elevation_Model
+#' @name srtmdem
 #' @docType data
 #' @keywords resource
 #' @format A global tiled raster resource available for all land areas.

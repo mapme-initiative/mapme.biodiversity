@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_tri.R
 \name{.comp_tri_extract}
 \alias{.comp_tri_extract}
-\title{function to compute single raster with terra extract}
+\title{Helper function to compute statistics using routines from terra extract}
 \usage{
 .comp_tri_extract(
   elevation = NULL,
@@ -13,7 +13,13 @@
   ...
 )
 }
+\arguments{
+\item{elevation}{elevation raster from which to compute statistics}
+}
+\value{
+A data-frame
+}
 \description{
-function to compute single raster with terra extract
+Helper function to compute statistics using routines from terra extract
 }
 \keyword{internal}

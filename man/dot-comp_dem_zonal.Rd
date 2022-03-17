@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_dem.R
 \name{.comp_dem_zonal}
 \alias{.comp_dem_zonal}
-\title{function to compute single raster with terra zonal}
+\title{Helper function to compute statistics using routines from terra zonal}
 \usage{
 .comp_dem_zonal(
   elevation = NULL,
@@ -13,7 +13,13 @@
   ...
 )
 }
+\arguments{
+\item{elevation}{elevation raster from which to compute statistics}
+}
+\value{
+A data-frame
+}
 \description{
-function to compute single raster with terra zonal
+Helper function to compute statistics using routines from terra zonal
 }
 \keyword{internal}

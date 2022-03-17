@@ -8,7 +8,7 @@
 #' Encoded as (°C), representing the minimum and maximum temperature per output grid
 #' cell while encoded as (mm), representing the mean precipitation per output grid cell.
 #'
-#' @name WorldClim_Climate_Variables
+#' @name climate
 #' @docType data
 #' @keywords resource
 #' @format Global raster layers available for years 2000 to 2018.

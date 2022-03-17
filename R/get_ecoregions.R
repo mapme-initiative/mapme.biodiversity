@@ -8,7 +8,7 @@
 #' land or inland water sharing a large majority of biodiversity. The datasets
 #' is made available from World Wildlife Fund (WWF) for the year 2001.
 #'
-#' @name Terrestrial_Ecoregions_of_the_World
+#' @name ecoregions
 #' @docType data
 #' @keywords resource
 #' @format Global terrestrial polygon resource depicting ecoregions.
@@ -70,4 +70,3 @@ NULL
   # return paths to the gpkg
   filename
 }
-

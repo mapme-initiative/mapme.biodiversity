@@ -7,7 +7,7 @@
 #' cities in the year 2015. Encoded as minutes, representing the time needed
 #' to reach that particular cell from nearby city of target population range.
 #'
-#' @name Travel_time_to_major_Cities
+#' @name traveltime
 #' @docType data
 #' @keywords resource
 #' @format Global raster layer available for year 2015.

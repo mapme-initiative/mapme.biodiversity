@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_tri.R
 \name{.calc_tri}
 \alias{.calc_tri}
-\title{Calculate Terrain Ruggedness Index (TRI) based on SRTM rasters}
+\title{Calculate Terrain Ruggedness Index (TRI) statistics based on SRTM data sets}
 \usage{
 .calc_tri(
   shp,
@@ -15,7 +15,33 @@
   ...
 )
 }
+\arguments{
+\item{shp}{A single polygon for which to calculate the tri statistic}
+
+\item{srtmelevation}{The elevation raster resource from SRTM}
+
+\item{engine}{The preferred processing functions from either one of "zonal",
+"extract" or "exactextract" as character.}
+
+\item{stats}{Function to be applied to compute statistics for polygons either
+one or multiple inputs as character "mean", "median" or "sd".}
+
+\item{rundir}{A directory where intermediate files are written to.}
+
+\item{verbose}{A directory where intermediate files are written to.}
+
+\item{todisk}{Logical indicating whether or not temporary raster files shall
+be written to disk}
+
+\item{...}{additional arguments}
+}
+\value{
+A tibble
+}
 \description{
-Calculate Terrain Ruggedness Index (TRI) based on SRTM rasters
+Considering the 30m resolution SRTM raster datasets users can specify which
+statistics among mean, median or standard deviation to compute. Also, users
+can specify the functions i.e. zonal from package terra, extract from package
+terra, or exactextract from exactextractr as desired.
 }
 \keyword{internal}

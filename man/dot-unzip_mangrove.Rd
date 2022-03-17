@@ -9,7 +9,7 @@
 \arguments{
 \item{rundir}{The directory to where the files are unzipped}
 
-\item{zip_files}{A charchter vector with potentially multiple zip files}
+\item{zip_files}{A character vector with potentially multiple zip files}
 }
 \value{
 Nothing.

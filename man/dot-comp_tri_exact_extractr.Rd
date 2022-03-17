@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_tri.R
 \name{.comp_tri_exact_extractr}
 \alias{.comp_tri_exact_extractr}
-\title{function to compute single raster with exactextractr}
+\title{Helper function to compute statistics using routines from exactextractr}
 \usage{
 .comp_tri_exact_extractr(
   elevation = NULL,
@@ -13,7 +13,13 @@
   ...
 )
 }
+\arguments{
+\item{elevation}{elevation raster from which to compute statistics}
+}
+\value{
+A data-frame
+}
 \description{
-function to compute single raster with exactextractr
+Helper function to compute statistics using routines from exactextractr
 }
 \keyword{internal}
