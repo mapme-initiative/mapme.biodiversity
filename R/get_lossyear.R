@@ -31,8 +31,8 @@
 #' @source \url{https://data.globalforestwatch.org/documents/tree-cover-loss/explore}
 NULL
 
-
-
+#' Get lossyear layer
+#'
 #' @param x An sf object returned by init_portfolio
 #' @param vers_lossyear The version to download, defaults to
 #'   \code{"GFC-2020-v1.8"}.

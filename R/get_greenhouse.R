@@ -28,6 +28,8 @@
 NULL
 
 
+#' Get greenhouse layer
+#'
 #' @param x An sf object returned by init_portfolio
 #' @param verbose Logical controlling verbosity.
 #' @param rundir A directory where intermediate files are written to.

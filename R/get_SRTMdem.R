@@ -1,15 +1,28 @@
-#' Downloads SRTM 30m Digital Elevation Model (DEM) Layer
+#' SRTM 30m Digital Elevation Model (DEM) layer
 #'
-#' The layer represents the 30m global terrestrial digital elevation model from
-#' the NASA Shuttle Radar Topographic Mission (SRTM), available for download as
+#' This resource is published by Farr et al. (2007) "The Shuttle Radar Topography
+#' Mission". The layer represents the 30m global terrestrial digital elevation model
+#' from the NASA Shuttle Radar Topographic Mission (SRTM), available for download as
 #' 5 degree x 5 degree tiles. It is encoded as meter, representing the elevation
 #' at the particular grid cell.
+#'
+#' @name srtmdem
+#' @docType data
+#' @keywords resource
+#' @format A global tiled raster resource available for all land areas.
+#' @references NASA Shuttle Radar Topography Mission (SRTM)(2013). Shuttle Radar
+#' Topography Mission (SRTM) Global. Distributed by OpenTopography.
+#' https://doi.org/10.5069/G9445JDF. Accessed: 2022-03-17
+#' @source \url{https://srtm.csi.cgiar.org/srtmdata/}
+NULL
+
+
+#' Downloads SRTM 30m Digital Elevation Model (DEM) Layer
 #'
 #' @param x An sf object returned by init_portfolio
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose Logical controlling verbosity.
 #' @importFrom utils unzip
-#' @name SRTM_Digital_Elevation_Model
 #' @keywords internal
 #'
 
@@ -44,7 +57,7 @@
 #'
 #' @param tile An sf object representing the tile to download
 #'
-#' @return A charchter vector
+#' @return A character vector
 #' @keywords internal
 .get_srtm_url <- function(tile) {
   index.c <- tile %% 72

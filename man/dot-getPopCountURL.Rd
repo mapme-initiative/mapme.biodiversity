@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_popCount.R
 \name{.getPopCountURL}
 \alias{.getPopCountURL}
-\title{Helper function to concstruch population layer urls}
+\title{Helper function to construct population layer urls}
 \usage{
 .getPopCountURL(target_year)
 }
@@ -10,9 +10,9 @@
 \item{target_year}{A numeric indicating the target year}
 }
 \value{
-A charchter vector.
+A character vector.
 }
 \description{
-Helper function to concstruch population layer urls
+Helper function to construct population layer urls
 }
 \keyword{internal}

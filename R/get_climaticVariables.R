@@ -1,3 +1,26 @@
+#' WorldClim climatic variables (min temperature, max temperature, mean precipitation)
+#'
+#' This resource is published by Fick et al. (2017) "WorldClim 2: new 1-km
+#' spatial resolution climate surfaces for global land areas". This resource
+#' represents multiple climatic variables from which we will be requiring minimum
+#' temperature, maximum temperature, and mean precipitation layers. The layers are
+#' available to download for the period 2000 - 2018 on monthly basis from WorldClim.
+#'
+#' Enlisted different resources can be reqested with their dedicated functions:
+#' \describe{
+#'   \item{tmin}{Encoded as (°C), representing the minimum temperature per output grid cell.}
+#'   \item{tmax}{Encoded as (°C), representing the maximum temperature per output grid cell.}
+#'   \item{prec}{Encoded as (mm), representing the mean precipitation per output grid cell.}
+#' }
+#'
+#' @name climate
+#' @docType data
+#' @keywords resource
+#' @format Global raster layers available for years 2000 to 2018.
+#' @source \url{https://www.worldclim.org/data/index.html}
+NULL
+
+
 #' Downloads WorldClim Minimum Temperature layer
 #'
 #' This resource represents the minimum temperature, layers available to
@@ -68,6 +91,12 @@
 }
 
 
+#' Helper function to download climate variable layers
+#'
+#' @param layer A character indicating the target variable name
+#'
+#' @return A character vector.
+#' @keywords internal
 .get_climatic_variables <- function(x,
                                     layer,
                                     rundir = tempdir(),
@@ -122,6 +151,13 @@
 }
 
 
+#' Helper function to construct climate variable layers urls
+#'
+#' @param layer A character indicating the target variable name
+#' @param year A numeric indicating the target year
+#'
+#' @return A character vector.
+#' @keywords internal
 .get_climate_url <- function(layer, year) {
   if (year %in% c(2000:2009)) {
     paste0(

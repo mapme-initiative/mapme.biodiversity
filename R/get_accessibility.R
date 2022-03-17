@@ -1,16 +1,30 @@
-#' Downloads Accessibility to Cities layer
+#' Accessibility to Cities layer
 #'
-#' Accessibility is the ease with which larger cities can be reached from a
-#' certain location. This resource represents the travel time to major cities
-#' in the year 2015. Encoded as minutes, representing the time needed to reach
-#' that particular cell from nearby city of population range of interest.
+#' This resource is published by Weiss et al. (2018) "A global map of travel
+#' time to cities to assess inequalities in accessibility in 2015" on journal
+#' nature. Accessibility is the ease with which larger cities can be reached
+#' from a certain location. This resource represents the travel time to major
+#' cities in the year 2015. Encoded as minutes, representing the time needed
+#' to reach that particular cell from nearby city of target population range.
+#'
+#' @name traveltime
+#' @docType data
+#' @keywords resource
+#' @format Global raster layer available for year 2015.
+#' @references Weiss, D. J., Nelson, A., Gibson, H. S., Temperley, W., Peedell,
+#' S., Lieber, A., … & Gething, P. W. (2018). A global map of travel time to cities
+#' to assess inequalities in accessibility in 2015. Nature, 553(7688), 333-336.
+#' @source \url{https://figshare.com/articles/dataset/Travel_time_to_cities_and_ports_in_the_year_2015/7638134/3}
+NULL
+
+
+#' Downloads Accessibility to Cities layer
 #'
 #' @param x An sf object returned by init_portfolio
 #' @param range_accessibility The city within the defined range of population
 #'   to download, defaults to \code{"20k_50k"}.
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose Logical controlling verbosity.
-#' @name Travel_time_to_major_Cities
 #' @keywords internal
 #'
 

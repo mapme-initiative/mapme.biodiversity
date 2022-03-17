@@ -12,7 +12,7 @@
 \item{year}{A single numeric value indicating the target year}
 }
 \value{
-A charchter vector
+A character vector
 }
 \description{
 Helper function to create ESA land cover urls

@@ -1,15 +1,24 @@
-#' Downloads NASA GRACE-based Drought Indicator Layer
+#' NASA GRACE-based Drought Indicator layer
 #'
-#' This resource indicates the drought, global raster layer available from year
-#' 2003 to present with weekly updates. Encoded as percentile, representing
-#' current wet or dry conditions showing the probability of occurrence - with
-#' lower values meaning dryer than normal, and higher values meaning wetter than
-#' normal.
+#' This resource is published by NASA GRACE Tellus. It indicates the drought,
+#' global raster layer available from year 2003 to present with weekly updates.
+#' Encoded as percentile, representing current wet or dry conditions showing the
+#' probability of occurrence - with lower values meaning dryer than normal, and
+#' higher values meaning wetter than normal.
+#'
+#' @name nasagrace
+#' @docType data
+#' @keywords resource
+#' @format Global raster layers available for years 2003 to present.
+#' @source \url{https://nasagrace.unl.edu/globaldata/}
+NULL
+
+
+#' Downloads NASA GRACE-based Drought Indicator Layer
 #'
 #' @param x An sf object returned by init_portfolio
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose Logical controlling verbosity.
-#' @name Drought_Indicator
 #' @keywords internal
 #'
 
