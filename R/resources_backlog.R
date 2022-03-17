@@ -83,6 +83,15 @@ available_resources <- function(resources = NULL) {
       downloader = ".get_precipitation",
       arguments = list()
     ),
+    chirps = list(
+      type = "raster",
+      source = "",
+      downloader = ".get_chirps",
+      arguments = list(
+        start_year = "2000",
+        end_year = "2020"
+      )
+    ),
     ecoregions = list(
       type = "vector",
       source = "WWF",
