@@ -159,17 +159,25 @@ calc_indicators <- function(x, indicators, ...) {
     if (resource_type == "raster") {
       # retrieve tiles that intersect with the shp extent
       tindex <- read_sf(available_resources[resource_name], quiet = TRUE)
-      target_files <- tindex$location[unlist(st_intersects(shp, tindex))]
-
-      if (length(target_files) == 0) {
-        warning("Does not intersect.")
-        return(NULL)
-      } else if (length(target_files) == 1) {
-        out <- terra::rast(target_files)
+      all_bboxes <- lapply(1:nrow(tindex), function(i) st_bbox(tindex[i, ]))
+      is_stacked <- do.call(all.equal, all_bboxes)
+      if (is_stacked) {
+        filenames <- gsub(".tif", "", basename(tindex$location))
+        out <- terra::rast(tindex$location)
+        names(out) <- filenames
       } else {
-        # create a vrt for multiple targets
-        vrt_name <- tempfile("vrt", fileext = ".vrt", tmpdir = rundir)
-        out <- terra::vrt(target_files, filename = vrt_name)
+        target_files <- tindex$location[unlist(st_intersects(shp, tindex))]
+
+        if (length(target_files) == 0) {
+          warning("Does not intersect.")
+          return(NULL)
+        } else if (length(target_files) == 1) {
+          out <- terra::rast(target_files)
+        } else {
+          # create a vrt for multiple targets
+          vrt_name <- tempfile("vrt", fileext = ".vrt", tmpdir = rundir)
+          out <- terra::vrt(target_files, filename = vrt_name)
+        }
       }
 
       # crop the source to the extent of the current polygon

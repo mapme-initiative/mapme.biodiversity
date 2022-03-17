@@ -17,6 +17,6 @@
 \description{
 This resource represents the minimum temperature, layers available to
 download for the period 2000 - 2018 on monthly basis from WorldClim. Encoded
-as (°C), representing the maximum temperature per output grid cell.
+as (°C), representing the minimum temperature per output grid cell.
 }
 \keyword{internal}
