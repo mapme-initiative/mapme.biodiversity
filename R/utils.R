@@ -14,6 +14,10 @@
   }
 }
 
+#' Helper to check for supported indicators
+#'
+#' @param indicators A character vector with requested indicators
+#' @keywords internal
 .check_requested_indicator <- function(indicators) {
   names_indicators <- names(available_indicators())
   # check for unsupported resources
@@ -34,6 +38,12 @@
   as.vector(required_resources)
 }
 
+#' Helper to check for existing resources
+#'
+#' @param ex_resources A character vector with existing resources
+#' @param req_resources A character vector with requested resources
+#' @param needed default value being FALSE
+#' @keywords internal
 .check_existing_resources <- function(ex_resources,
                                       req_resources,
                                       needed = FALSE) {
@@ -67,6 +77,13 @@
   }
 }
 
+
+
+#' Helper to check for resource arguments
+#'
+#' @param resource A character vector with requested resource
+#' @param args The arguments of requested resource
+#' @keywords internal
 .check_resource_arguments <- function(resource, args) {
   # TODO: What about portfolio wide parameters?
   resource_name <- names(resource)
@@ -105,6 +122,16 @@
 }
 
 
+#' Helper to create global grid
+#'
+#' @param xmin minimum longitude value (E/W)
+#' @param xmax maximum longitude value (E/W)
+#' @param ymin minimum latitude value (S/N)
+#' @param ymax maximum latitude value (E/W)
+#' @param dx difference in longitude value per grid
+#' @param dy difference in latitude value per grid
+#' @param proj projection system
+#' @keywords internal
 .make_global_grid <- function(xmin = -180, xmax = 170, dx = 10,
                               ymin = -50, ymax = 80, dy = 10,
                               proj = NULL) {
@@ -138,6 +165,12 @@
 }
 
 
+#' Helper to unzip and remove zip files
+#'
+#' @param zip zip file to unzip
+#' @param rundir A directory where intermediate files are written to.
+#' @param remove if TRUE, removes the zip else keeps it
+#' @keywords internal
 .unzip_and_remove <- function(zip, rundir, remove = TRUE) {
   suppressWarnings(unzip(
     zipfile = file.path(rundir, basename(zip)),
@@ -149,6 +182,13 @@
   }
 }
 
+
+#' Helper to check year availability
+#'
+#' @param target_years Numeric/s indicating the target year/s
+#' @param available_years Numeric/s indicating the available year/s
+#' @param indicator A character vector with target indicator
+#' @keywords internal
 .check_available_years <- function(target_years, available_years, indicator) {
   if (any(!target_years %in% available_years)) {
     message(sprintf("Some target years are not available for %s.", indicator))
@@ -166,7 +206,14 @@
 }
 
 
-
+#' Helper to check valid urls
+#'
+#' @param urls address to the datasource
+#' @param filenames name of the files in the url
+#' @param verbose Logical controlling verbosity.
+#' @param stubbornnes default value being 6
+#' @param check_existence default to TRUE
+#' @keywords internal
 .download_or_skip <- function(urls,
                               filenames,
                               verbose,
