@@ -14,7 +14,7 @@
 #'   "extract" or "exactextract" as character.}
 #' }
 #'
-#' @name heights
+#' @name elevation
 #' @docType data
 #' @keywords indicator
 #' @format A tibble with a column for elevation statistics (in meters)
