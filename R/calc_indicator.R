@@ -159,8 +159,8 @@ calc_indicators <- function(x, indicators, ...) {
     if (resource_type == "raster") {
       # retrieve tiles that intersect with the shp extent
       tindex <- read_sf(available_resources[resource_name], quiet = TRUE)
-      all_bboxes <- lapply(1:nrow(tindex), function(i) st_bbox(tindex[i, ]))
-      is_stacked <- do.call(all.equal, all_bboxes)
+      all_bboxes <- lapply(1:nrow(tindex), function(i) paste(as.numeric(st_bbox(tindex[i, ])), collapse = " "))
+      is_stacked <- length(unique(unlist(all_bboxes))) == 1
       if (is_stacked) {
         filenames <- gsub(".tif", "", basename(tindex$location))
         out <- terra::rast(tindex$location)
