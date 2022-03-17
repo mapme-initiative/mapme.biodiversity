@@ -5,8 +5,13 @@
 #' represents multiple climatic variables from which we will be requiring minimum
 #' temperature, maximum temperature, and mean precipitation layers. The layers are
 #' available to download for the period 2000 - 2018 on monthly basis from WorldClim.
-#' Encoded as (°C), representing the minimum and maximum temperature per output grid
-#' cell while encoded as (mm), representing the mean precipitation per output grid cell.
+#'
+#' Enlisted different resources can be reqested with their dedicated functions:
+#' \describe{
+#'   \item{tmin}{Encoded as (°C), representing the minimum temperature per output grid cell.}
+#'   \item{tmax}{Encoded as (°C), representing the maximum temperature per output grid cell.}
+#'   \item{prec}{Encoded as (mm), representing the mean precipitation per output grid cell.}
+#' }
 #'
 #' @name climate
 #' @docType data
@@ -20,7 +25,7 @@ NULL
 #'
 #' This resource represents the minimum temperature, layers available to
 #' download for the period 2000 - 2018 on monthly basis from WorldClim. Encoded
-#' as (°C), representing the maximum temperature per output grid cell.
+#' as (°C), representing the minimum temperature per output grid cell.
 #'
 #' @param x An sf object returned by init_portfolio
 #' @param rundir A directory where intermediate files are written to.
