@@ -24,7 +24,7 @@ index (tri) statistics for polygons. For each polygon, the desired statistic/s
 (mean, median or sd) is/are returned.
 The required resources for this indicator are:
 \itemize{
-\item \code{srtmelevation}
+\item \code{srtmdem}
 }
 }
 \details{

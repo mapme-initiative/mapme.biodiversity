@@ -5,12 +5,10 @@
 #' 1981 to the near-present. It has a spatial resolution of 0.05°. The data can
 #' be used to retrieve information on the amount of rainfall. Due to the availability
 #' of +30 years, anomaly detection and long-term average analysis is also possible.
+#' The routine will download the complete archive in order to support long-term
+#' average and anomaly calculations with respect to the 1981 - 2010 climate normal
+#' period. Thus no additionall arguments need to be specified.
 #'
-#' The following arguments should be set by the users:
-#' \describe{
-#'   \item{start_year}{A single integer value indicating the first year to be downloaded.}
-#'   \item{end_year}{A single integer value indicating the last year to be downloaded.}
-#' }
 #'
 #' @name chirps
 #' @docType data
@@ -26,29 +24,21 @@ NULL
 
 
 .get_chirps <- function(x,
-                        start_year,
-                        end_year,
                         rundir = tempdir(),
                         verbose = TRUE) {
-  if (any(missing(start_year), missing(end_year))) {
-    stop(paste("Please specify arguments 'start_year' and 'end_year' for ",
-      "downloading resource 'chirps'",
-      sep = ""
-    ))
-  }
+  chirps_url <- "https://data.chc.ucsb.edu/products/CHIRPS-2.0/global_monthly/cogs/"
+  chirps_list <- RCurl::getURL(chirps_url, dirlistonly = TRUE, ftp.use.epsv = FALSE)
+  chirps_list <- unique(stringr::str_extract_all(chirps_list, stringr::regex("chirps-\\s*(.*?)\\s*.cog"))[[1]])
+  urls <- paste(chirps_url, chirps_list, sep = "")
+  filenames <- file.path(rundir, basename(urls))
 
-  chirps_url <- "https://data.chc.ucsb.edu/products/CHIRPS-2.0/global_monthly/cogs/%s"
-  filename_stem <- "chirps-v2.0.%s.%s.cog"
-  months <- 1:12
-  months <- sapply(months, function(month) {
-    ifelse(month < 10, paste0("0", month), paste(month))
-  })
-  years <- start_year:end_year
-  filenames <- sprintf(filename_stem, rep(years, each = 12), rep(months, length(years)))
-  urls <- sprintf(chirps_url, filenames)
-  filenames <- file.path(rundir, filenames)
+  aria_bin <- attributes(x)$aria_bin
+  .download_or_skip(urls,
+    filenames,
+    verbose = verbose,
+    check_existence = TRUE,
+    aria_bin = aria_bin
+  )
 
-  .download_or_skip(urls, filenames, verbose = verbose, check_existence = TRUE)
-
-  list.files(rundir, full.names = TRUE)
+  filenames
 }

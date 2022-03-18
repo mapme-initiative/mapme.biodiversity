@@ -9,7 +9,8 @@
   filenames,
   verbose,
   stubbornnes = 6,
-  check_existence = TRUE
+  check_existence = TRUE,
+  aria_bin = NULL
 )
 }
 \arguments{

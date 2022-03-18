@@ -162,7 +162,7 @@ calc_indicators <- function(x, indicators, ...) {
       all_bboxes <- lapply(1:nrow(tindex), function(i) paste(as.numeric(st_bbox(tindex[i, ])), collapse = " "))
       is_stacked <- length(unique(unlist(all_bboxes))) == 1
       if (is_stacked) {
-        filenames <- gsub(".tif", "", basename(tindex$location))
+        filenames <- basename(tindex$location)
         out <- terra::rast(tindex$location)
         names(out) <- filenames
       } else {

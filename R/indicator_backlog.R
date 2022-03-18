@@ -15,7 +15,6 @@
 #' @keywords indicator
 #' @examples
 #' head(available_indicators(), 3)
-
 available_indicators <- function(indicator = NULL) {
   all_indicators <- list(
     treecover = list(
@@ -55,18 +54,25 @@ available_indicators <- function(indicator = NULL) {
     ),
     elevation = list(
       name = ".calc_dem",
-      inputs = list(srtmelevation = "raster"),
+      inputs = list(srtmdem = "raster"),
       arguments = list(
-        stats = "mean",
+        stats_elevation = "mean",
         engine = "zonal"
       )
     ),
-    tri <- list(
+    tri = list(
       name = ".calc_tri",
-      inputs = list(srtmelevation = "raster"),
+      inputs = list(srtmdem = "raster"),
       arguments = list(
-        stats = "mean",
+        stats_tri = "mean",
         engine = "zonal"
+      )
+    ),
+    precipitation = list(
+      name = ".calc_precipitation",
+      inputs = list(chirps = "raster"),
+      arguments = list(
+        stats_precipitation = "mean"
       )
     )
   )
@@ -79,4 +85,3 @@ available_indicators <- function(indicator = NULL) {
     all_indicators[indicator]
   }
 }
-

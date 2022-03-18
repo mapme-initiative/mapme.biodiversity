@@ -10,6 +10,7 @@ init_portfolio(
   outdir = getwd(),
   tmpdir = tempdir(),
   cores = parallel::detectCores() - 1,
+  aria_bin = NULL,
   verbose = TRUE
 )
 }
@@ -33,6 +34,9 @@ to create it. Cannot be equal to the output directory.}
 machine available for indicator calculation. It defaults to
 \code{parallel::detectCores() - 1} cores, i.e. one core less than all
 available cores.}
+
+\item{aria_bin}{A character vector to an aria2c executable for parallel
+downloads}
 
 \item{verbose}{Logical, defaults to TRUE, indicating if progress information
 is printed.}

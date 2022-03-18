@@ -6,9 +6,9 @@
 \usage{
 .calc_tri(
   shp,
-  srtmelevation,
+  srtmdem,
   engine = "zonal",
-  stats = "mean",
+  stats_tri = "mean",
   rundir = tempdir(),
   verbose = TRUE,
   todisk = FALSE,
@@ -18,12 +18,12 @@
 \arguments{
 \item{shp}{A single polygon for which to calculate the tri statistic}
 
-\item{srtmelevation}{The elevation raster resource from SRTM}
+\item{srtmdem}{The elevation raster resource from SRTM}
 
 \item{engine}{The preferred processing functions from either one of "zonal",
 "extract" or "exactextract" as character.}
 
-\item{stats}{Function to be applied to compute statistics for polygons either
+\item{stats_tri}{Function to be applied to compute statistics for polygons either
 one or multiple inputs as character "mean", "median" or "sd".}
 
 \item{rundir}{A directory where intermediate files are written to.}

@@ -27,6 +27,8 @@
 #'   machine available for indicator calculation. It defaults to
 #'   \code{parallel::detectCores() - 1} cores, i.e. one core less than all
 #'   available cores.
+#' @param aria_bin A character vector to an aria2c executable for parallel
+#'  downloads
 #' @param verbose Logical, defaults to TRUE, indicating if progress information
 #'   is printed.
 #' @keywords function
@@ -36,6 +38,7 @@ init_portfolio <- function(x,
                            outdir = getwd(),
                            tmpdir = tempdir(),
                            cores = parallel::detectCores() - 1,
+                           aria_bin = NULL,
                            verbose = TRUE) {
   if (outdir == tmpdir) {
     stop("Parameters outdir and tmpdir need to point to different directories.")
@@ -74,5 +77,6 @@ init_portfolio <- function(x,
   attr(x, "tmpdir") <- tmpdir
   attr(x, "cores") <- cores
   attr(x, "verbose") <- verbose
+  attr(x, "aria_bin") <- aria_bin
   x
 }

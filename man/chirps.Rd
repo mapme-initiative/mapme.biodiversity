@@ -16,13 +16,9 @@ This resource is published by Funk et al. (2015) and represents a quasi-global
 1981 to the near-present. It has a spatial resolution of 0.05°. The data can
 be used to retrieve information on the amount of rainfall. Due to the availability
 of +30 years, anomaly detection and long-term average analysis is also possible.
-}
-\details{
-The following arguments should be set by the users:
-\describe{
-\item{start_year}{A single integer value indicating the first year to be downloaded.}
-\item{end_year}{A single integer value indicating the last year to be downloaded.}
-}
+The routine will download the complete archive in order to support long-term
+average and anomaly calculations with respect to the 1981 - 2010 climate normal
+period. Thus no additionall arguments need to be specified.
 }
 \references{
 Funk, C., Peterson, P., Landsfeld, M. et al. The climate hazards

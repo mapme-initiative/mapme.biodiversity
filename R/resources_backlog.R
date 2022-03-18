@@ -87,10 +87,7 @@ available_resources <- function(resources = NULL) {
       type = "raster",
       source = "",
       downloader = ".get_chirps",
-      arguments = list(
-        start_year = "2000",
-        end_year = "2020"
-      )
+      arguments = list()
     ),
     ecoregions = list(
       type = "vector",

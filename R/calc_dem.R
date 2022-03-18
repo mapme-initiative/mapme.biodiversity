@@ -4,7 +4,7 @@
 #' polygons. For each polygon, the desired statistic/s (mean, median or sd)
 #' is/are returned.
 #' The required resources for this indicator are:
-#'  - \code{srtmelevation}
+#'  - \code{srtmdem}
 #'
 #' The following arguments can be set:
 #' \describe{
@@ -28,7 +28,7 @@ NULL
 #' terra, or exactextract from exactextractr as desired.
 #'
 #' @param shp A single polygon for which to calculate the elevation statistic
-#' @param srtmelevation The elevation raster resource from SRTM
+#' @param srtmdem The elevation raster resource from SRTM
 #' @param stats Function to be applied to compute statistics for polygons either
 #'   one or multiple inputs as character "mean", "median" or "sd".
 #' @param engine The preferred processing functions from either one of "zonal",
@@ -43,9 +43,9 @@ NULL
 #'
 
 .calc_dem <- function(shp,
-                      srtmelevation,
+                      srtmdem,
                       engine = "zonal",
-                      stats = "mean",
+                      stats_elevation = "mean",
                       rundir = tempdir(),
                       verbose = TRUE,
                       todisk = FALSE,
@@ -57,32 +57,32 @@ NULL
     stop(sprintf("Engine %s is not an available engine. Please choose one of: %s", engine, paste(available_engines, collapse = ", ")))
   }
 
-  if (ncell(srtmelevation) > 1024 * 1024) todisk <- TRUE
+  if (ncell(srtmdem) > 1024 * 1024) todisk <- TRUE
   available_stats <- c("mean", "median", "sd")
   # check if input stats are correct
-  if (!stats %in% available_stats) {
-    stop(sprintf("Stat %s is not an available statistics. Please choose one of: %s", stats, paste(available_stats, collapse = ", ")))
+  if (!stats_elevation %in% available_stats) {
+    stop(sprintf("Stat %s is not an available statistics. Please choose one of: %s", stats_elevation, paste(available_stats, collapse = ", ")))
   }
 
   if (engine == "extract") {
     tibble_zstats <- .comp_dem_extract(
-      elevation = srtmelevation,
+      elevation = srtmdem,
       shp = shp,
-      stats = stats
+      stats = stats_elevation
     )
     return(tibble_zstats)
   } else if (engine == "exactextract") {
     tibble_zstats <- .comp_dem_exact_extractr(
-      elevation = srtmelevation,
+      elevation = srtmdem,
       shp = shp,
-      stats = stats
+      stats = stats_elevation
     )
     return(tibble_zstats)
   } else {
     tibble_zstats <- .comp_dem_zonal(
-      elevation = srtmelevation,
+      elevation = srtmdem,
       shp = shp,
-      stats = stats,
+      stats = stats_elevation,
       todisk = todisk,
       rundir = rundir
     )
