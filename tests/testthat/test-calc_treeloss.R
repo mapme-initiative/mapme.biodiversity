@@ -4,7 +4,6 @@ test_that("treeloss works", {
       package = "mapme.biodiversity"
     )
   )
-
   outdir <- system.file("res",
     package = "mapme.biodiversity"
   )
@@ -32,12 +31,12 @@ test_that("treeloss works", {
   expect_snapshot(stat)
   attributes(portfolio)$years <- 2000:2005
 
-  expect_error(
+  expect_warning(
     calc_indicators(portfolio, "treeloss", min_cover = "10"),
     "must be a numeric value between 0 and 100"
   )
 
-  expect_error(
+  expect_warning(
     calc_indicators(portfolio, "treeloss", min_cover = 200),
     "must be a numeric value between 0 and 100"
   )
@@ -46,7 +45,7 @@ test_that("treeloss works", {
     calc_indicators(portfolio, "treeloss", min_cover = 50.2)$treeloss[[1]]
   )
 
-  expect_error(
+  expect_warning(
     calc_indicators(portfolio, "treeloss", min_size = -10),
     "Argument 'min_size' for indicator 'treeloss' must be a numeric value greater 0."
   )

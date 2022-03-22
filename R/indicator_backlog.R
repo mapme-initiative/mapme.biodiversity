@@ -74,6 +74,11 @@ available_indicators <- function(indicator = NULL) {
       arguments = list(
         stats_precipitation = "mean"
       )
+    ),
+    avgperc = list(
+      name = ".calc_avgperc",
+      inputs = list(chirps = "raster"),
+      arguments = list()
     )
   )
 

@@ -20,6 +20,7 @@ Description: Biodiversity areas, especially primary forest, serve a
 License: GPL (>= 3)
 Imports:
     curl,
+    data.table,
     dplyr,
     magrittr,
     progress,

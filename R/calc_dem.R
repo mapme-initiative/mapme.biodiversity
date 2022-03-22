@@ -50,7 +50,12 @@ NULL
                       verbose = TRUE,
                       todisk = FALSE,
                       ...) {
-
+  if (is.null(srtmdem)) {
+    stat_names <- paste("elevation_", stats_elevation, sep = "")
+    out <- tibble(as.data.frame(lapply(1:length(stats_elevation), function(i) NA)))
+    names(out) <- stat_names
+    return(out)
+  }
   # check if input engines are correct
   available_engines <- c("zonal", "extract", "exactextract")
   if (!engine %in% available_engines) {

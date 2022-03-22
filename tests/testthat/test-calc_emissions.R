@@ -32,12 +32,12 @@ test_that("emissions works", {
   expect_snapshot(stat)
   attributes(portfolio)$years <- 2000:2005
 
-  expect_error(
+  expect_warning(
     calc_indicators(portfolio, "emissions", min_cover = "10"),
     "must be a numeric value between 0 and 100"
   )
 
-  expect_error(
+  expect_warning(
     calc_indicators(portfolio, "emissions", min_cover = 200),
     "must be a numeric value between 0 and 100"
   )
@@ -47,7 +47,7 @@ test_that("emissions works", {
     stat
   )
 
-  expect_error(
+  expect_warning(
     calc_indicators(portfolio, "emissions", min_size = -10),
     "Argument 'min_size' for indicator 'emissions' must be a numeric value greater 0"
   )

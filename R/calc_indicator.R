@@ -47,6 +47,7 @@ calc_indicators <- function(x, indicators, ...) {
 #' @keywords internal
 #' @importFrom dplyr relocate last_col
 #' @importFrom tidyr nest
+#' @importFrom data.table rbindlist
 .get_single_indicator <- function(x, indicator, ...) {
   i <- NULL
   # get arguments from function call and portfolio object
@@ -116,7 +117,7 @@ calc_indicators <- function(x, indicators, ...) {
   # cleanup the tmpdir for indicator
   unlink(tmpdir, recursive = TRUE, force = TRUE)
   # bind results to data.frame
-  results <- do.call(rbind, results)
+  results <- tibble(data.table::rbindlist(results, fill = TRUE))
   # nest the results
   results <- nest(results, !!indicator := !.id)
   # attach results
@@ -141,7 +142,11 @@ calc_indicators <- function(x, indicators, ...) {
   processed_resources <- .read_source(params, rundir)
   params <- append(params, processed_resources)
   # call the indicator function with the associated parameters
-  out <- do.call(params$fun, args = params)
+  out <- try(do.call(params$fun, args = params))
+  if (inherits(out, "try-error")) {
+    warning(sprintf("Error occured at polygon %s with the following error message: %s. \n Returning NAs.", i, out))
+    out <- tibble(.id = i)
+  }
   if (params$verbose) params$p() # progress tick
   out$.id <- i # add an id variable
   unlink(rundir, recursive = TRUE, force = TRUE) # delete the current rundir

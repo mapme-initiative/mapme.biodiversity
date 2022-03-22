@@ -63,7 +63,12 @@ NULL
                       verbose = TRUE,
                       todisk = FALSE,
                       ...) {
-
+  if (is.null(srtmdem)) {
+    stat_names <- paste("terrain_ruggedness_index_", stats_tri, sep = "")
+    out <- tibble(as.data.frame(lapply(1:length(stats_tri), function(i) NA)))
+    names(out) <- stat_names
+    return(out)
+  }
   # check if input engines are correct
   available_engines <- c("zonal", "extract", "exactextract")
   if (!engine %in% available_engines) {
@@ -73,7 +78,7 @@ NULL
   if (ncell(srtmdem) > 1024 * 1024) todisk <- TRUE
   available_stats <- c("mean", "median", "sd")
   # check if input stats are correct
-  if (!stats_tri %in% available_stats) {
+  if (!any(stats_tri %in% available_stats)) {
     stop(sprintf("Stat %s is not an available statistics. Please choose one of: %s", stats_tri, paste(available_stats, collapse = ", ")))
   }
 
