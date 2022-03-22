@@ -5,7 +5,7 @@
 \alias{precipitation}
 \title{Calculate precipitation statistics}
 \format{
-A tibble with a column for years, months, the statistic and the coressponding value (in mm)
+A tibble with a column for years, months, the statistic and the corresponding value (in mm)
 }
 \description{
 This functions allows to calculate precipitation statistics based on the

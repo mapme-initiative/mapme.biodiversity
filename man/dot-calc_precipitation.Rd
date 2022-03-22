@@ -20,7 +20,7 @@
 
 \item{chirps}{The CHIRPS resource}
 
-\item{stats_precipitation}{A charchter vector of statistics to calculate}
+\item{stats_precipitation}{A character vector of statistics to calculate}
 
 \item{rundir}{A directory where intermediate files are written to.}
 

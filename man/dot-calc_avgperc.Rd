@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_avgperc.R
 \name{.calc_avgperc}
 \alias{.calc_avgperc}
-\title{Calculate long-term precipitation montthly averages}
+\title{Calculate long-term precipitation monthly averages}
 \usage{
 .calc_avgperc(
   shp,
@@ -32,6 +32,6 @@ be written to disk}
 A tibble
 }
 \description{
-Calculate long-term precipitation montthly averages
+Calculate long-term precipitation monthly averages
 }
 \keyword{internal}

@@ -5,7 +5,7 @@
 \alias{avgperc}
 \title{Calculate long-term average precipitation}
 \format{
-A tibble with a column for years, months, the statistic and the coressponding value (in mm)
+A tibble with a column for years, months, the statistic and the corresponding value (in mm)
 }
 \description{
 This functions allows to calculate the monthly long-term average precipitation

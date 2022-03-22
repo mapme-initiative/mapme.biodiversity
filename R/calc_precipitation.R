@@ -15,14 +15,14 @@
 #' @name precipitation
 #' @docType data
 #' @keywords indicator
-#' @format A tibble with a column for years, months, the statistic and the coressponding value (in mm)
+#' @format A tibble with a column for years, months, the statistic and the corresponding value (in mm)
 NULL
 
 #' Calculate precipitation statistics
 #'
 #' @param shp A single polygon for which to calculate the tree cover statistic
 #' @param chirps The CHIRPS resource
-#' @param stats_precipitation A charchter vector of statistics to calculate
+#' @param stats_precipitation A character vector of statistics to calculate
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
 #' @param todisk Logical indicating whether or not temporary raster files shall
@@ -43,8 +43,13 @@ NULL
 
   # initial argument checks
   # retrieve years from portfolio
+  # handling of return value if resources are missing, e.g. no overlap
+  if (is.null(chirps)) {
+    return(tibble(years = NA, months = NA, stat = NA, precipitation = NA))
+  }
   if (ncell(chirps) > 1024 * 1024) todisk <- TRUE
   years <- attributes(shp)$years
+
   if (any(years < 1981)) {
     warning(paste("Cannot calculate precipitation statistics ",
       "for years smaller than 1981",
@@ -55,6 +60,11 @@ NULL
       return(tibble(years = NA, months = NA, stat = NA, precipitation = NA))
     }
   }
+
+  src_names <- basename(sources(chirps))
+  layer_years <- as.numeric(stringr::str_sub(src_names, -11, -8))
+  chirps <- chirps[[which(layer_years %in% years)]]
+
   if (any(!stats_precipitation %in% c("mean", "median", "sd"))) {
     stop("Argument 'stat' for indicator 'chirps' most be one of 'mean', 'median', 'sd'")
   }
@@ -63,21 +73,6 @@ NULL
   if (!engine %in% available_engines) {
     stop(sprintf("Engine %s is not an available engine. Please choose one of: %s", engine, paste(available_engines, collapse = ", ")))
   }
-  # handling of return value if resources are missing, e.g. no overlap
-  if (is.null(chirps)) {
-    return(tibble(years = NA, months = NA, stat = NA, precipitation = NA))
-  }
-
-  chirps[chirps == -9999] <- NA
-  if (is.na(unique(as.vector(values(chirps))))) {
-    return(tibble(years = NA, months = NA, stat = NA, precipitation = NA))
-  }
-
-
-
-  layer_names <- names(chirps)
-  layer_years <- as.numeric(stringr::str_sub(layer_names, -11, -8))
-  chirps <- chirps[[which(layer_years %in% years)]]
 
   if (engine == "extract") {
     .prec_extract(
@@ -112,6 +107,7 @@ NULL
     filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
     overwrite = TRUE
   )
+  chirps[chirps == -9999] <- NA
   results <- lapply(1:length(stats), function(i) {
     out <- terra::zonal(chirps,
       p_raster,
@@ -119,7 +115,7 @@ NULL
       na.rm = T
     )
     out <- out[2:ncol(out)]
-    names(out) <- stringr::str_replace_all(stringr::str_sub(names(out), -11, -5), "\\.", "-")
+    names(out) <- stringr::str_replace_all(stringr::str_sub(names(out), -7, -1), "\\.", "-")
     out <- data.frame(precipitation = t(out))
     out <- tibble::rownames_to_column(out, "year")
     out <- tidyr::separate(out, year, into = c("year", "month"), sep = "-")
@@ -134,6 +130,7 @@ NULL
 .prec_extract <- function(chirps, shp, stats) {
   year <- NULL
   shp_v <- vect(shp)
+  chirps[chirps == -9999] <- NA
   results <- lapply(1:length(stats), function(i) {
     out <- terra::extract(chirps,
       shp_v,
@@ -141,7 +138,7 @@ NULL
       na.rm = T
     )
     out <- out[2:ncol(out)]
-    names(out) <- stringr::str_replace_all(stringr::str_sub(names(out), -11, -5), "\\.", "-")
+    names(out) <- stringr::str_replace_all(stringr::str_sub(names(out), -7, -1), "\\.", "-")
     out <- data.frame(precipitation = t(out))
     out <- tibble::rownames_to_column(out, "year")
     out <- tidyr::separate(out, year, into = c("year", "month"), sep = "-")
@@ -157,13 +154,14 @@ NULL
   year <- NULL
   calc_stats <- stringr::str_replace_all(stats, "sd", "stdev")
   shp_v <- vect(shp)
+  chirps[chirps == -9999] <- NA
   results <- lapply(1:length(stats), function(i) {
     out <- exactextractr::exact_extract(
       chirps,
       shp,
       fun = calc_stats[i]
     )
-    names(out) <- stringr::str_replace_all(stringr::str_sub(names(out), -11, -5), "\\.", "-")
+    names(out) <- stringr::str_replace_all(stringr::str_sub(names(out), -7, -1), "\\.", "-")
     out <- data.frame(precipitation = t(out))
     out <- tibble::rownames_to_column(out, "year")
     out <- tidyr::separate(out, year, into = c("year", "month"), sep = "-")

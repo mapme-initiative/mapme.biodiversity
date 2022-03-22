@@ -11,10 +11,10 @@
 #' @name avgperc
 #' @docType data
 #' @keywords indicator
-#' @format A tibble with a column for years, months, the statistic and the coressponding value (in mm)
+#' @format A tibble with a column for years, months, the statistic and the corresponding value (in mm)
 NULL
 
-#' Calculate long-term precipitation montthly averages
+#' Calculate long-term precipitation monthly averages
 #' @param shp A single polygon for which to calculate the tree cover statistic
 #' @param chirps The CHIRPS resource
 #' @param rundir A directory where intermediate files are written to.
@@ -35,13 +35,6 @@ NULL
                           ...) {
 
   # initial argument checks
-  # retrieve years from portfolio
-  if (ncell(chirps) > 1024 * 1024) todisk <- TRUE
-
-  available_engines <- c("zonal", "extract", "exactextract")
-  if (!engine %in% available_engines) {
-    stop(sprintf("Engine %s is not an available engine. Please choose one of: %s", engine, paste(available_engines, collapse = ", ")))
-  }
   # handling of return value if resources are missing, e.g. no overlap
   if (is.null(chirps)) {
     results <- as.data.frame(lapply(1:12, function(i) NA))
@@ -49,20 +42,28 @@ NULL
     return(tibble(results))
   }
 
-  chirps[chirps == -9999] <- NA
-  if (length(unique(values(chirps))) == 1) {
-    if (is.na(unique(values(chirps)))) {
+  # retrieve years from portfolio
+  if (ncell(chirps) > 1024 * 1024) todisk <- TRUE
+
+  available_engines <- c("zonal", "extract", "exactextract")
+  if (!engine %in% available_engines) {
+    stop(sprintf("Engine %s is not an available engine. Please choose one of: %s", engine, paste(available_engines, collapse = ", ")))
+  }
+
+  unique_vals <- unique(as.vector(values(chirps)))
+  if (length(unique_vals) == 1) {
+    if (is.na(unique_vals)) {
       results <- as.data.frame(lapply(1:12, function(i) NA))
       names(results) <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
       return(tibble(results))
     }
   }
 
-  layer_names <- names(chirps)
-  layer_years <- as.numeric(stringr::str_sub(layer_names, -11, -8))
+  src_names <- basename(sources(chirps))
+  layer_years <- as.numeric(stringr::str_sub(src_names, -11, -8))
   chirps <- chirps[[which(layer_years %in% 1981:2010)]]
   layer_names <- names(chirps)
-  layer_months <- as.numeric(stringr::str_sub(layer_names, -6, -5))
+  layer_months <- as.numeric(stringr::str_sub(layer_names, -2, -1))
   chirps_monthly <- lapply(1:12, function(i) {
     chirps[[layer_months == i]]
   })
@@ -70,12 +71,16 @@ NULL
   if (engine == "extract") {
     .avgprec_extract(
       chirps_monthly = chirps_monthly,
-      shp = shp
+      shp = shp,
+      rundir = rundir,
+      todisk = todisk
     )
   } else if (engine == "exactextract") {
     .avgprec_exact_extractr(
       chirps_monthly = chirps_monthly,
-      shp = shp
+      shp = shp,
+      rundir = rundir,
+      todisk = todisk
     )
   } else {
     .avgprec_zonal(
@@ -96,7 +101,7 @@ NULL
     filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
     overwrite = TRUE
   )
-  results <- unlist(lapply(1:length(chirps_monthly), function(i) {
+  results <- lapply(1:length(chirps_monthly), function(i) {
     tmp <- mean(chirps_monthly[[i]],
       filename = ifelse(todisk, file.path(rundir, "mean_chirps.tif"), "")
     )
@@ -106,7 +111,8 @@ NULL
       na.rm = T
     )
     out[2]
-  }))
+  })
+  results <- as.data.frame(results)
   names(results) <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
   tibble(results)
 }
@@ -115,7 +121,7 @@ NULL
 .avgprec_extract <- function(shp, chirps_monthly, rundir, todisk) {
   year <- NULL
   shp_v <- vect(shp)
-  results <- unlist(lapply(1:length(chirps_monthly), function(i) {
+  results <- lapply(1:length(chirps_monthly), function(i) {
     tmp <- mean(chirps_monthly[[i]],
       filename = ifelse(todisk, file.path(rundir, "mean_chirps.tif"), "")
     )
@@ -125,14 +131,15 @@ NULL
       na.rm = T
     )
     out[2]
-  }))
+  })
+  results <- as.data.frame(results)
   names(results) <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
   tibble(results)
 }
 
 
 .avgprec_exact_extractr <- function(shp, chirps_monthly, rundir, todisk) {
-  results <- unlist(lapply(1:length(chirps_monthly), function(i) {
+  results <- lapply(1:length(chirps_monthly), function(i) {
     tmp <- mean(chirps_monthly[[i]],
       filename = ifelse(todisk, file.path(rundir, "mean_chirps.tif"), "")
     )
@@ -141,7 +148,8 @@ NULL
       fun = "mean"
     )
     out
-  }))
+  })
+  results <- as.data.frame(results)
   names(results) <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
   tibble(results)
 }
