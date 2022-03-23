@@ -16,34 +16,28 @@ test_that("precipitation indicator works", {
   attributes(shp)$years <- 1980:1982
   expect_equal(
     .calc_precipitation(shp, NULL),
-    tibble(years = NA, months = NA, stat = NA, precipitation = NA)
+    NA
   )
   attributes(shp)$years <- 1981:1982
   expect_error(
-    .calc_precipitation(shp, chirps, stats_precipitation = "not-available"),
-    "Argument 'stat' for indicator 'chirps' most be one of 'mean', 'median', 'sd'"
+    .calc_precipitation(shp, chirps, scales_spi = c(1, 12, 48, 60)),
+    "Values of 'scales_spi' for SPI calculation must be integers between 0 and 48"
   )
   expect_error(
-    .calc_precipitation(shp, chirps, engine = "not-available", stats_precipitation = "mean"),
+    .calc_precipitation(shp, chirps, engine = "not-available"),
     "Engine not-available is not an available engine. Please choose one of: zonal, extract, exactextract"
   )
-  attributes(shp)$years <- 1981:1983
+  attributes(shp)$years <- 2000:2010
   expect_snapshot(
-    .calc_precipitation(shp, chirps,
-      engine = "zonal",
-      stats_precipitation = c("mean", "median", "sd")
-    )
+    .calc_precipitation(shp, chirps)
   )
   expect_snapshot(
-    .calc_precipitation(shp, chirps,
-      engine = "extract",
-      stats_precipitation = c("mean", "median", "sd")
-    )
+    .calc_precipitation(shp, chirps, scales_spi = c(12, 24))
   )
   expect_snapshot(
-    .calc_precipitation(shp, chirps,
-      engine = "exactextract",
-      stats_precipitation = c("mean", "median", "sd")
-    )
+    .calc_precipitation(shp, chirps, engine = "extract")
+  )
+  expect_snapshot(
+    .calc_precipitation(shp, chirps, engine = "exactextract")
   )
 })

@@ -2,54 +2,64 @@
 #'
 #' This functions allows to calculate precipitation statistics based on the
 #' CHIRPS rainfall estimates. Corresponding to the time-frame of the analysis
-#' of the portfolio, monthly precipitation statistics are calculated. Users
-#' can decide which statistics to calculate.
+#' of the portfolio, monthly precipitation statistics are calculated. These include
+#' the total rainfall amount, rainfall anomaly against the 1981-2010 climate normal,
+#' and the Standardized Precipitation Index (SPI) which is available for scales
+#' between 1 and 48 months. Th function needs the \code{SPEI} package to be
+#' installed.
 #' The required resources for this indicator are:
 #'  - \code{chirps}
 #'
 #' The following arguments can be set:
 #' \describe{
-#'   \item{stats}{The statistic to calculate. One or multiple of: 'mean', 'median', 'sd'.}
+#'   \item{scales_spi}{An integer vector indicating the scales for which to calculate the SPI.}
+#'     \item{engine}{The preferred processing functions from either one of "zonal",
+#'   "extract" or "exactextract" as character.}
 #' }
 #'
 #' @name precipitation
 #' @docType data
 #' @keywords indicator
-#' @format A tibble with a column for years, months, the statistic and the corresponding value (in mm)
+#' @format A tibble with a column for years, months, absolute rainfall, rainfall
+#'   anomaly and one or more columns per selected time-scale for SPI.
 NULL
 
 #' Calculate precipitation statistics
 #'
 #' @param shp A single polygon for which to calculate the tree cover statistic
 #' @param chirps The CHIRPS resource
-#' @param stats_precipitation A character vector of statistics to calculate
+#' @param scales_spi Integers specifying time-scales for SPI
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
 #' @param todisk Logical indicating whether or not temporary raster files shall
 #'   be written to disk
 #' @param ... additional arguments
 #' @return A tibble
-#' @importFrom stringr str_sub
 #' @keywords internal
 #'
 .calc_precipitation <- function(shp,
                                 chirps,
-                                stats_precipitation,
+                                scales_spi = 12,
                                 engine = "zonal",
                                 rundir = tempdir(),
                                 verbose = TRUE,
                                 todisk = FALSE,
                                 ...) {
-
+  if (!"SPEI" %in% utils::installed.packages()[, 1]) {
+    stop("R package 'SPEI' required. Please install via 'install.packages('SPEI'')'")
+  }
   # initial argument checks
   # retrieve years from portfolio
   # handling of return value if resources are missing, e.g. no overlap
   if (is.null(chirps)) {
-    return(tibble(years = NA, months = NA, stat = NA, precipitation = NA))
+    return(NA)
   }
   if (ncell(chirps) > 1024 * 1024) todisk <- TRUE
   years <- attributes(shp)$years
 
+  if (any(scales_spi < 0) | any(scales_spi > 48)) {
+    stop("Values of 'scales_spi' for SPI calculation must be integers between 0 and 48.")
+  }
   if (any(years < 1981)) {
     warning(paste("Cannot calculate precipitation statistics ",
       "for years smaller than 1981",
@@ -57,17 +67,49 @@ NULL
     ))
     years <- years[years >= 1981]
     if (length(years) == 0) {
-      return(tibble(years = NA, months = NA, stat = NA, precipitation = NA))
+      return(NA)
     }
   }
 
-  src_names <- basename(sources(chirps))
-  layer_years <- as.numeric(stringr::str_sub(src_names, -11, -8))
-  chirps <- chirps[[which(layer_years %in% years)]]
+  src_names <- names(chirps)
+  layer_years <- as.numeric(substr(src_names, 13, 17))
+  climate_chirps <- chirps[[which(layer_years %in% 1981:2010)]]
+  target_chirps <- chirps[[which(layer_years %in% years)]]
 
-  if (any(!stats_precipitation %in% c("mean", "median", "sd"))) {
-    stop("Argument 'stat' for indicator 'chirps' most be one of 'mean', 'median', 'sd'")
-  }
+  # calculate long-term monthly average
+  layer_names <- names(climate_chirps)
+  layer_months <- as.numeric(substr(layer_names, 18, 19))
+  climate_chirps <- lapply(1:12, function(i) {
+    mean(climate_chirps[[layer_months == i]])
+  })
+  climate_chirps <- do.call(c, climate_chirps)
+  names(climate_chirps) <- c(1:12)
+  climate_chirps <- rep(climate_chirps, length(years))
+  anomaly_chirps <- target_chirps - climate_chirps
+  climate_chirps <- climate_chirps[[1:12]]
+
+  # calculate SPI
+  spi_chirps <- lapply(scales_spi, function(scale) {
+    s <- ifelse(scale < 13, 1,
+      ifelse(scale < 25, 2,
+        ifelse(scale < 37, 3, 4)
+      )
+    )
+    target_years_spi <- switch(s,
+      years[1] - 2,
+      years[1] - 3,
+      years[1] - 4,
+      years[1] - 5
+    )
+    target_years_spi <- target_years_spi:years[length(years)]
+    target_spi <- chirps[[which(layer_years %in% target_years_spi)]]
+    spi_chirps <- app(target_spi, fun = function(x) {
+      SPEI::spi(x, scale = scale)$fitted
+    })
+    names(spi_chirps) <- names(target_spi)
+    spi_chirps[[names(target_chirps)]]
+  })
+  names(spi_chirps) <- paste0("spi_", scales_spi)
 
   available_engines <- c("zonal", "extract", "exactextract")
   if (!engine %in% available_engines) {
@@ -76,98 +118,99 @@ NULL
 
   if (engine == "extract") {
     .prec_extract(
-      chirps = chirps,
       shp = shp,
-      stats = stats_precipitation
+      absolute = target_chirps,
+      anomaly = anomaly_chirps,
+      spi = spi_chirps,
+      todisk = todisk,
+      rundir = rundir
     )
   } else if (engine == "exactextract") {
     .prec_exact_extractr(
-      chirps = chirps,
       shp = shp,
-      stats = stats_precipitation
+      absolute = target_chirps,
+      anomaly = anomaly_chirps,
+      spi = spi_chirps,
+      todisk = todisk,
+      rundir = rundir
     )
   } else {
     .prec_zonal(
-      chirps = chirps,
       shp = shp,
-      stats = stats_precipitation,
+      absolute = target_chirps,
+      anomaly = anomaly_chirps,
+      spi = spi_chirps,
       todisk = todisk,
       rundir = rundir
     )
   }
 }
 
-.prec_zonal <- function(chirps, shp, stats, todisk, rundir) {
-  year <- NULL
+.prec_zonal <- function(shp, absolute, anomaly, spi, todisk, rundir) {
+  dates <- strsplit(substr(names(absolute), 13, 19), "\\.")
+  years <- unlist(lapply(dates, function(x) x[[1]]))
+  months <- unlist(lapply(dates, function(x) x[[2]]))
+
   shp_v <- vect(shp)
   p_raster <- terra::rasterize(shp_v,
-    chirps,
+    absolute,
     field = 1,
     touches = TRUE,
     filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
     overwrite = TRUE
   )
-  chirps[chirps == -9999] <- NA
-  results <- lapply(1:length(stats), function(i) {
-    out <- terra::zonal(chirps,
-      p_raster,
-      fun = stats[i],
-      na.rm = T
-    )
-    out <- out[2:ncol(out)]
-    names(out) <- stringr::str_replace_all(stringr::str_sub(names(out), -7, -1), "\\.", "-")
-    out <- data.frame(precipitation = t(out))
-    out <- tibble::rownames_to_column(out, "year")
-    out <- tidyr::separate(out, year, into = c("year", "month"), sep = "-")
-    out$stat <- stats[i]
-    tibble(out[, c(1, 2, 4, 3)])
-  })
-  results <- do.call(rbind, results)
-  results
+
+  absolute <- terra::zonal(absolute, p_raster, fun = "mean")
+  anomaly <- terra::zonal(anomaly, p_raster, fun = "mean")
+  spi <- lapply(spi, function(x) as.numeric(terra::zonal(x, p_raster, fun = "mean"))[-1])
+
+  results <- tibble(
+    years = as.numeric(years),
+    months = as.numeric(months),
+    absolute = as.numeric(absolute)[-1],
+    anomaly = as.numeric(anomaly)[-1]
+  )
+
+  tibble(cbind(results, as.data.frame(spi)))
 }
 
 
-.prec_extract <- function(chirps, shp, stats) {
-  year <- NULL
+.prec_extract <- function(shp, absolute, anomaly, spi, todisk, rundir) {
+  dates <- strsplit(substr(names(absolute), 13, 19), "\\.")
+  years <- unlist(lapply(dates, function(x) x[[1]]))
+  months <- unlist(lapply(dates, function(x) x[[2]]))
+
   shp_v <- vect(shp)
-  chirps[chirps == -9999] <- NA
-  results <- lapply(1:length(stats), function(i) {
-    out <- terra::extract(chirps,
-      shp_v,
-      fun = stats[i],
-      na.rm = T
-    )
-    out <- out[2:ncol(out)]
-    names(out) <- stringr::str_replace_all(stringr::str_sub(names(out), -7, -1), "\\.", "-")
-    out <- data.frame(precipitation = t(out))
-    out <- tibble::rownames_to_column(out, "year")
-    out <- tidyr::separate(out, year, into = c("year", "month"), sep = "-")
-    out$stat <- stats[i]
-    tibble(out[, c(1, 2, 4, 3)])
-  })
-  results <- do.call(rbind, results)
-  results
+  absolute <- terra::extract(absolute, shp_v, fun = "mean")
+  anomaly <- terra::extract(anomaly, shp_v, fun = "mean")
+  spi <- lapply(spi, function(x) as.numeric(terra::extract(x, shp_v, fun = "mean"))[-1])
+
+  results <- tibble(
+    years = as.numeric(years),
+    months = as.numeric(months),
+    absolute = as.numeric(absolute)[-1],
+    anomaly = as.numeric(anomaly)[-1]
+  )
+
+  tibble(cbind(results, as.data.frame(spi)))
 }
 
 
-.prec_exact_extractr <- function(chirps, shp, stats) {
-  year <- NULL
-  calc_stats <- stringr::str_replace_all(stats, "sd", "stdev")
-  shp_v <- vect(shp)
-  chirps[chirps == -9999] <- NA
-  results <- lapply(1:length(stats), function(i) {
-    out <- exactextractr::exact_extract(
-      chirps,
-      shp,
-      fun = calc_stats[i]
-    )
-    names(out) <- stringr::str_replace_all(stringr::str_sub(names(out), -7, -1), "\\.", "-")
-    out <- data.frame(precipitation = t(out))
-    out <- tibble::rownames_to_column(out, "year")
-    out <- tidyr::separate(out, year, into = c("year", "month"), sep = "-")
-    out$stat <- stats[i]
-    tibble(out[, c(1, 2, 4, 3)])
-  })
-  results <- do.call(rbind, results)
-  results
+.prec_exact_extractr <- function(shp, absolute, anomaly, spi, todisk, rundir) {
+  dates <- strsplit(substr(names(absolute), 13, 19), "\\.")
+  years <- unlist(lapply(dates, function(x) x[[1]]))
+  months <- unlist(lapply(dates, function(x) x[[2]]))
+
+  absolute <- exactextractr::exact_extract(absolute, shp, fun = "mean")
+  anomaly <- exactextractr::exact_extract(anomaly, shp, fun = "mean")
+  spi <- lapply(spi, function(x) as.numeric(exactextractr::exact_extract(x, shp, fun = "mean")))
+
+  results <- tibble(
+    years = as.numeric(years),
+    months = as.numeric(months),
+    absolute = as.numeric(absolute),
+    anomaly = as.numeric(anomaly)
+  )
+
+  tibble(cbind(results, as.data.frame(spi)))
 }

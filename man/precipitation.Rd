@@ -5,13 +5,17 @@
 \alias{precipitation}
 \title{Calculate precipitation statistics}
 \format{
-A tibble with a column for years, months, the statistic and the corresponding value (in mm)
+A tibble with a column for years, months, absolute rainfall, rainfall
+anomaly and one or more columns per selected time-scale for SPI.
 }
 \description{
 This functions allows to calculate precipitation statistics based on the
 CHIRPS rainfall estimates. Corresponding to the time-frame of the analysis
-of the portfolio, monthly precipitation statistics are calculated. Users
-can decide which statistics to calculate.
+of the portfolio, monthly precipitation statistics are calculated. These include
+the total rainfall amount, rainfall anomaly against the 1981-2010 climate normal,
+and the Standardized Precipitation Index (SPI) which is available for scales
+between 1 and 48 months. Th function needs the \code{SPEI} package to be
+installed.
 The required resources for this indicator are:
 \itemize{
 \item \code{chirps}
@@ -20,7 +24,9 @@ The required resources for this indicator are:
 \details{
 The following arguments can be set:
 \describe{
-\item{stats}{The statistic to calculate. One or multiple of: 'mean', 'median', 'sd'.}
+\item{scales_spi}{An integer vector indicating the scales for which to calculate the SPI.}
+\item{engine}{The preferred processing functions from either one of "zonal",
+"extract" or "exactextract" as character.}
 }
 }
 \keyword{indicator}

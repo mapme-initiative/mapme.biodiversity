@@ -7,7 +7,7 @@
 .calc_precipitation(
   shp,
   chirps,
-  stats_precipitation,
+  scales_spi = 12,
   engine = "zonal",
   rundir = tempdir(),
   verbose = TRUE,
@@ -20,7 +20,7 @@
 
 \item{chirps}{The CHIRPS resource}
 
-\item{stats_precipitation}{A character vector of statistics to calculate}
+\item{scales_spi}{Integers specifying time-scales for SPI}
 
 \item{rundir}{A directory where intermediate files are written to.}
 
