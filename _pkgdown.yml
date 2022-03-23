@@ -21,6 +21,9 @@ home:
     href: https://github.com/mapme-initiative/mapme.biodiversity/issues
 destination: docs
 
+navbar:
+  bg: primary
+
 reference:
 - title: Functions
   desc: User-facing functions
