@@ -7,6 +7,6 @@
 #' @importFrom tibble tibble
 #' @importFrom magrittr "%>%"
 #' @importFrom utils download.file
-#' @keywords package
+#' @keywords internal
 globalVariables(c(":=", "!!", ".id"))
 NULL
