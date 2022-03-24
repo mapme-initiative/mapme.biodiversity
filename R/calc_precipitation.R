@@ -40,7 +40,7 @@ NULL
 .calc_precipitation <- function(shp,
                                 chirps,
                                 scales_spi = 12,
-                                engine = "zonal",
+                                engine = "extract",
                                 rundir = tempdir(),
                                 verbose = TRUE,
                                 todisk = FALSE,
@@ -74,6 +74,13 @@ NULL
   }
 
   src_names <- names(chirps)
+  # set values smaller 0 to NA
+  chirps <- clamp(chirps,
+    lower = 0, upper = Inf, values = FALSE,
+    filename = ifelse(todisk, file.path(rundir, "chirps.tif"), ""),
+    overwrite = TRUE,
+    filetype = "GTiff"
+  )
   layer_years <- as.numeric(substr(src_names, 13, 17))
   climate_chirps <- chirps[[which(layer_years %in% 1981:2010)]]
   target_chirps <- chirps[[which(layer_years %in% years)]]
@@ -83,12 +90,15 @@ NULL
   layer_months <- as.numeric(substr(layer_names, 18, 19))
   # chirps[chirps < 0] = NA
   climate_chirps <- lapply(1:12, function(i) {
-    app(climate_chirps[[layer_months == i]], fun = "mean", cores = 4)
+    app(climate_chirps[[layer_months == i]],
+      fun = "mean", cores = cores,
+      filename = ifelse(todisk, file.path(rundir, paste0("chirps_", i, ".tif")), ""),
+      overwrite = TRUE, wopt = list(filetype = "GTiff")
+    )
   })
   climate_chirps <- do.call(c, climate_chirps)
   names(climate_chirps) <- c(1:12)
   anomaly_chirps <- target_chirps - climate_chirps
-  climate_chirps <- climate_chirps[[1:12]]
 
   # calculate SPI
   spi_chirps <- lapply(scales_spi, function(scale) {
@@ -98,16 +108,20 @@ NULL
       )
     )
     target_years_spi <- switch(s,
+      years[1] - 1,
       years[1] - 2,
       years[1] - 3,
-      years[1] - 4,
-      years[1] - 5
+      years[1] - 4
     )
     target_years_spi <- target_years_spi:years[length(years)]
     target_spi <- chirps[[which(layer_years %in% target_years_spi)]]
-    spi_chirps <- app(target_spi, fun = function(x) {
-      SPEI::spi(x, scale = scale)$fitted
-    })
+    spi_chirps <- app(target_spi,
+      scale = scale, fun = function(x, scale) {
+        SPEI::spi(x, scale = scale, na.rm = TRUE)$fitted
+      }, cores = cores, overwrite = TRUE, wopt = list(filetype = "GTiff"),
+      filename =
+        ifelse(todisk, file.path(rundir, paste0("spi_", scale, ".tif")), "")
+    )
     names(spi_chirps) <- names(target_spi)
     spi_chirps[[names(target_chirps)]]
   })
@@ -131,7 +145,7 @@ NULL
 
 
   if (processing_mode == "asset") {
-    resuls <- extractor(
+    results <- extractor(
       shp = shp,
       absolute = target_chirps,
       anomaly = anomaly_chirps,

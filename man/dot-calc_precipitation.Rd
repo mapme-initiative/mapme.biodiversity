@@ -8,7 +8,7 @@
   shp,
   chirps,
   scales_spi = 12,
-  engine = "zonal",
+  engine = "extract",
   rundir = tempdir(),
   verbose = TRUE,
   todisk = FALSE,
