@@ -26,7 +26,8 @@ available_indicators <- function(indicator = NULL) {
       arguments = list(
         min_size = 10,
         min_cover = 30
-      )
+      ),
+      processing_mode = "asset"
     ),
     emissions = list(
       name = ".calc_emissions",
@@ -38,7 +39,8 @@ available_indicators <- function(indicator = NULL) {
       arguments = list(
         min_size = 10,
         min_cover = 30
-      )
+      ),
+      processing_mode = "asset"
     ),
     treeloss = list(
       name = ".calc_treeloss",
@@ -50,7 +52,8 @@ available_indicators <- function(indicator = NULL) {
       arguments = list(
         min_size = 10,
         min_cover = 30
-      )
+      ),
+      processing_mode = "asset"
     ),
     elevation = list(
       name = ".calc_dem",
@@ -58,7 +61,8 @@ available_indicators <- function(indicator = NULL) {
       arguments = list(
         stats_elevation = "mean",
         engine = "zonal"
-      )
+      ),
+      processing_mode = "asset"
     ),
     tri = list(
       name = ".calc_tri",
@@ -66,14 +70,16 @@ available_indicators <- function(indicator = NULL) {
       arguments = list(
         stats_tri = "mean",
         engine = "zonal"
-      )
+      ),
+      processing_mode = "asset"
     ),
     precipitation = list(
       name = ".calc_precipitation",
       inputs = list(chirps = "raster"),
       arguments = list(
         scales_spi = 12
-      )
+      ),
+      processing_mode = "portfolio"
     )
   )
 

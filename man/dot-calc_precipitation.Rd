@@ -12,6 +12,7 @@
   rundir = tempdir(),
   verbose = TRUE,
   todisk = FALSE,
+  processing_mode = "portfolio",
   ...
 )
 }

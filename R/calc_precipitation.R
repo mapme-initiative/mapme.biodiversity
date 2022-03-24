@@ -44,6 +44,7 @@ NULL
                                 rundir = tempdir(),
                                 verbose = TRUE,
                                 todisk = FALSE,
+                                processing_mode = "portfolio",
                                 ...) {
   if (!"SPEI" %in% utils::installed.packages()[, 1]) {
     stop("R package 'SPEI' required. Please install via 'install.packages('SPEI'')'")
@@ -56,6 +57,7 @@ NULL
   }
   if (ncell(chirps) > 1024 * 1024) todisk <- TRUE
   years <- attributes(shp)$years
+  cores <- attributes(shp)$cores
 
   if (any(scales_spi < 0) | any(scales_spi > 48)) {
     stop("Values of 'scales_spi' for SPI calculation must be integers between 0 and 48.")
@@ -79,12 +81,12 @@ NULL
   # calculate long-term monthly average
   layer_names <- names(climate_chirps)
   layer_months <- as.numeric(substr(layer_names, 18, 19))
+  # chirps[chirps < 0] = NA
   climate_chirps <- lapply(1:12, function(i) {
-    mean(climate_chirps[[layer_months == i]])
+    app(climate_chirps[[layer_months == i]], fun = "mean", cores = 4)
   })
   climate_chirps <- do.call(c, climate_chirps)
   names(climate_chirps) <- c(1:12)
-  climate_chirps <- rep(climate_chirps, length(years))
   anomaly_chirps <- target_chirps - climate_chirps
   climate_chirps <- climate_chirps[[1:12]]
 
@@ -116,26 +118,20 @@ NULL
     stop(sprintf("Engine %s is not an available engine. Please choose one of: %s", engine, paste(available_engines, collapse = ", ")))
   }
 
+
   if (engine == "extract") {
-    .prec_extract(
-      shp = shp,
-      absolute = target_chirps,
-      anomaly = anomaly_chirps,
-      spi = spi_chirps,
-      todisk = todisk,
-      rundir = rundir
-    )
-  } else if (engine == "exactextract") {
-    .prec_exact_extractr(
-      shp = shp,
-      absolute = target_chirps,
-      anomaly = anomaly_chirps,
-      spi = spi_chirps,
-      todisk = todisk,
-      rundir = rundir
-    )
-  } else {
-    .prec_zonal(
+    extractor <- .prec_extract
+  }
+  if (engine == "exactextract") {
+    extractor <- .prec_exact_extractr
+  }
+  if (engine == "zonal") {
+    extractor <- .prec_zonal
+  }
+
+
+  if (processing_mode == "asset") {
+    resuls <- extractor(
       shp = shp,
       absolute = target_chirps,
       anomaly = anomaly_chirps,
@@ -144,6 +140,22 @@ NULL
       rundir = rundir
     )
   }
+
+  if (processing_mode == "portfolio") {
+    results <- parallel::mclapply(1:nrow(shp), function(i) {
+      out <- extractor(
+        shp = shp[i, ],
+        absolute = target_chirps,
+        anomaly = anomaly_chirps,
+        spi = spi_chirps,
+        todisk = todisk,
+        rundir = rundir
+      )
+      out$.id <- i
+      out
+    }, mc.cores = cores)
+  }
+  results
 }
 
 .prec_zonal <- function(shp, absolute, anomaly, spi, todisk, rundir) {

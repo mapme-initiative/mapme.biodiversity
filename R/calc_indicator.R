@@ -65,6 +65,8 @@ calc_indicators <- function(x, indicators, ...) {
   fun <- match.fun(selected_indicator[[1]]$name)
   # required resources
   required_resources <- selected_indicator[[1]]$inputs
+  # get processing mode
+  processing_mode <- selected_indicator[[1]]$processing_mode
   # matching the specified arguments to the required arguments
   params <- .check_resource_arguments(selected_indicator, args)
   # append parameters
@@ -73,46 +75,52 @@ calc_indicators <- function(x, indicators, ...) {
   params$fun <- fun
   params$available_resources <- available_resources
   params$required_resources <- required_resources
+  params$cores <- cores
+  params$processing_mode <- processing_mode
 
-  if (verbose) {
-    progressr::handlers(
-      progressr::handler_progress(
-        format = sprintf(
-          " Calculating indicator '%s' [:bar] :percent",
-          indicator
-        ),
-        clear = FALSE,
-        width = 60
-      )
-    )
-  }
-  # apply function with parameters and add hidden id column
-  if (cores > 1) {
+  if (processing_mode == "asset") {
     if (verbose) {
-      progressr::with_progress({
-        params$p <- progressr::progressor(along = 1:nrow(x))
+      progressr::handlers(
+        progressr::handler_progress(
+          format = sprintf(
+            " Calculating indicator '%s' [:bar] :percent",
+            indicator
+          ),
+          clear = FALSE,
+          width = 60
+        )
+      )
+    }
+    # apply function with parameters and add hidden id column
+    if (cores > 1) {
+      if (verbose) {
+        progressr::with_progress({
+          params$p <- progressr::progressor(along = 1:nrow(x))
+          results <- parallel::mclapply(1:nrow(x), function(i) {
+            .prep_and_compute(x[i, ], params, i)
+          }, mc.cores = cores)
+        })
+      } else {
         results <- parallel::mclapply(1:nrow(x), function(i) {
           .prep_and_compute(x[i, ], params, i)
         }, mc.cores = cores)
-      })
+      }
     } else {
-      results <- parallel::mclapply(1:nrow(x), function(i) {
-        .prep_and_compute(x[i, ], params, i)
-      }, mc.cores = cores)
-    }
-  } else {
-    if (verbose) {
-      progressr::with_progress({
-        params$p <- progressr::progressor(along = 1:nrow(x))
+      if (verbose) {
+        progressr::with_progress({
+          params$p <- progressr::progressor(along = 1:nrow(x))
+          results <- lapply(1:nrow(x), function(i) {
+            .prep_and_compute(x[i, ], params, i)
+          })
+        })
+      } else {
         results <- lapply(1:nrow(x), function(i) {
           .prep_and_compute(x[i, ], params, i)
         })
-      })
-    } else {
-      results <- lapply(1:nrow(x), function(i) {
-        .prep_and_compute(x[i, ], params, i)
-      })
+      }
     }
+  } else { # processing_mode == "portfolio"
+    results <- .prep_and_compute(x, params, 1)
   }
   # cleanup the tmpdir for indicator
   unlink(tmpdir, recursive = TRUE, force = TRUE)
@@ -147,8 +155,8 @@ calc_indicators <- function(x, indicators, ...) {
     warning(sprintf("Error occured at polygon %s with the following error message: %s. \n Returning NAs.", i, out))
     out <- tibble(.id = i)
   }
-  if (params$verbose) params$p() # progress tick
-  out$.id <- i # add an id variable
+  if (params$verbose & params$processing_mode == "asset") params$p() # progress tick
+  if (params$processing_mode == "asset") out$.id <- i # add an id variable
   unlink(rundir, recursive = TRUE, force = TRUE) # delete the current rundir
   out # return
 }
