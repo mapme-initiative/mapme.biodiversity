@@ -33,7 +33,7 @@ NULL
 #' @importFrom utils unzip
 #' @name WorldClim_Minimum_Temperature
 #' @keywords internal
-#'
+#' @noRd
 
 .get_min_temperature <- function(x,
                                  rundir = tempdir(),
@@ -57,7 +57,7 @@ NULL
 #' @importFrom utils unzip
 #' @name WorldClim_Maximum_Temperature
 #' @keywords internal
-#'
+#' @noRd
 
 .get_max_temperature <- function(x,
                                  rundir = tempdir(),
@@ -81,7 +81,7 @@ NULL
 #' @importFrom utils unzip
 #' @name WorldClim_Mean_Precipitation
 #' @keywords internal
-#'
+#' @noRd
 
 .get_precipitation <- function(x,
                                rundir = tempdir(),
@@ -97,6 +97,7 @@ NULL
 #'
 #' @return A character vector.
 #' @keywords internal
+#' @noRd
 .get_climatic_variables <- function(x,
                                     layer,
                                     rundir = tempdir(),
@@ -158,6 +159,7 @@ NULL
 #'
 #' @return A character vector.
 #' @keywords internal
+#' @noRd
 .get_climate_url <- function(layer, year) {
   if (year %in% c(2000:2009)) {
     paste0(

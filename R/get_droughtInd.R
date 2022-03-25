@@ -20,7 +20,7 @@ NULL
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose Logical controlling verbosity.
 #' @keywords internal
-#'
+#' @noRd
 
 .get_drought_ind <- function(x,
                              rundir = tempdir(),

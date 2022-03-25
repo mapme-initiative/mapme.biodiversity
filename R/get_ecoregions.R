@@ -28,7 +28,7 @@ NULL
 #' @param verbose Logical controlling verbosity.
 #' @importFrom utils unzip
 #' @keywords internal
-#'
+#' @noRd
 
 .get_ecoregions <- function(x,
                             rundir = tempdir(),

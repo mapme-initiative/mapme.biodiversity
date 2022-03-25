@@ -28,7 +28,7 @@ NULL
 #' @param verbose Logical controlling verbosity.
 #' @importFrom utils unzip
 #' @keywords internal
-#'
+#' @noRd
 
 .get_mangrove <- function(x,
                           rundir = tempdir(),
@@ -66,6 +66,7 @@ NULL
 #'
 #' @return Nothing.
 #' @keywords internal
+#' @noRd
 .unzip_mangrove <- function(zip, rundir) {
   bn <- basename(zip)
   if (bn == "gmw-extent_2007.zip") {
@@ -118,6 +119,7 @@ NULL
 #'
 #' @return A character vector
 #' @keywords internal
+#' @noRd
 .get_mangrove_url <- function(target_year) {
   available_years <- c(1996, 2007:2010, 2015, 2016)
   if (target_year %in% available_years) {

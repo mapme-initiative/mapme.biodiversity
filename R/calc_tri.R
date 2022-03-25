@@ -7,7 +7,7 @@
 #' index (tri) statistics for polygons. For each polygon, the desired statistic/s
 #' (mean, median or sd) is/are returned.
 #' The required resources for this indicator are:
-#'  - \code{srtmelevation}
+#'  - \code{srtmdem}
 #'
 #' The following arguments can be set:
 #' \describe{
@@ -41,8 +41,8 @@ NULL
 #' terra, or exactextract from exactextractr as desired.
 #'
 #' @param shp A single polygon for which to calculate the tri statistic
-#' @param srtmelevation The elevation raster resource from SRTM
-#' @param stats Function to be applied to compute statistics for polygons either
+#' @param srtmdem The elevation raster resource from SRTM
+#' @param stats_tri Function to be applied to compute statistics for polygons either
 #'   one or multiple inputs as character "mean", "median" or "sd".
 #' @param engine The preferred processing functions from either one of "zonal",
 #'   "extract" or "exactextract" as character.
@@ -53,53 +53,58 @@ NULL
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
-#'
+#' @noRd
 
 .calc_tri <- function(shp,
-                      srtmelevation,
+                      srtmdem,
                       engine = "zonal",
-                      stats = "mean",
+                      stats_tri = "mean",
                       rundir = tempdir(),
                       verbose = TRUE,
                       todisk = FALSE,
                       ...) {
-
+  if (is.null(srtmdem)) {
+    stat_names <- paste("terrain_ruggedness_index_", stats_tri, sep = "")
+    out <- tibble(as.data.frame(lapply(1:length(stats_tri), function(i) NA)))
+    names(out) <- stat_names
+    return(out)
+  }
   # check if input engines are correct
   available_engines <- c("zonal", "extract", "exactextract")
   if (!engine %in% available_engines) {
     stop(sprintf("Engine %s is not an available engine. Please choose one of: %s", engine, paste(available_engines, collapse = ", ")))
   }
 
-  if (ncell(srtmelevation) > 1024 * 1024) todisk <- TRUE
+  if (ncell(srtmdem) > 1024 * 1024) todisk <- TRUE
   available_stats <- c("mean", "median", "sd")
   # check if input stats are correct
-  if (!stats %in% available_stats) {
-    stop(sprintf("Stat %s is not an available statistics. Please choose one of: %s", stats, paste(available_stats, collapse = ", ")))
+  if (!any(stats_tri %in% available_stats)) {
+    stop(sprintf("Stat %s is not an available statistics. Please choose one of: %s", stats_tri, paste(available_stats, collapse = ", ")))
   }
 
   if (engine == "extract") {
     tibble_zstats <- .comp_tri_extract(
-      elevation = srtmelevation,
+      elevation = srtmdem,
       shp = shp,
-      stats = stats,
+      stats = stats_tri,
       todisk = todisk,
       rundir = rundir
     )
     return(tibble_zstats)
   } else if (engine == "exactextract") {
     tibble_zstats <- .comp_tri_exact_extractr(
-      elevation = srtmelevation,
+      elevation = srtmdem,
       shp = shp,
-      stats = stats,
+      stats = stats_tri,
       todisk = todisk,
       rundir = rundir
     )
     return(tibble_zstats)
   } else {
     tibble_zstats <- .comp_tri_zonal(
-      elevation = srtmelevation,
+      elevation = srtmdem,
       shp = shp,
-      stats = stats,
+      stats = stats_tri,
       todisk = todisk,
       rundir = rundir
     )
@@ -114,7 +119,7 @@ NULL
 #'
 #' @return A data-frame
 #' @keywords internal
-#'
+#' @noRd
 
 .comp_tri_zonal <- function(elevation = NULL,
                             shp = NULL,
@@ -164,7 +169,7 @@ NULL
 #'
 #' @return A data-frame
 #' @keywords internal
-#'
+#' @noRd
 
 .comp_tri_extract <- function(elevation = NULL,
                               shp = NULL,
@@ -203,7 +208,7 @@ NULL
 #'
 #' @return A data-frame
 #' @keywords internal
-#'
+#' @noRd
 
 .comp_tri_exact_extractr <- function(elevation = NULL,
                                      shp = NULL,

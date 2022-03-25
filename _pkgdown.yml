@@ -1,6 +1,29 @@
 url: ~
 template:
   bootstrap: 5
+  bslib:
+    fg: "#004658"
+    bg: "#ffffff"
+    primary: "#004658"
+    link-color: "#008c8d"
+    link-hover-color: "#de9433"
+
+home:
+  title: An R package for processing global biodiversity data
+  links:
+  - text: Learn more about MAPME
+    href: https://mapme-initiative.org/
+  - text: Read the Open Source Guide
+    href: https://github.com/mapme-initiative/mapme.osg
+  - text: Browse source code
+    href: https://github.com/mapme-initiative/mapme.biodiversity
+  - text: File an issue
+    href: https://github.com/mapme-initiative/mapme.biodiversity/issues
+destination: docs
+
+navbar:
+  bg: primary
+
 reference:
 - title: Functions
   desc: User-facing functions
@@ -8,6 +31,8 @@ reference:
   - init_portfolio
   - get_resources
   - calc_indicators
+  - write_portfolio
+  - read_portfolio
 - title: Resources
   desc: Supported resources.
 - contents:
@@ -16,4 +41,11 @@ reference:
   desc: Supported indicators.
 - contents:
   - has_keyword("indicator")
+
+authors:
+  Darius Görgen:
+    href: http://dariusgoergen.com/
+  Om Prakash Bhandari:
+  MAPME-Initiative:
+    href: https://mapme-initiative.org/
 

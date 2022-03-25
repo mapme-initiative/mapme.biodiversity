@@ -20,6 +20,7 @@ Description: Biodiversity areas, especially primary forest, serve a
 License: GPL (>= 3)
 Imports:
     curl,
+    data.table,
     dplyr,
     magrittr,
     progress,
@@ -29,9 +30,11 @@ Imports:
     stringr,
     terra,
     tibble,
-    tidyr
+    tidyr,
+    tidyselect
 Suggests: 
     exactextractr,
+    SPEI,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Encoding: UTF-8

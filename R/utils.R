@@ -2,6 +2,7 @@
 #'
 #' @param resources A character vector with requested resources
 #' @keywords internal
+#' @noRd
 .check_requested_resources <- function(resources) {
   names_resources <- names(available_resources())
   # check for unsupported resources
@@ -18,6 +19,7 @@
 #'
 #' @param indicators A character vector with requested indicators
 #' @keywords internal
+#' @noRd
 .check_requested_indicator <- function(indicators) {
   names_indicators <- names(available_indicators())
   # check for unsupported resources
@@ -44,6 +46,7 @@
 #' @param req_resources A character vector with requested resources
 #' @param needed default value being FALSE
 #' @keywords internal
+#' @noRd
 .check_existing_resources <- function(ex_resources,
                                       req_resources,
                                       needed = FALSE) {
@@ -84,6 +87,7 @@
 #' @param resource A character vector with requested resource
 #' @param args The arguments of requested resource
 #' @keywords internal
+#' @noRd
 .check_resource_arguments <- function(resource, args) {
   # TODO: What about portfolio wide parameters?
   resource_name <- names(resource)
@@ -132,6 +136,7 @@
 #' @param dy difference in latitude value per grid
 #' @param proj projection system
 #' @keywords internal
+#' @noRd
 .make_global_grid <- function(xmin = -180, xmax = 170, dx = 10,
                               ymin = -50, ymax = 80, dy = 10,
                               proj = NULL) {
@@ -171,6 +176,7 @@
 #' @param rundir A directory where intermediate files are written to.
 #' @param remove if TRUE, removes the zip else keeps it
 #' @keywords internal
+#' @noRd
 .unzip_and_remove <- function(zip, rundir, remove = TRUE) {
   suppressWarnings(unzip(
     zipfile = file.path(rundir, basename(zip)),
@@ -189,6 +195,7 @@
 #' @param available_years Numeric/s indicating the available year/s
 #' @param indicator A character vector with target indicator
 #' @keywords internal
+#' @noRd
 .check_available_years <- function(target_years, available_years, indicator) {
   if (any(!target_years %in% available_years)) {
     message(sprintf("Some target years are not available for %s.", indicator))
@@ -214,48 +221,80 @@
 #' @param stubbornnes default value being 6
 #' @param check_existence default to TRUE
 #' @keywords internal
+#' @noRd
 .download_or_skip <- function(urls,
                               filenames,
                               verbose,
                               stubbornnes = 6,
-                              check_existence = TRUE) {
-  options(timeout = max(600, getOption("timeout")))
-  retry <- TRUE
-  counter <- 1
-  if (length(urls) < 10) verbose <- FALSE
-  while (retry) {
-    if (verbose) pb <- progress::progress_bar$new(total = length(urls))
-    if (verbose) pb$tick(0)
-    unsuccessful <- lapply(seq_along(urls), function(i) {
-      if (file.exists(filenames[i])) {
-        if (verbose) pb$tick()
-        return(NULL) # file exists locally
-      }
-      if (check_existence) {
-        if (!RCurl::url.exists(urls[i])) {
-          return(NULL)
+                              check_existence = TRUE,
+                              aria_bin = NULL) {
+  if (is.null(aria_bin)) {
+    options(timeout = max(600, getOption("timeout")))
+    retry <- TRUE
+    counter <- 1
+    if (length(urls) < 10) verbose <- FALSE
+    while (retry) {
+      if (verbose) pb <- progress::progress_bar$new(total = length(urls))
+      if (verbose) pb$tick(0)
+      unsuccessful <- lapply(seq_along(urls), function(i) {
+        if (file.exists(filenames[i])) {
+          if (verbose) pb$tick()
+          return(NULL) # file exists locally
         }
-      } # file does not exist remotely
+        if (check_existence) {
+          if (!RCurl::url.exists(urls[i])) {
+            return(NULL)
+          }
+        } # file does not exist remotely
 
-      status <- download.file(urls[i], filenames[i], quiet = TRUE, "libcurl")
-      if (status != 0) {
-        return(list(urls = urls[i], filenames = filenames[i]))
+        status <- download.file(urls[i], filenames[i], quiet = TRUE, "libcurl")
+        if (status != 0) {
+          return(list(urls = urls[i], filenames = filenames[i]))
+        }
+
+        if (verbose) pb$tick()
+        NULL
+      })
+      counter <- counter + 1
+
+      unsuccessful <- unsuccessful[which(sapply(unsuccessful, function(x) !is.null(x)))]
+      if (length(unsuccessful) > 0 & counter <= stubbornnes) {
+        warning(paste("Some target files have not been downloaded correctly. ",
+          "Download will be retried.",
+          sep = ""
+        ))
+        urls <- sapply(unsuccessful, function(x) x$urls)
+        filenames <- sapply(unsuccessful, function(x) x$filenames)
       }
-
-      if (verbose) pb$tick()
-      NULL
-    })
-    counter <- counter + 1
-
-    unsuccessful <- unsuccessful[which(sapply(unsuccessful, function(x) !is.null(x)))]
-    if (length(unsuccessful) > 0 & counter <= stubbornnes) {
-      warning(paste("Some target files have not been downloaded correctly. ",
-        "Download will be retried.",
-        sep = ""
-      ))
-      urls <- sapply(unsuccessful, function(x) x$urls)
-      filenames <- sapply(unsuccessful, function(x) x$filenames)
+      if (counter > stubbornnes | length(unsuccessful) == 0) retry <- FALSE
     }
-    if (counter > stubbornnes | length(unsuccessful) == 0) retry <- FALSE
+  } else { # use aria_bin
+
+    exists_index <- which(file.exists(filenames))
+    filenames <- filenames[-exists_index]
+    urls <- urls[-exists_index]
+    if (length(filenames) == 0) {
+      return(NULL)
+    }
+
+    lines <- lapply(1:length(urls), function(i) {
+      c(urls[i], paste0("  out=", filenames[i]))
+    })
+    lines <- unlist(lines)
+    tmpfile <- tempfile()
+    writeLines(lines, tmpfile)
+    if (verbose) {
+      args <- sprintf(
+        "--show-console-readout=false --console-log-level=warn -c -j 8 -i %s",
+        tmpfile
+      )
+    } else {
+      args <- sprintf(
+        "--quiet -c -j 8 -i %s",
+        tmpfile
+      )
+    }
+    out <- system2("/bin/aria2c", args = args)
+    file.remove(tmpfile)
   }
 }

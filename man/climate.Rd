@@ -16,7 +16,13 @@ spatial resolution climate surfaces for global land areas". This resource
 represents multiple climatic variables from which we will be requiring minimum
 temperature, maximum temperature, and mean precipitation layers. The layers are
 available to download for the period 2000 - 2018 on monthly basis from WorldClim.
-Encoded as (°C), representing the minimum and maximum temperature per output grid
-cell while encoded as (mm), representing the mean precipitation per output grid cell.
+}
+\details{
+Enlisted different resources can be reqested with their dedicated functions:
+\describe{
+\item{tmin}{Encoded as (°C), representing the minimum temperature per output grid cell.}
+\item{tmax}{Encoded as (°C), representing the maximum temperature per output grid cell.}
+\item{prec}{Encoded as (mm), representing the mean precipitation per output grid cell.}
+}
 }
 \keyword{resource}

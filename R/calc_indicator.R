@@ -47,6 +47,7 @@ calc_indicators <- function(x, indicators, ...) {
 #' @keywords internal
 #' @importFrom dplyr relocate last_col
 #' @importFrom tidyr nest
+#' @importFrom data.table rbindlist
 .get_single_indicator <- function(x, indicator, ...) {
   i <- NULL
   # get arguments from function call and portfolio object
@@ -64,6 +65,8 @@ calc_indicators <- function(x, indicators, ...) {
   fun <- match.fun(selected_indicator[[1]]$name)
   # required resources
   required_resources <- selected_indicator[[1]]$inputs
+  # get processing mode
+  processing_mode <- selected_indicator[[1]]$processing_mode
   # matching the specified arguments to the required arguments
   params <- .check_resource_arguments(selected_indicator, args)
   # append parameters
@@ -72,51 +75,57 @@ calc_indicators <- function(x, indicators, ...) {
   params$fun <- fun
   params$available_resources <- available_resources
   params$required_resources <- required_resources
+  params$cores <- cores
+  params$processing_mode <- processing_mode
 
-  if (verbose) {
-    progressr::handlers(
-      progressr::handler_progress(
-        format = sprintf(
-          " Calculating indicator '%s' [:bar] :percent",
-          indicator
-        ),
-        clear = FALSE,
-        width = 60
-      )
-    )
-  }
-  # apply function with parameters and add hidden id column
-  if (cores > 1) {
+  if (processing_mode == "asset") {
     if (verbose) {
-      progressr::with_progress({
-        params$p <- progressr::progressor(along = 1:nrow(x))
+      progressr::handlers(
+        progressr::handler_progress(
+          format = sprintf(
+            " Calculating indicator '%s' [:bar] :percent",
+            indicator
+          ),
+          clear = FALSE,
+          width = 60
+        )
+      )
+    }
+    # apply function with parameters and add hidden id column
+    if (cores > 1) {
+      if (verbose) {
+        progressr::with_progress({
+          params$p <- progressr::progressor(along = 1:nrow(x))
+          results <- parallel::mclapply(1:nrow(x), function(i) {
+            .prep_and_compute(x[i, ], params, i)
+          }, mc.cores = cores)
+        })
+      } else {
         results <- parallel::mclapply(1:nrow(x), function(i) {
           .prep_and_compute(x[i, ], params, i)
         }, mc.cores = cores)
-      })
+      }
     } else {
-      results <- parallel::mclapply(1:nrow(x), function(i) {
-        .prep_and_compute(x[i, ], params, i)
-      }, mc.cores = cores)
-    }
-  } else {
-    if (verbose) {
-      progressr::with_progress({
-        params$p <- progressr::progressor(along = 1:nrow(x))
+      if (verbose) {
+        progressr::with_progress({
+          params$p <- progressr::progressor(along = 1:nrow(x))
+          results <- lapply(1:nrow(x), function(i) {
+            .prep_and_compute(x[i, ], params, i)
+          })
+        })
+      } else {
         results <- lapply(1:nrow(x), function(i) {
           .prep_and_compute(x[i, ], params, i)
         })
-      })
-    } else {
-      results <- lapply(1:nrow(x), function(i) {
-        .prep_and_compute(x[i, ], params, i)
-      })
+      }
     }
+  } else { # processing_mode == "portfolio"
+    results <- .prep_and_compute(x, params, 1)
   }
   # cleanup the tmpdir for indicator
   unlink(tmpdir, recursive = TRUE, force = TRUE)
   # bind results to data.frame
-  results <- do.call(rbind, results)
+  results <- tibble(data.table::rbindlist(results, fill = TRUE))
   # nest the results
   results <- nest(results, !!indicator := !.id)
   # attach results
@@ -132,6 +141,7 @@ calc_indicators <- function(x, indicators, ...) {
 #' Helper to abstract preparation and computation
 #' of indicators per polygon
 #' @keywords internal
+#' @noRd
 .prep_and_compute <- function(shp, params, i) {
   rundir <- file.path(params$tmpdir, i) # create a rundir name
   dir.create(rundir, showWarnings = FALSE) # create the current rundir
@@ -141,9 +151,13 @@ calc_indicators <- function(x, indicators, ...) {
   processed_resources <- .read_source(params, rundir)
   params <- append(params, processed_resources)
   # call the indicator function with the associated parameters
-  out <- do.call(params$fun, args = params)
-  if (params$verbose) params$p() # progress tick
-  out$.id <- i # add an id variable
+  out <- try(do.call(params$fun, args = params))
+  if (inherits(out, "try-error")) {
+    warning(sprintf("Error occured at polygon %s with the following error message: %s. \n Returning NAs.", i, out))
+    out <- tibble(.id = i)
+  }
+  if (params$verbose & params$processing_mode == "asset") params$p() # progress tick
+  if (params$processing_mode == "asset") out$.id <- i # add an id variable
   unlink(rundir, recursive = TRUE, force = TRUE) # delete the current rundir
   out # return
 }
@@ -159,17 +173,25 @@ calc_indicators <- function(x, indicators, ...) {
     if (resource_type == "raster") {
       # retrieve tiles that intersect with the shp extent
       tindex <- read_sf(available_resources[resource_name], quiet = TRUE)
-      target_files <- tindex$location[unlist(st_intersects(shp, tindex))]
-
-      if (length(target_files) == 0) {
-        warning("Does not intersect.")
-        return(NULL)
-      } else if (length(target_files) == 1) {
-        out <- terra::rast(target_files)
+      all_bboxes <- lapply(1:nrow(tindex), function(i) paste(as.numeric(st_bbox(tindex[i, ])), collapse = " "))
+      is_stacked <- length(unique(unlist(all_bboxes))) == 1
+      if (is_stacked) {
+        filenames <- basename(tindex$location)
+        out <- terra::rast(tindex$location)
+        names(out) <- filenames
       } else {
-        # create a vrt for multiple targets
-        vrt_name <- tempfile("vrt", fileext = ".vrt", tmpdir = rundir)
-        out <- terra::vrt(target_files, filename = vrt_name)
+        target_files <- tindex$location[unlist(st_intersects(shp, tindex))]
+
+        if (length(target_files) == 0) {
+          warning("Does not intersect.")
+          return(NULL)
+        } else if (length(target_files) == 1) {
+          out <- terra::rast(target_files)
+        } else {
+          # create a vrt for multiple targets
+          vrt_name <- tempfile("vrt", fileext = ".vrt", tmpdir = rundir)
+          out <- terra::vrt(target_files, filename = vrt_name)
+        }
       }
 
       # crop the source to the extent of the current polygon

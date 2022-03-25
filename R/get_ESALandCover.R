@@ -23,7 +23,7 @@ NULL
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose Logical controlling verbosity.
 #' @keywords internal
-#'
+#' @noRd
 
 .get_esa_land_cover <- function(x,
                                 rundir = tempdir(),

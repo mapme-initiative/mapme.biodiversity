@@ -24,7 +24,7 @@ NULL
 #' @param verbose Logical controlling verbosity.
 #' @importFrom utils unzip
 #' @keywords internal
-#'
+#' @noRd
 
 .get_srtm_dem <- function(x,
                           rundir = tempdir(),
@@ -40,14 +40,24 @@ NULL
     stop("The extent of the portfolio does not intersect with the SRTM grid.")
   }
   urls <- unlist(sapply(tile_ids, function(tile) .get_srtm_url(tile)))
+  srtm_url <- "https://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/"
+  srtm_list <- RCurl::getURL(srtm_url, dirlistonly = TRUE, ftp.use.epsv = FALSE)
+  srtm_list <- unique(stringr::str_extract_all(srtm_list, stringr::regex("srtm_\\s*(.*?)\\s*.zip"))[[1]])
+  urls <- urls[which(basename(urls) %in% srtm_list)]
   filenames <- file.path(rundir, basename(urls))
   if (any(file.exists(filenames))) {
     message("Skipping existing files in output directory.")
   }
   # start download in a temporal directory within tmpdir
-  .download_or_skip(urls, filenames, verbose)
+  aria_bin <- attributes(x)$aria_bin
+  .download_or_skip(
+    urls = urls,
+    filenames = filenames,
+    verbose = verbose,
+    aria_bin = aria_bin
+  )
   # unzip zip files
-  sapply(filenames, function(zip) .unzip_and_remove(zip, rundir))
+  sapply(filenames, function(zip) .unzip_and_remove(zip, rundir, remove = FALSE))
   # return paths to the rasters
   gsub(".zip$", ".tif", filenames)
 }
@@ -59,6 +69,7 @@ NULL
 #'
 #' @return A character vector
 #' @keywords internal
+#' @noRd
 .get_srtm_url <- function(tile) {
   index.c <- tile %% 72
   index.r <- 24 - floor(tile / 72)

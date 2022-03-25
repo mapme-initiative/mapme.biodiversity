@@ -39,7 +39,7 @@ NULL
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
 #' @keywords internal
-#'
+#' @noRd
 .get_lossyear <- function(x,
                           vers_lossyear = "GFC-2020-v1.8",
                           rundir = tempdir(),

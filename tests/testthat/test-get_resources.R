@@ -11,11 +11,19 @@ test_that("get_resources works", {
   tmpdir <- system.file("tmp",
     package = "mapme.biodiversity"
   )
+
   portfolio <- init_portfolio(aoi,
     years = 2000:2020,
     cores = 1,
     outdir = outdir,
-    tmpdir = tmpdir
+    tmpdir = tmpdir,
+  )
+  portfolio <- init_portfolio(aoi,
+    years = 2000:2020,
+    cores = 1,
+    outdir = outdir,
+    tmpdir = tmpdir,
+    add_resources = FALSE
   )
 
   expect_message(

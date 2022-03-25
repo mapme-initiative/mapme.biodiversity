@@ -15,7 +15,6 @@
 #' @keywords indicator
 #' @examples
 #' head(available_indicators(), 3)
-
 available_indicators <- function(indicator = NULL) {
   all_indicators <- list(
     treecover = list(
@@ -27,7 +26,8 @@ available_indicators <- function(indicator = NULL) {
       arguments = list(
         min_size = 10,
         min_cover = 30
-      )
+      ),
+      processing_mode = "asset"
     ),
     emissions = list(
       name = ".calc_emissions",
@@ -39,7 +39,8 @@ available_indicators <- function(indicator = NULL) {
       arguments = list(
         min_size = 10,
         min_cover = 30
-      )
+      ),
+      processing_mode = "asset"
     ),
     treeloss = list(
       name = ".calc_treeloss",
@@ -51,23 +52,35 @@ available_indicators <- function(indicator = NULL) {
       arguments = list(
         min_size = 10,
         min_cover = 30
-      )
+      ),
+      processing_mode = "asset"
     ),
     elevation = list(
       name = ".calc_dem",
-      inputs = list(srtmelevation = "raster"),
+      inputs = list(srtmdem = "raster"),
       arguments = list(
-        stats = "mean",
+        stats_elevation = "mean",
         engine = "zonal"
-      )
+      ),
+      processing_mode = "asset"
     ),
-    tri <- list(
+    tri = list(
       name = ".calc_tri",
-      inputs = list(srtmelevation = "raster"),
+      inputs = list(srtmdem = "raster"),
       arguments = list(
-        stats = "mean",
+        stats_tri = "mean",
         engine = "zonal"
-      )
+      ),
+      processing_mode = "asset"
+    ),
+    precipitation = list(
+      name = ".calc_precipitation",
+      inputs = list(chirps = "raster"),
+      arguments = list(
+        scales_spi = 12,
+        engine = "extract"
+      ),
+      processing_mode = "portfolio"
     )
   )
 
@@ -79,4 +92,3 @@ available_indicators <- function(indicator = NULL) {
     all_indicators[indicator]
   }
 }
-
