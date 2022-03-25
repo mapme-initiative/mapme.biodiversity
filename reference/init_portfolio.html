@@ -78,6 +78,7 @@ and thus can be omitted during portfolio initialization.</p>
   outdir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span>,
   tmpdir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,
   cores <span class="op">=</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>,
+  add_resources <span class="op">=</span> <span class="cn">TRUE</span>,
   aria_bin <span class="op">=</span> <span class="cn">NULL</span>,
   verbose <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span></code></pre></div>
@@ -105,6 +106,10 @@ to create it. Cannot be equal to the output directory.</p></dd>
 machine available for indicator calculation. It defaults to
 <code>parallel::detectCores() - 1</code> cores, i.e. one core less than all
 available cores.</p></dd>
+<dt>add_resources</dt>
+<dd><p>Logical if existing resources in 'outdir' should be
+added to the portfolio. Defaults to TRUE. Setting it to FALSE can be of use
+e.g. if a previous download has terminated unexpectedly in order to resume.</p></dd>
 <dt>aria_bin</dt>
 <dd><p>A character vector to an aria2c executable for parallel
 downloads</p></dd>
