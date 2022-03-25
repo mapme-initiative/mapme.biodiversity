@@ -65,6 +65,15 @@ NULL
     stop(sprintf("Stat %s is not an available statistics. Please choose one of: %s", stats_accessibility, paste(available_stats, collapse = ", ")))
   }
 
+  # set max value of 65535 to NA
+  traveltime <- clamp(traveltime,
+    lower = -Inf, upper = 65534, values = FALSE,
+    filename = ifelse(todisk, file.path(rundir, "traveltime.tif"), ""),
+    overwrite = TRUE,
+    datatype = "INT1U",
+    filetype = "GTiff"
+  )
+
   if (engine == "extract") {
     .comp_traveltime_extract(
       shp = shp,
@@ -106,6 +115,7 @@ NULL
   traveltime <- terra::mask(traveltime,
     shp_v,
     filename =  ifelse(todisk, file.path(rundir, "traveltime.tif"), ""),
+    datatype = "INT1U",
     overwrite = TRUE
   )
   p_raster <- terra::rasterize(shp_v,
@@ -113,6 +123,7 @@ NULL
     field = 1:nrow(shp_v),
     touches = TRUE,
     filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
+    datatype = "INT1U",
     overwrite = TRUE
   )
 
