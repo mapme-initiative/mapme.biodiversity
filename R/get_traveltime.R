@@ -6,6 +6,25 @@
 #' from a certain location. This resource represents the travel time to major
 #' cities in the year 2015. Encoded as minutes, representing the time needed
 #' to reach that particular cell from nearby city of target population range.
+#' The following ranges to nearby cities are available:
+#' - "5k_10k"
+#' - "10k_20k"
+#' - "20k_50k"
+#' - "50k_100k"
+#' - "100k_200k"
+#' - "200k_500k"
+#' - "500k_1mio"
+#' - "1mio_5mio"
+#' - "50k_50mio"
+#' - "5k_110mio"
+#' - "20k_110mio"
+#'
+#' The following argument should be specified by users:
+#'
+#' \describe{
+#'   \item{range_traveltime}{A character vector indicating one or more ranges
+#'   to download.}
+#'   }
 #'
 #' @name traveltime
 #' @docType data
@@ -21,39 +40,45 @@ NULL
 #' Downloads Accessibility to Cities layer
 #'
 #' @param x An sf object returned by init_portfolio
-#' @param range_accessibility The city within the defined range of population
+#' @param range_traveltime The city within the defined range of population
 #'   to download, defaults to \code{"20k_50k"}.
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose Logical controlling verbosity.
 #' @keywords internal
 #' @noRd
 
-.get_accessibility <- function(x,
-                               range_accessibility = "20k_50k",
-                               rundir = tempdir(),
-                               verbose = TRUE) {
+.get_traveltime <- function(x,
+                            range_traveltime = "20k_50k",
+                            rundir = tempdir(),
+                            verbose = TRUE) {
 
   # get url for accessibility layer
-  urls <- .get_accessibility_url(range_accessibility)
+  urls <- .get_traveltime_url(range_traveltime)
   filenames <- file.path(
     rundir,
-    paste0("accessibility-", range_accessibility, ".tif")
+    paste0("traveltime-", range_traveltime, ".tif")
   )
   # start download in a temporal directory within tmpdir
-  .download_or_skip(urls, filenames, verbose, check_existence = FALSE)
+  aria_bin <- attributes(x)$aria_bin
+  .download_or_skip(urls,
+    filenames,
+    verbose,
+    check_existence = FALSE,
+    aria_bin = aria_bin
+  )
   # return paths to the raster
   filenames
 }
 
 
-#' Helper for accessibility urls generation
+#' Helper for traveltime urls generation
 #'
 #' @param range A valid range that is translated to an url
 #'
 #' @return A character string
 #' @keywords internal
 #' @noRd
-.get_accessibility_url <- function(range) {
+.get_traveltime_url <- function(range) {
   df_index <- data.frame(
     range = c(
       "5k_10k", "10k_20k", "20k_50k", "50k_100k", "100k_200k", "200k_500k",
@@ -68,7 +93,7 @@ NULL
   if (any(!range %in% df_index$range)) {
     index <- which(!range %in% df_index$range)
     basemsg <- paste("The selected %s not available ranges ",
-      "for accessibility. Available ranges are %s.",
+      "for traveltime Available ranges are %s.",
       sep = ""
     )
     if (length(index) == 1) {

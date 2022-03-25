@@ -25,9 +25,9 @@ NULL
 #' @keywords internal
 #' @noRd
 
-.get_esa_land_cover <- function(x,
-                                rundir = tempdir(),
-                                verbose = TRUE) {
+.get_esalandcover <- function(x,
+                              rundir = tempdir(),
+                              verbose = TRUE) {
   bbox <- st_bbox(x)
   target_years <- attributes(x)$years
   available_years <- c(2015:2019)
@@ -61,7 +61,8 @@ NULL
   if (any(file.exists(filenames))) {
     message("Skipping existing files in output directory.")
   }
-  .download_or_skip(urls, filenames, verbose)
+  aria_bin <- attributes(x)$aria_bin
+  .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin)
   # return all paths to the downloaded files
   filenames
 }
@@ -73,6 +74,7 @@ NULL
 #'
 #' @return A character vector
 #' @keywords internal
+#' @noRd
 .get_esa_url <- function(tile, year) {
   min_x <- st_bbox(tile)[1]
   max_y <- st_bbox(tile)[4]

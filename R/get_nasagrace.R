@@ -22,22 +22,23 @@ NULL
 #' @keywords internal
 #' @noRd
 
-.get_drought_ind <- function(x,
-                             rundir = tempdir(),
-                             verbose = TRUE) {
+.get_nasagrace <- function(x,
+                           rundir = tempdir(),
+                           verbose = TRUE) {
   target_years <- attributes(x)$years
   available_years <- 2003:2022
   target_years <- .check_available_years(
     target_years, available_years, "droughtindicators"
   )
 
-  urls <- unlist(sapply(target_years, function(year) .get_drought_url(year)))
+  urls <- unlist(sapply(target_years, function(year) .get_nasagrace_url(year)))
   filenames <- file.path(rundir, basename(urls))
   if (any(file.exists(filenames))) {
     message("Skipping existing files in output directory.")
   }
   # start download in a temporal directory within rundir
-  .download_or_skip(urls, filenames, verbose)
+  aria_bin <- attributes(x)$aria_bin
+  .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin)
   filenames
 }
 
@@ -48,7 +49,7 @@ NULL
 #'
 #' @return A character vector
 #' @keywords internal
-.get_drought_url <- function(target_year) {
+.get_nasagrace_url <- function(target_year) {
   available_years <- c(2003:2022)
   dates <- seq.Date(as.Date("2003/02/03"), as.Date("2022/02/28"), by = "week")
   available_dates <- as.integer(format(dates, "%Y%m%d"))

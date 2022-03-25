@@ -42,27 +42,27 @@ available_resources <- function(resources = NULL) {
     worldpop = list(
       type = "raster",
       source = "WorldPop",
-      downloader = ".get_popCount",
+      downloader = ".get_worldpop",
       arguments = list()
     ),
     esalandcover = list(
       type = "raster",
       source = "Copernicus (ESA)",
-      downloader = ".get_esa_land_cover",
+      downloader = ".get_esalandcover",
       arguments = list()
     ),
     traveltime = list(
       type = "raster",
       source = "Travel Time to Cities and Ports 2015",
-      downloader = ".get_accessibility",
+      downloader = ".get_traveltime",
       arguments = list(
-        range = "20k_50k"
+        range_traveltime = "20k_50k"
       )
     ),
     nasagrace = list(
       type = "raster",
       source = "NASA GRACE",
-      downloader = ".get_drought_ind",
+      downloader = ".get_nasagrace",
       arguments = list()
     ),
     mintemperature = list(
@@ -104,7 +104,7 @@ available_resources <- function(resources = NULL) {
     srtmdem = list(
       type = "raster",
       source = "SRTM",
-      downloader = ".get_srtm_dem",
+      downloader = ".get_srtmdem",
       arguments = list()
     ),
     bdod = list(

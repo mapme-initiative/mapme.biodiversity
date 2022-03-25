@@ -23,7 +23,7 @@ NULL
 #' @keywords internal
 #' @noRd
 
-.get_popCount <- function(x,
+.get_worldpop <- function(x,
                           rundir = tempdir(),
                           verbose = TRUE) {
   target_years <- attributes(x)$years
@@ -31,13 +31,14 @@ NULL
   target_years <- .check_available_years(
     target_years, available_years, "popcount"
   )
-  urls <- unlist(sapply(target_years, function(year) .getPopCountURL(year)))
+  urls <- unlist(sapply(target_years, function(year) .get_worldpop_url(year)))
   filenames <- file.path(rundir, basename(urls))
   if (any(file.exists(filenames))) {
     message("Skipping existing files in output directory.")
   }
   # start download in a temporal directory within tmpdir
-  .download_or_skip(urls, filenames, verbose)
+  aria_bin <- attributes(x)$aria_bin
+  .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin)
   # return paths to the raster
   filenames
 }
@@ -50,7 +51,7 @@ NULL
 #' @return A character vector.
 #' @keywords internal
 #' @noRd
-.getPopCountURL <- function(target_year) {
+.get_worldpop_url <- function(target_year) {
   available_years <- c(2000:2020)
   if (target_year %in% available_years) {
     paste0(

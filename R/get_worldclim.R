@@ -13,7 +13,7 @@
 #'   \item{prec}{Encoded as (mm), representing the mean precipitation per output grid cell.}
 #' }
 #'
-#' @name climate
+#' @name worldclim
 #' @docType data
 #' @keywords resource
 #' @format Global raster layers available for years 2000 to 2018.
@@ -125,7 +125,8 @@ NULL
   }
   # start download in a temporal directory within tmpdir
   # TODO: Parallel downloads
-  .download_or_skip(urls, filenames, verbose)
+  aria_bin <- attributes(x)$aria_bin
+  .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin)
 
   # unzip the downloaded file
   sapply(filenames, function(zip) {

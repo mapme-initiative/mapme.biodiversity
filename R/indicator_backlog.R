@@ -81,6 +81,24 @@ available_indicators <- function(indicator = NULL) {
         engine = "extract"
       ),
       processing_mode = "portfolio"
+    ),
+    accessibility = list(
+      name = ".calc_accessibility",
+      inputs = list(traveltime = "raster"),
+      arguments = list(
+        stats_accessibility = "mean",
+        engine = "extract"
+      ),
+      processing_mode = "asset"
+    ),
+    drought_indicator = list(
+      name = ".calc_drought_indicator",
+      inputs = list(nasagrace = "raster"),
+      arguments = list(
+        stats_drought = "mean",
+        engine = "extract"
+      ),
+      processing_mode = "portfolio"
     )
   )
 

@@ -47,7 +47,8 @@ NULL
     message("Skipping existing files in output directory.")
   }
   # start download in a temporal directory within tmpdir
-  .download_or_skip(urls, filenames, verbose)
+  aria_bin <- attributes(x)$aria_bin
+  .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin)
 
   # unzip and convert shp to gpkg
   message("Translating shapefiles to GeoPackages. This may take a while....")

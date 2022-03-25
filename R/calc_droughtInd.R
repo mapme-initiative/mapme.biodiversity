@@ -16,7 +16,7 @@
 #' @name drought_indicator
 #' @docType data
 #' @keywords indicator
-#' @format A tibble with a column for drought indicator statistics (in percentile)
+#' @format A tibble with a column for each specified stats and a column with the respective date.
 NULL
 
 #' Calculate drought indicator statistics
@@ -27,7 +27,7 @@ NULL
 #' terra, or exactextract from exactextractr as desired.
 #'
 #' @param shp A single polygon for which to calculate the drought statistic
-#' @param droughtindicators The drought indicator raster resource from NASA GRACE
+#' @param nasagrace The drought indicator raster resource from NASA GRACE
 #' @param stats_drought Function to be applied to compute statistics for polygons
 #'    either one or multiple inputs as character "mean", "median" or "sd".
 #' @param engine The preferred processing functions from either one of "zonal",
@@ -39,154 +39,161 @@ NULL
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
-#'
+#' @noRd
 
 .calc_drought_indicator <- function(shp,
-                                    droughtindicators,
-                                    engine = "zonal",
+                                    nasagrace,
+                                    engine = "extract",
                                     stats_drought = "mean",
                                     rundir = tempdir(),
                                     verbose = TRUE,
                                     todisk = FALSE,
+                                    processing_mode = "portfolio",
                                     ...) {
 
   # check if input engines are correct
+  cores <- attributes(shp)$cores
   available_engines <- c("zonal", "extract", "exactextract")
   if (!engine %in% available_engines) {
     stop(sprintf("Engine %s is not an available engine. Please choose one of: %s", engine, paste(available_engines, collapse = ", ")))
   }
 
-  if (ncell(droughtindicators) > 1024 * 1024) todisk <- TRUE
+  if (ncell(nasagrace) > 1024 * 1024) todisk <- TRUE
   available_stats <- c("mean", "median", "sd")
   # check if input stats are correct
-  if (!stats_drought %in% available_stats) {
+  if (!any(stats_drought %in% available_stats)) {
     stop(sprintf("Stat %s is not an available statistics. Please choose one of: %s", stats_drought, paste(available_stats, collapse = ", ")))
   }
 
   if (engine == "extract") {
-    tibble_zstats <- .comp_drought_extract(
-      shp = shp,
-      drought_rast = droughtindicators,
-      stats = stats_drought
-    )
-    return(tibble_zstats)
-  } else if (engine == "exactextract") {
-    tibble_zstats <- .comp_drought_exact_extract(
-      shp = shp,
-      drought_rast = droughtindicators,
-      stats = stats_drought
-    )
-    return(tibble_zstats)
-  } else {
-    tibble_zstats <- .comp_drought_zonal(
-      drought_rast = droughtindicators,
+    extractor <- .comp_drought_extract
+  }
+  if (engine == "exactextract") {
+    extractor <- .comp_drought_exact_extract
+  }
+  if (engine == "zonal") {
+    extractor <- .comp_drought_zonal
+  }
+
+
+  if (processing_mode == "asset") {
+    results <- extractor(
+      nasagrace = nasagrace,
       shp = shp,
       stats = stats_drought,
       todisk = todisk,
       rundir = rundir
     )
-    return(tibble_zstats)
   }
+
+  if (processing_mode == "portfolio") {
+    results <- parallel::mclapply(1:nrow(shp), function(i) {
+      out <- extractor(
+        nasagrace = nasagrace,
+        shp = shp[i, ],
+        stats = stats_drought,
+        todisk = todisk,
+        rundir = rundir
+      )
+      out$.id <- i
+      out
+    }, mc.cores = cores)
+  }
+
+  results
 }
 
 #' Helper function to compute statistics using routines from terra zonal
 #'
-#' @param drought_rast drought indicator raster from which to compute statistics
+#' @param nasagrace drought indicator raster from which to compute statistics
 #'
 #' @return A data-frame
 #' @keywords internal
-#'
+#' @noRd
 
-.comp_drought_zonal <- function(drought_rast = NULL,
+.comp_drought_zonal <- function(nasagrace = NULL,
                                 shp = NULL,
                                 stats = "mean",
                                 todisk = FALSE,
                                 rundir = tempdir(),
                                 ...) {
   shp_v <- vect(shp)
-  data <- lapply(1:nlyr(drought_rast), function(i) {
-    pre_data <- lapply(1:length(stats), function(j) {
-      rast_mask <- terra::mask(drought_rast[[i]],
-        shp_v,
-        filename =  ifelse(todisk, file.path(rundir, "droughtindicators.tif"), ""),
-        overwrite = TRUE
-      )
-      p_raster <- terra::rasterize(shp_v,
-        rast_mask,
-        field = 1:nrow(shp_v),
-        touches = TRUE,
-        filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
-        overwrite = TRUE
-      )
-      zstats <- terra::zonal(
-        rast_mask,
-        p_raster,
-        fun = stats[j],
-        na.rm = T
-      )
-      tibble1 <- tibble(drought = zstats[, 2])
-      bn <- basename(sources(drought_rast[[i]]))
-      time_frame <- sub(".*(\\d{8}).*", "\\1", bn)
-      names(tibble1)[names(tibble1) == "drought"] <-
-        paste0("drought_", stats[j], "_", time_frame)
-      return(tibble1)
-    })
-    unlist_zstats <- do.call(cbind, pre_data)
-    tibble2 <- tibble(unlist_zstats)
-    return(tibble2)
+  nasagrace <- terra::mask(nasagrace,
+    shp_v,
+    filename =  ifelse(todisk, file.path(rundir, "nasagrace.tif"), ""),
+    overwrite = TRUE
+  )
+
+  p_raster <- terra::rasterize(shp_v,
+    nasagrace,
+    field = 1:nrow(shp_v),
+    touches = TRUE,
+    filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
+    overwrite = TRUE
+  )
+
+  results <- lapply(1:length(stats), function(j) {
+    out <- terra::zonal(
+      nasagrace,
+      p_raster,
+      fun = stats[j],
+      na.rm = T
+    )
+    out <- tibble(wetness = as.numeric(out[-1]))
+    names(out) <- paste0("wetness_", stats[j])
+    out
   })
-  unlist_zstats <- do.call(cbind, data)
-  tibble_zstats <- tibble(unlist_zstats)
-  return(tibble_zstats)
+
+  results <- tibble(do.call(cbind, results))
+  bn <- names(nasagrace)
+  time_frame <- sub(".*(\\d{8}).*", "\\1", bn)
+  time_frame <- as.Date(time_frame, format = "%Y%m%d")
+  results$date <- time_frame
+  results
 }
 
 #' Helper function to compute statistics using routines from terra extract
 #'
-#' @param drought_rast drought indicator raster from which to compute statistics
+#' @param nasagrace drought indicator raster from which to compute statistics
 #'
 #' @return A data-frame
 #' @keywords internal
-#'
+#' @noRd
 
 .comp_drought_extract <- function(shp = NULL,
-                                  drought_rast = NULL,
+                                  nasagrace = NULL,
                                   stats = "mean",
                                   ...) {
   shp_v <- vect(shp)
-  data <- lapply(1:nlyr(drought_rast), function(i) {
-    pre_data <- lapply(1:length(stats), function(j) {
-      zstats <- terra::extract(
-        drought_rast[[i]],
-        shp_v,
-        fun = stats[j],
-        na.rm = T
-      )
-      tibble1 <- tibble(drought = zstats[, 2])
-      bn <- basename(sources(drought_rast[[i]]))
-      time_frame <- sub(".*(\\d{8}).*", "\\1", bn)
-      names(tibble1)[names(tibble1) == "drought"] <-
-        paste0("drought_", stats[j], "_", time_frame)
-      return(tibble1)
-    })
-    unlist_zstats <- do.call(cbind, pre_data)
-    tibble2 <- tibble(unlist_zstats)
-    return(tibble2)
+  results <- lapply(1:length(stats), function(j) {
+    out <- terra::extract(
+      nasagrace,
+      shp_v,
+      fun = stats[j],
+      na.rm = T
+    )
+    out <- tibble(wetness = as.numeric(out[-1]))
+    names(out) <- paste0("wetness_", stats[j])
+    out
   })
-  unlist_zstats <- do.call(cbind, data)
-  tibble_zstats <- tibble(unlist_zstats)
-  return(tibble_zstats)
+  results <- tibble(do.call(cbind, results))
+  bn <- names(nasagrace)
+  time_frame <- sub(".*(\\d{8}).*", "\\1", bn)
+  time_frame <- as.Date(time_frame, format = "%Y%m%d")
+  results$date <- time_frame
+  results
 }
 
 #' Helper function to compute statistics using routines from exactextractr
 #'
-#' @param drought_rast drought indicator raster from which to compute statistics
+#' @param nasagrace drought indicator raster from which to compute statistics
 #'
 #' @return A data-frame
 #' @keywords internal
-#'
+#' @noRd
 
 .comp_drought_exact_extract <- function(shp = NULL,
-                                        drought_rast = NULL,
+                                        nasagrace = NULL,
                                         stats = "mean",
                                         ...) {
   if (!"exactextractr" %in% utils::installed.packages()[, 1]) {
@@ -196,34 +203,28 @@ NULL
     ))
   }
 
-  data <- lapply(1:nlyr(drought_rast), function(i) {
-    pre_data <- lapply(1:length(stats), function(j) {
-      if (stats[j] == "sd") {
-        zstats <- exactextractr::exact_extract(
-          drought_rast[[i]],
-          shp,
-          fun = "stdev"
-        )
-      } else {
-        zstats <- exactextractr::exact_extract(
-          drought_rast[[i]],
-          shp,
-          fun = stats[j]
-        )
-      }
-
-      tibble1 <- tibble(drought = zstats)
-      bn <- basename(sources(drought_rast[[i]]))
-      time_frame <- sub(".*(\\d{8}).*", "\\1", bn)
-      names(tibble1)[names(tibble1) == "drought"] <-
-        paste0("drought_", stats[j], "_", time_frame)
-      return(tibble1)
-    })
-    unlist_zstats <- do.call(cbind, pre_data)
-    tibble2 <- tibble(unlist_zstats)
-    return(tibble2)
+  results <- lapply(1:length(stats), function(j) {
+    if (stats[j] == "sd") {
+      out <- exactextractr::exact_extract(
+        nasagrace,
+        shp,
+        fun = "stdev"
+      )
+    } else {
+      out <- exactextractr::exact_extract(
+        nasagrace,
+        shp,
+        fun = stats[j]
+      )
+    }
+    out <- tibble(wetness = as.numeric(out))
+    names(out) <- paste0("wetness_", stats[j])
+    out
   })
-  unlist_zstats <- do.call(cbind, data)
-  tibble_zstats <- tibble(unlist_zstats)
-  return(tibble_zstats)
+  results <- tibble(do.call(cbind, results))
+  bn <- names(nasagrace)
+  time_frame <- sub(".*(\\d{8}).*", "\\1", bn)
+  time_frame <- as.Date(time_frame, format = "%Y%m%d")
+  results$date <- time_frame
+  results
 }

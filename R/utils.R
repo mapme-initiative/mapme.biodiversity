@@ -271,8 +271,10 @@
   } else { # use aria_bin
 
     exists_index <- which(file.exists(filenames))
-    filenames <- filenames[-exists_index]
-    urls <- urls[-exists_index]
+    if (length(exists_index) > 0) {
+      filenames <- filenames[-exists_index]
+      urls <- urls[-exists_index]
+    }
     if (length(filenames) == 0) {
       return(NULL)
     }
