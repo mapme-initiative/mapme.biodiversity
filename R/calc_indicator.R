@@ -141,6 +141,7 @@ calc_indicators <- function(x, indicators, ...) {
 #' Helper to abstract preparation and computation
 #' of indicators per polygon
 #' @keywords internal
+#' @noRd
 .prep_and_compute <- function(shp, params, i) {
   rundir <- file.path(params$tmpdir, i) # create a rundir name
   dir.create(rundir, showWarnings = FALSE) # create the current rundir

@@ -24,7 +24,7 @@ NULL
 #' @param verbose Logical controlling verbosity.
 #' @importFrom utils unzip
 #' @keywords internal
-#'
+#' @noRd
 
 .get_srtm_dem <- function(x,
                           rundir = tempdir(),
@@ -69,6 +69,7 @@ NULL
 #'
 #' @return A character vector
 #' @keywords internal
+#' @noRd
 .get_srtm_url <- function(tile) {
   index.c <- tile %% 72
   index.r <- 24 - floor(tile / 72)

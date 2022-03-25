@@ -34,6 +34,7 @@ NULL
 #' @param verbose Logical controlling verbosity.
 #' @param rundir A directory where intermediate files are written to.
 #' @keywords internal
+#' @noRd
 .get_greenhouse <- function(x,
                             verbose = TRUE,
                             rundir = tempdir()) {

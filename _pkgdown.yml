@@ -31,6 +31,8 @@ reference:
   - init_portfolio
   - get_resources
   - calc_indicators
+  - write_portfolio
+  - read_portfolio
 - title: Resources
   desc: Supported resources.
 - contents:

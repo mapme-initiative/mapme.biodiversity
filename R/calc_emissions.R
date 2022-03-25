@@ -39,7 +39,7 @@ NULL
 #' @return A tibble
 #' @importFrom stringr str_sub
 #' @keywords internal
-#'
+#' @noRd
 .calc_emissions <- function(shp,
                             treecover2000,
                             lossyear,

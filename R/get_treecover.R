@@ -38,6 +38,7 @@ NULL
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose Logical controlling verbosity.
 #' @keywords internal
+#' @noRd
 #'
 .get_treecover <- function(x,
                            vers_treecover = "GFC-2020-v1.8",

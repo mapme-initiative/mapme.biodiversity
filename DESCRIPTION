@@ -30,7 +30,8 @@ Imports:
     stringr,
     terra,
     tibble,
-    tidyr
+    tidyr,
+    tidyselect
 Suggests: 
     exactextractr,
     SPEI,

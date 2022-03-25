@@ -36,7 +36,7 @@ NULL
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
-#'
+#' @noRd
 .calc_precipitation <- function(shp,
                                 chirps,
                                 scales_spi = 12,

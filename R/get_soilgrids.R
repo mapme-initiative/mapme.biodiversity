@@ -75,6 +75,7 @@ NULL
 #' @return A charchter vector of the final filenames
 #' @keywords internal
 #' @importFrom stringr str_replace
+#' @noRd
 .get_soilgrids <- function(x,
                            layer,
                            depth,

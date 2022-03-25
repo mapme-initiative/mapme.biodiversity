@@ -21,7 +21,7 @@ NULL
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose Logical controlling verbosity.
 #' @keywords internal
-#'
+#' @noRd
 
 .get_popCount <- function(x,
                           rundir = tempdir(),
@@ -49,6 +49,7 @@ NULL
 #'
 #' @return A character vector.
 #' @keywords internal
+#' @noRd
 .getPopCountURL <- function(target_year) {
   available_years <- c(2000:2020)
   if (target_year %in% available_years) {

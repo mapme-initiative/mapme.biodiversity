@@ -26,7 +26,7 @@ NULL
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose Logical controlling verbosity.
 #' @keywords internal
-#'
+#' @noRd
 
 .get_accessibility <- function(x,
                                range_accessibility = "20k_50k",
@@ -52,6 +52,7 @@ NULL
 #'
 #' @return A character string
 #' @keywords internal
+#' @noRd
 .get_accessibility_url <- function(range) {
   df_index <- data.frame(
     range = c(

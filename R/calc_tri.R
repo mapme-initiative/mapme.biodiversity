@@ -53,7 +53,7 @@ NULL
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
-#'
+#' @noRd
 
 .calc_tri <- function(shp,
                       srtmdem,
@@ -119,7 +119,7 @@ NULL
 #'
 #' @return A data-frame
 #' @keywords internal
-#'
+#' @noRd
 
 .comp_tri_zonal <- function(elevation = NULL,
                             shp = NULL,
@@ -169,7 +169,7 @@ NULL
 #'
 #' @return A data-frame
 #' @keywords internal
-#'
+#' @noRd
 
 .comp_tri_extract <- function(elevation = NULL,
                               shp = NULL,
@@ -208,7 +208,7 @@ NULL
 #'
 #' @return A data-frame
 #' @keywords internal
-#'
+#' @noRd
 
 .comp_tri_exact_extractr <- function(elevation = NULL,
                                      shp = NULL,

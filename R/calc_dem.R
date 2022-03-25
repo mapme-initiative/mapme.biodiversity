@@ -40,7 +40,7 @@ NULL
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
-#'
+#' @noRd
 
 .calc_dem <- function(shp,
                       srtmdem,
@@ -101,7 +101,7 @@ NULL
 #'
 #' @return A data-frame
 #' @keywords internal
-#'
+#' @noRd
 
 .comp_dem_extract <- function(elevation = NULL,
                               shp = NULL,
@@ -130,7 +130,7 @@ NULL
 #'
 #' @return A data-frame
 #' @keywords internal
-#'
+#' @noRd
 
 .comp_dem_zonal <- function(elevation = NULL,
                             shp = NULL,
@@ -172,7 +172,7 @@ NULL
 #'
 #' @return A data-frame
 #' @keywords internal
-#'
+#' @noRd
 
 .comp_dem_exact_extractr <- function(elevation = NULL,
                                      shp = NULL,
