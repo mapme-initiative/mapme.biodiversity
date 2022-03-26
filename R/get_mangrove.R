@@ -80,7 +80,6 @@ NULL
       exdir = rundir,
     )
     shp <- file.path(rundir, "GMW_2007_v2.0.shp")
-    write_sf(shp, file.path(rundir, basename("gmw-extent_2007.gpkg")))
     command <- sprintf("ogr2ogr %s %s", gpkg, shp)
     system(command)
     d_files <- list.files(rundir, full.names = T)
