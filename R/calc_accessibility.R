@@ -10,7 +10,8 @@
 #' The following arguments can be set:
 #' \describe{
 #'   \item{stats_accessibility}{Function to be applied to compute statistics for polygons either
-#'   one or multiple inputs as character "mean", "median" or "sd".}
+#'   one or multiple inputs as character. Supported statistics are: "mean",
+#'   "median", "sd", "min", "max", "sum" "var".}
 #'   \item{engine}{The preferred processing functions from either one of "zonal",
 #'   "extract" or "exactextract" as character.}
 #' }
@@ -59,7 +60,7 @@ NULL
   }
 
   if (ncell(traveltime) > 1024 * 1024) todisk <- TRUE
-  available_stats <- c("mean", "median", "sd")
+  available_stats <- c("mean", "median", "sd", "min", "max", "sum", "var")
   # check if input stats are correct
   if (!any(stats_accessibility %in% available_stats)) {
     stop(sprintf("Stat %s is not an available statistics. Please choose one of: %s", stats_accessibility, paste(available_stats, collapse = ", ")))
@@ -197,11 +198,11 @@ NULL
   }
 
   results <- lapply(1:length(stats), function(j) {
-    if (stats[j] == "sd") {
+    if (stats[j] %in% c("sd", "var")) {
       out <- exactextractr::exact_extract(
         traveltime,
         shp,
-        fun = "stdev"
+        fun = ifelse(stats[i] == "sd", "stdev", "variance")
       )
     } else {
       out <- exactextractr::exact_extract(
