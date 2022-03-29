@@ -12,7 +12,8 @@
 #' The following arguments can be set:
 #' \describe{
 #'   \item{stats}{Function to be applied to compute statistics for polygons either
-#'   single or multiple inputs as character "mean", "median" or "sd".}
+#'   single or multiple inputs as character. Supported statistics are: "mean",
+#'   "median", "sd", "min", "max", "sum" "var".}
 #'   \item{engine}{The preferred processing functions from either one of "zonal",
 #'   "extract" or "exactextract" as character.}
 #' }
@@ -76,7 +77,7 @@ NULL
   }
 
   if (ncell(srtmdem) > 1024 * 1024) todisk <- TRUE
-  available_stats <- c("mean", "median", "sd")
+  available_stats <- c("mean", "median", "sd", "min", "max", "sum", "var")
   # check if input stats are correct
   if (!any(stats_tri %in% available_stats)) {
     stop(sprintf("Stat %s is not an available statistics. Please choose one of: %s", stats_tri, paste(available_stats, collapse = ", ")))
@@ -230,11 +231,11 @@ NULL
     overwrite = TRUE
   )
   zstats <- lapply(1:length(stats), function(i) {
-    if (stats[i] == "sd") {
+    if (stats[i] %in% c("sd", "var")) {
       zstats <- exactextractr::exact_extract(
         tri,
         shp,
-        fun = "stdev"
+        fun = ifelse(stats[i] == "sd", "stdev", "variance")
       )
     } else {
       zstats <- exactextractr::exact_extract(
