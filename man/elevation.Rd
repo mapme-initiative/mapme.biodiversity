@@ -20,7 +20,8 @@ The required resources for this indicator are:
 The following arguments can be set:
 \describe{
 \item{stats}{Function to be applied to compute statistics for polygons either
-one or multiple inputs as character "mean", "median" or "sd".}
+one or multiple inputs as character.  Supported statistics are: "mean",
+"median", "sd", "min", "max", "sum" "var".}
 \item{engine}{The preferred processing functions from either one of "zonal",
 "extract" or "exactextract" as character.}
 }

@@ -13,3 +13,7 @@ package helps to analyse a number of biodiversity related indicators and biodive
 
 **Important Note** 
 The development is currently work in progress. Additional information will be published here shortly.
+
+**Documentation**
+
+You can find the documentation of the package [here](https://mapme-initiative.github.io/mapme.biodiversity/reference/index.html).

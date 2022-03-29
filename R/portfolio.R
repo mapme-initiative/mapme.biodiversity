@@ -49,6 +49,23 @@ init_portfolio <- function(x,
   }
   if (!dir.exists(outdir)) dir.create(outdir, recursive = TRUE)
   if (!dir.exists(tmpdir)) dir.create(tmpdir, recursive = TRUE)
+  if (Sys.info()["sysname"] == "Windows" & cores > 1) {
+    warning(paste("Parallel processing on Windows currently is not supported.",
+      "Setting number of cores to 1",
+      sep = " "
+    ))
+    cores <- 1
+  }
+
+  aria_output <- try(system2(aria_bin, args = "--version", stdout = TRUE), silent = TRUE)
+  if (inherits(aria_output, "try-error") | !grepl("aria2 version", aria_output[1])) {
+    warning(paste(
+      "Argument 'aria_bin' does not point to a executable aria2 installation.",
+      "The package will use R internal download utility."
+    ))
+    aria_bin <- NULL
+  }
+
   if (nrow(x) < 1) stop("x must contain at least one asset.")
   if (st_crs(x) != st_crs(4326)) {
     message("CRS of x is not EPSG:4326. Attempting to transform.")
