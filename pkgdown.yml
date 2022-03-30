@@ -5,8 +5,9 @@ articles:
   installation: installation.html
   introduction: introduction.html
   terminology: terminology.html
+  userguide: userguide.html
   workflow: workflow.html
-last_built: 2022-03-30T08:58Z
+last_built: 2022-03-30T13:08Z
 urls:
   reference: https://mapme-initiative.github.io/mapme.biodiversity/reference
   article: https://mapme-initiative.github.io/mapme.biodiversity/articles
