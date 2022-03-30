@@ -12,6 +12,7 @@ test_that("init_portfolio works", {
   tmpdir <- system.file("tmp",
     package = "mapme.biodiversity"
   )
+
   expect_error(
     init_portfolio(aoi,
       years = 1980:2020,
@@ -22,6 +23,19 @@ test_that("init_portfolio works", {
     ),
     "outdir and tmpdir need to point to different directories."
   )
+
+  expect_error(
+    init_portfolio(aoi,
+      years = 1980:2020,
+      outdir = outdir,
+      tmpdir = tmpdir,
+      cores = 2,
+      verbose = TRUE
+    ),
+    "Some assests are not of type POLYGON."
+  )
+
+  aoi <- suppressWarnings(st_cast(aoi, to = "POLYGON")[1, ])
 
   portfolio <- init_portfolio(aoi,
     years = 1980:2020,
@@ -62,7 +76,7 @@ test_that("init_portfolio works", {
       cores = 2,
       verbose = TRUE
     ),
-    "Some assests are not of type POLYGON or MULTIPOLYGON."
+    "Some assests are not of type POLYGON."
   )
 
   expect_error(

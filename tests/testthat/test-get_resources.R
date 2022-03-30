@@ -12,6 +12,7 @@ test_that("get_resources works", {
     package = "mapme.biodiversity"
   )
 
+  aoi <- suppressWarnings(st_cast(aoi, to = "POLYGON"))[1, ]
   portfolio <- init_portfolio(aoi,
     years = 2000:2020,
     cores = 1,
