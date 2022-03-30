@@ -1,5 +1,4 @@
 test_that("get_resources works", {
-  skip_on_os(os = "windows")
   aoi <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
       package = "mapme.biodiversity"
@@ -20,6 +19,7 @@ test_that("get_resources works", {
     outdir = outdir,
     tmpdir = tmpdir,
   )
+
   portfolio <- init_portfolio(aoi,
     years = 2000:2020,
     cores = 1,

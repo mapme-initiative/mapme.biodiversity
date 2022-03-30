@@ -1,5 +1,4 @@
 test_that("multiplication works", {
-  skip_on_os(os = "windows")
   aoi <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
       package = "mapme.biodiversity"
