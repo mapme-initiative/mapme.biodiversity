@@ -1,108 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/404.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/404.html</loc>
   </url>
   <url>
-    <loc>/LICENSE.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/LICENSE.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/articles/index.html</loc>
   </url>
   <url>
-    <loc>/index.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/articles/installation.html</loc>
   </url>
   <url>
-    <loc>/reference/available_indicators.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/articles/introduction.html</loc>
   </url>
   <url>
-    <loc>/reference/available_resources.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/articles/terminology.html</loc>
   </url>
   <url>
-    <loc>/reference/calc_indicators.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/articles/workflow.html</loc>
   </url>
   <url>
-    <loc>/reference/chirps.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/authors.html</loc>
   </url>
   <url>
-    <loc>/reference/climate.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/index.html</loc>
   </url>
   <url>
-    <loc>/reference/dot-get_drought_url.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/available_indicators.html</loc>
   </url>
   <url>
-    <loc>/reference/dot-get_esa_url.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/available_resources.html</loc>
   </url>
   <url>
-    <loc>/reference/dot-get_single_indicator.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/calc_indicators.html</loc>
   </url>
   <url>
-    <loc>/reference/dot-get_single_resource.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/chirps.html</loc>
   </url>
   <url>
-    <loc>/reference/ecoregions.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/climate.html</loc>
   </url>
   <url>
-    <loc>/reference/elevation.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/dot-get_drought_url.html</loc>
   </url>
   <url>
-    <loc>/reference/emissions.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/dot-get_esa_url.html</loc>
   </url>
   <url>
-    <loc>/reference/esalandcover.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/dot-get_single_indicator.html</loc>
   </url>
   <url>
-    <loc>/reference/get_resources.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/dot-get_single_resource.html</loc>
   </url>
   <url>
-    <loc>/reference/greenhouse.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/ecoregions.html</loc>
   </url>
   <url>
-    <loc>/reference/index.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/elevation.html</loc>
   </url>
   <url>
-    <loc>/reference/init_portfolio.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/emissions.html</loc>
   </url>
   <url>
-    <loc>/reference/lossyear.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/esalandcover.html</loc>
   </url>
   <url>
-    <loc>/reference/mangrove.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/get_resources.html</loc>
   </url>
   <url>
-    <loc>/reference/nasagrace.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/greenhouse.html</loc>
   </url>
   <url>
-    <loc>/reference/precipitation.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/read_portfolio.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/init_portfolio.html</loc>
   </url>
   <url>
-    <loc>/reference/soilgrids.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/lossyear.html</loc>
   </url>
   <url>
-    <loc>/reference/srtmdem.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/mangrove.html</loc>
   </url>
   <url>
-    <loc>/reference/traveltime.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/nasagrace.html</loc>
   </url>
   <url>
-    <loc>/reference/treecover.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/precipitation.html</loc>
   </url>
   <url>
-    <loc>/reference/treecover2000.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/read_portfolio.html</loc>
   </url>
   <url>
-    <loc>/reference/treeloss.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/soilgrids.html</loc>
   </url>
   <url>
-    <loc>/reference/tri.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/srtmdem.html</loc>
   </url>
   <url>
-    <loc>/reference/worldpop.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/traveltime.html</loc>
   </url>
   <url>
-    <loc>/reference/write_portfolio.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/treecover.html</loc>
+  </url>
+  <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/treecover2000.html</loc>
+  </url>
+  <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/treeloss.html</loc>
+  </url>
+  <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/tri.html</loc>
+  </url>
+  <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/worldpop.html</loc>
+  </url>
+  <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/write_portfolio.html</loc>
   </url>
 </urlset>
