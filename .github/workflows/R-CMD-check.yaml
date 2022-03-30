@@ -43,6 +43,19 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install gdal proj geos
+         
+       - name: "Set up python on windows"
+         if: runner.os == 'Windows'
+         uses: actions/setup-python@v2
+         with:
+           python-version: 3.8
+
+      - name: "windows install spatial libraries"
+        if: runner.os == 'Windows'
+        run: |
+          # Activate the base environment and install python packages
+          C:\Miniconda\condabin\conda.bat activate base
+          C:\Miniconda\condabin\conda.bat install -c conda-forge gdal proj geos 
 
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
