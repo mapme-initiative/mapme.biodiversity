@@ -77,7 +77,7 @@ available_indicators <- function(indicator = NULL) {
       name = ".calc_precipitation",
       inputs = list(chirps = "raster"),
       arguments = list(
-        scales_spi = 12,
+        scales_spi = NULL,
         engine = "extract"
       ),
       processing_mode = "portfolio"

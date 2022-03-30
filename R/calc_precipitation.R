@@ -39,7 +39,7 @@ NULL
 #' @noRd
 .calc_precipitation <- function(shp,
                                 chirps,
-                                scales_spi = 12,
+                                scales_spi = NULL,
                                 engine = "extract",
                                 rundir = tempdir(),
                                 verbose = TRUE,
@@ -59,8 +59,10 @@ NULL
   years <- attributes(shp)$years
   cores <- attributes(shp)$cores
 
-  if (any(scales_spi < 0) | any(scales_spi > 48)) {
-    stop("Values of 'scales_spi' for SPI calculation must be integers between 0 and 48.")
+  if (!is.null(scales_spi)) {
+    if (any(scales_spi < 0) | any(scales_spi > 48)) {
+      stop("Values of 'scales_spi' for SPI calculation must be integers between 0 and 48.")
+    }
   }
   if (any(years < 1981)) {
     warning(paste("Cannot calculate precipitation statistics ",
@@ -101,31 +103,35 @@ NULL
   anomaly_chirps <- target_chirps - climate_chirps
 
   # calculate SPI
-  spi_chirps <- lapply(scales_spi, function(scale) {
-    s <- ifelse(scale < 13, 1,
-      ifelse(scale < 25, 2,
-        ifelse(scale < 37, 3, 4)
+  if (!is.null(scales_spi)) {
+    spi_chirps <- lapply(scales_spi, function(scale) {
+      s <- ifelse(scale < 13, 1,
+        ifelse(scale < 25, 2,
+          ifelse(scale < 37, 3, 4)
+        )
       )
-    )
-    target_years_spi <- switch(s,
-      years[1] - 1,
-      years[1] - 2,
-      years[1] - 3,
-      years[1] - 4
-    )
-    target_years_spi <- target_years_spi:years[length(years)]
-    target_spi <- chirps[[which(layer_years %in% target_years_spi)]]
-    spi_chirps <- app(target_spi,
-      scale = scale, fun = function(x, scale) {
-        SPEI::spi(x, scale = scale, na.rm = TRUE)$fitted
-      }, cores = cores, overwrite = TRUE, wopt = list(filetype = "GTiff"),
-      filename =
-        ifelse(todisk, file.path(rundir, paste0("spi_", scale, ".tif")), "")
-    )
-    names(spi_chirps) <- names(target_spi)
-    spi_chirps[[names(target_chirps)]]
-  })
-  names(spi_chirps) <- paste0("spi_", scales_spi)
+      target_years_spi <- switch(s,
+        years[1] - 2,
+        years[1] - 3,
+        years[1] - 4,
+        years[1] - 5
+      )
+      target_years_spi <- target_years_spi:years[length(years)]
+      target_spi <- chirps[[which(layer_years %in% target_years_spi)]]
+      spi_chirps <- app(target_spi,
+        scale = scale, fun = function(x, scale) {
+          SPEI::spi(x, scale = scale, na.rm = TRUE)$fitted
+        }, cores = cores, overwrite = TRUE, wopt = list(filetype = "GTiff"),
+        filename =
+          ifelse(todisk, file.path(rundir, paste0("spi_", scale, ".tif")), "")
+      )
+      names(spi_chirps) <- names(target_spi)
+      spi_chirps[[names(target_chirps)]]
+    })
+    names(spi_chirps) <- paste0("spi_", scales_spi)
+  } else {
+    spi_chirps <- NULL
+  }
 
   available_engines <- c("zonal", "extract", "exactextract")
   if (!engine %in% available_engines) {
@@ -188,7 +194,6 @@ NULL
 
   absolute <- terra::zonal(absolute, p_raster, fun = "mean")
   anomaly <- terra::zonal(anomaly, p_raster, fun = "mean")
-  spi <- lapply(spi, function(x) as.numeric(terra::zonal(x, p_raster, fun = "mean"))[-1])
 
   results <- tibble(
     years = as.numeric(years),
@@ -197,7 +202,12 @@ NULL
     anomaly = as.numeric(anomaly)[-1]
   )
 
-  tibble(cbind(results, as.data.frame(spi)))
+  if (!is.null(spi)) {
+    spi <- lapply(spi, function(x) as.numeric(terra::zonal(x, p_raster, fun = "mean"))[-1])
+    tibble(cbind(results, as.data.frame(spi)))
+  } else {
+    results
+  }
 }
 
 
@@ -209,7 +219,7 @@ NULL
   shp_v <- vect(shp)
   absolute <- terra::extract(absolute, shp_v, fun = "mean")
   anomaly <- terra::extract(anomaly, shp_v, fun = "mean")
-  spi <- lapply(spi, function(x) as.numeric(terra::extract(x, shp_v, fun = "mean"))[-1])
+
 
   results <- tibble(
     years = as.numeric(years),
@@ -218,7 +228,12 @@ NULL
     anomaly = as.numeric(anomaly)[-1]
   )
 
-  tibble(cbind(results, as.data.frame(spi)))
+  if (!is.null(spi)) {
+    spi <- lapply(spi, function(x) as.numeric(terra::extract(x, shp_v, fun = "mean"))[-1])
+    tibble(cbind(results, as.data.frame(spi)))
+  } else {
+    results
+  }
 }
 
 
@@ -229,7 +244,7 @@ NULL
 
   absolute <- exactextractr::exact_extract(absolute, shp, fun = "mean")
   anomaly <- exactextractr::exact_extract(anomaly, shp, fun = "mean")
-  spi <- lapply(spi, function(x) as.numeric(exactextractr::exact_extract(x, shp, fun = "mean")))
+
 
   results <- tibble(
     years = as.numeric(years),
@@ -238,5 +253,10 @@ NULL
     anomaly = as.numeric(anomaly)
   )
 
-  tibble(cbind(results, as.data.frame(spi)))
+  if (!is.null(spi)) {
+    spi <- lapply(spi, function(x) as.numeric(exactextractr::exact_extract(x, shp, fun = "mean")))
+    tibble(cbind(results, as.data.frame(spi)))
+  } else {
+    results
+  }
 }
