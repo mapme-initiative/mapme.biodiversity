@@ -2,7 +2,7 @@ Package: mapme.biodiversity
 Title: Efficient monitoring of global biodiversity areas
 Version: 0.0.0.9000
 Authors@R: c(
-    person("Darius", "Görgen", , "darius2402@web.de", role = c("aut", "cre")),
+    person("Darius A.", "Görgen", , "darius2402@web.de", role = c("aut", "cre")),
     person("Om Prakash", "Bahandri", role = "aut")
   )
 Description: Biodiversity areas, especially primary forest, serve a
@@ -33,9 +33,14 @@ Imports:
     tidyr,
     tidyselect
 Suggests: 
+    DiagrammeR,
     exactextractr,
+    knitr,
+    rmarkdown,
     SPEI,
     testthat (>= 3.0.0)
+VignetteBuilder: 
+    knitr
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

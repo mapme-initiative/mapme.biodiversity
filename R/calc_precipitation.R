@@ -8,7 +8,7 @@
 #' between 1 and 48 months. Th function needs the \code{SPEI} package to be
 #' installed.
 #' The required resources for this indicator are:
-#'  - \code{chirps}
+#'  - [chirps]
 #'
 #' The following arguments can be set:
 #' \describe{

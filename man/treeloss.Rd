@@ -15,9 +15,9 @@ to calculate them in one run if users are actually interested in both statistics
 Otherwise users are advised to use the respective single indicator functions.
 The required resources for this indicator are:
 \itemize{
-\item \code{treecover2000}
-\item \code{lossyear}
-\item \code{greenhouse}.
+\item \link{treecover2000}
+\item \link{lossyear}
+\item \link{greenhouse}.
 }
 }
 \details{
