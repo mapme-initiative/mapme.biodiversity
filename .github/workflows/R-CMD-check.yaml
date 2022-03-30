@@ -42,7 +42,7 @@ jobs:
       - name: "macOS Install spatial libraries"
         if: runner.os == 'macOS'
         run: |
-          brew install gdal proj geos geos-devel
+          brew install gdal proj geos
 
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
