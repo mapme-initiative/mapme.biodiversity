@@ -73,7 +73,9 @@ get_resources <- function(x, resources, ...) {
   params$rundir <- rundir
   params$verbose <- atts$verbose
   # set terra temporal directory to rundir
-  terra::terraOptions(tempdir = rundir)
+  terra_org <- tempdir()
+  dir.create(file.path(tmpdir, "terra"))
+  terra::terraOptions(tempdir = file.path(tmpdir, "terra"))
   # conduct download function, TODO: we can think of an efficient way for
   # parallel downloads here or further upstream
   # if files to not exist use download function to download to tmpdir
@@ -135,6 +137,11 @@ get_resources <- function(x, resources, ...) {
     write_sf(footprints, dsn = tindex_file)
     downloaded_files <- tindex_file
   }
+
+  # remove terra tmpdir
+  unlink(file.path(tmpdir, "terra"), recursive = TRUE, force = TRUE)
+  terra::terraOptions(tempdir = terra_org)
+
   # add the new resource to the attributes of the portfolio object
   resource_to_add <- list(downloaded_files)
   names(resource_to_add) <- resource
