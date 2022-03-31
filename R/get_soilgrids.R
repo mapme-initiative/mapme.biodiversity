@@ -65,10 +65,10 @@ NULL
 #' sense for land masses.
 #'
 #' @param x A sf portfolio object
-#' @param layer A charchter vector indicating the layer to download from
+#' @param layers A charchter vector indicating the layers to download from
 #'   soilgrids
-#' @param depth A charachter vector indicating the depth to download
-#' @param stat A chrachter vector indicating the statistic to download.
+#' @param depths A charachter vector indicating the depths to download
+#' @param stats A chrachter vector indicating the statistics to download.
 #' @param rundir The directory where temporary and final results are written to.
 #' @param verbose A logical controlling the verbosity.
 #'
@@ -77,117 +77,122 @@ NULL
 #' @importFrom stringr str_replace
 #' @noRd
 .get_soilgrids <- function(x,
-                           layer,
-                           depth,
-                           stat,
+                           layers,
+                           depths,
+                           stats,
                            rundir = tempdir(),
-                           verbose = TRUE) {
-  if (any(missing(layer), missing(depth), missing(stat))) {
+                           verbose = TRUE,
+                           ...) {
+  if (any(missing(layers), missing(depths), missing(stats))) {
     stop(
       paste("For downloading data from soilgrid a valid layer, a valid ",
         "depth range and a valid statistic have to be specified.",
         sep = ""
-      )
-    )
-  }
-
-  if (!layer %in% names(.sg_layers)) {
-    stop(
-      sprintf(
-        paste("The selected layer '%s' is not available. ",
-          "Please choose one of: %s.",
-          sep = ""
-        ),
-        layer, paste(names(.sg_layers), collapse = ", ")
-      )
-    )
-  }
-
-  if (!depth %in% .sg_depths) {
-    stop(
-      sprintf(
-        paste("The selected depth range '%s' is not available. ",
-          "Please choose one of: %s.",
-          sep = ""
-        ),
-        depth, paste(.sg_depths, collapse = ", ")
-      )
-    )
-  }
-
-  if (!stat %in% .sg_stats) {
-    stop(
-      sprintf(
-        paste("The selected predictions statistic '%s' is not available. ", "
-              Please choose one of: %s.", sep = ""),
-        stat, paste(.sg_stats, collapse = ", ")
-      )
-    )
-  }
-  message(
-    sprintf(
-      paste("Starting to download data for layer '%s'.",
-        " This may take a while...",
-        sep = ""
       ),
-      layer
+      call. = FALSE
     )
-  )
-
-  baseurl <- "/vsicurl/https://files.isric.org/soilgrids/latest/data/"
-  datalayer <- sprintf("%s/%s_%s_%s.vrt", layer, layer, depth, stat)
-  filename <- str_replace(basename(datalayer), "vrt", "tif")
-  if (file.exists(file.path(rundir, filename))) {
-    message(
-      sprintf(
-        "File %s exists in output directory. Skipping download.",
-        filename
-      )
-    )
-    return(file.path(rundir, filename))
   }
-  prjstring <- "+proj=igh +lat_0=0 +lon_0=0 +datum=WGS84 +units=m +no_defs"
-  srcprj <- st_crs(prjstring)
-  x %>%
-    st_bbox() %>%
-    st_as_sfc() %>%
-    st_transform(srcprj) %>%
-    st_bbox() %>%
-    as.numeric() -> bbox
-  bbox <- paste(c(bbox[1], bbox[4], bbox[3], bbox[2]), collapse = " ")
 
-  command_to_local_vrt <- sprintf(
-    "gdal_translate -tr 250 250 -projwin %s %s %s",
-    bbox, file.path(baseurl, datalayer),
-    file.path(rundir, basename(datalayer))
-  )
-  system(command_to_local_vrt, intern = TRUE)
-
-  command_to_wgs84 <- sprintf(
-    "gdalwarp -s_srs '%s' -t_srs EPSG:4326  %s %s ",
-    prjstring,
-    file.path(rundir, basename(datalayer)),
-    file.path(rundir, paste0("proj_", basename(datalayer)))
-  )
-  system(command_to_wgs84, intern = TRUE)
-
-  command_to_gtiff <- sprintf(
-    paste("gdal_translate -co TILED=YES -co COMPRESS=DEFLATE ",
-      "-co PREDICTOR=2 -co BIGTIFF=YES %s %s",
-      sep = ""
-    ),
-    file.path(rundir, paste0("proj_", basename(datalayer))),
-    file.path(rundir, filename)
-  )
-  system(command_to_gtiff)
-
-  file.remove(
-    grep(list.files(rundir, full.names = TRUE),
-      pattern = ".tif$", invert = TRUE, value = TRUE
+  if (any(!layers %in% names(.sg_layers))) {
+    na_layers <- layers[which(!layers %in% .sg_layers)]
+    stop(
+      sprintf(
+        paste("The selected layer(s) '%s' is/are not available. ",
+          "Please choose one of: %s.",
+          sep = ""
+        ),
+        paste(layers, sep = ", "), paste(names(.sg_layers), collapse = ", ")
+      ),
+      call. = FALSE
     )
-  )
-  file.path(rundir, filename)
+  }
+
+  if (any(!depths %in% .sg_depths)) {
+    na_depths <- depths[which(!depths %in% .sg_depths)]
+    stop(
+      sprintf(
+        paste("The selected depth range(s) '%s' is/are not available. ",
+          "Please choose one of: %s.",
+          sep = ""
+        ),
+        na_depths, paste(.sg_depths, collapse = ", ")
+      ),
+      .call = FALSE
+    )
+  }
+
+  if (!stats %in% .sg_stats) {
+    na_stats <- stats[which(!stats %in% .sg_stats)]
+    stop(
+      sprintf(
+        paste("The selected predictions statistic(s) '%s' is not available. ", "
+              Please choose one of: %s.", sep = ""),
+        na_stats, paste(.sg_stats, collapse = ", ")
+      ),
+      .call = FALSE
+    )
+  }
+
+
+  filenames <- list()
+  for (layer in layers) {
+    for (depth in depths) {
+      for (stat in stats) {
+        if (layer != "ocs" & depth == "0-30cm") {
+          message("Depth '0-30cm' is only available of layer 'ocs'.")
+          next
+        }
+
+        if (layer == "ocs" & depth != "0-30cm") {
+          message("Layer 'ocs' is only available at depth '0-30cm'.")
+          next
+        }
+
+        baseurl <- "/vsicurl/https://files.isric.org/soilgrids/latest/data/"
+        datalayer <- sprintf("%s/%s_%s_%s.vrt", layer, layer, depth, stat)
+        filename <- file.path(rundir, str_replace(basename(datalayer), "vrt", "tif"))
+
+        if (!file.exists(filename)) {
+          if (verbose) {
+            message(
+              sprintf(
+                paste("Starting to download data for layer '%s', depth '%s', and stat '%s'.",
+                  " This may take a while...",
+                  sep = ""
+                ),
+                layer, depth, stat
+              )
+            )
+          }
+          soilgrid_source <- rast(file.path(baseurl, datalayer))
+          x_bbox <- st_as_sf(st_as_sfc(st_bbox(x)))
+          x_proj <- st_transform(x_bbox, crs(soilgrid_source))
+          soilgrid_cropped <- crop(soilgrid_source, x_proj,
+            filename = file.path(rundir, "soillayer_cropped.tif"),
+            datatype = "INT2U", overwrite = TRUE
+          )
+          conversion_factor <- .sg_layers[layer][[1]]$conversion_factor
+
+          suppressWarnings(
+            project(soilgrid_cropped * conversion_factor, "EPSG:4326",
+              filename = filename,
+              datatype = "FLT4S", overwrite = TRUE
+            )
+          )
+
+          file.remove(file.path(rundir, "soillayer_cropped.tif"))
+        } else {
+          if (verbose) {
+            message(sprintf("Output file %s exists. Skipping re-download. Please delete if spatial extent has changed.", basename(filename)))
+          }
+        }
+        filenames <- append(filenames, filename)
+      }
+    }
+  }
+  unlist(filenames)
 }
+
 
 .sg_layers <- list(
   bdod = list(
@@ -271,114 +276,4 @@ NULL
   "0-5cm", "5-15cm", "15-30cm", "30-60cm",
   "60-100cm", "100-200cm", "0-30cm"
 )
-.sg_stats <- c("Q0.05", "Q0.50", "mean", "Q0.95")
-
-.get_bdod <- function(x, depth, stat, rundir = tempdir(), verbose = TRUE) {
-  if (depth == "0-30cm") {
-    stop(paste("Depth '0-30cm' is not available for this layer. ",
-      "Please choose another depth.",
-      sep = ""
-    ))
-  }
-  .get_soilgrids(x, "bdod", depth, stat, rundir, verbose)
-}
-
-.get_cec <- function(x, depth, stat, rundir = tempdir(), verbose = TRUE) {
-  if (depth == "0-30cm") {
-    stop(paste("Depth '0-30cm' is not available for this layer. ",
-      "Please choose another depth.",
-      sep = ""
-    ))
-  }
-  .get_soilgrids(x, "cec", depth, stat, rundir, verbose)
-}
-
-.get_cfvo <- function(x, depth, stat, rundir = tempdir(), verbose = TRUE) {
-  if (depth == "0-30cm") {
-    stop(paste("Depth '0-30cm' is not available for this layer. ",
-      "Please choose another depth.",
-      sep = ""
-    ))
-  }
-  .get_soilgrids(x, "cfvo", depth, stat, rundir, verbose)
-}
-
-.get_clay <- function(x, depth, stat, rundir = tempdir(), verbose = TRUE) {
-  if (depth == "0-30cm") {
-    stop(paste("Depth '0-30cm' is not available for this layer. ",
-      "Please choose another depth.",
-      sep = ""
-    ))
-  }
-  .get_soilgrids(x, "clay", depth, stat, rundir, verbose)
-}
-
-.get_nitrogen <- function(x, depth, stat, rundir = tempdir(), verbose = TRUE) {
-  if (depth == "0-30cm") {
-    stop(paste("Depth '0-30cm' is not available for this layer. ",
-      "Please choose another depth.",
-      sep = ""
-    ))
-  }
-  .get_soilgrids(x, "nitrogen", depth, stat, rundir, verbose)
-}
-
-.get_phh2o <- function(x, depth, stat, rundir = tempdir(), verbose = TRUE) {
-  if (depth == "0-30cm") {
-    stop(paste("Depth '0-30cm' is not available for this layer. ",
-      "Please choose another depth.",
-      sep = ""
-    ))
-  }
-  .get_soilgrids(x, "phh2o", depth, stat, rundir, verbose)
-}
-
-.get_sand <- function(x, depth, stat, rundir = tempdir(), verbose = TRUE) {
-  if (depth == "0-30cm") {
-    stop(paste("Depth '0-30cm' is not available for this layer. ",
-      "Please choose another depth.",
-      sep = ""
-    ))
-  }
-  .get_soilgrids(x, "sand", depth, stat, rundir, verbose)
-}
-.get_silt <- function(x, depth, stat, rundir = tempdir(), verbose = TRUE) {
-  if (depth == "0-30cm") {
-    stop(paste("Depth '0-30cm' is not available for this layer. ",
-      "Please choose another depth.",
-      sep = ""
-    ))
-  }
-  .get_soilgrids(x, "silt", depth, stat, rundir, verbose)
-}
-
-.get_soc <- function(x, depth, stat, rundir = tempdir(), verbose = TRUE) {
-  if (depth == "0-30cm") {
-    stop(paste("Depth '0-30cm' is not available for this layer. ",
-      "Please choose another depth.",
-      sep = ""
-    ))
-  }
-  .get_soilgrids(x, "soc", depth, stat, rundir, verbose)
-}
-
-.get_ocd <- function(x, depth, stat, rundir = tempdir(), verbose = TRUE) {
-  if (depth == "0-30cm") {
-    stop(paste("Depth '0-30cm' is not available for this layer. ",
-      "Please choose another depth.",
-      sep = ""
-    ))
-  }
-  .get_soilgrids(x, "ocd", depth, stat, rundir, verbose)
-}
-
-.get_ocs <- function(x, depth, stat, rundir = tempdir(), verbose = TRUE) {
-  if (depth != "0-30cm") {
-    message(paste("Layer 'ocs' is only available for depth '0-30cm'.",
-      "Setting to this value.",
-      sep = ""
-    ))
-    depth <- "0-30cm"
-  }
-  .get_soilgrids(x, "ocs", depth, stat, rundir, verbose)
-}
+.sg_stats <- c("Q0.05", "Q0.5", "mean", "Q0.95")

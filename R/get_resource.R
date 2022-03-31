@@ -72,6 +72,8 @@ get_resources <- function(x, resources, ...) {
   params$x <- x
   params$rundir <- rundir
   params$verbose <- atts$verbose
+  # set terra temporal directory to rundir
+  terra::terraOptions(tempdir = rundir)
   # conduct download function, TODO: we can think of an efficient way for
   # parallel downloads here or further upstream
   # if files to not exist use download function to download to tmpdir

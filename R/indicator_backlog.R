@@ -81,6 +81,15 @@ available_indicators <- function(indicator = NULL) {
         engine = "extract"
       ),
       processing_mode = "portfolio"
+    ),
+    soilproperties = list(
+      name = ".calc_soilproperties",
+      inputs = list(soilgrids = "raster"),
+      arguments = list(
+        stats_soil = "mean",
+        engine = "extract"
+      ),
+      processing_mode = "asset"
     )
   )
 
