@@ -162,7 +162,7 @@ NULL
   }
 
   if (processing_mode == "portfolio") {
-    results <- parallel::mclapply(1:nrow(shp), function(i) {
+    results <- pbapply::pblapply(1:nrow(shp), function(i) {
       out <- extractor(
         shp = shp[i, ],
         absolute = target_chirps,
@@ -173,7 +173,7 @@ NULL
       )
       out$.id <- i
       out
-    }, mc.cores = cores)
+    }, cl = cores)
   }
   results
 }
