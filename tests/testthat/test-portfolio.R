@@ -53,7 +53,7 @@ test_that("init_portfolio works", {
       cores = 2,
       verbose = TRUE
     ),
-    "'.assetid'. Overwritting its values with a unique identifier."
+    "'assetid'. Overwritting its values with a unique identifier."
   )
 
   aoi2 <- st_transform(aoi, st_crs(3857))

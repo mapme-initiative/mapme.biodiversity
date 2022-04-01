@@ -36,7 +36,7 @@ transform your data via <code>sf::st_cast()</code>. We also expect the data to b
 In case the CRS of the portfolio is projected, we will attempt to transform to
 <code>EPSG:4326</code>. Arbitrary metadata that is needed for your analysis is allowed
 in the columns of the object and will be retained throughout the workflow.
-The package will add a unique asset identifier called <code>.assetid</code> and
+The package will add a unique asset identifier called <code>assetid</code> and
 add nested list columns for indicators. Portfolio-wide arguments are set as 
 attributes during the call of <code>init_portfolio()</code>. Except from these additional
 arguments, an portfolio object actually is and will behave as a familiar <code>{sf}</code>

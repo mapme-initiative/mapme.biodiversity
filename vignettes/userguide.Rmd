@@ -84,7 +84,7 @@ aoi_gridded[metanames] <- st_drop_geometry(aoi)
 Now, we are ready to initiate a portfolio object containing multiple assets.
 We use the <code>init_portfolio()</code> function and set some attributes that
 are important for the subsequent processing. The function will add a unique
-identifier column called '.assetid' that is used to uniquely identify each
+identifier column called 'assetid' that is used to uniquely identify each
 asset in the portfolio.
 
 ```{r init_portfolio}
@@ -97,7 +97,7 @@ sample_portfolio <- init_portfolio(
   cores = 1,
   verbose = TRUE
 )
-plot(sample_portfolio[".assetid"])
+plot(sample_portfolio["assetid"])
 ```
 
 The first argument, 'x', is the sf object that we want to turn into a portfolio.
@@ -202,10 +202,10 @@ indicators and you do not know what they mean, head over to the indicator
 help-page to learn about the available arguments.
 
 Now let's take a look at the results. We will select only some of the metadata
-and the outpu indicator column in order to get a clearer picture of what has happened.
+and the output indicator column in order to get a clearer picture of what has happened.
 
 ```{r select_cols}
-(sample_portfolio <- sample_portfolio %>% select(.assetid, WDPAID, precipitation))
+(sample_portfolio <- sample_portfolio %>% select(assetid, WDPAID, precipitation))
 ```
 We obtained a new listed column in our sf object that is called like the requested
 indicator. We can already see that, for each asset in our portfolio, this column
@@ -227,13 +227,13 @@ library(toastui)
 library(apexcharter)
 
 sample_portfolio %>%
-  filter(.assetid > 2 & .assetid < 17) %>%
+  filter(assetid > 2 & assetid < 17) %>%
   st_drop_geometry() %>%
-  select(.assetid, precipitation) %>%
+  select(assetid, precipitation) %>%
   mutate(anomaly = precipitation) %>%
   datagrid() %>%
   grid_complex_header(
-    "Precipitation indicators for Sierra de Neiba" = c(".assetid", "precipitation", "anomaly")
+    "Precipitation indicators for Sierra de Neiba" = c("assetid", "precipitation", "anomaly")
   ) %>%
   grid_sparkline(
     column = "precipitation",
@@ -259,11 +259,11 @@ a good idea to keep the geometry information in a separated variable in order
 to keep the size of the data object relatively small.
 
 ```{r unnest}
-geometries <- select(sample_portfolio, .assetid)
+geometries <- select(sample_portfolio, assetid)
 sample_portfolio %>%
   st_drop_geometry() %>%
   tidyr::unnest(precipitation) %>%
-  filter(.assetid == 3)
+  filter(assetid == 3)
 ```
 
 # Exporting an portfolio object
