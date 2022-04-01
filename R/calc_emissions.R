@@ -6,9 +6,9 @@
 #' from Harris et al. (2021) and area-wise emission statistics are calculated
 #' for each year.
 #' The required resources for this indicator are:
-#'  - \code{treecover2000}
-#'  - \code{lossyear}
-#'  - \code{greenhouse}.
+#'  - [treecover2000]
+#'  - [lossyear]
+#'  - [greenhouse].
 #'
 #' The following arguments can be set:
 #' \describe{

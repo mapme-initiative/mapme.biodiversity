@@ -4,6 +4,8 @@ test_that("precipitation indicator works", {
       package = "mapme.biodiversity"
     )
   )
+  shp <- suppressWarnings(st_cast(shp, to = "POLYGON"))[1, ]
+
   chirps <- list.files(system.file("res", "chirps",
     package = "mapme.biodiversity"
   ), pattern = ".cog$", full.names = TRUE)

@@ -1,4 +1,4 @@
-url: ~
+url: https://mapme-initiative.github.io/mapme.biodiversity/
 template:
   bootstrap: 5
   bslib:
@@ -23,6 +23,26 @@ destination: docs
 
 navbar:
   bg: primary
+  components:
+   home: ~
+   articles:
+      text: Articles
+      menu:
+        - text: Introduction
+          href: articles/introduction.html
+        - text: Installation
+          href: articles/installation.html
+        - text: Terminology
+          href: articles/terminology.html
+        - text: Workflow
+          href: articles/workflow.html
+        - text: Using the package
+          href: articles/userguide.html
+        - text: Extending the package
+          href: articles/extensions.html
+  github:
+    icon: fab fa-github fa-lg
+    href: https://github.com/mapme-initiative/mapme.biodiversity
 
 reference:
 - title: Functions
@@ -43,7 +63,7 @@ reference:
   - has_keyword("indicator")
 
 authors:
-  Darius Görgen:
+  Darius A. Görgen:
     href: http://dariusgoergen.com/
   Om Prakash Bhandari:
   MAPME-Initiative:

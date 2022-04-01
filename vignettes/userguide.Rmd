@@ -1,0 +1,294 @@
+---
+title: "Using the Package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using the Package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+This vignette assumes that you have already familiarized yourself with the 
+terminology used in the package. If not, please head over to the [Terminology](terminology.html)
+article to learn about the most important concepts. 
+
+In the following we will demonstrated an idealized workflow based on a subset
+of the CHIRPS dataset that is delivered together with this package. You can follow
+along the code snippets below in order to reproduce the results. Please note, that
+in order to reduce the time it takes to process this vignette, we will not download
+any resources from the internet. In a real user-scenario, thus processing time
+might substantially increase because resources have to be downloaded and real
+portfolios might actually be larger than the one created here. 
+
+# Getting started
+
+First, we will load the mapme.biodiversity package into our R session. We will also
+attach the  <code>sf</code> and  <code>terra</code> packages, since we are going
+to handle spatial data sets. Then, we will read an package internal
+GeoPackage which includes the geometry of a protected area in xx from the WDPA 
+database.
+
+```{r setup}
+library(mapme.biodiversity)
+library(sf)
+library(dplyr)
+
+aoi_path <- system.file("extdata", "sierra_de_neiba_478140.gpkg", package = "mapme.biodiversity")
+(aoi <- read_sf(aoi_path))
+```
+The sf object contains a single object of geometry type 'MULTIPOLYGON'. The 
+mapme.biodiversity package, however, only supports geometries of type 'POLYGON',
+thus we need to cast the geometry before we advance. The resulting sf object 
+also contains some metadata, that will be retained throughout the complete
+workflow. Because the casted geometries are merely artifacts of the digitization 
+process in this special example we will subset to only the largest polygon.
+
+```{r cast}
+(aoi <- st_cast(aoi, to = "POLYGON")[1, ])
+```
+
+In the following, we will simulate a larger portfolio. For this, we will create
+artifical smaller polygons within the original extent of the main polygon. This
+way, we can showcase the behavior of the mapme.biodiversity package for
+portfolios that contain multiple assets. We will only select single assets 
+with geometry type POLYGON that lie within the original boundary of the protected
+area.
+
+```{r chunking}
+aoi_gridded <- st_make_grid(
+  x = st_bbox(aoi),
+  n = c(10, 10),
+  square = FALSE
+) %>%
+  st_intersection(aoi) %>%
+  st_as_sf() %>%
+  mutate(geom_type = st_geometry_type(x)) %>%
+  filter(geom_type == "POLYGON") %>%
+  select(-geom_type, geom = x) %>%
+  st_as_sf()
+
+metanames <- names(st_drop_geometry(aoi))
+aoi_gridded[metanames] <- st_drop_geometry(aoi)
+```
+
+# Initialization of a portfolio
+
+Now, we are ready to initiate a portfolio object containing multiple assets.
+We use the <code>init_portfolio()</code> function and set some attributes that
+are important for the subsequent processing. The function will add a unique
+identifier column called '.assetid' that is used to uniquely identify each
+asset in the portfolio.
+
+```{r init_portfolio}
+sample_portfolio <- init_portfolio(
+  x = aoi_gridded,
+  years = 2010,
+  outdir = system.file("res", package = "mapme.biodiversity"),
+  tmpdir = system.file("tmp", package = "mapme.biodiversity"),
+  add_resources = TRUE,
+  cores = 1,
+  verbose = TRUE
+)
+plot(sample_portfolio[".assetid"])
+```
+
+The first argument, 'x', is the sf object that we want to turn into a portfolio.
+The argument 'years' allows us to restrict our analysis to certain years only.
+Depending on the temporal extent of a given resource, that resource might or might
+not be available for the portfolios temporal extent. All resource and indicator 
+functions will gracefully inform the user if the temporal extents do not intersect.
+The 'outdir' and 'tmpdir' arguments shall point towards directories on the local
+file system. If these directories do not exist, we will attempt to create them.
+The 'outdir' cannot be equalt to the 'tmpdir' argument. All downloaded resources
+will be written to directories within 'outdir' that will have the name of the 
+respective resource. In 'tmpdir' temporary files and intermediate results 
+during the indicator calculation will be written. The 'add_resources' arguments
+controls the behaviour of the function in case that in 'outdir' existing 
+resources are to be expected. If set to TRUE, the function will search for available
+resources and add these as attributes to the portfolio. If FALSE, this 
+action will not be performed and when a resource is queried that potentially might
+already exist within 'outdir' only missing files for that portfolio are downloaded.
+That might be useful if you wish to share the same 'outdir' directory accross 
+different projects in order to share the same resources. The argument 'cores'
+specifies the number of cores available to the indicator routines for parallel
+processing. Parallel processing is deactivated on Windows and should be set to a 
+value greater 1 if you wish to activate parallel processing on UNIX systems.
+Finally, the 'verbose' logical controls the verbosity of the routines up to some 
+extent. Even if set to FALSE, the package will inform users about any potential
+misspecifications of arguments.
+
+# Getting resources
+
+From here, we can start to retrieve our first resource. We can learn about
+available resources using the <code>available_resources()</code> function. With
+no arguments specified, it will return a list object with all available resources.
+When we specify the name of a specific resource we can retrieve only that information.
+
+```{r query_resources}
+available_resources("chirps")
+```
+The output informs us that the resource called 'chirps' is a raster resource.
+The downloader is called '.get_chirps', but that is not really of interest 
+for users. However, the 'arguments' can be of interest, but in the case of the
+'chirps' resource it is an empty list meaning that users do not have to specify
+any additional arguments. If you wish to get more detailed information about
+a resource, you can go to the helpage by running either of those commands below.
+
+```{r helppage_resource, eval = FALSE}
+?chirps
+help(chirps)
+```
+
+With that information, we are ready to get the 'chirps' resource. We will
+use a common interface that is used for all resources, called <code>get_resources()</code>.
+We have to specify our portfolio object and the names of the resource(s) we wish
+to download. Additional arguments for the specific resource an be specified.
+The output of the function is the portfolio object with its attributes amended
+for the new resource, thus we simply can overwrite the 'sample_portfolio' variable.
+
+```{r get_chirps}
+sample_portfolio <- get_resources(x = sample_portfolio, resources = "chirps")
+```
+# Calculate indicators
+
+The next step consists of calculating specific indicators. Note, that each indicator
+requires one or more resources that were made available via the <code>get_resources()</code>
+function explained above. We can learn about all available indicators via the
+<code>available_indicators()</code> function that will return the info for
+specific indicators if a valid name is supplied. In this example, we are interested
+in calculating the 'precipitation' indicator which is based on the 'chirps' resource.
+
+```{r query_indicator}
+available_indicators("precipitation")
+```
+We can learn the package internal function name and the processing mode, which 
+both are not really of interest to users. If you are not familiar with those
+expressions make sure to quickly read through our [Terminology](terminology.html)
+vignette. More of interest to users are the 'inputs', 'arguments', and 'engine' objects.
+For the 'precipitation' indicator only a single resource, namely the 'chirps'
+resource is required. A single argument called 'scales_spi' can be specified that
+defaults to a value of NULL Also, the indicator supports different extractions
+engines, which in this case defaults to 'extract', representing the <code>terra::extract()</code>
+function.
+
+If in doubt you can head over to the more explicit indicator documentation via
+either of the below commands:
+
+```{r helppage_indicator, eval = FALSE}
+?precipitation
+help(precipitation)
+```
+
+Once we are equipped with that knowledge we can move over to the actual
+indicator calculation. We will use a standardized interface that applies to
+all availaible indicators vie the <code>calc_indicators()</code> function.
+
+```{r calc_indicator}
+sample_portfolio <- calc_indicators(sample_portfolio,
+  indicators = "precipitation"
+)
+```
+The function call will inform us that we have not specified two available arguments
+and that the default values have been used. If you get such a message for other
+indicators and you do not know what they mean, head over to the indicator
+help-page to learn about the available arguments.
+
+Now let's take a look at the results. We will select only some of the metadata
+and the outpu indicator column in order to get a clearer picture of what has happened.
+
+```{r select_cols}
+(sample_portfolio <- sample_portfolio %>% select(.assetid, WDPAID, precipitation))
+```
+We obtained a new listed column in our sf object that is called like the requested
+indicator. We can already see that, for each asset in our portfolio, this column
+contains a tibble with 12 rows and 4 columns. Let's have a closer look at these 
+objects.
+
+```{r investigate_indicator}
+sample_portfolio$precipitation[10]
+```
+
+We obtained a tibble in long format for 12 months in the year 2010. The precipitation
+indicator with the default setting delivered the absolute average rainfall as well
+as the rainfall anomaly compared to the 1981-2010 climate normal period (make sure
+to read the detailed indicator documentation via `?precipitation`).
+Let's quickly visualize the results for our assets.
+
+```{r toast_ui, echo = FALSE}
+library(toastui)
+library(apexcharter)
+
+sample_portfolio %>%
+  filter(.assetid > 2 & .assetid < 17) %>%
+  st_drop_geometry() %>%
+  select(.assetid, precipitation) %>%
+  mutate(anomaly = precipitation) %>%
+  datagrid() %>%
+  grid_complex_header(
+    "Precipitation indicators for Sierra de Neiba" = c(".assetid", "precipitation", "anomaly")
+  ) %>%
+  grid_sparkline(
+    column = "precipitation",
+    renderer = function(data) {
+      apex(data, aes(months, absolute), type = "column") %>%
+        ax_chart(sparkline = list(enabled = TRUE)) %>%
+        ax_yaxis(min = 0, max = 300)
+    }
+  ) %>%
+  grid_sparkline(
+    column = "anomaly",
+    renderer = function(data) {
+      apex(data, aes(months, anomaly), type = "column") %>%
+        ax_chart(sparkline = list(enabled = TRUE)) %>%
+        ax_yaxis(min = -90, max = 150)
+    }
+  )
+```
+
+If you wish to conduct your statistical analysis in R, you can use tidyr functionality
+to unnest one or multiple columns. Especially for large portfolios, it is usually
+a good idea to keep the geometry information in a separated variable in order
+to keep the size of the data object relatively small.
+
+```{r unnest}
+geometries <- select(sample_portfolio, .assetid)
+sample_portfolio %>%
+  st_drop_geometry() %>%
+  tidyr::unnest(precipitation) %>%
+  filter(.assetid == 3)
+```
+
+# Exporting an portfolio object
+
+You can use the <code>write_portfolio()</code> function to save a processed portfolio object
+to disk as a geopackage. This allows sharing your data with others who
+might not be using R. Simply point towards a non-existing file on your local
+disk to write the portfolio. The function will create an individual table
+for all processed indicators. Via the <code>read_portfolio()</code> function,
+a portfolio which has been written to disk in such a way can be read back into R.
+However, users should note that the attributes that are added during the 
+portfolio initialization are not reconstructed. Thus if you wish to continue to
+use mapme.biodiversity functionality on such a portfolio object, make sure to 
+re-run <code>init_portfolio()</code> on it.
+
+```{r portfolio_io}
+tmp_output <- tempfile(fileext = ".gpkg")
+write_portfolio(
+  x = sample_portfolio,
+  dsn = tmp_output
+)
+(portfolio_from_disk <- read_portfolio(tmp_output))
+```
+
+```{r delete_tmp, echo=FALSE, include=FALSE}
+file.remove(tmp_output)
+```
+

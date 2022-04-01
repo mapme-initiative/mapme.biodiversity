@@ -22,7 +22,10 @@
 #' @param tmpdir Character vector to a directory used for intermediate files.
 #'   Defaults to the output of \code{tempdir()}, e.g. the current R session's
 #'   temporal directory. If a custom file path does not exist, we will attempt
-#'   to create it. Cannot be equal to the output directory.
+#'   to create it. Cannot be equal to the output directory. Note, that for
+#'   raster calculations we will set the temporal directory for the \code{terra}
+#'   package here. Please make sure that enough disk space is available because
+#'   some intermediate calculations can become quite large.
 #' @param cores An integer value indicating the number of cores on the host
 #'   machine available for indicator calculation. It defaults to
 #'   \code{parallel::detectCores() - 1} cores, i.e. one core less than all
@@ -57,13 +60,15 @@ init_portfolio <- function(x,
     cores <- 1
   }
 
-  aria_output <- try(system2(aria_bin, args = "--version", stdout = TRUE), silent = TRUE)
-  if (inherits(aria_output, "try-error") | !grepl("aria2 version", aria_output[1])) {
-    warning(paste(
-      "Argument 'aria_bin' does not point to a executable aria2 installation.",
-      "The package will use R internal download utility."
-    ))
-    aria_bin <- NULL
+  if (!is.null(aria_bin)) {
+    aria_output <- try(system2(aria_bin, args = "--version", stdout = TRUE), silent = TRUE)
+    if (inherits(aria_output, "try-error") | !grepl("aria2 version", aria_output[1])) {
+      warning(paste(
+        "Argument 'aria_bin' does not point to a executable aria2 installation.",
+        "The package will use R internal download utility."
+      ))
+      aria_bin <- NULL
+    }
   }
 
   if (nrow(x) < 1) stop("x must contain at least one asset.")
@@ -74,8 +79,8 @@ init_portfolio <- function(x,
   # use tibble for prettier printing of the object
   x <- st_as_sf(tibble(x))
   # check for geometry types
-  if (any(!unique(st_geometry_type(x)) %in% c("POLYGON", "MULTIPOLYGON"))) {
-    stop("Some assests are not of type POLYGON or MULTIPOLYGON.")
+  if (any(!unique(st_geometry_type(x)) %in% c("POLYGON"))) {
+    stop("Some assests are not of type POLYGON. Please use sf::st_cast() to cast to POLYGON.")
   }
   # add a unique asset identifier
   if (".assetid" %in% names(x)) {
@@ -227,14 +232,14 @@ read_portfolio <- function(file, ...) {
     ))
   }
 
-  metadata <- st_read(file, layer = "metadata", ...)
+  metadata <- read_sf(file, layer = "metadata", ...)
   present_indicators <- all_layers$name[which(all_layers$name %in% names(available_indicators()))]
   if (length(present_indicators) == 0) {
     stop("Could not find any mapme.biodiversity indicator tables in the input file.")
   }
 
   for (ind in present_indicators) {
-    tmp <- st_read(file, layer = ind, ...)
+    tmp <- read_sf(file, layer = ind, ...)
     tmp <- tidyr::nest(tmp, data = !.assetid)
     names(tmp)[2] <- ind
     metadata <- dplyr::left_join(metadata, tmp, by = ".assetid")

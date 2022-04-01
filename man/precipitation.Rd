@@ -18,7 +18,7 @@ between 1 and 48 months. Th function needs the \code{SPEI} package to be
 installed.
 The required resources for this indicator are:
 \itemize{
-\item \code{chirps}
+\item \link{chirps}
 }
 }
 \details{

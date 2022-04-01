@@ -11,12 +11,15 @@ test_that("multiplication works", {
   tmpdir <- system.file("tmp",
     package = "mapme.biodiversity"
   )
+
+  aoi <- suppressWarnings(st_cast(aoi, to = "POLYGON"))[1, ]
   portfolio <- init_portfolio(aoi,
     years = 2000:2005,
     cores = 1,
     outdir = outdir,
     tmpdir = tmpdir
   )
+
   portfolio <- get_resources(portfolio,
     resources = c("treecover2000", "lossyear")
   )

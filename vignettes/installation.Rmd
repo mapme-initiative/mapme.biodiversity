@@ -1,0 +1,49 @@
+---
+author: "Darius A. Görgen"
+title: "Installation"
+date: "Last modified: `r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Installation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+This sections describes how to install the `{mapme.biodiversity}` package. 
+Because the package handles some spatial data, we assume that you have
+a working installation of [GDAL](https://gdal.org/index.html) and [PROJ](https://proj.org/) 
+on your system. The GDAL installation needs to be found on your PATH variable, 
+because several system calls will be issued when the package is used. Please 
+refer to the respective installation guides to learn about how to install these 
+programs on your OS.
+While the package supports sequentially downloading all supported resources,
+we include the option to provide a path to an [aria2](https://aria2.github.io/) executable 
+in order to seed up the download based on parallel processing. We expect that 
+the path to the executable binary is known to the user and we test it if 
+provided during portfolio initialization.
+
+Provided that above requirements are met, installing the `{mapme.biodiversity}` 
+package is then achieved trough the following function call: 
+
+
+```{r installation, eval = F}
+remotes::install_github("mapme-initiative/mapme.biodiversity")
+```
+
+The installation process will install potential missing R dependencies.
+After the successful installation, you are ready to use the package's 
+functionality. Simply load the package for your R session with the library
+call:
+
+```{r setup, val = F}
+library(mapme.biodiversity)
+```
+
