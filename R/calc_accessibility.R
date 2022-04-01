@@ -202,7 +202,7 @@ NULL
       out <- exactextractr::exact_extract(
         traveltime,
         shp,
-        fun = ifelse(stats[i] == "sd", "stdev", "variance")
+        fun = ifelse(stats[j] == "sd", "stdev", "variance")
       )
     } else {
       out <- exactextractr::exact_extract(
