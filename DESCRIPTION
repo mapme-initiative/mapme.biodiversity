@@ -1,5 +1,5 @@
 Package: mapme.biodiversity
-Title: Efficient monitoring of global biodiversity areas
+Title: Efficient Monitoring of Global Biodiversity Portfolios
 Version: 0.0.0.9000
 Authors@R: c(
     person("Darius A.", "Görgen", , "darius2402@web.de", role = c("aut", "cre")),
@@ -18,6 +18,10 @@ Description: Biodiversity areas, especially primary forest, serve a
     of an organization's effort to protect biodiversity areas under threat
     and to identify regions were intervention is most duly needed.
 License: GPL (>= 3)
+Depends:
+    R (>= 3.5.0),
+    sf,
+    terra
 Imports:
     curl,
     data.table,
@@ -26,9 +30,7 @@ Imports:
     progress,
     progressr,
     RCurl,
-    sf,
     stringr,
-    terra,
     tibble,
     tidyr,
     tidyselect
