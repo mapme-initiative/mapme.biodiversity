@@ -74,7 +74,7 @@ get_resources <- function(x, resources, ...) {
   params$verbose <- atts$verbose
   # set terra temporal directory to rundir
   terra_org <- tempdir()
-  dir.create(file.path(tmpdir, "terra"))
+  dir.create(file.path(tmpdir, "terra"), showWarnings = FALSE)
   terra::terraOptions(tempdir = file.path(tmpdir, "terra"))
   # conduct download function, TODO: we can think of an efficient way for
   # parallel downloads here or further upstream

@@ -234,11 +234,8 @@
     counter <- 1
     if (length(urls) < 10) verbose <- FALSE
     while (retry) {
-      if (verbose) pb <- progress::progress_bar$new(total = length(urls))
-      if (verbose) pb$tick(0)
-      unsuccessful <- lapply(seq_along(urls), function(i) {
+      unsuccessful <- pbapply::pblapply(seq_along(urls), function(i) {
         if (file.exists(filenames[i])) {
-          if (verbose) pb$tick()
           return(NULL) # file exists locally
         }
         if (check_existence) {
@@ -252,9 +249,9 @@
           return(list(urls = urls[i], filenames = filenames[i]))
         }
 
-        if (verbose) pb$tick()
         NULL
       })
+
       counter <- counter + 1
 
       unsuccessful <- unsuccessful[which(sapply(unsuccessful, function(x) !is.null(x)))]

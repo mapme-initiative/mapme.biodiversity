@@ -79,51 +79,15 @@ calc_indicators <- function(x, indicators, ...) {
   params$processing_mode <- processing_mode
   # set terra temporal directory to rundir
   terra_org <- tempdir()
-  dir.create(file.path(tmpdir, "terra"))
+  dir.create(file.path(tmpdir, "terra"), showWarnings = FALSE)
   terra::terraOptions(tempdir = file.path(tmpdir, "terra"))
 
   if (processing_mode == "asset") {
-    if (verbose) {
-      progressr::handlers(
-        progressr::handler_progress(
-          format = sprintf(
-            " Calculating indicator '%s' [:bar] :percent",
-            indicator
-          ),
-          clear = FALSE,
-          width = 60
-        )
-      )
-    }
     # apply function with parameters and add hidden id column
-    if (cores > 1) {
-      if (verbose) {
-        progressr::with_progress({
-          params$p <- progressr::progressor(along = 1:nrow(x))
-          results <- parallel::mclapply(1:nrow(x), function(i) {
-            .prep_and_compute(x[i, ], params, i)
-          }, mc.cores = cores)
-        })
-      } else {
-        results <- parallel::mclapply(1:nrow(x), function(i) {
-          .prep_and_compute(x[i, ], params, i)
-        }, mc.cores = cores)
-      }
-    } else {
-      if (verbose) {
-        progressr::with_progress({
-          params$p <- progressr::progressor(along = 1:nrow(x))
-          results <- lapply(1:nrow(x), function(i) {
-            .prep_and_compute(x[i, ], params, i)
-          })
-        })
-      } else {
-        results <- lapply(1:nrow(x), function(i) {
-          .prep_and_compute(x[i, ], params, i)
-        })
-      }
-    }
-  } else { # processing_mode == "portfolio"
+    results <- pbapply::pblapply(1:nrow(x), function(i) {
+      .prep_and_compute(x[i, ], params, i)
+    }, cl = cores)
+  } else {
     results <- .prep_and_compute(x, params, 1)
   }
   # cleanup the tmpdir for indicator
@@ -163,7 +127,6 @@ calc_indicators <- function(x, indicators, ...) {
     warning(sprintf("Error occured at polygon %s with the following error message: %s. \n Returning NAs.", i, out))
     out <- tibble(.id = i)
   }
-  if (params$verbose & params$processing_mode == "asset") params$p() # progress tick
   if (params$processing_mode == "asset") out$.id <- i # add an id variable
   unlink(rundir, recursive = TRUE, force = TRUE) # delete the current rundir
   out # return
