@@ -60,6 +60,9 @@ init_portfolio <- function(x,
     cores <- 1
   }
 
+  # deactivate progress bar if verbose is set to FALSE
+  if (!verbose) pbapply::pboptions(type = "none")
+
   if (!is.null(aria_bin)) {
     aria_output <- try(system2(aria_bin, args = "--version", stdout = TRUE), silent = TRUE)
     if (inherits(aria_output, "try-error") | !grepl("aria2 version", aria_output[1])) {
