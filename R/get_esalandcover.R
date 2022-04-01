@@ -58,6 +58,14 @@ NULL
   # urls to vector
   urls <- unlist(urls)
   filenames <- file.path(rundir, basename(urls))
+  # change filename structure
+  bn <- basename(filenames)
+  chars <- strsplit(bn, "-|_")
+  charname <- lapply(1:length(chars), function(j) {
+    paste0(chars[[j]][1],"_",chars[[j]][3],"_",chars[[j]][5],"_",chars[[j]][6],".tif")
+  })
+  charnames <- unlist(charname)
+  filenames <- file.path(rundir, basename(charnames))
   if (any(file.exists(filenames))) {
     message("Skipping existing files in output directory.")
   }
