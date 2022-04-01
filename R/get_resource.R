@@ -72,6 +72,10 @@ get_resources <- function(x, resources, ...) {
   params$x <- x
   params$rundir <- rundir
   params$verbose <- atts$verbose
+  # set terra temporal directory to rundir
+  terra_org <- tempdir()
+  dir.create(file.path(tmpdir, "terra"))
+  terra::terraOptions(tempdir = file.path(tmpdir, "terra"))
   # conduct download function, TODO: we can think of an efficient way for
   # parallel downloads here or further upstream
   # if files to not exist use download function to download to tmpdir
@@ -122,14 +126,22 @@ get_resources <- function(x, resources, ...) {
   if (selected_resource[[1]]$type == "raster") {
     tindex_file <- file.path(rundir, paste0("tileindex_", resource, ".gpkg"))
     if (file.exists(tindex_file)) file.remove(tindex_file)
-    command <- sprintf(
-      "gdaltindex -write_absolute_path -t_srs EPSG:4326 %s %s",
-      tindex_file, paste(downloaded_files, collapse = " ")
-    )
-    # print(command)
-    system(command, intern = TRUE)
+    footprints <- lapply(downloaded_files, function(file) {
+      tmp <- rast(file)
+      footprint <- st_as_sf(st_as_sfc(st_bbox(tmp)))
+      st_geometry(footprint) <- "geom"
+      footprint$location <- sources(tmp)
+      footprint
+    })
+    footprints <- do.call(rbind, footprints)
+    write_sf(footprints, dsn = tindex_file)
     downloaded_files <- tindex_file
   }
+
+  # remove terra tmpdir
+  unlink(file.path(tmpdir, "terra"), recursive = TRUE, force = TRUE)
+  terra::terraOptions(tempdir = terra_org)
+
   # add the new resource to the attributes of the portfolio object
   resource_to_add <- list(downloaded_files)
   names(resource_to_add) <- resource

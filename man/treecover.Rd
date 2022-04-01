@@ -14,8 +14,8 @@ preceeding and the current years are substracted from the treecover in the
 year 2000 and actual treecover figures within the polygon are returned.
 The required resources for this indicator are:
 \itemize{
-\item \code{treecover2000}
-\item \code{lossyear}
+\item \link{treecover2000}
+\item \link{lossyear}
 }
 }
 \details{

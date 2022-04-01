@@ -6,9 +6,9 @@
 #' to calculate them in one run if users are actually interested in both statistics.
 #' Otherwise users are advised to use the respective single indicator functions.
 #' The required resources for this indicator are:
-#'  - \code{treecover2000}
-#'  - \code{lossyear}
-#'  - \code{greenhouse}.
+#'  - [treecover2000]
+#'  - [lossyear]
+#'  - [greenhouse].
 #'
 #' The following arguments can be set:
 #' \describe{

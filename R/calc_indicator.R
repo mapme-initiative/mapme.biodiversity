@@ -77,6 +77,10 @@ calc_indicators <- function(x, indicators, ...) {
   params$required_resources <- required_resources
   params$cores <- cores
   params$processing_mode <- processing_mode
+  # set terra temporal directory to rundir
+  terra_org <- tempdir()
+  dir.create(file.path(tmpdir, "terra"))
+  terra::terraOptions(tempdir = file.path(tmpdir, "terra"))
 
   if (processing_mode == "asset") {
     if (verbose) {
@@ -124,6 +128,9 @@ calc_indicators <- function(x, indicators, ...) {
   }
   # cleanup the tmpdir for indicator
   unlink(tmpdir, recursive = TRUE, force = TRUE)
+  # remove terra tmpdir
+  unlink(file.path(tmpdir, "terra"), recursive = TRUE, force = TRUE)
+  terra::terraOptions(tempdir = terra_org)
   # bind results to data.frame
   results <- tibble(data.table::rbindlist(results, fill = TRUE))
   # nest the results

@@ -4,3 +4,4 @@ devel
 renv.lock
 renv
 docs
+inst/doc

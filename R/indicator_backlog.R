@@ -77,7 +77,7 @@ available_indicators <- function(indicator = NULL) {
       name = ".calc_precipitation",
       inputs = list(chirps = "raster"),
       arguments = list(
-        scales_spi = 12,
+        scales_spi = NULL,
         engine = "extract"
       ),
       processing_mode = "portfolio"
@@ -99,6 +99,15 @@ available_indicators <- function(indicator = NULL) {
         engine = "extract"
       ),
       processing_mode = "portfolio"
+    ),
+    soilproperties = list(
+      name = ".calc_soilproperties",
+      inputs = list(soilgrids = "raster"),
+      arguments = list(
+        stats_soil = "mean",
+        engine = "extract"
+      ),
+      processing_mode = "asset"
     )
   )
 

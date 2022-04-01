@@ -29,7 +29,10 @@ to the current working directory.}
 \item{tmpdir}{Character vector to a directory used for intermediate files.
 Defaults to the output of \code{tempdir()}, e.g. the current R session's
 temporal directory. If a custom file path does not exist, we will attempt
-to create it. Cannot be equal to the output directory.}
+to create it. Cannot be equal to the output directory. Note, that for
+raster calculations we will set the temporal directory for the \code{terra}
+package here. Please make sure that enough disk space is available because
+some intermediate calculations can become quite large.}
 
 \item{cores}{An integer value indicating the number of cores on the host
 machine available for indicator calculation. It defaults to

@@ -1,56 +1,78 @@
 test_that("treeloss works", {
-  aoi <- read_sf(
+  shp <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
       package = "mapme.biodiversity"
     )
   )
-  outdir <- system.file("res",
+  shp <- suppressWarnings(st_cast(shp, to = "POLYGON"))[1, ]
+
+  treecover2000 <- list.files(system.file("res", "treecover2000",
     package = "mapme.biodiversity"
-  )
-  tmpdir <- system.file("tmp",
+  ), pattern = ".tif$", full.names = TRUE)
+
+  lossyear <- list.files(system.file("res", "lossyear",
     package = "mapme.biodiversity"
-  )
-  portfolio <- init_portfolio(aoi,
-    years = 1990:1995,
-    cores = 1,
-    outdir = outdir,
-    tmpdir = tmpdir
-  )
-  portfolio <- get_resources(portfolio,
-    resources = c("treecover2000", "lossyear", "greenhouse")
-  )
-  resources <- attributes(portfolio)$resources
+  ), pattern = ".tif$", full.names = TRUE)
+  greenhouse <- list.files(system.file("res", "greenhouse",
+    package = "mapme.biodiversity"
+  ), pattern = ".tif$", full.names = TRUE)
+
+  treecover2000 <- rast(treecover2000)
+  lossyear <- rast(lossyear)
+  greenhouse <- rast(greenhouse)
+
+  attributes(shp)$years <- 1990:1999
+  attributes(shp)$cores <- 1
 
   expect_warning(
-    calc_indicators(portfolio, "treeloss"),
+    .calc_treeloss(shp, treecover2000, lossyear, greenhouse),
     "Cannot calculate treeloss statistics for years smaller than 2000"
   )
 
-  attributes(portfolio)$years <- 1999:2005
-  stat <- suppressWarnings(calc_indicators(portfolio, "treeloss")$treeloss[[1]])
-  expect_snapshot(stat)
-  attributes(portfolio)$years <- 2000:2005
-
-  expect_warning(
-    calc_indicators(portfolio, "treeloss", min_cover = "10"),
-    "must be a numeric value between 0 and 100"
+  attributes(shp)$years <- 2000:2005
+  expect_equal(
+    .calc_treeloss(shp, treecover2000, lossyear, NULL),
+    tibble(years = 2000:2005, treecover = rep(NA, 6), emissions = rep(NA, 6))
   )
 
-  expect_warning(
-    calc_indicators(portfolio, "treeloss", min_cover = 200),
-    "must be a numeric value between 0 and 100"
-  )
-
-  expect_snapshot(
-    calc_indicators(portfolio, "treeloss", min_cover = 50.2)$treeloss[[1]]
-  )
-
-  expect_warning(
-    calc_indicators(portfolio, "treeloss", min_size = -10),
+  expect_error(
+    .calc_treeloss(shp, treecover2000, lossyear, greenhouse, min_size = "a"),
     "Argument 'min_size' for indicator 'treeloss' must be a numeric value greater 0."
   )
 
-  expect_snapshot(
-    calc_indicators(portfolio, "treeloss", min_size = 1000, min_cover = 100)$treeloss[[1]]
+  expect_error(
+    .calc_treeloss(shp, treecover2000, lossyear, greenhouse, min_size = -10),
+    "Argument 'min_size' for indicator 'treeloss' must be a numeric value greater 0."
   )
+
+  expect_error(
+    .calc_treeloss(shp, treecover2000, lossyear, greenhouse, min_cover = "a"),
+    "Argument 'min_cover' for indicator 'treeloss' must be a numeric value between 0 and 100."
+  )
+
+  expect_error(
+    .calc_treeloss(shp, treecover2000, lossyear, greenhouse, min_cover = -10),
+    "Argument 'min_cover' for indicator 'treeloss' must be a numeric value between 0 and 100."
+  )
+
+  expect_error(
+    .calc_treeloss(shp, treecover2000, lossyear, greenhouse, min_cover = 110),
+    "Argument 'min_cover' for indicator 'treeloss' must be a numeric value between 0 and 100."
+  )
+
+  expect_snapshot(
+    .calc_treeloss(shp, treecover2000, lossyear, greenhouse, min_size = 1, min_cover = 10)
+  )
+
+  attributes(shp)$years <- 1999:2005
+  expect_warning(
+    stat <- .calc_treeloss(shp, treecover2000, lossyear, greenhouse, min_size = 1, min_cover = 10),
+    "Cannot calculate treeloss statistics for years smaller than 2000."
+  )
+
+  expect_snapshot(stat)
+  attributes(shp)$years <- 2000:2005
+  stats_treeloss <- .calc_treeloss(shp, treecover2000, lossyear, greenhouse, min_size = 1, min_cover = 10)[, c(1, 2)]
+  stats_emissions <- .calc_emissions(shp, treecover2000, lossyear, greenhouse, min_size = 1, min_cover = 10)
+  expect_equal(stats_treeloss, stats_emissions)
 })

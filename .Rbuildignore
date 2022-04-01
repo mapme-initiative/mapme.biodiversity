@@ -10,3 +10,7 @@ inst/extdata/resources
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+inst/res/chirps/tileindex_chirps.gpkg
+inst/res/greenhouse/tileindex_greenhouse.gpkg
+inst/res/lossyear/tileindex_lossyear.gpkg
+inst/res/treecover2000/tileindex_treecover2000.gpkg

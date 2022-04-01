@@ -5,8 +5,8 @@
 #' preceeding and the current years are substracted from the treecover in the
 #' year 2000 and actual treecover figures within the polygon are returned.
 #' The required resources for this indicator are:
-#'  - \code{treecover2000}
-#'  - \code{lossyear}
+#'  - [treecover2000]
+#'  - [lossyear]
 #'
 #' The following arguments can be set:
 #' \describe{

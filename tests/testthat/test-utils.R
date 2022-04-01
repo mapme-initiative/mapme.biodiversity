@@ -80,7 +80,7 @@ test_that(".check_available_years works", {
 })
 
 
-test_that(".download_ors_skip works", {
+test_that(".download_or_skip works", {
   urls <- rep("https://github.com/mapme-initiative/mapme.biodiversity/blob/main/R/utils.R", 3)
   filenames <- sapply(1:3, function(i) tempfile())
   expect_equal(

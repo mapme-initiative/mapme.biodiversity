@@ -15,9 +15,9 @@ from Harris et al. (2021) and area-wise emission statistics are calculated
 for each year.
 The required resources for this indicator are:
 \itemize{
-\item \code{treecover2000}
-\item \code{lossyear}
-\item \code{greenhouse}.
+\item \link{treecover2000}
+\item \link{lossyear}
+\item \link{greenhouse}.
 }
 }
 \details{
