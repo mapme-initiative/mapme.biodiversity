@@ -1,28 +1,22 @@
-# test-calc_drought_indicator.R
-
-library(sf)
-library(terra)
-library(testthat)
-
 test_that("drought indicator works", {
   shp <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
-                package = "mapme.biodiversity"
+      package = "mapme.biodiversity"
     )
   )
   nasagrace <- list.files(system.file("res", "nasagrace",
-                                   package = "mapme.biodiversity"
+    package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)
   nasagrace <- rast(nasagrace)
   attributes(shp)$years <- 2003:2022
   attributes(shp)$cores <- 1
   expect_error(
     .calc_drought_indicator(shp, nasagrace, engine = "not-available"),
-    "Engine not-available is not an available engine. Please choose one of: zonal, extract, exactextract"
+    "Engine 'not-available' is not an available engine. Please choose one of:"
   )
   expect_error(
     .calc_drought_indicator(shp, nasagrace, stats_drought = "not-available"),
-    "Stat not-available is not an available statistics. Please choose one of: mean, median, sd"
+    "Statistic 'not-available' is not supported. Please choose one of:"
   )
   expect_snapshot(
     .calc_drought_indicator(shp, nasagrace)

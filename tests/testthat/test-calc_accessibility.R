@@ -1,28 +1,22 @@
-# test-calc_accessibility.R
-
-library(sf)
-library(terra)
-library(testthat)
-
 test_that("accessibility works", {
   shp <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
-                package = "mapme.biodiversity"
+      package = "mapme.biodiversity"
     )
   )
   traveltime <- list.files(system.file("res", "traveltime",
-                                    package = "mapme.biodiversity"
+    package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)
   traveltime <- rast(traveltime)
   attributes(shp)$years <- 2015
   attributes(shp)$cores <- 1
   expect_error(
     .calc_accessibility(shp, traveltime, engine = "not-available"),
-    "Engine not-available is not an available engine. Please choose one of: zonal, extract, exactextract"
+    "Engine 'not-available' is not an available engine. Please choose one of:"
   )
   expect_error(
     .calc_accessibility(shp, traveltime, stats_accessibility = "not-available"),
-    "Stat not-available is not an available statistics. Please choose one of: mean, median, sd, min, max, sum, var"
+    "Statistic 'not-available' is not supported. Please choose one of:"
   )
   expect_snapshot(
     .calc_accessibility(shp, traveltime)
@@ -40,4 +34,3 @@ test_that("accessibility works", {
     .calc_accessibility(shp, traveltime, engine = "exactextract")
   )
 })
-

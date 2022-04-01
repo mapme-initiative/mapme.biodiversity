@@ -52,18 +52,17 @@ NULL
                                     ...) {
 
   # check if input engines are correct
-  cores <- attributes(shp)$cores
-  available_engines <- c("zonal", "extract", "exactextract")
-  if (!engine %in% available_engines) {
-    stop(sprintf("Engine %s is not an available engine. Please choose one of: %s", engine, paste(available_engines, collapse = ", ")))
+  if (is.null(nasagrace)) {
+    return(NA)
   }
-
+  # check if intermediate raster should be written to disk
   if (ncell(nasagrace) > 1024 * 1024) todisk <- TRUE
-  available_stats <- c("mean", "median", "sd")
-  # check if input stats are correct
-  if (!any(stats_drought %in% available_stats)) {
-    stop(sprintf("Stat %s is not an available statistics. Please choose one of: %s", stats_drought, paste(available_stats, collapse = ", ")))
-  }
+  # check if input engine is correctly specified
+  available_engines <- c("zonal", "extract", "exactextract")
+  .check_engine(available_engines, engine)
+  # check if only supoorted stats have been specified
+  available_stats <- c("mean", "median", "sd", "min", "max", "sum", "var")
+  .check_stats(available_stats, stats_drought)
 
   if (engine == "extract") {
     extractor <- .comp_drought_extract
@@ -87,6 +86,7 @@ NULL
   }
 
   if (processing_mode == "portfolio") {
+    cores <- attributes(shp)$cores
     results <- parallel::mclapply(1:nrow(shp), function(i) {
       out <- extractor(
         nasagrace = nasagrace,
@@ -204,11 +204,11 @@ NULL
   }
 
   results <- lapply(1:length(stats), function(j) {
-    if (stats[j] == "sd") {
+    if (stats[j] %in% c("sd", "var")) {
       out <- exactextractr::exact_extract(
         nasagrace,
         shp,
-        fun = "stdev"
+        fun = ifelse(stats[j] == "sd", "stdev", "variance")
       )
     } else {
       out <- exactextractr::exact_extract(

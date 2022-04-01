@@ -59,6 +59,10 @@ NULL
                            ...) {
 
   # initial argument checks
+  # handling of return value if resources are missing, e.g. no overlap
+  if (any(is.null(treecover2000), is.null(lossyear), is.null(greenhouse))) {
+    return(NA)
+  }
   # retrieve years from portfolio
   years <- attributes(shp)$years
 
@@ -78,17 +82,6 @@ NULL
       )
     }
   }
-  # handling of return value if resources are missing, e.g. no overlap
-  if (any(is.null(treecover2000), is.null(lossyear), is.null(greenhouse))) {
-    return(
-      tibble(
-        years = years,
-        treecover = rep(NA, length(years)),
-        emissions = rep(NA, length(years))
-      )
-    )
-  }
-
   if (ncell(treecover2000) > 1024 * 1024) todisk <- TRUE
   # check if treecover2000 only contains 0s, e.g. on the ocean
   minmax_treecover2000 <- unique(as.vector(minmax(treecover2000)))

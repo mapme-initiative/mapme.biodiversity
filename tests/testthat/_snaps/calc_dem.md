@@ -12,8 +12,6 @@
 
     Code
       .calc_dem(shp, srtmdem, stats = c("mean", "median", "sd"))
-    Warning <simpleWarning>
-      the condition has length > 1 and only the first element will be used
     Output
       # A tibble: 1 x 3
         elevation_mean elevation_median elevation_sd

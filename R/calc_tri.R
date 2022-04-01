@@ -64,24 +64,18 @@ NULL
                       verbose = TRUE,
                       todisk = FALSE,
                       ...) {
-  if (is.null(srtmdem)) {
-    stat_names <- paste("terrain_ruggedness_index_", stats_tri, sep = "")
-    out <- tibble(as.data.frame(lapply(1:length(stats_tri), function(i) NA)))
-    names(out) <- stat_names
-    return(out)
-  }
   # check if input engines are correct
-  available_engines <- c("zonal", "extract", "exactextract")
-  if (!engine %in% available_engines) {
-    stop(sprintf("Engine %s is not an available engine. Please choose one of: %s", engine, paste(available_engines, collapse = ", ")))
+  if (is.null(srtmdem)) {
+    return(NA)
   }
-
+  # check if intermediate raster should be written to disk
   if (ncell(srtmdem) > 1024 * 1024) todisk <- TRUE
+  # check if input engine is correctly specified
+  available_engines <- c("zonal", "extract", "exactextract")
+  .check_engine(available_engines, engine)
+  # check if only supoorted stats have been specified
   available_stats <- c("mean", "median", "sd", "min", "max", "sum", "var")
-  # check if input stats are correct
-  if (!any(stats_tri %in% available_stats)) {
-    stop(sprintf("Stat %s is not an available statistics. Please choose one of: %s", stats_tri, paste(available_stats, collapse = ", ")))
-  }
+  .check_stats(available_stats, stats_tri)
 
   if (engine == "extract") {
     tibble_zstats <- .comp_tri_extract(

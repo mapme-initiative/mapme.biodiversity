@@ -46,7 +46,7 @@ NULL
                                 todisk = FALSE,
                                 processing_mode = "portfolio",
                                 ...) {
-  if (!"SPEI" %in% utils::installed.packages()[, 1]) {
+  if (!"SPEI" %in% utils::installed.packages()[, 1] & !is.null(scales_spi)) {
     stop("R package 'SPEI' required. Please install via 'install.packages('SPEI'')'")
   }
   # initial argument checks

@@ -5,6 +5,7 @@ test_that("precipitation indicator works", {
     )
   )
   shp <- suppressWarnings(st_cast(shp, to = "POLYGON"))[1, ]
+  pbapply::pboptions(type = "none")
 
   chirps <- list.files(system.file("res", "chirps",
     package = "mapme.biodiversity"
@@ -28,7 +29,7 @@ test_that("precipitation indicator works", {
   )
   expect_error(
     .calc_precipitation(shp, chirps, engine = "not-available"),
-    "Engine not-available is not an available engine. Please choose one of: zonal, extract, exactextract"
+    "Engine not-available is not an available engine. Please choose one of:"
   )
   attributes(shp)$years <- 2000:2010
   expect_snapshot(
