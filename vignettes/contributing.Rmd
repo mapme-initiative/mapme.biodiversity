@@ -1,0 +1,279 @@
+---
+title: "Contributing"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Contributing}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+If you are reading this vignette you most probably to contribute to the `{mapme.biodiversity}`
+package. This is great news and we are very happy to receive Pull-Requests
+extending the package's functionality! Below you will receive important in-depth
+information about how to add resources and indicators in order to make the process
+as seamless as possible for both you and the package's maintainers. Please make
+sure to read and understand this guide before opening a PR. If in doubt, especially
+if you feel that the framework does not support your specific use case, always
+feel free to raise an issue and we will happily discuss how we can support your
+ideas. If you have not already done so, make sure to read [Terminology](terminology.html)
+vignette in order to get familiar with the most important concepts of this package.
+
+Note that we use the [tidyverse styleguide](https://style.tidyverse.org/) 
+for the package. That specifically means that function and variable names should 
+follow the snake case pattern. We also use the arrow assignment operator (`<-`). 
+When submitting a PR which does not consistently follow the tidyverse style guide, 
+the maintainers of the package might change the code to adhere to this code style
+without further notice before accepting the PR. 
+
+# Getting started
+
+Ideally, you clone the GitHub repository via the git command in a command line
+on Linux and MacOS systems or via the GitHub Desktop application on Windows.
+On Linux, the command would look like this:
+
+```bash
+git clone https://github.com/mapme-initiative/mapme.biodiversity
+```
+
+We do not accept pushes to main, thus the first step would be to create
+a specific branch for your extension. In this tutorial we will pretend to 
+reimplement the `soilgrids` resources and the associated `soilproperties` 
+indicator, so that we create a branch reflecting this. Don't forget to checkout
+to the newly created branch!
+
+```bash
+git branch add-soilgrid-indicators
+git checkout add-soilgrid-indicators
+```
+Below, we will assume that you develop your extension to the package in R Studio.
+The general guidelines to follow also apply if you choose a different tooling 
+for your development process, however, it will not be covered in this vignette.
+We assume that all R development dependencies for the state of the package when 
+you used the `git clone` command are installed. The easiest way to ensure this
+is using devtools when in the package's directory:
+
+```r
+devtools::install_dev_deps()
+```
+
+# Adding a resource
+
+## Checklist
+
+- [ ] Add the new resource to `R/resources_backlog.R` following the standardized template
+- [ ] Create a file for all necessary code to download your resource (`R/get_resource_name.R`)
+- [ ] Include roxygen documentation for your resource following the provided template
+- [ ] Check user-specified arguments (if any) for correctness
+- [ ] Retrieve portfolio-wide parameters of interest for your resource from the portfolio
+- [ ] Match the spatio-temporal extent of the portfolio with your resource
+- [ ] Provide your own download functionality or use `.download_or_skip()`
+- [ ] Delete any intermediate files that are no longer required
+- [ ] Return the absolute file paths for all matching resource files
+- [ ] Write a testthat script testing all the newly added functionality (except the actual download) and write it to `test/testthat/test-get_resource_name.R`
+- [ ] Added a new dependency? Make sure to include a supporting statement for that dependency in your PR!
+
+## Introducing a new resources to the backlog
+
+A resource is a supported dataset that can be downloaded from a user's perspective  
+via the <code>get_resources()</code> function. Currently, the package supports
+only raster and vector resources. If you wish to submit the support of a new
+resource, please be aware that we will only accept new resources if they are
+associated with at least one indicator calculation. The very first step to
+add a resource is to add it into the internal resource backlog function so
+that the package is aware of its existence. Once checkout to the new
+branch and having the project opened in R Studio, issue the following
+command to open the resource backlog file:
+
+```{r open_resource_backlog, eval = FALSE}
+file.edit("R/resources_backlog.R")
+```
+
+This file keeps track of all supported resources in a list object. You will
+see that each resource shares a common structure how it is specified. The name
+of the list object will be the name how the package identifies a specific resource.
+Most importantly, the type argument specifies whether a resource is of type 'raster'
+or 'vector'. If applicable, the source argument shall contain an URL pointing
+to a webpage documenting the resource. The downloader argument is the package
+internal function name that is used to download the resource. This function 
+is the most important code file for a new resource. Then, arguments and their
+default value to govern the download process can be specified. If no additional
+arguments are needed just enter a empty list. For the `soilgrids` resource,
+the internal backlog looks like this (don't spent too much effort in understanding
+the arguments just yet. These will become clearer when we "write" the downloader.
+When contributing a new resource, it is usually an iterative process between
+the backlog and the downloader to identify those arguments that need to be specified
+by users):
+
+```{r soilgrid_backlog, eval = FALSE}
+soilgrids <- list(
+  type = "raster",
+  source = "https://www.isric.org/explore/soilgrids",
+  downloader = ".get_soilgrids",
+  arguments = list(
+    layers = "clay",
+    depths = "0-5cm",
+    stats = "mean"
+  )
+)
+```
+
+With the resource being backlogged, the package now can find a 
+resource called `soilgrids` of type `raster` and it can also identify the 
+downloader function In this specific case, the package can also
+determine the default values of three arguments in case users did not specify
+anything. This is important information that will determine how the `get_resources()`
+function actually works when called by users. 
+
+## Documenting the new resource
+
+By convention, the filename of a downloader **MUST** start with `get_<resource_name>.R` 
+appended by the name of the resource. In the case of the soilgrids resource that
+translates to `get_soilgrids.R`. In the first part of such a downloader, make
+sure to include a detailed documentation. This documentation should explain
+what this resource represents, where it comes from (including a citation), 
+and the arguments users should specify to control what is actually downloaded.
+Importantly, this documentation **MUST** receive the roxygen tag `@docType data` as
+well as the `@keywords resource` tag, so that the documentation can be 
+identified as a resource. The `NULL` value below the documentation **MUST** be 
+included. Below is a template that should be used for documenting a resource.
+
+```r
+#' Short title
+#'
+#' One or more description paragraphs might follow here. Please describe
+#' required user arguments here, ideally as itemized lists.
+#'
+#' @name <the short name of your resource, same as in the backlog>
+#' @docType data <we document resources as a dataset>
+#' @keywords resource <identifies the documentation as a resource>
+#' @format <one sentence on data format and spatial extent>
+#' @references <ideally a citable scientific publication>
+#' @source <a link in the \url{} tag linking to an online documentation>
+NULL
+```
+
+## Function inputs
+
+After documenting the resource, you can get started with implementing the 
+actual downloader. The downloader is a package internal function that users do not
+directly interact with. By convention, we append package internal function names
+with a dot. Similar to the filename itself, resource downloaders should start
+with `.get_<resource_name>`. The first argument is always `x`, which corresponds
+to the portfolio object. Important attributes (e.g. the spatial-temporal extent)
+can be derived from this object. Then additional user-facing arguments might follow.
+After these arguments, each resource downloader receives the argument `rundir` which
+by default should point to the output of `tempdir()`, but will be pointing to 
+a output directory on disk where the output shall be written to when used by users.
+Additionally, a logical called `verbose`, by default set to TRUE, controlling 
+the verbosity of the downloader as well as the dots argument. For the `soilgrids` 
+resource, the function header thus looks like this:
+
+```r
+.get_soilgrids <- function(x, layers, depths, stats,
+                           rundir = tempdir(),
+                           verbose = TRUE,
+                           ...) {
+                           # downloader coder goes here
+                           }
+```
+
+## Check arguments and retrieval of portfolio-wide parameters
+
+Before actually conducting any downloads, it is important that you as the provider
+of the new resource check extensively that all required arguments were correctly
+specified. That specifically applies to the user defined variables that your
+downloader requires. The package framework does not have the capability to check
+for the correctness of these arguments. That is something that each downloader
+has to take care of. If some arguments are wrongly specified, the function
+should fail (via `stop()`) and gracefully inform users which arguments where
+misspecified and which values actually represent valid values. You can head
+over to the soilgrids downloader (use `file.edit("R/get_soilgrids.R")`) and 
+analyse the first few lines of the file (up to line ~130) to see how the
+inputs are checked for the soilgrids resource.
+
+Some portfolio-wide parameters that might be important to your specific downloader
+can be determined by analyzing the `x` portfolio attributes. Currently the following
+attributes with regard to a resource download are set, when users initialize their portfolio:
+
+```r
+  attr(x, "nitems") <- nrow(x)
+  attr(x, "bbox") <- st_bbox(x)
+  attr(x, "years") <- years
+  attr(x, "cores") <- cores
+  attr(x, "aria_bin") <- aria_bin
+```
+
+Your resource downloader should take care that with these user-specified arguments
+and the portfolio-wide parameters the files matching these arguments are downloaded.
+These can be queried with the following syntax with the temporal extent of
+the portfolio as an example:
+
+```r
+attributes(x)$years
+```
+
+
+## Using helper functions
+
+If you construct a number of URLs and associated local filenames that you wish
+to iterate over, the package provides a helper function to download these files
+and skip already exisiting ones. The following code snippet shows how
+to use that function:
+
+```r
+aria_bin <- attributes(x)$aria_bin
+verbose <- attributes(x)$verbose
+
+.download_or_skip(urls = source_urls, filenames = target_filenames,
+                  verbose = verbose, stubbornnes = 6, check_existencs = TRUE,
+                  aria_bin = aria_bin)
+
+```
+This function will attempt to download the specified URLs to the corresponding 
+local filenames. URLs for which a corresponding filename already exists will be
+skipped and information about this will be issued as a message if verbose is set 
+to TRUE. The stubbornnes controls the number of retries of failed downloads.
+If check_existence is set to TRUE, `RCurl::url.exists(url)` will be used
+to check if a given URL actually exists online. This check takes some time to
+run, but for some resources it can be useful if you cannot be sure if the constructed
+URL actually exists on the remote location. Users are enabled to specify
+an executable aria2c installation to support parallel downloads. The value of
+the aria_bin variable will be `NULL` if no valid executable has been specified.
+Otherwise the downloader will use the aria2c program to download the specified URLS.
+
+You are free and also encouraged to develop helper functions for your resource to 
+increase the understandibility and ease maintenance of your downloader. Any helper
+functions associated with your resource should be located in the same file. If 
+you feel a helper function might server a purpose across different resource,
+feel free to raise this in a comment and we can consider moving it to `R/utils.R`.
+Since helper functions are internal to the package, they **MUST** start with a dot.
+Package internal functions do not require a roxygen documentation. If you wish
+to include a documentation to make your code easier to understand, make sure to
+add the `@keywords internal` and `@noRd` tags to your functions.
+
+## Defining the output and handling intermediat files
+
+You can create and delete intermediate files and directories within `rundir`.
+The expected output of a resource downloader is a character vector
+including the local filepaths to all target files matching the spatio-temporal
+extent of the portfolio `x`. For raster resources, a tileindex indicating the
+location on earth for each raster file and its file path will be constructed and
+added as a resource to the portfolio. Vector resources are expected to be translated
+to GeoPackages (`.gpkg`) and will be appended to the portfolio as is.
+
+## A note on dependecies for resources
+
+Note, that a resources **SHALL NOT** add additional dependencies to the package. If
+you add a dependencies we require you to add a supporting statement to your PR
+explaining why this dependency is needed and why other approaches would fail.
+Before accepting your PR, we might request you to change your code to remove 
+that dependency, if it is feasible to achieve the same functionality without it.
