@@ -3,8 +3,10 @@ title: "Using the Package"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Using the Package}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -130,17 +132,16 @@ misspecifications of arguments.
 From here, we can start to retrieve our first resource. We can learn about
 available resources using the <code>available_resources()</code> function. With
 no arguments specified, it will return a list object with all available resources.
-When we specify the name of a specific resource we can retrieve only that information.
+Let's inspect the names of this list to learn which resources are available.
 
 ```{r query_resources}
-available_resources("chirps")
+names(available_resources())
 ```
-The output informs us that the resource called 'chirps' is a raster resource.
-The downloader is called '.get_chirps', but that is not really of interest 
-for users. However, the 'arguments' can be of interest, but in the case of the
-'chirps' resource it is an empty list meaning that users do not have to specify
-any additional arguments. If you wish to get more detailed information about
-a resource, you can go to the helpage by running either of those commands below.
+For the purpose of this vignette, we are going to download the 'chirps' resource.
+We can get more detailed information about a given resource, by using either of 
+the commands below to open up the help page. If you are viewing the online 
+version of this documentation, you can simply head over to the [chirps](../reference/chirps.html)
+resource documentation.
 
 ```{r helppage_resource, eval = FALSE}
 ?chirps
@@ -162,11 +163,11 @@ sample_portfolio <- get_resources(x = sample_portfolio, resources = "chirps")
 The next step consists of calculating specific indicators. Note, that each indicator
 requires one or more resources that were made available via the <code>get_resources()</code>
 function explained above. We can learn about all available indicators via the
-<code>available_indicators()</code> function that will return the info for
-specific indicators if a valid name is supplied. In this example, we are interested
+<code>available_indicators()</code> function.
 in calculating the 'precipitation' indicator which is based on the 'chirps' resource.
 
 ```{r query_indicator}
+names(available_indicators())
 available_indicators("precipitation")
 ```
 We can learn the package internal function name and the processing mode, which 
@@ -180,7 +181,8 @@ engines, which in this case defaults to 'extract', representing the <code>terra:
 function.
 
 If in doubt you can head over to the more explicit indicator documentation via
-either of the below commands:
+either of the below commands or, if you are viewing the online version, head
+over to the [precipitation](../reference/precipitation.html) documentation.
 
 ```{r helppage_indicator, eval = FALSE}
 ?precipitation
@@ -193,7 +195,7 @@ all availaible indicators vie the <code>calc_indicators()</code> function.
 
 ```{r calc_indicator}
 sample_portfolio <- calc_indicators(sample_portfolio,
-  indicators = "precipitation"
+                                    indicators = "precipitation"
 )
 ```
 The function call will inform us that we have not specified two available arguments
@@ -220,37 +222,39 @@ We obtained a tibble in long format for 12 months in the year 2010. The precipit
 indicator with the default setting delivered the absolute average rainfall as well
 as the rainfall anomaly compared to the 1981-2010 climate normal period (make sure
 to read the detailed indicator documentation via `?precipitation`).
-Let's quickly visualize the results for our assets.
+Let's quickly visualize the results a single asset
 
-```{r toast_ui, echo = FALSE}
-library(toastui)
-library(apexcharter)
+```{r plot_precipitation, echo = FALSE}
+library(ggplot2)
+
 
 sample_portfolio %>%
-  filter(.assetid > 2 & .assetid < 17) %>%
-  st_drop_geometry() %>%
-  select(.assetid, precipitation) %>%
-  mutate(anomaly = precipitation) %>%
-  datagrid() %>%
-  grid_complex_header(
-    "Precipitation indicators for Sierra de Neiba" = c(".assetid", "precipitation", "anomaly")
-  ) %>%
-  grid_sparkline(
-    column = "precipitation",
-    renderer = function(data) {
-      apex(data, aes(months, absolute), type = "column") %>%
-        ax_chart(sparkline = list(enabled = TRUE)) %>%
-        ax_yaxis(min = 0, max = 300)
-    }
-  ) %>%
-  grid_sparkline(
-    column = "anomaly",
-    renderer = function(data) {
-      apex(data, aes(months, anomaly), type = "column") %>%
-        ax_chart(sparkline = list(enabled = TRUE)) %>%
-        ax_yaxis(min = -90, max = 150)
-    }
-  )
+  filter(.assetid == 7) %>%
+  st_drop_geometry() %>% 
+  tidyr::unnest(precipitation) %>% 
+  mutate(months = month.abb[months]) %>% 
+  mutate(months = factor(months, levels = month.abb, labels = month.abb)) %>%
+  ggplot() +
+  geom_bar(aes(x=months, y=absolute), stat = "identity", fill = "darkblue") +
+  labs(title = "Sum of monthly precipitation 2010", x = "", y = "Precipitation sum [mm]") +
+  theme_classic()
+
+
+sample_portfolio %>%
+  filter(.assetid == 7) %>%
+  st_drop_geometry() %>% 
+  tidyr::unnest(precipitation) %>% 
+  mutate(months = month.abb[months],
+         sign = ifelse(anomaly < 0, "lower than average", "higher than average")) %>% 
+  mutate(months = factor(months, levels = month.abb, labels = month.abb)) %>% 
+  ggplot() +
+  geom_bar(aes(x=months, y=anomaly, fill = sign), stat = "identity") +
+  scale_fill_manual(values= c("darkblue", "brown2")) +
+  labs(title = "Monthly precipitation anomaly 2010", x = "Month", y = "Precipitation anomaly [mm]",
+       fill = "Anomaly") +
+  theme_classic() +
+  theme(legend.position = "bottom")
+
 ```
 
 If you wish to conduct your statistical analysis in R, you can use tidyr functionality

@@ -14,7 +14,7 @@
 #' @export
 #' @keywords resource
 #' @examples
-#' head(available_resources(), 3)
+#' names(available_resources())
 available_resources <- function(resources = NULL) {
   all_resources <- list(
     treecover2000 = list(
