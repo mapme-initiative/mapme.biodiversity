@@ -36,7 +36,7 @@ when requesting the indicator."><meta property="og:image" content="https://mapme
     <a class="dropdown-item" href="../articles/installation.html">Installation</a>
     <a class="dropdown-item" href="../articles/terminology.html">Terminology</a>
     <a class="dropdown-item" href="../articles/workflow.html">Workflow</a>
-    <a class="dropdown-item" href="../articles/userguide.html">Using the package</a>
+    <a class="dropdown-item" href="../articles/userguide.html">Quickstart</a>
     <a class="dropdown-item" href="../articles/contributing.html">Contributing</a>
   </div>
 </li>
@@ -82,85 +82,9 @@ information about the requested indicator will be returned.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">available_indicators</span><span class="op">(</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $treecover</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $treecover$name</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ".calc_treecover"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $treecover$inputs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $treecover$inputs$treecover2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "raster"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $treecover$inputs$lossyear</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "raster"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $treecover$arguments</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $treecover$arguments$min_size</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $treecover$arguments$min_cover</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $treecover$processing_mode</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "asset"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $emissions</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $emissions$name</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ".calc_emissions"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $emissions$inputs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $emissions$inputs$treecover2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "raster"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $emissions$inputs$lossyear</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "raster"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $emissions$inputs$greenhouse</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "raster"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $emissions$arguments</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $emissions$arguments$min_size</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $emissions$arguments$min_cover</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $emissions$processing_mode</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "asset"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $treeloss</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $treeloss$name</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ".calc_treeloss"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $treeloss$inputs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $treeloss$inputs$treecover2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "raster"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $treeloss$inputs$lossyear</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "raster"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $treeloss$inputs$greenhouse</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "raster"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $treeloss$arguments</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $treeloss$arguments$min_size</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $treeloss$arguments$min_cover</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $treeloss$processing_mode</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "asset"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">available_indicators</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "treecover"      "emissions"      "treeloss"       "elevation"     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "tri"            "precipitation"  "soilproperties"</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

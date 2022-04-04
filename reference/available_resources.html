@@ -36,7 +36,7 @@ when requesting the resource."><meta property="og:image" content="https://mapme-
     <a class="dropdown-item" href="../articles/installation.html">Installation</a>
     <a class="dropdown-item" href="../articles/terminology.html">Terminology</a>
     <a class="dropdown-item" href="../articles/workflow.html">Workflow</a>
-    <a class="dropdown-item" href="../articles/userguide.html">Using the package</a>
+    <a class="dropdown-item" href="../articles/userguide.html">Quickstart</a>
     <a class="dropdown-item" href="../articles/contributing.html">Contributing</a>
   </div>
 </li>
@@ -82,53 +82,11 @@ information about the requested resource will be returned.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">available_resources</span><span class="op">(</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $treecover2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $treecover2000$type</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "raster"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $treecover2000$source</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "https://data.globalforestwatch.org/documents/tree-cover-2000/explore"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $treecover2000$downloader</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ".get_treecover"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $treecover2000$arguments</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $treecover2000$arguments$vers_treecover</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "GFC-2020-v1.8"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $lossyear</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $lossyear$type</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "raster"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $lossyear$source</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "https://data.globalforestwatch.org/documents/tree-cover-loss/explore"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $lossyear$downloader</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ".get_lossyear"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $lossyear$arguments</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $lossyear$arguments$vers_lossyear</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "GFC-2020-v1.8"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $greenhouse</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $greenhouse$type</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "raster"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $greenhouse$source</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "https://data.globalforestwatch.org/datasets/gfw::forest-greenhouse-gas-emissions/about"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $greenhouse$downloader</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ".get_greenhouse"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $greenhouse$arguments</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> list()</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">available_resources</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "treecover2000"  "lossyear"       "greenhouse"     "worldpop"      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5] "esalandcover"   "traveltime"     "nasagrace"      "mintemperature"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "maxtemperature" "precipitation"  "chirps"         "ecoregions"    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] "mangrove"       "srtmdem"        "soilgrids"     </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
