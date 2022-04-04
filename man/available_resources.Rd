@@ -22,6 +22,6 @@ and to learn about potentially additional arguments that should be specified
 when requesting the resource.
 }
 \examples{
-head(available_resources(), 3)
+names(available_resources())
 }
 \keyword{resource}
