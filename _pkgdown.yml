@@ -36,7 +36,7 @@ navbar:
           href: articles/terminology.html
         - text: Workflow
           href: articles/workflow.html
-        - text: Using the package
+        - text: Quickstart
           href: articles/userguide.html
         - text: Contributing
           href: articles/contributing.html
