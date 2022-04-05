@@ -106,43 +106,29 @@
 
 <span class="va">aoi_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"sierra_de_neiba_478140.gpkg"</span>, package <span class="op">=</span> <span class="st">"mapme.biodiversity"</span><span class="op">)</span>
 <span class="op">(</span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></span><span class="op">(</span><span class="va">aoi_path</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; Simple feature collection with 1 feature and 49 fields</span>
+<span class="co">#&gt; Simple feature collection with 1 feature and 4 fields</span>
 <span class="co">#&gt; Geometry type: MULTIPOLYGON</span>
 <span class="co">#&gt; Dimension:     XY</span>
 <span class="co">#&gt; Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span>
 <span class="co">#&gt; Geodetic CRS:  WGS 84</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 50</span></span>
-<span class="co">#&gt;   WDPAID WDPA_PID PA_DEF NAME      ORIG_NAME DESIG DESIG_ENG DESIG_TYPE IUCN_CAT</span>
-<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">478</span>140 478140   1      Sierra d… Sierra d… Parq… National… National   II      </span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 41 more variables: INT_CRIT &lt;chr&gt;, MARINE &lt;chr&gt;, REP_M_AREA &lt;dbl&gt;,</span></span>
-<span class="co">#&gt; <span style="color: #949494;">#   REP_AREA &lt;dbl&gt;, NO_TAKE &lt;chr&gt;, NO_TK_AREA &lt;dbl&gt;, STATUS &lt;chr&gt;,</span></span>
-<span class="co">#&gt; <span style="color: #949494;">#   STATUS_YR &lt;dbl&gt;, GOV_TYPE &lt;chr&gt;, OWN_TYPE &lt;chr&gt;, MANG_AUTH &lt;chr&gt;,</span></span>
-<span class="co">#&gt; <span style="color: #949494;">#   MANG_PLAN &lt;chr&gt;, VERIF &lt;chr&gt;, METADATAID &lt;int&gt;, SUB_LOC &lt;chr&gt;,</span></span>
-<span class="co">#&gt; <span style="color: #949494;">#   PARENT_ISO &lt;chr&gt;, ISO3 &lt;chr&gt;, SUPP_INFO &lt;chr&gt;, CONS_OBJ &lt;chr&gt;,</span></span>
-<span class="co">#&gt; <span style="color: #949494;">#   GEOMETRY_TYPE &lt;chr&gt;, AREA_KM2 &lt;dbl&gt;, GIS_M_AREA &lt;dbl&gt;, GIS_AREA &lt;dbl&gt;,</span></span>
-<span class="co">#&gt; <span style="color: #949494;">#   name_kfw &lt;chr&gt;, type_kfw &lt;chr&gt;, area_sqkm_kfw &lt;dbl&gt;, mab_kfw &lt;chr&gt;, …</span></span></code></pre></div>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 5</span></span>
+<span class="co">#&gt;   WDPAID NAME            DESIG_ENG     ISO3                                 geom</span>
+<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;MULTIPOLYGON [°]&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">478</span>140 Sierra de Neiba National Park DOM   (((-71.76134 18.66333, -71.76067 1…</span></code></pre></div>
 <p>The sf-object contains a single object of geometry type <code>MULTIPOLYGON</code>. The <code>{mapme.biodiversity}</code> package, however, only supports geometries of type <code>POLYGON</code>, thus we need to cast the geometry before we advance. The resulting sf object also contains some metadata, that will be retained throughout the complete workflow. Because some of the casted geometries represent artifacts of the digitization process, in this example we will subset to only the largest polygon.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_cast.html" class="external-link">st_cast</a></span><span class="op">(</span><span class="va">aoi</span>, to <span class="op">=</span> <span class="st">"POLYGON"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span><span class="op">)</span>
 <span class="co">#&gt; Warning in st_cast.sf(aoi, to = "POLYGON"): repeating attributes for all sub-</span>
 <span class="co">#&gt; geometries for which they may not be constant</span>
-<span class="co">#&gt; Simple feature collection with 1 feature and 49 fields</span>
+<span class="co">#&gt; Simple feature collection with 1 feature and 4 fields</span>
 <span class="co">#&gt; Geometry type: POLYGON</span>
 <span class="co">#&gt; Dimension:     XY</span>
 <span class="co">#&gt; Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span>
 <span class="co">#&gt; Geodetic CRS:  WGS 84</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 50</span></span>
-<span class="co">#&gt;   WDPAID WDPA_PID PA_DEF NAME      ORIG_NAME DESIG DESIG_ENG DESIG_TYPE IUCN_CAT</span>
-<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">478</span>140 478140   1      Sierra d… Sierra d… Parq… National… National   II      </span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 41 more variables: INT_CRIT &lt;chr&gt;, MARINE &lt;chr&gt;, REP_M_AREA &lt;dbl&gt;,</span></span>
-<span class="co">#&gt; <span style="color: #949494;">#   REP_AREA &lt;dbl&gt;, NO_TAKE &lt;chr&gt;, NO_TK_AREA &lt;dbl&gt;, STATUS &lt;chr&gt;,</span></span>
-<span class="co">#&gt; <span style="color: #949494;">#   STATUS_YR &lt;dbl&gt;, GOV_TYPE &lt;chr&gt;, OWN_TYPE &lt;chr&gt;, MANG_AUTH &lt;chr&gt;,</span></span>
-<span class="co">#&gt; <span style="color: #949494;">#   MANG_PLAN &lt;chr&gt;, VERIF &lt;chr&gt;, METADATAID &lt;int&gt;, SUB_LOC &lt;chr&gt;,</span></span>
-<span class="co">#&gt; <span style="color: #949494;">#   PARENT_ISO &lt;chr&gt;, ISO3 &lt;chr&gt;, SUPP_INFO &lt;chr&gt;, CONS_OBJ &lt;chr&gt;,</span></span>
-<span class="co">#&gt; <span style="color: #949494;">#   GEOMETRY_TYPE &lt;chr&gt;, AREA_KM2 &lt;dbl&gt;, GIS_M_AREA &lt;dbl&gt;, GIS_AREA &lt;dbl&gt;,</span></span>
-<span class="co">#&gt; <span style="color: #949494;">#   name_kfw &lt;chr&gt;, type_kfw &lt;chr&gt;, area_sqkm_kfw &lt;dbl&gt;, mab_kfw &lt;chr&gt;, …</span></span></code></pre></div>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 5</span></span>
+<span class="co">#&gt;   WDPAID NAME            DESIG_ENG     ISO3                                 geom</span>
+<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">478</span>140 Sierra de Neiba National Park DOM   ((-71.76134 18.66333, -71.76067 18…</span></code></pre></div>
 <p>In the following, we will simulate a portfolio consiting of several polygons (assets, in the jargon of this package). To this end, we create smaller polygons within the original extent of the main polygon. This way, we can showcase the behavior of the <code>{mapme.biodiversity}</code> package for portfolios that contain multiple assets. We will only select single assets with geometry type <code>POLYGON</code> that lie within the original boundary of the protected area.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">aoi_gridded</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_make_grid.html" class="external-link">st_make_grid</a></span><span class="op">(</span>
@@ -306,9 +292,9 @@
   dsn <span class="op">=</span> <span class="va">tmp_output</span>
 <span class="op">)</span>
 <span class="co">#&gt; Writing layer `metadata' to data source </span>
-<span class="co">#&gt;   `/tmp/Rtmp85LDoP/file41e656152bef.gpkg' using driver `GPKG'</span>
+<span class="co">#&gt;   `/tmp/RtmpIFkr2E/file44375945900.gpkg' using driver `GPKG'</span>
 <span class="co">#&gt; Writing 20 features with 2 fields and geometry type Polygon.</span>
-<span class="co">#&gt; Updating layer `precipitation' to data source `/tmp/Rtmp85LDoP/file41e656152bef.gpkg' using driver `GPKG'</span>
+<span class="co">#&gt; Updating layer `precipitation' to data source `/tmp/RtmpIFkr2E/file44375945900.gpkg' using driver `GPKG'</span>
 <span class="co">#&gt; Writing 240 features with 5 fields without geometries.</span>
 <span class="op">(</span><span class="va">portfolio_from_disk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_portfolio.html">read_portfolio</a></span><span class="op">(</span><span class="va">tmp_output</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Simple feature collection with 20 features and 3 fields</span>
