@@ -48,11 +48,11 @@ NULL
   }
   # start download in a temporal directory within tmpdir
   aria_bin <- attributes(x)$aria_bin
-  .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin)
+  if (is.null(attr(x, "testing"))) .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin)
 
   # unzip and convert shp to gpkg
   message("Translating shapefiles to GeoPackages. This may take a while....")
-  sapply(filenames, function(zip) .unzip_mangrove(zip, rundir))
+  if (is.null(attr(x, "testing"))) sapply(filenames, function(zip) .unzip_mangrove(zip, rundir))
 
   # return paths to the gpkg
   list.files(rundir, full.names = T, pattern = ".gpkg")

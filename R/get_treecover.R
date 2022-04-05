@@ -50,7 +50,7 @@ NULL
     stop(
       sprintf(
         "Wrong version specified for treecover resource. Select one of %s.",
-        .available_gfw_versions()
+        paste(.available_gfw_versions(), collapse = ", ")
       ),
       call. = FALSE
     )
@@ -82,7 +82,7 @@ NULL
   }
   # start download and skip files that exist
   # TODO: parallel downloads
-  .download_or_skip(urls, filenames, verbose)
+  if (is.null(attr(x, "testing"))) .download_or_skip(urls, filenames, verbose)
   # return all paths to the downloaded files
   filenames
 }

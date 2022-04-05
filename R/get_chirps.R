@@ -22,7 +22,6 @@
 NULL
 
 
-
 .get_chirps <- function(x,
                         rundir = tempdir(),
                         verbose = TRUE) {
@@ -33,12 +32,13 @@ NULL
   filenames <- file.path(rundir, basename(urls))
 
   aria_bin <- attributes(x)$aria_bin
-  .download_or_skip(urls,
-    filenames,
-    verbose = verbose,
-    check_existence = TRUE,
-    aria_bin = aria_bin
-  )
-
+  if (is.null(attr(x, "testing"))) {
+    .download_or_skip(urls,
+      filenames,
+      verbose = verbose,
+      check_existence = TRUE,
+      aria_bin = aria_bin
+    )
+  }
   filenames
 }

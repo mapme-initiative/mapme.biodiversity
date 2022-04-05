@@ -14,7 +14,7 @@
 #' @export
 #' @keywords indicator
 #' @examples
-#' head(available_indicators(), 3)
+#' names(available_indicators())
 available_indicators <- function(indicator = NULL) {
   all_indicators <- list(
     treecover = list(

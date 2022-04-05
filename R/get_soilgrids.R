@@ -95,33 +95,29 @@ NULL
 
   if (any(!layers %in% names(.sg_layers))) {
     na_layers <- layers[which(!layers %in% .sg_layers)]
-    stop(
-      sprintf(
-        paste("The selected layer(s) '%s' is/are not available. ",
-          "Please choose one of: %s.",
-          sep = ""
-        ),
-        paste(layers, sep = ", "), paste(names(.sg_layers), collapse = ", ")
+    stop(sprintf(
+      paste("The selected layer(s) '%s' is/are not available. ",
+        "Please choose one of: %s.",
+        sep = ""
       ),
-      call. = FALSE
-    )
+      paste(na_layers, sep = ", "), paste(names(.sg_layers), collapse = ", ")
+    ), call. = FALSE)
   }
 
   if (any(!depths %in% .sg_depths)) {
     na_depths <- depths[which(!depths %in% .sg_depths)]
-    stop(
-      sprintf(
-        paste("The selected depth range(s) '%s' is/are not available. ",
-          "Please choose one of: %s.",
-          sep = ""
-        ),
-        na_depths, paste(.sg_depths, collapse = ", ")
+    stop(sprintf(
+      paste("The selected depth range(s) '%s' is/are not available. ",
+        "Please choose one of: %s.",
+        sep = ""
       ),
-      .call = FALSE
+      na_depths, paste(.sg_depths, collapse = ", ")
+    ),
+    call. = FALSE
     )
   }
 
-  if (!stats %in% .sg_stats) {
+  if (any(!stats %in% .sg_stats)) {
     na_stats <- stats[which(!stats %in% .sg_stats)]
     stop(
       sprintf(
@@ -129,7 +125,7 @@ NULL
               Please choose one of: %s.", sep = ""),
         na_stats, paste(.sg_stats, collapse = ", ")
       ),
-      .call = FALSE
+      call. = FALSE
     )
   }
 
@@ -152,7 +148,7 @@ NULL
         datalayer <- sprintf("%s/%s_%s_%s.vrt", layer, layer, depth, stat)
         filename <- file.path(rundir, str_replace(basename(datalayer), "vrt", "tif"))
 
-        if (!file.exists(filename)) {
+        if (!file.exists(filename) & is.null(attr(x, "testing"))) {
           if (verbose) {
             message(
               sprintf(

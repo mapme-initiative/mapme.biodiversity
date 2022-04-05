@@ -36,10 +36,10 @@ navbar:
           href: articles/terminology.html
         - text: Workflow
           href: articles/workflow.html
-        - text: Using the package
+        - text: Quickstart
           href: articles/userguide.html
-        - text: Extending the package
-          href: articles/extensions.html
+        - text: Contributing
+          href: articles/contributing.html
   github:
     icon: fab fa-github fa-lg
     href: https://github.com/mapme-initiative/mapme.biodiversity
