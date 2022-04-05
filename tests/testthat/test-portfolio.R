@@ -110,7 +110,7 @@ test_that("init_portfolio works", {
     verbose = FALSE,
   )
 
-  tmpfile <- "./portfolio_out.gpkg"
+  tmpfile <- file.path(".", "portfolio_out.gpkg")
 
   expect_snapshot_output(
     portfolio %>%
