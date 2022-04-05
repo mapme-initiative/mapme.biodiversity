@@ -183,7 +183,10 @@ calc_indicators <- function(x, indicators, ...) {
     }
 
     if (resource_type == "vector") {
-      out <- read_sf(source, wkt_filter = st_as_text(st_geometry(shp)))
+      out <- lapply(available_resources[[resource_name]], function(source) {
+        read_sf(source, wkt_filter = st_as_text(st_geometry(shp)))
+      })
+      names(out) <- basename(available_resources[[resource_name]])
     }
     out
   })
