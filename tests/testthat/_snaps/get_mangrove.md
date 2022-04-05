@@ -7,5 +7,5 @@
       Some target years are not available for mangroveextent.
       Translating shapefiles to GeoPackages. This may take a while....
     Output
-      character(0)
+      [1] "gmw-extent_1996.gpkg" "gmw-extent_2016.gpkg"
 
