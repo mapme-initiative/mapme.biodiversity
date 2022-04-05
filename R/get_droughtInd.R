@@ -37,7 +37,7 @@ NULL
     message("Skipping existing files in output directory.")
   }
   # start download in a temporal directory within rundir
-  .download_or_skip(urls, filenames, verbose)
+  if (is.null(attr(x, "testing"))) .download_or_skip(urls, filenames, verbose)
   filenames
 }
 

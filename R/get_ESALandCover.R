@@ -61,7 +61,7 @@ NULL
   if (any(file.exists(filenames))) {
     message("Skipping existing files in output directory.")
   }
-  .download_or_skip(urls, filenames, verbose)
+  if (is.null(attr(x, "testing"))) .download_or_skip(urls, filenames, verbose)
   # return all paths to the downloaded files
   filenames
 }

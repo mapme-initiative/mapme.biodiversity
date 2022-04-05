@@ -34,14 +34,13 @@ Imports:
     tidyr,
     tidyselect
 Suggests: 
-    apexcharter,
     DiagrammeR,
     exactextractr,
+    ggplot2,
     knitr,
     rmarkdown,
     SPEI,
-    testthat (>= 3.0.0),
-    toastui
+    testthat (>= 3.0.0)
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3

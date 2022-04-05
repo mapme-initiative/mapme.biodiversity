@@ -47,11 +47,11 @@ NULL
     message("Skipping existing files in output directory.")
   }
   # start download in a temporal directory within tmpdir
-  .download_or_skip(urls, filenames, verbose)
+  if (is.null(attr(x, "testing"))) .download_or_skip(urls, filenames, verbose)
 
   # unzip and convert shp to gpkg
   message("Translating shapefiles to GeoPackages. This may take a while....")
-  sapply(filenames, function(zip) .unzip_mangrove(zip, rundir))
+  if (is.null(attr(x, "testing"))) sapply(filenames, function(zip) .unzip_mangrove(zip, rundir))
 
   # return paths to the gpkg
   list.files(rundir, full.names = T, pattern = ".gpkg")
