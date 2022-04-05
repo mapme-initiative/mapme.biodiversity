@@ -1,4 +1,3 @@
-
 test_that("init_portfolio works", {
   aoi <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
@@ -125,16 +124,15 @@ test_that("init_portfolio works", {
     verbose = FALSE,
   )
 
-  tmpfile <- file.path(".", "portfolio_out.gpkg")
+  tmpfile <- file.path("portfolio_out.gpkg")
 
-  expect_snapshot_output(
+  expect_snapshot(
     portfolio %>%
-      get_resources("chirps") %>%
-      calc_indicators("precipitation") %>%
+      calc_indicators("precipitation", scales_spi = NULL, engine = "extract") %>%
       write_portfolio(tmpfile)
   )
 
-  expect_snapshot_output(
+  expect_snapshot(
     read_portfolio(tmpfile)
   )
 
