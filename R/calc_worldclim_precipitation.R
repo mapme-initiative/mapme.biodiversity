@@ -1,0 +1,66 @@
+#' Calculate precipitation statistics
+#'
+#' This function allows to efficiently calculate precipitation statistics
+#' from Worldclim for polygons. For each polygon, the desired statistic/s (min,
+#' max, sum, mean, median, sd or var) is/are returned.
+#' The required resources for this indicator are:
+#'  - \code{precipitation}
+#'
+#' The following arguments can be set:
+#' \describe{
+#'   \item{stats_precipitation}{Function to be applied to compute statistics for polygons either
+#'   one or multiple inputs as character. Supported statistics are: "mean",
+#'   "median", "sd", "min", "max", "sum" "var".}
+#'   \item{engine}{The preferred processing functions from either one of "zonal",
+#'   "extract" or "exactextract" as character.}
+#' }
+#'
+#' @name worldclim_prec
+#' @docType data
+#' @keywords indicator
+#' @format A tibble with a column for precipitation statistics (in mm)
+NULL
+
+#' Calculate worldclim precipitation statistics
+#'
+#' Considering the 1km precipitation raster datasets from worldclim users
+#' can specify which statistics among min, max, sum, mean, median, variance or
+#' standard deviation to compute. Also, users can specify the functions i.e. zonal
+#' from package terra, extract from package terra, or exactextract from exactextractr
+#' as desired.
+#'
+#' @param shp A single polygon for which to calculate the precipitation statistic
+#' @param precipitation precipitation raster from which to compute statistics
+#' @param stats_precipitation Function to be applied to compute statistics for polygons
+#'    either one or multiple inputs as character "min", "max", "sum", "mean", "median"
+#'    "sd" or "var".
+#' @param engine The preferred processing functions from either one of "zonal",
+#'   "extract" or "exactextract" as character.
+#' @param rundir A directory where intermediate files are written to.
+#' @param verbose A directory where intermediate files are written to.
+#' @param todisk Logical indicating whether or not temporary raster files shall
+#'   be written to disk
+#' @param ... additional arguments
+#' @return A tibble
+#' @keywords internal
+#' @noRd
+
+.calc_worldclim_precipitation <- function(shp,
+                                          precipitation,
+                                          engine = "extract",
+                                          stats_precipitation = "mean",
+                                          rundir = tempdir(),
+                                          verbose = TRUE,
+                                          todisk = FALSE,
+                                          ...) {
+  results <- .calc_worldclim(
+    shp = shp,
+    worldclim = precipitation,
+    engine = engine,
+    stats_worldclim = stats_precipitation,
+    rundir = rundir,
+    verbose = verbose,
+    todisk = todisk
+  )
+  results
+}
