@@ -284,7 +284,10 @@
           }
         } # file does not exist remotely
 
-        status <- download.file(urls[i], filenames[i], quiet = TRUE, "libcurl")
+        status <- download.file(urls[i], filenames[i],
+          quiet = TRUE, "libcurl",
+          mode = ifelse(Sys.info()["sysname"] == "Windows", "wb", "w")
+        )
         if (status != 0) {
           return(list(urls = urls[i], filenames = filenames[i]))
         }
