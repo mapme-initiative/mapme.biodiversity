@@ -13,12 +13,14 @@ test_that("init_portfolio works", {
     package = "mapme.biodiversity"
   )
 
+  cores <- ifelse(Sys.info()["sysname"] == "Windows", 1, 2)
+
   expect_error(
     init_portfolio(aoi,
       years = 1980:2020,
       outdir = outdir,
       tmpdir = outdir,
-      cores = 2,
+      cores = cores,
       verbose = TRUE
     ),
     "outdir and tmpdir need to point to different directories."
@@ -29,7 +31,7 @@ test_that("init_portfolio works", {
       years = 1980:2020,
       outdir = outdir,
       tmpdir = tmpdir,
-      cores = 2,
+      cores = cores,
       verbose = TRUE
     ),
     "Some assests are not of type POLYGON."
@@ -41,7 +43,7 @@ test_that("init_portfolio works", {
     years = 1980:2020,
     outdir = outdir,
     tmpdir = tmpdir,
-    cores = 2,
+    cores = cores,
     verbose = TRUE
   )
 
@@ -50,7 +52,7 @@ test_that("init_portfolio works", {
       years = 1980:2020,
       outdir = outdir,
       tmpdir = tmpdir,
-      cores = 2,
+      cores = cores,
       verbose = TRUE
     ),
     "'.assetid'. Overwritting its values with a unique identifier."
@@ -62,7 +64,7 @@ test_that("init_portfolio works", {
       years = 1980:2020,
       outdir = outdir,
       tmpdir = tmpdir,
-      cores = 2,
+      cores = cores,
       verbose = TRUE
     ),
     "CRS of x is not EPSG:4326. Attempting to transform."
@@ -73,7 +75,7 @@ test_that("init_portfolio works", {
       years = 1980:2020,
       outdir = outdir,
       tmpdir = tmpdir,
-      cores = 2,
+      cores = cores,
       verbose = TRUE
     ),
     "Some assests are not of type POLYGON."
@@ -84,7 +86,7 @@ test_that("init_portfolio works", {
       years = 1980:2020,
       outdir = outdir,
       tmpdir = tmpdir,
-      cores = 2,
+      cores = cores,
       verbose = TRUE
     ),
     "x must contain at least one asset."
@@ -101,6 +103,19 @@ test_that("init_portfolio works", {
     ),
     "Argument 'aria_bin' does not point to a executable aria2 installation."
   )
+
+  if (Sys.info()["sysname"] == "Windows") {
+    expect_warning(
+      init_portfolio(aoi,
+        years = 2000:2020,
+        outdir = outdir,
+        tmpdir = tmpdir,
+        cores = 2,
+        verbose = TRUE,
+      ),
+      "Parallel processing on Windows currently is not supported"
+    )
+  }
 
   portfolio <- init_portfolio(aoi,
     years = 2000:2020,

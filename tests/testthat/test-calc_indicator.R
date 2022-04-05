@@ -38,9 +38,11 @@ test_that("multiplication works", {
   )$treecover[[1]]
   expect_snapshot(stat)
 
+  cores <- ifelse(Sys.info()["sysname"] == "Windows", 1, 2)
+
   portfolio <- init_portfolio(aoi,
     years = 2000:2005,
-    cores = 2,
+    cores = cores,
     outdir = outdir,
     tmpdir = tmpdir
   )
