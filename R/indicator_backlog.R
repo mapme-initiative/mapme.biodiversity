@@ -108,6 +108,49 @@ available_indicators <- function(indicator = NULL) {
         engine = "extract"
       ),
       processing_mode = "asset"
+    ),
+    popcount = list(
+      name = ".calc_worldpop",
+      inputs = list(worldpop = "raster"),
+      arguments = list(
+        stats_worldpop = "sum",
+        engine = "extract"
+      ),
+      processing_mode = "asset"
+    ),
+    landcover = list(
+      name = ".calc_esalandcover",
+      inputs = list(esalandcover = "raster"),
+      arguments = list(
+      ),
+      processing_mode = "asset"
+    ),
+    worldclim_tmin = list(
+      name = ".calc_worldclim_mintemperature",
+      inputs = list(mintemperature = "raster"),
+      arguments = list(
+        stats_mintemperature = "mean",
+        engine = "extract"
+      ),
+      processing_mode = "asset"
+    ),
+    worldclim_tmax = list(
+      name = ".calc_worldclim_maxtemperature",
+      inputs = list(maxtemperature = "raster"),
+      arguments = list(
+        stats_maxtemperature = "mean",
+        engine = "extract"
+      ),
+      processing_mode = "asset"
+    ),
+    worldclim_prec = list(
+      name = ".calc_worldclim_precipitation",
+      inputs = list(precipitation = "raster"),
+      arguments = list(
+        stats_precipitation = "mean",
+        engine = "extract"
+      ),
+      processing_mode = "asset"
     )
   )
 
