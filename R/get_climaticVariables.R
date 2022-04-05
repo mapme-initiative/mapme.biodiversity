@@ -39,7 +39,6 @@ NULL
                                  rundir = tempdir(),
                                  verbose = TRUE) {
   .get_climatic_variables(x = x, layer = "tmin", rundir, verbose)
-  list.files(rundir, full.names = T)
 }
 
 
@@ -63,7 +62,6 @@ NULL
                                  rundir = tempdir(),
                                  verbose = TRUE) {
   .get_climatic_variables(x = x, layer = "tmax", rundir, verbose)
-  list.files(rundir, full.names = T)
 }
 
 
@@ -87,7 +85,6 @@ NULL
                                rundir = tempdir(),
                                verbose = TRUE) {
   .get_climatic_variables(x = x, layer = "prec", rundir, verbose)
-  list.files(rundir, full.names = T)
 }
 
 
@@ -112,7 +109,7 @@ NULL
   target_years <- attributes(x)$years
   available_years <- 2000:2018
   target_years <- .check_available_years(
-    target_years, available_years, "mangroveextent"
+    target_years, available_years, layer
   )
 
   all_urls <- unlist(sapply(target_years, function(year) {
@@ -125,6 +122,9 @@ NULL
   }
   # start download in a temporal directory within tmpdir
   # TODO: Parallel downloads
+  if (!is.null(attr(x, "testing"))) {
+    return(filenames)
+  }
   .download_or_skip(urls, filenames, verbose)
 
   # unzip the downloaded file

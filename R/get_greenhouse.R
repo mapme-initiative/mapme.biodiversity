@@ -57,7 +57,7 @@ NULL
     message("Skipping existing files in output directory.")
   }
   # TODO: Parallel downloads
-  .download_or_skip(urls, filenames, verbose, check_existence = FALSE)
+  if (is.null(attr(x, "testing"))) .download_or_skip(urls, filenames, verbose, check_existence = FALSE)
   # return all paths to the downloaded files
   filenames
 }

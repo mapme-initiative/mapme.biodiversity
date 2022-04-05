@@ -89,4 +89,39 @@ test_that("init_portfolio works", {
     ),
     "x must contain at least one asset."
   )
+
+  expect_warning(
+    init_portfolio(aoi,
+      years = 2000:2020,
+      outdir = outdir,
+      tmpdir = tmpdir,
+      cores = 1,
+      verbose = TRUE,
+      aria_bin = "/no-valid-bin"
+    ),
+    "Argument 'aria_bin' does not point to a executable aria2 installation."
+  )
+
+  portfolio <- init_portfolio(aoi,
+    years = 2000:2020,
+    outdir = outdir,
+    tmpdir = tmpdir,
+    cores = 1,
+    verbose = FALSE,
+  )
+
+  tmpfile <- "./portfolio_out.gpkg"
+
+  expect_snapshot_output(
+    portfolio %>%
+      get_resources("chirps") %>%
+      calc_indicators("precipitation") %>%
+      write_portfolio(tmpfile)
+  )
+
+  expect_snapshot_output(
+    read_portfolio(tmpfile)
+  )
+
+  file.remove(tmpfile)
 })

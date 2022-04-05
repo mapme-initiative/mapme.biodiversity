@@ -1,0 +1,11 @@
+# .get_mangrove works
+
+    Code
+      basename(get_resources(portfolio, "mangrove"))
+    Message <simpleMessage>
+      Starting process to download resource 'mangrove'........
+      Some target years are not available for mangroveextent.
+      Translating shapefiles to GeoPackages. This may take a while....
+    Output
+      character(0)
+

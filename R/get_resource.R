@@ -116,6 +116,10 @@ get_resources <- function(x, resources, ...) {
     }
   )
 
+  if (!is.null(attr(x, "testing"))) {
+    return(downloaded_files)
+  }
+
   # we included an error checker so that we can still return a valid object
   # even in cases that one or more downloads fail
   if (is.na(downloaded_files[1])) {

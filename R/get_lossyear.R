@@ -80,7 +80,7 @@ NULL
   }
   # start download in a temporal directory within tmpdir
   # TODO: Parallel downloads
-  .download_or_skip(urls, filenames, verbose)
+  if (is.null(attr(x, "testing"))) .download_or_skip(urls, filenames, verbose)
   # return all paths to the downloaded files
   filenames
 }

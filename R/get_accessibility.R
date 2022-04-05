@@ -40,7 +40,7 @@ NULL
     paste0("accessibility-", range_accessibility, ".tif")
   )
   # start download in a temporal directory within tmpdir
-  .download_or_skip(urls, filenames, verbose, check_existence = FALSE)
+  if (is.null(attr(x, "testing"))) .download_or_skip(urls, filenames, verbose, check_existence = FALSE)
   # return paths to the raster
   filenames
 }

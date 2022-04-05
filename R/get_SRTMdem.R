@@ -50,14 +50,16 @@ NULL
   }
   # start download in a temporal directory within tmpdir
   aria_bin <- attributes(x)$aria_bin
-  .download_or_skip(
-    urls = urls,
-    filenames = filenames,
-    verbose = verbose,
-    aria_bin = aria_bin
-  )
+  if (is.null(attr(x, "testing"))) {
+    .download_or_skip(
+      urls = urls,
+      filenames = filenames,
+      verbose = verbose,
+      aria_bin = aria_bin
+    )
+  }
   # unzip zip files
-  sapply(filenames, function(zip) .unzip_and_remove(zip, rundir, remove = FALSE))
+  if (is.null(attr(x, "testing"))) sapply(filenames, function(zip) .unzip_and_remove(zip, rundir, remove = FALSE))
   # return paths to the rasters
   gsub(".zip$", ".tif", filenames)
 }
