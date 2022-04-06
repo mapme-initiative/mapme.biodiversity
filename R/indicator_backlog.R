@@ -119,10 +119,9 @@ available_indicators <- function(indicator = NULL) {
       processing_mode = "asset"
     ),
     landcover = list(
-      name = ".calc_esalandcover",
+      name = ".calc_landcover",
       inputs = list(esalandcover = "raster"),
-      arguments = list(
-      ),
+      arguments = list(),
       processing_mode = "asset"
     ),
     worldclim_tmin = list(

@@ -55,7 +55,8 @@ NULL
       urls = urls,
       filenames = filenames,
       verbose = verbose,
-      aria_bin = aria_bin
+      aria_bin = aria_bin,
+      check_existence = FALSE
     )
   }
   # unzip zip files

@@ -80,8 +80,8 @@ NULL
       exdir = rundir,
     )
     shp <- file.path(rundir, "GMW_2007_v2.0.shp")
-    command <- sprintf("ogr2ogr %s %s", gpkg, shp)
-    system(command)
+    shp <- read_sf(shp)
+    write_sf(shp, gpkg)
     d_files <- list.files(rundir, full.names = T)
     unlink(grep("gmw-extent*", d_files, value = T, invert = T),
       recursive = T, force = T
@@ -103,8 +103,8 @@ NULL
       rundir, "/GMW_001_GlobalMangroveWatch_", year,
       "/01_Data/GMW_", year, "_v2.shp"
     )
-    command <- sprintf("ogr2ogr %s %s", gpkg, shp)
-    system(command)
+    shp <- read_sf(shp)
+    write_sf(shp, gpkg)
     d_files <- list.files(rundir, full.names = T)
     unlink(grep("gmw-extent*", d_files, value = T, invert = T),
       recursive = T, force = T

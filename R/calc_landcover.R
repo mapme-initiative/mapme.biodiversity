@@ -32,31 +32,25 @@ NULL
 #' @keywords internal
 #' @noRd
 
-.calc_esalandcover <- function(shp,
-                               esalandcover,
-                               rundir = tempdir(),
-                               verbose = TRUE,
-                               todisk = FALSE,
-                               ...) {
+.calc_landcover <- function(shp,
+                            esalandcover,
+                            rundir = tempdir(),
+                            verbose = TRUE,
+                            todisk = FALSE,
+                            ...) {
   if (is.null(esalandcover)) {
     return(NA)
   }
 
   # check if intermediate raster should be written to disk
   if (ncell(esalandcover) > 1024 * 1024) todisk <- TRUE
-
-  results <- lapply(1:nlyr(esalandcover), function(j) {
-    .comp_esalandcover(
-      shp = shp,
-      esalandcover = esalandcover[[j]],
-      rundir = rundir,
-      verbose = verbose,
-      todisk = todisk
-    )
-  })
-
-  results <- tibble(do.call(rbind, results))
-  results
+  .comp_esalandcover(
+    shp = shp,
+    esalandcover = esalandcover,
+    rundir = rundir,
+    verbose = verbose,
+    todisk = todisk
+  )
 }
 
 #' Helper function to compute area of diffrent landcover classes from single raster
@@ -75,7 +69,7 @@ NULL
                                ...) {
   # mask raster per shapefile
   shp_v <- vect(shp)
-  esa_mask <- terra::mask(esalandcover[[1]], shp_v)
+  esa_mask <- terra::mask(esalandcover, shp_v)
   # compute area of each cell
   arearaster <- cellSize(
     esa_mask,
@@ -108,11 +102,9 @@ NULL
     by.x = colnames(patchsizes)[1],
     by.y = colnames(discrete_classes)[1]
   )
-  result <- out[, 2:3]
-  result$year <- strsplit(names(esalandcover), "_")[[1]][4]
-  result <- tidyr::pivot_wider(result,
-    names_from = "classes",
-    values_from = "area"
-  )
-  result
+  result <- out[, -1]
+  layernames <- tools::file_path_sans_ext(names(esalandcover))
+  years <- as.numeric(sapply(layernames, function(layer) strsplit(layer, "_")[[1]][4]))
+  names(result)[1:length(years)] <- years
+  tidyr::pivot_longer(result, cols = 1:length(years), names_to = "year", values_to = "area")
 }

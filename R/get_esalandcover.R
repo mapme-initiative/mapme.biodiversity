@@ -57,21 +57,23 @@ NULL
   })
   # urls to vector
   urls <- unlist(urls)
-  filenames <- file.path(rundir, basename(urls))
   # change filename structure
-  bn <- basename(filenames)
+  bn <- basename(urls)
   chars <- strsplit(bn, "-|_")
   charname <- lapply(1:length(chars), function(j) {
-    paste0(chars[[j]][1],"_",chars[[j]][3],"_",chars[[j]][5],"_",chars[[j]][6],".tif")
+    paste0(chars[[j]][1], "_", chars[[j]][3], "_", chars[[j]][5], "_", chars[[j]][6], ".tif")
   })
   charnames <- unlist(charname)
   filenames <- file.path(rundir, basename(charnames))
-  if (any(file.exists(filenames))) {
-    message("Skipping existing files in output directory.")
-  }
-
   aria_bin <- attributes(x)$aria_bin
-  if (is.null(attr(x, "testing"))) .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin)
+  if (is.null(attr(x, "testing"))) {
+    filenames <- .download_or_skip(urls,
+      filenames,
+      verbose,
+      aria_bin = aria_bin,
+      check_existence = TRUE
+    )
+  }
   # return all paths to the downloaded files
   filenames
 }
