@@ -277,7 +277,7 @@
 
   exists_index <- which(file.exists(filenames))
   if (length(exists_index) > 0) {
-    message("Skipping existing files in output directory.")
+    if (verbose) message("Skipping existing files in output directory.")
     missing_filenames <- filenames[-exists_index]
     missing_urls <- urls[-exists_index]
   } else {

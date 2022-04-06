@@ -37,6 +37,23 @@ single or multiple inputs as character. Supported statistics are: "mean",
 "extract" or "exactextract" as character.}
 }
 }
+\examples{
+library(sf)
+library(mapme.biodiversity)
+(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") \%>\%
+  read_sf() \%>\%
+  init_portfolio(
+    years = 2000:2020,
+    outdir = system.file("res", package = "mapme.biodiversity"),
+    tmpdir = system.file("tmp", package = "mapme.biodiversity"),
+    add_resources = FALSE,
+    cores = 1,
+    verbose = FALSE
+  ) \%>\%
+  get_resources("srtmdem") \%>\%
+  calc_indicators("tri", stats_tri = c("mean", "median", "sd", "var"), engine = "extract") \%>\%
+  tidyr::unnest(tri))
+}
 \references{
 Riley, S. J., DeGloria, S. D., & Elliot, R. (1999). Index that quantifies
 topographic heterogeneity. intermountain Journal of sciences, 5(1-4), 23-27.

@@ -29,4 +29,21 @@ The following arguments can be set:
 "extract" or "exactextract" as character.}
 }
 }
+\examples{
+library(sf)
+library(mapme.biodiversity)
+(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") \%>\%
+  read_sf() \%>\%
+  init_portfolio(
+    years = 2010,
+    outdir = system.file("res", package = "mapme.biodiversity"),
+    tmpdir = system.file("tmp", package = "mapme.biodiversity"),
+    add_resources = FALSE,
+    cores = 1,
+    verbose = FALSE
+  ) \%>\%
+  get_resources("chirps") \%>\%
+  calc_indicators("chirpsprec", scales_spi = NULL, engine = "exactextract") \%>\%
+  tidyr::unnest(chirpsprec))
+}
 \keyword{indicator}

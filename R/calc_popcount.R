@@ -22,6 +22,22 @@
 #' @docType data
 #' @keywords indicator
 #' @format A tibble with a column for population count statistics
+#' @examples
+#' library(sf)
+#' library(mapme.biodiversity)
+#' (aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
+#'   read_sf() %>%
+#'   init_portfolio(
+#'     years = 2000:2010,
+#'     outdir = system.file("res", package = "mapme.biodiversity"),
+#'     tmpdir = system.file("tmp", package = "mapme.biodiversity"),
+#'     add_resources = FALSE,
+#'     cores = 1,
+#'     verbose = FALSE
+#'   ) %>%
+#'   get_resources("worldpop") %>%
+#'   calc_indicators("popcount", stats_popcount = c("sum", "median"), engine = "extract") %>%
+#'   tidyr::unnest(popcount))
 NULL
 
 #' Calculate population count statistics

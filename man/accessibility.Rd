@@ -27,4 +27,23 @@ one or multiple inputs as character. Supported statistics are: "mean",
 "extract" or "exactextract" as character.}
 }
 }
+\examples{
+library(sf)
+library(mapme.biodiversity)
+(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") \%>\%
+  read_sf() \%>\%
+  init_portfolio(
+    years = 2022,
+    outdir = system.file("res", package = "mapme.biodiversity"),
+    tmpdir = system.file("tmp", package = "mapme.biodiversity"),
+    add_resources = FALSE,
+    cores = 1,
+    verbose = FALSE
+  ) \%>\%
+  get_resources("traveltime",
+    range_traveltime = c("5k_10k", "100k_200k", "500k_1mio", "1mio_5mio")
+  ) \%>\%
+  calc_indicators("accessibility", stats_accessibility = c("min", "max"), engine = "extract") \%>\%
+  tidyr::unnest(accessibility))
+}
 \keyword{indicator}

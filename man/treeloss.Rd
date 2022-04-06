@@ -27,4 +27,24 @@ The following arguments can be set:
 \item{min_cover}{The minimum cover percentage per pixel to be considered as forest.}
 }
 }
+\examples{
+library(sf)
+library(mapme.biodiversity)
+(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") \%>\%
+  read_sf() \%>\%
+  init_portfolio(
+    years = 2016:2017,
+    outdir = system.file("res", package = "mapme.biodiversity"),
+    tmpdir = system.file("tmp", package = "mapme.biodiversity"),
+    add_resources = FALSE,
+    cores = 1,
+    verbose = FALSE
+  ) \%>\%
+  get_resources(
+    resources = c("treecover2000", "lossyear", "greenhouse"),
+    vers_treecover = "GFC-2020-v1.8", vers_lossyear = "GFC-2020-v1.8"
+  ) \%>\%
+  calc_indicators("treeloss", min_size = 1, min_cover = 30) \%>\%
+  tidyr::unnest(treeloss))
+}
 \keyword{indicator}
