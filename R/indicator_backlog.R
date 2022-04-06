@@ -73,8 +73,8 @@ available_indicators <- function(indicator = NULL) {
       ),
       processing_mode = "asset"
     ),
-    precipitation = list(
-      name = ".calc_precipitation",
+    chirpsprec = list(
+      name = ".calc_chirpsprec",
       inputs = list(chirps = "raster"),
       arguments = list(
         scales_spi = NULL,
@@ -110,10 +110,10 @@ available_indicators <- function(indicator = NULL) {
       processing_mode = "asset"
     ),
     popcount = list(
-      name = ".calc_worldpop",
+      name = ".calc_popcount",
       inputs = list(worldpop = "raster"),
       arguments = list(
-        stats_worldpop = "sum",
+        stats_popcount = "sum",
         engine = "extract"
       ),
       processing_mode = "asset"
@@ -124,29 +124,29 @@ available_indicators <- function(indicator = NULL) {
       arguments = list(),
       processing_mode = "asset"
     ),
-    worldclim_tmin = list(
-      name = ".calc_worldclim_mintemperature",
+    wctmin = list(
+      name = ".calc_wctmin",
       inputs = list(mintemperature = "raster"),
       arguments = list(
-        stats_mintemperature = "mean",
+        stats_worldclim = "mean",
         engine = "extract"
       ),
       processing_mode = "asset"
     ),
-    worldclim_tmax = list(
-      name = ".calc_worldclim_maxtemperature",
+    wctmax = list(
+      name = ".calc_wctmax",
       inputs = list(maxtemperature = "raster"),
       arguments = list(
-        stats_maxtemperature = "mean",
+        stats_worldclim = "mean",
         engine = "extract"
       ),
       processing_mode = "asset"
     ),
-    worldclim_prec = list(
-      name = ".calc_worldclim_precipitation",
+    wcprec = list(
+      name = ".calc_wcprec",
       inputs = list(precipitation = "raster"),
       arguments = list(
-        stats_precipitation = "mean",
+        stats_worldclim = "mean",
         engine = "extract"
       ),
       processing_mode = "asset"
@@ -155,7 +155,7 @@ available_indicators <- function(indicator = NULL) {
 
   # determine what to return
   if (is.null(indicator)) {
-    return(all_indicators)
+    return(all_indicators[order(names(all_indicators))])
   } else {
     .check_requested_indicator(indicator)
     all_indicators[indicator]

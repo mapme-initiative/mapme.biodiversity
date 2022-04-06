@@ -14,34 +14,34 @@ test_that("precipitation indicator works", {
   attributes(shp)$years <- 1970:1980
   attributes(shp)$cores <- 1
   expect_warning(
-    .calc_precipitation(shp, chirps),
+    .calc_chirpsprec(shp, chirps),
     "Cannot calculate precipitation statistics for years smaller than 1981"
   )
   attributes(shp)$years <- 1980:1982
   expect_equal(
-    .calc_precipitation(shp, NULL),
+    .calc_chirpsprec(shp, NULL),
     NA
   )
   attributes(shp)$years <- 1981:1982
   expect_error(
-    .calc_precipitation(shp, chirps, scales_spi = c(1, 12, 48, 60)),
+    .calc_chirpsprec(shp, chirps, scales_spi = c(1, 12, 48, 60)),
     "Values of 'scales_spi' for SPI calculation must be integers between 0 and 48"
   )
   expect_error(
-    .calc_precipitation(shp, chirps, engine = "not-available"),
+    .calc_chirpsprec(shp, chirps, engine = "not-available"),
     "Engine not-available is not an available engine. Please choose one of:"
   )
   attributes(shp)$years <- 2000:2010
   expect_snapshot(
-    .calc_precipitation(shp, chirps)
+    .calc_chirpsprec(shp, chirps)
   )
   expect_snapshot(
-    .calc_precipitation(shp, chirps, scales_spi = c(12, 24))
+    .calc_chirpsprec(shp, chirps, scales_spi = c(12, 24))
   )
   expect_snapshot(
-    .calc_precipitation(shp, chirps, engine = "extract")
+    .calc_chirpsprec(shp, chirps, engine = "extract")
   )
   expect_snapshot(
-    .calc_precipitation(shp, chirps, engine = "exactextract")
+    .calc_chirpsprec(shp, chirps, engine = "exactextract")
   )
 })

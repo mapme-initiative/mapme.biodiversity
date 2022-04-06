@@ -117,16 +117,14 @@ NULL
   }))
   urls <- unique(all_urls)
   filenames <- file.path(rundir, basename(urls))
-  if (any(file.exists(filenames))) {
-    message("Skipping existing files in output directory.")
-  }
   # start download in a temporal directory within tmpdir
   # TODO: Parallel downloads
   aria_bin <- attributes(x)$aria_bin
   if (!is.null(attr(x, "testing"))) {
     return(filenames)
   }
-  .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin)
+
+  .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin, check_existence = FALSE)
 
   # unzip the downloaded file
   sapply(filenames, function(zip) {

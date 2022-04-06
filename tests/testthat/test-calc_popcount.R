@@ -17,26 +17,26 @@ test_that("population count works", {
   attributes(shp)$years <- 2000:2022
   attributes(shp)$cores <- 1
   expect_error(
-    .calc_worldpop(shp, worldpop, engine = "not-available"),
+    .calc_popcount(shp, worldpop, engine = "not-available"),
     "Engine 'not-available' is not an available engine. Please choose one of:"
   )
   expect_error(
-    .calc_worldpop(shp, worldpop, stats_worldpop = "not-available"),
+    .calc_popcount(shp, worldpop, stats_popcount = "not-available"),
     "Statistic 'not-available' is not supported. Please choose one of:"
   )
   expect_snapshot(
-    .calc_worldpop(shp, worldpop)
+    .calc_popcount(shp, worldpop)
   )
   expect_snapshot(
-    .calc_worldpop(shp, worldpop, stats_worldpop = c("mean", "median", "sd"))
+    .calc_popcount(shp, worldpop, stats_popcount = c("mean", "median", "sd"))
   )
   expect_snapshot(
-    .calc_worldpop(shp, worldpop, engine = "extract")
+    .calc_popcount(shp, worldpop, engine = "extract")
   )
   expect_snapshot(
-    .calc_worldpop(shp, worldpop, engine = "exactextract")
+    .calc_popcount(shp, worldpop, engine = "exactextract")
   )
   expect_snapshot(
-    .calc_worldpop(shp, worldpop, engine = "zonal")
+    .calc_popcount(shp, worldpop, engine = "zonal")
   )
 })

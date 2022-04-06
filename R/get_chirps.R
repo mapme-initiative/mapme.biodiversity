@@ -36,7 +36,7 @@ NULL
     .download_or_skip(urls,
       filenames,
       verbose = verbose,
-      check_existence = TRUE,
+      check_existence = FALSE,
       aria_bin = aria_bin
     )
   }

@@ -11,7 +11,7 @@
 #'
 #' The following arguments can be set:
 #' \describe{
-#'   \item{stats}{Function to be applied to compute statistics for polygons either
+#'   \item{stats_tri}{Function to be applied to compute statistics for polygons either
 #'   single or multiple inputs as character. Supported statistics are: "mean",
 #'   "median", "sd", "min", "max", "sum" "var".}
 #'   \item{engine}{The preferred processing functions from either one of "zonal",
@@ -149,7 +149,7 @@ NULL
     )
     tibble_zstats <- tibble(tri = zstats[, 2])
     names(tibble_zstats)[names(tibble_zstats) == "tri"] <-
-      paste0("terrain_ruggedness_index_", stats[i])
+      paste0("tri_", stats[i])
     return(tibble_zstats)
   })
   unlist_zstats <- do.call(cbind, zstats)
@@ -188,7 +188,7 @@ NULL
     )
     tibble_zstats <- tibble(tri = zstats[, 2])
     names(tibble_zstats)[names(tibble_zstats) == "tri"] <-
-      paste0("terrain_ruggedness_index_", stats[i])
+      paste0("tri_", stats[i])
     return(tibble_zstats)
   })
   unlist_zstats <- do.call(cbind, zstats)
@@ -240,7 +240,7 @@ NULL
     }
     tibble_zstats <- tibble(tri = zstats)
     names(tibble_zstats)[names(tibble_zstats) == "tri"] <-
-      paste0("terrain_ruggedness_index_", stats[i])
+      paste0("tri_", stats[i])
     return(tibble_zstats)
   })
   unlist_zstats <- do.call(cbind, zstats)

@@ -11,7 +11,7 @@
 #'
 #' The following arguments can be set:
 #' \describe{
-#'   \item{stats_worldpop}{Function to be applied to compute statistics for polygons either
+#'   \item{stats_popcount}{Function to be applied to compute statistics for polygons either
 #'   one or multiple inputs as character. Supported statistics are: "mean",
 #'   "median", "sd", "min", "max", "sum" "var".}
 #'   \item{engine}{The preferred processing functions from either one of "zonal",
@@ -33,7 +33,7 @@ NULL
 #'
 #' @param shp A single polygon for which to calculate the population count statistic
 #' @param worldpop The population count raster resource from worldPop
-#' @param stats_worldpop Function to be applied to compute statistics for polygons
+#' @param stats_popcount Function to be applied to compute statistics for polygons
 #'    either one or multiple inputs as character "min", "max", "sum", "mean", "median"
 #'    "sd" or "var".
 #' @param engine The preferred processing functions from either one of "zonal",
@@ -47,10 +47,10 @@ NULL
 #' @keywords internal
 #' @noRd
 
-.calc_worldpop <- function(shp,
+.calc_popcount <- function(shp,
                            worldpop,
                            engine = "extract",
-                           stats_worldpop = "sum",
+                           stats_popcount = "sum",
                            rundir = tempdir(),
                            verbose = TRUE,
                            todisk = FALSE,
@@ -65,7 +65,7 @@ NULL
   .check_engine(available_engines, engine)
   # check if only supoorted stats have been specified
   available_stats <- c("mean", "median", "sd", "min", "max", "sum", "var")
-  .check_stats(available_stats, stats_worldpop)
+  .check_stats(available_stats, stats_popcount)
 
   # set max value of 65535 to NA
   worldpop <- clamp(worldpop,
@@ -80,19 +80,19 @@ NULL
     .comp_worldpop_extract(
       shp = shp,
       worldpop = worldpop,
-      stats = stats_worldpop
+      stats = stats_popcount
     )
   } else if (engine == "exactextract") {
     .comp_worldpop_exact_extract(
       shp = shp,
       worldpop = worldpop,
-      stats = stats_worldpop
+      stats = stats_popcount
     )
   } else {
     .comp_worldpop_zonal(
       worldpop = worldpop,
       shp = shp,
-      stats = stats_worldpop,
+      stats = stats_popcount,
       todisk = todisk,
       rundir = rundir
     )
@@ -137,7 +137,7 @@ NULL
       na.rm = T
     )
     out <- tibble(population = unlist(out[-1]))
-    names(out) <- paste0("population_", stats[j])
+    names(out) <- paste0("popcount_", stats[j])
     out
   })
   results <- tibble(do.call(cbind, results))
@@ -168,7 +168,7 @@ NULL
       na.rm = T
     )
     out <- tibble(population = unlist(out[-1]))
-    names(out) <- paste0("population_", stats[j])
+    names(out) <- paste0("popcount_", stats[j])
     out
   })
   results <- tibble(do.call(cbind, results))
@@ -212,7 +212,7 @@ NULL
       )
     }
     out <- tibble(population = unlist(out))
-    names(out) <- paste0("population_", stats[j])
+    names(out) <- paste0("popcount_", stats[j])
     out
   })
   results <- tibble(do.call(cbind, results))

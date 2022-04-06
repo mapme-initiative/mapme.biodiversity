@@ -128,7 +128,7 @@ test_that("init_portfolio works", {
 
   expect_snapshot(
     portfolio %>%
-      calc_indicators("precipitation", scales_spi = NULL, engine = "extract") %>%
+      calc_indicators("chirpsprec", scales_spi = NULL, engine = "extract") %>%
       write_portfolio(tmpfile)
   )
 

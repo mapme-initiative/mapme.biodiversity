@@ -4,7 +4,6 @@
       basename(get_resources(portfolio, "worldpop"))
     Message <simpleMessage>
       Starting process to download resource 'worldpop'........
-      Skipping existing files in output directory.
     Output
        [1] "ppp_2000_1km_Aggregated.tif" "ppp_2001_1km_Aggregated.tif"
        [3] "ppp_2002_1km_Aggregated.tif" "ppp_2003_1km_Aggregated.tif"

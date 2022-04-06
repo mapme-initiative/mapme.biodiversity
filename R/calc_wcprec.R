@@ -8,14 +8,14 @@
 #'
 #' The following arguments can be set:
 #' \describe{
-#'   \item{stats_precipitation}{Function to be applied to compute statistics for polygons either
+#'   \item{stats_worldclim}{Function to be applied to compute statistics for polygons either
 #'   one or multiple inputs as character. Supported statistics are: "mean",
 #'   "median", "sd", "min", "max", "sum" "var".}
 #'   \item{engine}{The preferred processing functions from either one of "zonal",
 #'   "extract" or "exactextract" as character.}
 #' }
 #'
-#' @name worldclim_prec
+#' @name wcprec
 #' @docType data
 #' @keywords indicator
 #' @format A tibble with a column for precipitation statistics (in mm)
@@ -31,7 +31,7 @@ NULL
 #'
 #' @param shp A single polygon for which to calculate the precipitation statistic
 #' @param precipitation precipitation raster from which to compute statistics
-#' @param stats_precipitation Function to be applied to compute statistics for polygons
+#' @param stats_worldclim Function to be applied to compute statistics for polygons
 #'    either one or multiple inputs as character "min", "max", "sum", "mean", "median"
 #'    "sd" or "var".
 #' @param engine The preferred processing functions from either one of "zonal",
@@ -45,19 +45,19 @@ NULL
 #' @keywords internal
 #' @noRd
 
-.calc_worldclim_precipitation <- function(shp,
-                                          precipitation,
-                                          engine = "extract",
-                                          stats_precipitation = "mean",
-                                          rundir = tempdir(),
-                                          verbose = TRUE,
-                                          todisk = FALSE,
-                                          ...) {
+.calc_wcprec <- function(shp,
+                         precipitation,
+                         engine = "extract",
+                         stats_worldclim = "mean",
+                         rundir = tempdir(),
+                         verbose = TRUE,
+                         todisk = FALSE,
+                         ...) {
   results <- .calc_worldclim(
     shp = shp,
     worldclim = precipitation,
     engine = engine,
-    stats_worldclim = stats_precipitation,
+    stats_worldclim = stats_worldclim,
     rundir = rundir,
     verbose = verbose,
     todisk = todisk

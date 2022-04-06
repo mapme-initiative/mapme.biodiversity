@@ -121,7 +121,7 @@ available_resources <- function(resources = NULL) {
 
   # determine what to return
   if (is.null(resources)) {
-    return(all_resources)
+    return(all_resources[order(names(all_resources))])
   } else {
     .check_requested_resources(resources)
     all_resources[resources]

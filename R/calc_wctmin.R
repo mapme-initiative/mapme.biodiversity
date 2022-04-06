@@ -1,4 +1,4 @@
-#' Calculate minimum temperature statistics
+#' Calculate minimum temperature statistics based on WorldClim
 #'
 #' This function allows to efficiently calculate minimum temperature statistics
 #' from Worldclim for polygons. For each polygon, the desired statistic/s (min,
@@ -8,14 +8,14 @@
 #'
 #' The following arguments can be set:
 #' \describe{
-#'   \item{stats_mintemperature}{Function to be applied to compute statistics for polygons either
+#'   \item{stats_worldclim}{Function to be applied to compute statistics for polygons either
 #'   one or multiple inputs as character. Supported statistics are: "mean",
 #'   "median", "sd", "min", "max", "sum" "var".}
 #'   \item{engine}{The preferred processing functions from either one of "zonal",
 #'   "extract" or "exactextract" as character.}
 #' }
 #'
-#' @name worldclim_tmin
+#' @name wctmin
 #' @docType data
 #' @keywords indicator
 #' @format A tibble with a column for minimum temperature statistics (in °C)
@@ -31,7 +31,7 @@ NULL
 #'
 #' @param shp A single polygon for which to calculate the minimum temperature statistic
 #' @param mintemperature minimum temperature raster from which to compute statistics
-#' @param stats_mintemperature Function to be applied to compute statistics for polygons
+#' @param stats_worldclim Function to be applied to compute statistics for polygons
 #'    either one or multiple inputs as character "min", "max", "sum", "mean", "median"
 #'    "sd" or "var".
 #' @param engine The preferred processing functions from either one of "zonal",
@@ -45,19 +45,19 @@ NULL
 #' @keywords internal
 #' @noRd
 
-.calc_worldclim_mintemperature <- function(shp,
-                                           mintemperature,
-                                           engine = "extract",
-                                           stats_mintemperature = "mean",
-                                           rundir = tempdir(),
-                                           verbose = TRUE,
-                                           todisk = FALSE,
-                                           ...) {
+.calc_wctmin <- function(shp,
+                         mintemperature,
+                         engine = "extract",
+                         stats_worldclim = "mean",
+                         rundir = tempdir(),
+                         verbose = TRUE,
+                         todisk = FALSE,
+                         ...) {
   results <- .calc_worldclim(
     shp = shp,
     worldclim = mintemperature,
     engine = engine,
-    stats_worldclim = stats_mintemperature,
+    stats_worldclim = stats_worldclim,
     rundir = rundir,
     verbose = verbose,
     todisk = todisk
@@ -181,7 +181,8 @@ NULL
   results <- tibble(do.call(cbind, results))
   layer_names <- names(worldclim)
   date_name <- unlist(lapply(layer_names, function(x) strsplit(x, "_")[[1]][4]))
-  results$date <- date_name
+  date_name <- paste0(tools::file_path_sans_ext(date_name), "-01")
+  results$date <- as.Date(date_name, "%Y-%m-%d")
   results
 }
 
@@ -213,7 +214,8 @@ NULL
   results <- tibble(do.call(cbind, results))
   layer_names <- names(worldclim)
   date_name <- unlist(lapply(layer_names, function(x) strsplit(x, "_")[[1]][4]))
-  results$date <- date_name
+  date_name <- paste0(tools::file_path_sans_ext(date_name), "-01")
+  results$date <- as.Date(date_name, "%Y-%m-%d")
   results
 }
 
@@ -259,6 +261,7 @@ NULL
   results <- tibble(do.call(cbind, results))
   layer_names <- names(worldclim)
   date_name <- unlist(lapply(layer_names, function(x) strsplit(x, "_")[[1]][4]))
-  results$date <- date_name
+  date_name <- paste0(tools::file_path_sans_ext(date_name), "-01")
+  results$date <- as.Date(date_name, "%Y-%m-%d")
   results
 }

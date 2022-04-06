@@ -33,12 +33,9 @@ NULL
   )
   urls <- unlist(sapply(target_years, function(year) .get_worldpop_url(year)))
   filenames <- file.path(rundir, basename(urls))
-  if (any(file.exists(filenames))) {
-    message("Skipping existing files in output directory.")
-  }
   # start download in a temporal directory within tmpdir
   aria_bin <- attributes(x)$aria_bin
-  if (is.null(attr(x, "testing"))) .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin)
+  if (is.null(attr(x, "testing"))) .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin, check_existence = FALSE)
   # return paths to the raster
   filenames
 }

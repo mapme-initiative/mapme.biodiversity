@@ -12,26 +12,26 @@ test_that("worldclim maximum temperature works", {
   attributes(shp)$years <- 2000:2022
   attributes(shp)$cores <- 1
   expect_error(
-    .calc_worldclim_maxtemperature(shp, maxtemperature, engine = "not-available"),
+    .calc_wctmax(shp, maxtemperature, engine = "not-available"),
     "Engine 'not-available' is not an available engine. Please choose one of:"
   )
   expect_error(
-    .calc_worldclim_maxtemperature(shp, maxtemperature, stats_maxtemperature = "not-available"),
+    .calc_wctmax(shp, maxtemperature, stats_worldclim = "not-available"),
     "Statistic 'not-available' is not supported. Please choose one of:"
   )
   expect_snapshot(
-    .calc_worldclim_maxtemperature(shp, maxtemperature)
+    .calc_wctmax(shp, maxtemperature)
   )
   expect_snapshot(
-    .calc_worldclim_maxtemperature(shp, maxtemperature, stats_maxtemperature = c("mean", "median", "sd"))
+    .calc_wctmax(shp, maxtemperature, stats_worldclim = c("mean", "median", "sd"))
   )
   expect_snapshot(
-    .calc_worldclim_maxtemperature(shp, maxtemperature, engine = "extract")
+    .calc_wctmax(shp, maxtemperature, engine = "extract")
   )
   expect_snapshot(
-    .calc_worldclim_maxtemperature(shp, maxtemperature, engine = "exactextract")
+    .calc_wctmax(shp, maxtemperature, engine = "exactextract")
   )
   expect_snapshot(
-    .calc_worldclim_maxtemperature(shp, maxtemperature, engine = "zonal")
+    .calc_wctmax(shp, maxtemperature, engine = "zonal")
   )
 })
