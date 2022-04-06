@@ -196,8 +196,7 @@
 <p>We can now make the <code>chirps</code> resource available for our portfolio. We will use a common interface that is used for all resources, called <code><a href="../reference/get_resources.html">get_resources()</a></code>. We have to specify our portfolio object and the names of the resource(s) we wish to download. Additional arguments for the specific resource can be specified. The output of the function is the portfolio object with its attributes appended for the new resource, thus we simply can overwrite the <code>sample_portfolio</code> variable.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sample_portfolio</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_resources.html">get_resources</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">sample_portfolio</span>, resources <span class="op">=</span> <span class="st">"chirps"</span><span class="op">)</span>
-<span class="co">#&gt; Starting process to download resource 'chirps'........</span>
-<span class="co">#&gt; Skipping existing files in output directory.</span></code></pre></div>
+<span class="co">#&gt; The following requested resource is already available: chirps.</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="calculate-specific-indicators">Calculate specific indicators<a class="anchor" aria-label="anchor" href="#calculate-specific-indicators"></a>
@@ -296,9 +295,9 @@
   dsn <span class="op">=</span> <span class="va">tmp_output</span>
 <span class="op">)</span>
 <span class="co">#&gt; Writing layer `metadata' to data source </span>
-<span class="co">#&gt;   `/tmp/RtmpK1Kugz/file44d47861119a.gpkg' using driver `GPKG'</span>
+<span class="co">#&gt;   `/tmp/RtmpMY6tFh/file4302297ae3dd.gpkg' using driver `GPKG'</span>
 <span class="co">#&gt; Writing 20 features with 2 fields and geometry type Polygon.</span>
-<span class="co">#&gt; Updating layer `chirpsprec' to data source `/tmp/RtmpK1Kugz/file44d47861119a.gpkg' using driver `GPKG'</span>
+<span class="co">#&gt; Updating layer `chirpsprec' to data source `/tmp/RtmpMY6tFh/file4302297ae3dd.gpkg' using driver `GPKG'</span>
 <span class="co">#&gt; Writing 240 features with 4 fields without geometries.</span>
 <span class="op">(</span><span class="va">portfolio_from_disk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_portfolio.html">read_portfolio</a></span><span class="op">(</span><span class="va">tmp_output</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Simple feature collection with 20 features and 3 fields</span>
