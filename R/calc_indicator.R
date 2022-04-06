@@ -143,10 +143,11 @@ calc_indicators <- function(x, indicators, ...) {
 
     if (resource_type == "raster") {
       tindex <- read_sf(available_resources[resource_name], quiet = TRUE)
-      out <- .read_raster_source(shp, tindex)
+      out <- .read_raster_source(shp, tindex, rundir)
     } else if (resource_type == "vector") {
       out <- lapply(available_resources[[resource_name]], function(source) {
-        read_sf(source, wkt_filter = st_as_text(st_geometry(shp)))
+        tmp <- read_sf(source, wkt_filter = st_as_text(st_geometry(shp)))
+        tmp <- st_make_valid(tmp)
       })
       names(out) <- basename(available_resources[[resource_name]])
     } else {
@@ -160,7 +161,7 @@ calc_indicators <- function(x, indicators, ...) {
 
 
 
-.read_raster_source <- function(shp, tindex) {
+.read_raster_source <- function(shp, tindex, rundir) {
   all_bboxes <- lapply(1:nrow(tindex), function(i) paste(as.numeric(st_bbox(tindex[i, ])), collapse = " "))
   is_stacked <- length(unique(unlist(all_bboxes))) == 1
 
@@ -197,6 +198,7 @@ calc_indicators <- function(x, indicators, ...) {
       # indices thus belong to the previous timestep and we can merge these
       # as a vrt and later join the bands. We always assign the name of the
       # first file as the layername.
+      unique_bboxes <- unique(unlist(all_bboxes))
       layer_index <- which(all_bboxes == unique_bboxes[[1]])
       temporal_gap <- layer_index[2] - layer_index[1] - 1
       out <- lapply(layer_index, function(j) {
