@@ -34,6 +34,9 @@
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/index.html</loc>
   </url>
   <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/accessibility.html</loc>
+  </url>
+  <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/available_indicators.html</loc>
   </url>
   <url>
@@ -46,19 +49,19 @@
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/chirps.html</loc>
   </url>
   <url>
-    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/climate.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/chirpsprec.html</loc>
   </url>
   <url>
-    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/dot-get_drought_url.html</loc>
-  </url>
-  <url>
-    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/dot-get_esa_url.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/dot-get_nasagrace_url.html</loc>
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/dot-get_single_indicator.html</loc>
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/dot-get_single_resource.html</loc>
+  </url>
+  <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/drought_indicator.html</loc>
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/ecoregions.html</loc>
@@ -85,6 +88,9 @@
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/init_portfolio.html</loc>
   </url>
   <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/landcover.html</loc>
+  </url>
+  <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/lossyear.html</loc>
   </url>
   <url>
@@ -94,7 +100,7 @@
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/nasagrace.html</loc>
   </url>
   <url>
-    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/precipitation.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/popcount.html</loc>
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/read_portfolio.html</loc>
@@ -122,6 +128,18 @@
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/tri.html</loc>
+  </url>
+  <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/wcprec.html</loc>
+  </url>
+  <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/wctmax.html</loc>
+  </url>
+  <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/wctmin.html</loc>
+  </url>
+  <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/worldclim.html</loc>
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/worldpop.html</loc>
