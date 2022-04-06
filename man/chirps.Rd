@@ -24,6 +24,6 @@ period. Thus no additionall arguments need to be specified.
 Funk, C., Peterson, P., Landsfeld, M. et al. The climate hazards
 infrared precipitation with stations—a new environmental record for
 monitoring extremes. Sci Data 2, 150066 (2015).
-\url{https://doi.org/10.1038/sdata.2015.66}
+\doi{10.1038/sdata.2015.66}
 }
 \keyword{resource}

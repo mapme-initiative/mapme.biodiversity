@@ -31,7 +31,7 @@ test_that("treecover works", {
   attributes(shp)$years <- 2000:2005
   expect_equal(
     .calc_treecover(shp, treecover2000, NULL),
-    tibble(years = 2000:2005, treecover = rep(NA, 6))
+    NA
   )
 
   expect_error(

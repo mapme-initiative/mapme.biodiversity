@@ -73,11 +73,29 @@ available_indicators <- function(indicator = NULL) {
       ),
       processing_mode = "asset"
     ),
-    precipitation = list(
-      name = ".calc_precipitation",
+    chirpsprec = list(
+      name = ".calc_chirpsprec",
       inputs = list(chirps = "raster"),
       arguments = list(
         scales_spi = NULL,
+        engine = "extract"
+      ),
+      processing_mode = "portfolio"
+    ),
+    accessibility = list(
+      name = ".calc_accessibility",
+      inputs = list(traveltime = "raster"),
+      arguments = list(
+        stats_accessibility = "mean",
+        engine = "extract"
+      ),
+      processing_mode = "asset"
+    ),
+    drought_indicator = list(
+      name = ".calc_drought_indicator",
+      inputs = list(nasagrace = "raster"),
+      arguments = list(
+        stats_drought = "mean",
         engine = "extract"
       ),
       processing_mode = "portfolio"
@@ -90,12 +108,54 @@ available_indicators <- function(indicator = NULL) {
         engine = "extract"
       ),
       processing_mode = "asset"
+    ),
+    popcount = list(
+      name = ".calc_popcount",
+      inputs = list(worldpop = "raster"),
+      arguments = list(
+        stats_popcount = "sum",
+        engine = "extract"
+      ),
+      processing_mode = "asset"
+    ),
+    landcover = list(
+      name = ".calc_landcover",
+      inputs = list(esalandcover = "raster"),
+      arguments = list(),
+      processing_mode = "asset"
+    ),
+    wctmin = list(
+      name = ".calc_wctmin",
+      inputs = list(mintemperature = "raster"),
+      arguments = list(
+        stats_worldclim = "mean",
+        engine = "extract"
+      ),
+      processing_mode = "asset"
+    ),
+    wctmax = list(
+      name = ".calc_wctmax",
+      inputs = list(maxtemperature = "raster"),
+      arguments = list(
+        stats_worldclim = "mean",
+        engine = "extract"
+      ),
+      processing_mode = "asset"
+    ),
+    wcprec = list(
+      name = ".calc_wcprec",
+      inputs = list(precipitation = "raster"),
+      arguments = list(
+        stats_worldclim = "mean",
+        engine = "extract"
+      ),
+      processing_mode = "asset"
     )
   )
 
   # determine what to return
   if (is.null(indicator)) {
-    return(all_indicators)
+    return(all_indicators[order(names(all_indicators))])
   } else {
     .check_requested_indicator(indicator)
     all_indicators[indicator]

@@ -80,7 +80,8 @@ NULL
   }
   # start download in a temporal directory within tmpdir
   # TODO: Parallel downloads
-  if (is.null(attr(x, "testing"))) .download_or_skip(urls, filenames, verbose)
+  aria_bin <- attributes(x)$aria_bin
+  if (is.null(attr(x, "testing"))) .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin)
   # return all paths to the downloaded files
   filenames
 }

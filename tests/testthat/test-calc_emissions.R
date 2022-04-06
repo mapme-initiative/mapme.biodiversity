@@ -32,7 +32,7 @@ test_that("emissions works", {
   attributes(shp)$years <- 2000:2005
   expect_equal(
     .calc_emissions(shp, treecover2000, lossyear, NULL),
-    tibble(years = 2000:2005, emissions = rep(NA, 6))
+    NA
   )
 
   expect_error(

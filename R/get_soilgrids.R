@@ -49,7 +49,7 @@
 #' @references Hengl T, Mendes de Jesus J, Heuvelink GBM, Ruiperez Gonzalez M,
 #' Kilibarda M, et al. (2017) SoilGrids250m: Global gridded soil information
 #' based on machine learning. PLOS ONE 12(2): e0169748.
-#' \url{https://doi.org/10.1371/journal.pone.0169748}
+#' \doi{https://doi.org/10.1371/journal.pone.0169748}
 #' @source \url{https://www.isric.org/explore/soilgrids}
 NULL
 

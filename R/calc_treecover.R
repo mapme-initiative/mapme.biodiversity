@@ -53,6 +53,10 @@ NULL
                             todisk = FALSE,
                             ...) {
   # initial argument checks
+  # handling of return value if resources are missing, e.g. no overlap
+  if (any(is.null(treecover2000), is.null(lossyear))) {
+    return(NA)
+  }
   # retrieve years from portfolio
   years <- attributes(shp)$years
 
@@ -65,12 +69,6 @@ NULL
     if (length(years) == 0) {
       return(tibble(years = NA, treecover = NA))
     }
-  }
-
-
-  # handling of return value if resources are missing, e.g. no overlap
-  if (any(is.null(treecover2000), is.null(lossyear))) {
-    return(tibble(years = years, treecover = rep(NA, length(years))))
   }
   if (ncell(treecover2000) > 1024 * 1024) todisk <- TRUE
   # check if treecover2000 only contains 0s, e.g. on the ocean

@@ -18,7 +18,7 @@
 #' @references Funk, C., Peterson, P., Landsfeld, M. et al. The climate hazards
 #' infrared precipitation with stations—a new environmental record for
 #' monitoring extremes. Sci Data 2, 150066 (2015).
-#' \url{https://doi.org/10.1038/sdata.2015.66}
+#' \doi{10.1038/sdata.2015.66}
 NULL
 
 
@@ -36,7 +36,7 @@ NULL
     .download_or_skip(urls,
       filenames,
       verbose = verbose,
-      check_existence = TRUE,
+      check_existence = FALSE,
       aria_bin = aria_bin
     )
   }

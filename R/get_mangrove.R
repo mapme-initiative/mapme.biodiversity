@@ -47,7 +47,8 @@ NULL
     message("Skipping existing files in output directory.")
   }
   # start download in a temporal directory within tmpdir
-  if (is.null(attr(x, "testing"))) .download_or_skip(urls, filenames, verbose)
+  aria_bin <- attributes(x)$aria_bin
+  if (is.null(attr(x, "testing"))) .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin)
 
   # unzip and convert shp to gpkg
   message("Translating shapefiles to GeoPackages. This may take a while....")
@@ -79,9 +80,8 @@ NULL
       exdir = rundir,
     )
     shp <- file.path(rundir, "GMW_2007_v2.0.shp")
-    write_sf(shp, file.path(rundir, basename("gmw-extent_2007.gpkg")))
-    command <- sprintf("ogr2ogr %s %s", gpkg, shp)
-    system(command)
+    shp <- read_sf(shp)
+    write_sf(shp, gpkg)
     d_files <- list.files(rundir, full.names = T)
     unlink(grep("gmw-extent*", d_files, value = T, invert = T),
       recursive = T, force = T
@@ -103,8 +103,8 @@ NULL
       rundir, "/GMW_001_GlobalMangroveWatch_", year,
       "/01_Data/GMW_", year, "_v2.shp"
     )
-    command <- sprintf("ogr2ogr %s %s", gpkg, shp)
-    system(command)
+    shp <- read_sf(shp)
+    write_sf(shp, gpkg)
     d_files <- list.files(rundir, full.names = T)
     unlink(grep("gmw-extent*", d_files, value = T, invert = T),
       recursive = T, force = T

@@ -25,7 +25,7 @@ test_that("soilpoperties works", {
 
   expect_error(
     .calc_soilproperties(shp, soilgrids, stats_soil = "not-available"),
-    "Stat 'not-available' is not an available statistics. Please choose one of:"
+    "Statistic 'not-available' is not supported. Please choose one of:"
   )
 
   expect_snapshot(

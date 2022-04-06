@@ -155,14 +155,14 @@ function. For this, we inspect the names of the returned object:
 names(available_indicators())
 ```
 
-Say, we are interested in the precipitation indicator.
+Say, we are interested in the precipitation indicator based on the CHIRPS dataset.
 We can learn more about this indicator and its required resources by using
 either of the commands below or, if you are viewing the online version, head
-over to the [precipitation](../reference/precipitation.html) documentation.
+over to the [chirpsprec](../reference/chirpsprec.html) documentation.
 
 ```{r helppage_indicator, eval = FALSE}
-?precipitation
-help(precipitation)
+?chirpsprec
+help(chirpsprec)
 ```
 
 By inspecting the help page we learned that this indicator requires the `chirps` 
@@ -207,7 +207,7 @@ sample_portfolio <- get_resources(x = sample_portfolio, resources = "chirps")
 The next step consists of actually calculating specific indicators. Note, 
 that each indicator requires one or more resources that were made available 
 via the <code>get_resources()</code> function explained above. Here, we are going
-to calculate the `precipitation` indicator which is based on the `chirps` resource.
+to calculate the `chirpsprec` indicator which is based on the `chirps` resource.
 Since the resource has been made available in the previous step, we can continue
 with requesting the calculation of our desired indicator. Note, the below
 command would issue an error in case a required resource has not been made
@@ -215,7 +215,7 @@ available via <code>get_resources()</code> before.
 
 ```{r calc_indicator}
 sample_portfolio <- calc_indicators(sample_portfolio,
-  indicators = "precipitation"
+  indicators = "chirpsprec"
 )
 ```
 
@@ -228,7 +228,7 @@ Now let's take a look at the results. We will select only some of the metadata
 and the output indicator column in order to get a clearer picture of what has happened.
 
 ```{r select_cols}
-(sample_portfolio <- sample_portfolio %>% select(.assetid, WDPAID, precipitation))
+(sample_portfolio <- sample_portfolio %>% select(.assetid, WDPAID, chirpsprec))
 ```
 
 We obtained a new listed column in our sf object that is called like the requested
@@ -237,39 +237,32 @@ contains a tibble with 12 rows and 4 columns. Let's have a closer look at these
 objects.
 
 ```{r investigate_indicator}
-sample_portfolio$precipitation[10]
+sample_portfolio$chirpsprec[10]
 ```
 
 For each asset, the result is a tibble in long format for 12 months in the year 
 2010. The precipitation indicator with the default setting delivered the absolute
 rainfall sum as well as the rainfall anomaly compared to the 1981-2010 climate 
-normal period (make sure to read the detailed indicator documentation via `?precipitation`).
+normal period (make sure to read the detailed indicator documentation via `?chirpsprec`).
 Let's quickly visualize the results for a single asset:
 
 ```{r plot_precipitation, echo = FALSE}
 sample_portfolio %>%
   filter(.assetid == 7) %>%
   st_drop_geometry() %>%
-  tidyr::unnest(precipitation) %>%
-  mutate(months = month.abb[months]) %>%
-  mutate(months = factor(months, levels = month.abb, labels = month.abb)) %>%
+  tidyr::unnest(chirpsprec) %>%
   ggplot() +
-  geom_bar(aes(x = months, y = absolute), stat = "identity", fill = "darkblue") +
+  geom_bar(aes(x = dates, y = absolute), stat = "identity", fill = "darkblue") +
   labs(title = "Sum of monthly precipitation 2010", x = "", y = "Precipitation sum [mm]") +
   theme_classic()
-
 
 sample_portfolio %>%
   filter(.assetid == 7) %>%
   st_drop_geometry() %>%
-  tidyr::unnest(precipitation) %>%
-  mutate(
-    months = month.abb[months],
-    sign = ifelse(anomaly < 0, "lower than average", "higher than average")
-  ) %>%
-  mutate(months = factor(months, levels = month.abb, labels = month.abb)) %>%
+  tidyr::unnest(chirpsprec) %>%
+  mutate(sign = ifelse(anomaly < 0, "lower than average", "higher than average")) %>%
   ggplot() +
-  geom_bar(aes(x = months, y = anomaly, fill = sign), stat = "identity") +
+  geom_bar(aes(x = dates, y = anomaly, fill = sign), stat = "identity") +
   scale_fill_manual(values = c("darkblue", "brown2")) +
   labs(
     title = "Monthly precipitation anomaly 2010", x = "Month", y = "Precipitation anomaly [mm]",
@@ -288,7 +281,7 @@ to keep the size of the data object relatively small.
 geometries <- select(sample_portfolio, .assetid)
 sample_portfolio %>%
   st_drop_geometry() %>%
-  tidyr::unnest(precipitation) %>%
+  tidyr::unnest(chirpsprec) %>%
   filter(.assetid == 3)
 ```
 

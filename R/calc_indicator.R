@@ -140,53 +140,84 @@ calc_indicators <- function(x, indicators, ...) {
   processed_resources <- lapply(seq_along(required_resources), function(i) {
     resource_type <- required_resources[[i]]
     resource_name <- names(required_resources)[[i]]
+
     if (resource_type == "raster") {
-      # retrieve tiles that intersect with the shp extent
       tindex <- read_sf(available_resources[resource_name], quiet = TRUE)
-      all_bboxes <- lapply(1:nrow(tindex), function(i) paste(as.numeric(st_bbox(tindex[i, ])), collapse = " "))
-      is_stacked <- length(unique(unlist(all_bboxes))) == 1
-      if (is_stacked) {
-        filenames <- basename(tindex$location)
-        out <- terra::rast(tindex$location)
-        names(out) <- filenames
-      } else {
-        target_files <- tindex$location[unlist(st_intersects(shp, tindex))]
-
-        if (length(target_files) == 0) {
-          warning("Does not intersect.")
-          return(NULL)
-        } else if (length(target_files) == 1) {
-          out <- terra::rast(target_files)
-        } else {
-          # create a vrt for multiple targets
-          vrt_name <- tempfile("vrt", fileext = ".vrt", tmpdir = rundir)
-          out <- terra::vrt(target_files, filename = vrt_name)
-        }
-      }
-
-      # crop the source to the extent of the current polygon
-      out <- tryCatch(
-        {
-          terra::crop(out, terra::vect(shp), tempdir = rundir)
-        },
-        error = function(cond) {
-          print(cond)
-          warning("Cropping failed.", call. = FALSE)
-          return(NULL)
-        },
-        warning = function(cond) {
-          print(cond)
-          warning("Cropping failed.", call. = FALSE)
-          return(NULL)
-        }
-      )
-    }
-
-    if (resource_type == "vector") {
-      out <- read_sf(source, wkt_filter = st_as_text(st_geometry(shp)))
+      out <- .read_raster_source(shp, tindex, rundir)
+    } else if (resource_type == "vector") {
+      out <- lapply(available_resources[[resource_name]], function(source) {
+        tmp <- read_sf(source, wkt_filter = st_as_text(st_geometry(shp)))
+        tmp <- st_make_valid(tmp)
+      })
+      names(out) <- basename(available_resources[[resource_name]])
+    } else {
+      stop(sprintf("Resource type '%s' currently not supported", resource_type))
     }
     out
   })
   names(processed_resources) <- names(required_resources)
   processed_resources
+}
+
+
+
+.read_raster_source <- function(shp, tindex, rundir) {
+  all_bboxes <- lapply(1:nrow(tindex), function(i) paste(as.numeric(st_bbox(tindex[i, ])), collapse = " "))
+  is_stacked <- length(unique(unlist(all_bboxes))) == 1
+
+  if (is_stacked) { # current resource/extent all have the same bounding box
+
+    filenames <- basename(tindex$location)
+    out <- terra::rast(tindex$location)
+    names(out) <- filenames
+  } else {
+    is_unique <- length(unique(unlist(all_bboxes))) == nrow(tindex)
+
+    if (is_unique) { # all tiles have a different bounding box
+      target_files <- tindex$location[unlist(st_intersects(shp, tindex))]
+
+      if (length(target_files) == 0) {
+        warning("No intersection with resource.")
+        return(NULL)
+      } else if (length(target_files) == 1) {
+        out <- terra::rast(target_files)
+      } else {
+        # create a vrt for multiple targets
+        vrt_name <- tempfile("vrt", fileext = ".vrt", tmpdir = rundir)
+        out <- terra::vrt(target_files, filename = vrt_name)
+      }
+    } else { # some tiles share the same bboxes, and others do not, needs proper merging
+      # We assume here that the tiles present in tileindex have a temporal dimension.
+      # Thus each timestep should end up in its own layer. Different tiles from
+      # the same timestep should be spatially merged. We want to avoid merging
+      # different tile from different timesteps. We thus assume some regularity
+      # in how the name of a raster file expresses its temporal dimension.
+      # With this assumption, we can expect the files in tindex to be ordered.
+      # Thus we retrive the index of all files sharing the same bbox and assume
+      # that they belong to different timesteps. The files in between these
+      # indices thus belong to the previous timestep and we can merge these
+      # as a vrt and later join the bands. We always assign the name of the
+      # first file as the layername.
+      unique_bboxes <- unique(unlist(all_bboxes))
+      layer_index <- which(all_bboxes == unique_bboxes[[1]])
+      temporal_gap <- layer_index[2] - layer_index[1] - 1
+      out <- lapply(layer_index, function(j) {
+        target_files <- tindex$location[j:(j + temporal_gap)]
+        org_filename <- basename(target_files[1])
+        filename <- tools::file_path_sans_ext(org_filename)
+        vrt_name <- file.path(rundir, sprintf("vrt_%s.vrt", filename))
+        tmp <- terra::vrt(target_files, filename = vrt_name)
+        names(tmp) <- org_filename
+        tmp
+      })
+      out <- do.call(c, out)
+    }
+  }
+  # crop the source to the extent of the current polygon
+  cropped <- try(terra::crop(out, terra::vect(shp)))
+  if (inherits(cropped, "try-error")) {
+    warning(as.character(cropped))
+    return(NULL)
+  }
+  cropped
 }

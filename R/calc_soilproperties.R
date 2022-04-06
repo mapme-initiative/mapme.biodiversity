@@ -33,21 +33,18 @@ NULL
                                  verbose = TRUE,
                                  todisk = FALSE,
                                  ...) {
+  # check if input engines are correct
   if (is.null(soilgrids)) {
     return(NA)
   }
-  # check if input engines are correct
-  available_engines <- c("zonal", "extract", "exactextract")
-  if (!engine %in% available_engines) {
-    stop(sprintf("Engine '%s' is not an available engine. Please choose one of: %s", engine, paste(available_engines, collapse = ", ")))
-  }
-
+  # check if intermediate raster should be written to disk
   if (ncell(soilgrids) > 1024 * 1024) todisk <- TRUE
+  # check if input engine is correctly specified
+  available_engines <- c("zonal", "extract", "exactextract")
+  .check_engine(available_engines, engine)
+  # check if only supoorted stats have been specified
   available_stats <- c("mean", "median", "sd", "min", "max", "sum", "var")
-  # check if input stats are correct
-  if (!any(stats_soil %in% available_stats)) {
-    stop(sprintf("Stat '%s' is not an available statistics. Please choose one of: %s", stats_soil, paste(available_stats, collapse = ", ")))
-  }
+  .check_stats(available_stats, stats_soil)
 
   if (engine == "extract") {
     extractor <- .soil_extract
