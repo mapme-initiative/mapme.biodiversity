@@ -23,6 +23,24 @@
 #' @format A tibble with a column for the soilgrid layer, the depth and the model
 #'   output statistic as well as additionall columns for all zonal statistics
 #'   specified via \code{stats_soil}
+#' @examples
+#' library(sf)
+#' library(mapme.biodiversity)
+#' (aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
+#'   read_sf() %>%
+#'   init_portfolio(
+#'     years = 2022,
+#'     outdir = system.file("res", package = "mapme.biodiversity"),
+#'     tmpdir = system.file("tmp", package = "mapme.biodiversity"),
+#'     add_resources = FALSE,
+#'     cores = 1,
+#'     verbose = FALSE
+#'   ) %>%
+#'   get_resources("soilgrids",
+#'     layers = c("clay", "silt"), depths = c("0-5cm", "5-15cm"), stats = "mean"
+#'   ) %>%
+#'   calc_indicators("soilproperties", stats_soil = c("mean", "median"), engine = "extract") %>%
+#'   tidyr::unnest(soilproperties))
 NULL
 
 .calc_soilproperties <- function(shp,

@@ -19,6 +19,22 @@
 #' @docType data
 #' @keywords indicator
 #' @format A tibble with a column for maximum temperature statistics (in °C)
+#' @examples
+#' library(sf)
+#' library(mapme.biodiversity)
+#' (aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
+#'   read_sf() %>%
+#'   init_portfolio(
+#'     years = 2018,
+#'     outdir = system.file("res", package = "mapme.biodiversity"),
+#'     tmpdir = system.file("tmp", package = "mapme.biodiversity"),
+#'     add_resources = FALSE,
+#'     cores = 1,
+#'     verbose = FALSE
+#'   ) %>%
+#'   get_resources("maxtemperature") %>%
+#'   calc_indicators("wctmax", stats_worldclim = c("mean", "median"), engine = "extract") %>%
+#'   tidyr::unnest(wctmax))
 NULL
 
 #' Calculate worldclim maximum temperature statistics

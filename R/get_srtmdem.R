@@ -45,9 +45,6 @@ NULL
   srtm_list <- unique(stringr::str_extract_all(srtm_list, stringr::regex("srtm_\\s*(.*?)\\s*.zip"))[[1]])
   urls <- urls[which(basename(urls) %in% srtm_list)]
   filenames <- file.path(rundir, basename(urls))
-  if (any(file.exists(filenames))) {
-    message("Skipping existing files in output directory.")
-  }
   # start download in a temporal directory within tmpdir
   aria_bin <- attributes(x)$aria_bin
   if (is.null(attr(x, "testing"))) {

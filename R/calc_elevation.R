@@ -19,6 +19,24 @@
 #' @docType data
 #' @keywords indicator
 #' @format A tibble with a column for elevation statistics (in meters)
+#' @examples
+#' library(sf)
+#' library(mapme.biodiversity)
+#' (aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
+#'   read_sf() %>%
+#'   init_portfolio(
+#'     years = 2000:2020,
+#'     outdir = system.file("res", package = "mapme.biodiversity"),
+#'     tmpdir = system.file("tmp", package = "mapme.biodiversity"),
+#'     add_resources = FALSE,
+#'     cores = 1,
+#'     verbose = FALSE
+#'   ) %>%
+#'   get_resources("srtmdem") %>%
+#'   calc_indicators("elevation",
+#'     stats_elevation = c("mean", "median", "sd", "var"), engine = "extract"
+#'   ) %>%
+#'   tidyr::unnest(elevation))
 NULL
 
 #' Calculate elevation statistics based on SRTM data sets
@@ -48,7 +66,7 @@ NULL
                       engine = "zonal",
                       stats_elevation = "mean",
                       rundir = tempdir(),
-                      verbose = TRUE,
+                      verbose,
                       todisk = FALSE,
                       ...) {
   if (is.null(srtmdem)) {

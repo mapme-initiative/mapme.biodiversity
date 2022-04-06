@@ -19,4 +19,21 @@ The required resources for this indicator are:
 \item \code{esalandcover}
 }
 }
+\examples{
+library(sf)
+library(mapme.biodiversity)
+(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") \%>\%
+  read_sf() \%>\%
+  init_portfolio(
+    years = 2016:2017,
+    outdir = system.file("res", package = "mapme.biodiversity"),
+    tmpdir = system.file("tmp", package = "mapme.biodiversity"),
+    add_resources = FALSE,
+    cores = 1,
+    verbose = FALSE
+  ) \%>\%
+  get_resources("esalandcover") \%>\%
+  calc_indicators("landcover") \%>\%
+  tidyr::unnest(landcover))
+}
 \keyword{indicator}

@@ -81,7 +81,7 @@ NULL
                            depths,
                            stats,
                            rundir = tempdir(),
-                           verbose = TRUE,
+                           verbose,
                            ...) {
   if (any(missing(layers), missing(depths), missing(stats))) {
     stop(

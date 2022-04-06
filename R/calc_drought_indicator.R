@@ -3,7 +3,7 @@
 #' This function allows to efficiently calculate drought indicator statistics for
 #' polygons. For each polygon, the desired statistic/s (mean, median or sd) is/are
 #' returned. The required resources for this indicator are:
-#'  - \code{droughtindicators}
+#'  - \code{nasagrace}
 #'
 #' The following arguments can be set:
 #' \describe{
@@ -17,6 +17,22 @@
 #' @docType data
 #' @keywords indicator
 #' @format A tibble with a column for each specified stats and a column with the respective date.
+#' @examples
+#' library(sf)
+#' library(mapme.biodiversity)
+#' (aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
+#'   read_sf() %>%
+#'   init_portfolio(
+#'     years = 2022,
+#'     outdir = system.file("res", package = "mapme.biodiversity"),
+#'     tmpdir = system.file("tmp", package = "mapme.biodiversity"),
+#'     add_resources = FALSE,
+#'     cores = 1,
+#'     verbose = FALSE
+#'   ) %>%
+#'   get_resources("nasagrace") %>%
+#'   calc_indicators("drought_indicator", stats_drought = c("mean", "median"), engine = "extract") %>%
+#'   tidyr::unnest(drought_indicator))
 NULL
 
 #' Calculate drought indicator statistics

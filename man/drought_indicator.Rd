@@ -12,7 +12,7 @@ This function allows to efficiently calculate drought indicator statistics for
 polygons. For each polygon, the desired statistic/s (mean, median or sd) is/are
 returned. The required resources for this indicator are:
 \itemize{
-\item \code{droughtindicators}
+\item \code{nasagrace}
 }
 }
 \details{
@@ -23,5 +23,22 @@ one or multiple inputs as character "mean", "median" or "sd".}
 \item{engine}{The preferred processing functions from either one of "zonal",
 "extract" or "exactextract" as character.}
 }
+}
+\examples{
+library(sf)
+library(mapme.biodiversity)
+(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") \%>\%
+  read_sf() \%>\%
+  init_portfolio(
+    years = 2022,
+    outdir = system.file("res", package = "mapme.biodiversity"),
+    tmpdir = system.file("tmp", package = "mapme.biodiversity"),
+    add_resources = FALSE,
+    cores = 1,
+    verbose = FALSE
+  ) \%>\%
+  get_resources("nasagrace") \%>\%
+  calc_indicators("drought_indicator", stats_drought = c("mean", "median"), engine = "extract") \%>\%
+  tidyr::unnest(drought_indicator))
 }
 \keyword{indicator}
