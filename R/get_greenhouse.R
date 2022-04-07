@@ -43,12 +43,15 @@ NULL
     "753016096c1d49f0977e7b62533375ee_0.geojson",
     sep = ""
   )
-  spatialindex <- st_read(index_url, quiet = TRUE)
+  index_file <- tempfile(tmpdir = rundir, fileext = ".geojson")
+  download.file(index_url, index_file)
+  spatialindex <- st_read(index_file, quiet = TRUE)
   targets <- unlist(st_intersects(st_as_sfc(bbox), spatialindex))
   tileids <- spatialindex$tile_id[targets]
   urls <- as.character(
     spatialindex$Mg_CO2e_px_download[spatialindex$tile_id %in% tileids]
   )
+  file.remove(index_file)
   filenames <- file.path(
     rundir,
     sprintf("gfw_forest_carbon_gross_emissions_Mg_CO2e_px_%s.tif", tileids)
