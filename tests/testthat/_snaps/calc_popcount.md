@@ -1,4 +1,4 @@
-# population count works
+# .calc_popcount works
 
     Code
       .calc_popcount(shp, worldpop)

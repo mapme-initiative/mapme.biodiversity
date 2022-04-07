@@ -59,4 +59,9 @@ test_that("get_soilgrids works", {
       stats = "not-available"
     )
   )
+
+  expect_error(
+    .get_soilgrids(portfolio),
+    "For downloading data from soilgrid a valid layer, a valid depth range and a valid statistic have to be specified"
+  )
 })

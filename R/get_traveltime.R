@@ -51,13 +51,14 @@ NULL
                             range_traveltime = "20k_50k",
                             rundir = tempdir(),
                             verbose = TRUE) {
-
-  # get url for accessibility layer
-  urls <- .get_traveltime_url(range_traveltime)
   filenames <- file.path(
     rundir,
     paste0("traveltime-", range_traveltime, ".tif")
   )
+  # get url for accessibility layer
+  check <- .get_traveltime_url(range_traveltime, filenames)
+  urls <- check$urls
+  filenames <- check$filenames
   # start download in a temporal directory within tmpdir
   aria_bin <- attributes(x)$aria_bin
   if (is.null(attr(x, "testing"))) .download_or_skip(urls, filenames, verbose, check_existence = FALSE, aria_bin = aria_bin)
@@ -73,7 +74,7 @@ NULL
 #' @return A character string
 #' @keywords internal
 #' @noRd
-.get_traveltime_url <- function(range) {
+.get_traveltime_url <- function(range, filenames) {
   df_index <- data.frame(
     range = c(
       "5k_10k", "10k_20k", "20k_50k", "50k_100k", "100k_200k", "200k_500k",
@@ -98,6 +99,7 @@ NULL
     }
     message(sprintf(basemsg, body, paste(df_index$range, collapse = ", ")))
     range <- range[-index]
+    filenames <- filenames[-index]
     if (length(range) == 0) {
       stop("No supoorted ranges have been specified.")
     } else {
@@ -111,8 +113,9 @@ NULL
     }
   }
 
-  unlist(lapply(range, function(x) {
+  urls <- unlist(lapply(range, function(x) {
     index <- df_index$index[df_index$range == x]
     paste0("https://ndownloader.figshare.com/files/", index)
   }))
+  return(list(urls = urls, filenames = filenames))
 }
