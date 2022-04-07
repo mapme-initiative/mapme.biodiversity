@@ -1,6 +1,6 @@
 test_that(".get_mangrove works", {
   aoi <- read_sf(
-    system.file("extdata", "sierra_de_neiba_478140.gpkg",
+    system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
       package = "mapme.biodiversity"
     )
   )
