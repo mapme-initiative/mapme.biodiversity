@@ -28,14 +28,14 @@ test_that(".get_worldpop works", {
     "traveltime-20k_50k.tif"
   )
 
-  expect_equal(
+  expect_warning(
     get_resources(portfolio, "traveltime", range_traveltime = "not-available"),
-    NA
+    "Download for resource traveltime failed. Returning unmodified portfolio object."
   )
 
-  expect_equal(
+  expect_warning(
     get_resources(portfolio, "traveltime", range_traveltime = c("not-available", "not-available2")),
-    NA
+    "Download for resource traveltime failed. Returning unmodified portfolio object."
   )
 
   expect_equal(
