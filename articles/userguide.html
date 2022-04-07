@@ -247,18 +247,18 @@
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 12 × 3</span></span>
 <span class="co">#&gt;    dates      absolute anomaly</span>
 <span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2010-01-01    22.5    8.51 </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2010-02-01    26.2    0.404</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2010-03-01    45.4   -<span style="color: #BB0000;">9.11</span> </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2010-04-01   165.    41.5  </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2010-05-01   201.   -<span style="color: #BB0000;">20.4</span>  </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2010-06-01   228.   110.   </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2010-07-01   160.    76.1  </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2010-08-01   101.   -<span style="color: #BB0000;">18.1</span>  </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2010-09-01   111.   -<span style="color: #BB0000;">65.6</span>  </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2010-10-01   106.   -<span style="color: #BB0000;">53.1</span>  </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 2010-11-01   131.    33.3  </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2010-12-01     8.16  -<span style="color: #BB0000;">2.40</span></span></code></pre></div>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2010-01-01       22   8.43 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2010-02-01       26   0.700</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2010-03-01       45  -<span style="color: #BB0000;">9</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2010-04-01      165  41.6  </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2010-05-01      200 -<span style="color: #BB0000;">20.7</span>  </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2010-06-01      227 110    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2010-07-01      159  75.8  </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2010-08-01      100 -<span style="color: #BB0000;">18.5</span>  </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2010-09-01      111 -<span style="color: #BB0000;">65.3</span>  </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2010-10-01      105 -<span style="color: #BB0000;">53.4</span>  </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 2010-11-01      130  32.9  </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2010-12-01        8  -<span style="color: #BB0000;">2.1</span></span></code></pre></div>
 <p>For each asset, the result is a tibble in long format for 12 months in the year 2010. The precipitation indicator with the default setting delivered the absolute rainfall sum as well as the rainfall anomaly compared to the 1981-2010 climate normal period (make sure to read the detailed indicator documentation via <code><a href="../reference/chirpsprec.html">?chirpsprec</a></code>). Let’s quickly visualize the results for a single asset:</p>
 <p><img src="userguide_files/figure-html/plot_precipitation-1.png" width="700"><img src="userguide_files/figure-html/plot_precipitation-2.png" width="700"></p>
 <p>If you wish to conduct your statistical analysis in R, you can use <a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a> functionality to unnest one or multiple columns. Especially for large portfolios, it is usually a good idea to keep the geometry information in a separated variable in order to keep the size of the data object relatively small.</p>
@@ -271,18 +271,18 @@
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 12 × 5</span></span>
 <span class="co">#&gt;    .assetid WDPAID dates      absolute anomaly</span>
 <span class="co">#&gt;       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>        3 <span style="text-decoration: underline;">478</span>140 2010-01-01    13.1     4.58</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>        3 <span style="text-decoration: underline;">478</span>140 2010-02-01    16.8     2.20</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>        3 <span style="text-decoration: underline;">478</span>140 2010-03-01    27.3    -<span style="color: #BB0000;">7.77</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>        3 <span style="text-decoration: underline;">478</span>140 2010-04-01   130.     32.5 </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>        3 <span style="text-decoration: underline;">478</span>140 2010-05-01   159.    -<span style="color: #BB0000;">10.3</span> </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>        3 <span style="text-decoration: underline;">478</span>140 2010-06-01   170.     77.8 </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>        3 <span style="text-decoration: underline;">478</span>140 2010-07-01   140.     64.9 </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        3 <span style="text-decoration: underline;">478</span>140 2010-08-01    98.0    -<span style="color: #BB0000;">4.14</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        3 <span style="text-decoration: underline;">478</span>140 2010-09-01   101.    -<span style="color: #BB0000;">38.3</span> </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        3 <span style="text-decoration: underline;">478</span>140 2010-10-01   105.    -<span style="color: #BB0000;">35.2</span> </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">11</span>        3 <span style="text-decoration: underline;">478</span>140 2010-11-01   101.     26.6 </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">12</span>        3 <span style="text-decoration: underline;">478</span>140 2010-12-01     7.35   -<span style="color: #BB0000;">1.18</span></span></code></pre></div>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>        3 <span style="text-decoration: underline;">478</span>140 2010-01-01       13    4.93</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>        3 <span style="text-decoration: underline;">478</span>140 2010-02-01       16    1.93</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>        3 <span style="text-decoration: underline;">478</span>140 2010-03-01       27   -<span style="color: #BB0000;">7.53</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>        3 <span style="text-decoration: underline;">478</span>140 2010-04-01      129   32.2 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>        3 <span style="text-decoration: underline;">478</span>140 2010-05-01      159  -<span style="color: #BB0000;">10.3</span> </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>        3 <span style="text-decoration: underline;">478</span>140 2010-06-01      170   78   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>        3 <span style="text-decoration: underline;">478</span>140 2010-07-01      139   64.6 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        3 <span style="text-decoration: underline;">478</span>140 2010-08-01       98   -<span style="color: #BB0000;">3.67</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        3 <span style="text-decoration: underline;">478</span>140 2010-09-01      100  -<span style="color: #BB0000;">38.6</span> </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        3 <span style="text-decoration: underline;">478</span>140 2010-10-01      104  -<span style="color: #BB0000;">35.6</span> </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">11</span>        3 <span style="text-decoration: underline;">478</span>140 2010-11-01      101   26.8 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">12</span>        3 <span style="text-decoration: underline;">478</span>140 2010-12-01        7   -<span style="color: #BB0000;">1.03</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="exporting-an-portfolio-object">Exporting an portfolio object<a class="anchor" aria-label="anchor" href="#exporting-an-portfolio-object"></a>
@@ -295,9 +295,9 @@
   dsn <span class="op">=</span> <span class="va">tmp_output</span>
 <span class="op">)</span>
 <span class="co">#&gt; Writing layer `metadata' to data source </span>
-<span class="co">#&gt;   `/tmp/RtmpMY6tFh/file4302297ae3dd.gpkg' using driver `GPKG'</span>
+<span class="co">#&gt;   `/tmp/RtmpMC9XHH/file42e02010b8f4.gpkg' using driver `GPKG'</span>
 <span class="co">#&gt; Writing 20 features with 2 fields and geometry type Polygon.</span>
-<span class="co">#&gt; Updating layer `chirpsprec' to data source `/tmp/RtmpMY6tFh/file4302297ae3dd.gpkg' using driver `GPKG'</span>
+<span class="co">#&gt; Updating layer `chirpsprec' to data source `/tmp/RtmpMC9XHH/file42e02010b8f4.gpkg' using driver `GPKG'</span>
 <span class="co">#&gt; Writing 240 features with 4 fields without geometries.</span>
 <span class="op">(</span><span class="va">portfolio_from_disk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_portfolio.html">read_portfolio</a></span><span class="op">(</span><span class="va">tmp_output</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Simple feature collection with 20 features and 3 fields</span>
