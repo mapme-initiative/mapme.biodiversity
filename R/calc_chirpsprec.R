@@ -31,12 +31,11 @@
 #'     years = 2010,
 #'     outdir = system.file("res", package = "mapme.biodiversity"),
 #'     tmpdir = system.file("tmp", package = "mapme.biodiversity"),
-#'     add_resources = FALSE,
 #'     cores = 1,
 #'     verbose = FALSE
 #'   ) %>%
 #'   get_resources("chirps") %>%
-#'   calc_indicators("chirpsprec", scales_spi = NULL, engine = "exactextract") %>%
+#'   calc_indicators("chirpsprec", engine = "exactextract") %>%
 #'   tidyr::unnest(chirpsprec))
 NULL
 

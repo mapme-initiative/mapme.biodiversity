@@ -1,9 +1,3 @@
-# test-calc_esalandcover.R
-
-library(sf)
-library(terra)
-library(testthat)
-
 test_that("esa global landcover works", {
   shp <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",

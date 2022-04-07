@@ -1,10 +1,4 @@
-# test-calc_worldpop.R
-
-library(sf)
-library(terra)
-library(testthat)
-
-test_that("population count works", {
+test_that(".calc_popcount works", {
   shp <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
       package = "mapme.biodiversity"
