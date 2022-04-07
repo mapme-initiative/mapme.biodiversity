@@ -270,7 +270,7 @@
                               aria_bin = NULL) {
   if (check_existence) {
     if (verbose) message("Checking URLs for existence. This may take a while...")
-    url_exists <- unlist(lapply(urls, function(url) RCurl::url.exists(url)))
+    url_exists <- unlist(lapply(urls, function(url) !httr::http_error(url)))
     urls <- urls[url_exists]
     filenames <- filenames[url_exists]
   }

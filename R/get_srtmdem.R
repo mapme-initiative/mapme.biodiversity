@@ -41,8 +41,10 @@ NULL
   }
   urls <- unlist(sapply(tile_ids, function(tile) .get_srtm_url(tile)))
   srtm_url <- "https://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/"
-  srtm_list <- RCurl::getURL(srtm_url, dirlistonly = TRUE, ftp.use.epsv = FALSE)
-  srtm_list <- unique(stringr::str_extract_all(srtm_list, stringr::regex("srtm_\\s*(.*?)\\s*.zip"))[[1]])
+  srtm_list <- rvest::read_html(srtm_url) %>%
+    rvest::html_elements("a") %>%
+    rvest::html_text2()
+  srtm_list <- grep(".zip", srtm_list, value = TRUE)
   urls <- urls[which(basename(urls) %in% srtm_list)]
   filenames <- file.path(rundir, basename(urls))
   # start download in a temporal directory within tmpdir

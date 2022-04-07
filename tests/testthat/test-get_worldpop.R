@@ -14,7 +14,7 @@ test_that(".get_worldpop works", {
   )
 
   portfolio <- init_portfolio(aoi,
-    years = 2000:2020,
+    years = 2000,
     outdir = outdir,
     tmpdir = tmpdir,
     cores = 1,
@@ -24,7 +24,13 @@ test_that(".get_worldpop works", {
   # Add testing attribute in order to skip downloads
   attributes(portfolio)$testing <- TRUE
 
-  expect_snapshot(
-    basename(get_resources(portfolio, "worldpop"))
+  expect_equal(
+    basename(get_resources(portfolio, "worldpop")),
+    "ppp_2000_1km_Aggregated.tif"
+  )
+
+  expect_warning(
+    .get_worldpop_url(1999),
+    "Population count not available for target year 1999"
   )
 })

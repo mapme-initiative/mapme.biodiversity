@@ -26,8 +26,10 @@ NULL
                         rundir = tempdir(),
                         verbose = TRUE) {
   chirps_url <- "https://data.chc.ucsb.edu/products/CHIRPS-2.0/global_monthly/cogs/"
-  chirps_list <- RCurl::getURL(chirps_url, dirlistonly = TRUE, ftp.use.epsv = FALSE)
-  chirps_list <- unique(stringr::str_extract_all(chirps_list, stringr::regex("chirps-\\s*(.*?)\\s*.cog"))[[1]])
+  chirps_list <- rvest::read_html(chirps_url) %>%
+    rvest::html_elements("a") %>%
+    rvest::html_text2()
+  chirps_list <- grep(".cog", chirps_list, value = TRUE)
   urls <- paste(chirps_url, chirps_list, sep = "")
   filenames <- file.path(rundir, basename(urls))
 
