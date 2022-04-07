@@ -23,7 +23,23 @@ test_that(".get_worldpop works", {
   )
   # Add testing attribute in order to skip downloads
   attributes(portfolio)$testing <- TRUE
-  expect_snapshot(
-    basename(get_resources(portfolio, "traveltime"))
+  expect_equal(
+    basename(get_resources(portfolio, "traveltime")),
+    "traveltime-20k_50k.tif"
+  )
+
+  expect_equal(
+    get_resources(portfolio, "traveltime", range_traveltime = "not-available"),
+    NA
+  )
+
+  expect_equal(
+    get_resources(portfolio, "traveltime", range_traveltime = c("not-available", "not-available2")),
+    NA
+  )
+
+  expect_equal(
+    basename(get_resources(portfolio, "traveltime", range_traveltime = c("20k_50k", "not-available"))),
+    "traveltime-20k_50k.tif"
   )
 })
