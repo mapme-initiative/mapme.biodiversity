@@ -28,8 +28,8 @@ knitr::opts_chunk$set(
 Here we present a quick introduction to the most important terminologies and concepts
 used throughout this tutorial:
 
-- **Portfolio**: A portfolio in the sense of this documentation
-is the collection of single assets in an <code>{sf}</code> object. The package
+- **Portfolio**: This documentation defines a portfolio as
+the collection of single assets in an <code>{sf}</code> object. The package
 does only allow assets with geometries of type 'POLYGON' to be included in the <code>{sf}</code>.
 In case that some of your data has type 'MULTIPOLYGON' you are required to 
 transform your data via <code>sf::st_cast()</code>. We also expect the data to be unprojected.
@@ -43,23 +43,23 @@ arguments, an portfolio object actually is and will behave as a familiar <code>{
 object in any important regard.
 
 - **Resources**: A resource is a supported dataset that can be downloaded via the 
-<code>get_resources()</code> function. A resource can represent either a raster or a 
-vector data set. Vector datasets from the internet will be saved to disk as
+<code>get_resources()</code> function. A resource represents either a raster or a 
+vector data set. Vector datasets from the internet are saved to disk as
 GeoPackages. Raster datasets can be tiled so that only tiles that cover the 
 spatial extent of the portfolio will be downloaded. Global raster resources will
-be downloaded completely. Additionally, raster resources can be time-invariant
+be downloaded completely. Additionally, raster resources are time-invariant
 (e.g. a Digital Elevation Model) or contain a temporal dimension. If a raster
 resource contains a temporal dimension, usually only the time-frame intersecting
 with the time-frame of the portfolio will be downloaded. Some resources might
 require additional arguments set by users. These can simply be added to the 
-<code>get_resources()</code> function call. In order to learn about resources and
+<code>get_resources()</code> function call. To learn about resources and
 their arguments simply query the help-page for that resource (e.g. via <code>?treecover2000</code>).
 
 - **Indicators**: An indicator calculates a specific tabular numeric output for all
-assets in a portfolio. Every indicator requires one or more resources to be available
+assets in a portfolio. Every indicator requires one or more resources available
 locally. Additional arguments might be required though sensible defaults have been
-set. The package will gracefully inform about any misspecification of arguments.
-In order to learn more about a specific indicator and its required arguments,
+set. The package will inform about any misspecification of arguments.
+To learn more about a specific indicator and its required arguments,
 simply query the help-page (e.g. via <code>?treecover</code>). When an indicator 
 calculation is requested a nested list column with the same name will be added
 to the portfolio.
@@ -67,7 +67,7 @@ to the portfolio.
 - **Engines**: Several indicators support different engines for the extraction of
 the numeric outputs. Currently, these engines are based on either <code>terra::zonal()</code>,
 <code>terra::extract()</code>, or <code>exactextractr::exact_extract()</code>. We took 
-great care to set these engines to sensible defaults. However, in order to 
+great care to set these engines to sensible defaults. However, to 
 customize your workflow you can chose to use a different engine from the default.
 
 - **Processing Modes**: The processing mode is rarely of interest to users but it is
