@@ -42,7 +42,6 @@ NULL
 #' @param todisk Logical indicating whether or not temporary vector files shall
 #'   be written to disk
 #' @param ... additional arguments
-#' @importFrom dplyr select, group_by, summarise
 #' @return A tibble
 #' @keywords internal
 #' @noRd
@@ -53,6 +52,9 @@ NULL
                        verbose = TRUE,
                        todisk = FALSE,
                        ...) {
+  ECO_NAME <- NULL
+  new_area <- NULL
+
   merged <- .comp_teow(
     shp = shp,
     ecoregions = ecoregions,
@@ -76,7 +78,6 @@ NULL
 #'
 #' @param ecoregions terrestrial ecoregions vector from which to compute statistics
 #'
-#' @importFrom units set_units
 #' @return A data-frame
 #' @keywords internal
 #' @noRd
@@ -87,7 +88,6 @@ NULL
                        verbose = TRUE,
                        todisk = FALSE,
                        ...) {
-
   intersected <- st_intersection(shp, ecoregions[[1]])
   biome_and_name <- data.frame(
     BIOME = c(1:14, 98, 99),
@@ -112,8 +112,8 @@ NULL
   )
   merged <- merge(intersected, biome_and_name)
   area <- st_area(merged) %>%
-    units::set_units("ha") %>%
-    as.numeric()
+    as.numeric() %>%
+    `/`(., 10000)
   merged <- st_drop_geometry(merged)
   merged$new_area <- area
   return(merged)

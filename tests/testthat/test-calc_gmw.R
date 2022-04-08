@@ -1,11 +1,11 @@
 test_that("mangrove extent works", {
   shp <- read_sf(
     system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
-                package = "mapme.biodiversity"
+      package = "mapme.biodiversity"
     )
   )
   source <- list.files(system.file("res", "mangrove",
-                                         package = "mapme.biodiversity"
+    package = "mapme.biodiversity"
   ), pattern = ".gpkg$", full.names = TRUE)
   mangrove <- lapply(1:length(source), function(j) {
     out <- read_sf(source[[j]])
@@ -14,7 +14,6 @@ test_that("mangrove extent works", {
   names(mangrove) <- basename(source)
   attributes(shp)$cores <- 1
   expect_snapshot(
-    suppressWarnings(.calc_gmw(shp, mangrove))
+    .calc_gmw(shp, mangrove)
   )
 })
-

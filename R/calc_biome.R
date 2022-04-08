@@ -42,10 +42,10 @@ NULL
 #' @param todisk Logical indicating whether or not temporary vector files shall
 #'   be written to disk
 #' @param ... additional arguments
-#' @importFrom dplyr select, group_by, summarise
 #' @return A tibble
 #' @keywords internal
 #' @noRd
+
 
 .calc_biome <- function(shp,
                         ecoregions,
@@ -53,6 +53,10 @@ NULL
                         verbose = TRUE,
                         todisk = FALSE,
                         ...) {
+  BIOME_NAME <- NULL
+  biomes <- NULL
+  new_area <- NULL
+
   merged <- .comp_teow(
     shp = shp,
     ecoregions = ecoregions,

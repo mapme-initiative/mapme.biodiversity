@@ -14,10 +14,12 @@
 #' @examples
 #' library(sf)
 #' library(mapme.biodiversity)
-#' (aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg", package = "mapme.biodiversity") %>%
+#' (aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
+#'   package = "mapme.biodiversity"
+#' ) %>%
 #'   read_sf() %>%
 #'   init_portfolio(
-#'     years = c(1996,2016),
+#'     years = c(1996, 2016),
 #'     outdir = system.file("res", package = "mapme.biodiversity"),
 #'     tmpdir = system.file("tmp", package = "mapme.biodiversity"),
 #'     add_resources = FALSE,
@@ -55,9 +57,9 @@ NULL
   results <- lapply(1:length(mangrove), function(j) {
     intersected <- st_intersection(mangrove[[j]], shp)
     area <- st_area(intersected) %>%
-      units::set_units("ha") %>%
+      as.numeric() %>%
       sum() %>%
-      as.numeric()
+      `/`(., 10000)
     out <- tibble(
       mangrove_extent = area,
       year = strsplit(names(mangrove[j]), "_|.gpkg")[[1]][2]
