@@ -150,6 +150,24 @@ available_indicators <- function(indicator = NULL) {
         engine = "extract"
       ),
       processing_mode = "asset"
+    ),
+    gmw = list(
+      name = ".calc_gmw",
+      inputs = list(mangrove = "vector"),
+      arguments = list(),
+      processing_mode = "asset"
+    ),
+    teow = list(
+      name = ".calc_teow",
+      inputs = list(ecoregions = "vector"),
+      arguments = list(),
+      processing_mode = "asset"
+    ),
+    biome = list(
+      name = ".calc_biome",
+      inputs = list(ecoregions = "vector"),
+      arguments = list(),
+      processing_mode = "asset"
     )
   )
 
