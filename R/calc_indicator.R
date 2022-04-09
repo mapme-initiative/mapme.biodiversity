@@ -150,15 +150,13 @@ calc_indicators <- function(x, indicators, ...) {
       out <- .read_raster_source(shp, tindex, rundir)
     } else if (resource_type == "vector") {
       out <- lapply(available_resources[[resource_name]], function(source) {
-        tmp <- read_sf(source, wkt_filter = st_as_text(st_geometry(shp)))
+        tmp <- read_sf(source, wkt_filter = st_as_text(st_as_sfc(st_bbox(shp))))
         if (sf_use_s2()) {
           st_geometry(tmp) <- st_geometry(tmp) %>%
             st_as_s2(rebuild = TRUE) %>%
             st_as_sfc()
-        } else {
-          tmp <- st_make_valid(tmp)
         }
-        tmp
+        tmp <- st_make_valid(tmp)
       })
       names(out) <- basename(available_resources[[resource_name]])
     } else {
