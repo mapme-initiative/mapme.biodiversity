@@ -31,7 +31,7 @@
 #'     years = 2000:2010,
 #'     outdir = system.file("res", package = "mapme.biodiversity"),
 #'     tmpdir = system.file("tmp", package = "mapme.biodiversity"),
-#'     add_resources = FALSE,
+#'     add_resources = TRUE,
 #'     cores = 1,
 #'     verbose = FALSE
 #'   ) %>%

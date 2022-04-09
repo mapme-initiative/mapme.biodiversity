@@ -36,6 +36,29 @@ NULL
   # start download in a temporal directory within tmpdir
   aria_bin <- attributes(x)$aria_bin
   if (is.null(attr(x, "testing"))) .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin, check_existence = FALSE)
+  footprints <- unlist(lapply(filenames, function(file) {
+    bbox <- round(as.numeric(st_bbox(rast(file))), 3)
+    identical(bbox, round(c(-180.00125, -72.00042, 179.99875, 83.99958), 3))
+  }))
+
+  if (is.null(attr(x, "testing"))) {
+    if (any(!footprints)) {
+      index <- which(!footprints)
+      index_ok <- which(footprints)[1]
+      target <- rast(filenames[index_ok])
+      if (verbose) message("Resampling worldpop layers...")
+      for (i in index) {
+        tmpfile <- tempfile(tmpdir = rundir, fileext = ".tif")
+        file.copy(filenames[i], tmpfile)
+        tmp <- rast(tmpfile)
+        project(tmp, target,
+          filename = filenames[i],
+          overwrite = TRUE, method = "bilinear", progress = verbose
+        )
+        file.remove(tmpfile)
+      }
+    }
+  }
   # return paths to the raster
   filenames
 }

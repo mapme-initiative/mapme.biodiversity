@@ -96,7 +96,7 @@ calc_indicators <- function(x, indicators, ...) {
   unlink(file.path(tmpdir, "terra"), recursive = TRUE, force = TRUE)
   terra::terraOptions(tempdir = terra_org)
   # bind results to data.frame
-  results <- tibble(data.table::rbindlist(results, fill = TRUE, idcol = ".id", ))
+  results <- tibble(data.table::rbindlist(results, fill = TRUE, idcol = ".id"))
   # nest the results
   results <- nest(results, !!indicator := !.id)
   # attach results
