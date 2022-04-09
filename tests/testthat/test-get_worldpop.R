@@ -14,7 +14,7 @@ test_that(".get_worldpop works", {
   )
 
   portfolio <- init_portfolio(aoi,
-    years = 2000,
+    years = 2001,
     outdir = outdir,
     tmpdir = tmpdir,
     cores = 1,
@@ -26,7 +26,7 @@ test_that(".get_worldpop works", {
 
   expect_equal(
     basename(get_resources(portfolio, "worldpop")),
-    "ppp_2000_1km_Aggregated.tif"
+    "ppp_2001_1km_Aggregated.tif"
   )
 
   expect_warning(
