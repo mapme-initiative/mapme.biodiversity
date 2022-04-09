@@ -4,6 +4,7 @@ test_that("mangrove extent works", {
       package = "mapme.biodiversity"
     )
   )
+  shp <- st_make_valid(shp)
   source <- list.files(system.file("res", "mangrove",
     package = "mapme.biodiversity"
   ), pattern = ".gpkg$", full.names = TRUE)
