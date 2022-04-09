@@ -27,10 +27,25 @@ calc_indicators <- function(x, indicators, ...) {
     existing_resources, required_resources,
     needed = TRUE
   )
-  ## TODO: check if we can go parallel here. Problem is when errors occur
-  # for one resource and it terminates the complete process. We would have
-  # to catch that so other processes can terminate successfully.
+  # Fix for MacOS CI error with duplicated vertices in vector resources
+  # Error in s2_geography_from_wkb(x, oriented = oriented, check = check) :
+  # Evaluation error: Found 1 feature with invalid spherical geometry.
+  # [1] Loop 0 is not valid: Edge 821 is degenerate (duplicate vertex).
+  # https://github.com/r-spatial/sf/issues/1762 suggests to deactivate s2,
+  # proposition of https://github.com/r-spatial/sf/issues/1902 to dissable
+  # s2 and fix the geometry has failed, thus for now falling back to lwgeom
+  if (Sys.info()["sysname"] == "MacOS") {
+    if (!"lwgeom" %in% utils::installed.packages()[, 1]) {
+      stop(paste(
+        "Requires package 'lwgeom' for area calculations.\n",
+        "Please install via 'install.packages('lwgeom')'"
+      ))
+    }
+    s2_org <- sf_use_s2()
+    suppressMessages(sf_use_s2(FALSE))
+  }
   for (indicator in indicators) x <- .get_single_indicator(x, indicator, ...)
+  if (Sys.info()["sysname"] == "MacOS") suppressMessages(sf_use_s2(s2_org))
   x
 }
 
@@ -151,12 +166,7 @@ calc_indicators <- function(x, indicators, ...) {
     } else if (resource_type == "vector") {
       out <- lapply(available_resources[[resource_name]], function(source) {
         tmp <- read_sf(source, wkt_filter = st_as_text(st_as_sfc(st_bbox(shp))))
-        if (sf_use_s2()) {
-          st_geometry(tmp) <- st_geometry(tmp) %>%
-            st_as_s2(rebuild = TRUE) %>%
-            st_as_sfc()
-        }
-        tmp <- st_make_valid(tmp)
+        st_make_valid(tmp)
       })
       names(out) <- basename(available_resources[[resource_name]])
     } else {

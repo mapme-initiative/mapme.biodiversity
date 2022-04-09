@@ -28,6 +28,7 @@ Imports:
     data.table,
     dplyr,
     httr,
+    lwgeom,
     magrittr,
     pbapply,
     rvest,
