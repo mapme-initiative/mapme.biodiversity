@@ -37,7 +37,7 @@ calc_indicators <- function(x, indicators, ...) {
   if (Sys.info()["sysname"] == "Darwin" | grepl("darwin", Sys.info()["sysname"])) {
     s2_org <- sf_use_s2()
     suppressMessages(sf_use_s2(FALSE))
-    on.exit(sf_use_s2(s2_org))
+    on.exit(suppressMessages(sf_use_s2(s2_org)))
   }
 
   for (indicator in indicators) x <- .get_single_indicator(x, indicator, ...)
