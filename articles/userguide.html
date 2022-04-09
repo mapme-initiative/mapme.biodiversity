@@ -172,11 +172,12 @@
 <p>You can check which indicators are available via the <code><a href="../reference/available_indicators.html">available_indicators()</a></code> function. For this, we inspect the names of the returned object:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/terra/man/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="../reference/available_indicators.html">available_indicators</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;  [1] "accessibility"     "chirpsprec"        "drought_indicator"</span>
-<span class="co">#&gt;  [4] "elevation"         "emissions"         "landcover"        </span>
-<span class="co">#&gt;  [7] "popcount"          "soilproperties"    "treecover"        </span>
-<span class="co">#&gt; [10] "treeloss"          "tri"               "wcprec"           </span>
-<span class="co">#&gt; [13] "wctmax"            "wctmin"</span></code></pre></div>
+<span class="co">#&gt;  [1] "accessibility"     "biome"             "chirpsprec"       </span>
+<span class="co">#&gt;  [4] "drought_indicator" "elevation"         "emissions"        </span>
+<span class="co">#&gt;  [7] "gmw"               "landcover"         "popcount"         </span>
+<span class="co">#&gt; [10] "soilproperties"    "teow"              "treecover"        </span>
+<span class="co">#&gt; [13] "treeloss"          "tri"               "wcprec"           </span>
+<span class="co">#&gt; [16] "wctmax"            "wctmin"</span></code></pre></div>
 <p>Say, we are interested in the precipitation indicator based on the CHIRPS dataset. We can learn more about this indicator and its required resources by using either of the commands below or, if you are viewing the online version, head over to the <a href="../reference/chirpsprec.html">chirpsprec</a> documentation.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">?</span><span class="va">chirpsprec</span>
@@ -295,9 +296,9 @@
   dsn <span class="op">=</span> <span class="va">tmp_output</span>
 <span class="op">)</span>
 <span class="co">#&gt; Writing layer `metadata' to data source </span>
-<span class="co">#&gt;   `/tmp/RtmpMC9XHH/file42e02010b8f4.gpkg' using driver `GPKG'</span>
+<span class="co">#&gt;   `/tmp/RtmpaP20Uh/file3ff64e3364c4.gpkg' using driver `GPKG'</span>
 <span class="co">#&gt; Writing 20 features with 2 fields and geometry type Polygon.</span>
-<span class="co">#&gt; Updating layer `chirpsprec' to data source `/tmp/RtmpMC9XHH/file42e02010b8f4.gpkg' using driver `GPKG'</span>
+<span class="co">#&gt; Updating layer `chirpsprec' to data source `/tmp/RtmpaP20Uh/file3ff64e3364c4.gpkg' using driver `GPKG'</span>
 <span class="co">#&gt; Writing 240 features with 4 fields without geometries.</span>
 <span class="op">(</span><span class="va">portfolio_from_disk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_portfolio.html">read_portfolio</a></span><span class="op">(</span><span class="va">tmp_output</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Simple feature collection with 20 features and 3 fields</span>

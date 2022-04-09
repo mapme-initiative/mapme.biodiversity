@@ -43,6 +43,9 @@
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/available_resources.html</loc>
   </url>
   <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/biome.html</loc>
+  </url>
+  <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/calc_indicators.html</loc>
   </url>
   <url>
@@ -79,6 +82,9 @@
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/get_resources.html</loc>
   </url>
   <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/gmw.html</loc>
+  </url>
+  <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/greenhouse.html</loc>
   </url>
   <url>
@@ -113,6 +119,9 @@
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/srtmdem.html</loc>
+  </url>
+  <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/teow.html</loc>
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/traveltime.html</loc>
