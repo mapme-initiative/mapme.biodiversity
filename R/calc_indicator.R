@@ -96,7 +96,7 @@ calc_indicators <- function(x, indicators, ...) {
   unlink(file.path(tmpdir, "terra"), recursive = TRUE, force = TRUE)
   terra::terraOptions(tempdir = terra_org)
   # bind results to data.frame
-  results <- tibble(data.table::rbindlist(results, fill = TRUE))
+  results <- tibble(data.table::rbindlist(results, fill = TRUE, idcol = ".id"))
   # nest the results
   results <- nest(results, !!indicator := !.id)
   # attach results
@@ -125,9 +125,9 @@ calc_indicators <- function(x, indicators, ...) {
   out <- try(do.call(params$fun, args = params))
   if (inherits(out, "try-error")) {
     warning(sprintf("Error occured at polygon %s with the following error message: %s. \n Returning NAs.", i, out))
-    out <- tibble(.id = i)
+    out <- list(NA)
   }
-  if (params$processing_mode == "asset") out$.id <- i # add an id variable
+  if(is.na(out)) out <- list(NA)
   unlink(rundir, recursive = TRUE, force = TRUE) # delete the current rundir
   out # return
 }

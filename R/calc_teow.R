@@ -54,7 +54,7 @@ NULL
                        ...) {
   ECO_NAME <- NULL
   new_area <- NULL
-
+  if(nrow(ecoregions[[1]]) == 0) return(NA)
   merged <- .comp_teow(
     shp = shp,
     ecoregions = ecoregions,
@@ -68,10 +68,9 @@ NULL
     ecoregions = out[[1]],
     area = out[[2]]
   )
-  results_eco <- out_tibble %>%
+  out_tibble %>%
     dplyr::group_by(ecoregions) %>%
     dplyr::summarise(area = sum(as.numeric(area)))
-  results_eco
 }
 
 #' Helper function to intersect polygons and add biome names
