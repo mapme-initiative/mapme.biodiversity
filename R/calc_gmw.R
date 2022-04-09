@@ -55,7 +55,7 @@ NULL
                       todisk = FALSE,
                       ...) {
   results <- lapply(1:length(mangrove), function(j) {
-    intersected <- st_intersection(mangrove[[j]], shp)
+    intersected <- suppressWarnings(st_intersection(mangrove[[j]], shp))
     area <- st_area(intersected) %>%
       as.numeric() %>%
       sum() %>%

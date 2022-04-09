@@ -111,8 +111,6 @@ NULL
         todisk = todisk,
         rundir = rundir
       )
-      out$.id <- i
-      out
     }, mc.cores = cores)
   }
 

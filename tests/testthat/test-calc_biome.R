@@ -4,6 +4,7 @@ test_that("biome computation works", {
       package = "mapme.biodiversity"
     )
   )
+  shp <- st_make_valid(shp)
   source <- list.files(system.file("res", "ecoregions",
     package = "mapme.biodiversity"
   ), pattern = ".gpkg$", full.names = TRUE)
