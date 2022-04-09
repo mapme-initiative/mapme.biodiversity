@@ -34,18 +34,14 @@ calc_indicators <- function(x, indicators, ...) {
   # https://github.com/r-spatial/sf/issues/1762 suggests to deactivate s2,
   # proposition of https://github.com/r-spatial/sf/issues/1902 to dissable
   # s2 and fix the geometry has failed, thus for now falling back to lwgeom
-  if (Sys.info()["sysname"] == "MacOS") {
-    if (!"lwgeom" %in% utils::installed.packages()[, 1]) {
-      stop(paste(
-        "Requires package 'lwgeom' for area calculations.\n",
-        "Please install via 'install.packages('lwgeom')'"
-      ))
-    }
+  if (Sys.info()["sysname"] == "Darwin" | grepl("darwin", Sys.info()["sysname"])) {
     s2_org <- sf_use_s2()
     suppressMessages(sf_use_s2(FALSE))
   }
   for (indicator in indicators) x <- .get_single_indicator(x, indicator, ...)
-  if (Sys.info()["sysname"] == "MacOS") suppressMessages(sf_use_s2(s2_org))
+  if (Sys.info()["sysname"] == "Darwin" | grepl("darwin", Sys.info()["sysname"])) {
+    suppressMessages(sf_use_s2(s2_org))
+  }
   x
 }
 
