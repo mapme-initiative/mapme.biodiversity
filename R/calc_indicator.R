@@ -151,7 +151,14 @@ calc_indicators <- function(x, indicators, ...) {
     } else if (resource_type == "vector") {
       out <- lapply(available_resources[[resource_name]], function(source) {
         tmp <- read_sf(source, wkt_filter = st_as_text(st_geometry(shp)))
-        tmp <- st_make_valid(tmp)
+        if (sf_use_s2()) {
+          st_geometry(tmp) <- st_geometry(tmp) %>%
+            st_as_s2(rebuild = TRUE) %>%
+            st_as_sfc()
+        } else {
+          tmp <- st_make_valid(tmp)
+        }
+        tmp
       })
       names(out) <- basename(available_resources[[resource_name]])
     } else {
