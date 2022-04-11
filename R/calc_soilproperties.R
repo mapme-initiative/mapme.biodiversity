@@ -122,6 +122,11 @@ NULL
   results$layer <- sapply(parameters, function(para) para["layer"])
   results$depth <- sapply(parameters, function(para) para["depth"])
   results$stat <- sapply(parameters, function(para) para["stat"])
+  conv_df <- lapply(.sg_layers, function(y) as.data.frame(y))
+  conv_df <- do.call(rbind, conv_df)["conversion_factor"]
+  conv_df$layer <- row.names(conv_df)
+  results <- merge(results, conv_df)
+  for (stat in stats) results[[stat]] <- results[[stat]] / results[["conversion_factor"]]
   results[, c("layer", "depth", "stat", stats)]
 }
 
@@ -144,12 +149,6 @@ NULL
     filename =  ifelse(todisk, file.path(rundir, "soilgrids.tif"), ""),
     overwrite = TRUE
   )
-  p_raster <- terra::rasterize(shp_v,
-    soilgrids_mask,
-    field = 1:nrow(shp_v),
-    filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
-    overwrite = TRUE
-  )
   results <- lapply(stats, function(stat) {
     out <- terra::extract(soilgrids_mask,
       shp_v,
@@ -164,6 +163,11 @@ NULL
   results$layer <- sapply(parameters, function(para) para["layer"])
   results$depth <- sapply(parameters, function(para) para["depth"])
   results$stat <- sapply(parameters, function(para) para["stat"])
+  conv_df <- lapply(.sg_layers, function(y) as.data.frame(y))
+  conv_df <- do.call(rbind, conv_df)["conversion_factor"]
+  conv_df$layer <- row.names(conv_df)
+  results <- merge(results, conv_df)
+  for (stat in stats) results[[stat]] <- results[[stat]] / results[["conversion_factor"]]
   results[, c("layer", "depth", "stat", stats)]
 }
 
@@ -208,5 +212,10 @@ NULL
   results$layer <- sapply(parameters, function(para) para["layer"])
   results$depth <- sapply(parameters, function(para) para["depth"])
   results$stat <- sapply(parameters, function(para) para["stat"])
+  conv_df <- lapply(.sg_layers, function(y) as.data.frame(y))
+  conv_df <- do.call(rbind, conv_df)["conversion_factor"]
+  conv_df$layer <- row.names(conv_df)
+  results <- merge(results, conv_df)
+  for (stat in stats) results[[stat]] <- results[[stat]] / results[["conversion_factor"]]
   results[, c("layer", "depth", "stat", stats)]
 }

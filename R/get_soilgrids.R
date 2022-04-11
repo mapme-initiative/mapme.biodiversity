@@ -8,17 +8,17 @@
 #' 0.95 percentile predictions are available.
 #' The following parameters are available:
 #' \describe{
-#'   \item{bdod}{Bulk density of the fine earth fraction (cg/cm3)}
-#'   \item{cec}{Cation Exchange Capacity of the soil (mmol(c)/kg)}
-#'   \item{cfvo}{Volumetric fraction of coarse fragments > 2 mm (cm3/dm3 (volPerc))}
-#'   \item{clay}{Proportion of clay particles < 0.002 mm in the fine earth fraction (g/kg)}
-#'   \item{nitrogen}{Total nitrogen (cg/kg)}
-#'   \item{phh2o}{Soil pH (pHx10)}
-#'   \item{sand}{Proportion of sand particles > 0.05 mm in the fine earth fraction (g/kg)}
-#'   \item{silt}{Proportion of silt particles >= 0.002 mm and <= 0.05 mm in the fine earth fraction (g/kg)}
-#'   \item{soc}{Soil organic carbon content in the fine earth fraction (dg/kg)}
+#'   \item{bdod}{Bulk density of the fine earth fraction (kg/dm3)}
+#'   \item{cec}{Cation Exchange Capacity of the soil (cmol(c)/kg)}
+#'   \item{cfvo}{Volumetric fraction of coarse fragments > 2 mm (cm3/100cm3 (volPerc))}
+#'   \item{clay}{Proportion of clay particles < 0.002 mm in the fine earth fraction (g/100g)}
+#'   \item{nitrogen}{Total nitrogen (g/kg)}
+#'   \item{phh2o}{Soil pH (pH)}
+#'   \item{sand}{Proportion of sand particles > 0.05 mm in the fine earth fraction (g/100g)}
+#'   \item{silt}{Proportion of silt particles >= 0.002 mm and <= 0.05 mm in the fine earth fraction (g/100g)}
+#'   \item{soc}{Soil organic carbon content in the fine earth fraction (g/kg)}
 #'   \item{ocd}{Organic carbon density (kg/m3)}
-#'   \item{ocs}{Organic carbon stocks (t/ha)}
+#'   \item{ocs}{Organic carbon stocks (kg/m²)}
 #' }
 #'
 #' Users can specify the following arguments:
@@ -167,15 +167,12 @@ NULL
             filename = file.path(rundir, "soillayer_cropped.tif"),
             datatype = "INT2U", overwrite = TRUE
           )
-          conversion_factor <- .sg_layers[layer][[1]]$conversion_factor
-
           suppressWarnings(
-            project(soilgrid_cropped / conversion_factor, "EPSG:4326",
+            project(soilgrid_cropped, "EPSG:4326",
               filename = filename,
-              datatype = "FLT4S", overwrite = TRUE
+              datatype = "INT2U", overwrite = TRUE
             )
           )
-
           file.remove(file.path(rundir, "soillayer_cropped.tif"))
         } else {
           if (verbose) {
