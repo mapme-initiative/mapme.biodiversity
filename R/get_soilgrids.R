@@ -170,7 +170,7 @@ NULL
           conversion_factor <- .sg_layers[layer][[1]]$conversion_factor
 
           suppressWarnings(
-            project(soilgrid_cropped * conversion_factor, "EPSG:4326",
+            project(soilgrid_cropped / conversion_factor, "EPSG:4326",
               filename = filename,
               datatype = "FLT4S", overwrite = TRUE
             )
@@ -227,7 +227,7 @@ NULL
   phh2o = list(
     description = "Soil pH",
     mapped_units = "pHx10",
-    conversion_factor = 100,
+    conversion_factor = 10,
     conventional_units = "pH"
   ),
   sand = list(
