@@ -18,23 +18,23 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-This vignette assumes that you have already familiarized yourself with the 
-terminology used in the package. If not, please head over to the [Terminology](terminology.html)
-article to learn about the most important concepts. 
-
 In the following we will demonstrate an idealized workflow based on a subset
 of the CHIRPS dataset that is delivered together with this package. You can follow
-along the code snippets below in order to reproduce the results. Please note, that
-in order to reduce the time it takes to process this vignette, we will not download
+along the code snippets below to reproduce the results. Please note, that
+to reduce the time it takes to process this vignette, we will not download
 any resources from the internet. In a real use case, thus processing time
 might substantially increase because resources have to be downloaded and real
-portfolios might actually be larger than the one created here. 
+portfolios might be larger than the one created in this example. 
+
+This vignette assumes that you have already followed the steps in [Installation](installation.html) and have familiarized yourself with the 
+terminology used in the package. If you are unfamiliar with the terminology used here, please head over to the [Terminology](terminology.html)
+article to learn about the most important concepts. 
 
 The idealized workflow for using `{mapme.biodiversity}` consists of the following
 steps:
 
 - initialize your portfolio using an sf-object containing only geometries of type POLYGON
-- decide which indicator(s) you wish to calculated and download the required resource(s)
+- decide which indicator(s) you wish to calculate and download the required resource(s)
 - conduct your indicator calculation, which adds a nested list column to your portfolio object
 - continue your analysis in R or decide to export your results to a GeoPackage to use it with
 other geospatial software
@@ -116,15 +116,15 @@ plot(sample_portfolio[".assetid"])
 The first argument, `x`, is the sf-object that we want to turn into a portfolio.
 The argument `years` allows us to restrict our analysis to certain years only.
 Certain resources with a temporal dimension are only processed for the portfolio's 
-temporal extent. All resource and indicator functions will gracefully inform the 
+temporal extent. All resource and indicator functions will inform the 
 user if the portfolio's temporal extents do not intersect. The `outdir` and `tmpdir` 
 arguments point towards directories on the local file system of your machine. 
-If these directories do not exist, we will attempt to create them.
+If these directories do not exist, the package attempts to create them.
 The `outdir` cannot be equal to the `tmpdir` argument. All downloaded resources
 will be written to their respective directories within `outdir`. 
 We will set the `{terra}`'s package temporal directory to directory within `tmpdir`
 and also any intermediate files during the calculation of an indicator will be written 
-there. Thus. please ensure that you have write access to these directories and that
+there. Thus, please ensure that you have write access to these directories and that
 there is sufficient free disk space to support the analysis of your portfolio. 
 
 The `add_resources` arguments controls the behavior of the function in case that 
@@ -138,10 +138,10 @@ useful if you wish to share the same `outdir` directory across different project
 which allows you to keep all resource in a common place, but only process those 
 that match your current portfolio object. 
 
-The argument `cores` specifies the number of cores available to the indicator 
+The argument `cores` specifies the number of CPU cores available to the indicator 
 routines for parallel processing. Parallel processing is deactivated on Windows 
-by default and should be set to a value greater 1 if you wish to activate parallel 
-processing on other OSs. Finally, the `verbose` logical controls the verbosity 
+by default. If you use another operating system you may set to a value greater 1 if you wish to activate parallel 
+processing. Finally, the `verbose` logical controls the verbosity 
 of the routines up to some extent. Note, that even if set to `FALSE`, the package 
 will inform users about any potential error in specifying of arguments in the form
 of warnings and errors.
@@ -204,14 +204,14 @@ sample_portfolio <- get_resources(x = sample_portfolio, resources = "chirps")
 
 # Calculate specific indicators
 
-The next step consists of actually calculating specific indicators. Note, 
+The next step consists of calculating specific indicators. Note, 
 that each indicator requires one or more resources that were made available 
 via the <code>get_resources()</code> function explained above. Here, we are going
 to calculate the `chirpsprec` indicator which is based on the `chirps` resource.
 Since the resource has been made available in the previous step, we can continue
-with requesting the calculation of our desired indicator. Note, the below
+requesting the calculation of our desired indicator. Note, the below
 command would issue an error in case a required resource has not been made
-available via <code>get_resources()</code> before.
+available via <code>get_resources()</code> beforehand.
 
 ```{r calc_indicator}
 sample_portfolio <- calc_indicators(sample_portfolio,
@@ -225,14 +225,14 @@ message for other indicators and you do not know what they mean, head over to
 the indicator help-page to learn about the available arguments.
 
 Now let's take a look at the results. We will select only some of the metadata
-and the output indicator column in order to get a clearer picture of what has happened.
+and the output indicator column to get a clearer picture of what has happened.
 
 ```{r select_cols}
 (sample_portfolio <- sample_portfolio %>% select(.assetid, WDPAID, chirpsprec))
 ```
 
 We obtained a new listed column in our sf object that is called like the requested
-indicator. We can already see that, for each asset in our portfolio, this column
+indicator. For each asset in our portfolio, this column
 contains a tibble with 12 rows and 4 columns. Let's have a closer look at these 
 objects.
 
@@ -274,7 +274,7 @@ sample_portfolio %>%
 
 If you wish to conduct your statistical analysis in R, you can use `{tidyr}` functionality
 to unnest one or multiple columns. Especially for large portfolios, it is usually
-a good idea to keep the geometry information in a separated variable in order
+a good idea to keep the geometry information in a separated variable
 to keep the size of the data object relatively small.
 
 ```{r unnest}
