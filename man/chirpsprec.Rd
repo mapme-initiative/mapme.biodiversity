@@ -32,10 +32,9 @@ order to fit the SPI. Defaults to 8 years.}
 }
 }
 \examples{
-library(sf)
 library(mapme.biodiversity)
 (aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") \%>\%
-  read_sf() \%>\%
+  sf::read_sf() \%>\%
   init_portfolio(
     years = 2010,
     outdir = system.file("res", package = "mapme.biodiversity"),

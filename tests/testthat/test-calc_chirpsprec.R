@@ -1,6 +1,6 @@
 test_that("precipitation indicator works", {
   shp <- read_sf(
-    system.file("extdata", "sierra_de_neiba_478140.gpkg",
+    system.file("extdata", "gfw_sample.gpkg",
       package = "mapme.biodiversity"
     )
   )

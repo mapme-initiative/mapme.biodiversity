@@ -25,10 +25,9 @@
 #' @format A tibble with a column for years, months, absolute rainfall, rainfall
 #'   anomaly and one or more columns per selected time-scale for SPI.
 #' @examples
-#' library(sf)
 #' library(mapme.biodiversity)
 #' (aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
-#'   read_sf() %>%
+#'   sf::read_sf() %>%
 #'   init_portfolio(
 #'     years = 2010,
 #'     outdir = system.file("res", package = "mapme.biodiversity"),

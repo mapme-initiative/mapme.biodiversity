@@ -1,18 +1,18 @@
 test_that("treecover works", {
   shp <- read_sf(
-    system.file("extdata", "sierra_de_neiba_478140.gpkg",
+    system.file("extdata", "gfw_sample.gpkg",
       package = "mapme.biodiversity"
     )
   )
-  shp <- suppressWarnings(st_cast(shp, to = "POLYGON"))[1, ]
 
   treecover2000 <- list.files(system.file("res", "treecover2000",
     package = "mapme.biodiversity"
-  ), pattern = ".tif$", full.names = TRUE)
+  ), pattern = ".tif$", full.names = TRUE) #
 
   lossyear <- list.files(system.file("res", "lossyear",
     package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)
+
   greenhouse <- list.files(system.file("res", "greenhouse",
     package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)
@@ -58,6 +58,7 @@ test_that("treecover works", {
     .calc_treecover(shp, treecover2000, lossyear, min_cover = 110),
     "Argument 'min_cover' for indicator 'treecover' must be a numeric value between 0 and 100."
   )
+
 
   expect_snapshot(
     .calc_treecover(shp, treecover2000, lossyear, min_size = 1, min_cover = 10)
