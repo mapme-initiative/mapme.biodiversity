@@ -100,13 +100,13 @@ are important for the subsequent processing. The function will add a unique
 identifier column called `.assetid` that is used to uniquely identify each
 asset in the portfolio.
 
-```{r init_portfolio}
+```{r init_portfolio, dpi = 50, out.width="120%", out.height="120%"}
 sample_portfolio <- init_portfolio(
   x = aoi_gridded,
   years = 2010,
   outdir = system.file("res", package = "mapme.biodiversity"),
   tmpdir = system.file("tmp", package = "mapme.biodiversity"),
-  add_resources = TRUE,
+  add_resources = FALSE,
   cores = 1,
   verbose = TRUE
 )
@@ -215,7 +215,10 @@ available via <code>get_resources()</code> beforehand.
 
 ```{r calc_indicator}
 sample_portfolio <- calc_indicators(sample_portfolio,
-  indicators = "chirpsprec"
+  indicators = "chirpsprec",
+  scales_spi = 3,
+  spi_prev_years = 8,
+  engine = "extract"
 )
 ```
 
@@ -246,18 +249,9 @@ rainfall sum as well as the rainfall anomaly compared to the 1981-2010 climate
 normal period (make sure to read the detailed indicator documentation via `?chirpsprec`).
 Let's quickly visualize the results for a single asset:
 
-```{r plot_precipitation, echo = FALSE}
+```{r plot_precipitation, echo = FALSE, warning=FALSE, dpi = 50}
 sample_portfolio %>%
-  filter(.assetid == 7) %>%
-  st_drop_geometry() %>%
-  tidyr::unnest(chirpsprec) %>%
-  ggplot() +
-  geom_bar(aes(x = dates, y = absolute), stat = "identity", fill = "darkblue") +
-  labs(title = "Sum of monthly precipitation 2010", x = "", y = "Precipitation sum [mm]") +
-  theme_classic()
-
-sample_portfolio %>%
-  filter(.assetid == 7) %>%
+  filter(.assetid == 10) %>%
   st_drop_geometry() %>%
   tidyr::unnest(chirpsprec) %>%
   mutate(sign = ifelse(anomaly < 0, "lower than average", "higher than average")) %>%
@@ -265,11 +259,38 @@ sample_portfolio %>%
   geom_bar(aes(x = dates, y = anomaly, fill = sign), stat = "identity") +
   scale_fill_manual(values = c("darkblue", "brown2")) +
   labs(
-    title = "Monthly precipitation anomaly 2010", x = "Month", y = "Precipitation anomaly [mm]",
+    title = "Monthly precipitation anomaly 2010", x = "", y = "Precipitation anomaly [mm]",
     fill = "Anomaly"
   ) +
   theme_classic() +
   theme(legend.position = "bottom")
+
+sample_portfolio %>%
+  filter(.assetid == 10) %>%
+  st_drop_geometry() %>%
+  tidyr::unnest(chirpsprec) %>%
+  mutate(
+    spi_3 = ifelse(is.na(spi_3), 0, spi_3),
+    sign = ifelse(spi_3 < 0, "lower than average", "higher than average")
+  ) %>%
+  ggplot() +
+  geom_bar(aes(x = dates, y = spi_3, fill = sign), stat = "identity") +
+  scale_fill_manual(values = c("darkblue", "brown2")) +
+  labs(
+    title = "Monthly SPI value for 2010 (timescale = 3)", x = "Month", y = "SPI",
+    fill = "SPI"
+  ) +
+  theme_classic() +
+  theme(legend.position = "bottom")
+
+sample_portfolio %>%
+  filter(.assetid == 10) %>%
+  st_drop_geometry() %>%
+  tidyr::unnest(chirpsprec) %>%
+  ggplot() +
+  geom_bar(aes(x = dates, y = absolute), stat = "identity", fill = "darkblue") +
+  labs(title = "Sum of monthly precipitation 2010", x = "", y = "Precipitation sum [mm]") +
+  theme_classic()
 ```
 
 If you wish to conduct your statistical analysis in R, you can use `{tidyr}` functionality

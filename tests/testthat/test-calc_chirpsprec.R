@@ -36,12 +36,16 @@ test_that("precipitation indicator works", {
     .calc_chirpsprec(shp, chirps)
   )
   expect_snapshot(
-    .calc_chirpsprec(shp, chirps, scales_spi = c(12, 24))
+    .calc_chirpsprec(shp, chirps, scales_spi = c(12, 24), spi_prev_years = 12)
   )
   expect_snapshot(
     .calc_chirpsprec(shp, chirps, engine = "extract")
   )
   expect_snapshot(
     .calc_chirpsprec(shp, chirps, engine = "exactextract")
+  )
+  attributes(shp)$years <- 1985:2000
+  expect_snapshot(
+    .calc_chirpsprec(shp, chirps, scales_spi = c(12, 24), spi_prev_years = 3)
   )
 })

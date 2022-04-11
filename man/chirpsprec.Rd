@@ -25,6 +25,8 @@ The required resources for this indicator are:
 The following arguments can be set:
 \describe{
 \item{scales_spi}{An integer vector indicating the scales for which to calculate the SPI.}
+\item{spi_previous_year}{An integer specifying how many previous years to include in
+order to fit the SPI. Defaults to 8 years.}
 \item{engine}{The preferred processing functions from either one of "zonal",
 "extract" or "exactextract" as character.}
 }
@@ -42,7 +44,7 @@ library(mapme.biodiversity)
     verbose = FALSE
   ) \%>\%
   get_resources("chirps") \%>\%
-  calc_indicators("chirpsprec", engine = "exactextract") \%>\%
+  calc_indicators("chirpsprec", engine = "exactextract", scales_spi = 3, spi_prev_years = 8) \%>\%
   tidyr::unnest(chirpsprec))
 }
 \keyword{indicator}

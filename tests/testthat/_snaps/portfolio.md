@@ -1,13 +1,13 @@
 # init_portfolio works
 
     Code
-      portfolio %>% calc_indicators("chirpsprec", scales_spi = NULL, engine = "extract") %>%
-        write_portfolio(tmpfile)
+      portfolio %>% calc_indicators("chirpsprec", scales_spi = 3, spi_prev_years = 8,
+        engine = "extract") %>% write_portfolio(tmpfile)
     Output
       Writing layer `metadata' to data source `portfolio_out.gpkg' using driver `GPKG'
       Writing 1 features with 5 fields and geometry type Polygon.
       Updating layer `chirpsprec' to data source `portfolio_out.gpkg' using driver `GPKG'
-      Writing 252 features with 4 fields without geometries.
+      Writing 252 features with 5 fields without geometries.
 
 ---
 

@@ -77,7 +77,8 @@ available_indicators <- function(indicator = NULL) {
       name = ".calc_chirpsprec",
       inputs = list(chirps = "raster"),
       arguments = list(
-        scales_spi = NULL,
+        scales_spi = 3,
+        spi_prev_years = 8,
         engine = "extract"
       ),
       processing_mode = "portfolio"
