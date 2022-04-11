@@ -27,10 +27,21 @@ calc_indicators <- function(x, indicators, ...) {
     existing_resources, required_resources,
     needed = TRUE
   )
-  ## TODO: check if we can go parallel here. Problem is when errors occur
-  # for one resource and it terminates the complete process. We would have
-  # to catch that so other processes can terminate successfully.
+  # Fix for MacOS CI error with duplicated vertices in vector resources
+  # Error in s2_geography_from_wkb(x, oriented = oriented, check = check) :
+  # Evaluation error: Found 1 feature with invalid spherical geometry.
+  # [1] Loop 0 is not valid: Edge 821 is degenerate (duplicate vertex).
+  # https://github.com/r-spatial/sf/issues/1762 suggests to deactivate s2,
+  # proposition of https://github.com/r-spatial/sf/issues/1902 to dissable
+  # s2 and fix the geometry has failed, thus for now falling back to lwgeom
+  if (Sys.info()["sysname"] == "Darwin" | grepl("darwin", Sys.info()["sysname"])) {
+    s2_org <- sf_use_s2()
+    suppressMessages(sf_use_s2(FALSE))
+  }
   for (indicator in indicators) x <- .get_single_indicator(x, indicator, ...)
+  if (Sys.info()["sysname"] == "Darwin" | grepl("darwin", Sys.info()["sysname"])) {
+    suppressMessages(sf_use_s2(s2_org))
+  }
   x
 }
 
@@ -96,7 +107,7 @@ calc_indicators <- function(x, indicators, ...) {
   unlink(file.path(tmpdir, "terra"), recursive = TRUE, force = TRUE)
   terra::terraOptions(tempdir = terra_org)
   # bind results to data.frame
-  results <- tibble(data.table::rbindlist(results, fill = TRUE))
+  results <- tibble(data.table::rbindlist(results, fill = TRUE, idcol = ".id"))
   # nest the results
   results <- nest(results, !!indicator := !.id)
   # attach results
@@ -123,11 +134,15 @@ calc_indicators <- function(x, indicators, ...) {
   params <- append(params, processed_resources)
   # call the indicator function with the associated parameters
   out <- try(do.call(params$fun, args = params))
+  if (length(out) == 1) {
+    if (is.na(out)) {
+      out <- list(NA)
+    }
+  }
   if (inherits(out, "try-error")) {
     warning(sprintf("Error occured at polygon %s with the following error message: %s. \n Returning NAs.", i, out))
-    out <- tibble(.id = i)
+    out <- list(NA)
   }
-  if (params$processing_mode == "asset") out$.id <- i # add an id variable
   unlink(rundir, recursive = TRUE, force = TRUE) # delete the current rundir
   out # return
 }
@@ -146,8 +161,8 @@ calc_indicators <- function(x, indicators, ...) {
       out <- .read_raster_source(shp, tindex, rundir)
     } else if (resource_type == "vector") {
       out <- lapply(available_resources[[resource_name]], function(source) {
-        tmp <- read_sf(source, wkt_filter = st_as_text(st_geometry(shp)))
-        tmp <- st_make_valid(tmp)
+        tmp <- read_sf(source, wkt_filter = st_as_text(st_as_sfc(st_bbox(shp))))
+        st_make_valid(tmp)
       })
       names(out) <- basename(available_resources[[resource_name]])
     } else {
