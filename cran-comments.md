@@ -18,3 +18,5 @@
   and against the development and old-release of R on Ubuntu using GitHub Actions.
 
 * R CMD check on the aforementioned configurations produced no warnings nor notes.
+
+* URLs in the userguide vignette are now fully specified as requested by CRAN review
