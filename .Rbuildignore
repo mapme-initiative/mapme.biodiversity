@@ -28,3 +28,4 @@ vignettes/workflow.Rmd
 vignettes/introduction.Rmd
 vignettes/installation.Rmd
 vignettes/contributing.Rmd
+^cran-comments\.md$
