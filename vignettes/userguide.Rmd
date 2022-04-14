@@ -127,24 +127,27 @@ and also any intermediate files during the calculation of an indicator will be w
 there. Thus, please ensure that you have write access to these directories and that
 there is sufficient free disk space to support the analysis of your portfolio. 
 
-The `add_resources` arguments controls the behavior of the function in case that 
-in `outdir` existing resources are already present. If set to `TRUE`, the 
-function will search for available resources and add these as attributes to the 
-portfolio, without further checks of a matching spatio-temporal extent. If set to 
-`FALSE`, this action will not be performed and when a resource is requested that 
-potentially might already exist within `outdir` only missing files for the 
-spatio-temporal extent of the portfolio are downloaded. This behavior might be 
-useful if you wish to share the same `outdir` directory across different projects 
-which allows you to keep all resource in a common place, but only process those 
-that match your current portfolio object. 
+In case your share a common `outdir` across different portfolios, with the 
+`add_resources` arguments controls the behavior of the portfolio initialization. 
+If set to `TRUE`, the function will automatically search for all available 
+resources and add these as attributes to the portfolio, without further checking
+if these resources actually match its spatio-temporal extent. Only use this if 
+you are sure that for your current portfolio, all resources have been previously
+downloaded. If set to `FALSE`, no pre-existing resources will be added to the
+portfolio. Once you request a specific portfolio for your resources, only
+those files will be downloaded that are missing in `outdir`. This behavior is
+beneficial if you share the `outdir` between different projects to ensure that 
+only matching resources are returned.
 
 The argument `cores` specifies the number of CPU cores available to the indicator 
 routines for parallel processing. Parallel processing is deactivated on Windows 
-by default. If you use another operating system you may set to a value greater 1 if you wish to activate parallel 
-processing. Finally, the `verbose` logical controls the verbosity 
-of the routines up to some extent. Note, that even if set to `FALSE`, the package 
-will inform users about any potential error in specifying of arguments in the form
-of warnings and errors.
+by default. If you use another operating system you may set to a value greater 
+1 if you wish to activate parallel processing. 
+
+Finally, the `verbose` logical controls whether or not the package
+will print informative messages during the calculations. Note, 
+that even if set to `FALSE`, the package will inform users about any potential 
+error in specifying of arguments in the form of warnings and errors.
 
 # Getting the right resources
 
@@ -166,9 +169,10 @@ help(chirpsprec)
 ```
 
 By inspecting the help page we learned that this indicator requires the `chirps` 
-resource and it accepts two arguments, namely the `scales_spi` and `engine` arguments.
-`scales_spi` determines the time-scale for the calculation of the Standardized-Precipitation-Index (SPI),
-and the `engine` argument controls how zonal statistics for each asset in the portfolio
+resource and it accepts three arguments, namely the `scales_spi`, `spi_prev_years`
+and `engine` arguments. `scales_spi` determines the time-scale for the calculation of the Standardized-Precipitation-Index (SPI), while `spi_prev_years` indicates how many 
+previous years are included in the fitting process.
+The `engine` argument controls how zonal statistics for each asset in the portfolio
 is extracted.
 
 With that information at hand, we can start to retrieve the required resource. 
@@ -201,6 +205,16 @@ for the new resource, thus we simply can overwrite the `sample_portfolio` variab
 sample_portfolio <- get_resources(x = sample_portfolio, resources = "chirps")
 ```
 
+In case you want to download more than one resource, you can use the same interface
+and the resources will be made available sequentially. Required arguments 
+for a resource are simply added as usual:
+
+```{r get_multi_resources, eval = FALSE}
+sample_portfolio <- get_resources(x = sample_portfolio, 
+                                  resources = c("chirps", "treecover2000"),
+                                  vers_treecover = "GFC-2020-v1.8")
+
+```
 
 # Calculate specific indicators
 
@@ -259,7 +273,7 @@ sample_portfolio %>%
   geom_bar(aes(x = dates, y = anomaly, fill = sign), stat = "identity") +
   scale_fill_manual(values = c("darkblue", "brown2")) +
   labs(
-    title = "Monthly precipitation anomaly 2010", x = "", y = "Precipitation anomaly [mm]",
+    title = "Monthly precipitation anomaly for 2010 in regard to the 1981-2010 climate normal", x = "", y = "Precipitation anomaly [mm]",
     fill = "Anomaly"
   ) +
   theme_classic() +
@@ -315,9 +329,10 @@ point towards a non-existing file on your local disk to write the portfolio.
 The function will create an individual table for all processed indicators. Via 
 the <code>read_portfolio()</code> function, a portfolio which has been written 
 to disk in such a way can be read back into R. However, users should note that 
-the attributes that were added during the portfolio initialization are **not** 
-reconstructed. Thus if you wish to continue to use `{mapme.biodiversity}` 
-functionality on such a portfolio object, make sure to re-run <code>init_portfolio()</code> 
+the portfolio-wide arguments that were set during the portfolio initialization 
+are **not**  reconstructed (e.g. the temporal extent, `outdir` and `tmpdir`, etc.).
+Thus if you wish to continue to use `{mapme.biodiversity}` functionality on 
+such a portfolio object, make sure to re-run <code>init_portfolio()</code> 
 on it.
 
 ```{r portfolio_io}

@@ -5,8 +5,8 @@
 \alias{chirpsprec}
 \title{Calculate precipitation statistics based on CHIRPS}
 \format{
-A tibble with a column for years, months, absolute rainfall, rainfall
-anomaly and one or more columns per selected time-scale for SPI.
+A tibble with a column for years, months, absolute rainfall (in mm), rainfall
+anomaly (in mm) and one or more columns per selected time-scale for SPI (dimensionless).
 }
 \description{
 This functions allows to calculate precipitation statistics based on the
@@ -32,9 +32,11 @@ order to fit the SPI. Defaults to 8 years.}
 }
 }
 \examples{
+if(Sys.getenv("NOT_CRAN") == "true"){
+library(sf)
 library(mapme.biodiversity)
 (aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") \%>\%
-  sf::read_sf() \%>\%
+  read_sf() \%>\%
   init_portfolio(
     years = 2010,
     outdir = system.file("res", package = "mapme.biodiversity"),
@@ -45,5 +47,6 @@ library(mapme.biodiversity)
   get_resources("chirps") \%>\%
   calc_indicators("chirpsprec", engine = "exactextract", scales_spi = 3, spi_prev_years = 8) \%>\%
   tidyr::unnest(chirpsprec))
+}
 }
 \keyword{indicator}

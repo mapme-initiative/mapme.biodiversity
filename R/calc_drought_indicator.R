@@ -1,9 +1,12 @@
 #' Calculate drought indicator statistics
 #'
-#' This function allows to efficiently calculate drought indicator statistics for
-#' polygons. For each polygon, the desired statistic/s (mean, median or sd) is/are
+#' This function allows to efficiently calculate the relative wetness in the
+#' shallow groundwater section with regard to the the 1948-2012 reference period.
+#' The values represent the wetness percentile a given area achieves at a given
+#' point in time in regard to the reference period.
+#' For each polygon, the desired statistic/s (mean, median or sd) is/are
 #' returned. The required resources for this indicator are:
-#'  - \code{nasagrace}
+#'  - [nasagrace]
 #'
 #' The following arguments can be set:
 #' \describe{

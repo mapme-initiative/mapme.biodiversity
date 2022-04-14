@@ -1,7 +1,5 @@
 ---
-author: "Darius A. Görgen"
 title: "Introduction"
-date: "Last modified: `r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Introduction}
@@ -58,25 +56,32 @@ used in a consecutive manner in order to realize a seamless analysis workflow:
 1.  initiate a portfolio based on an <code>{sf}</code> object
 2.  get resources for the spatio-temporal extent of the portfolio
 3.  calculate indicators based on the available resources for each asset in the portfolio 
-4.  write the resulting to disk as a GeoPackage and share or use in other Geo-Spatial software, or
+4.  write the results to disk as a GeoPackage and use it with other Geo-Spatial software, or
 5.  conduct your statistical analysis in R
 
 ## Inputs, Outputs
 
--  an <code>{sf}</code> object containing only geometries of type 'POLYGON' with arbitrary
+-  an <code>{sf}</code> object containing only geometries of type `'POLYGON'` with arbitrary
 metadata and additional information about the temporal extent and an output folder
 structure
+
 - raster and vector resources matching the spatio-temporal extent of the portfolio
 will be downloaded and made available locally. These are necessary inputs for
 the subsequent calculation of indicators, but the raw resource of course also 
-can be used, e.g. for custom visualizations or analysis
+can be used, e.g. for custom visualizations or analysis. Importantly, the same
+resource directory can be used for different portfolios because *matching resources
+are figured out during run time*. Thus, there is no need to store multiple copies
+of the input resources.
+
 - the results of the indicator calculation will be added to the portfolio object
-as nested list columns. This is mandatory because the rectangular structure of
-indicators might be quite different. When the complete analysis is done in R, this
-does not pose any limitations. However, if the data was to be shared
-to use it in other geospatial software, a routine to write a portfolio object
-as a GeoPackage is provided. Each indicator will be written to an independent table and
-a unique identifier allows joining the attributes with the geometries later.
+as *nested list columns*. This approach makes it feasible to support a variety
+of indicators with differently shaped outputs (e.g. time variant vs. invariant
+indicators). When the analysis is done in R, this does not pose serious limitations,
+because the desired indicator can easily be unnested via `tidyr::unnest()`. 
+However, if the data was to be shared to use it in other geospatial software (e.g. 
+QGIS), a routine to write a portfolio object as a GeoPackage to disk is provided. 
+Each indicator will be written to an independent table and a unique identifier 
+allows joining the attributes with the geometries later.
 
 ## Limitations
 
@@ -88,8 +93,8 @@ very large polygons sequentially or substantially reduce the number of cores.
 
 - on Windows, parallel processing currently is not supported. While it has been
 thoroughly tested that the provided routines also work on Windows machines, 
-parallelization strategies compared to UNIX machines are quiet different. If 
-you wish to process large portfolios in parallel please make sure to use a UNIX
+the sequential processing of large numbers of polygons can take a while. If 
+you wish to process large portfolios in parallel, please make sure to use a UNIX
 based operating system (e.g. by using an [docker image](https://hub.docker.com/r/rocker/geospatial)).
 
 - we took a great effort to evaluate the most efficient processing routines for

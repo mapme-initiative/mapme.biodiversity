@@ -5,7 +5,7 @@
 #' World (TEOW) - World Wildlife Fund (WWF) for polygons. For each polygon,
 #' the name and area of the ecoregions (in hectare) is returned.
 #' The required resources for this indicator are:
-#'  - \code{ecoregions}
+#'  - [ecoregions]
 #'
 #' @name teow
 #' @docType data

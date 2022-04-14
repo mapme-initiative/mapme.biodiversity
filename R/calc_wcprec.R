@@ -4,7 +4,7 @@
 #' from Worldclim for polygons. For each polygon, the desired statistic/s (min,
 #' max, sum, mean, median, sd or var) is/are returned.
 #' The required resources for this indicator are:
-#'  - \code{precipitation}
+#'  - precipitation layer from [worldclim]
 #'
 #' The following arguments can be set:
 #' \describe{

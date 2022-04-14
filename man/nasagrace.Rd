@@ -11,10 +11,11 @@ Global raster layers available for years 2003 to present.
 \url{https://nasagrace.unl.edu/globaldata/}
 }
 \description{
-This resource is published by NASA GRACE Tellus. It indicates the drought,
-global raster layer available from year 2003 to present with weekly updates.
-Encoded as percentile, representing current wet or dry conditions showing the
-probability of occurrence - with lower values meaning dryer than normal, and
-higher values meaning wetter than normal.
+The resource is published by NASA GRACE Tellus. This data set
+reflects on potential drought conditions in the shallow groundwater section
+relative to a reference period spanning from 1948 to 2012.
+It is available as a global raster with a weekly temporal resolution starting
+with the year 2003. The value indicates the wetness percentile of a given
+pixel with regard to the reference period.
 }
 \keyword{resource}

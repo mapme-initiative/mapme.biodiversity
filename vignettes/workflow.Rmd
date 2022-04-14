@@ -18,21 +18,15 @@ knitr::opts_chunk$set(
 )
 ```
 
-The most important steps of the processing workflow 
-of `{mapme.biodiversity}` are described here. The first crucial step is to initiate a portfolio object with 
-all important portfolio-wide parameters (e.g. the temporal extent, input/output structure,
-download utility and parallel processing). In a next step the required resources
-for the analysis are downloaded. Once all required resources are made available, 
-supported indicators are calculated for each asset within the portfolio. Then,
-users can either continue their data analysis within R or decide to export
-the portfolio to a GeoPackage and continue to work with other Geo-spatial software.
-The relevant steps (see figure) in a `{mapme.biodiversity}` workflow thus comprise:
+The most important steps of the processing workflow of `{mapme.biodiversity}` 
+are described here. A typical workflow consists of the following steps:
 
 -  initialization of a portfolio object from an `{sf}` object together with portfolio-wide parameters
--  download of a selection of resources via a standardized interface
--  calculation of indicators for all assets within a portfolio via a standardized interface
--  then, users are free to conduct their statistical analysis within R
--  optionally, export the portfolio as a GeoPackage to share with others or use other Geo-spatial software
+-  identify the required resources needed for the indicators you want to calculate
+-  download one or more resources that are required for your desired indicators
+-  automated calculation of the indicators for all assets within a portfolio
+-  then, you are free to conduct your statistical analysis within R, or,
+-  you can export the portfolio as a GeoPackage to share with others or use it with other Geo-spatial software (e.g. QGIS)
 
 ```{r wflow, echo = FALSE}
 library(DiagrammeR)

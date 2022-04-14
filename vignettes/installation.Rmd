@@ -1,7 +1,5 @@
 ---
-author: "Darius A. Görgen"
 title: "Installation"
-date: "Last modified: `r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Installation}

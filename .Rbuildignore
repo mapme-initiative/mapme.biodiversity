@@ -9,6 +9,7 @@ devel
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+inst/tmp/terra
 inst/res/chirps/tileindex_chirps.gpkg
 inst/res/greenhouse/tileindex_greenhouse.gpkg
 inst/res/lossyear/tileindex_lossyear.gpkg
@@ -22,3 +23,8 @@ inst/res/nasagrace/tileindex_nasagrace.gpkg
 inst/res/mintemperature/tileindex_mintemperature.gpkg
 inst/res/maxtemperature/tileindex_maxtemperature.gpkg
 inst/res/esalandcover/tileindex_esalandcover.gpkg
+^README\.Rmd$
+vignettes/workflow.Rmd
+vignettes/introduction.Rmd
+vignettes/installation.Rmd
+vignettes/contributing.Rmd
