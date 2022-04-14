@@ -19,17 +19,17 @@ prediction uncertainty, besides the mean and median prediction, the 0.05 and
 0.95 percentile predictions are available.
 The following parameters are available:
 \describe{
-\item{bdod}{Bulk density of the fine earth fraction (cg/cm3)}
-\item{cec}{Cation Exchange Capacity of the soil (mmol(c)/kg)}
-\item{cfvo}{Volumetric fraction of coarse fragments > 2 mm (cm3/dm3 (volPerc))}
-\item{clay}{Proportion of clay particles < 0.002 mm in the fine earth fraction (g/kg)}
-\item{nitrogen}{Total nitrogen (cg/kg)}
-\item{phh2o}{Soil pH (pHx10)}
-\item{sand}{Proportion of sand particles > 0.05 mm in the fine earth fraction (g/kg)}
-\item{silt}{Proportion of silt particles >= 0.002 mm and <= 0.05 mm in the fine earth fraction (g/kg)}
-\item{soc}{Soil organic carbon content in the fine earth fraction (dg/kg)}
+\item{bdod}{Bulk density of the fine earth fraction (kg/dm3)}
+\item{cec}{Cation Exchange Capacity of the soil (cmol(c)/kg)}
+\item{cfvo}{Volumetric fraction of coarse fragments > 2 mm (cm3/100cm3 (volPerc))}
+\item{clay}{Proportion of clay particles < 0.002 mm in the fine earth fraction (g/100g)}
+\item{nitrogen}{Total nitrogen (g/kg)}
+\item{phh2o}{Soil pH (pH)}
+\item{sand}{Proportion of sand particles > 0.05 mm in the fine earth fraction (g/100g)}
+\item{silt}{Proportion of silt particles >= 0.002 mm and <= 0.05 mm in the fine earth fraction (g/100g)}
+\item{soc}{Soil organic carbon content in the fine earth fraction (g/kg)}
 \item{ocd}{Organic carbon density (kg/m3)}
-\item{ocs}{Organic carbon stocks (t/ha)}
+\item{ocs}{Organic carbon stocks (kg/m²)}
 }
 }
 \details{
