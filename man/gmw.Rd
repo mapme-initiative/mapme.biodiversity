@@ -14,7 +14,7 @@ for polygons. For each polygon, the area of the mangrove (in hectare)
 for desired year is returned.
 The required resources for this indicator are:
 \itemize{
-\item \code{mangrove}
+\item \link{mangrove}
 }
 }
 \examples{

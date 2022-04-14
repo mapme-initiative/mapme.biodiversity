@@ -13,16 +13,19 @@
 #' The following arguments can be set:
 #' \describe{
 #'   \item{scales_spi}{An integer vector indicating the scales for which to calculate the SPI.}
-#'     \item{engine}{The preferred processing functions from either one of "zonal",
+#'   \item{spi_previous_year}{An integer specifying how many previous years to include in
+#'   order to fit the SPI. Defaults to 8 years.}
+#'   \item{engine}{The preferred processing functions from either one of "zonal",
 #'   "extract" or "exactextract" as character.}
 #' }
 #'
 #' @name chirpsprec
 #' @docType data
 #' @keywords indicator
-#' @format A tibble with a column for years, months, absolute rainfall, rainfall
-#'   anomaly and one or more columns per selected time-scale for SPI.
+#' @format A tibble with a column for years, months, absolute rainfall (in mm), rainfall
+#'   anomaly (in mm) and one or more columns per selected time-scale for SPI (dimensionless).
 #' @examples
+#' if(Sys.getenv("NOT_CRAN") == "true"){
 #' library(sf)
 #' library(mapme.biodiversity)
 #' (aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
@@ -35,8 +38,9 @@
 #'     verbose = FALSE
 #'   ) %>%
 #'   get_resources("chirps") %>%
-#'   calc_indicators("chirpsprec", engine = "exactextract") %>%
+#'   calc_indicators("chirpsprec", engine = "exactextract", scales_spi = 3, spi_prev_years = 8) %>%
 #'   tidyr::unnest(chirpsprec))
+#' }
 NULL
 
 #' Calculate precipitation statistics based on CHIRPS
@@ -44,6 +48,8 @@ NULL
 #' @param shp A single polygon for which to calculate the tree cover statistic
 #' @param chirps The CHIRPS resource
 #' @param scales_spi Integers specifying time-scales for SPI
+#' @param spi_prec_years Integer specyfing how many previous years to include in
+#'   order to fit the SPI. Defaults to 8.
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
 #' @param todisk Logical indicating whether or not temporary raster files shall
@@ -54,7 +60,8 @@ NULL
 #' @noRd
 .calc_chirpsprec <- function(shp,
                              chirps,
-                             scales_spi = NULL,
+                             scales_spi = 3,
+                             spi_prev_years = 8,
                              engine = "extract",
                              rundir = tempdir(),
                              verbose = TRUE,
@@ -81,8 +88,8 @@ NULL
   }
   if (any(years < 1981)) {
     warning(paste("Cannot calculate precipitation statistics ",
-      "for years smaller than 1981",
-      sep = ""
+                  "for years smaller than 1981",
+                  sep = ""
     ))
     years <- years[years >= 1981]
     if (length(years) == 0) {
@@ -93,10 +100,10 @@ NULL
   src_names <- names(chirps)
   # set values smaller 0 to NA
   chirps <- clamp(chirps,
-    lower = 0, upper = Inf, values = FALSE,
-    filename = ifelse(todisk, file.path(rundir, "chirps.tif"), ""),
-    overwrite = TRUE,
-    filetype = "GTiff"
+                  lower = 0, upper = Inf, values = FALSE,
+                  filename = ifelse(todisk, file.path(rundir, "chirps.tif"), ""),
+                  overwrite = TRUE,
+                  filetype = "GTiff"
   )
   layer_years <- as.numeric(substr(src_names, 13, 17))
   climate_chirps <- chirps[[which(layer_years %in% 1981:2010)]]
@@ -108,9 +115,9 @@ NULL
   # chirps[chirps < 0] = NA
   climate_chirps <- lapply(1:12, function(i) {
     app(climate_chirps[[layer_months == i]],
-      fun = "mean", cores = cores,
-      filename = ifelse(todisk, file.path(rundir, paste0("chirps_", i, ".tif")), ""),
-      overwrite = TRUE, wopt = list(filetype = "GTiff")
+        fun = "mean", cores = cores,
+        filename = ifelse(todisk, file.path(rundir, paste0("chirps_", i, ".tif")), ""),
+        overwrite = TRUE, wopt = list(filetype = "GTiff")
     )
   })
   climate_chirps <- do.call(c, climate_chirps)
@@ -120,25 +127,15 @@ NULL
   # calculate SPI
   if (!is.null(scales_spi)) {
     spi_chirps <- lapply(scales_spi, function(scale) {
-      s <- ifelse(scale < 13, 1,
-        ifelse(scale < 25, 2,
-          ifelse(scale < 37, 3, 4)
-        )
-      )
-      target_years_spi <- switch(s,
-        years[1] - 2,
-        years[1] - 3,
-        years[1] - 4,
-        years[1] - 5
-      )
+      target_years_spi <- years[1] - spi_prev_years
       target_years_spi <- target_years_spi:years[length(years)]
       target_spi <- chirps[[which(layer_years %in% target_years_spi)]]
       spi_chirps <- app(target_spi,
-        scale = scale, fun = function(x, scale) {
-          SPEI::spi(x, scale = scale, na.rm = TRUE)$fitted
-        }, cores = cores, overwrite = TRUE, wopt = list(filetype = "GTiff"),
-        filename =
-          ifelse(todisk, file.path(rundir, paste0("spi_", scale, ".tif")), "")
+                        scale = scale, fun = function(x, scale) {
+                          SPEI::spi(x, scale = scale, na.rm = TRUE)$fitted
+                        }, cores = cores, overwrite = TRUE, wopt = list(filetype = "GTiff"),
+                        filename =
+                          ifelse(todisk, file.path(rundir, paste0("spi_", scale, ".tif")), "")
       )
       names(spi_chirps) <- names(target_spi)
       spi_chirps[[names(target_chirps)]]
@@ -197,11 +194,11 @@ NULL
 
   shp_v <- vect(shp)
   p_raster <- terra::rasterize(shp_v,
-    absolute,
-    field = 1,
-    touches = TRUE,
-    filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
-    overwrite = TRUE
+                               absolute,
+                               field = 1,
+                               touches = TRUE,
+                               filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
+                               overwrite = TRUE
   )
 
   absolute <- terra::zonal(absolute, p_raster, fun = "mean")

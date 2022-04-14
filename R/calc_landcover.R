@@ -7,12 +7,12 @@
 #' polygons. For each polygon, the area of the classes in hectare(ha) is
 #' returned.
 #' The required resources for this indicator are:
-#'  - \code{esalandcover}
+#'  - [esalandcover]
 #'
 #' @name landcover
 #' @docType data
 #' @keywords indicator
-#' @format A tibble with a column for area of landcover classes
+#' @format A tibble with a column for area (in ha) per landcover class
 #' @examples
 #' library(sf)
 #' library(mapme.biodiversity)

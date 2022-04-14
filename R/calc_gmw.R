@@ -5,7 +5,7 @@
 #' for polygons. For each polygon, the area of the mangrove (in hectare)
 #' for desired year is returned.
 #' The required resources for this indicator are:
-#'  - \code{mangrove}
+#'  - [mangrove]
 #'
 #' @name gmw
 #' @docType data

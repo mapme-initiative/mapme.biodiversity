@@ -122,13 +122,14 @@ test_that("init_portfolio works", {
     tmpdir = tmpdir,
     cores = 1,
     verbose = FALSE,
-  )
+  ) %>%
+    get_resources("chirps")
 
   tmpfile <- file.path("portfolio_out.gpkg")
 
   expect_snapshot(
     portfolio %>%
-      calc_indicators("chirpsprec", scales_spi = NULL, engine = "extract") %>%
+      calc_indicators("chirpsprec", scales_spi = 3, spi_prev_years = 8, engine = "extract") %>%
       write_portfolio(tmpfile)
   )
 

@@ -1,6 +1,6 @@
 Package: mapme.biodiversity
 Title: Efficient Monitoring of Global Biodiversity Portfolios
-Version: 0.0.0.9000
+Version: 0.0.1
 Authors@R: c(
     person("Darius A.", "Görgen", , "darius2402@web.de", role = c("aut", "cre")),
     person("Om Prakash", "Bhandari", role = "aut")
@@ -21,8 +21,6 @@ Description: Biodiversity areas, especially primary forest, serve a
 License: GPL (>= 3)
 Depends:
     R (>= 3.5.0),
-    sf,
-    terra
 Imports:
     curl,
     data.table,
@@ -31,7 +29,9 @@ Imports:
     magrittr,
     pbapply,
     rvest,
+    sf,
     stringr,
+    terra,
     tibble,
     tidyr,
     tidyselect

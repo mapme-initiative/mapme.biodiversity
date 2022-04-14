@@ -16,7 +16,7 @@ polygons. For each polygon, the desired statistic/s (min, max, sum, mean,
 median, sd or var) is/are returned.
 The required resources for this indicator are:
 \itemize{
-\item \code{worldpop}
+\item \link{worldpop}
 }
 }
 \details{
