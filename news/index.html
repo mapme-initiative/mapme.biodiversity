@@ -53,8 +53,9 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.1" id="mapmebiodiversity-001">mapme.biodiversity 0.0.1<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-001"></a></h2>
-<ul><li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
-<li>initial supported resources are:
+<ul><li><p>Added a <code>NEWS.md</code> file to track changes to the package.</p></li>
+<li>
+<p>initial supported resources are:</p>
 <ul><li>ecoregions</li>
 <li>esalandcover</li>
 <li>greenhouse</li>
@@ -68,7 +69,8 @@
 <li>worldclim</li>
 <li>worldpop</li>
 </ul></li>
-<li>initial supported indicators are:
+<li>
+<p>initial supported indicators are:</p>
 <ul><li>acessibility</li>
 <li>biome</li>
 <li>chirpsprec</li>
@@ -87,19 +89,15 @@
 <li>wctmax</li>
 <li>wctmin</li>
 </ul></li>
-<li>
-<code><a href="../reference/init_portfolio.html">init_portfolio()</a></code> is used to initialize a portfolio object. The input must be an sf object where all geometries are of type <code>POLYGON</code>
-</li>
-<li>users can request the download of one or more resources via <code><a href="../reference/get_resources.html">get_resources()</a></code>
-</li>
-<li>users can request the processing of an indicator via <code><a href="../reference/calc_indicators.html">calc_indicators()</a></code>
-</li>
-<li>indicators are added to the portfolio object as nested list columns</li>
-<li>a processed portfolio object can be exported as a GeoPackage via <code><a href="../reference/write_portfolio.html">write_portfolio()</a></code>
-</li>
-<li>a portfolio saved to disk as a GeoPackage can be read back into R via <code><a href="../reference/read_portfolio.html">read_portfolio()</a></code>. If users wish to download additional resources or calculate indicators, <code><a href="../reference/init_portfolio.html">init_portfolio()</a></code> has to be called again.</li>
-<li>Parallelization using multiple cores on the host machine is disabled on Windows</li>
-<li>on MacOS, the s2 engine for spherical geometric vector operations is disabled and lwgeom is used instead.</li>
+<li><p><code><a href="../reference/init_portfolio.html">init_portfolio()</a></code> is used to initialize a portfolio object. The input must be an sf object where all geometries are of type <code>POLYGON</code></p></li>
+<li><p>users can request the download of one or more resources via <code><a href="../reference/get_resources.html">get_resources()</a></code></p></li>
+<li><p>users can request the processing of an indicator via <code><a href="../reference/calc_indicators.html">calc_indicators()</a></code></p></li>
+<li><p>indicators are added to the portfolio object as nested list columns</p></li>
+<li><p>a processed portfolio object can be exported as a GeoPackage via <code><a href="../reference/write_portfolio.html">write_portfolio()</a></code></p></li>
+<li><p>a portfolio saved to disk as a GeoPackage can be read back into R via <code><a href="../reference/read_portfolio.html">read_portfolio()</a></code>. If users wish to download additional resources or calculate indicators, <code><a href="../reference/init_portfolio.html">init_portfolio()</a></code> has to be called again.</p></li>
+<li><p>Parallelization using multiple cores on the host machine is disabled on Windows</p></li>
+<li><p>on MacOS, the s2 engine for spherical geometric vector operations is disabled and lwgeom is used instead.</p></li>
+<li><p>Introduced absolute URLS in userguide.Rmd pointing to the online documentation (#58)</p></li>
 </ul></div>
   </main></div>
 

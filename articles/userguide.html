@@ -90,7 +90,7 @@
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>In the following we will demonstrate an idealized workflow based on a subset of the CHIRPS dataset that is delivered together with this package. You can follow along the code snippets below to reproduce the results. Please note, that to reduce the time it takes to process this vignette, we will not download any resources from the internet. In a real use case, thus processing time might substantially increase because resources have to be downloaded and real portfolios might be larger than the one created in this example.</p>
-<p>This vignette assumes that you have already followed the steps in <a href="installation.html">Installation</a> and have familiarized yourself with the terminology used in the package. If you are unfamiliar with the terminology used here, please head over to the <a href="terminology.html">Terminology</a> article to learn about the most important concepts.</p>
+<p>This vignette assumes that you have already followed the steps in <a href="https://mapme-initiative.github.io/mapme.biodiversity/articles/installation.html">Installation</a> and have familiarized yourself with the terminology used in the package. If you are unfamiliar with the terminology used here, please head over to the <a href="https://mapme-initiative.github.io/mapme.biodiversity/articles/terminology.html">Terminology</a> article to learn about the most important concepts.</p>
 <p>The idealized workflow for using <code>{mapme.biodiversity}</code> consists of the following steps:</p>
 <ul>
 <li>initialize your portfolio using an sf-object containing only geometries of type POLYGON</li>
@@ -134,7 +134,7 @@
 <span class="co">#&gt;   WDPAID NAME            DESIG_ENG     ISO3                                 geom</span>
 <span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span></span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">478</span>140 Sierra de Neiba National Park DOM   ((-71.76134 18.66333, -71.76067 18…</span></code></pre></div>
-<p>In the following, we will simulate a portfolio consiting of several polygons (assets, in the jargon of this package). To this end, we create smaller polygons within the original extent of the main polygon. This way, we can showcase the behavior of the <code>{mapme.biodiversity}</code> package for portfolios that contain multiple assets. We will only select single assets with geometry type <code>POLYGON</code> that lie within the original boundary of the protected area.</p>
+<p>In the following, we will simulate a portfolio consisting of several polygons (assets, in the jargon of this package). To this end, we create smaller polygons within the original extent of the main polygon. This way, we can showcase the behavior of the <code>{mapme.biodiversity}</code> package for portfolios that contain multiple assets. We will only select single assets with geometry type <code>POLYGON</code> that lie within the original boundary of the protected area.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">aoi_gridded</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_make_grid.html" class="external-link">st_make_grid</a></span><span class="op">(</span>
   x <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">aoi</span><span class="op">)</span>,
@@ -184,7 +184,7 @@
 <span class="co">#&gt; [10] "soilproperties"    "teow"              "treecover"        </span>
 <span class="co">#&gt; [13] "treeloss"          "tri"               "wcprec"           </span>
 <span class="co">#&gt; [16] "wctmax"            "wctmin"</span></code></pre></div>
-<p>Say, we are interested in the precipitation indicator based on the CHIRPS dataset. We can learn more about this indicator and its required resources by using either of the commands below or, if you are viewing the online version, head over to the <a href="../reference/chirpsprec.html">chirpsprec</a> documentation.</p>
+<p>Say, we are interested in the precipitation indicator based on the CHIRPS dataset. We can learn more about this indicator and its required resources by using either of the commands below or, if you are viewing the online version, head over to the <a href="https://mapme-initiative.github.io/mapme.biodiversity/reference/chirpsprec.html">chirpsprec</a> documentation.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">?</span><span class="va">chirpsprec</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/help.html" class="external-link">help</a></span><span class="op">(</span><span class="va">chirpsprec</span><span class="op">)</span></code></pre></div>
@@ -196,7 +196,7 @@
 <span class="co">#&gt;  [5] "lossyear"       "mangrove"       "maxtemperature" "mintemperature"</span>
 <span class="co">#&gt;  [9] "nasagrace"      "precipitation"  "soilgrids"      "srtmdem"       </span>
 <span class="co">#&gt; [13] "traveltime"     "treecover2000"  "worldpop"</span></code></pre></div>
-<p>For the purpose of this vignette, we are going to download the <code>chirps</code> resource. We can get more detailed information about a given resource, by using either of the commands below to open up the help page. If you are viewing the online version of this documentation, you can simply head over to the <a href="../reference/chirps.html">chirps</a> resource documentation.</p>
+<p>For the purpose of this vignette, we are going to download the <code>chirps</code> resource. We can get more detailed information about a given resource, by using either of the commands below to open up the help page. If you are viewing the online version of this documentation, you can simply head over to the <a href="https://mapme-initiative.github.io/mapme.biodiversity/reference/chirps.html">chirps</a> resource documentation.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">?</span><span class="va">chirps</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/help.html" class="external-link">help</a></span><span class="op">(</span><span class="va">chirps</span><span class="op">)</span></code></pre></div>
@@ -309,9 +309,9 @@
   dsn <span class="op">=</span> <span class="va">tmp_output</span>
 <span class="op">)</span>
 <span class="co">#&gt; Writing layer `metadata' to data source </span>
-<span class="co">#&gt;   `/tmp/RtmpMosm1P/file421b6f303fb5.gpkg' using driver `GPKG'</span>
+<span class="co">#&gt;   `/tmp/Rtmp3KhA4A/file41c8564a554f.gpkg' using driver `GPKG'</span>
 <span class="co">#&gt; Writing 20 features with 2 fields and geometry type Polygon.</span>
-<span class="co">#&gt; Updating layer `chirpsprec' to data source `/tmp/RtmpMosm1P/file421b6f303fb5.gpkg' using driver `GPKG'</span>
+<span class="co">#&gt; Updating layer `chirpsprec' to data source `/tmp/Rtmp3KhA4A/file41c8564a554f.gpkg' using driver `GPKG'</span>
 <span class="co">#&gt; Writing 240 features with 5 fields without geometries.</span>
 <span class="op">(</span><span class="va">portfolio_from_disk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_portfolio.html">read_portfolio</a></span><span class="op">(</span><span class="va">tmp_output</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Simple feature collection with 20 features and 3 fields</span>
