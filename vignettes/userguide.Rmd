@@ -26,8 +26,8 @@ any resources from the internet. In a real use case, thus processing time
 might substantially increase because resources have to be downloaded and real
 portfolios might be larger than the one created in this example. 
 
-This vignette assumes that you have already followed the steps in [Installation](installation.html) and have familiarized yourself with the 
-terminology used in the package. If you are unfamiliar with the terminology used here, please head over to the [Terminology](terminology.html)
+This vignette assumes that you have already followed the steps in [Installation](https://mapme-initiative.github.io/mapme.biodiversity/articles/installation.html) and have familiarized yourself with the 
+terminology used in the package. If you are unfamiliar with the terminology used here, please head over to the [Terminology](https://mapme-initiative.github.io/mapme.biodiversity/articles/terminology.html)
 article to learn about the most important concepts. 
 
 The idealized workflow for using `{mapme.biodiversity}` consists of the following
@@ -68,7 +68,7 @@ process, in this example we will subset to only the largest polygon.
 (aoi <- st_cast(aoi, to = "POLYGON")[1, ])
 ```
 
-In the following, we will simulate a portfolio consiting of several polygons (assets,
+In the following, we will simulate a portfolio consisting of several polygons (assets,
 in the jargon of this package). To this end, we create smaller polygons within 
 the original extent of the main polygon. This way, we can showcase the behavior 
 of the `{mapme.biodiversity}` package for portfolios that contain multiple assets. 
@@ -161,7 +161,7 @@ names(available_indicators())
 Say, we are interested in the precipitation indicator based on the CHIRPS dataset.
 We can learn more about this indicator and its required resources by using
 either of the commands below or, if you are viewing the online version, head
-over to the [chirpsprec](../reference/chirpsprec.html) documentation.
+over to the [chirpsprec](https://mapme-initiative.github.io/mapme.biodiversity/reference/chirpsprec.html) documentation.
 
 ```{r helppage_indicator, eval = FALSE}
 ?chirpsprec
@@ -186,7 +186,7 @@ names(available_resources())
 For the purpose of this vignette, we are going to download the `chirps` resource.
 We can get more detailed information about a given resource, by using either of 
 the commands below to open up the help page. If you are viewing the online 
-version of this documentation, you can simply head over to the [chirps](../reference/chirps.html)
+version of this documentation, you can simply head over to the [chirps](https://mapme-initiative.github.io/mapme.biodiversity/reference/chirps.html)
 resource documentation.
 
 ```{r helppage_resource, eval = FALSE}
