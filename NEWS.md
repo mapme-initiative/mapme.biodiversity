@@ -44,3 +44,5 @@
 * Parallelization using multiple cores on the host machine is disabled on Windows
 * on MacOS, the s2 engine for spherical geometric vector operations is disabled and
   lwgeom is used instead.
+  
+* Introduced absolute URLS in userguide.Rmd pointing to the online documentation (#58)
