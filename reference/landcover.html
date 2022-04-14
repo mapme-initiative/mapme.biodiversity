@@ -28,7 +28,7 @@ esalandcover
     
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,8 +36,8 @@ esalandcover
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
+      <ul class="navbar-nav me-auto"><li class="nav-item">
+  <a class="nav-link" href="../articles/userguide.html">Quickstart</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
@@ -46,9 +46,14 @@ esalandcover
     <a class="dropdown-item" href="../articles/installation.html">Installation</a>
     <a class="dropdown-item" href="../articles/terminology.html">Terminology</a>
     <a class="dropdown-item" href="../articles/workflow.html">Workflow</a>
-    <a class="dropdown-item" href="../articles/userguide.html">Quickstart</a>
     <a class="dropdown-item" href="../articles/contributing.html">Contributing</a>
   </div>
+</li>
+<li class="active nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -72,13 +77,13 @@ observation of land cover dynamics over a period of time. This function
 allows to efficiently calculate area of different landcover classes for
 polygons. For each polygon, the area of the classes in hectare(ha) is
 returned.
-The required resources for this indicator are:</p><ul><li><p><code>esalandcover</code></p></li>
+The required resources for this indicator are:</p><ul><li><p><a href="esalandcover.html">esalandcover</a></p></li>
 </ul></div>
 
 
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
-    <p>A tibble with a column for area of landcover classes</p>
+    <p>A tibble with a column for area (in ha) per landcover class</p>
     </div>
 
     <div class="section level2">

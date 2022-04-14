@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,7 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
+  <a class="nav-link" href="../articles/userguide.html">Quickstart</a>
 </li>
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
@@ -52,9 +52,14 @@
     <a class="dropdown-item" href="../articles/installation.html">Installation</a>
     <a class="dropdown-item" href="../articles/terminology.html">Terminology</a>
     <a class="dropdown-item" href="../articles/workflow.html">Workflow</a>
-    <a class="dropdown-item" href="../articles/userguide.html">Quickstart</a>
     <a class="dropdown-item" href="../articles/contributing.html">Contributing</a>
   </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
@@ -204,7 +209,7 @@ via the <code><a href="../reference/get_resources.html">get_resources()</a></cod
 <p>Before actually conducting any downloads, it is important that you as the provider of the new resource check extensively that all required arguments were correctly specified. That specifically applies to the user-defined variables that your downloader requires. The package framework cannot check for the correctness of these arguments. That is something that each downloader has to take care of. If some arguments are wrongly specified, the function should fail (via <code><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop()</a></code>) and gracefully inform users which arguments where misspecified and which values represent valid values. You can head over to the soilgrids downloader (use <code>file.edit("R/get_soilgrids.R")</code>) and analyze the first few lines of the file (up to line ~130) to see how the inputs are checked for the soilgrids resource.</p>
 <p>Some portfolio-wide parameters that might be important to your specific downloader can be determined by analyzing the <code>x</code> portfolio attributes. Currently, the following attributes with regard to a resource download are set, when users initialize their portfolio:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R">  <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"nitems"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
+<code class="sourceCode R">  <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"nitems"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
   <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"bbox"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
   <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"years"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">years</span>
   <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"cores"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">cores</span>
@@ -376,7 +381,7 @@ indicators are processed via the <code><a href="../reference/calc_indicators.htm
 <p>An important difference of how to handle the processing between the <code>asset</code> and <code>portfolio</code> mode is that in the <code>asset</code> mode, the package handles the parallelization. However, in the case that processing is conducted in the <code>portfolio</code> mode, we ask you as a developer to iterate over all assets in the portfolio using the <a href="https://github.com/psolymos/pbapply" class="external-link">pbapply</a> package. Specifically, you can retrieve the number of cores available via the portfolios attributes:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">shp</span><span class="op">)</span><span class="op">$</span><span class="va">cores</span>
-<span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">pbapply</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pbapply/man/pbapply.html" class="external-link">pblapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">shp</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span>
+<span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">pbapply</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pbapply/man/pbapply.html" class="external-link">pblapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">shp</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span>
     <span class="co"># processing logic goes here</span>
     <span class="va">obj</span><span class="op">$</span><span class="va">.id</span> <span class="op">&lt;-</span> <span class="va">i</span>
     <span class="va">obj</span>

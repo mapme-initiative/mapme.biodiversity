@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,7 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
+  <a class="nav-link" href="../articles/userguide.html">Quickstart</a>
 </li>
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
@@ -52,9 +52,14 @@
     <a class="dropdown-item" href="../articles/installation.html">Installation</a>
     <a class="dropdown-item" href="../articles/terminology.html">Terminology</a>
     <a class="dropdown-item" href="../articles/workflow.html">Workflow</a>
-    <a class="dropdown-item" href="../articles/userguide.html">Quickstart</a>
     <a class="dropdown-item" href="../articles/contributing.html">Contributing</a>
   </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
@@ -77,7 +82,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Workflow</h1>
                         <h4 data-toc-skip class="author">Darius A. Görgen</h4>
             
-            <h4 data-toc-skip class="date">Last modified: 2022-04-11</h4>
+            <h4 data-toc-skip class="date">Last modified: 2022-04-14</h4>
       
       
       <div class="d-none name"><code>workflow.Rmd</code></div>
@@ -85,16 +90,17 @@
 
     
     
-<p>In the following, the most important steps of the processing workflow of <code>{mapme.biodiversity}</code> are described; the figure guides the reader through these descriptions. The overall goal here is to initiate a portfolio object with all important portfolio-wide parameters (e.g. the temporal extent, input/output structure, download utility and parallel processing). In a next step the required resources for the analysis are downloaded. Once all required resources are made available, supported indicators are calculated for each asset within the portfolio. Then, users can either continue their data analysis within R or decide to export the portfolio to a GeoPackage and continue to work with other Geo-spatial software. The relevant steps in a <code>{mapme.biodiversity}</code> workflow thus comprise:</p>
+<p>The most important steps of the processing workflow of <code>{mapme.biodiversity}</code> are described here. A typical workflow consists of the following steps:</p>
 <ul>
 <li>initialization of a portfolio object from an <a href="https://r-spatial.github.io/sf/" class="external-link">sf</a> object together with portfolio-wide parameters</li>
-<li>download of a selection of resources via a standardized interface</li>
-<li>calculation of indicators for all assets within a portfolio via a standardized interface</li>
-<li>then, users are free to conduct their statistical analysis within R</li>
-<li>optionally, they can export the portfolio as a GeoPackage to share with others or use other Geo-spatial software</li>
+<li>identify the required resources needed for the indicators you want to calculate</li>
+<li>download one or more resources that are required for your desired indicators</li>
+<li>automated calculation of the indicators for all assets within a portfolio</li>
+<li>then, you are free to conduct your statistical analysis within R, or,</li>
+<li>you can export the portfolio as a GeoPackage to share with others or use it with other Geo-spatial software (e.g. QGIS)</li>
 </ul>
-<div id="htmlwidget-1a55dc4344767f3d5b3a" style="width:480px;height:480px;" class="DiagrammeR html-widget"></div>
-<script type="application/json" data-for="htmlwidget-1a55dc4344767f3d5b3a">{"x":{"diagram":"\n  graph TB\n\n    classDef default fill:#c2dddd,stroke-width:2px,stroke:#034858;\n\n    A(Portfolio initialization)\n    B(Get resources)\n    C(Calculate indicators)\n    D(Statistical analysis within R)\n    E(Export to GeoPackage)\n    A-->B\n    B-->C\n    C-->D\n    C-->E\n\n"},"evals":[],"jsHooks":[]}</script></main>
+<div id="htmlwidget-f7b013147c771069ae0d" style="width:480px;height:480px;" class="DiagrammeR html-widget"></div>
+<script type="application/json" data-for="htmlwidget-f7b013147c771069ae0d">{"x":{"diagram":"\n  graph TB\n\n    classDef default fill:#c2dddd,stroke-width:2px,stroke:#034858;\n\n    A(Portfolio initialization)\n    B(Get resources)\n    C(Calculate indicators)\n    D(Statistical analysis within R)\n    E(Export to GeoPackage)\n    A-->B\n    B-->C\n    C-->D\n    C-->E\n\n"},"evals":[],"jsHooks":[]}</script></main>
 </div>
 
 

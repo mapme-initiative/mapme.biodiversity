@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,7 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
+  <a class="nav-link" href="../articles/userguide.html">Quickstart</a>
 </li>
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
@@ -52,9 +52,14 @@
     <a class="dropdown-item" href="../articles/installation.html">Installation</a>
     <a class="dropdown-item" href="../articles/terminology.html">Terminology</a>
     <a class="dropdown-item" href="../articles/workflow.html">Workflow</a>
-    <a class="dropdown-item" href="../articles/userguide.html">Quickstart</a>
     <a class="dropdown-item" href="../articles/contributing.html">Contributing</a>
   </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
@@ -73,9 +78,7 @@
 <script src="installation_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <main id="main"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Installation</h1>
-                        <h4 data-toc-skip class="author">Darius A. Görgen</h4>
             
-            <h4 data-toc-skip class="date">Last modified: 2022-04-11</h4>
       
       
       <div class="d-none name"><code>installation.Rmd</code></div>
@@ -83,17 +86,13 @@
 
     
     
-<p>This sections describes how to install the <code>{mapme.biodiversity}</code> package. Because the package handles some spatial data, we assume that you have a working installation of <a href="https://gdal.org/index.html" class="external-link">GDAL</a> and <a href="https://proj.org/" class="external-link">PROJ</a> on your system. The GDAL installation needs to be found on your PATH variable, because several system calls will be issued when the package is used. Please refer to the respective installation guides to learn about how to install these programs on your OS. While the package supports sequentially downloading all supported resources, we include the option to provide a path to an <a href="https://aria2.github.io/" class="external-link">aria2</a> executable in order to seed up the download based on parallel processing. We expect that the path to the executable binary is known to the user and we test it if provided during portfolio initialization.</p>
-<p>Provided that above requirements are met, installing the <code>{mapme.biodiversity}</code> package is then achieved trough the following function call:</p>
+<p>This sections describes how to install the <code>{mapme.biodiversity}</code> package. Since the package handles spatial data, we assume that you have a working installation of <a href="https://gdal.org/index.html" class="external-link">GDAL</a> and <a href="https://proj.org/" class="external-link">PROJ</a> on your system. The GDAL installation needs to be found on your PATH variable, because several system calls will be issued when the package is used. Please refer to the respective installation guides to learn about how to install these programs on your OS. While the package supports sequentially downloading all supported resources, we include the option to provide a path to an <a href="https://aria2.github.io/" class="external-link">aria2</a> executable to speed up the download based on parallel processing. We expect that the path to the executable binary is known to the user and we test it if provided during portfolio initialization.</p>
+<p>Given that the above requirements are met, installing the <code>{mapme.biodiversity}</code> package is then achieved trough the following function call:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"mapme-initiative/mapme.biodiversity"</span><span class="op">)</span></code></pre></div>
 <p>The installation process will install potential missing R dependencies. After the successful installation, you are ready to use the package’s functionality. Simply load the package for your R session with the library call:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">mapme.biodiversity</span><span class="op">)</span>
-<span class="co">#&gt; Loading required package: sf</span>
-<span class="co">#&gt; Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1; sf_use_s2() is TRUE</span>
-<span class="co">#&gt; Loading required package: terra</span>
-<span class="co">#&gt; terra 1.5.21</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">mapme.biodiversity</span><span class="op">)</span></code></pre></div>
   </main>
 </div>
 
