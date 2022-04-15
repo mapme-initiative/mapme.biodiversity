@@ -2,7 +2,15 @@
 
 0 errors | 0 warnings | 1 note
 
-* This is a new release. mapme.biodiversity was designed to aid the statistical
+* This is a re-submission for an initial release. The following requested changes 
+  based on thankfully received reviews by the CRAN volunteers have been addressed:
+  - URLs in the userguide vignette are now fully specified
+  - \value tags added to all exported functions explaining what is the output/sideffect
+  - using requireNamespace() instead of installed.packages() to check if packages listed in SUGGEST
+    are loadable
+  - re-checked that at no time (examples and test) more than 2 cores are used
+
+* mapme.biodiversity was designed to aid the statistical
   analysis of various spatial data sets (raster and vector formats) for potentially
   large portfolios. It abstracts away the overhead usually associated with
   spatio-temporal matching of geographical data sets, allowing users to focus
@@ -15,8 +23,7 @@
   package for raster operations. 
   
 * We test the package against the current R release on MacOS, Windows and Ubuntu,
-  and against the development and old-release of R on Ubuntu using GitHub Actions.
+  and against the development and old-release of R on Ubuntu using 
+  [GitHub Actions](https://github.com/mapme-initiative/mapme.biodiversity/actions).
 
 * R CMD check on the aforementioned configurations produced no warnings nor notes.
-
-* URLs in the userguide vignette are now fully specified as requested by CRAN review

@@ -16,6 +16,9 @@ if it exists}
 
 \item{...}{Additional arguments supplied to \code{st_write()}}
 }
+\value{
+\code{x}, invisibly
+}
 \description{
 The function is used to save a processes biodiversity portfolio to disk.
 In order to ensure interoperability with other geospatial software the only

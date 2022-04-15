@@ -37,6 +37,8 @@
 #' @param add_resources Logical if existing resources in 'outdir' should be
 #'   added to the portfolio. Defaults to TRUE. Setting it to FALSE can be of use
 #'   e.g. if a previous download has terminated unexpectedly in order to resume.
+#' @return The sf portfolio object `x` with amended attributes controlling the
+#'   processing behavior further down the processing chain.
 #' @keywords function
 #' @export
 init_portfolio <- function(x,
@@ -144,7 +146,7 @@ init_portfolio <- function(x,
 #' @param overwrite A logical indicating if the output file should be overwritten
 #'   if it exists
 #' @param ... Additional arguments supplied to \code{st_write()}
-#'
+#' @return \code{x}, invisibly
 #' @keywords function
 #' @export
 write_portfolio <- function(x,
@@ -198,6 +200,7 @@ write_portfolio <- function(x,
     tmp <- tidyr::unnest(tmp, tidyselect::all_of(ind))
     st_write(tmp, dsn, ind, append = TRUE, ...)
   }
+  invisible(x)
 }
 
 
@@ -221,7 +224,8 @@ write_portfolio <- function(x,
 #' @param file A character vector pointing to a GeoPackage that has been
 #'   previously written to disk via \code{write_portfolio()}
 #' @param ... Additional arguments supplied to \code{st_read()}
-#'
+#' @return An sf object object with nested list columns for every indicator
+#'   table found in the GeoPackage source file.
 #' @keywords function
 #' @export
 #'

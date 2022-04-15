@@ -12,6 +12,10 @@ previously written to disk via \code{write_portfolio()}}
 
 \item{...}{Additional arguments supplied to \code{st_read()}}
 }
+\value{
+An sf object object with nested list columns for every indicator
+table found in the GeoPackage source file.
+}
 \description{
 This function can be used to read a portfolio object that was previously
 written to disk via \code{write_portfolio()} back into R as an \code{sf} object.

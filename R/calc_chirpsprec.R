@@ -68,7 +68,7 @@ NULL
                              todisk = FALSE,
                              processing_mode = "portfolio",
                              ...) {
-  if (!"SPEI" %in% utils::installed.packages()[, 1] & !is.null(scales_spi)) {
+  if (!requireNamespace("SPEI", quietly = TRUE) & !is.null(scales_spi)) {
     stop("R package 'SPEI' required. Please install via 'install.packages('SPEI'')'")
   }
   # initial argument checks
@@ -241,6 +241,12 @@ NULL
 
 
 .prec_exact_extractr <- function(shp, absolute, anomaly, spi, todisk, rundir) {
+  if(!requireNamespace("exactextractr", quietly = TRUE)){
+    stop(paste(
+      "Needs package 'exactextractr' to be installed.",
+      "Consider installing with 'install.packages('exactextractr')"
+    ))
+  }
   dates <- as.Date(paste0(substr(names(absolute), 13, 19), ".01"), "%Y.%m.%d")
 
   absolute <- exactextractr::exact_extract(absolute, shp, fun = "mean")

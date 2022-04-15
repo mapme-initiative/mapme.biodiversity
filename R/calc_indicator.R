@@ -16,6 +16,8 @@
 #' @param ... Additional arguments required for the requested indicators. Check
 #'  \code{available_indicators()} to learn more about the supported indicators
 #'  and their arguments.
+#' @return The sf portfolio object \code{x} with additional nested list column per
+#'   requested indicator.
 #' @keywords function
 #' @export
 calc_indicators <- function(x, indicators, ...) {

@@ -15,6 +15,8 @@
 #' @param ... Additional arguments required for the requested resources. Check
 #'  \code{available_resources()} to learn more about the supported resources and
 #'  their arguments.
+#' @return Primarily called for the side effect of downloading resources. Returns
+#'   the sf portfolio object \code{x} with its attributes amended by the requested resources.
 #' @keywords function
 #' @export
 get_resources <- function(x, resources, ...) {
