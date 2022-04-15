@@ -20,7 +20,7 @@ Description: Biodiversity areas, especially primary forest, serve a
     needed.
 License: GPL (>= 3)
 Depends:
-    R (>= 3.5.0),
+    R (>= 3.5.0)
 Imports:
     curl,
     data.table,

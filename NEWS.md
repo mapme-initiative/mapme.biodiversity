@@ -46,3 +46,5 @@
   lwgeom is used instead.
   
 * Introduced absolute URLS in userguide.Rmd pointing to the online documentation (#58)
+* \value tags added to all exported functions explaining what is the output/sideffect (#58)
+* using requireNamespace() instead of installed.packages() to check if packages listed in SUGGEST are loadable (#58)

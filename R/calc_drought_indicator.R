@@ -213,13 +213,12 @@ NULL
                                         nasagrace = NULL,
                                         stats = "mean",
                                         ...) {
-  if (!"exactextractr" %in% utils::installed.packages()[, 1]) {
+  if(!requireNamespace("exactextractr", quietly = TRUE)){
     stop(paste(
       "Needs package 'exactextractr' to be installed.",
       "Consider installing with 'install.packages('exactextractr')"
     ))
   }
-
   results <- lapply(1:length(stats), function(j) {
     if (stats[j] %in% c("sd", "var")) {
       out <- exactextractr::exact_extract(

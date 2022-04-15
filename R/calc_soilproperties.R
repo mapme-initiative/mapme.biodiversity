@@ -177,7 +177,7 @@ NULL
                                 todisk = todisk,
                                 rundir = tempdir(),
                                 ...) {
-  if (!"exactextractr" %in% utils::installed.packages()[, 1]) {
+  if(!requireNamespace("exactextractr", quietly = TRUE)){
     stop(paste(
       "Needs package 'exactextractr' to be installed.",
       "Consider installing with 'install.packages('exactextractr')"

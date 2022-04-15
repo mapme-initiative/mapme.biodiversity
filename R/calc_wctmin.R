@@ -248,13 +248,12 @@ NULL
                                           shp = NULL,
                                           stats = "mean",
                                           ...) {
-  if (!"exactextractr" %in% utils::installed.packages()[, 1]) {
+  if(!requireNamespace("exactextractr", quietly = TRUE)){
     stop(paste(
       "Needs package 'exactextractr' to be installed.",
       "Consider installing with 'install.packages('exactextractr')"
     ))
   }
-
   layer <- strsplit(names(worldclim), "_")[[1]][3]
   results <- lapply(1:length(stats), function(j) {
     if (stats[j] %in% c("sd", "var")) {
