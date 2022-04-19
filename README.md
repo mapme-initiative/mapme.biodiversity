@@ -4,6 +4,8 @@
 [![R-CMD-check](https://github.com/mapme-initiative/mapme.biodiversity/workflows/R-CMD-check/badge.svg)](https://github.com/mapme-initiative/mapme.biodiversity/actions)
 [![Coverage
 Status](https://img.shields.io/codecov/c/github/mapme-initiative/mapme.biodiversity/master.svg)](https://codecov.io/github/mapme-initiative/mapme.biodiversity?branch=master)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/mapme.biodiversity)](https://CRAN.R-project.org/package=mapme.biodiversity)
 <!-- badges: end -->
 
 # mapme.biodiversity <img src="man/figures/logo.png" align="right" height="110"/>
@@ -33,7 +35,13 @@ Development Bank KfW.
 
 ## Installation
 
-The package and its dependencies can be installed via:
+The package and its dependencies can be installed from CRAN via:
+
+``` r
+install.packages("mapme.biodiversity")
+```
+
+To install the development version, use the following command:
 
 ``` r
 remotes::install_github("https://github.com/mapme-initiative/mapme.biodiversity")
