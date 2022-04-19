@@ -112,8 +112,11 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>The package and its dependencies can be installed via:</p>
+<p>The package and its dependencies can be installed from CRAN via:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"mapme.biodiversity"</span><span class="op">)</span></code></pre></div>
+<p>To install the development version, use the following command:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"https://github.com/mapme-initiative/mapme.biodiversity"</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level2">
@@ -121,53 +124,53 @@
 </h2>
 <p><code>{mapme.biodiversity}</code> works by constructing a portfolio from an sf object. Specific raster and vector resource matching the spatio-temporal extent of the portfolio are made available locally. Once all required resources are available, indicators can be calculated individually for each asset in the portfolio.</p>
 <p>To list all available resources and indicators run:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">mapme.biodiversity</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">## Linking to GEOS 3.10.1, GDAL 3.4.0, PROJ 8.2.0; sf_use_s2() is TRUE</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">## Linking to GEOS 3.10.1, GDAL 3.4.0, PROJ 8.2.0; sf_use_s2() is TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">resources</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="reference/available_resources.html">available_resources</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 <span class="va">indicators</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="reference/available_indicators.html">available_indicators</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Supported resources:\n- %s\n\nSupported indicators:\n- %s"</span>,
             <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">resources</span>, collapse <span class="op">=</span> <span class="st">"\n- "</span><span class="op">)</span>,
             <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">indicators</span>, collapse <span class="op">=</span> <span class="st">"\n- "</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co">## Supported resources:</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="co">## - chirps</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="co">## - ecoregions</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="co">## - esalandcover</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="co">## - greenhouse</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a><span class="co">## - lossyear</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a><span class="co">## - mangrove</span></span>
-<span id="cb5-8"><a href="#cb5-8"></a><span class="co">## - maxtemperature</span></span>
-<span id="cb5-9"><a href="#cb5-9"></a><span class="co">## - mintemperature</span></span>
-<span id="cb5-10"><a href="#cb5-10"></a><span class="co">## - nasagrace</span></span>
-<span id="cb5-11"><a href="#cb5-11"></a><span class="co">## - precipitation</span></span>
-<span id="cb5-12"><a href="#cb5-12"></a><span class="co">## - soilgrids</span></span>
-<span id="cb5-13"><a href="#cb5-13"></a><span class="co">## - srtmdem</span></span>
-<span id="cb5-14"><a href="#cb5-14"></a><span class="co">## - traveltime</span></span>
-<span id="cb5-15"><a href="#cb5-15"></a><span class="co">## - treecover2000</span></span>
-<span id="cb5-16"><a href="#cb5-16"></a><span class="co">## - worldpop</span></span>
-<span id="cb5-17"><a href="#cb5-17"></a><span class="co">## </span></span>
-<span id="cb5-18"><a href="#cb5-18"></a><span class="co">## Supported indicators:</span></span>
-<span id="cb5-19"><a href="#cb5-19"></a><span class="co">## - accessibility</span></span>
-<span id="cb5-20"><a href="#cb5-20"></a><span class="co">## - biome</span></span>
-<span id="cb5-21"><a href="#cb5-21"></a><span class="co">## - chirpsprec</span></span>
-<span id="cb5-22"><a href="#cb5-22"></a><span class="co">## - drought_indicator</span></span>
-<span id="cb5-23"><a href="#cb5-23"></a><span class="co">## - elevation</span></span>
-<span id="cb5-24"><a href="#cb5-24"></a><span class="co">## - emissions</span></span>
-<span id="cb5-25"><a href="#cb5-25"></a><span class="co">## - gmw</span></span>
-<span id="cb5-26"><a href="#cb5-26"></a><span class="co">## - landcover</span></span>
-<span id="cb5-27"><a href="#cb5-27"></a><span class="co">## - popcount</span></span>
-<span id="cb5-28"><a href="#cb5-28"></a><span class="co">## - soilproperties</span></span>
-<span id="cb5-29"><a href="#cb5-29"></a><span class="co">## - teow</span></span>
-<span id="cb5-30"><a href="#cb5-30"></a><span class="co">## - treecover</span></span>
-<span id="cb5-31"><a href="#cb5-31"></a><span class="co">## - treeloss</span></span>
-<span id="cb5-32"><a href="#cb5-32"></a><span class="co">## - tri</span></span>
-<span id="cb5-33"><a href="#cb5-33"></a><span class="co">## - wcprec</span></span>
-<span id="cb5-34"><a href="#cb5-34"></a><span class="co">## - wctmax</span></span>
-<span id="cb5-35"><a href="#cb5-35"></a><span class="co">## - wctmin</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co">## Supported resources:</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co">## - chirps</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="co">## - ecoregions</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">## - esalandcover</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co">## - greenhouse</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co">## - lossyear</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="co">## - mangrove</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co">## - maxtemperature</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="co">## - mintemperature</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="co">## - nasagrace</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="co">## - precipitation</span></span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="co">## - soilgrids</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a><span class="co">## - srtmdem</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a><span class="co">## - traveltime</span></span>
+<span id="cb6-15"><a href="#cb6-15"></a><span class="co">## - treecover2000</span></span>
+<span id="cb6-16"><a href="#cb6-16"></a><span class="co">## - worldpop</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a><span class="co">## </span></span>
+<span id="cb6-18"><a href="#cb6-18"></a><span class="co">## Supported indicators:</span></span>
+<span id="cb6-19"><a href="#cb6-19"></a><span class="co">## - accessibility</span></span>
+<span id="cb6-20"><a href="#cb6-20"></a><span class="co">## - biome</span></span>
+<span id="cb6-21"><a href="#cb6-21"></a><span class="co">## - chirpsprec</span></span>
+<span id="cb6-22"><a href="#cb6-22"></a><span class="co">## - drought_indicator</span></span>
+<span id="cb6-23"><a href="#cb6-23"></a><span class="co">## - elevation</span></span>
+<span id="cb6-24"><a href="#cb6-24"></a><span class="co">## - emissions</span></span>
+<span id="cb6-25"><a href="#cb6-25"></a><span class="co">## - gmw</span></span>
+<span id="cb6-26"><a href="#cb6-26"></a><span class="co">## - landcover</span></span>
+<span id="cb6-27"><a href="#cb6-27"></a><span class="co">## - popcount</span></span>
+<span id="cb6-28"><a href="#cb6-28"></a><span class="co">## - soilproperties</span></span>
+<span id="cb6-29"><a href="#cb6-29"></a><span class="co">## - teow</span></span>
+<span id="cb6-30"><a href="#cb6-30"></a><span class="co">## - treecover</span></span>
+<span id="cb6-31"><a href="#cb6-31"></a><span class="co">## - treeloss</span></span>
+<span id="cb6-32"><a href="#cb6-32"></a><span class="co">## - tri</span></span>
+<span id="cb6-33"><a href="#cb6-33"></a><span class="co">## - wcprec</span></span>
+<span id="cb6-34"><a href="#cb6-34"></a><span class="co">## - wctmax</span></span>
+<span id="cb6-35"><a href="#cb6-35"></a><span class="co">## - wctmin</span></span></code></pre></div>
 <p>Once you have decided on an indicator you are interested in, you can initialize a biodiversity portfolio by using an sf-object that only contains geometries of type <code>POLYGON</code> via the <code><a href="reference/init_portfolio.html">init_portfolio()</a></code> function call. This will set some important information that is needed further down the processing chain. We can then request the download of a resources that is required to calculate specific indicators. Once the indicator has been calculated for individually for all assets in a portfolio, the data is returned as a nested list column to the original object.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"sierra_de_neiba_478140_2.gpkg"</span>, package <span class="op">=</span> <span class="st">"mapme.biodiversity"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
     <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
     <span class="fu"><a href="reference/init_portfolio.html">init_portfolio</a></span><span class="op">(</span>
@@ -184,17 +187,17 @@
     <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
     <span class="fu"><a href="reference/calc_indicators.html">calc_indicators</a></span><span class="op">(</span><span class="st">"treeloss"</span>, min_size <span class="op">=</span> <span class="fl">1</span>, min_cover <span class="op">=</span> <span class="fl">30</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
     <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">treeloss</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">## Simple feature collection with 2 features and 8 fields</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="co">## Geometry type: POLYGON</span></span>
-<span id="cb7-3"><a href="#cb7-3"></a><span class="co">## Dimension:     XY</span></span>
-<span id="cb7-4"><a href="#cb7-4"></a><span class="co">## Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span></span>
-<span id="cb7-5"><a href="#cb7-5"></a><span class="co">## Geodetic CRS:  WGS 84</span></span>
-<span id="cb7-6"><a href="#cb7-6"></a><span class="co">## # A tibble: 2 × 9</span></span>
-<span id="cb7-7"><a href="#cb7-7"></a><span class="co">##   WDPAID NAME            DESIG_ENG     ISO3  .assetid years emissions treecover</span></span>
-<span id="cb7-8"><a href="#cb7-8"></a><span class="co">##    &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;         &lt;chr&gt;    &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;     &lt;dbl&gt;</span></span>
-<span id="cb7-9"><a href="#cb7-9"></a><span class="co">## 1 478140 Sierra de Neiba National Park DOM          1  2016      2832     2357.</span></span>
-<span id="cb7-10"><a href="#cb7-10"></a><span class="co">## 2 478140 Sierra de Neiba National Park DOM          1  2017      3468     2345.</span></span>
-<span id="cb7-11"><a href="#cb7-11"></a><span class="co">## # … with 1 more variable: geom &lt;POLYGON [°]&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co">## Simple feature collection with 2 features and 8 fields</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="co">## Geometry type: POLYGON</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="co">## Dimension:     XY</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co">## Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="co">## Geodetic CRS:  WGS 84</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co">## # A tibble: 2 × 9</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co">##   WDPAID NAME            DESIG_ENG     ISO3  .assetid years emissions treecover</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="co">##    &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;         &lt;chr&gt;    &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;     &lt;dbl&gt;</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="co">## 1 478140 Sierra de Neiba National Park DOM          1  2016      2832     2357.</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="co">## 2 478140 Sierra de Neiba National Park DOM          1  2017      3468     2345.</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="co">## # … with 1 more variable: geom &lt;POLYGON [°]&gt;</span></span></code></pre></div>
 <p>Head over to the <a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">online documentation</a> find more detailed information about the package.</p>
 </div>
 </div>
@@ -202,6 +205,7 @@
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
+<li><a href="https://cloud.r-project.org/package=mapme.biodiversity" class="external-link">View on CRAN</a></li>
 <li><a href="https://mapme-initiative.org/" class="external-link">Learn more about MAPME</a></li>
 <li><a href="https://github.com/mapme-initiative/mapme.osg" class="external-link">Read the Open Source Guide</a></li>
 <li><a href="https://github.com/mapme-initiative/mapme.biodiversity" class="external-link">Browse source code</a></li>
@@ -239,6 +243,7 @@
 <ul class="list-unstyled">
 <li><a href="https://github.com/mapme-initiative/mapme.biodiversity/actions" class="external-link"><img src="https://github.com/mapme-initiative/mapme.biodiversity/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://codecov.io/github/mapme-initiative/mapme.biodiversity?branch=master" class="external-link"><img src="https://img.shields.io/codecov/c/github/mapme-initiative/mapme.biodiversity/master.svg" alt="Coverage Status"></a></li>
+<li><a href="https://CRAN.R-project.org/package=mapme.biodiversity" class="external-link"><img src="https://www.r-pkg.org/badges/version/mapme.biodiversity" alt="CRAN status"></a></li>
 </ul>
 </div>
 
