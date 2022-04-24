@@ -18,27 +18,29 @@
 #' @references Funk, C., Peterson, P., Landsfeld, M. et al. The climate hazards
 #' infrared precipitation with stations—a new environmental record for
 #' monitoring extremes. Sci Data 2, 150066 (2015).
-#' \url{https://doi.org/10.1038/sdata.2015.66}
+#' \doi{10.1038/sdata.2015.66}
 NULL
-
 
 
 .get_chirps <- function(x,
                         rundir = tempdir(),
                         verbose = TRUE) {
   chirps_url <- "https://data.chc.ucsb.edu/products/CHIRPS-2.0/global_monthly/cogs/"
-  chirps_list <- RCurl::getURL(chirps_url, dirlistonly = TRUE, ftp.use.epsv = FALSE)
-  chirps_list <- unique(stringr::str_extract_all(chirps_list, stringr::regex("chirps-\\s*(.*?)\\s*.cog"))[[1]])
+  chirps_list <- rvest::read_html(chirps_url) %>%
+    rvest::html_elements("a") %>%
+    rvest::html_text2()
+  chirps_list <- grep(".cog", chirps_list, value = TRUE)
   urls <- paste(chirps_url, chirps_list, sep = "")
   filenames <- file.path(rundir, basename(urls))
 
   aria_bin <- attributes(x)$aria_bin
-  .download_or_skip(urls,
-    filenames,
-    verbose = verbose,
-    check_existence = TRUE,
-    aria_bin = aria_bin
-  )
-
+  if (is.null(attr(x, "testing"))) {
+    .download_or_skip(urls,
+      filenames,
+      verbose = verbose,
+      check_existence = FALSE,
+      aria_bin = aria_bin
+    )
+  }
   filenames
 }

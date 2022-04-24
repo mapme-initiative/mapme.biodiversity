@@ -83,19 +83,42 @@ test_that(".check_available_years works", {
 test_that(".download_or_skip works", {
   urls <- rep("https://github.com/mapme-initiative/mapme.biodiversity/blob/main/R/utils.R", 3)
   filenames <- sapply(1:3, function(i) tempfile())
-  expect_equal(
+  expect_length(
     .download_or_skip(urls, filenames, verbose = TRUE, check_existence = TRUE),
-    NULL
+    3
   )
-  expect_equal(
+  expect_length(
     .download_or_skip(urls, filenames, verbose = TRUE, check_existence = TRUE),
-    NULL
+    3
   )
   file.remove(filenames)
   urls[1] <- paste(urls[1], "nonexisting", sep = "")
-  expect_equal(
+  expect_length(
     .download_or_skip(urls, filenames, verbose = TRUE, check_existence = TRUE),
-    NULL
+    2
   )
   file.remove(filenames[2:3])
+})
+
+test_that(".check_engine works", {
+  expect_error(
+    .check_engine(c("zonal", "extract"), c("not_implemented", "not_implemented2")),
+    "Please specify only one engine of:"
+  )
+  expect_error(
+    .check_engine(c("zonal", "extract"), "not_implemented"),
+    "Engine 'not_implemented' is not an available engine. Please choose one of:"
+  )
+})
+
+
+test_that(".check_stats works", {
+  expect_error(
+    .check_stats(c("mean", "min", "max"), c("mean", "min", "other")),
+    "Statistic 'other' is not supported. Please choose one of: mean, min, max"
+  )
+  expect_error(
+    .check_stats(c("mean", "min"), c("mean", "other", "other2")),
+    "Statistics 'other', 'other2' are not supported. Please choose one of: mean, min"
+  )
 })

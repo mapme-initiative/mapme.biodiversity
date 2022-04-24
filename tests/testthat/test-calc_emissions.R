@@ -1,11 +1,9 @@
 test_that("emissions works", {
   shp <- read_sf(
-    system.file("extdata", "sierra_de_neiba_478140.gpkg",
+    system.file("extdata", "gfw_sample.gpkg",
       package = "mapme.biodiversity"
     )
   )
-  shp <- suppressWarnings(st_cast(shp, to = "POLYGON"))[1, ]
-
   treecover2000 <- list.files(system.file("res", "treecover2000",
     package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)
@@ -32,7 +30,7 @@ test_that("emissions works", {
   attributes(shp)$years <- 2000:2005
   expect_equal(
     .calc_emissions(shp, treecover2000, lossyear, NULL),
-    tibble(years = 2000:2005, emissions = rep(NA, 6))
+    NA
   )
 
   expect_error(

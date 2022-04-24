@@ -30,4 +30,31 @@ single or multiple inputs as character. Supported statistics are: "mean",
 "extract" or "exactextract" as character.}
 }
 }
+\examples{
+library(sf)
+library(mapme.biodiversity)
+
+temp_loc <- file.path(tempdir(), "mapme.biodiversity")
+if(!file.exists(temp_loc)){
+dir.create(temp_loc)
+resource_dir <- system.file("res", package = "mapme.biodiversity")
+file.copy(resource_dir, temp_loc, recursive = TRUE)
+}
+
+(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") \%>\%
+  read_sf() \%>\%
+  init_portfolio(
+    years = 2022,
+    outdir = file.path(temp_loc, "res"),
+    tmpdir = tempdir(),
+    add_resources = FALSE,
+    cores = 1,
+    verbose = FALSE
+  ) \%>\%
+  get_resources("soilgrids",
+    layers = c("clay", "silt"), depths = c("0-5cm", "5-15cm"), stats = "mean"
+  ) \%>\%
+  calc_indicators("soilproperties", stats_soil = c("mean", "median"), engine = "extract") \%>\%
+  tidyr::unnest(soilproperties))
+}
 \keyword{indicator}

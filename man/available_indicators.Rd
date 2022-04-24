@@ -22,6 +22,6 @@ and to learn about potentially additional arguments that should be specified
 when requesting the indicator.
 }
 \examples{
-head(available_indicators(), 3)
+names(available_indicators())
 }
 \keyword{indicator}

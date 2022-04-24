@@ -212,6 +212,46 @@
   target_years
 }
 
+.check_engine <- function(implemented_engines, queried_engine) {
+  if (length(queried_engine) > 1) {
+    stop(sprintf(
+      "Please specify only one engine of: %s.",
+      paste(implemented_engines, collapse = ", ")
+    ))
+  }
+
+  if (!queried_engine %in% implemented_engines) {
+    stop(sprintf(
+      paste("Engine '%s' is not an available engine.",
+        "Please choose one of: %s",
+        collapse = " "
+      ),
+      queried_engine, paste(implemented_engines, collapse = ", ")
+    ))
+  }
+}
+
+.check_stats <- function(implemented_stats, queried_stats) {
+  if (any(!queried_stats %in% implemented_stats)) {
+    not_available <- queried_stats[which(!queried_stats %in% implemented_stats)]
+    msg_body <- "%s '%s' %s not supported. Please choose one of: %s"
+    if (length(not_available) == 1) {
+      stat <- "Statistic"
+      verb <- "is"
+    } else {
+      stat <- "Statistics"
+      verb <- "are"
+    }
+    msg <- sprintf(
+      msg_body, stat,
+      paste(not_available, collapse = "', '"),
+      verb,
+      paste(implemented_stats, collapse = ", ")
+    )
+    stop(msg)
+  }
+}
+
 
 #' Helper to check valid urls
 #'
@@ -228,31 +268,44 @@
                               stubbornnes = 6,
                               check_existence = TRUE,
                               aria_bin = NULL) {
+  if (check_existence) {
+    if (verbose) message("Checking URLs for existence. This may take a while...")
+    url_exists <- unlist(lapply(urls, function(url) !httr::http_error(url)))
+    urls <- urls[url_exists]
+    filenames <- filenames[url_exists]
+  }
+
+  exists_index <- which(file.exists(filenames))
+  if (length(exists_index) > 0) {
+    if (verbose) message("Skipping existing files in output directory.")
+    missing_filenames <- filenames[-exists_index]
+    missing_urls <- urls[-exists_index]
+  } else {
+    missing_filenames <- filenames
+    missing_urls <- urls
+  }
+
+  if (length(missing_filenames) == 0) {
+    return(filenames)
+  }
+
   if (is.null(aria_bin)) {
     options(timeout = max(600, getOption("timeout")))
     retry <- TRUE
     counter <- 1
-    if (length(urls) < 10) verbose <- FALSE
     while (retry) {
-      if (verbose) pb <- progress::progress_bar$new(total = length(urls))
-      if (verbose) pb$tick(0)
-      unsuccessful <- lapply(seq_along(urls), function(i) {
-        if (file.exists(filenames[i])) {
-          if (verbose) pb$tick()
+      unsuccessful <- pbapply::pblapply(seq_along(missing_urls), function(i) {
+        if (file.exists(missing_filenames[i])) {
           return(NULL) # file exists locally
         }
-        if (check_existence) {
-          if (!RCurl::url.exists(urls[i])) {
-            return(NULL)
-          }
-        } # file does not exist remotely
 
-        status <- download.file(urls[i], filenames[i], quiet = TRUE, "libcurl")
+        status <- download.file(missing_urls[i], missing_filenames[i],
+          quiet = TRUE, "libcurl",
+          mode = ifelse(Sys.info()["sysname"] == "Windows", "wb", "w")
+        )
         if (status != 0) {
-          return(list(urls = urls[i], filenames = filenames[i]))
+          return(list(urls = missing_urls[i], filenames = missing_filenames[i]))
         }
-
-        if (verbose) pb$tick()
         NULL
       })
       counter <- counter + 1
@@ -263,22 +316,15 @@
           "Download will be retried.",
           sep = ""
         ))
-        urls <- sapply(unsuccessful, function(x) x$urls)
-        filenames <- sapply(unsuccessful, function(x) x$filenames)
+        missing_urls <- sapply(unsuccessful, function(x) x$missing_urls)
+        missing_filenames <- sapply(unsuccessful, function(x) x$missing_filenames)
       }
       if (counter > stubbornnes | length(unsuccessful) == 0) retry <- FALSE
     }
   } else { # use aria_bin
 
-    exists_index <- which(file.exists(filenames))
-    filenames <- filenames[-exists_index]
-    urls <- urls[-exists_index]
-    if (length(filenames) == 0) {
-      return(NULL)
-    }
-
-    lines <- lapply(1:length(urls), function(i) {
-      c(urls[i], paste0("  out=", filenames[i]))
+    lines <- lapply(1:length(missing_urls), function(i) {
+      c(missing_urls[i], paste0("  out=", missing_filenames[i]))
     })
     lines <- unlist(lines)
     tmpfile <- tempfile()
@@ -297,4 +343,5 @@
     out <- system2("/bin/aria2c", args = args)
     file.remove(tmpfile)
   }
+  return(filenames)
 }

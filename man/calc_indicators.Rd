@@ -19,6 +19,10 @@ required arguments and their default values, about the supported indicators}
 \code{available_indicators()} to learn more about the supported indicators
 and their arguments.}
 }
+\value{
+The sf portfolio object \code{x} with additional nested list column per
+requested indicator.
+}
 \description{
 With \code{calc_indicators()} specific biodiversity indicators
 can be calculated. A requirment is that the ressources that

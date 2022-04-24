@@ -15,6 +15,8 @@
 #' @param ... Additional arguments required for the requested resources. Check
 #'  \code{available_resources()} to learn more about the supported resources and
 #'  their arguments.
+#' @return Primarily called for the side effect of downloading resources. Returns
+#'   the sf portfolio object \code{x} with its attributes amended by the requested resources.
 #' @keywords function
 #' @export
 get_resources <- function(x, resources, ...) {
@@ -62,6 +64,7 @@ get_resources <- function(x, resources, ...) {
   atts <- attributes(x)
   outdir <- atts$outdir
   tmpdir <- atts$tmpdir
+  verbose <- atts$verbose
   rundir <- file.path(outdir, resource)
   dir.create(rundir, showWarnings = FALSE)
   selected_resource <- available_resources(resource)
@@ -71,17 +74,18 @@ get_resources <- function(x, resources, ...) {
   params <- .check_resource_arguments(selected_resource, args)
   params$x <- x
   params$rundir <- rundir
-  params$verbose <- atts$verbose
+  params$verbose <- verbose
   # set terra temporal directory to rundir
   terra_org <- tempdir()
-  dir.create(file.path(tmpdir, "terra"))
+  dir.create(file.path(tmpdir, "terra"), showWarnings = FALSE)
   terra::terraOptions(tempdir = file.path(tmpdir, "terra"))
   # conduct download function, TODO: we can think of an efficient way for
   # parallel downloads here or further upstream
   # if files to not exist use download function to download to tmpdir
-  message(
-    sprintf("Starting process to download resource '%s'........", resource)
-  )
+  if (verbose) {
+    message(sprintf("Starting process to download resource '%s'........", resource))
+  }
+
   downloaded_files <- tryCatch(
     {
       do.call(fun, args = params)
@@ -115,6 +119,10 @@ get_resources <- function(x, resources, ...) {
       return(NA)
     }
   )
+
+  if (!is.null(attr(x, "testing"))) {
+    return(downloaded_files)
+  }
 
   # we included an error checker so that we can still return a valid object
   # even in cases that one or more downloads fail

@@ -23,44 +23,51 @@ destination: docs
 
 navbar:
   bg: primary
+  structure:
+    left: [quickstart, articles, reference, news]
+    right: [search, twitter, github]
   components:
    home: ~
+   quickstart:
+     text: Quickstart
+     href: articles/userguide.html
    articles:
-      text: Articles
-      menu:
-        - text: Introduction
-          href: articles/introduction.html
-        - text: Installation
-          href: articles/installation.html
-        - text: Terminology
-          href: articles/terminology.html
-        - text: Workflow
-          href: articles/workflow.html
-        - text: Using the package
-          href: articles/userguide.html
-        - text: Extending the package
-          href: articles/extensions.html
-  github:
-    icon: fab fa-github fa-lg
-    href: https://github.com/mapme-initiative/mapme.biodiversity
+     text: Articles
+     menu:
+       - text: Introduction
+         href: articles/introduction.html
+       - text: Installation
+         href: articles/installation.html
+       - text: Terminology
+         href: articles/terminology.html
+       - text: Workflow
+         href: articles/workflow.html
+       - text: Contributing
+         href: articles/contributing.html
 
 reference:
-- title: Functions
-  desc: User-facing functions
-- contents:
-  - init_portfolio
-  - get_resources
-  - calc_indicators
-  - write_portfolio
-  - read_portfolio
-- title: Resources
-  desc: Supported resources.
-- contents:
-  - has_keyword("resource")
-- title: Indicators
-  desc: Supported indicators.
-- contents:
-  - has_keyword("indicator")
+  - title: Functions
+    desc: User-facing functions
+  - contents:
+    - init_portfolio
+    - get_resources
+    - calc_indicators
+    - write_portfolio
+    - read_portfolio
+  - title: Resources
+    desc: Supported resources.
+  - contents:
+    - available_resources
+    - has_keyword("resource")
+  - title: Indicators
+    desc: Supported indicators.
+  - contents:
+    - available_indicators
+    - has_keyword("indicator")
+
+github:
+  icon: fab fa-github fa-lg
+  href: https://github.com/mapme-initiative/mapme.biodiversity/
 
 authors:
   Darius A. Görgen:

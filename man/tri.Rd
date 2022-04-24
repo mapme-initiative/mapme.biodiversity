@@ -30,12 +30,37 @@ The required resources for this indicator are:
 \details{
 The following arguments can be set:
 \describe{
-\item{stats}{Function to be applied to compute statistics for polygons either
+\item{stats_tri}{Function to be applied to compute statistics for polygons either
 single or multiple inputs as character. Supported statistics are: "mean",
 "median", "sd", "min", "max", "sum" "var".}
 \item{engine}{The preferred processing functions from either one of "zonal",
 "extract" or "exactextract" as character.}
 }
+}
+\examples{
+library(sf)
+library(mapme.biodiversity)
+
+temp_loc <- file.path(tempdir(), "mapme.biodiversity")
+if(!file.exists(temp_loc)){
+dir.create(temp_loc)
+resource_dir <- system.file("res", package = "mapme.biodiversity")
+file.copy(resource_dir, temp_loc, recursive = TRUE)
+}
+
+(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") \%>\%
+  read_sf() \%>\%
+  init_portfolio(
+    years = 2000:2020,
+    outdir = file.path(temp_loc, "res"),
+    tmpdir = tempdir(),
+    add_resources = FALSE,
+    cores = 1,
+    verbose = FALSE
+  ) \%>\%
+  get_resources("srtmdem") \%>\%
+  calc_indicators("tri", stats_tri = c("mean", "median", "sd", "var"), engine = "extract") \%>\%
+  tidyr::unnest(tri))
 }
 \references{
 Riley, S. J., DeGloria, S. D., & Elliot, R. (1999). Index that quantifies

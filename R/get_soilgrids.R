@@ -8,17 +8,17 @@
 #' 0.95 percentile predictions are available.
 #' The following parameters are available:
 #' \describe{
-#'   \item{bdod}{Bulk density of the fine earth fraction (cg/cm3)}
-#'   \item{cec}{Cation Exchange Capacity of the soil (mmol(c)/kg)}
-#'   \item{cfvo}{Volumetric fraction of coarse fragments > 2 mm (cm3/dm3 (volPerc))}
-#'   \item{clay}{Proportion of clay particles < 0.002 mm in the fine earth fraction (g/kg)}
-#'   \item{nitrogen}{Total nitrogen (cg/kg)}
-#'   \item{phh2o}{Soil pH (pHx10)}
-#'   \item{sand}{Proportion of sand particles > 0.05 mm in the fine earth fraction (g/kg)}
-#'   \item{silt}{Proportion of silt particles >= 0.002 mm and <= 0.05 mm in the fine earth fraction (g/kg)}
-#'   \item{soc}{Soil organic carbon content in the fine earth fraction (dg/kg)}
+#'   \item{bdod}{Bulk density of the fine earth fraction (kg/dm3)}
+#'   \item{cec}{Cation Exchange Capacity of the soil (cmol(c)/kg)}
+#'   \item{cfvo}{Volumetric fraction of coarse fragments > 2 mm (cm3/100cm3 (volPerc))}
+#'   \item{clay}{Proportion of clay particles < 0.002 mm in the fine earth fraction (g/100g)}
+#'   \item{nitrogen}{Total nitrogen (g/kg)}
+#'   \item{phh2o}{Soil pH (pH)}
+#'   \item{sand}{Proportion of sand particles > 0.05 mm in the fine earth fraction (g/100g)}
+#'   \item{silt}{Proportion of silt particles >= 0.002 mm and <= 0.05 mm in the fine earth fraction (g/100g)}
+#'   \item{soc}{Soil organic carbon content in the fine earth fraction (g/kg)}
 #'   \item{ocd}{Organic carbon density (kg/m3)}
-#'   \item{ocs}{Organic carbon stocks (t/ha)}
+#'   \item{ocs}{Organic carbon stocks (kg/m²)}
 #' }
 #'
 #' Users can specify the following arguments:
@@ -49,7 +49,7 @@
 #' @references Hengl T, Mendes de Jesus J, Heuvelink GBM, Ruiperez Gonzalez M,
 #' Kilibarda M, et al. (2017) SoilGrids250m: Global gridded soil information
 #' based on machine learning. PLOS ONE 12(2): e0169748.
-#' \url{https://doi.org/10.1371/journal.pone.0169748}
+#' \doi{https://doi.org/10.1371/journal.pone.0169748}
 #' @source \url{https://www.isric.org/explore/soilgrids}
 NULL
 
@@ -81,7 +81,7 @@ NULL
                            depths,
                            stats,
                            rundir = tempdir(),
-                           verbose = TRUE,
+                           verbose,
                            ...) {
   if (any(missing(layers), missing(depths), missing(stats))) {
     stop(
@@ -95,33 +95,29 @@ NULL
 
   if (any(!layers %in% names(.sg_layers))) {
     na_layers <- layers[which(!layers %in% .sg_layers)]
-    stop(
-      sprintf(
-        paste("The selected layer(s) '%s' is/are not available. ",
-          "Please choose one of: %s.",
-          sep = ""
-        ),
-        paste(layers, sep = ", "), paste(names(.sg_layers), collapse = ", ")
+    stop(sprintf(
+      paste("The selected layer(s) '%s' is/are not available. ",
+        "Please choose one of: %s.",
+        sep = ""
       ),
-      call. = FALSE
-    )
+      paste(na_layers, sep = ", "), paste(names(.sg_layers), collapse = ", ")
+    ), call. = FALSE)
   }
 
   if (any(!depths %in% .sg_depths)) {
     na_depths <- depths[which(!depths %in% .sg_depths)]
-    stop(
-      sprintf(
-        paste("The selected depth range(s) '%s' is/are not available. ",
-          "Please choose one of: %s.",
-          sep = ""
-        ),
-        na_depths, paste(.sg_depths, collapse = ", ")
+    stop(sprintf(
+      paste("The selected depth range(s) '%s' is/are not available. ",
+        "Please choose one of: %s.",
+        sep = ""
       ),
-      .call = FALSE
+      na_depths, paste(.sg_depths, collapse = ", ")
+    ),
+    call. = FALSE
     )
   }
 
-  if (!stats %in% .sg_stats) {
+  if (any(!stats %in% .sg_stats)) {
     na_stats <- stats[which(!stats %in% .sg_stats)]
     stop(
       sprintf(
@@ -129,7 +125,7 @@ NULL
               Please choose one of: %s.", sep = ""),
         na_stats, paste(.sg_stats, collapse = ", ")
       ),
-      .call = FALSE
+      call. = FALSE
     )
   }
 
@@ -152,7 +148,7 @@ NULL
         datalayer <- sprintf("%s/%s_%s_%s.vrt", layer, layer, depth, stat)
         filename <- file.path(rundir, str_replace(basename(datalayer), "vrt", "tif"))
 
-        if (!file.exists(filename)) {
+        if (!file.exists(filename) & is.null(attr(x, "testing"))) {
           if (verbose) {
             message(
               sprintf(
@@ -171,15 +167,12 @@ NULL
             filename = file.path(rundir, "soillayer_cropped.tif"),
             datatype = "INT2U", overwrite = TRUE
           )
-          conversion_factor <- .sg_layers[layer][[1]]$conversion_factor
-
           suppressWarnings(
-            project(soilgrid_cropped * conversion_factor, "EPSG:4326",
+            project(soilgrid_cropped, "EPSG:4326",
               filename = filename,
-              datatype = "FLT4S", overwrite = TRUE
+              datatype = "INT2U", overwrite = TRUE
             )
           )
-
           file.remove(file.path(rundir, "soillayer_cropped.tif"))
         } else {
           if (verbose) {
@@ -231,7 +224,7 @@ NULL
   phh2o = list(
     description = "Soil pH",
     mapped_units = "pHx10",
-    conversion_factor = 100,
+    conversion_factor = 10,
     conventional_units = "pH"
   ),
   sand = list(

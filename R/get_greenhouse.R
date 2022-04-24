@@ -39,11 +39,8 @@ NULL
                             verbose = TRUE,
                             rundir = tempdir()) {
   bbox <- st_bbox(x)
-  index_url <- paste("https://opendata.arcgis.com/datasets/",
-    "753016096c1d49f0977e7b62533375ee_0.geojson",
-    sep = ""
-  )
-  spatialindex <- st_read(index_url, quiet = TRUE)
+  index_file <- system.file("extdata", "greenhouse_index.geosjon", package = "mapme.biodiversity")
+  spatialindex <- st_read(index_file, quiet = TRUE)
   targets <- unlist(st_intersects(st_as_sfc(bbox), spatialindex))
   tileids <- spatialindex$tile_id[targets]
   urls <- as.character(
@@ -53,11 +50,9 @@ NULL
     rundir,
     sprintf("gfw_forest_carbon_gross_emissions_Mg_CO2e_px_%s.tif", tileids)
   )
-  if (any(file.exists(filenames))) {
-    message("Skipping existing files in output directory.")
-  }
   # TODO: Parallel downloads
-  .download_or_skip(urls, filenames, verbose, check_existence = FALSE)
+  aria_bin <- attributes(x)$aria_bin
+  if (is.null(attr(x, "testing"))) .download_or_skip(urls, filenames, verbose, check_existence = FALSE, aria_bin = aria_bin)
   # return all paths to the downloaded files
   filenames
 }

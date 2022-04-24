@@ -19,6 +19,10 @@ required arguments and their default values, about the supported resources.}
 \code{available_resources()} to learn more about the supported resources and
 their arguments.}
 }
+\value{
+Primarily called for the side effect of downloading resources. Returns
+the sf portfolio object \code{x} with its attributes amended by the requested resources.
+}
 \description{
 With \code{get_resources()} specific biodiversity data sets required for the
 calculation of indicators can be downloaded. The function supports the

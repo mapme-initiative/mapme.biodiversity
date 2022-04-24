@@ -23,6 +23,32 @@
 #' @format A tibble with a column for the soilgrid layer, the depth and the model
 #'   output statistic as well as additionall columns for all zonal statistics
 #'   specified via \code{stats_soil}
+#' @examples
+#' library(sf)
+#' library(mapme.biodiversity)
+#'
+#' temp_loc <- file.path(tempdir(), "mapme.biodiversity")
+#' if(!file.exists(temp_loc)){
+#' dir.create(temp_loc)
+#' resource_dir <- system.file("res", package = "mapme.biodiversity")
+#' file.copy(resource_dir, temp_loc, recursive = TRUE)
+#' }
+#'
+#' (aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
+#'   read_sf() %>%
+#'   init_portfolio(
+#'     years = 2022,
+#'     outdir = file.path(temp_loc, "res"),
+#'     tmpdir = tempdir(),
+#'     add_resources = FALSE,
+#'     cores = 1,
+#'     verbose = FALSE
+#'   ) %>%
+#'   get_resources("soilgrids",
+#'     layers = c("clay", "silt"), depths = c("0-5cm", "5-15cm"), stats = "mean"
+#'   ) %>%
+#'   calc_indicators("soilproperties", stats_soil = c("mean", "median"), engine = "extract") %>%
+#'   tidyr::unnest(soilproperties))
 NULL
 
 .calc_soilproperties <- function(shp,
@@ -33,21 +59,18 @@ NULL
                                  verbose = TRUE,
                                  todisk = FALSE,
                                  ...) {
+  # check if input engines are correct
   if (is.null(soilgrids)) {
     return(NA)
   }
-  # check if input engines are correct
-  available_engines <- c("zonal", "extract", "exactextract")
-  if (!engine %in% available_engines) {
-    stop(sprintf("Engine '%s' is not an available engine. Please choose one of: %s", engine, paste(available_engines, collapse = ", ")))
-  }
-
+  # check if intermediate raster should be written to disk
   if (ncell(soilgrids) > 1024 * 1024) todisk <- TRUE
+  # check if input engine is correctly specified
+  available_engines <- c("zonal", "extract", "exactextract")
+  .check_engine(available_engines, engine)
+  # check if only supoorted stats have been specified
   available_stats <- c("mean", "median", "sd", "min", "max", "sum", "var")
-  # check if input stats are correct
-  if (!any(stats_soil %in% available_stats)) {
-    stop(sprintf("Stat '%s' is not an available statistics. Please choose one of: %s", stats_soil, paste(available_stats, collapse = ", ")))
-  }
+  .check_stats(available_stats, stats_soil)
 
   if (engine == "extract") {
     extractor <- .soil_extract
@@ -107,6 +130,11 @@ NULL
   results$layer <- sapply(parameters, function(para) para["layer"])
   results$depth <- sapply(parameters, function(para) para["depth"])
   results$stat <- sapply(parameters, function(para) para["stat"])
+  conv_df <- lapply(.sg_layers, function(y) as.data.frame(y))
+  conv_df <- do.call(rbind, conv_df)["conversion_factor"]
+  conv_df$layer <- row.names(conv_df)
+  results <- merge(results, conv_df)
+  for (stat in stats) results[[stat]] <- results[[stat]] / results[["conversion_factor"]]
   results[, c("layer", "depth", "stat", stats)]
 }
 
@@ -129,12 +157,6 @@ NULL
     filename =  ifelse(todisk, file.path(rundir, "soilgrids.tif"), ""),
     overwrite = TRUE
   )
-  p_raster <- terra::rasterize(shp_v,
-    soilgrids_mask,
-    field = 1:nrow(shp_v),
-    filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
-    overwrite = TRUE
-  )
   results <- lapply(stats, function(stat) {
     out <- terra::extract(soilgrids_mask,
       shp_v,
@@ -149,6 +171,11 @@ NULL
   results$layer <- sapply(parameters, function(para) para["layer"])
   results$depth <- sapply(parameters, function(para) para["depth"])
   results$stat <- sapply(parameters, function(para) para["stat"])
+  conv_df <- lapply(.sg_layers, function(y) as.data.frame(y))
+  conv_df <- do.call(rbind, conv_df)["conversion_factor"]
+  conv_df$layer <- row.names(conv_df)
+  results <- merge(results, conv_df)
+  for (stat in stats) results[[stat]] <- results[[stat]] / results[["conversion_factor"]]
   results[, c("layer", "depth", "stat", stats)]
 }
 
@@ -158,7 +185,7 @@ NULL
                                 todisk = todisk,
                                 rundir = tempdir(),
                                 ...) {
-  if (!"exactextractr" %in% utils::installed.packages()[, 1]) {
+  if(!requireNamespace("exactextractr", quietly = TRUE)){
     stop(paste(
       "Needs package 'exactextractr' to be installed.",
       "Consider installing with 'install.packages('exactextractr')"
@@ -193,5 +220,10 @@ NULL
   results$layer <- sapply(parameters, function(para) para["layer"])
   results$depth <- sapply(parameters, function(para) para["depth"])
   results$stat <- sapply(parameters, function(para) para["stat"])
+  conv_df <- lapply(.sg_layers, function(y) as.data.frame(y))
+  conv_df <- do.call(rbind, conv_df)["conversion_factor"]
+  conv_df$layer <- row.names(conv_df)
+  results <- merge(results, conv_df)
+  for (stat in stats) results[[stat]] <- results[[stat]] / results[["conversion_factor"]]
   results[, c("layer", "depth", "stat", stats)]
 }

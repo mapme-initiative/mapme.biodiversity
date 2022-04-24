@@ -18,6 +18,33 @@
 #' @docType data
 #' @keywords indicator
 #' @format A tibble with a column for years and treecover (in ha)
+#' @examples
+#' library(sf)
+#' library(mapme.biodiversity)
+#'
+#' temp_loc <- file.path(tempdir(), "mapme.biodiversity")
+#' if(!file.exists(temp_loc)){
+#' dir.create(temp_loc)
+#' resource_dir <- system.file("res", package = "mapme.biodiversity")
+#' file.copy(resource_dir, temp_loc, recursive = TRUE)
+#' }
+#'
+#' (aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
+#'   read_sf() %>%
+#'   init_portfolio(
+#'     years = 2016:2017,
+#'     outdir = file.path(temp_loc, "res"),
+#'     tmpdir = tempdir(),
+#'     add_resources = FALSE,
+#'     cores = 1,
+#'     verbose = FALSE
+#'   ) %>%
+#'   get_resources(
+#'     resources = c("treecover2000", "lossyear"),
+#'     vers_treecover = "GFC-2020-v1.8", vers_lossyear = "GFC-2020-v1.8"
+#'   ) %>%
+#'   calc_indicators("treecover", min_size = 1, min_cover = 30) %>%
+#'   tidyr::unnest(treecover))
 NULL
 
 #' Calculate tree cover per year based on GFW data sets
@@ -53,6 +80,10 @@ NULL
                             todisk = FALSE,
                             ...) {
   # initial argument checks
+  # handling of return value if resources are missing, e.g. no overlap
+  if (any(is.null(treecover2000), is.null(lossyear))) {
+    return(NA)
+  }
   # retrieve years from portfolio
   years <- attributes(shp)$years
 
@@ -65,12 +96,6 @@ NULL
     if (length(years) == 0) {
       return(tibble(years = NA, treecover = NA))
     }
-  }
-
-
-  # handling of return value if resources are missing, e.g. no overlap
-  if (any(is.null(treecover2000), is.null(lossyear))) {
-    return(tibble(years = years, treecover = rep(NA, length(years))))
   }
   if (ncell(treecover2000) > 1024 * 1024) todisk <- TRUE
   # check if treecover2000 only contains 0s, e.g. on the ocean
