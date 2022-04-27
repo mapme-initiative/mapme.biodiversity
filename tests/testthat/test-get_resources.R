@@ -5,12 +5,8 @@ test_that("get_resources works", {
     )
   )
 
-  outdir <- system.file("res",
-    package = "mapme.biodiversity"
-  )
-  tmpdir <- system.file("tmp",
-    package = "mapme.biodiversity"
-  )
+  outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
+  tmpdir <- tempdir()
 
   aoi <- suppressWarnings(st_cast(aoi, to = "POLYGON"))[1, ]
   portfolio <- init_portfolio(aoi,

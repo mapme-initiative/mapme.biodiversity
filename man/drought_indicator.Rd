@@ -30,12 +30,20 @@ one or multiple inputs as character "mean", "median" or "sd".}
 \examples{
 library(sf)
 library(mapme.biodiversity)
+
+temp_loc <- file.path(tempdir(), "mapme.biodiversity")
+if(!file.exists(temp_loc)){
+dir.create(temp_loc)
+resource_dir <- system.file("res", package = "mapme.biodiversity")
+file.copy(resource_dir, temp_loc, recursive = TRUE)
+}
+
 (aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") \%>\%
   read_sf() \%>\%
   init_portfolio(
     years = 2022,
-    outdir = system.file("res", package = "mapme.biodiversity"),
-    tmpdir = system.file("tmp", package = "mapme.biodiversity"),
+    outdir = file.path(temp_loc, "res"),
+    tmpdir = tempdir(),
     add_resources = FALSE,
     cores = 1,
     verbose = FALSE

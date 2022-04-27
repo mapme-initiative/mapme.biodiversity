@@ -6,12 +6,8 @@ test_that(".get_worldpop works", {
   )
   aoi <- suppressWarnings(st_cast(aoi, to = "POLYGON")[1, ])
 
-  outdir <- system.file("res",
-    package = "mapme.biodiversity"
-  )
-  tmpdir <- system.file("tmp",
-    package = "mapme.biodiversity"
-  )
+  outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
+  tmpdir <- tempdir()
 
   portfolio <- init_portfolio(aoi,
     years = 2000:2020,

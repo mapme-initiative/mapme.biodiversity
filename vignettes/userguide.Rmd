@@ -97,7 +97,7 @@ aoi_gridded[metanames] <- st_drop_geometry(aoi)
 Now, we are ready to initiate a portfolio object containing multiple assets.
 We use the <code>init_portfolio()</code> function and set some attributes that
 are important for the subsequent processing. The function will add a unique
-identifier column called `.assetid` that is used to uniquely identify each
+identifier column called 'assetid' that is used to uniquely identify each
 asset in the portfolio.
 
 ```{r init_portfolio, dpi = 50, out.width="120%", out.height="120%"}
@@ -110,7 +110,7 @@ sample_portfolio <- init_portfolio(
   cores = 1,
   verbose = TRUE
 )
-plot(sample_portfolio[".assetid"])
+plot(sample_portfolio["assetid"])
 ```
 
 The first argument, `x`, is the sf-object that we want to turn into a portfolio.
@@ -245,7 +245,7 @@ Now let's take a look at the results. We will select only some of the metadata
 and the output indicator column to get a clearer picture of what has happened.
 
 ```{r select_cols}
-(sample_portfolio <- sample_portfolio %>% select(.assetid, WDPAID, chirpsprec))
+(sample_portfolio <- sample_portfolio %>% select(assetid, WDPAID, chirpsprec))
 ```
 
 We obtained a new listed column in our sf object that is called like the requested
@@ -265,7 +265,7 @@ Let's quickly visualize the results for a single asset:
 
 ```{r plot_precipitation, echo = FALSE, warning=FALSE, dpi = 50}
 sample_portfolio %>%
-  filter(.assetid == 10) %>%
+  filter(assetid == 10) %>%
   st_drop_geometry() %>%
   tidyr::unnest(chirpsprec) %>%
   mutate(sign = ifelse(anomaly < 0, "lower than average", "higher than average")) %>%
@@ -280,7 +280,7 @@ sample_portfolio %>%
   theme(legend.position = "bottom")
 
 sample_portfolio %>%
-  filter(.assetid == 10) %>%
+  filter(assetid == 10) %>%
   st_drop_geometry() %>%
   tidyr::unnest(chirpsprec) %>%
   mutate(
@@ -298,7 +298,7 @@ sample_portfolio %>%
   theme(legend.position = "bottom")
 
 sample_portfolio %>%
-  filter(.assetid == 10) %>%
+  filter(assetid == 10) %>%
   st_drop_geometry() %>%
   tidyr::unnest(chirpsprec) %>%
   ggplot() +
@@ -313,11 +313,11 @@ a good idea to keep the geometry information in a separated variable
 to keep the size of the data object relatively small.
 
 ```{r unnest}
-geometries <- select(sample_portfolio, .assetid)
+geometries <- select(sample_portfolio, assetid)
 sample_portfolio %>%
   st_drop_geometry() %>%
   tidyr::unnest(chirpsprec) %>%
-  filter(.assetid == 3)
+  filter(assetid == 3)
 ```
 
 # Exporting an portfolio object

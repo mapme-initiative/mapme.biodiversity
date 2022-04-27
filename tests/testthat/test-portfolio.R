@@ -5,12 +5,8 @@ test_that("init_portfolio works", {
     )
   )
 
-  outdir <- system.file("res",
-    package = "mapme.biodiversity"
-  )
-  tmpdir <- system.file("tmp",
-    package = "mapme.biodiversity"
-  )
+  outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
+  tmpdir <- tempdir()
 
   cores <- ifelse(Sys.info()["sysname"] == "Windows", 1, 2)
 
@@ -54,7 +50,7 @@ test_that("init_portfolio works", {
       cores = cores,
       verbose = TRUE
     ),
-    "'.assetid'. Overwritting its values with a unique identifier."
+    "'assetid'. Overwritting its values with a unique identifier."
   )
 
   aoi2 <- st_transform(aoi, st_crs(3857))

@@ -28,7 +28,7 @@ The metadata of a portfolio together with the geometry will be written
 to a table called 'metadata'. All available and supported indicators, which
 are expected to be present as a nested list columns will be written to their
 own respective tables. In order to allow re-joining the metadata with the
-indicators, it is expected that a column called '.assetid' which uniquely
+indicators, it is expected that a column called 'assetid' which uniquely
 identifies all assets is present. Usually, users do not have to take care of
 this since the usual \code{{mapme.biodiversity}} workflow will ensure that this
 columns is present. Additional arguments to \code{st_write()} can be supplied.

@@ -88,15 +88,15 @@ init_portfolio <- function(x,
     stop("Some assests are not of type POLYGON. Please use sf::st_cast() to cast to POLYGON.")
   }
   # add a unique asset identifier
-  if (".assetid" %in% names(x)) {
+  if ("assetid" %in% names(x)) {
     message(
-      paste("Found a column named '.assetid'. ",
-        "Overwritting its values with a unique identifier.",
+      paste("Found a column named 'assetid'.",
+        " Overwritting its values with a unique identifier.",
         sep = ""
       )
     )
   }
-  x$.assetid <- 1:nrow(x)
+  x$assetid <- 1:nrow(x)
 
   # check if resources already exist
   resources <- list()
@@ -136,7 +136,7 @@ init_portfolio <- function(x,
 #' to a table called 'metadata'. All available and supported indicators, which
 #' are expected to be present as a nested list columns will be written to their
 #' own respective tables. In order to allow re-joining the metadata with the
-#' indicators, it is expected that a column called '.assetid' which uniquely
+#' indicators, it is expected that a column called 'assetid' which uniquely
 #' identifies all assets is present. Usually, users do not have to take care of
 #' this since the usual \code{{mapme.biodiversity}} workflow will ensure that this
 #' columns is present. Additional arguments to \code{st_write()} can be supplied.
@@ -153,7 +153,7 @@ write_portfolio <- function(x,
                             dsn,
                             overwrite = FALSE,
                             ...) {
-  .assetid <- NULL
+  assetid <- NULL
   all_indicators <- names(available_indicators())
   present_indicators <- names(x)[which(names(x) %in% all_indicators)]
 
@@ -179,24 +179,24 @@ write_portfolio <- function(x,
     present_indicators <- present_indicators[-index]
   }
 
-  if (!".assetid" %in% names(x)) {
-    stop("Column '.assetid' is missing.")
+  if (!"assetid" %in% names(x)) {
+    stop("Column 'assetid' is missing.")
   }
 
-  if (nrow(x) != length(unique(x$.assetid))) {
-    stop("Column '.assetid' does not uniquley identify assets.")
+  if (nrow(x) != length(unique(x$assetid))) {
+    stop("Column 'assetid' does not uniquley identify assets.")
   }
 
   # separate metadata from data
   metadata <- dplyr::select(x, -tidyselect::all_of(present_indicators))
-  data <- st_drop_geometry(dplyr::select(x, .assetid, tidyselect::all_of(present_indicators)))
+  data <- st_drop_geometry(dplyr::select(x, assetid, tidyselect::all_of(present_indicators)))
 
   # initiate GPKG with metadata (including geometries)
   st_write(metadata, dsn, "metadata", delete_dsn = overwrite, ...)
 
   # loop through the nested indicators and append as their own layers
   for (ind in present_indicators) {
-    tmp <- dplyr::select(data, .assetid, tidyselect::all_of(ind))
+    tmp <- dplyr::select(data, assetid, tidyselect::all_of(ind))
     tmp <- tidyr::unnest(tmp, tidyselect::all_of(ind))
     st_write(tmp, dsn, ind, append = TRUE, ...)
   }
@@ -230,7 +230,7 @@ write_portfolio <- function(x,
 #' @export
 #'
 read_portfolio <- function(file, ...) {
-  .assetid <- NULL
+  assetid <- NULL
   all_layers <- st_layers(file)
   if (!"metadata" %in% all_layers$name | all_layers$geomtype[[which(all_layers$name == "metadata")]] != "Polygon") {
     stop(sprintf(
@@ -247,9 +247,9 @@ read_portfolio <- function(file, ...) {
 
   for (ind in present_indicators) {
     tmp <- read_sf(file, layer = ind, ...)
-    tmp <- tidyr::nest(tmp, data = !.assetid)
+    tmp <- tidyr::nest(tmp, data = !assetid)
     names(tmp)[2] <- ind
-    metadata <- dplyr::left_join(metadata, tmp, by = ".assetid")
+    metadata <- dplyr::left_join(metadata, tmp, by = "assetid")
   }
 
   dplyr::relocate(metadata, !!attributes(metadata)[["sf_column"]], .after = tidyselect::last_col())

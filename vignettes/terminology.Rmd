@@ -36,7 +36,7 @@ In case the CRS of the portfolio is projected, we will attempt to transform to
 <code>EPSG:4326</code>. Any metadata that is needed for your analysis is allowed
 in the columns of the object and will be retained throughout the workflow so that
 you can access it once you have calculated your indicators.
-The package will add a unique asset identifier called <code>.assetid</code> and
+The package will add a unique asset identifier called <code>assetid</code> and
 add *nested list columns* for each indicator. Portfolio-wide arguments are set as 
 attributes during the call of <code>init_portfolio()</code>. Except from these additional
 arguments, an portfolio object actually is and will behave as a familiar <code>{sf}</code>
