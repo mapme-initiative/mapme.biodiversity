@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,11 +52,29 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.1" id="mapmebiodiversity-001">mapme.biodiversity 0.0.1<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-001"></a></h2>
-<ul><li><p>Added a <code>NEWS.md</code> file to track changes to the package.</p></li>
-<li>
-<p>initial supported resources are:</p>
-<ul><li>ecoregions</li>
+<h2 class="pkg-version" data-toc-text="development version" id="mapmebiodiversity-development-version">mapme.biodiversity (development version)<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-development-version"></a></h2>
+<div class="section level3"><h3 id="breaking-changes-development-version">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3></div>
+<div class="section level3"><h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3></div>
+<div class="section level3"><h3 id="internal-development-version">Internal<a class="anchor" aria-label="anchor" href="#internal-development-version"></a></h3></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0" id="mapmebiodiversity-010">mapme.biodiversity 0.1.0<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-010"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-0-1-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-1-0"></a></h3>
+<ul><li>renamed ‘.assetid’ to ‘assetid’ (#22)</li></ul></div>
+<div class="section level3">
+<h3 id="new-features-0-1-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-1-0"></a></h3>
+<ul><li>None</li></ul></div>
+<div class="section level3">
+<h3 id="internal-0-1-0">Internal<a class="anchor" aria-label="anchor" href="#internal-0-1-0"></a></h3>
+<ul><li>ensured that tests and examples adhere to CRAN policies of only writing to the temporal directory (#22)</li></ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.0.1" id="mapmebiodiversity-001">mapme.biodiversity 0.0.1<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-001"></a></h2><p class="text-muted">CRAN release: 2022-04-19</p>
+<div class="section level3">
+<h3 id="initial-release-0-0-1">Initial release<a class="anchor" aria-label="anchor" href="#initial-release-0-0-1"></a></h3>
+<ul><li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
+<li>initial supported resources are:<ul><li>ecoregions</li>
 <li>esalandcover</li>
 <li>greenhouse</li>
 <li>lossyear</li>
@@ -69,9 +87,7 @@
 <li>worldclim</li>
 <li>worldpop</li>
 </ul></li>
-<li>
-<p>initial supported indicators are:</p>
-<ul><li>acessibility</li>
+<li>initial supported indicators are:<ul><li>acessibility</li>
 <li>biome</li>
 <li>chirpsprec</li>
 <li>drought_indicator</li>
@@ -89,19 +105,29 @@
 <li>wctmax</li>
 <li>wctmin</li>
 </ul></li>
-<li><p><code><a href="../reference/init_portfolio.html">init_portfolio()</a></code> is used to initialize a portfolio object. The input must be an sf object where all geometries are of type <code>POLYGON</code></p></li>
-<li><p>users can request the download of one or more resources via <code><a href="../reference/get_resources.html">get_resources()</a></code></p></li>
-<li><p>users can request the processing of an indicator via <code><a href="../reference/calc_indicators.html">calc_indicators()</a></code></p></li>
-<li><p>indicators are added to the portfolio object as nested list columns</p></li>
-<li><p>a processed portfolio object can be exported as a GeoPackage via <code><a href="../reference/write_portfolio.html">write_portfolio()</a></code></p></li>
-<li><p>a portfolio saved to disk as a GeoPackage can be read back into R via <code><a href="../reference/read_portfolio.html">read_portfolio()</a></code>. If users wish to download additional resources or calculate indicators, <code><a href="../reference/init_portfolio.html">init_portfolio()</a></code> has to be called again.</p></li>
-<li><p>Parallelization using multiple cores on the host machine is disabled on Windows</p></li>
-<li><p>on MacOS, the s2 engine for spherical geometric vector operations is disabled and lwgeom is used instead.</p></li>
-<li><p>Introduced absolute URLS in userguide.Rmd pointing to the online documentation (#58)</p></li>
-<li><p>tags added to all exported functions explaining what is the output/sideffect (#58)</p></li>
-<li><p>using requireNamespace() instead of installed.packages() to check if packages listed in SUGGEST are loadable (#58)</p></li>
+<li>
+<code><a href="../reference/init_portfolio.html">init_portfolio()</a></code> is used to initialize a portfolio object. The input must be an sf object where all geometries are of type <code>POLYGON</code>
+</li>
+<li>users can request the download of one or more resources via <code><a href="../reference/get_resources.html">get_resources()</a></code>
+</li>
+<li>users can request the processing of an indicator via <code><a href="../reference/calc_indicators.html">calc_indicators()</a></code>
+</li>
+<li>indicators are added to the portfolio object as nested list columns</li>
+<li>a processed portfolio object can be exported as a GeoPackage via <code><a href="../reference/write_portfolio.html">write_portfolio()</a></code>
+</li>
+<li>a portfolio saved to disk as a GeoPackage can be read back into R via <code><a href="../reference/read_portfolio.html">read_portfolio()</a></code>. If users wish to download additional resources or calculate indicators, <code><a href="../reference/init_portfolio.html">init_portfolio()</a></code> has to be called again.</li>
+<li>Parallelization using multiple cores on the host machine is disabled on Windows</li>
+<li>on MacOS, the s2 engine for spherical geometric vector operations is disabled and lwgeom is used instead.</li>
 </ul></div>
-  </main></div>
+<div class="section level3">
+<h3 id="internal-0-0-1">Internal<a class="anchor" aria-label="anchor" href="#internal-0-0-1"></a></h3>
+<ul><li>Introduced absolute URLS in userguide.Rmd pointing to the online documentation (#59)</li>
+<li>tags added to all exported functions explaining what is the output/sideffect (#59)</li>
+<li>using requireNamespace() instead of installed.packages() to check if packages listed in SUGGEST are loadable (#58)</li>
+</ul></div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
@@ -109,7 +135,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
     </footer></div>
