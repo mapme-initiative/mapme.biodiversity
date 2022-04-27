@@ -29,10 +29,16 @@ the path to the executable binary is known to the user and we test it if
 provided during portfolio initialization.
 
 Given that the above requirements are met, installing the `{mapme.biodiversity}` 
-package is then achieved trough the following function call: 
+current CRAN release is then achieved trough the following function call: 
 
+```{r installation-cran, eval = FALSE}
+install.packages("mapme.biodiversity")
+```
 
-```{r installation, eval = F}
+You can install the latest development version from GitHub via the following
+call:
+
+```{r installation, eval = FALSE}
 remotes::install_github("mapme-initiative/mapme.biodiversity")
 ```
 
@@ -41,7 +47,7 @@ After the successful installation, you are ready to use the package's
 functionality. Simply load the package for your R session with the library
 call:
 
-```{r setup, val = F}
+```{r setup, eval = FALSE}
 library(mapme.biodiversity)
 ```
 
