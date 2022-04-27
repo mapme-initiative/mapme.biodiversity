@@ -66,7 +66,14 @@
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
 </form>
 
-      <ul class="navbar-nav"></ul>
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/mapme-initiative/mapme.biodiversity/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 
     
@@ -87,11 +94,14 @@
     
     
 <p>This sections describes how to install the <code>{mapme.biodiversity}</code> package. Since the package handles spatial data, we assume that you have a working installation of <a href="https://gdal.org/index.html" class="external-link">GDAL</a> and <a href="https://proj.org/" class="external-link">PROJ</a> on your system. The GDAL installation needs to be found on your PATH variable, because several system calls will be issued when the package is used. Please refer to the respective installation guides to learn about how to install these programs on your OS. While the package supports sequentially downloading all supported resources, we include the option to provide a path to an <a href="https://aria2.github.io/" class="external-link">aria2</a> executable to speed up the download based on parallel processing. We expect that the path to the executable binary is known to the user and we test it if provided during portfolio initialization.</p>
-<p>Given that the above requirements are met, installing the <code>{mapme.biodiversity}</code> package is then achieved trough the following function call:</p>
+<p>Given that the above requirements are met, installing the <code>{mapme.biodiversity}</code> current CRAN release is then achieved trough the following function call:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"mapme.biodiversity"</span><span class="op">)</span></code></pre></div>
+<p>You can install the latest development version from GitHub via the following call:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"mapme-initiative/mapme.biodiversity"</span><span class="op">)</span></code></pre></div>
 <p>The installation process will install potential missing R dependencies. After the successful installation, you are ready to use the package’s functionality. Simply load the package for your R session with the library call:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">mapme.biodiversity</span><span class="op">)</span></code></pre></div>
   </main>
 </div>
