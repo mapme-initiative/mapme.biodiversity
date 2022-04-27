@@ -1,4 +1,26 @@
+# mapme.biodiversity (development version)
+
+## Breaking changes
+
+## New features
+
+## Internal
+
+# mapme.biodiversity 0.1.0
+
+## Breaking changes
+* renamed '.assetid' to 'assetid' (#22)
+
+## New features
+* None
+
+## Internal
+* ensured that tests and examples adhere to CRAN policies of
+only writing to the temporal directory (#22)
+
 # mapme.biodiversity 0.0.1
+
+## Initial release
 
 * Added a `NEWS.md` file to track changes to the package.
 * initial supported resources are:
@@ -45,6 +67,8 @@
 * on MacOS, the s2 engine for spherical geometric vector operations is disabled and
   lwgeom is used instead.
   
-* Introduced absolute URLS in userguide.Rmd pointing to the online documentation (#58)
-* \value tags added to all exported functions explaining what is the output/sideffect (#58)
+## Internal
+
+* Introduced absolute URLS in userguide.Rmd pointing to the online documentation (#59)
+* \value tags added to all exported functions explaining what is the output/sideffect (#59)
 * using requireNamespace() instead of installed.packages() to check if packages listed in SUGGEST are loadable (#58)
