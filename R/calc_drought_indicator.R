@@ -31,7 +31,8 @@
 #' file.copy(resource_dir, temp_loc, recursive = TRUE)
 #' }
 #'
-#' (aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
+#' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+#'                         package = "mapme.biodiversity") %>%
 #'   read_sf() %>%
 #'   init_portfolio(
 #'     years = 2022,
@@ -43,7 +44,7 @@
 #'   ) %>%
 #'   get_resources("nasagrace") %>%
 #'   calc_indicators("drought_indicator", stats_drought = c("mean", "median"), engine = "extract") %>%
-#'   tidyr::unnest(drought_indicator))
+#'   tidyr::unnest(drought_indicator)))
 NULL
 
 #' Calculate drought indicator statistics

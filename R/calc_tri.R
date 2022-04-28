@@ -43,7 +43,8 @@
 #' file.copy(resource_dir, temp_loc, recursive = TRUE)
 #' }
 #'
-#' (aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
+#' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+#'                         package = "mapme.biodiversity") %>%
 #'   read_sf() %>%
 #'   init_portfolio(
 #'     years = 2000:2020,
@@ -55,7 +56,7 @@
 #'   ) %>%
 #'   get_resources("srtmdem") %>%
 #'   calc_indicators("tri", stats_tri = c("mean", "median", "sd", "var"), engine = "extract") %>%
-#'   tidyr::unnest(tri))
+#'   tidyr::unnest(tri)))
 NULL
 
 #' Calculate Terrain Ruggedness Index (TRI) statistics based on SRTM data sets

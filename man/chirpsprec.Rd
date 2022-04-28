@@ -43,7 +43,7 @@ resource_dir <- system.file("res", package = "mapme.biodiversity")
 file.copy(resource_dir, temp_loc, recursive = TRUE)
 }
 
-(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") \%>\%
+(try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") \%>\%
   read_sf() \%>\%
   init_portfolio(
     years = 2010,
@@ -54,7 +54,7 @@ file.copy(resource_dir, temp_loc, recursive = TRUE)
   ) \%>\%
   get_resources("chirps") \%>\%
   calc_indicators("chirpsprec", engine = "exactextract", scales_spi = 3, spi_prev_years = 8) \%>\%
-  tidyr::unnest(chirpsprec))
+  tidyr::unnest(chirpsprec)))
 }
 }
 \keyword{indicator}

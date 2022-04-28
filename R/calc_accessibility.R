@@ -31,7 +31,8 @@
 #' file.copy(resource_dir, temp_loc, recursive = TRUE)
 #' }
 #'
-#' (aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
+#' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+#'                         package = "mapme.biodiversity") %>%
 #'   read_sf() %>%
 #'   init_portfolio(
 #'     years = 2022,
@@ -45,7 +46,7 @@
 #'     range_traveltime = c("5k_10k", "100k_200k", "500k_1mio", "1mio_5mio")
 #'   ) %>%
 #'   calc_indicators("accessibility", stats_accessibility = c("min", "max"), engine = "extract") %>%
-#'   tidyr::unnest(accessibility))
+#'   tidyr::unnest(accessibility)))
 NULL
 
 #' Calculate accessibility to major cities' statistics
@@ -92,11 +93,11 @@ NULL
 
   # set max value of 65535 to NA
   traveltime <- clamp(traveltime,
-    lower = -Inf, upper = 65534, values = FALSE,
-    filename = ifelse(todisk, file.path(rundir, "traveltime.tif"), ""),
-    overwrite = TRUE,
-    datatype = "INT1U",
-    filetype = "GTiff"
+                      lower = -Inf, upper = 65534, values = FALSE,
+                      filename = ifelse(todisk, file.path(rundir, "traveltime.tif"), ""),
+                      overwrite = TRUE,
+                      datatype = "INT1U",
+                      filetype = "GTiff"
   )
 
   if (engine == "extract") {
@@ -138,18 +139,18 @@ NULL
                                    ...) {
   shp_v <- vect(shp)
   traveltime <- terra::mask(traveltime,
-    shp_v,
-    filename =  ifelse(todisk, file.path(rundir, "traveltime.tif"), ""),
-    datatype = "INT1U",
-    overwrite = TRUE
+                            shp_v,
+                            filename =  ifelse(todisk, file.path(rundir, "traveltime.tif"), ""),
+                            datatype = "INT1U",
+                            overwrite = TRUE
   )
   p_raster <- terra::rasterize(shp_v,
-    traveltime,
-    field = 1:nrow(shp_v),
-    touches = TRUE,
-    filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
-    datatype = "INT1U",
-    overwrite = TRUE
+                               traveltime,
+                               field = 1:nrow(shp_v),
+                               touches = TRUE,
+                               filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
+                               datatype = "INT1U",
+                               overwrite = TRUE
   )
 
   shp_v <- vect(shp)

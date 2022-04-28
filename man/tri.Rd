@@ -48,7 +48,7 @@ resource_dir <- system.file("res", package = "mapme.biodiversity")
 file.copy(resource_dir, temp_loc, recursive = TRUE)
 }
 
-(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") \%>\%
+(try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") \%>\%
   read_sf() \%>\%
   init_portfolio(
     years = 2000:2020,
@@ -60,7 +60,7 @@ file.copy(resource_dir, temp_loc, recursive = TRUE)
   ) \%>\%
   get_resources("srtmdem") \%>\%
   calc_indicators("tri", stats_tri = c("mean", "median", "sd", "var"), engine = "extract") \%>\%
-  tidyr::unnest(tri))
+  tidyr::unnest(tri)))
 }
 \references{
 Riley, S. J., DeGloria, S. D., & Elliot, R. (1999). Index that quantifies

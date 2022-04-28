@@ -31,7 +31,8 @@
 #' }
 #'
 #'
-#' (aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
+#' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+#'                         package = "mapme.biodiversity") %>%
 #'   read_sf() %>%
 #'   init_portfolio(
 #'     years = 2018,
@@ -43,7 +44,7 @@
 #'   ) %>%
 #'   get_resources("precipitation") %>%
 #'   calc_indicators("wcprec", stats_worldclim = c("mean", "median"), engine = "extract") %>%
-#'   tidyr::unnest(wcprec))
+#'   tidyr::unnest(wcprec)))
 NULL
 
 #' Calculate worldclim precipitation statistics

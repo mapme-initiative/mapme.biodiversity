@@ -29,7 +29,8 @@
 #' file.copy(resource_dir, temp_loc, recursive = TRUE)
 #' }
 #'
-#' (aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
+#' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+#'                         package = "mapme.biodiversity") %>%
 #'   read_sf() %>%
 #'   init_portfolio(
 #'     years = 2016:2017,
@@ -44,7 +45,7 @@
 #'     vers_treecover = "GFC-2020-v1.8", vers_lossyear = "GFC-2020-v1.8"
 #'   ) %>%
 #'   calc_indicators("treecover", min_size = 1, min_cover = 30) %>%
-#'   tidyr::unnest(treecover))
+#'   tidyr::unnest(treecover)))
 NULL
 
 #' Calculate tree cover per year based on GFW data sets

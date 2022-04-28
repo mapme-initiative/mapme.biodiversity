@@ -22,7 +22,8 @@
 #' file.copy(resource_dir, temp_loc, recursive = TRUE)
 #' }
 #'
-#' (aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
+#' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+#'                         package = "mapme.biodiversity") %>%
 #'   read_sf() %>%
 #'   init_portfolio(
 #'     years = 2001,
@@ -34,7 +35,7 @@
 #'   ) %>%
 #'   get_resources("ecoregions") %>%
 #'   calc_indicators("biome") %>%
-#'   tidyr::unnest(biome))
+#'   tidyr::unnest(biome)))
 NULL
 
 #' Calculate biomes statistics (TEOW) based on WWF

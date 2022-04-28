@@ -25,7 +25,7 @@
 #' @format A tibble with a column for years, months, absolute rainfall (in mm), rainfall
 #'   anomaly (in mm) and one or more columns per selected time-scale for SPI (dimensionless).
 #' @examples
-#' if(Sys.getenv("NOT_CRAN") == "true"){
+#' if(Sys.getenv("NOT_CRAN") != "false"){
 #' library(sf)
 #' library(mapme.biodiversity)
 #'
@@ -36,7 +36,8 @@
 #' file.copy(resource_dir, temp_loc, recursive = TRUE)
 #' }
 #'
-#' (aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
+#' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+#'                         package = "mapme.biodiversity") %>%
 #'   read_sf() %>%
 #'   init_portfolio(
 #'     years = 2010,
@@ -47,7 +48,7 @@
 #'   ) %>%
 #'   get_resources("chirps") %>%
 #'   calc_indicators("chirpsprec", engine = "exactextract", scales_spi = 3, spi_prev_years = 8) %>%
-#'   tidyr::unnest(chirpsprec))
+#'   tidyr::unnest(chirpsprec)))
 #' }
 NULL
 

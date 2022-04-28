@@ -33,7 +33,8 @@
 #' file.copy(resource_dir, temp_loc, recursive = TRUE)
 #' }
 #'
-#' (aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
+#' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+#'                         package = "mapme.biodiversity") %>%
 #'   read_sf() %>%
 #'   init_portfolio(
 #'     years = 2000:2010,
@@ -45,7 +46,7 @@
 #'   ) %>%
 #'   get_resources("worldpop") %>%
 #'   calc_indicators("popcount", stats_popcount = c("sum", "median"), engine = "extract") %>%
-#'   tidyr::unnest(popcount))
+#'   tidyr::unnest(popcount)))
 NULL
 
 #' Calculate population count statistics

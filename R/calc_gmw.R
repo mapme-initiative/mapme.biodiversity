@@ -22,9 +22,8 @@
 #' file.copy(resource_dir, temp_loc, recursive = TRUE)
 #' }
 #'
-#' (aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
-#'   package = "mapme.biodiversity"
-#' ) %>%
+#' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+#'                         package = "mapme.biodiversity") %>%
 #'   read_sf() %>%
 #'   init_portfolio(
 #'     years = c(1996, 2016),
@@ -36,7 +35,7 @@
 #'   ) %>%
 #'   get_resources("mangrove") %>%
 #'   calc_indicators("gmw") %>%
-#'   tidyr::unnest(gmw))
+#'   tidyr::unnest(gmw)))
 NULL
 
 #' Calculate mangrove extent based on Global Mangrove Watch (GMW)
