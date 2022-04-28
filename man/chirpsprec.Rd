@@ -32,7 +32,7 @@ order to fit the SPI. Defaults to 8 years.}
 }
 }
 \examples{
-if(Sys.getenv("NOT_CRAN") == "true"){
+if(Sys.getenv("NOT_CRAN") != "false"){
 library(sf)
 library(mapme.biodiversity)
 
@@ -43,7 +43,8 @@ resource_dir <- system.file("res", package = "mapme.biodiversity")
 file.copy(resource_dir, temp_loc, recursive = TRUE)
 }
 
-(try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") \%>\%
+(try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+                        package = "mapme.biodiversity") \%>\%
   read_sf() \%>\%
   init_portfolio(
     years = 2010,
