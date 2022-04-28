@@ -87,7 +87,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Quickstart</h1>
             
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/mapme-initiative/mapme.biodiversity/blob/HEAD/vignettes/userguide.Rmd" class="external-link"><code>vignettes/userguide.Rmd</code></a></small>
       <div class="d-none name"><code>userguide.Rmd</code></div>
     </div>
 
@@ -98,7 +98,7 @@
 </h2>
 <p>In the following we will demonstrate an idealized workflow based on a subset of the CHIRPS dataset that is delivered together with this package. You can follow along the code snippets below to reproduce the results. Please note, that to reduce the time it takes to process this vignette, we will not download any resources from the internet. In a real use case, thus processing time might substantially increase because resources have to be downloaded and real portfolios might be larger than the one created in this example.</p>
 <p>This vignette assumes that you have already followed the steps in <a href="https://mapme-initiative.github.io/mapme.biodiversity/articles/installation.html">Installation</a> and have familiarized yourself with the terminology used in the package. If you are unfamiliar with the terminology used here, please head over to the <a href="https://mapme-initiative.github.io/mapme.biodiversity/articles/terminology.html">Terminology</a> article to learn about the most important concepts.</p>
-<p>The idealized workflow for using <code>{mapme.biodiversity}</code> consists of the following steps:</p>
+<p>The idealized workflow for using <a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> consists of the following steps:</p>
 <ul>
 <li>initialize your portfolio using an sf-object containing only geometries of type POLYGON</li>
 <li>decide which indicator(s) you wish to calculate and download the required resource(s)</li>
@@ -109,9 +109,9 @@
 <div class="section level2">
 <h2 id="getting-started">Getting started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
 </h2>
-<p>First, we will load the <code>{mapme.biodiversity}</code> and the <a href="https://r-spatial.github.io/sf/" class="external-link">sf</a> package for handling spatial vector data. For tabular data handling and the creation of a plot, we will also load the <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> and <a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a> packages. Then, we will read an package internal GeoPackage which includes the geometry of a protected area in the Dominican Republic from the WDPA database.</p>
+<p>First, we will load the <a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> and the <a href="https://r-spatial.github.io/sf/" class="external-link">sf</a> package for handling spatial vector data. For tabular data handling and the creation of a plot, we will also load the <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> and <a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a> packages. Then, we will read an package internal GeoPackage which includes the geometry of a protected area in the Dominican Republic from the WDPA database.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">mapme.biodiversity</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
@@ -127,7 +127,7 @@
 <span class="co">#&gt;   WDPAID NAME            DESIG_ENG     ISO3                                 geom</span>
 <span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;MULTIPOLYGON [°]&gt;</span></span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">478</span>140 Sierra de Neiba National Park DOM   (((-71.76134 18.66333, -71.76067 1…</span></code></pre></div>
-<p>The sf-object contains a single object of geometry type <code>MULTIPOLYGON</code>. The <code>{mapme.biodiversity}</code> package, however, only supports geometries of type <code>POLYGON</code>, thus we need to cast the geometry before we advance. The resulting sf object also contains some metadata, that will be retained throughout the complete workflow. Because some of the casted geometries represent artifacts of the digitization process, in this example we will subset to only the largest polygon.</p>
+<p>The sf-object contains a single object of geometry type <code>MULTIPOLYGON</code>. The <a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> package, however, only supports geometries of type <code>POLYGON</code>, thus we need to cast the geometry before we advance. The resulting sf object also contains some metadata, that will be retained throughout the complete workflow. Because some of the casted geometries represent artifacts of the digitization process, in this example we will subset to only the largest polygon.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_cast.html" class="external-link">st_cast</a></span><span class="op">(</span><span class="va">aoi</span>, to <span class="op">=</span> <span class="st">"POLYGON"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span><span class="op">)</span>
 <span class="co">#&gt; Warning in st_cast.sf(aoi, to = "POLYGON"): repeating attributes for all sub-</span>
@@ -141,7 +141,7 @@
 <span class="co">#&gt;   WDPAID NAME            DESIG_ENG     ISO3                                 geom</span>
 <span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span></span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">478</span>140 Sierra de Neiba National Park DOM   ((-71.76134 18.66333, -71.76067 18…</span></code></pre></div>
-<p>In the following, we will simulate a portfolio consisting of several polygons (assets, in the jargon of this package). To this end, we create smaller polygons within the original extent of the main polygon. This way, we can showcase the behavior of the <code>{mapme.biodiversity}</code> package for portfolios that contain multiple assets. We will only select single assets with geometry type <code>POLYGON</code> that lie within the original boundary of the protected area.</p>
+<p>In the following, we will simulate a portfolio consisting of several polygons (assets, in the jargon of this package). To this end, we create smaller polygons within the original extent of the main polygon. This way, we can showcase the behavior of the <a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> package for portfolios that contain multiple assets. We will only select single assets with geometry type <code>POLYGON</code> that lie within the original boundary of the protected area.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">aoi_gridded</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_make_grid.html" class="external-link">st_make_grid</a></span><span class="op">(</span>
   x <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">aoi</span><span class="op">)</span>,
@@ -308,7 +308,7 @@
 <div class="section level2">
 <h2 id="exporting-an-portfolio-object">Exporting an portfolio object<a class="anchor" aria-label="anchor" href="#exporting-an-portfolio-object"></a>
 </h2>
-<p>You can use the <code><a href="../reference/write_portfolio.html">write_portfolio()</a></code> function to save a processed portfolio object to disk as a GeoPackage. This allows sharing your data with others who might not be using R, but any other geospatial software. Simply point towards a non-existing file on your local disk to write the portfolio. The function will create an individual table for all processed indicators. Via the <code><a href="../reference/read_portfolio.html">read_portfolio()</a></code> function, a portfolio which has been written to disk in such a way can be read back into R. However, users should note that the portfolio-wide arguments that were set during the portfolio initialization are <strong>not</strong> reconstructed (e.g. the temporal extent, <code>outdir</code> and <code>tmpdir</code>, etc.). Thus if you wish to continue to use <code>{mapme.biodiversity}</code> functionality on such a portfolio object, make sure to re-run <code><a href="../reference/init_portfolio.html">init_portfolio()</a></code> on it.</p>
+<p>You can use the <code><a href="../reference/write_portfolio.html">write_portfolio()</a></code> function to save a processed portfolio object to disk as a GeoPackage. This allows sharing your data with others who might not be using R, but any other geospatial software. Simply point towards a non-existing file on your local disk to write the portfolio. The function will create an individual table for all processed indicators. Via the <code><a href="../reference/read_portfolio.html">read_portfolio()</a></code> function, a portfolio which has been written to disk in such a way can be read back into R. However, users should note that the portfolio-wide arguments that were set during the portfolio initialization are <strong>not</strong> reconstructed (e.g. the temporal extent, <code>outdir</code> and <code>tmpdir</code>, etc.). Thus if you wish to continue to use <a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> functionality on such a portfolio object, make sure to re-run <code><a href="../reference/init_portfolio.html">init_portfolio()</a></code> on it.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tmp_output</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".gpkg"</span><span class="op">)</span>
 <span class="fu"><a href="../reference/write_portfolio.html">write_portfolio</a></span><span class="op">(</span>
@@ -316,9 +316,9 @@
   dsn <span class="op">=</span> <span class="va">tmp_output</span>
 <span class="op">)</span>
 <span class="co">#&gt; Writing layer `metadata' to data source </span>
-<span class="co">#&gt;   `/tmp/Rtmpfe7xL1/file418c9ec6d94.gpkg' using driver `GPKG'</span>
+<span class="co">#&gt;   `/tmp/RtmpsCGyWQ/file41b16ca31e4e.gpkg' using driver `GPKG'</span>
 <span class="co">#&gt; Writing 20 features with 2 fields and geometry type Polygon.</span>
-<span class="co">#&gt; Updating layer `chirpsprec' to data source `/tmp/Rtmpfe7xL1/file418c9ec6d94.gpkg' using driver `GPKG'</span>
+<span class="co">#&gt; Updating layer `chirpsprec' to data source `/tmp/RtmpsCGyWQ/file41b16ca31e4e.gpkg' using driver `GPKG'</span>
 <span class="co">#&gt; Writing 240 features with 5 fields without geometries.</span>
 <span class="op">(</span><span class="va">portfolio_from_disk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_portfolio.html">read_portfolio</a></span><span class="op">(</span><span class="va">tmp_output</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Simple feature collection with 20 features and 3 fields</span>
