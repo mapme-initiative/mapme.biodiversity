@@ -33,7 +33,7 @@
 #' @references Riley, S. J., DeGloria, S. D., & Elliot, R. (1999). Index that quantifies
 #'   topographic heterogeneity. intermountain Journal of sciences, 5(1-4), 23-27.
 #' @examples
-#' if (Sys.getenv("NOT_CRAN") != "false") {
+#' if (Sys.getenv("NOT_CRAN") == "true") {
 #'   library(sf)
 #'   library(mapme.biodiversity)
 #'

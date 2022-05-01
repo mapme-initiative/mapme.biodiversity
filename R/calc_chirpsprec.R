@@ -25,30 +25,31 @@
 #' @format A tibble with a column for years, months, absolute rainfall (in mm), rainfall
 #'   anomaly (in mm) and one or more columns per selected time-scale for SPI (dimensionless).
 #' @examples
-#' if(Sys.getenv("NOT_CRAN") != "false"){
-#' library(sf)
-#' library(mapme.biodiversity)
+#' if (Sys.getenv("NOT_CRAN") == "true") {
+#'   library(sf)
+#'   library(mapme.biodiversity)
 #'
-#' temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-#' if(!file.exists(temp_loc)){
-#' dir.create(temp_loc)
-#' resource_dir <- system.file("res", package = "mapme.biodiversity")
-#' file.copy(resource_dir, temp_loc, recursive = TRUE)
-#' }
+#'   temp_loc <- file.path(tempdir(), "mapme.biodiversity")
+#'   if (!file.exists(temp_loc)) {
+#'     dir.create(temp_loc)
+#'     resource_dir <- system.file("res", package = "mapme.biodiversity")
+#'     file.copy(resource_dir, temp_loc, recursive = TRUE)
+#'   }
 #'
-#' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-#'                         package = "mapme.biodiversity") %>%
-#'   read_sf() %>%
-#'   init_portfolio(
-#'     years = 2010,
-#'     outdir = file.path(temp_loc, "res"),
-#'     tmpdir = tempdir(),
-#'     cores = 1,
-#'     verbose = FALSE
+#'   (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+#'     package = "mapme.biodiversity"
 #'   ) %>%
-#'   get_resources("chirps") %>%
-#'   calc_indicators("chirpsprec", engine = "exactextract", scales_spi = 3, spi_prev_years = 8) %>%
-#'   tidyr::unnest(chirpsprec)))
+#'     read_sf() %>%
+#'     init_portfolio(
+#'       years = 2010,
+#'       outdir = file.path(temp_loc, "res"),
+#'       tmpdir = tempdir(),
+#'       cores = 1,
+#'       verbose = FALSE
+#'     ) %>%
+#'     get_resources("chirps") %>%
+#'     calc_indicators("chirpsprec", engine = "exactextract", scales_spi = 3, spi_prev_years = 8) %>%
+#'     tidyr::unnest(chirpsprec)))
 #' }
 NULL
 
@@ -97,8 +98,8 @@ NULL
   }
   if (any(years < 1981)) {
     warning(paste("Cannot calculate precipitation statistics ",
-                  "for years smaller than 1981",
-                  sep = ""
+      "for years smaller than 1981",
+      sep = ""
     ))
     years <- years[years >= 1981]
     if (length(years) == 0) {
@@ -109,10 +110,10 @@ NULL
   src_names <- names(chirps)
   # set values smaller 0 to NA
   chirps <- clamp(chirps,
-                  lower = 0, upper = Inf, values = FALSE,
-                  filename = ifelse(todisk, file.path(rundir, "chirps.tif"), ""),
-                  overwrite = TRUE,
-                  filetype = "GTiff"
+    lower = 0, upper = Inf, values = FALSE,
+    filename = ifelse(todisk, file.path(rundir, "chirps.tif"), ""),
+    overwrite = TRUE,
+    filetype = "GTiff"
   )
   layer_years <- as.numeric(substr(src_names, 13, 17))
   climate_chirps <- chirps[[which(layer_years %in% 1981:2010)]]
@@ -124,9 +125,9 @@ NULL
   # chirps[chirps < 0] = NA
   climate_chirps <- lapply(1:12, function(i) {
     app(climate_chirps[[layer_months == i]],
-        fun = "mean", cores = cores,
-        filename = ifelse(todisk, file.path(rundir, paste0("chirps_", i, ".tif")), ""),
-        overwrite = TRUE, wopt = list(filetype = "GTiff")
+      fun = "mean", cores = cores,
+      filename = ifelse(todisk, file.path(rundir, paste0("chirps_", i, ".tif")), ""),
+      overwrite = TRUE, wopt = list(filetype = "GTiff")
     )
   })
   climate_chirps <- do.call(c, climate_chirps)
@@ -140,11 +141,11 @@ NULL
       target_years_spi <- target_years_spi:years[length(years)]
       target_spi <- chirps[[which(layer_years %in% target_years_spi)]]
       spi_chirps <- app(target_spi,
-                        scale = scale, fun = function(x, scale) {
-                          SPEI::spi(x, scale = scale, na.rm = TRUE)$fitted
-                        }, cores = cores, overwrite = TRUE, wopt = list(filetype = "GTiff"),
-                        filename =
-                          ifelse(todisk, file.path(rundir, paste0("spi_", scale, ".tif")), "")
+        scale = scale, fun = function(x, scale) {
+          SPEI::spi(x, scale = scale, na.rm = TRUE)$fitted
+        }, cores = cores, overwrite = TRUE, wopt = list(filetype = "GTiff"),
+        filename =
+          ifelse(todisk, file.path(rundir, paste0("spi_", scale, ".tif")), "")
       )
       names(spi_chirps) <- names(target_spi)
       spi_chirps[[names(target_chirps)]]
@@ -203,11 +204,11 @@ NULL
 
   shp_v <- vect(shp)
   p_raster <- terra::rasterize(shp_v,
-                               absolute,
-                               field = 1,
-                               touches = TRUE,
-                               filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
-                               overwrite = TRUE
+    absolute,
+    field = 1,
+    touches = TRUE,
+    filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
+    overwrite = TRUE
   )
 
   absolute <- terra::zonal(absolute, p_raster, fun = "mean")
@@ -250,7 +251,7 @@ NULL
 
 
 .prec_exact_extractr <- function(shp, absolute, anomaly, spi, todisk, rundir) {
-  if(!requireNamespace("exactextractr", quietly = TRUE)){
+  if (!requireNamespace("exactextractr", quietly = TRUE)) {
     stop(paste(
       "Needs package 'exactextractr' to be installed.",
       "Consider installing with 'install.packages('exactextractr')"

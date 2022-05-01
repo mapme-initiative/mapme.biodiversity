@@ -38,7 +38,7 @@ single or multiple inputs as character. Supported statistics are: "mean",
 }
 }
 \examples{
-if (Sys.getenv("NOT_CRAN") != "false") {
+if (Sys.getenv("NOT_CRAN") == "true") {
   library(sf)
   library(mapme.biodiversity)
 

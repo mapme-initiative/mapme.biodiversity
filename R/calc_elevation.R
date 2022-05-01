@@ -20,7 +20,7 @@
 #' @keywords indicator
 #' @format A tibble with a column for elevation statistics (in meters)
 #' @examples
-#' if (Sys.getenv("NOT_CRAN") != "false") {
+#' if (Sys.getenv("NOT_CRAN") == "true") {
 #'   library(sf)
 #'   library(mapme.biodiversity)
 #'
