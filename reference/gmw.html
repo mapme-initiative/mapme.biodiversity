@@ -24,7 +24,7 @@ mangrove
     
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -98,9 +98,8 @@ The required resources for this indicator are:</p><ul><li><p><a href="mangrove.h
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.copy</a></span><span class="op">(</span><span class="va">resource_dir</span>, <span class="va">temp_loc</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="op">(</span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"shell_beach_protected_area_41057_B.gpkg"</span>,</span>
-<span class="r-in">  package <span class="op">=</span> <span class="st">"mapme.biodiversity"</span></span>
-<span class="r-in"><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span class="r-in"><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"sierra_de_neiba_478140_2.gpkg"</span>,</span>
+<span class="r-in">                        package <span class="op">=</span> <span class="st">"mapme.biodiversity"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="init_portfolio.html">init_portfolio</a></span><span class="op">(</span></span>
 <span class="r-in">    years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1996</span>, <span class="fl">2016</span><span class="op">)</span>,</span>
@@ -112,19 +111,19 @@ The required resources for this indicator are:</p><ul><li><p><a href="mangrove.h
 <span class="r-in">  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="get_resources.html">get_resources</a></span><span class="op">(</span><span class="st">"mangrove"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="calc_indicators.html">calc_indicators</a></span><span class="op">(</span><span class="st">"gmw"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">gmw</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">gmw</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Skipping existing files in output directory.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Translating shapefiles to GeoPackages. This may take a while....</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 2 features and 7 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POLYGON</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -59.84866 ymin: 8.307999 xmax: -59.71 ymax: 8.364002</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  WGS 84</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 8</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   WDPAID NAME                      DESIG_ENG ISO3  assetid mangrove_extent year </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>  <span style="text-decoration: underline;">41</span>057 Shell Beach Protected Ar… Managed … GUY         1           <span style="text-decoration: underline;">1</span>215. 1996 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>  <span style="text-decoration: underline;">41</span>057 Shell Beach Protected Ar… Managed … GUY         1           <span style="text-decoration: underline;">1</span>207. 2016 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   WDPAID NAME            DESIG_ENG     ISO3  assetid mangrove_extent year </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">478</span>140 Sierra de Neiba National Park DOM         1               0 1996 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> <span style="text-decoration: underline;">478</span>140 Sierra de Neiba National Park DOM         1               0 2016 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 1 more variable: geom &lt;POLYGON [°]&gt;</span></span>
 </code></pre></div>
     </div>

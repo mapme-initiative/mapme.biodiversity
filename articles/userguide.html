@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -163,11 +163,18 @@
 </h2>
 <p>Now, we are ready to initiate a portfolio object containing multiple assets. We use the <code><a href="../reference/init_portfolio.html">init_portfolio()</a></code> function and set some attributes that are important for the subsequent processing. The function will add a unique identifier column called ‘assetid’ that is used to uniquely identify each asset in the portfolio.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sample_portfolio</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init_portfolio.html">init_portfolio</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="co"># copying package internal resource to tempdir</span>
+<span class="va">outdir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"mapme.biodiversity"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">outdir</span><span class="op">)</span>
+<span class="va">resource_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"res"</span>, package <span class="op">=</span> <span class="st">"mapme.biodiversity"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.copy</a></span><span class="op">(</span><span class="va">resource_dir</span>, <span class="va">outdir</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">#&gt; [1] TRUE</span>
+
+<span class="va">sample_portfolio</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init_portfolio.html">init_portfolio</a></span><span class="op">(</span>
   x <span class="op">=</span> <span class="va">aoi_gridded</span>,
   years <span class="op">=</span> <span class="fl">2010</span>,
-  outdir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"res"</span>, package <span class="op">=</span> <span class="st">"mapme.biodiversity"</span><span class="op">)</span>,
-  tmpdir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"tmp"</span>, package <span class="op">=</span> <span class="st">"mapme.biodiversity"</span><span class="op">)</span>,
+  outdir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">outdir</span>, <span class="st">"res"</span><span class="op">)</span>,
+  tmpdir <span class="op">=</span> <span class="va">outdir</span>,
   add_resources <span class="op">=</span> <span class="cn">FALSE</span>,
   cores <span class="op">=</span> <span class="fl">1</span>,
   verbose <span class="op">=</span> <span class="cn">TRUE</span>
@@ -214,9 +221,11 @@
 <span class="co">#&gt; Skipping existing files in output directory.</span></code></pre></div>
 <p>In case you want to download more than one resource, you can use the same interface and the resources will be made available sequentially. Required arguments for a resource are simply added as usual:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sample_portfolio</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_resources.html">get_resources</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">sample_portfolio</span>, 
-                                  resources <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"chirps"</span>, <span class="st">"treecover2000"</span><span class="op">)</span>,
-                                  vers_treecover <span class="op">=</span> <span class="st">"GFC-2020-v1.8"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">sample_portfolio</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_resources.html">get_resources</a></span><span class="op">(</span>
+  x <span class="op">=</span> <span class="va">sample_portfolio</span>,
+  resources <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"chirps"</span>, <span class="st">"treecover2000"</span><span class="op">)</span>,
+  vers_treecover <span class="op">=</span> <span class="st">"GFC-2020-v1.8"</span>
+<span class="op">)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="calculate-specific-indicators">Calculate specific indicators<a class="anchor" aria-label="anchor" href="#calculate-specific-indicators"></a>
@@ -316,9 +325,9 @@
   dsn <span class="op">=</span> <span class="va">tmp_output</span>
 <span class="op">)</span>
 <span class="co">#&gt; Writing layer `metadata' to data source </span>
-<span class="co">#&gt;   `/tmp/RtmpsCGyWQ/file41b16ca31e4e.gpkg' using driver `GPKG'</span>
+<span class="co">#&gt;   `/tmp/RtmpdfLO89/file40ef5ebbf8c4.gpkg' using driver `GPKG'</span>
 <span class="co">#&gt; Writing 20 features with 2 fields and geometry type Polygon.</span>
-<span class="co">#&gt; Updating layer `chirpsprec' to data source `/tmp/RtmpsCGyWQ/file41b16ca31e4e.gpkg' using driver `GPKG'</span>
+<span class="co">#&gt; Updating layer `chirpsprec' to data source `/tmp/RtmpdfLO89/file40ef5ebbf8c4.gpkg' using driver `GPKG'</span>
 <span class="co">#&gt; Writing 240 features with 5 fields without geometries.</span>
 <span class="op">(</span><span class="va">portfolio_from_disk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_portfolio.html">read_portfolio</a></span><span class="op">(</span><span class="va">tmp_output</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Simple feature collection with 20 features and 3 fields</span>

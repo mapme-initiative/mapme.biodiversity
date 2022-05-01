@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,6 +64,19 @@
 <div class="section level3"><h3 id="internal-development-version">Internal<a class="anchor" aria-label="anchor" href="#internal-development-version"></a></h3></div>
 </div>
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.1" id="mapmebiodiversity-011">mapme.biodiversity 0.1.1<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-011"></a></h2>
+<div class="section level3">
+<h3 id="internal-0-1-1">Internal<a class="anchor" aria-label="anchor" href="#internal-0-1-1"></a></h3>
+<ul><li>
+<code><a href="../reference/init_portfolio.html">init_portfolio()</a></code> now sets the <code>testing</code> attribute to FALSE by default.</li>
+<li>
+<code>get_&lt;resource&gt;()</code> functions now return filenames early if <code>testing</code> is set to TRUE.</li>
+<li>
+<code>calc_&lt;indicator&gt;()</code> examples now copy files to the R temporal directory and are wrapped in <code><a href="https://rdrr.io/r/base/try.html" class="external-link">try()</a></code> to avoid errors/warnings on CRAN if an internet resource is not available.</li>
+<li>examples for <code>calc_tri()</code> and <code>calc_elevation()</code> are now disabled on CRAN because of the responsiveness of CIGAR servers.</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="mapmebiodiversity-010">mapme.biodiversity 0.1.0<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-010"></a></h2><p class="text-muted">CRAN release: 2022-04-27</p>
 <div class="section level3">
 <h3 id="breaking-changes-0-1-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-1-0"></a></h3>
@@ -73,7 +86,7 @@
 <ul><li>None</li></ul></div>
 <div class="section level3">
 <h3 id="internal-0-1-0">Internal<a class="anchor" aria-label="anchor" href="#internal-0-1-0"></a></h3>
-<ul><li>ensured that tests and examples adhere to CRAN policies of only writing to the temporal directory (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/22" class="external-link">#22</a>)</li></ul></div>
+<ul><li>ensures that tests and examples adhere to CRAN policies of only writing to the temporal directory (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/22" class="external-link">#22</a>).</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.1" id="mapmebiodiversity-001">mapme.biodiversity 0.0.1<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-001"></a></h2><p class="text-muted">CRAN release: 2022-04-19</p>

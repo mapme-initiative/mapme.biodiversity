@@ -30,7 +30,7 @@ chirps
     
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -113,7 +113,7 @@ order to fit the SPI. Defaults to 8 years.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"NOT_CRAN"</span><span class="op">)</span> <span class="op">==</span> <span class="st">"true"</span><span class="op">)</span><span class="op">{</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"NOT_CRAN"</span><span class="op">)</span> <span class="op">!=</span> <span class="st">"false"</span><span class="op">)</span><span class="op">{</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a></span><span class="op">)</span></span>
 <span class="r-in"></span>
@@ -124,7 +124,8 @@ order to fit the SPI. Defaults to 8 years.</p></dd>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.copy</a></span><span class="op">(</span><span class="va">resource_dir</span>, <span class="va">temp_loc</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="op">(</span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"sierra_de_neiba_478140_2.gpkg"</span>, package <span class="op">=</span> <span class="st">"mapme.biodiversity"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span class="r-in"><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"sierra_de_neiba_478140_2.gpkg"</span>,</span>
+<span class="r-in">                        package <span class="op">=</span> <span class="st">"mapme.biodiversity"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="init_portfolio.html">init_portfolio</a></span><span class="op">(</span></span>
 <span class="r-in">    years <span class="op">=</span> <span class="fl">2010</span>,</span>
@@ -135,7 +136,7 @@ order to fit the SPI. Defaults to 8 years.</p></dd>
 <span class="r-in">  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="get_resources.html">get_resources</a></span><span class="op">(</span><span class="st">"chirps"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="calc_indicators.html">calc_indicators</a></span><span class="op">(</span><span class="st">"chirpsprec"</span>, engine <span class="op">=</span> <span class="st">"exactextract"</span>, scales_spi <span class="op">=</span> <span class="fl">3</span>, spi_prev_years <span class="op">=</span> <span class="fl">8</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">chirpsprec</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">chirpsprec</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 12 features and 9 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POLYGON</span>
