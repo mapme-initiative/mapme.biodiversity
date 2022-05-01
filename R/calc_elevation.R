@@ -20,32 +20,35 @@
 #' @keywords indicator
 #' @format A tibble with a column for elevation statistics (in meters)
 #' @examples
-#' library(sf)
-#' library(mapme.biodiversity)
+#' if (Sys.getenv("NOT_CRAN") != "false") {
+#'   library(sf)
+#'   library(mapme.biodiversity)
 #'
-#' temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-#' if(!file.exists(temp_loc)){
-#' dir.create(temp_loc)
-#' resource_dir <- system.file("res", package = "mapme.biodiversity")
-#' file.copy(resource_dir, temp_loc, recursive = TRUE)
+#'   temp_loc <- file.path(tempdir(), "mapme.biodiversity")
+#'   if (!file.exists(temp_loc)) {
+#'     dir.create(temp_loc)
+#'     resource_dir <- system.file("res", package = "mapme.biodiversity")
+#'     file.copy(resource_dir, temp_loc, recursive = TRUE)
+#'   }
+#'
+#'   (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+#'     package = "mapme.biodiversity"
+#'   ) %>%
+#'     read_sf() %>%
+#'     init_portfolio(
+#'       years = 2000:2020,
+#'       outdir = file.path(temp_loc, "res"),
+#'       tmpdir = tempdir(),
+#'       add_resources = FALSE,
+#'       cores = 1,
+#'       verbose = FALSE
+#'     ) %>%
+#'     get_resources("srtmdem") %>%
+#'     calc_indicators("elevation",
+#'       stats_elevation = c("mean", "median", "sd", "var"), engine = "extract"
+#'     ) %>%
+#'     tidyr::unnest(elevation)))
 #' }
-#'
-#' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-#'                         package = "mapme.biodiversity") %>%
-#'   read_sf() %>%
-#'   init_portfolio(
-#'     years = 2000:2020,
-#'     outdir = file.path(temp_loc, "res"),
-#'     tmpdir = tempdir(),
-#'     add_resources = FALSE,
-#'     cores = 1,
-#'     verbose = FALSE
-#'   ) %>%
-#'   get_resources("srtmdem") %>%
-#'   calc_indicators("elevation",
-#'     stats_elevation = c("mean", "median", "sd", "var"), engine = "extract"
-#'   ) %>%
-#'   tidyr::unnest(elevation)))
 NULL
 
 #' Calculate elevation statistics based on SRTM data sets
@@ -199,8 +202,7 @@ NULL
                                      shp = NULL,
                                      stats = "mean",
                                      ...) {
-
-  if(!requireNamespace("exactextractr", quietly = TRUE)){
+  if (!requireNamespace("exactextractr", quietly = TRUE)) {
     stop(paste(
       "Needs package 'exactextractr' to be installed.",
       "Consider installing with 'install.packages('exactextractr')"

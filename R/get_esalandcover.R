@@ -64,16 +64,17 @@ NULL
     paste0(chars[[j]][1], "_", chars[[j]][3], "_", chars[[j]][5], "_", chars[[j]][6], ".tif")
   })
   charnames <- unlist(charname)
+  if (attr(x, "testing")) {
+    return(basename(charnames))
+  }
   filenames <- file.path(rundir, basename(charnames))
   aria_bin <- attributes(x)$aria_bin
-  if (is.null(attr(x, "testing"))) {
-    filenames <- .download_or_skip(urls,
-      filenames,
-      verbose,
-      aria_bin = aria_bin,
-      check_existence = TRUE
-    )
-  }
+  filenames <- .download_or_skip(urls,
+    filenames,
+    verbose,
+    aria_bin = aria_bin,
+    check_existence = TRUE
+  )
   # return all paths to the downloaded files
   filenames
 }

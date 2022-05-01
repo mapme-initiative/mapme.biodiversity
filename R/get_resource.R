@@ -120,7 +120,7 @@ get_resources <- function(x, resources, ...) {
     }
   )
 
-  if (!is.null(attr(x, "testing"))) {
+  if (attr(x, "testing")) {
     return(downloaded_files)
   }
 

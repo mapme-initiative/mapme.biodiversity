@@ -50,9 +50,11 @@ NULL
     rundir,
     sprintf("gfw_forest_carbon_gross_emissions_Mg_CO2e_px_%s.tif", tileids)
   )
-  # TODO: Parallel downloads
+  if (attr(x, "testing")) {
+    return(basename(filenames))
+  }
   aria_bin <- attributes(x)$aria_bin
-  if (is.null(attr(x, "testing"))) .download_or_skip(urls, filenames, verbose, check_existence = FALSE, aria_bin = aria_bin)
+  .download_or_skip(urls, filenames, verbose, check_existence = FALSE, aria_bin = aria_bin)
   # return all paths to the downloaded files
   filenames
 }

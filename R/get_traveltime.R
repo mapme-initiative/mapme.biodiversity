@@ -59,6 +59,9 @@ NULL
   check <- .get_traveltime_url(range_traveltime, filenames)
   urls <- check$urls
   filenames <- check$filenames
+  if (attr(x, "testing")) {
+    return(basename(filenames))
+  }
   # start download in a temporal directory within tmpdir
   aria_bin <- attributes(x)$aria_bin
   if (is.null(attr(x, "testing"))) .download_or_skip(urls, filenames, verbose, check_existence = FALSE, aria_bin = aria_bin)

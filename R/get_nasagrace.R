@@ -34,11 +34,12 @@ NULL
 
   urls <- unlist(sapply(target_years, function(year) .get_nasagrace_url(year)))
   filenames <- file.path(rundir, basename(urls))
+  if (attr(x, "testing")) {
+    return(basename(filenames))
+  }
   # start download in a temporal directory within rundir
   aria_bin <- attributes(x)$aria_bin
-  if (is.null(attr(x, "testing"))) {
-    .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin, check_existence = FALSE)
-  }
+  .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin, check_existence = FALSE)
   filenames
 }
 

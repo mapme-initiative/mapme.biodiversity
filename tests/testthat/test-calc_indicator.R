@@ -1,4 +1,4 @@
-test_that("multiplication works", {
+test_that("calc_indicator works", {
   aoi <- read_sf(
     system.file("extdata", "gfw_sample.gpkg",
       package = "mapme.biodiversity"

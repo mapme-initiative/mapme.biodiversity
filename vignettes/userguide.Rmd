@@ -101,6 +101,7 @@ identifier column called 'assetid' that is used to uniquely identify each
 asset in the portfolio.
 
 ```{r init_portfolio, dpi = 50, out.width="120%", out.height="120%"}
+# copying package internal resource to tempdir
 outdir <- file.path(tempdir(), "mapme.biodiversity")
 dir.create(outdir)
 resource_dir <- system.file("res", package = "mapme.biodiversity")
@@ -215,10 +216,11 @@ and the resources will be made available sequentially. Required arguments
 for a resource are simply added as usual:
 
 ```{r get_multi_resources, eval = FALSE}
-sample_portfolio <- get_resources(x = sample_portfolio, 
-                                  resources = c("chirps", "treecover2000"),
-                                  vers_treecover = "GFC-2020-v1.8")
-
+sample_portfolio <- get_resources(
+  x = sample_portfolio,
+  resources = c("chirps", "treecover2000"),
+  vers_treecover = "GFC-2020-v1.8"
+)
 ```
 
 # Calculate specific indicators

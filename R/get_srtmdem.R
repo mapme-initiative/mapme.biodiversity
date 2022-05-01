@@ -40,6 +40,10 @@ NULL
     stop("The extent of the portfolio does not intersect with the SRTM grid.")
   }
   urls <- unlist(sapply(tile_ids, function(tile) .get_srtm_url(tile)))
+  if (attr(x, "testing")) {
+    return(basename(urls))
+  }
+
   srtm_url <- "https://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/"
   srtm_list <- rvest::read_html(srtm_url) %>%
     rvest::html_elements("a") %>%
@@ -49,17 +53,15 @@ NULL
   filenames <- file.path(rundir, basename(urls))
   # start download in a temporal directory within tmpdir
   aria_bin <- attributes(x)$aria_bin
-  if (is.null(attr(x, "testing"))) {
-    .download_or_skip(
-      urls = urls,
-      filenames = filenames,
-      verbose = verbose,
-      aria_bin = aria_bin,
-      check_existence = FALSE
-    )
-  }
+  .download_or_skip(
+    urls = urls,
+    filenames = filenames,
+    verbose = verbose,
+    aria_bin = aria_bin,
+    check_existence = FALSE
+  )
   # unzip zip files
-  if (is.null(attr(x, "testing"))) sapply(filenames, function(zip) .unzip_and_remove(zip, rundir, remove = FALSE))
+  sapply(filenames, function(zip) .unzip_and_remove(zip, rundir, remove = FALSE))
   # return paths to the rasters
   gsub(".zip$", ".tif", filenames)
 }

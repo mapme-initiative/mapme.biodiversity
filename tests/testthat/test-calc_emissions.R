@@ -11,6 +11,7 @@ test_that("emissions works", {
   lossyear <- list.files(system.file("res", "lossyear",
     package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)
+
   greenhouse <- list.files(system.file("res", "greenhouse",
     package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)

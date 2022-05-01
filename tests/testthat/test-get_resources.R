@@ -5,6 +5,10 @@ test_that("get_resources works", {
     )
   )
 
+  temp_loc <- file.path(tempdir(), "mapme.biodiversity")
+  dir.create(temp_loc, showWarnings = FALSE)
+  resource_dir <- system.file("res", package = "mapme.biodiversity")
+  file.copy(resource_dir, temp_loc, recursive = TRUE)
   outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
   tmpdir <- tempdir()
 

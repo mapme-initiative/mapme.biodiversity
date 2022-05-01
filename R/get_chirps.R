@@ -32,15 +32,16 @@ NULL
   chirps_list <- grep(".cog", chirps_list, value = TRUE)
   urls <- paste(chirps_url, chirps_list, sep = "")
   filenames <- file.path(rundir, basename(urls))
+  if (attr(x, "testing")) {
+    return(basename(filenames))
+  }
 
   aria_bin <- attributes(x)$aria_bin
-  if (is.null(attr(x, "testing"))) {
-    .download_or_skip(urls,
-      filenames,
-      verbose = verbose,
-      check_existence = FALSE,
-      aria_bin = aria_bin
-    )
-  }
+  .download_or_skip(urls,
+    filenames,
+    verbose = verbose,
+    check_existence = FALSE,
+    aria_bin = aria_bin
+  )
   filenames
 }
