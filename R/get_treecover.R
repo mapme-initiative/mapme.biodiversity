@@ -77,10 +77,13 @@ NULL
     baseurl, vers_treecover, ids
   )
   filenames <- file.path(rundir, basename(urls))
+  if (attr(x, "testing")) {
+    return(basename(filenames))
+  }
   # start download and skip files that exist
   # TODO: parallel downloads
   aria_bin <- attributes(x)$aria_bin
-  if (is.null(attr(x, "testing"))) .download_or_skip(urls, filenames, verbose, check_existence = FALSE, aria_bin = aria_bin)
+  .download_or_skip(urls, filenames, verbose, check_existence = FALSE, aria_bin = aria_bin)
   # return all paths to the downloaded files
   filenames
 }

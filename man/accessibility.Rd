@@ -38,7 +38,8 @@ resource_dir <- system.file("res", package = "mapme.biodiversity")
 file.copy(resource_dir, temp_loc, recursive = TRUE)
 }
 
-(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") \%>\%
+(try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+                        package = "mapme.biodiversity") \%>\%
   read_sf() \%>\%
   init_portfolio(
     years = 2022,
@@ -52,6 +53,6 @@ file.copy(resource_dir, temp_loc, recursive = TRUE)
     range_traveltime = c("5k_10k", "100k_200k", "500k_1mio", "1mio_5mio")
   ) \%>\%
   calc_indicators("accessibility", stats_accessibility = c("min", "max"), engine = "extract") \%>\%
-  tidyr::unnest(accessibility))
+  tidyr::unnest(accessibility)))
 }
 \keyword{indicator}

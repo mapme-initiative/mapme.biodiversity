@@ -30,7 +30,8 @@
 #' file.copy(resource_dir, temp_loc, recursive = TRUE)
 #' }
 #'
-#' (aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
+#' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+#'                         package = "mapme.biodiversity") %>%
 #'   read_sf() %>%
 #'   init_portfolio(
 #'     years = 2018,
@@ -42,7 +43,7 @@
 #'   ) %>%
 #'   get_resources("mintemperature") %>%
 #'   calc_indicators("wctmin", stats_worldclim = c("mean", "median"), engine = "extract") %>%
-#'   tidyr::unnest(wctmin))
+#'   tidyr::unnest(wctmin)))
 NULL
 
 #' Calculate worldclim minimum temperature statistics

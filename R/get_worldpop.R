@@ -33,9 +33,12 @@ NULL
   )
   urls <- unlist(sapply(target_years, function(year) .get_worldpop_url(year)))
   filenames <- file.path(rundir, basename(urls))
+  if (attr(x, "testing")) {
+    return(basename(filenames))
+  }
   # start download in a temporal directory within tmpdir
   aria_bin <- attributes(x)$aria_bin
-  if (is.null(attr(x, "testing"))) .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin, check_existence = FALSE)
+  .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin, check_existence = FALSE)
 
   footprints <- lapply(filenames, function(file) {
     paste(as.character(st_bbox(rast(file))), collapse = " ")

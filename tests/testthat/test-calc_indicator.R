@@ -1,16 +1,12 @@
-test_that("multiplication works", {
+test_that("calc_indicator works", {
   aoi <- read_sf(
     system.file("extdata", "gfw_sample.gpkg",
       package = "mapme.biodiversity"
     )
   )
 
-  outdir <- system.file("res",
-    package = "mapme.biodiversity"
-  )
-  tmpdir <- system.file("tmp",
-    package = "mapme.biodiversity"
-  )
+  outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
+  tmpdir <- tempdir()
 
   aoi <- suppressWarnings(st_cast(aoi, to = "POLYGON"))[1, ]
   portfolio <- init_portfolio(aoi,

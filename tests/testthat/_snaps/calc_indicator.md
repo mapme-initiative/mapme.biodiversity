@@ -1,4 +1,4 @@
-# multiplication works
+# calc_indicator works
 
     Code
       stat

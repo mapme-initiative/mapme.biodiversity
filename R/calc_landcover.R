@@ -24,7 +24,8 @@
 #' file.copy(resource_dir, temp_loc, recursive = TRUE)
 #' }
 #'
-#' (aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
+#' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+#'                         package = "mapme.biodiversity") %>%
 #'   read_sf() %>%
 #'   init_portfolio(
 #'     years = 2016:2017,
@@ -36,7 +37,7 @@
 #'   ) %>%
 #'   get_resources("esalandcover") %>%
 #'   calc_indicators("landcover") %>%
-#'   tidyr::unnest(landcover))
+#'   tidyr::unnest(landcover)))
 NULL
 
 #' Calculate area of different landcover classes from ESA

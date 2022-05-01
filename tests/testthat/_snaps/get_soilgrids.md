@@ -4,283 +4,42 @@
       basename(get_resources(portfolio, resources = "soilgrids", layers = names(
         .sg_layers), depths = .sg_depths, stats = .sg_stats))
     Message <simpleMessage>
-      Starting process to download resource 'soilgrids'........
-      Output file bdod_0-5cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file bdod_0-5cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file bdod_0-5cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file bdod_0-5cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file bdod_5-15cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file bdod_5-15cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file bdod_5-15cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file bdod_5-15cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file bdod_15-30cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file bdod_15-30cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file bdod_15-30cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file bdod_15-30cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file bdod_30-60cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file bdod_30-60cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file bdod_30-60cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file bdod_30-60cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file bdod_60-100cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file bdod_60-100cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file bdod_60-100cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file bdod_60-100cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file bdod_100-200cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file bdod_100-200cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file bdod_100-200cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file bdod_100-200cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
-      Output file cec_0-5cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cec_0-5cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cec_0-5cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cec_0-5cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cec_5-15cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cec_5-15cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cec_5-15cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cec_5-15cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cec_15-30cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cec_15-30cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cec_15-30cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cec_15-30cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cec_30-60cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cec_30-60cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cec_30-60cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cec_30-60cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cec_60-100cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cec_60-100cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cec_60-100cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cec_60-100cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cec_100-200cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cec_100-200cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cec_100-200cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cec_100-200cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
-      Output file cfvo_0-5cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cfvo_0-5cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cfvo_0-5cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cfvo_0-5cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cfvo_5-15cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cfvo_5-15cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cfvo_5-15cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cfvo_5-15cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cfvo_15-30cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cfvo_15-30cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cfvo_15-30cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cfvo_15-30cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cfvo_30-60cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cfvo_30-60cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cfvo_30-60cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cfvo_30-60cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cfvo_60-100cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cfvo_60-100cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cfvo_60-100cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cfvo_60-100cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cfvo_100-200cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cfvo_100-200cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cfvo_100-200cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file cfvo_100-200cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
-      Output file clay_0-5cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file clay_0-5cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file clay_0-5cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file clay_0-5cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file clay_5-15cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file clay_5-15cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file clay_5-15cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file clay_5-15cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file clay_15-30cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file clay_15-30cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file clay_15-30cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file clay_15-30cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file clay_30-60cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file clay_30-60cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file clay_30-60cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file clay_30-60cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file clay_60-100cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file clay_60-100cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file clay_60-100cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file clay_60-100cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file clay_100-200cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file clay_100-200cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file clay_100-200cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file clay_100-200cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
-      Output file nitrogen_0-5cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file nitrogen_0-5cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file nitrogen_0-5cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file nitrogen_0-5cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file nitrogen_5-15cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file nitrogen_5-15cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file nitrogen_5-15cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file nitrogen_5-15cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file nitrogen_15-30cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file nitrogen_15-30cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file nitrogen_15-30cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file nitrogen_15-30cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file nitrogen_30-60cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file nitrogen_30-60cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file nitrogen_30-60cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file nitrogen_30-60cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file nitrogen_60-100cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file nitrogen_60-100cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file nitrogen_60-100cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file nitrogen_60-100cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file nitrogen_100-200cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file nitrogen_100-200cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file nitrogen_100-200cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file nitrogen_100-200cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
-      Output file phh2o_0-5cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file phh2o_0-5cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file phh2o_0-5cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file phh2o_0-5cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file phh2o_5-15cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file phh2o_5-15cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file phh2o_5-15cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file phh2o_5-15cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file phh2o_15-30cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file phh2o_15-30cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file phh2o_15-30cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file phh2o_15-30cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file phh2o_30-60cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file phh2o_30-60cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file phh2o_30-60cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file phh2o_30-60cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file phh2o_60-100cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file phh2o_60-100cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file phh2o_60-100cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file phh2o_60-100cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file phh2o_100-200cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file phh2o_100-200cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file phh2o_100-200cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file phh2o_100-200cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
-      Output file sand_0-5cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file sand_0-5cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file sand_0-5cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file sand_0-5cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file sand_5-15cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file sand_5-15cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file sand_5-15cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file sand_5-15cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file sand_15-30cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file sand_15-30cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file sand_15-30cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file sand_15-30cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file sand_30-60cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file sand_30-60cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file sand_30-60cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file sand_30-60cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file sand_60-100cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file sand_60-100cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file sand_60-100cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file sand_60-100cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file sand_100-200cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file sand_100-200cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file sand_100-200cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file sand_100-200cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
-      Output file silt_0-5cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file silt_0-5cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file silt_0-5cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file silt_0-5cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file silt_5-15cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file silt_5-15cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file silt_5-15cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file silt_5-15cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file silt_15-30cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file silt_15-30cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file silt_15-30cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file silt_15-30cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file silt_30-60cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file silt_30-60cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file silt_30-60cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file silt_30-60cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file silt_60-100cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file silt_60-100cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file silt_60-100cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file silt_60-100cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file silt_100-200cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file silt_100-200cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file silt_100-200cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file silt_100-200cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
-      Output file soc_0-5cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file soc_0-5cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file soc_0-5cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file soc_0-5cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file soc_5-15cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file soc_5-15cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file soc_5-15cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file soc_5-15cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file soc_15-30cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file soc_15-30cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file soc_15-30cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file soc_15-30cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file soc_30-60cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file soc_30-60cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file soc_30-60cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file soc_30-60cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file soc_60-100cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file soc_60-100cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file soc_60-100cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file soc_60-100cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file soc_100-200cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file soc_100-200cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file soc_100-200cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file soc_100-200cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
-      Output file ocd_0-5cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file ocd_0-5cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file ocd_0-5cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file ocd_0-5cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file ocd_5-15cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file ocd_5-15cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file ocd_5-15cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file ocd_5-15cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file ocd_15-30cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file ocd_15-30cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file ocd_15-30cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file ocd_15-30cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file ocd_30-60cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file ocd_30-60cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file ocd_30-60cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file ocd_30-60cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file ocd_60-100cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file ocd_60-100cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file ocd_60-100cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file ocd_60-100cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file ocd_100-200cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file ocd_100-200cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file ocd_100-200cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file ocd_100-200cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.
@@ -309,10 +68,6 @@
       Layer 'ocs' is only available at depth '0-30cm'.
       Layer 'ocs' is only available at depth '0-30cm'.
       Layer 'ocs' is only available at depth '0-30cm'.
-      Output file ocs_0-30cm_Q0.05.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file ocs_0-30cm_Q0.5.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file ocs_0-30cm_mean.tif exists. Skipping re-download. Please delete if spatial extent has changed.
-      Output file ocs_0-30cm_Q0.95.tif exists. Skipping re-download. Please delete if spatial extent has changed.
     Output
         [1] "bdod_0-5cm_Q0.05.tif"         "bdod_0-5cm_Q0.5.tif"         
         [3] "bdod_0-5cm_mean.tif"          "bdod_0-5cm_Q0.95.tif"        

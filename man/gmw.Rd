@@ -28,9 +28,8 @@ resource_dir <- system.file("res", package = "mapme.biodiversity")
 file.copy(resource_dir, temp_loc, recursive = TRUE)
 }
 
-(aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
-  package = "mapme.biodiversity"
-) \%>\%
+(try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+                        package = "mapme.biodiversity") \%>\%
   read_sf() \%>\%
   init_portfolio(
     years = c(1996, 2016),
@@ -42,6 +41,6 @@ file.copy(resource_dir, temp_loc, recursive = TRUE)
   ) \%>\%
   get_resources("mangrove") \%>\%
   calc_indicators("gmw") \%>\%
-  tidyr::unnest(gmw))
+  tidyr::unnest(gmw)))
 }
 \keyword{indicator}

@@ -66,7 +66,7 @@ init_portfolio <- function(x,
   if (!verbose) pbapply::pboptions(type = "none")
 
   if (!is.null(aria_bin)) {
-    aria_output <- try(system2(aria_bin, args = "--version", stdout = TRUE), silent = TRUE)
+    aria_output <- try(system2(aria_bin, args = "--version", stdout = TRUE, stderr = FALSE), silent = TRUE)
     if (inherits(aria_output, "try-error") | !grepl("aria2 version", aria_output[1])) {
       warning(paste(
         "Argument 'aria_bin' does not point to a executable aria2 installation.",
@@ -123,6 +123,7 @@ init_portfolio <- function(x,
   attr(x, "cores") <- cores
   attr(x, "verbose") <- verbose
   attr(x, "aria_bin") <- aria_bin
+  attr(x, "testing") <- FALSE
   x
 }
 

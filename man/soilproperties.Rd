@@ -41,7 +41,8 @@ resource_dir <- system.file("res", package = "mapme.biodiversity")
 file.copy(resource_dir, temp_loc, recursive = TRUE)
 }
 
-(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") \%>\%
+(try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+                        package = "mapme.biodiversity") \%>\%
   read_sf() \%>\%
   init_portfolio(
     years = 2022,
@@ -55,6 +56,6 @@ file.copy(resource_dir, temp_loc, recursive = TRUE)
     layers = c("clay", "silt"), depths = c("0-5cm", "5-15cm"), stats = "mean"
   ) \%>\%
   calc_indicators("soilproperties", stats_soil = c("mean", "median"), engine = "extract") \%>\%
-  tidyr::unnest(soilproperties))
+  tidyr::unnest(soilproperties)))
 }
 \keyword{indicator}

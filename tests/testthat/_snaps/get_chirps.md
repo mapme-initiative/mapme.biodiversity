@@ -1,4 +1,4 @@
-# .get_worldpop works
+# .get_chirps works
 
     Code
       basename(get_resources(portfolio, "chirps"))

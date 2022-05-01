@@ -6,6 +6,16 @@
 
 ## Internal
 
+# mapme.biodiversity 0.1.1
+
+## Internal
+* `init_portfolio()` now sets the `testing` attribute to FALSE by default.
+* `get_<resource>()` functions now return filenames early if `testing` is set to TRUE.
+* `calc_<indicator>()` examples now copy files to the R temporal directory and are 
+wrapped in `try()` to avoid errors/warnings on CRAN if an internet resource is not available.
+* examples for `calc_tri()` and `calc_elevation()` are now disabled on CRAN because
+of the responsiveness of CIGAR servers.
+
 # mapme.biodiversity 0.1.0
 
 ## Breaking changes
@@ -15,8 +25,8 @@
 * None
 
 ## Internal
-* ensured that tests and examples adhere to CRAN policies of
-only writing to the temporal directory (#22)
+* ensures that tests and examples adhere to CRAN policies of
+only writing to the temporal directory (#22).
 
 # mapme.biodiversity 0.0.1
 

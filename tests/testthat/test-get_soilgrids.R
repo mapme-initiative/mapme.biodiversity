@@ -6,6 +6,10 @@ test_that("get_soilgrids works", {
   )
   aoi <- suppressWarnings(st_cast(aoi, to = "POLYGON")[1, ])
 
+  temp_loc <- file.path(tempdir(), "mapme.biodiversity")
+  dir.create(temp_loc, showWarnings = FALSE)
+  resource_dir <- system.file("res", package = "mapme.biodiversity")
+  file.copy(resource_dir, temp_loc, recursive = TRUE)
   outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
   tmpdir <- tempdir()
 
@@ -15,7 +19,7 @@ test_that("get_soilgrids works", {
     tmpdir = tmpdir,
     cores = 1,
     add_resources = FALSE,
-    verbose = TRUE
+    verbose = FALSE
   )
   # Add testing attribute in order to skip downloads
   attributes(portfolio)$testing <- TRUE

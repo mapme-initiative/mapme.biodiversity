@@ -30,7 +30,8 @@ resource_dir <- system.file("res", package = "mapme.biodiversity")
 file.copy(resource_dir, temp_loc, recursive = TRUE)
 }
 
-(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") \%>\%
+(try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+                        package = "mapme.biodiversity") \%>\%
   read_sf() \%>\%
   init_portfolio(
     years = 2016:2017,
@@ -42,6 +43,6 @@ file.copy(resource_dir, temp_loc, recursive = TRUE)
   ) \%>\%
   get_resources("esalandcover") \%>\%
   calc_indicators("landcover") \%>\%
-  tidyr::unnest(landcover))
+  tidyr::unnest(landcover)))
 }
 \keyword{indicator}

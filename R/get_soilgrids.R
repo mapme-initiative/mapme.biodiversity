@@ -147,8 +147,12 @@ NULL
         baseurl <- "/vsicurl/https://files.isric.org/soilgrids/latest/data/"
         datalayer <- sprintf("%s/%s_%s_%s.vrt", layer, layer, depth, stat)
         filename <- file.path(rundir, str_replace(basename(datalayer), "vrt", "tif"))
+        if (attr(x, "testing")) {
+          filenames <- append(filenames, filename)
+          next
+        }
 
-        if (!file.exists(filename) & is.null(attr(x, "testing"))) {
+        if (!file.exists(filename)) {
           if (verbose) {
             message(
               sprintf(
