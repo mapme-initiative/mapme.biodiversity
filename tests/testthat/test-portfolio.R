@@ -121,8 +121,7 @@ test_that("init_portfolio works", {
                               outdir = outdir,
                               tmpdir = tmpdir,
                               cores = 1,
-                              verbose = FALSE,
-  ) %>%
+                              verbose = FALSE) %>%
     get_resources(c("treecover2000", "lossyear"))
   
   tmpfile <- file.path(file.path(tempdir(), "portfolio_out.gpkg"))
