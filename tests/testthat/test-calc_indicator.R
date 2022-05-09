@@ -50,7 +50,7 @@ test_that("calc_indicator works", {
     cores = cores,
     outdir = outdir,
     tmpdir = tmpdir,
-    add_resources = FALSE,
+    add_resources = TRUE,
     verbose = FALSE
   )
 

@@ -130,8 +130,8 @@ test_that("init_portfolio works", {
 
   expect_invisible(
     portfolio %>%
-       calc_indicators("treecover", min_size = 1, min_cover = 30) %>%
-       write_portfolio(tmpfile, quiet = TRUE)
+      calc_indicators("treecover", min_size = 1, min_cover = 30) %>%
+      write_portfolio(tmpfile, quiet = TRUE)
   )
 
   expect_snapshot(

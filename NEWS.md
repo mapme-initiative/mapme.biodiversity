@@ -9,8 +9,8 @@
 # mapme.biodiversity 0.1.2
 
 ## Internal
-* unit tests for `get_<resources>()` functionality have been deactivated until
-a reliable way how to test for internet resources has been figured out.
+* unit tests have been silenced in order to be more informative for reverse
+dependency checks
 
 # mapme.biodiversity 0.1.1
 
