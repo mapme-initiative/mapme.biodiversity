@@ -40,6 +40,7 @@ test_that("calc_indicator works", {
     min_size = 5,
     min_cover = 30
   )$treecover[[1]]
+
   expect_snapshot(stat)
 
   cores <- ifelse(Sys.info()["sysname"] == "Windows", 1, 2)
@@ -52,4 +53,12 @@ test_that("calc_indicator works", {
     add_resources = FALSE,
     verbose = FALSE
   )
+
+  stat <- calc_indicators(portfolio,
+    indicators = "treecover",
+    min_size = 5,
+    min_cover = 30
+  )$treecover[[1]]
+
+  expect_snapshot(stat)
 })

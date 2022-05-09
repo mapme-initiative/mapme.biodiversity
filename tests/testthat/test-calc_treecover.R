@@ -69,6 +69,7 @@ test_that("treecover works", {
     stat <- .calc_treecover(shp, treecover2000, lossyear, min_size = 1, min_cover = 10),
     "Cannot calculate treecover statistics for years smaller than 2000."
   )
+  
   expect_snapshot(stat)
   attributes(shp)$years <- 2000:2005
   stats_treecover <- .calc_treecover(shp, treecover2000, lossyear, min_size = 1, min_cover = 10)

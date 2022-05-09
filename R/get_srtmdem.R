@@ -13,7 +13,7 @@
 #' @references NASA Shuttle Radar Topography Mission (SRTM)(2013). Shuttle Radar
 #' Topography Mission (SRTM) Global. Distributed by OpenTopography.
 #' https://doi.org/10.5069/G9445JDF. Accessed: 2022-03-17
-#' @source \url{https://srtm.csi.cgiar.org/srtmdata/}
+#' @source \url{https://srtm.csi.cgiar.org/}
 NULL
 
 

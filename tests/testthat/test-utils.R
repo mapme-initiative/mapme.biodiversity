@@ -86,7 +86,6 @@ test_that(".check_engine works", {
   )
 })
 
-
 test_that(".check_stats works", {
   expect_error(
     .check_stats(c("mean", "min", "max"), c("mean", "min", "other")),
@@ -97,8 +96,6 @@ test_that(".check_stats works", {
     "Statistics 'other', 'other2' are not supported. Please choose one of: mean, min"
   )
 })
-
-
 
 
 test_that(".download_or_skip works", {

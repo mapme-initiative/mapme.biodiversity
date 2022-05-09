@@ -8,7 +8,7 @@
 A global tiled raster resource available for all land areas.
 }
 \source{
-\url{https://srtm.csi.cgiar.org/srtmdata/}
+\url{https://srtm.csi.cgiar.org/}
 }
 \description{
 This resource is published by Farr et al. (2007) "The Shuttle Radar Topography
