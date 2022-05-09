@@ -14,22 +14,25 @@ test_that(".get_worldpop works", {
   tmpdir <- tempdir()
 
   portfolio <- init_portfolio(aoi,
-    years = 2000:2020,
+    years = 2000:2018,
     outdir = outdir,
     tmpdir = tmpdir,
     cores = 1,
     add_resources = FALSE,
-    verbose = TRUE
+    verbose = FALSE
   )
   # Add testing attribute in order to skip downloads
   attributes(portfolio)$testing <- TRUE
-  expect_snapshot(
-    basename(get_resources(portfolio, "mintemperature"))
+  expect_equal(
+    .get_climatic_variables(portfolio, "tmin"),
+    c("wc2.1_2.5m_tmin_2000-2009.zip", "wc2.1_2.5m_tmin_2010-2018.zip")
   )
-  expect_snapshot(
-    basename(get_resources(portfolio, "maxtemperature"))
+  expect_equal(
+    .get_climatic_variables(portfolio, "tmax"),
+    c("wc2.1_2.5m_tmax_2000-2009.zip", "wc2.1_2.5m_tmax_2010-2018.zip")
   )
-  expect_snapshot(
-    basename(get_resources(portfolio, "precipitation"))
+  expect_equal(
+    .get_climatic_variables(portfolio, "prec"),
+    c("wc2.1_2.5m_prec_2000-2009.zip", "wc2.1_2.5m_prec_2010-2018.zip")
   )
 })

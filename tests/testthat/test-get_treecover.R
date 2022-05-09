@@ -24,13 +24,12 @@ test_that(".get_treecover works", {
   # Add testing attribute in order to skip downloads
   attributes(portfolio)$testing <- TRUE
 
-  expect_warning(
-    get_resources(portfolio, resources = "treecover2000", vers_treecover = "not-available"),
-    "Download for resource treecover2000 failed. Returning unmodified portfolio object."
+  expect_error(
+    .get_treecover(portfolio, vers_treecover = "not-available"),
   )
 
   expect_equal(
-    basename(get_resources(portfolio, resources = "treecover2000")),
+    .get_treecover(portfolio, vers_treecover = "GFC-2020-v1.8"),
     "Hansen_GFC-2020-v1.8_treecover2000_20N_080W.tif"
   )
 })

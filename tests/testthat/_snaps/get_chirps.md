@@ -1,9 +1,7 @@
 # .get_chirps works
 
     Code
-      basename(get_resources(portfolio, "chirps"))
-    Message <simpleMessage>
-      Starting process to download resource 'chirps'........
+      .get_chirps(portfolio)
     Output
         [1] "chirps-v2.0.1981.01.cog" "chirps-v2.0.1981.02.cog"
         [3] "chirps-v2.0.1981.03.cog" "chirps-v2.0.1981.04.cog"

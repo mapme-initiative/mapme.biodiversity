@@ -27,7 +27,7 @@ test_that(".get_srtm works", {
   attributes(portfolio)$testing <- TRUE
 
   expect_equal(
-    basename(get_resources(portfolio, resources = "srtmdem")),
+    .get_srtmdem(portfolio),
     "srtm_22_09.zip"
   )
 })

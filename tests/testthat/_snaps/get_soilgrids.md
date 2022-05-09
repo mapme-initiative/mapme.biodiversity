@@ -1,8 +1,8 @@
 # get_soilgrids works
 
     Code
-      basename(get_resources(portfolio, resources = "soilgrids", layers = names(
-        .sg_layers), depths = .sg_depths, stats = .sg_stats))
+      .get_soilgrids(portfolio, resources = "soilgrids", layers = names(.sg_layers),
+      depths = .sg_depths, stats = .sg_stats)
     Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
       Depth '0-30cm' is only available of layer 'ocs'.

@@ -25,16 +25,15 @@ test_that(".check_existing_resources works", {
   expect_error(.check_existing_resources(available_resource, "srtmelevation", needed = TRUE), "required resource is not available")
   expect_equal(.check_existing_resources(available_resource, c("srtmelevation", "accessibility")), c("srtmelevation", "accessibility"))
   expect_error(.check_existing_resources(available_resource, c("srtmelevation", "accessibility"), needed = TRUE), "required resources are not available")
-  expect_equal(.check_existing_resources(available_resource, c("treecover2000", "srtmelevation", "accessibility")), c("srtmelevation", "accessibility"))
-  expect_message(.check_existing_resources(available_resource, c("treecover2000", "srtmelevation", "accessibility")), "requested resource is already available")
+  expect_message(out <- .check_existing_resources(available_resource, c("treecover2000", "srtmelevation", "accessibility")), "requested resource is already available")
+  expect_equal(out, c("srtmelevation", "accessibility"))
   expect_error(.check_existing_resources(available_resource, c("treecover2000", "srtmelevation", "accessibility"), needed = TRUE), "required resources are not available")
 })
 
-
 test_that(".check_resource_arguments works", {
   resource <- available_resources("treecover2000")
-  expect_equal(.check_resource_arguments(resource, args = list()), list(vers_treecover = "GFC-2020-v1.8"))
-  expect_message(.check_resource_arguments(resource, args = list()), "Argument 'vers_treecover' for resource 'treecover2000' was not specified")
+  expect_message(out <- .check_resource_arguments(resource, args = list()), "Argument 'vers_treecover' for resource 'treecover2000' was not specified")
+  expect_equal(out, list(vers_treecover = "GFC-2020-v1.8"))
   expect_equal(.check_resource_arguments(resource, args = list(vers_treecover = "GFC-2020-v1.8")), list(vers_treecover = "GFC-2020-v1.8"))
   expect_equal(.check_resource_arguments(resource, args = list(vers_treecover = "GFC-2020-v1.8", noarg = NA)), list(vers_treecover = "GFC-2020-v1.8"))
 })
@@ -70,13 +69,10 @@ test_that(".check_available_years works", {
     "The target years do not intersect with the availability of treecover."
   )
   expect_message(
-    .check_available_years(2000:2011, 2011:2020, indicator = "treecover"),
+    out <- .check_available_years(2000:2011, 2011:2020, indicator = "treecover"),
     "Some target years are not available for treecover."
   )
-  expect_equal(
-    .check_available_years(2000:2011, 2011:2020, indicator = "treecover"),
-    2011
-  )
+  expect_equal(out, 2011)
 })
 
 test_that(".check_engine works", {
@@ -110,17 +106,17 @@ test_that(".download_or_skip works", {
   urls <- rep("https://github.com/mapme-initiative/mapme.biodiversity/blob/main/R/utils.R", 3)
   filenames <- sapply(1:3, function(i) tempfile())
   expect_length(
-    .download_or_skip(urls, filenames, verbose = TRUE, check_existence = TRUE),
+    .download_or_skip(urls, filenames, verbose = FALSE, check_existence = TRUE),
     3
   )
   expect_length(
-    .download_or_skip(urls, filenames, verbose = TRUE, check_existence = TRUE),
+    .download_or_skip(urls, filenames, verbose = FALSE, check_existence = TRUE),
     3
   )
   file.remove(filenames)
   urls[1] <- paste(urls[1], "nonexisting", sep = "")
   expect_length(
-    .download_or_skip(urls, filenames, verbose = TRUE, check_existence = TRUE),
+    .download_or_skip(urls, filenames, verbose = FALSE, check_existence = TRUE),
     2
   )
   file.remove(filenames[2:3])

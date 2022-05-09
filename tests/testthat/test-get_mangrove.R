@@ -14,16 +14,17 @@ test_that(".get_mangrove works", {
   tmpdir <- tempdir()
 
   portfolio <- init_portfolio(aoi,
-    years = 2000:2020,
+    years = 2007:2008,
     outdir = outdir,
     tmpdir = tmpdir,
     cores = 1,
     add_resources = FALSE,
-    verbose = TRUE
+    verbose = FALSE
   )
   # Add testing attribute in order to skip downloads
   attributes(portfolio)$testing <- TRUE
-  expect_snapshot(
-    basename(get_resources(portfolio, "mangrove"))
+  expect_equal(
+    .get_mangrove(portfolio),
+    c("gmw-extent_2007.zip", "gmw-extent_2008.zip")
   )
 })

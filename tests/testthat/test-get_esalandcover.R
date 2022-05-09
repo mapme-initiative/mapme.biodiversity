@@ -14,16 +14,16 @@ test_that(".get_esalandcover works", {
   tmpdir <- tempdir()
 
   portfolio <- init_portfolio(aoi,
-    years = 2000:2020,
+    years = 2015,
     outdir = outdir,
     tmpdir = tmpdir,
     cores = 1,
     add_resources = FALSE,
-    verbose = TRUE
+    verbose = FALSE
   )
   # Add testing attribute in order to skip downloads
   attributes(portfolio)$testing <- TRUE
-  expect_snapshot(
-    basename(get_resources(portfolio, "esalandcover"))
-  )
+  expect_equal(
+    .get_esalandcover(portfolio),
+               "W080N20_LC100_v3.0.1_2015.tif")
 })

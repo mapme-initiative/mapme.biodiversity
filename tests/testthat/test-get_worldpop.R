@@ -25,7 +25,7 @@ test_that(".get_worldpop works", {
   attributes(portfolio)$testing <- TRUE
 
   expect_equal(
-    basename(get_resources(portfolio, "worldpop")),
+    .get_worldpop(portfolio),
     "ppp_2001_1km_Aggregated.tif"
   )
 

@@ -148,7 +148,7 @@ NULL
         datalayer <- sprintf("%s/%s_%s_%s.vrt", layer, layer, depth, stat)
         filename <- file.path(rundir, str_replace(basename(datalayer), "vrt", "tif"))
         if (attr(x, "testing")) {
-          filenames <- append(filenames, filename)
+          filenames <- append(filenames, basename(filename))
           next
         }
 

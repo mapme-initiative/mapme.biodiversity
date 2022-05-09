@@ -1,7 +1,7 @@
-test_that(".get_lossyear works", {
+test_that(".get_droughtind works", {
   aoi <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
-                package = "mapme.biodiversity"
+      package = "mapme.biodiversity"
     )
   )
   aoi <- suppressWarnings(st_cast(aoi, to = "POLYGON")[1, ])
@@ -14,18 +14,16 @@ test_that(".get_lossyear works", {
   tmpdir <- tempdir()
 
   portfolio <- init_portfolio(aoi,
-                              years = 2000:2020,
-                              outdir = outdir,
-                              tmpdir = tmpdir,
-                              cores = 1,
-                              add_resources = FALSE,
-                              verbose = FALSE
+    years = 2004:2010,
+    outdir = outdir,
+    tmpdir = tmpdir,
+    cores = 1,
+    add_resources = FALSE,
+    verbose = FALSE
   )
-
   # Add testing attribute in order to skip downloads
   attributes(portfolio)$testing <- TRUE
-  expect_equal(
-    .get_lossyear(portfolio, vers_lossyear = "GFC-2020-v1.8"),
-    "Hansen_GFC-2020-v1.8_lossyear_20N_080W.tif"
+  expect_snapshot(
+    .get_nasagrace(portfolio)
   )
 })

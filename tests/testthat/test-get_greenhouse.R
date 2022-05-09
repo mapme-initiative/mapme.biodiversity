@@ -19,14 +19,14 @@ test_that(".get_greenhouse works", {
     tmpdir = tmpdir,
     cores = 1,
     add_resources = FALSE,
-    verbose = TRUE
+    verbose = FALSE
   )
 
   # Add testing attribute in order to skip downloads
   attributes(portfolio)$testing <- TRUE
 
   expect_equal(
-    basename(get_resources(portfolio, resources = "greenhouse")),
+    .get_greenhouse(portfolio),
     "gfw_forest_carbon_gross_emissions_Mg_CO2e_px_20N_080W.tif"
   )
 })

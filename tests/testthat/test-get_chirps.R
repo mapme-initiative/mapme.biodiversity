@@ -19,12 +19,11 @@ test_that(".get_chirps works", {
     tmpdir = tmpdir,
     cores = 1,
     add_resources = FALSE,
-    verbose = TRUE
+    verbose = FALSE
   )
   # Add testing attribute in order to skip downloads
   attributes(portfolio)$testing <- TRUE
-
   expect_snapshot(
-    basename(get_resources(portfolio, "chirps"))
+    .get_chirps(portfolio)
   )
 })
