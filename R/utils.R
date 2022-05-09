@@ -198,9 +198,10 @@
 #' @noRd
 .check_available_years <- function(target_years, available_years, indicator) {
   if (any(!target_years %in% available_years)) {
-    message(sprintf("Some target years are not available for %s.", indicator))
     target_years <- target_years[target_years %in% available_years]
-    if (length(target_years) == 0) {
+    if(length(target_years) > 0 ){
+    message(sprintf("Some target years are not available for %s.", indicator))
+    } else {
       stop(
         sprintf(
           "The target years do not intersect with the availability of %s.",

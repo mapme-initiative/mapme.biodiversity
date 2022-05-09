@@ -20,15 +20,17 @@ test_that("calc_indicator works", {
     tmpdir = tmpdir,
     verbose = FALSE
   )
-  
-  portfolio <- get_resources(portfolio, c("treecover2000", "lossyear"),
-                             vers_treecover = "GFC-2020-v1.8", 
-                             vers_lossyear = "GFC-2020-v1.8")
+
+  portfolio <- get_resources(portfolio,
+    resources = c("treecover2000", "lossyear"),
+    vers_treecover = "GFC-2020-v1.8",
+    vers_lossyear = "GFC-2020-v1.8"
+  )
 
   expect_message(
     calc_indicators(portfolio,
       indicators = "treecover",
-      min_cover = 30
+      min_cover = 10
     ),
     "was not specified. Setting to default value"
   )
@@ -38,7 +40,7 @@ test_that("calc_indicator works", {
     min_size = 5,
     min_cover = 30
   )$treecover[[1]]
-  
+
   expect_snapshot(stat)
 
   cores <- ifelse(Sys.info()["sysname"] == "Windows", 1, 2)
@@ -47,7 +49,9 @@ test_that("calc_indicator works", {
     years = 2000:2005,
     cores = cores,
     outdir = outdir,
-    tmpdir = tmpdir
+    tmpdir = tmpdir,
+    add_resources = TRUE,
+    verbose = FALSE
   )
 
   stat <- calc_indicators(portfolio,
@@ -55,8 +59,6 @@ test_that("calc_indicator works", {
     min_size = 5,
     min_cover = 30
   )$treecover[[1]]
-  
-  expect_snapshot(
-    stat
-  )
+
+  expect_snapshot(stat)
 })

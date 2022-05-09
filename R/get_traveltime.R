@@ -56,7 +56,7 @@ NULL
     paste0("traveltime-", range_traveltime, ".tif")
   )
   # get url for accessibility layer
-  check <- .get_traveltime_url(range_traveltime, filenames)
+  check <- .get_traveltime_url(range_traveltime, filenames, verbose = verbose)
   urls <- check$urls
   filenames <- check$filenames
   if (attr(x, "testing")) {
@@ -77,7 +77,7 @@ NULL
 #' @return A character string
 #' @keywords internal
 #' @noRd
-.get_traveltime_url <- function(range, filenames) {
+.get_traveltime_url <- function(range, filenames, verbose = TRUE) {
   df_index <- data.frame(
     range = c(
       "5k_10k", "10k_20k", "20k_50k", "50k_100k", "100k_200k", "200k_500k",
@@ -100,7 +100,7 @@ NULL
     } else {
       body <- sprintf("ranges '%s' are", paste(range[index], collapse = "', '"))
     }
-    message(sprintf(basemsg, body, paste(df_index$range, collapse = ", ")))
+    if(verbose) message(sprintf(basemsg, body, paste(df_index$range, collapse = ", ")))
     range <- range[-index]
     filenames <- filenames[-index]
     if (length(range) == 0) {
@@ -112,7 +112,7 @@ NULL
       } else {
         body <- sprintf("ranges of %s.", paste(range, collapse = ", "))
       }
-      message(sprintf(basemsg, body))
+      if(verbose) message(sprintf(basemsg, body))
     }
   }
 
