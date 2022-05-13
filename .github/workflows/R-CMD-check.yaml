@@ -50,7 +50,7 @@ jobs:
           extra-packages: rcmdcheck
 
       - name: "dev version for spatial packages"
-        if: ${{ matrix.config.cran }}
+        if: ${{ matrix.config.dev }}
         run: |
            Rscript -e "install.packages('remotes')" -e "remotes::install_github('r-spatial/sf')" -e "remotes::install_github('rspatial/terra')"
 
