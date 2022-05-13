@@ -18,12 +18,12 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macOS-latest,   r: 'release', cran: 'true'}
-          - {os: windows-latest, r: 'release', cran: 'true'}
-          - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release', cran: 'true'}
-          - {os: ubuntu-latest,   r: 'release', cran: 'true'}
-          - {os: ubuntu-latest,   r: 'oldrel-1', cran: 'true'}
-          - {os: ubuntu-latest,   r: 'release', cran: 'false'}
+          - {os: macOS-latest,   r: 'release', dev: false}
+          - {os: windows-latest, r: 'release', dev: false}
+          - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release', dev: false}
+          - {os: ubuntu-latest,   r: 'release', dev: false}
+          - {os: ubuntu-latest,   r: 'oldrel-1', dev: false}
+          - {os: ubuntu-latest,   r: 'release', dev: true}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -45,13 +45,13 @@ jobs:
         run: |
           brew install gdal proj geos
 
-      - name: "dev version for spatial packages"
-        if: ${{ matrix.config.cran }} == 'false'
-        run: |
-           Rscript -e "install.packages('remotes')" -e "remotes::install_github('r-spatial/sf')" -e "remotes::install_github('rspatial/terra')"
-
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
           extra-packages: rcmdcheck
+
+      - name: "dev version for spatial packages"
+        if: ${{ matrix.config.cran }}
+        run: |
+           Rscript -e "install.packages('remotes')" -e "remotes::install_github('r-spatial/sf')" -e "remotes::install_github('rspatial/terra')"
 
       - uses: r-lib/actions/check-r-package@v1
