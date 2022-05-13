@@ -48,7 +48,7 @@ jobs:
       - name: 'dev version for spatial packages'
         if: ${{ matrix.config.cran }} == 'false'
         run: |
-          install.packages(c('remotes',dependencies=TRUE)
+          install.packages('remotes',dependencies=TRUE)
           remotes::install_github('r-spatial/sf')
           remotes::install_github('rspatial/terra')
 
