@@ -40,17 +40,17 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      - name: 'macOS install spatial libraries'
+      - name: "macOS install spatial libraries"
         if: runner.os == 'macOS'
         run: |
           brew install gdal proj geos
 
-      - name: 'dev version for spatial packages'
+      - name: "dev version for spatial packages"
         if: ${{ matrix.config.cran }} == 'false'
         run: |
-          install.packages('remotes',dependencies=TRUE)
-          remotes::install_github('r-spatial/sf')
-          remotes::install_github('rspatial/terra')
+          install.packages("remotes"",dependencies=TRUE)
+          remotes::install_github("r-spatial/sf"")
+          remotes::install_github("rspatial/terra"")
 
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
