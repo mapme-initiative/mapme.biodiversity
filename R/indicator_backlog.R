@@ -57,24 +57,24 @@ available_indicators <- function(indicator = NULL) {
     ),
     elevation = list(
       name = ".calc_dem",
-      inputs = list(srtmdem = "raster"),
+      inputs = list(nasa_srtm = "raster"),
       arguments = list(
         stats_elevation = "mean",
         engine = "zonal"
       ),
       processing_mode = "asset"
     ),
-    tri = list(
-      name = ".calc_tri",
-      inputs = list(srtmdem = "raster"),
+    TRI = list(
+      name = ".calc_TRI",
+      inputs = list(nasa_srtm = "raster"),
       arguments = list(
         stats_tri = "mean",
         engine = "zonal"
       ),
       processing_mode = "asset"
     ),
-    chirpsprec = list(
-      name = ".calc_chirpsprec",
+    precipitation_chirps = list(
+      name = ".calc_precipitation_chirps",
       inputs = list(chirps = "raster"),
       arguments = list(
         scales_spi = 3,
@@ -83,9 +83,9 @@ available_indicators <- function(indicator = NULL) {
       ),
       processing_mode = "portfolio"
     ),
-    accessibility = list(
-      name = ".calc_accessibility",
-      inputs = list(traveltime = "raster"),
+    traveltime = list(
+      name = ".calc_traveltime",
+      inputs = list(nelson_et_al = "raster"),
       arguments = list(
         stats_accessibility = "mean",
         engine = "extract"
@@ -94,7 +94,7 @@ available_indicators <- function(indicator = NULL) {
     ),
     drought_indicator = list(
       name = ".calc_drought_indicator",
-      inputs = list(nasagrace = "raster"),
+      inputs = list(nasa_grace = "raster"),
       arguments = list(
         stats_drought = "mean",
         engine = "extract"
@@ -110,8 +110,8 @@ available_indicators <- function(indicator = NULL) {
       ),
       processing_mode = "asset"
     ),
-    popcount = list(
-      name = ".calc_popcount",
+    population_count = list(
+      name = ".calc_population_count",
       inputs = list(worldpop = "raster"),
       arguments = list(
         stats_popcount = "sum",
@@ -152,21 +152,21 @@ available_indicators <- function(indicator = NULL) {
       ),
       processing_mode = "asset"
     ),
-    gmw = list(
-      name = ".calc_gmw",
-      inputs = list(mangrove = "vector"),
+    mangroves_area = list(
+      name = ".calc_mangroves_area",
+      inputs = list(gmw = "vector"),
       arguments = list(),
       processing_mode = "asset"
     ),
-    teow = list(
-      name = ".calc_teow",
-      inputs = list(ecoregions = "vector"),
+    ecoregion = list(
+      name = ".calc_ecoregion",
+      inputs = list(teow = "vector"),
       arguments = list(),
       processing_mode = "asset"
     ),
     biome = list(
       name = ".calc_biome",
-      inputs = list(ecoregions = "vector"),
+      inputs = list(teow = "vector"),
       arguments = list(),
       processing_mode = "asset"
     )

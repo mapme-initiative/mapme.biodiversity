@@ -51,18 +51,18 @@ available_resources <- function(resources = NULL) {
       downloader = ".get_esalandcover",
       arguments = list()
     ),
-    traveltime = list(
+    nelson_et_al = list(
       type = "raster",
       source = "Travel Time to Cities and Ports 2015",
-      downloader = ".get_traveltime",
+      downloader = ".get_nelson_et_al",
       arguments = list(
         range_traveltime = "20k_50k"
       )
     ),
-    nasagrace = list(
+    nasa_grace = list(
       type = "raster",
       source = "NASA GRACE",
-      downloader = ".get_nasagrace",
+      downloader = ".get_nasa_grace",
       arguments = list()
     ),
     mintemperature = list(
@@ -89,22 +89,22 @@ available_resources <- function(resources = NULL) {
       downloader = ".get_chirps",
       arguments = list()
     ),
-    ecoregions = list(
+    teow = list(
       type = "vector",
       source = "WWF",
-      downloader = ".get_ecoregions",
+      downloader = ".get_teow",
       arguments = list()
     ),
-    mangrove = list(
+    gmw = list(
       type = "vector",
       source = "Global Mangrove Watch",
-      downloader = ".get_mangrove",
+      downloader = ".get_gmw",
       arguments = list()
     ),
-    srtmdem = list(
+    nasa_srtm = list(
       type = "raster",
       source = "SRTM",
-      downloader = ".get_srtmdem",
+      downloader = ".get_nasa_srtm",
       arguments = list()
     ),
     soilgrids = list(

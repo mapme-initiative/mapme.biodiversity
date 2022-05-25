@@ -13,7 +13,7 @@ polygons. For each polygon, the desired statistic/s (mean, median or sd)
 is/are returned.
 The required resources for this indicator are:
 \itemize{
-\item \link{srtmdem}
+\item \link{nasa_srtm}
 }
 }
 \details{
@@ -50,7 +50,7 @@ if (Sys.getenv("NOT_CRAN") == "true") {
       cores = 1,
       verbose = FALSE
     ) \%>\%
-    get_resources("srtmdem") \%>\%
+    get_resources("nasa_srtm") \%>\%
     calc_indicators("elevation",
       stats_elevation = c("mean", "median", "sd", "var"), engine = "extract"
     ) \%>\%
