@@ -65,22 +65,22 @@ available_resources <- function(resources = NULL) {
       downloader = ".get_nasa_grace",
       arguments = list()
     ),
-    mintemperature = list(
+    worldclim_min_temperature = list(
       type = "raster",
       source = "WorldClim",
-      downloader = ".get_min_temperature",
+      downloader = ".get_worldclim_min_temperature",
       arguments = list()
     ),
-    maxtemperature = list(
+    worldclim_max_temperature = list(
       type = "raster",
       source = "WorldClim",
-      downloader = ".get_max_temperature",
+      downloader = ".get_worldclim_max_temperature",
       arguments = list()
     ),
-    precipitation = list(
+    worldclim_precipitation = list(
       type = "raster",
       source = "WorldClim",
-      downloader = ".get_precipitation",
+      downloader = ".get_worldclim_precipitation",
       arguments = list()
     ),
     chirps = list(

@@ -125,27 +125,27 @@ available_indicators <- function(indicator = NULL) {
       arguments = list(),
       processing_mode = "asset"
     ),
-    wctmin = list(
-      name = ".calc_wctmin",
-      inputs = list(mintemperature = "raster"),
+    temperature_min_wc = list(
+      name = ".calc_temperature_min_wc",
+      inputs = list(worldclim_min_temperature = "raster"),
       arguments = list(
         stats_worldclim = "mean",
         engine = "extract"
       ),
       processing_mode = "asset"
     ),
-    wctmax = list(
-      name = ".calc_wctmax",
-      inputs = list(maxtemperature = "raster"),
+    temperature_max_wc = list(
+      name = ".calc_temperature_max_wc",
+      inputs = list(worldclim_max_temperature = "raster"),
       arguments = list(
         stats_worldclim = "mean",
         engine = "extract"
       ),
       processing_mode = "asset"
     ),
-    wcprec = list(
-      name = ".calc_wcprec",
-      inputs = list(precipitation = "raster"),
+    precipitation = list(
+      name = ".calc_precipitation",
+      inputs = list(worldclim_precipitation = "raster"),
       arguments = list(
         stats_worldclim = "mean",
         engine = "extract"

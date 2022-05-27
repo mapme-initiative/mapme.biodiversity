@@ -1,7 +1,7 @@
 # worldclim maximum temperature works
 
     Code
-      .calc_wctmax(shp, maxtemperature)
+      .calc_temperature_max_wc(shp, worldclim_max_temperature)
     Output
       # A tibble: 12 x 2
          tmax_mean date      
@@ -22,7 +22,8 @@
 ---
 
     Code
-      .calc_wctmax(shp, maxtemperature, stats_worldclim = c("mean", "median", "sd"))
+      .calc_temperature_max_wc(shp, worldclim_max_temperature, stats_worldclim = c(
+        "mean", "median", "sd"))
     Output
       # A tibble: 12 x 4
          tmax_mean tmax_median tmax_sd date      
@@ -43,7 +44,7 @@
 ---
 
     Code
-      .calc_wctmax(shp, maxtemperature, engine = "extract")
+      .calc_temperature_max_wc(shp, worldclim_max_temperature, engine = "extract")
     Output
       # A tibble: 12 x 2
          tmax_mean date      
@@ -64,7 +65,7 @@
 ---
 
     Code
-      .calc_wctmax(shp, maxtemperature, engine = "exactextract")
+      .calc_temperature_max_wc(shp, worldclim_max_temperature, engine = "exactextract")
     Output
       # A tibble: 12 x 2
          tmax_mean date      
@@ -85,7 +86,7 @@
 ---
 
     Code
-      .calc_wctmax(shp, maxtemperature, engine = "zonal")
+      .calc_temperature_max_wc(shp, worldclim_max_temperature, engine = "zonal")
     Output
       # A tibble: 12 x 2
          tmax_mean date      

@@ -15,7 +15,7 @@
 #'   "extract" or "exactextract" as character.}
 #' }
 #'
-#' @name wctmin
+#' @name temperature_min_wc
 #' @docType data
 #' @keywords indicator
 #' @format A tibble with a column for minimum temperature statistics (in °C)
@@ -24,14 +24,15 @@
 #' library(mapme.biodiversity)
 #'
 #' temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-#' if(!file.exists(temp_loc)){
-#' dir.create(temp_loc)
-#' resource_dir <- system.file("res", package = "mapme.biodiversity")
-#' file.copy(resource_dir, temp_loc, recursive = TRUE)
+#' if (!file.exists(temp_loc)) {
+#'   dir.create(temp_loc)
+#'   resource_dir <- system.file("res", package = "mapme.biodiversity")
+#'   file.copy(resource_dir, temp_loc, recursive = TRUE)
 #' }
 #'
 #' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-#'                         package = "mapme.biodiversity") %>%
+#'   package = "mapme.biodiversity"
+#' ) %>%
 #'   read_sf() %>%
 #'   init_portfolio(
 #'     years = 2018,
@@ -41,9 +42,12 @@
 #'     cores = 1,
 #'     verbose = FALSE
 #'   ) %>%
-#'   get_resources("mintemperature") %>%
-#'   calc_indicators("wctmin", stats_worldclim = c("mean", "median"), engine = "extract") %>%
-#'   tidyr::unnest(wctmin)))
+#'   get_resources("worldclim_min_temperature") %>%
+#'   calc_indicators("temperature_min_wc",
+#'     stats_worldclim = c("mean", "median"),
+#'     engine = "extract"
+#'   ) %>%
+#'   tidyr::unnest(temperature_min_wc)))
 NULL
 
 #' Calculate worldclim minimum temperature statistics
@@ -55,7 +59,7 @@ NULL
 #' as desired.
 #'
 #' @param shp A single polygon for which to calculate the minimum temperature statistic
-#' @param mintemperature minimum temperature raster from which to compute statistics
+#' @param worldclim_min_temperature minimum temperature raster from which to compute statistics
 #' @param stats_worldclim Function to be applied to compute statistics for polygons
 #'    either one or multiple inputs as character "min", "max", "sum", "mean", "median"
 #'    "sd" or "var".
@@ -70,17 +74,17 @@ NULL
 #' @keywords internal
 #' @noRd
 
-.calc_wctmin <- function(shp,
-                         mintemperature,
-                         engine = "extract",
-                         stats_worldclim = "mean",
-                         rundir = tempdir(),
-                         verbose = TRUE,
-                         todisk = FALSE,
-                         ...) {
+.calc_temperature_min_wc <- function(shp,
+                                     worldclim_min_temperature,
+                                     engine = "extract",
+                                     stats_worldclim = "mean",
+                                     rundir = tempdir(),
+                                     verbose = TRUE,
+                                     todisk = FALSE,
+                                     ...) {
   results <- .calc_worldclim(
     shp = shp,
-    worldclim = mintemperature,
+    worldclim = worldclim_min_temperature,
     engine = engine,
     stats_worldclim = stats_worldclim,
     rundir = rundir,
@@ -257,7 +261,7 @@ NULL
                                           shp = NULL,
                                           stats = "mean",
                                           ...) {
-  if(!requireNamespace("exactextractr", quietly = TRUE)){
+  if (!requireNamespace("exactextractr", quietly = TRUE)) {
     stop(paste(
       "Needs package 'exactextractr' to be installed.",
       "Consider installing with 'install.packages('exactextractr')"

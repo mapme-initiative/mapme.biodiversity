@@ -1,7 +1,7 @@
 # worldclim precipitation works
 
     Code
-      .calc_wcprec(shp, precipitation)
+      .calc_precipitation(shp, worldclim_precipitation)
     Output
       # A tibble: 12 x 2
          prec_mean date      
@@ -22,7 +22,8 @@
 ---
 
     Code
-      .calc_wcprec(shp, precipitation, stats_worldclim = c("mean", "median", "sd"))
+      .calc_precipitation(shp, worldclim_precipitation, stats_worldclim = c("mean",
+        "median", "sd"))
     Output
       # A tibble: 12 x 4
          prec_mean prec_median prec_sd date      
@@ -43,7 +44,7 @@
 ---
 
     Code
-      .calc_wcprec(shp, precipitation, engine = "extract")
+      .calc_precipitation(shp, worldclim_precipitation, engine = "extract")
     Output
       # A tibble: 12 x 2
          prec_mean date      
@@ -64,7 +65,7 @@
 ---
 
     Code
-      .calc_wcprec(shp, precipitation, engine = "exactextract")
+      .calc_precipitation(shp, worldclim_precipitation, engine = "exactextract")
     Output
       # A tibble: 12 x 2
          prec_mean date      
@@ -85,7 +86,7 @@
 ---
 
     Code
-      .calc_wcprec(shp, precipitation, engine = "zonal")
+      .calc_precipitation(shp, worldclim_precipitation, engine = "zonal")
     Output
       # A tibble: 12 x 2
          prec_mean date      

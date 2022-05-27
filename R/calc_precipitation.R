@@ -15,7 +15,7 @@
 #'   "extract" or "exactextract" as character.}
 #' }
 #'
-#' @name wcprec
+#' @name precipitation
 #' @docType data
 #' @keywords indicator
 #' @format A tibble with a column for precipitation statistics (in mm)
@@ -42,9 +42,9 @@
 #'     cores = 1,
 #'     verbose = FALSE
 #'   ) %>%
-#'   get_resources("precipitation") %>%
-#'   calc_indicators("wcprec", stats_worldclim = c("mean", "median"), engine = "extract") %>%
-#'   tidyr::unnest(wcprec)))
+#'   get_resources("worldclim_precipitation") %>%
+#'   calc_indicators("precipitation", stats_worldclim = c("mean", "median"), engine = "extract") %>%
+#'   tidyr::unnest(precipitation)))
 NULL
 
 #' Calculate worldclim precipitation statistics
@@ -56,7 +56,7 @@ NULL
 #' as desired.
 #'
 #' @param shp A single polygon for which to calculate the precipitation statistic
-#' @param precipitation precipitation raster from which to compute statistics
+#' @param worldclim_precipitation precipitation raster from which to compute statistics
 #' @param stats_worldclim Function to be applied to compute statistics for polygons
 #'    either one or multiple inputs as character "min", "max", "sum", "mean", "median"
 #'    "sd" or "var".
@@ -71,17 +71,17 @@ NULL
 #' @keywords internal
 #' @noRd
 
-.calc_wcprec <- function(shp,
-                         precipitation,
-                         engine = "extract",
-                         stats_worldclim = "mean",
-                         rundir = tempdir(),
-                         verbose = TRUE,
-                         todisk = FALSE,
-                         ...) {
+.calc_precipitation <- function(shp,
+                                worldclim_precipitation,
+                                engine = "extract",
+                                stats_worldclim = "mean",
+                                rundir = tempdir(),
+                                verbose = TRUE,
+                                todisk = FALSE,
+                                ...) {
   results <- .calc_worldclim(
     shp = shp,
-    worldclim = precipitation,
+    worldclim = worldclim_precipitation,
     engine = engine,
     stats_worldclim = stats_worldclim,
     rundir = rundir,

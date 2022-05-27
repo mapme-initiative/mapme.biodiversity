@@ -1,7 +1,7 @@
 # worldclim minimum temperature works
 
     Code
-      .calc_wctmin(shp, mintemperature)
+      .calc_temperature_min_wc(shp, worldclim_min_temperature)
     Output
       # A tibble: 12 x 2
          tmin_mean date      
@@ -22,7 +22,8 @@
 ---
 
     Code
-      .calc_wctmin(shp, mintemperature, stats_worldclim = c("mean", "median", "sd"))
+      .calc_temperature_min_wc(shp, worldclim_min_temperature, stats_worldclim = c(
+        "mean", "median", "sd"))
     Output
       # A tibble: 12 x 4
          tmin_mean tmin_median tmin_sd date      
@@ -43,7 +44,7 @@
 ---
 
     Code
-      .calc_wctmin(shp, mintemperature, engine = "extract")
+      .calc_temperature_min_wc(shp, worldclim_min_temperature, engine = "extract")
     Output
       # A tibble: 12 x 2
          tmin_mean date      
@@ -64,7 +65,7 @@
 ---
 
     Code
-      .calc_wctmin(shp, mintemperature, engine = "exactextract")
+      .calc_temperature_min_wc(shp, worldclim_min_temperature, engine = "exactextract")
     Output
       # A tibble: 12 x 2
          tmin_mean date      
@@ -85,7 +86,7 @@
 ---
 
     Code
-      .calc_wctmin(shp, mintemperature, engine = "zonal")
+      .calc_temperature_min_wc(shp, worldclim_min_temperature, engine = "zonal")
     Output
       # A tibble: 12 x 2
          tmin_mean date      
