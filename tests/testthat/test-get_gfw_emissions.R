@@ -1,4 +1,4 @@
-test_that(".get_greenhouse works", {
+test_that(".get_gfw_emissions works", {
   aoi <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
       package = "mapme.biodiversity"
@@ -26,7 +26,7 @@ test_that(".get_greenhouse works", {
   attributes(portfolio)$testing <- TRUE
 
   expect_equal(
-    .get_greenhouse(portfolio),
+    .get_gfw_emissions(portfolio),
     "gfw_forest_carbon_gross_emissions_Mg_CO2e_px_20N_080W.tif"
   )
 })

@@ -123,14 +123,14 @@ test_that("init_portfolio works", {
                               cores = 1,
                               verbose = FALSE,
                               add_resources = FALSE) %>%
-    get_resources(c("treecover2000", "lossyear"),
+    get_resources(c("gfw_treecover", "gfw_lossyear"),
                   vers_lossyear = "GFC-2020-v1.8", vers_treecover = "GFC-2020-v1.8")
 
   tmpfile <- file.path(file.path(tempdir(), "portfolio_out.gpkg"))
 
   expect_invisible(
     portfolio %>%
-      calc_indicators("treecover", min_size = 1, min_cover = 30) %>%
+      calc_indicators("treecover_area", min_size = 1, min_cover = 30) %>%
       write_portfolio(tmpfile, quiet = TRUE)
   )
 

@@ -17,7 +17,7 @@
 #' et al. (2013). A missing value (NA) will be inserted for greenhouse gas
 #' emissions for areas where no data is available.
 #'
-#' @name greenhouse
+#' @name gfw_emissions
 #' @docType data
 #' @keywords resource
 #' @format A global tiled raster resource available for all land areas.
@@ -35,9 +35,9 @@ NULL
 #' @param rundir A directory where intermediate files are written to.
 #' @keywords internal
 #' @noRd
-.get_greenhouse <- function(x,
-                            verbose = TRUE,
-                            rundir = tempdir()) {
+.get_gfw_emissions <- function(x,
+                               verbose = TRUE,
+                               rundir = tempdir()) {
   bbox <- st_bbox(x)
   index_file <- system.file("extdata", "greenhouse_index.geosjon", package = "mapme.biodiversity")
   spatialindex <- st_read(index_file, quiet = TRUE)

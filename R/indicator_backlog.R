@@ -17,11 +17,11 @@
 #' names(available_indicators())
 available_indicators <- function(indicator = NULL) {
   all_indicators <- list(
-    treecover = list(
-      name = ".calc_treecover",
+    treecover_area = list(
+      name = ".calc_treecover_area",
       inputs = list(
-        treecover2000 = "raster",
-        lossyear = "raster"
+        gfw_treecover = "raster",
+        gfw_lossyear = "raster"
       ),
       arguments = list(
         min_size = 10,
@@ -29,12 +29,12 @@ available_indicators <- function(indicator = NULL) {
       ),
       processing_mode = "asset"
     ),
-    emissions = list(
-      name = ".calc_emissions",
+    treecoverloss_emissions = list(
+      name = ".calc_treecoverloss_emissions",
       inputs = list(
-        treecover2000 = "raster",
-        lossyear = "raster",
-        greenhouse = "raster"
+        gfw_treecover = "raster",
+        gfw_lossyear = "raster",
+        gfw_emissions = "raster"
       ),
       arguments = list(
         min_size = 10,
@@ -42,12 +42,12 @@ available_indicators <- function(indicator = NULL) {
       ),
       processing_mode = "asset"
     ),
-    treeloss = list(
-      name = ".calc_treeloss",
+    treecoverloss_area = list(
+      name = ".calc_treecoverloss_area",
       inputs = list(
-        treecover2000 = "raster",
-        lossyear = "raster",
-        greenhouse = "raster"
+        gfw_treecover = "raster",
+        gfw_lossyear = "raster",
+        gfw_emissions = "raster"
       ),
       arguments = list(
         min_size = 10,

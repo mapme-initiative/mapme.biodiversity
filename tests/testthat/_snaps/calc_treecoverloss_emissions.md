@@ -1,8 +1,8 @@
 # emissions works
 
     Code
-      .calc_emissions(shp, treecover2000, lossyear, greenhouse, min_size = 1,
-        min_cover = 10)
+      .calc_treecoverloss_emissions(shp, gfw_treecover, gfw_lossyear, gfw_emissions,
+        min_size = 1, min_cover = 10)
     Output
       # A tibble: 6 x 2
         years emissions

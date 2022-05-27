@@ -1,4 +1,4 @@
-test_that(".get_treecover works", {
+test_that(".get_gfw_treecover works", {
   aoi <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
       package = "mapme.biodiversity"
@@ -25,11 +25,11 @@ test_that(".get_treecover works", {
   attributes(portfolio)$testing <- TRUE
 
   expect_error(
-    .get_treecover(portfolio, vers_treecover = "not-available"),
+    .get_gfw_treecover(portfolio, vers_treecover = "not-available"),
   )
 
   expect_equal(
-    .get_treecover(portfolio, vers_treecover = "GFC-2020-v1.8"),
+    .get_gfw_treecover(portfolio, vers_treecover = "GFC-2020-v1.8"),
     "Hansen_GFC-2020-v1.8_treecover2000_20N_080W.tif"
   )
 })

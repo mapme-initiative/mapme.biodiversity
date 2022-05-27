@@ -6,9 +6,9 @@
 #' to calculate them in one run if users are actually interested in both statistics.
 #' Otherwise users are advised to use the respective single indicator functions.
 #' The required resources for this indicator are:
-#'  - [treecover2000]
-#'  - [lossyear]
-#'  - [greenhouse].
+#'  - [gfw_treecover]
+#'  - [gfw_lossyear]
+#'  - [gfw_emissions].
 #'
 #' The following arguments can be set:
 #' \describe{
@@ -16,7 +16,7 @@
 #'   \item{min_cover}{The minimum cover percentage per pixel to be considered as forest.}
 #' }
 #'
-#' @name treeloss
+#' @name treecoverloss_area
 #' @docType data
 #' @keywords indicator
 #' @format A tibble with a column for years, treecover (in ha), and emissions (in Mg CO2)
@@ -25,14 +25,15 @@
 #' library(mapme.biodiversity)
 #'
 #' temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-#' if(!file.exists(temp_loc)){
-#' dir.create(temp_loc)
-#' resource_dir <- system.file("res", package = "mapme.biodiversity")
-#' file.copy(resource_dir, temp_loc, recursive = TRUE)
+#' if (!file.exists(temp_loc)) {
+#'   dir.create(temp_loc)
+#'   resource_dir <- system.file("res", package = "mapme.biodiversity")
+#'   file.copy(resource_dir, temp_loc, recursive = TRUE)
 #' }
 #'
 #' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-#'                         package = "mapme.biodiversity") %>%
+#'   package = "mapme.biodiversity"
+#' ) %>%
 #'   read_sf() %>%
 #'   init_portfolio(
 #'     years = 2016:2017,
@@ -43,15 +44,15 @@
 #'     verbose = FALSE
 #'   ) %>%
 #'   get_resources(
-#'     resources = c("treecover2000", "lossyear", "greenhouse"),
+#'     resources = c("gfw_treecover", "gfw_lossyear", "gfw_emissions"),
 #'     vers_treecover = "GFC-2020-v1.8", vers_lossyear = "GFC-2020-v1.8"
 #'   ) %>%
-#'   calc_indicators("treeloss", min_size = 1, min_cover = 30) %>%
-#'   tidyr::unnest(treeloss)))
+#'   calc_indicators("treecoverloss_area", min_size = 1, min_cover = 30) %>%
+#'   tidyr::unnest(treecoverloss_area)))
 NULL
 
 
-#' Calculate treecover are and greenhouse gas emissions
+#' Calculate treecover area and greenhouse gas emissions
 #'
 #' This is a joint indicator calculating both, treecover and greenhouse
 #' gas emissions per treecover loss. It actually combines the indicators for
@@ -60,9 +61,9 @@ NULL
 #' these two indicators consider applying the respective functions.
 #'
 #' @param shp A single polygon for which to calculate the tree cover statistic
-#' @param treecover2000 The treecover 2000 resource from GFW
-#' @param lossyear The lossyear resource from GFW
-#' @param greenhouse The greenhouse emission layer from GFW
+#' @param gfw_treecover The treecover 2000 resource from GFW
+#' @param gfw_lossyear The lossyear resource from GFW
+#' @param gfw_emissions The greenhouse emission layer from GFW
 #' @param min_size The minimum size of a forest patch in ha.
 #' @param min_cover The minimum threshold of stand density for a pixel to be
 #'   considered forest in the year 2000.
@@ -75,20 +76,20 @@ NULL
 #' @importFrom stringr str_sub
 #' @keywords internal
 #' @noRd
-.calc_treeloss <- function(shp,
-                           treecover2000,
-                           lossyear,
-                           greenhouse,
-                           min_size = 10,
-                           min_cover = 35,
-                           rundir = tempdir(),
-                           verbose = TRUE,
-                           todisk = FALSE,
-                           ...) {
+.calc_treecoverloss_area <- function(shp,
+                                     gfw_treecover,
+                                     gfw_lossyear,
+                                     gfw_emissions,
+                                     min_size = 10,
+                                     min_cover = 35,
+                                     rundir = tempdir(),
+                                     verbose = TRUE,
+                                     todisk = FALSE,
+                                     ...) {
 
   # initial argument checks
   # handling of return value if resources are missing, e.g. no overlap
-  if (any(is.null(treecover2000), is.null(lossyear), is.null(greenhouse))) {
+  if (any(is.null(gfw_treecover), is.null(gfw_lossyear), is.null(gfw_emissions))) {
     return(NA)
   }
   # retrieve years from portfolio
@@ -110,11 +111,11 @@ NULL
       )
     }
   }
-  if (ncell(treecover2000) > 1024 * 1024) todisk <- TRUE
-  # check if treecover2000 only contains 0s, e.g. on the ocean
-  minmax_treecover2000 <- unique(as.vector(minmax(treecover2000)))
-  if (length(minmax_treecover2000) == 1) {
-    if (minmax_treecover2000 == 0 | is.nan(minmax_treecover2000)) {
+  if (ncell(gfw_treecover) > 1024 * 1024) todisk <- TRUE
+  # check if gfw_treecover only contains 0s, e.g. on the ocean
+  minmax_gfw_treecover <- unique(as.vector(minmax(gfw_treecover)))
+  if (length(minmax_gfw_treecover) == 1) {
+    if (minmax_gfw_treecover == 0 | is.nan(minmax_gfw_treecover)) {
       return(
         tibble(
           years = years,
@@ -154,7 +155,7 @@ NULL
   # start calculation if everything is set up correctly
   # retrieve an area raster
   arearaster <- cellSize(
-    treecover2000,
+    gfw_treecover,
     unit = "ha",
     filename = ifelse(todisk, file.path(rundir, "arearaster.tif"), ""),
     datatype = "FLT4S",
@@ -162,59 +163,59 @@ NULL
   )
   # rasterize the polygon
   polyraster <- rasterize(
-    vect(shp), treecover2000,
+    vect(shp), gfw_treecover,
     field = 1, touches = TRUE,
     filename = ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
     datatype = "INT1U",
     overwrite = TRUE
   )
 
-  # mask treecover2000
-  treecover2000 <- mask(
-    treecover2000, polyraster,
-    filename =  ifelse(todisk, file.path(rundir, "treecover2000.tif"), ""),
+  # mask gfw_treecover
+  gfw_treecover <- mask(
+    gfw_treecover, polyraster,
+    filename =  ifelse(todisk, file.path(rundir, "gfw_treecover.tif"), ""),
     datatype = "INT1U",
     overwrite = TRUE
   )
 
   # mask lossyear
-  lossyear <- mask(
-    lossyear, polyraster,
-    filename =  ifelse(todisk, file.path(rundir, "lossyear.tif"), ""),
+  gfw_lossyear <- mask(
+    gfw_lossyear, polyraster,
+    filename =  ifelse(todisk, file.path(rundir, "gfw_lossyear.tif"), ""),
     datatype = "INT1U",
     overwrite = TRUE
   )
 
   # resample greenhouse if extent doesnt match
-  if (ncell(greenhouse) != ncell(treecover2000)) {
-    greenhouse <- resample(
-      greenhouse, treecover2000,
+  if (ncell(gfw_emissions) != ncell(gfw_treecover)) {
+    gfw_emissions <- resample(
+      gfw_emissions, gfw_treecover,
       method = "bilinear",
-      filename =  ifelse(todisk, file.path(rundir, "greenhouse.tif"), ""),
+      filename =  ifelse(todisk, file.path(rundir, "gfw_emissions.tif"), ""),
       datatype = "FLT4S",
       overwrite = TRUE
     )
   }
   # mask greenhouse
-  greenhouse <- mask(
-    greenhouse, polyraster,
-    filename =  ifelse(todisk, file.path(rundir, "greenhouse.tif"), ""),
+  gfw_emissions <- mask(
+    gfw_emissions, polyraster,
+    filename =  ifelse(todisk, file.path(rundir, "gfw_emissions.tif"), ""),
     datatype = "FLT4S",
     overwrite = TRUE
   )
 
-  # binarize the treecover2000 layer based on min_cover argument
-  binary_treecover2000 <- classify(
-    treecover2000,
+  # binarize the gfw_treecover layer based on min_cover argument
+  binary_gfw_treecover <- classify(
+    gfw_treecover,
     rcl = matrix(c(0, min_cover, 0, min_cover, 100, 1), ncol = 3, byrow = TRUE),
     include.lowest = TRUE,
-    filename = ifelse(todisk, file.path(rundir, "binary_treecover2000.tif"), ""),
+    filename = ifelse(todisk, file.path(rundir, "binary_gfw_treecover.tif"), ""),
     datatype = "INT1U",
     overwrite = TRUE
   )
   # retrieve patches of comprehensive forest areas
   patched <- patches(
-    binary_treecover2000,
+    binary_gfw_treecover,
     directions = 4, zeroAsNA = TRUE,
     filename = ifelse(todisk, file.path(rundir, "patched.tif"), ""),
     datatype = "INT4U",
@@ -242,17 +243,17 @@ NULL
     overwrite = TRUE
   )
   # remove patches smaller than threshold
-  binary_treecover2000 <- ifel(
-    patchsizes < min_size, 0, binary_treecover2000,
-    filename = ifelse(todisk, file.path(rundir, "binary_treecover2000.tif"), ""),
+  binary_gfw_treecover <- ifel(
+    patchsizes < min_size, 0, binary_gfw_treecover,
+    filename = ifelse(todisk, file.path(rundir, "binary_gfw_treecover.tif"), ""),
     datatype = "INT1U",
     overwrite = TRUE
   )
 
-  # return 0 if binary treecover2000 only consits of 0 or nan
-  minmax_treecover2000 <- unique(as.vector(minmax(binary_treecover2000)))
-  if (length(minmax_treecover2000) == 1) {
-    if (minmax_treecover2000 == 0 | is.nan(minmax_treecover2000)) {
+  # return 0 if binary gfw_treecover only consits of 0 or nan
+  minmax_gfw_treecover <- unique(as.vector(minmax(binary_gfw_treecover)))
+  if (length(minmax_gfw_treecover) == 1) {
+    if (minmax_gfw_treecover == 0 | is.nan(minmax_gfw_treecover)) {
       return(
         tibble(
           years = years,
@@ -264,17 +265,17 @@ NULL
   }
 
   # set no loss occurrences to NA
-  lossyear <- ifel(
-    lossyear == 0, NA, lossyear,
-    filename = ifelse(todisk, file.path(rundir, "lossyear.tif"), ""),
+  gfw_lossyear <- ifel(
+    gfw_lossyear == 0, NA, gfw_lossyear,
+    filename = ifelse(todisk, file.path(rundir, "gfw_lossyear.tif"), ""),
     datatype = "INT1U",
     overwrite = TRUE
   )
 
   # exclude non-tree pixels from lossyear layer
-  lossyear <- mask(
-    lossyear, binary_treecover2000,
-    filename = ifelse(todisk, file.path(rundir, "lossyear.tif"), ""),
+  gfw_lossyear <- mask(
+    gfw_lossyear, binary_gfw_treecover,
+    filename = ifelse(todisk, file.path(rundir, "gfw_lossyear.tif"), ""),
     datatype = "INT1U",
     overwrite = TRUE
   )
@@ -282,46 +283,46 @@ NULL
   # get forest cover statistics for each year
   yearly_loss_values <- lapply(years, function(y) {
     y <- y - 2000
-    current_treecover2000 <- ifel(
-      lossyear <= y, NA, binary_treecover2000,
-      filename = ifelse(todisk, file.path(rundir, "current_treecover2000.tif"), ""),
+    current_gfw_treecover <- ifel(
+      gfw_lossyear <= y, NA, binary_gfw_treecover,
+      filename = ifelse(todisk, file.path(rundir, "current_gfw_treecover.tif"), ""),
       datatype = "INT1U",
       overwrite = TRUE
     )
     current_arearaster <- mask(
-      arearaster, current_treecover2000,
+      arearaster, current_gfw_treecover,
       maskvalues = c(NA, 0),
       filename = ifelse(todisk, file.path(rundir, "current_area.tif"), ""),
       datatype = "FLT4S",
       overwrite = TRUE
     )
-    ha_sum_treecover2000 <- zonal(
+    ha_sum_gfw_treecover <- zonal(
       current_arearaster,
       polyraster, sum,
       na.rm = TRUE
     )[2]
-    ha_sum_treecover2000 <- as.numeric(ha_sum_treecover2000)
+    ha_sum_gfw_treecover <- as.numeric(ha_sum_gfw_treecover)
 
     current_losslayer <- ifel(
-      lossyear == y, 1, NA,
+      gfw_lossyear == y, 1, NA,
       filename = ifelse(todisk, file.path(rundir, "current_losses.tif"), ""),
       datatype = "INT1U",
       overwrite = TRUE
     )
-    current_greenhouse <- mask(
-      greenhouse, current_losslayer,
+    current_gfw_emissions <- mask(
+      gfw_emissions, current_losslayer,
       filename = ifelse(todisk, file.path(rundir, "current_emissions.tif"), ""),
       datatype = "FLT4S",
       overwrite = TRUE
     )
     # terra engine
-    emissions_sum <- zonal(current_greenhouse, polyraster, sum, na.rm = TRUE)[2]
+    emissions_sum <- zonal(current_gfw_emissions, polyraster, sum, na.rm = TRUE)[2]
     emissions_sum <- as.numeric(emissions_sum)
-    tibble(treecover = ha_sum_treecover2000, emissions = emissions_sum)
+    tibble(treecover = ha_sum_gfw_treecover, emissions = emissions_sum)
   })
 
   # memory clean up
-  rm(arearaster, binary_treecover2000, patchsizes, patched, polyraster)
+  rm(arearaster, binary_gfw_treecover, patchsizes, patched, polyraster)
   # return a data-frame
   out <- do.call(rbind, yearly_loss_values)
   out$years <- years

@@ -24,7 +24,7 @@ test_that("get_resources works", {
 
   expect_message(
     get_resources(portfolio,
-      resources = c("treecover2000", "lossyear", "greenhouse"),
+      resources = c("gfw_treecover", "gfw_lossyear", "gfw_emissions"),
       vers_lossyear = "GFC-2020-v1.8"
     ),
     "Setting to default value of"
@@ -38,14 +38,14 @@ test_that("get_resources works", {
   )
 
   portfolio2 <- get_resources(portfolio,
-    resources = c("treecover2000", "lossyear", "greenhouse"),
+    resources = c("gfw_treecover", "gfw_lossyear", "gfw_emissions"),
     vers_lossyear = "GFC-2020-v1.8", vers_treecover = "GFC-2020-v1.8"
   )
 
   expect_message(
     get_resources(portfolio2,
-      resources = c("treecover2000", "lossyear", "greenhouse")
+      resources = c("gfw_treecover", "gfw_lossyear", "gfw_emissions")
     ),
-    "The following requested resources are already available: treecover2000, lossyear, greenhouse."
+    "The following requested resources are already available: gfw_treecover, gfw_lossyear, gfw_emissions."
   )
 })

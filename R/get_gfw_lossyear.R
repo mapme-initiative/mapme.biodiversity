@@ -1,23 +1,25 @@
-#' Treecover for the year 2000
+#' Year of forest loss occurence
 #'
 #' This resource is part of the publication by Hansen et al. (2013)
 #' "High-Resolution Global Maps of 21st-Century Forest Cover Change". It
-#' represents "tree cover in the year 2000, defined as canopy closure for all
-#' vegetation taller than 5m in height. Encoded as a percentage per output grid
-#' cell, in the range 0–100." Due to changes in the satellites products used
-#' in the compilation of the treecover product, results before the year 2011
-#' and afterwards are not directly comparable until reprocessing has finished.
-#' Users should be aware of this limitation, especially when the timeframe
-#' of the analysis spans over the two periods delimited by the year 2011.
+#' represents "Forest loss during the period 2000–2020, defined as a
+#' stand-replacement disturbance, or a change from a forest to non-forest state.
+#' Encoded as either 0 (no loss) or else a value in the range 1–20, representing
+#' loss detected primarily in the year 2001–2020, respectively." Due to changes
+#' in the satellites products used in the compilation of the tree loss product,
+#' results before the year 2011 and afterwards are not directly comparable
+#' until reprocessing has finished. Users should be aware of this limitation,
+#'  especially when the timeframe of the analysis spans over the two periods
+#'  delimited by the year 2011.
 #'
 #' The following argument can be set:
 #' \describe{
-#'   \item{vers_treecover}{The version of the dataset to download. Defaults to
-#'   "GFC-2020-v1.8". Check mapme.biodiversity:::.available_gfw_versions()
+#'   \item{vers_lossyear}{The version of the dataset to download. Defaults to
+#'   "GFC-2020-v1.8". Check \code{mapme.biodiversity:::.available_gfw_versions()}
 #'   to get a list of available versions}
 #' }
 #'
-#' @name treecover2000
+#' @name gfw_lossyear
 #' @docType data
 #' @keywords resource
 #' @format A global tiled raster resource available for all land areas.
@@ -26,31 +28,30 @@
 #' Loveland, A. Kommareddy, A. Egorov, L. Chini, C. O. Justice, and J. R. G.
 #' Townshend. 2013. “High-Resolution Global Maps of 21st-Century Forest Cover
 #' Change.” Science 342 (15 November): 850–53.
-#' @source \url{https://data.globalforestwatch.org/documents/tree-cover-2000/explore}
+#' @source \url{https://data.globalforestwatch.org/documents/tree-cover-loss/explore}
 NULL
 
-
-#' Get treecover layer
+#' Get lossyear layer
 #'
 #' @param x An sf object returned by init_portfolio
-#' @param vers_treecover The version to download, defaults to
+#' @param vers_lossyear The version to download, defaults to
 #'   \code{"GFC-2020-v1.8"}.
 #' @param rundir A directory where intermediate files are written to.
-#' @param verbose Logical controlling verbosity.
+#' @param verbose A directory where intermediate files are written to.
 #' @keywords internal
 #' @noRd
-#'
-.get_treecover <- function(x,
-                           vers_treecover = "GFC-2020-v1.8",
-                           rundir = tempdir(),
-                           verbose = TRUE) {
-
+.get_gfw_lossyear <- function(x,
+                              vers_lossyear = "GFC-2020-v1.8",
+                              rundir = tempdir(),
+                              verbose = TRUE) {
   # check that version is correct
-  if (!vers_treecover %in% .available_gfw_versions()) {
+  if (!vers_lossyear %in% .available_gfw_versions()) {
     stop(
       sprintf(
-        "Wrong version specified for treecover resource. Select one of %s.",
-        paste(.available_gfw_versions(), collapse = ", ")
+        paste("Wrong version specified for lossyear resource. ",
+          "Select one of %s.",
+          sep = ""
+        ), .available_gfw_versions()
       ),
       call. = FALSE
     )
@@ -59,7 +60,7 @@ NULL
   bbox <- st_bbox(x)
   baseurl <- sprintf(
     "https://storage.googleapis.com/earthenginepartners-hansen/%s/",
-    vers_treecover
+    vers_lossyear
   )
   grid_gfc <- .make_global_grid(
     xmin = -180, xmax = 170, dx = 10,
@@ -72,25 +73,14 @@ NULL
     )
   }
   ids <- sapply(tile_ids, function(n) .get_gfw_tile_id(grid_gfc[n, ]))
-  urls <- sprintf(
-    "%sHansen_%s_treecover2000_%s.tif",
-    baseurl, vers_treecover, ids
-  )
+  urls <- sprintf("%sHansen_%s_lossyear_%s.tif", baseurl, vers_lossyear, ids)
   filenames <- file.path(rundir, basename(urls))
   if (attr(x, "testing")) {
     return(basename(filenames))
   }
-  # start download and skip files that exist
-  # TODO: parallel downloads
+  # start download in a temporal directory within tmpdir
   aria_bin <- attributes(x)$aria_bin
   .download_or_skip(urls, filenames, verbose, check_existence = FALSE, aria_bin = aria_bin)
   # return all paths to the downloaded files
   filenames
-}
-
-.available_gfw_versions <- function() {
-  c(
-    "GFC-2015-v1.3", "GFC-2016-v1.4", "GFC-2017-v1.5",
-    "GFC-2018-v1.6", "GFC-2019-v1.7", "GFC-2020-v1.8"
-  )
 }

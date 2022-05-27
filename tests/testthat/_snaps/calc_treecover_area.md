@@ -1,7 +1,7 @@
 # treecover works
 
     Code
-      .calc_treecover(shp, treecover2000, lossyear, min_size = 1, min_cover = 10)
+      .calc_treecover_area(shp, gfw_treecover, gfw_lossyear, min_size = 1, min_cover = 10)
     Output
       # A tibble: 6 x 2
         years treecover

@@ -17,26 +17,26 @@
 #' names(available_resources())
 available_resources <- function(resources = NULL) {
   all_resources <- list(
-    treecover2000 = list(
+    gfw_treecover = list(
       type = "raster",
       source = "https://data.globalforestwatch.org/documents/tree-cover-2000/explore",
-      downloader = ".get_treecover",
+      downloader = ".get_gfw_treecover",
       arguments = list(
         vers_treecover = "GFC-2020-v1.8"
       )
     ),
-    lossyear = list(
+    gfw_lossyear = list(
       type = "raster",
       source = "https://data.globalforestwatch.org/documents/tree-cover-loss/explore",
-      downloader = ".get_lossyear",
+      downloader = ".get_gfw_lossyear",
       arguments = list(
         vers_lossyear = "GFC-2020-v1.8"
       )
     ),
-    greenhouse = list(
+    gfw_emissions = list(
       "type" = "raster",
       source = "https://data.globalforestwatch.org/datasets/gfw::forest-greenhouse-gas-emissions/about",
-      downloader = ".get_greenhouse",
+      downloader = ".get_gfw_emissions",
       arguments = list()
     ),
     worldpop = list(
