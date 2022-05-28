@@ -5,131 +5,68 @@
       depths = .sg_depths, stats = .sg_stats)
     Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Depth '0-30cm' is only available of layer 'ocs'.
-    Message <simpleMessage>
       Layer 'ocs' is only available at depth '0-30cm'.
-    Message <simpleMessage>
       Layer 'ocs' is only available at depth '0-30cm'.
-    Message <simpleMessage>
       Layer 'ocs' is only available at depth '0-30cm'.
-    Message <simpleMessage>
       Layer 'ocs' is only available at depth '0-30cm'.
-    Message <simpleMessage>
       Layer 'ocs' is only available at depth '0-30cm'.
-    Message <simpleMessage>
       Layer 'ocs' is only available at depth '0-30cm'.
-    Message <simpleMessage>
       Layer 'ocs' is only available at depth '0-30cm'.
-    Message <simpleMessage>
       Layer 'ocs' is only available at depth '0-30cm'.
-    Message <simpleMessage>
       Layer 'ocs' is only available at depth '0-30cm'.
-    Message <simpleMessage>
       Layer 'ocs' is only available at depth '0-30cm'.
-    Message <simpleMessage>
       Layer 'ocs' is only available at depth '0-30cm'.
-    Message <simpleMessage>
       Layer 'ocs' is only available at depth '0-30cm'.
-    Message <simpleMessage>
       Layer 'ocs' is only available at depth '0-30cm'.
-    Message <simpleMessage>
       Layer 'ocs' is only available at depth '0-30cm'.
-    Message <simpleMessage>
       Layer 'ocs' is only available at depth '0-30cm'.
-    Message <simpleMessage>
       Layer 'ocs' is only available at depth '0-30cm'.
-    Message <simpleMessage>
       Layer 'ocs' is only available at depth '0-30cm'.
-    Message <simpleMessage>
       Layer 'ocs' is only available at depth '0-30cm'.
-    Message <simpleMessage>
       Layer 'ocs' is only available at depth '0-30cm'.
-    Message <simpleMessage>
       Layer 'ocs' is only available at depth '0-30cm'.
-    Message <simpleMessage>
       Layer 'ocs' is only available at depth '0-30cm'.
-    Message <simpleMessage>
       Layer 'ocs' is only available at depth '0-30cm'.
-    Message <simpleMessage>
       Layer 'ocs' is only available at depth '0-30cm'.
-    Message <simpleMessage>
       Layer 'ocs' is only available at depth '0-30cm'.
     Output
         [1] "bdod_0-5cm_Q0.05.tif"         "bdod_0-5cm_Q0.5.tif"         
