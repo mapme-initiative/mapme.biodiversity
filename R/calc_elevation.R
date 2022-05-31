@@ -73,14 +73,14 @@ NULL
 #' @keywords internal
 #' @noRd
 
-.calc_dem <- function(shp,
-                      nasa_srtm,
-                      engine = "zonal",
-                      stats_elevation = "mean",
-                      rundir = tempdir(),
-                      verbose,
-                      todisk = FALSE,
-                      ...) {
+.calc_elevation <- function(shp,
+                            nasa_srtm,
+                            engine = "zonal",
+                            stats_elevation = "mean",
+                            rundir = tempdir(),
+                            verbose,
+                            todisk = FALSE,
+                            ...) {
   if (is.null(nasa_srtm)) {
     return(NA)
   }
@@ -134,9 +134,9 @@ NULL
   shp_v <- vect(shp)
   zstats <- lapply(1:length(stats), function(i) {
     zstats <- terra::extract(elevation,
-                             shp_v,
-                             fun = stats[i],
-                             na.rm = T
+      shp_v,
+      fun = stats[i],
+      na.rm = T
     )
     tibble_zstats <- tibble(elev = zstats[, 2])
     names(tibble_zstats)[names(tibble_zstats) == "elev"] <-
@@ -164,21 +164,21 @@ NULL
                             ...) {
   shp_v <- vect(shp)
   rast_mask <- terra::mask(elevation,
-                           shp_v,
-                           filename =  ifelse(todisk, file.path(rundir, "elevation.tif"), ""),
-                           overwrite = TRUE
+    shp_v,
+    filename =  ifelse(todisk, file.path(rundir, "elevation.tif"), ""),
+    overwrite = TRUE
   )
   p_raster <- terra::rasterize(shp_v,
-                               rast_mask,
-                               field = 1:nrow(shp_v),
-                               filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
-                               overwrite = TRUE
+    rast_mask,
+    field = 1:nrow(shp_v),
+    filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
+    overwrite = TRUE
   )
   zstats <- lapply(1:length(stats), function(i) {
     zstats <- terra::zonal(rast_mask,
-                           p_raster,
-                           fun = stats[i],
-                           na.rm = T
+      p_raster,
+      fun = stats[i],
+      na.rm = T
     )
     tibble_zstats <- tibble(elev = zstats[, 2])
     names(tibble_zstats)[names(tibble_zstats) == "elev"] <-

@@ -73,6 +73,6 @@ test_that("treecover works", {
   expect_snapshot(stat)
   attributes(shp)$years <- 2000:2005
   stats_treecover <- .calc_treecover_area(shp, gfw_treecover, gfw_lossyear, min_size = 1, min_cover = 10)
-  stats_treeloss <- .calc_treecoverloss_area(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_size = 1, min_cover = 10)[, c(1, 3)]
+  stats_treeloss <- .calc_treecover_area_and_emissions(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_size = 1, min_cover = 10)[, c(1, 3)]
   expect_equal(stats_treecover, stats_treecover)
 })

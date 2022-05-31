@@ -1,7 +1,7 @@
-# srtm dem works
+# srtm elevation works
 
     Code
-      .calc_dem(shp, nasa_srtm)
+      .calc_elevation(shp, nasa_srtm)
     Output
       # A tibble: 1 x 1
         elevation_mean
@@ -11,7 +11,7 @@
 ---
 
     Code
-      .calc_dem(shp, nasa_srtm, stats = c("mean", "median", "sd"))
+      .calc_elevation(shp, nasa_srtm, stats = c("mean", "median", "sd"))
     Output
       # A tibble: 1 x 3
         elevation_mean elevation_median elevation_sd
@@ -21,7 +21,7 @@
 ---
 
     Code
-      .calc_dem(shp, nasa_srtm, engine = "extract")
+      .calc_elevation(shp, nasa_srtm, engine = "extract")
     Output
       # A tibble: 1 x 1
         elevation_mean
@@ -31,7 +31,7 @@
 ---
 
     Code
-      .calc_dem(shp, nasa_srtm, engine = "exactextract")
+      .calc_elevation(shp, nasa_srtm, engine = "exactextract")
     Output
       # A tibble: 1 x 1
         elevation_mean

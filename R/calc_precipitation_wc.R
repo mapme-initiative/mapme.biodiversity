@@ -15,7 +15,7 @@
 #'   "extract" or "exactextract" as character.}
 #' }
 #'
-#' @name precipitation
+#' @name precipitation_wc
 #' @docType data
 #' @keywords indicator
 #' @format A tibble with a column for precipitation statistics (in mm)
@@ -24,15 +24,16 @@
 #' library(mapme.biodiversity)
 #'
 #' temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-#' if(!file.exists(temp_loc)){
-#' dir.create(temp_loc)
-#' resource_dir <- system.file("res", package = "mapme.biodiversity")
-#' file.copy(resource_dir, temp_loc, recursive = TRUE)
+#' if (!file.exists(temp_loc)) {
+#'   dir.create(temp_loc)
+#'   resource_dir <- system.file("res", package = "mapme.biodiversity")
+#'   file.copy(resource_dir, temp_loc, recursive = TRUE)
 #' }
 #'
 #'
 #' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-#'                         package = "mapme.biodiversity") %>%
+#'   package = "mapme.biodiversity"
+#' ) %>%
 #'   read_sf() %>%
 #'   init_portfolio(
 #'     years = 2018,
@@ -43,8 +44,11 @@
 #'     verbose = FALSE
 #'   ) %>%
 #'   get_resources("worldclim_precipitation") %>%
-#'   calc_indicators("precipitation", stats_worldclim = c("mean", "median"), engine = "extract") %>%
-#'   tidyr::unnest(precipitation)))
+#'   calc_indicators("precipitation_wc",
+#'     stats_worldclim = c("mean", "median"),
+#'     engine = "extract"
+#'   ) %>%
+#'   tidyr::unnest(precipitation_wc)))
 NULL
 
 #' Calculate worldclim precipitation statistics
@@ -71,14 +75,14 @@ NULL
 #' @keywords internal
 #' @noRd
 
-.calc_precipitation <- function(shp,
-                                worldclim_precipitation,
-                                engine = "extract",
-                                stats_worldclim = "mean",
-                                rundir = tempdir(),
-                                verbose = TRUE,
-                                todisk = FALSE,
-                                ...) {
+.calc_precipitation_wc <- function(shp,
+                                   worldclim_precipitation,
+                                   engine = "extract",
+                                   stats_worldclim = "mean",
+                                   rundir = tempdir(),
+                                   verbose = TRUE,
+                                   todisk = FALSE,
+                                   ...) {
   results <- .calc_worldclim(
     shp = shp,
     worldclim = worldclim_precipitation,

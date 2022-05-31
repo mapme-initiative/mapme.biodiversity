@@ -42,8 +42,8 @@ available_indicators <- function(indicator = NULL) {
       ),
       processing_mode = "asset"
     ),
-    treecoverloss_area = list(
-      name = ".calc_treecoverloss_area",
+    treecover_area_and_emissions = list(
+      name = ".calc_treecover_area_and_emissions",
       inputs = list(
         gfw_treecover = "raster",
         gfw_lossyear = "raster",
@@ -56,7 +56,7 @@ available_indicators <- function(indicator = NULL) {
       processing_mode = "asset"
     ),
     elevation = list(
-      name = ".calc_dem",
+      name = ".calc_elevation",
       inputs = list(nasa_srtm = "raster"),
       arguments = list(
         stats_elevation = "mean",
@@ -64,8 +64,8 @@ available_indicators <- function(indicator = NULL) {
       ),
       processing_mode = "asset"
     ),
-    TRI = list(
-      name = ".calc_TRI",
+    tri = list(
+      name = ".calc_tri",
       inputs = list(nasa_srtm = "raster"),
       arguments = list(
         stats_tri = "mean",
@@ -143,8 +143,8 @@ available_indicators <- function(indicator = NULL) {
       ),
       processing_mode = "asset"
     ),
-    precipitation = list(
-      name = ".calc_precipitation",
+    precipitation_wc = list(
+      name = ".calc_precipitation_wc",
       inputs = list(worldclim_precipitation = "raster"),
       arguments = list(
         stats_worldclim = "mean",

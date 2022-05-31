@@ -1,8 +1,8 @@
-# treeloss works
+# treecover area and emissions works
 
     Code
-      .calc_treecoverloss_area(shp, gfw_treecover, gfw_lossyear, gfw_emissions,
-        min_size = 1, min_cover = 10)
+      .calc_treecover_area_and_emissions(shp, gfw_treecover, gfw_lossyear,
+        gfw_emissions, min_size = 1, min_cover = 10)
     Output
       # A tibble: 6 x 3
         years emissions treecover

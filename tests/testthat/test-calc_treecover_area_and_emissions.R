@@ -1,4 +1,4 @@
-test_that("treeloss works", {
+test_that("treecover area and emissions works", {
   shp <- read_sf(
     system.file("extdata", "gfw_sample.gpkg",
       package = "mapme.biodiversity"
@@ -25,54 +25,54 @@ test_that("treeloss works", {
   attributes(shp)$cores <- 1
 
   expect_warning(
-    .calc_treecoverloss_area(shp, gfw_treecover, gfw_lossyear, gfw_emissions),
+    .calc_treecover_area_and_emissions(shp, gfw_treecover, gfw_lossyear, gfw_emissions),
     "Cannot calculate treeloss statistics for years smaller than 2000"
   )
 
   attributes(shp)$years <- 2000:2005
   expect_equal(
-    .calc_treecoverloss_area(shp, gfw_treecover, gfw_lossyear, NULL),
+    .calc_treecover_area_and_emissions(shp, gfw_treecover, gfw_lossyear, NULL),
     NA
   )
 
   expect_error(
-    .calc_treecoverloss_area(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_size = "a"),
+    .calc_treecover_area_and_emissions(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_size = "a"),
     "Argument 'min_size' for indicator 'treeloss' must be a numeric value greater 0."
   )
 
   expect_error(
-    .calc_treecoverloss_area(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_size = -10),
+    .calc_treecover_area_and_emissions(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_size = -10),
     "Argument 'min_size' for indicator 'treeloss' must be a numeric value greater 0."
   )
 
   expect_error(
-    .calc_treecoverloss_area(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_cover = "a"),
+    .calc_treecover_area_and_emissions(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_cover = "a"),
     "Argument 'min_cover' for indicator 'treeloss' must be a numeric value between 0 and 100."
   )
 
   expect_error(
-    .calc_treecoverloss_area(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_cover = -10),
+    .calc_treecover_area_and_emissions(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_cover = -10),
     "Argument 'min_cover' for indicator 'treeloss' must be a numeric value between 0 and 100."
   )
 
   expect_error(
-    .calc_treecoverloss_area(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_cover = 110),
+    .calc_treecover_area_and_emissions(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_cover = 110),
     "Argument 'min_cover' for indicator 'treeloss' must be a numeric value between 0 and 100."
   )
 
   expect_snapshot(
-    .calc_treecoverloss_area(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_size = 1, min_cover = 10)
+    .calc_treecover_area_and_emissions(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_size = 1, min_cover = 10)
   )
 
   attributes(shp)$years <- 1999:2005
   expect_warning(
-    stat <- .calc_treecoverloss_area(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_size = 1, min_cover = 10),
+    stat <- .calc_treecover_area_and_emissions(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_size = 1, min_cover = 10),
     "Cannot calculate treeloss statistics for years smaller than 2000."
   )
 
   expect_snapshot(stat)
   attributes(shp)$years <- 2000:2005
-  stats_treeloss <- .calc_treecoverloss_area(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_size = 1, min_cover = 10)[, c(1, 2)]
+  stats_treeloss <- .calc_treecover_area_and_emissions(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_size = 1, min_cover = 10)[, c(1, 2)]
   stats_emissions <- .calc_treecoverloss_emissions(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_size = 1, min_cover = 10)
   expect_equal(stats_treeloss, stats_emissions)
 })

@@ -5,7 +5,7 @@
     Output
       # A tibble: 55 x 3
          classes               year   area
-         <chr>                 <chr> <dbl>
+         <fct>                 <chr> <dbl>
        1 shrubs                2015   506.
        2 shrubs                2016   506.
        3 shrubs                2017   506.

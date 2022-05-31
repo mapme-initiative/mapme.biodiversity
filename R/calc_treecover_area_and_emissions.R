@@ -16,7 +16,7 @@
 #'   \item{min_cover}{The minimum cover percentage per pixel to be considered as forest.}
 #' }
 #'
-#' @name treecoverloss_area
+#' @name treecover_area_and_emissions
 #' @docType data
 #' @keywords indicator
 #' @format A tibble with a column for years, treecover (in ha), and emissions (in Mg CO2)
@@ -47,8 +47,8 @@
 #'     resources = c("gfw_treecover", "gfw_lossyear", "gfw_emissions"),
 #'     vers_treecover = "GFC-2020-v1.8", vers_lossyear = "GFC-2020-v1.8"
 #'   ) %>%
-#'   calc_indicators("treecoverloss_area", min_size = 1, min_cover = 30) %>%
-#'   tidyr::unnest(treecoverloss_area)))
+#'   calc_indicators("treecover_area_and_emissions", min_size = 1, min_cover = 30) %>%
+#'   tidyr::unnest(treecover_area_and_emissions)))
 NULL
 
 
@@ -76,16 +76,16 @@ NULL
 #' @importFrom stringr str_sub
 #' @keywords internal
 #' @noRd
-.calc_treecoverloss_area <- function(shp,
-                                     gfw_treecover,
-                                     gfw_lossyear,
-                                     gfw_emissions,
-                                     min_size = 10,
-                                     min_cover = 35,
-                                     rundir = tempdir(),
-                                     verbose = TRUE,
-                                     todisk = FALSE,
-                                     ...) {
+.calc_treecover_area_and_emissions <- function(shp,
+                                               gfw_treecover,
+                                               gfw_lossyear,
+                                               gfw_emissions,
+                                               min_size = 10,
+                                               min_cover = 35,
+                                               rundir = tempdir(),
+                                               verbose = TRUE,
+                                               todisk = FALSE,
+                                               ...) {
 
   # initial argument checks
   # handling of return value if resources are missing, e.g. no overlap

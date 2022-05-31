@@ -18,7 +18,7 @@
 #'   "extract" or "exactextract" as character.}
 #' }
 #'
-#' @name TRI
+#' @name tri
 #' @docType data
 #' @keywords indicator
 #' @format A tibble with a column for terrain ruggedness index statistics (in meters).
@@ -57,8 +57,8 @@
 #'       verbose = FALSE
 #'     ) %>%
 #'     get_resources("nasa_srtm") %>%
-#'     calc_indicators("TRI", stats_tri = c("mean", "median", "sd", "var"), engine = "extract") %>%
-#'     tidyr::unnest(TRI)))
+#'     calc_indicators("tri", stats_tri = c("mean", "median", "sd", "var"), engine = "extract") %>%
+#'     tidyr::unnest(tri)))
 #' }
 NULL
 
@@ -84,7 +84,7 @@ NULL
 #' @keywords internal
 #' @noRd
 
-.calc_TRI <- function(shp,
+.calc_tri <- function(shp,
                       nasa_srtm,
                       engine = "zonal",
                       stats_tri = "mean",
