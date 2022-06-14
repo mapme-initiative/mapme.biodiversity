@@ -30,6 +30,7 @@ The following ranges to nearby cities are available:
 \item "50k_50mio"
 \item "5k_110mio"
 \item "20k_110mio"
+\item "5mio_50mio"
 }
 }
 \details{

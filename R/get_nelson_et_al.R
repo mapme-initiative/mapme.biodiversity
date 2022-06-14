@@ -18,6 +18,7 @@
 #' - "50k_50mio"
 #' - "5k_110mio"
 #' - "20k_110mio"
+#' - "5mio_50mio"
 #'
 #' The following argument should be specified by users:
 #'
@@ -81,11 +82,11 @@ NULL
   df_index <- data.frame(
     range = c(
       "5k_10k", "10k_20k", "20k_50k", "50k_100k", "100k_200k", "200k_500k",
-      "500k_1mio", "1mio_5mio", "50k_50mio", "5k_110mio", "20k_110mio"
+      "500k_1mio", "1mio_5mio", "50k_50mio", "5k_110mio", "20k_110mio", "5mio_50mio"
     ),
     index = c(
       14189840, 14189837, 14189831, 14189825, 14189819, 14189816, 14189810,
-      14189807, 14189849, 14189852, 14189843
+      14189807, 14189849, 14189852, 14189843, 14189804
     )
   )
 
@@ -118,7 +119,7 @@ NULL
 
   urls <- unlist(lapply(range, function(x) {
     index <- df_index$index[df_index$range == x]
-    paste0("https://ndownloader.figshare.com/files/", index)
+    paste0("https://figshare.com/ndownloader/files/", index)
   }))
   return(list(urls = urls, filenames = filenames))
 }
