@@ -11,7 +11,7 @@
 #' @docType data
 #' @keywords resource
 #' @format Global raster layers available for years 2000-2020.
-#' @source \url{https://www.worldpop.org/geodata/listing?id=64}
+#' @source \url{https://www.worldpop.org/}
 NULL
 
 

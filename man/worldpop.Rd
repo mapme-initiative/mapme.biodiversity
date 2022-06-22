@@ -8,7 +8,7 @@
 Global raster layers available for years 2000-2020.
 }
 \source{
-\url{https://www.worldpop.org/geodata/listing?id=64}
+\url{https://www.worldpop.org/}
 }
 \description{
 This resource is published by open spatial demographic data and research
