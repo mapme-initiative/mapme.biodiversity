@@ -19,8 +19,7 @@
 * indicators:
 * `treecover` -> `treecover_area`
 * `emissions` -> `treecoverloss_emissions`
-* `treeloss` -> `treecoverloss_area`
-* `tri` -> `TRI`
+* `treeloss` -> `treecover_area_and_emissions`
 * `chirpsprec` -> `precipitation_chirps`
 * `accessibility` -> `traveltime`
 * `popcount` -> `population_count`
