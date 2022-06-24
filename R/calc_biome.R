@@ -65,6 +65,7 @@ NULL
   BIOME_NAME <- NULL
   biomes <- NULL
   new_area <- NULL
+  area <- NULL
   if(nrow(ecoregions[[1]]) == 0) return(NA)
 
   merged <- .comp_teow(

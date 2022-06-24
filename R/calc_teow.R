@@ -63,6 +63,7 @@ NULL
                        ...) {
   ECO_NAME <- NULL
   new_area <- NULL
+  area <- NULL
   if (nrow(ecoregions[[1]]) == 0) {
     return(NA)
   }
