@@ -110,14 +110,20 @@ and thus can be omitted during portfolio initialization.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
 <dd><p>The sf object to be transformed to a portfolio</p></dd>
+
+
 <dt>years</dt>
 <dd><p>Numeric vector for time frame of the analysis handed over as a
 vector of consecutive years</p></dd>
+
+
 <dt>outdir</dt>
 <dd><p>Character indicating the directory where resources will be
 written to. If the directory does not exist, we will attempt to create it.
 The output director cannot be equal to the temporary directory. Defaults
 to the current working directory.</p></dd>
+
+
 <dt>tmpdir</dt>
 <dd><p>Character vector to a directory used for intermediate files.
 Defaults to the output of <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>, e.g. the current R session's
@@ -126,25 +132,36 @@ to create it. Cannot be equal to the output directory. Note, that for
 raster calculations we will set the temporal directory for the <code>terra</code>
 package here. Please make sure that enough disk space is available because
 some intermediate calculations can become quite large.</p></dd>
+
+
 <dt>cores</dt>
 <dd><p>An integer value indicating the number of cores on the host
 machine available for indicator calculation. It defaults to
 <code>parallel::detectCores() - 1</code> cores, i.e. one core less than all
 available cores.</p></dd>
+
+
 <dt>add_resources</dt>
 <dd><p>Logical if existing resources in 'outdir' should be
 added to the portfolio. Defaults to TRUE. Setting it to FALSE can be of use
 e.g. if a previous download has terminated unexpectedly in order to resume.</p></dd>
+
+
 <dt>aria_bin</dt>
 <dd><p>A character vector to an aria2c executable for parallel
 downloads</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>Logical, defaults to TRUE, indicating if progress information
 is printed.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>The sf portfolio object <code>x</code> with amended attributes controlling the
+    
+
+<p>The sf portfolio object <code>x</code> with amended attributes controlling the
 processing behavior further down the processing chain.</p>
     </div>
 
@@ -157,7 +174,7 @@ processing behavior further down the processing chain.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>
