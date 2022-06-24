@@ -324,6 +324,8 @@
     }
   } else { # use aria_bin
 
+    outdir <- dirname(missing_filenames[1])
+    missing_filenames <- basename(missing_filenames)
     lines <- lapply(1:length(missing_urls), function(i) {
       c(missing_urls[i], paste0("  out=", missing_filenames[i]))
     })
@@ -332,13 +334,13 @@
     writeLines(lines, tmpfile)
     if (verbose) {
       args <- sprintf(
-        "--show-console-readout=false --console-log-level=warn -c -j 8 -i %s",
-        tmpfile
+        "--show-console-readout=false --console-log-level=warn -c -j 8 -i %s -d %s",
+        tmpfile, outdir
       )
     } else {
       args <- sprintf(
-        "--quiet -c -j 8 -i %s",
-        tmpfile
+        "--quiet -c -j 8 -i %s -d %s",
+        tmpfile, outdir
       )
     }
     out <- system2("/bin/aria2c", args = args)

@@ -31,6 +31,7 @@ Imports:
     httr,
     magrittr,
     pbapply,
+    purrr,
     rvest,
     sf,
     stringr,
@@ -52,5 +53,5 @@ VignetteBuilder:
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 SystemRequirements: GDAL (>= 3.0.0), PROJ (>= 4.8.0)

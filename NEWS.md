@@ -11,6 +11,8 @@
 ## Internal
 * unit tests have been silenced in order to be more informative for reverse
 dependency checks
+* checks for tile availability reactivated for SRTM
+* fixed notes due to uninitialized variables in TEOW and biome indicators
 
 # mapme.biodiversity 0.1.1
 
