@@ -64,6 +64,7 @@ NULL
   ECO_NAME <- NULL
   new_area <- NULL
   ecoregions <- NULL
+  area <- NULL
   if (nrow(teow[[1]]) == 0) {
     return(NA)
   }

@@ -127,11 +127,10 @@ test_that("init_portfolio works", {
                   vers_lossyear = "GFC-2020-v1.8", vers_treecover = "GFC-2020-v1.8")
 
   tmpfile <- file.path(file.path(tempdir(), "portfolio_out.gpkg"))
+  portfolio <- calc_indicators(portfolio, "treecover_area", min_size = 1, min_cover = 30)
 
   expect_invisible(
-    portfolio %>%
-      calc_indicators("treecover_area", min_size = 1, min_cover = 30) %>%
-      write_portfolio(tmpfile, quiet = TRUE)
+    write_portfolio(portfolio, tmpfile, quiet = TRUE)
   )
 
   expect_snapshot(

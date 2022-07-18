@@ -44,12 +44,6 @@ NULL
     return(basename(urls))
   }
 
-  srtm_url <- "https://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/"
-  srtm_list <- rvest::read_html(srtm_url) %>%
-    rvest::html_elements("a") %>%
-    rvest::html_text2()
-  srtm_list <- grep(".zip", srtm_list, value = TRUE)
-  urls <- urls[which(basename(urls) %in% srtm_list)]
   filenames <- file.path(rundir, basename(urls))
   # start download in a temporal directory within tmpdir
   aria_bin <- attributes(x)$aria_bin
@@ -58,7 +52,7 @@ NULL
     filenames = filenames,
     verbose = verbose,
     aria_bin = aria_bin,
-    check_existence = FALSE
+    check_existence = TRUE
   )
   # unzip zip files
   sapply(filenames, function(zip) .unzip_and_remove(zip, rundir, remove = FALSE))
