@@ -5,7 +5,7 @@
     Output
       # A tibble: 55 x 3
          classes               year   area
-         <fct>                 <chr> <dbl>
+         <chr>                 <chr> <dbl>
        1 shrubs                2015   506.
        2 shrubs                2016   506.
        3 shrubs                2017   506.
@@ -17,4 +17,5 @@
        9 herbaceous_vegetation 2018  1836.
       10 herbaceous_vegetation 2019  1836.
       # ... with 45 more rows
+      # i Use `print(n = ...)` to see more rows
 

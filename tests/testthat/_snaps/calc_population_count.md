@@ -17,6 +17,7 @@
        9        4784. 2008 
       10        4923. 2009 
       # ... with 11 more rows
+      # i Use `print(n = ...)` to see more rows
 
 ---
 
@@ -37,6 +38,7 @@
        9          20.9            17.7        12.3 2008 
       10          21.5            17.7        12.7 2009 
       # ... with 11 more rows
+      # i Use `print(n = ...)` to see more rows
 
 ---
 
@@ -57,6 +59,7 @@
        9        4784. 2008 
       10        4923. 2009 
       # ... with 11 more rows
+      # i Use `print(n = ...)` to see more rows
 
 ---
 
@@ -77,6 +80,7 @@
        9        4804. 2008 
       10        4946. 2009 
       # ... with 11 more rows
+      # i Use `print(n = ...)` to see more rows
 
 ---
 
@@ -97,4 +101,5 @@
        9        7518. 2008 
       10        7718. 2009 
       # ... with 11 more rows
+      # i Use `print(n = ...)` to see more rows
 
