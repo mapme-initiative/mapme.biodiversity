@@ -48,26 +48,24 @@ NULL
     ))
   }
   # create all urls for target years and per tile
-  urls <- lapply(target_years, function(year) {
-    out <- vector(length = length(tile_ids))
-    for (i in seq_along(tile_ids)) {
-      out[i] <- .get_esa_url(grid_esa[tile_ids[i], ], year)
-    }
-    out
-  })
-  # urls to vector
-  urls <- unlist(urls)
-  # change filename structure
-  bn <- basename(urls)
-  chars <- strsplit(bn, "-|_")
-  charname <- lapply(1:length(chars), function(j) {
-    paste0(chars[[j]][1], "_", chars[[j]][3], "_", chars[[j]][5], "_", chars[[j]][6], ".tif")
-  })
-  charnames <- unlist(charname)
-  if (attr(x, "testing")) {
-    return(basename(charnames))
+  urls <- c()
+  for(i in tile_ids){
+    tmp <- purrr::map_chr(target_years, .get_esa_url, tile = grid_esa[i, ])
+    urls <- c(urls, tmp)
   }
-  filenames <- file.path(rundir, basename(charnames))
+  # change filename structure
+  basenames <- basename(urls)
+  splitted <- strsplit(basenames, "-|_")
+  filenames <- purrr::map_chr(basenames, function(x){
+    x <- strsplit(x, "-|_")[[1]]
+    paste0(x[1], "_", x[3], "_", x[5], "_", x[6], ".tif")
+  })
+
+  if (attr(x, "testing")) {
+    return(basename(filenames))
+  }
+
+  filenames <- file.path(rundir, basename(filenames))
   aria_bin <- attributes(x)$aria_bin
   filenames <- .download_or_skip(urls,
     filenames,
