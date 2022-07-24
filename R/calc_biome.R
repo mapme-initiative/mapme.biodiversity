@@ -5,7 +5,7 @@
 #' World (TEOW) - World Wildlife Fund (WWF) for polygons. For each polygon,
 #' the name and area of the biomes (in hectare) is returned.
 #' The required resources for this indicator are:
-#'  - [ecoregions]
+#'  - [teow]
 #'
 #' @name biome
 #' @docType data
@@ -33,7 +33,7 @@
 #'     cores = 1,
 #'     verbose = FALSE
 #'   ) %>%
-#'   get_resources("ecoregions") %>%
+#'   get_resources("teow") %>%
 #'   calc_indicators("biome") %>%
 #'   tidyr::unnest(biome)))
 NULL
@@ -45,7 +45,7 @@ NULL
 #' of the particular biomes for their polygons.
 #'
 #' @param shp A single polygon for which to calculate the biomes statistic
-#' @param ecoregions The ecoregions vector resource (TEOW - WWF)
+#' @param teow The teow vector resource (TEOW - WWF)
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
 #' @param todisk Logical indicating whether or not temporary vector files shall
@@ -57,7 +57,7 @@ NULL
 
 
 .calc_biome <- function(shp,
-                        ecoregions,
+                        teow,
                         rundir = tempdir(),
                         verbose = TRUE,
                         todisk = FALSE,
@@ -66,11 +66,11 @@ NULL
   biomes <- NULL
   new_area <- NULL
   area <- NULL
-  if(nrow(ecoregions[[1]]) == 0) return(NA)
+  if(nrow(teow[[1]]) == 0) return(NA)
 
   merged <- .comp_teow(
     shp = shp,
-    ecoregions = ecoregions,
+    teow = teow,
     rundir = rundir,
     verbose = verbose,
     todisk = todisk

@@ -17,4 +17,5 @@
        9 herbaceous_vegetation 2018  1836.
       10 herbaceous_vegetation 2019  1836.
       # ... with 45 more rows
+      # i Use `print(n = ...)` to see more rows
 

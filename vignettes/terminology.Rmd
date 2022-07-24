@@ -48,7 +48,7 @@ vector data set. Vector datasets from are saved to disk as
 GeoPackages. Raster datasets can be tiled so that only tiles that cover the 
 spatial extent of the portfolio will be downloaded. Global raster resources will
 be downloaded completely. Additionally, some raster resources are time-invariant
-(e.g. a <code>?srtmdem</code>), others contain a temporal dimension (e.g. <code>?esalandcover</code>). 
+(e.g. a <code>?nasa_srtm</code>), others contain a temporal dimension (e.g. <code>?esalandcover</code>). 
 If a raster resource contains a temporal dimension, usually only the time-frame 
 intersecting with the time-frame of the portfolio will be downloaded. Some resources might
 require additional arguments set by users. These can simply be added to the 

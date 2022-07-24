@@ -1,4 +1,4 @@
-test_that(".get_worldpop works", {
+test_that(".get_climaticVariables works", {
   aoi <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
       package = "mapme.biodiversity"

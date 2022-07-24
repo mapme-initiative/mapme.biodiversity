@@ -15,7 +15,7 @@ point in time in regard to the reference period.
 For each polygon, the desired statistic/s (mean, median or sd) is/are
 returned. The required resources for this indicator are:
 \itemize{
-\item \link{nasagrace}
+\item \link{nasa_grace}
 }
 }
 \details{
@@ -49,7 +49,7 @@ file.copy(resource_dir, temp_loc, recursive = TRUE)
     cores = 1,
     verbose = FALSE
   ) \%>\%
-  get_resources("nasagrace") \%>\%
+  get_resources("nasa_grace") \%>\%
   calc_indicators("drought_indicator", stats_drought = c("mean", "median"), engine = "extract") \%>\%
   tidyr::unnest(drought_indicator)))
 }

@@ -1,7 +1,7 @@
 # drought indicator works
 
     Code
-      .calc_drought_indicator(shp, nasagrace)
+      .calc_drought_indicator(shp, nasa_grace)
     Output
       [[1]]
       # A tibble: 9 x 2
@@ -21,7 +21,7 @@
 ---
 
     Code
-      .calc_drought_indicator(shp, nasagrace, engine = "zonal")
+      .calc_drought_indicator(shp, nasa_grace, engine = "zonal")
     Output
       [[1]]
       # A tibble: 9 x 2
@@ -41,7 +41,7 @@
 ---
 
     Code
-      .calc_drought_indicator(shp, nasagrace, stats = c("mean", "median", "sd"))
+      .calc_drought_indicator(shp, nasa_grace, stats = c("mean", "median", "sd"))
     Output
       [[1]]
       # A tibble: 9 x 4
@@ -61,7 +61,7 @@
 ---
 
     Code
-      .calc_drought_indicator(shp, nasagrace, engine = "extract")
+      .calc_drought_indicator(shp, nasa_grace, engine = "extract")
     Output
       [[1]]
       # A tibble: 9 x 2
@@ -81,7 +81,7 @@
 ---
 
     Code
-      .calc_drought_indicator(shp, nasagrace, engine = "exactextract")
+      .calc_drought_indicator(shp, nasa_grace, engine = "exactextract")
     Output
       [[1]]
       # A tibble: 9 x 2

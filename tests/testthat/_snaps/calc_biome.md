@@ -1,7 +1,7 @@
 # biome computation works
 
     Code
-      .calc_biome(shp, ecoregions)
+      .calc_biome(shp, teow)
     Output
       # A tibble: 1 x 2
         biomes                                      area

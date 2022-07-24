@@ -167,11 +167,11 @@ names(available_indicators())
 Say, we are interested in the precipitation indicator based on the CHIRPS dataset.
 We can learn more about this indicator and its required resources by using
 either of the commands below or, if you are viewing the online version, head
-over to the [chirpsprec](https://mapme-initiative.github.io/mapme.biodiversity/reference/chirpsprec.html) documentation.
+over to the [precipitation_chirps](https://mapme-initiative.github.io/mapme.biodiversity/reference/precipitation_chirps.html) documentation.
 
 ```{r helppage_indicator, eval = FALSE}
-?chirpsprec
-help(chirpsprec)
+?precipitation_chirps
+help(precipitation_chirps)
 ```
 
 By inspecting the help page we learned that this indicator requires the `chirps` 
@@ -228,7 +228,7 @@ sample_portfolio <- get_resources(
 The next step consists of calculating specific indicators. Note, 
 that each indicator requires one or more resources that were made available 
 via the <code>get_resources()</code> function explained above. Here, we are going
-to calculate the `chirpsprec` indicator which is based on the `chirps` resource.
+to calculate the `precipitation_chirps` indicator which is based on the `chirps` resource.
 Since the resource has been made available in the previous step, we can continue
 requesting the calculation of our desired indicator. Note, the below
 command would issue an error in case a required resource has not been made
@@ -236,7 +236,7 @@ available via <code>get_resources()</code> beforehand.
 
 ```{r calc_indicator}
 sample_portfolio <- calc_indicators(sample_portfolio,
-  indicators = "chirpsprec",
+  indicators = "precipitation_chirps",
   scales_spi = 3,
   spi_prev_years = 8,
   engine = "extract"
@@ -252,7 +252,7 @@ Now let's take a look at the results. We will select only some of the metadata
 and the output indicator column to get a clearer picture of what has happened.
 
 ```{r select_cols}
-(sample_portfolio <- sample_portfolio %>% select(assetid, WDPAID, chirpsprec))
+(sample_portfolio <- sample_portfolio %>% select(assetid, WDPAID, precipitation_chirps))
 ```
 
 We obtained a new listed column in our sf object that is called like the requested
@@ -261,20 +261,20 @@ contains a tibble with 12 rows and 4 columns. Let's have a closer look at these
 objects.
 
 ```{r investigate_indicator}
-sample_portfolio$chirpsprec[10]
+sample_portfolio$precipitation_chirps[10]
 ```
 
 For each asset, the result is a tibble in long format for 12 months in the year 
 2010. The precipitation indicator with the default setting delivered the absolute
 rainfall sum as well as the rainfall anomaly compared to the 1981-2010 climate 
-normal period (make sure to read the detailed indicator documentation via `?chirpsprec`).
+normal period (make sure to read the detailed indicator documentation via `?precipitation_chirps`).
 Let's quickly visualize the results for a single asset:
 
 ```{r plot_precipitation, echo = FALSE, warning=FALSE, dpi = 50}
 sample_portfolio %>%
   filter(assetid == 10) %>%
   st_drop_geometry() %>%
-  tidyr::unnest(chirpsprec) %>%
+  tidyr::unnest(precipitation_chirps) %>%
   mutate(sign = ifelse(anomaly < 0, "lower than average", "higher than average")) %>%
   ggplot() +
   geom_bar(aes(x = dates, y = anomaly, fill = sign), stat = "identity") +
@@ -289,7 +289,7 @@ sample_portfolio %>%
 sample_portfolio %>%
   filter(assetid == 10) %>%
   st_drop_geometry() %>%
-  tidyr::unnest(chirpsprec) %>%
+  tidyr::unnest(precipitation_chirps) %>%
   mutate(
     spi_3 = ifelse(is.na(spi_3), 0, spi_3),
     sign = ifelse(spi_3 < 0, "lower than average", "higher than average")
@@ -307,7 +307,7 @@ sample_portfolio %>%
 sample_portfolio %>%
   filter(assetid == 10) %>%
   st_drop_geometry() %>%
-  tidyr::unnest(chirpsprec) %>%
+  tidyr::unnest(precipitation_chirps) %>%
   ggplot() +
   geom_bar(aes(x = dates, y = absolute), stat = "identity", fill = "darkblue") +
   labs(title = "Sum of monthly precipitation 2010", x = "", y = "Precipitation sum [mm]") +
@@ -323,7 +323,7 @@ to keep the size of the data object relatively small.
 geometries <- select(sample_portfolio, assetid)
 sample_portfolio %>%
   st_drop_geometry() %>%
-  tidyr::unnest(chirpsprec) %>%
+  tidyr::unnest(precipitation_chirps) %>%
   filter(assetid == 3)
 ```
 
