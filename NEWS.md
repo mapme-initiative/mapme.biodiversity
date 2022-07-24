@@ -29,9 +29,11 @@
 * `gmw` -> `mangroves_area`
 * `teow` -> `ecoregion`
 
-
-
 ## New features
+
+## Internal
+
+# mapme.biodiversity 0.1.2
 
 ## Internal
 * unit tests have been silenced in order to be more informative for reverse

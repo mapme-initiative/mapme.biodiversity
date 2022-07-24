@@ -239,7 +239,7 @@ NULL
   yearly_cover_values <- lapply(years, function(y) {
     y <- y - 2000
     current_gfw_treecover <- ifel(
-      gfw_lossyear <= y, NA, binary_gfw_treecover,
+      gfw_lossyear <= y, 0, binary_gfw_treecover,
       filename = ifelse(todisk, file.path(rundir, "current_gfw_treecover.tif"), ""),
       datatype = "INT1U",
       overwrite = TRUE

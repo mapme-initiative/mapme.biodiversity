@@ -284,7 +284,7 @@ NULL
   yearly_loss_values <- lapply(years, function(y) {
     y <- y - 2000
     current_gfw_treecover <- ifel(
-      gfw_lossyear <= y, NA, binary_gfw_treecover,
+      gfw_lossyear <= y, 0, binary_gfw_treecover,
       filename = ifelse(todisk, file.path(rundir, "current_gfw_treecover.tif"), ""),
       datatype = "INT1U",
       overwrite = TRUE
@@ -304,13 +304,13 @@ NULL
     ha_sum_gfw_treecover <- as.numeric(ha_sum_gfw_treecover)
 
     current_losslayer <- ifel(
-      gfw_lossyear == y, 1, NA,
+      gfw_lossyear == y, 1, 0,
       filename = ifelse(todisk, file.path(rundir, "current_losses.tif"), ""),
       datatype = "INT1U",
       overwrite = TRUE
     )
     current_gfw_emissions <- mask(
-      gfw_emissions, current_losslayer,
+      gfw_emissions, current_losslayer, maskvalues = 0,
       filename = ifelse(todisk, file.path(rundir, "current_emissions.tif"), ""),
       datatype = "FLT4S",
       overwrite = TRUE
