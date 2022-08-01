@@ -17,26 +17,26 @@
 #' names(available_resources())
 available_resources <- function(resources = NULL) {
   all_resources <- list(
-    treecover2000 = list(
+    gfw_treecover = list(
       type = "raster",
       source = "https://data.globalforestwatch.org/documents/tree-cover-2000/explore",
-      downloader = ".get_treecover",
+      downloader = ".get_gfw_treecover",
       arguments = list(
         vers_treecover = "GFC-2020-v1.8"
       )
     ),
-    lossyear = list(
+    gfw_lossyear = list(
       type = "raster",
       source = "https://data.globalforestwatch.org/documents/tree-cover-loss/explore",
-      downloader = ".get_lossyear",
+      downloader = ".get_gfw_lossyear",
       arguments = list(
         vers_lossyear = "GFC-2020-v1.8"
       )
     ),
-    greenhouse = list(
+    gfw_emissions = list(
       "type" = "raster",
       source = "https://data.globalforestwatch.org/datasets/gfw::forest-greenhouse-gas-emissions/about",
-      downloader = ".get_greenhouse",
+      downloader = ".get_gfw_emissions",
       arguments = list()
     ),
     worldpop = list(
@@ -51,36 +51,36 @@ available_resources <- function(resources = NULL) {
       downloader = ".get_esalandcover",
       arguments = list()
     ),
-    traveltime = list(
+    nelson_et_al = list(
       type = "raster",
       source = "Travel Time to Cities and Ports 2015",
-      downloader = ".get_traveltime",
+      downloader = ".get_nelson_et_al",
       arguments = list(
         range_traveltime = "20k_50k"
       )
     ),
-    nasagrace = list(
+    nasa_grace = list(
       type = "raster",
       source = "NASA GRACE",
-      downloader = ".get_nasagrace",
+      downloader = ".get_nasa_grace",
       arguments = list()
     ),
-    mintemperature = list(
+    worldclim_min_temperature = list(
       type = "raster",
       source = "WorldClim",
-      downloader = ".get_min_temperature",
+      downloader = ".get_worldclim_min_temperature",
       arguments = list()
     ),
-    maxtemperature = list(
+    worldclim_max_temperature = list(
       type = "raster",
       source = "WorldClim",
-      downloader = ".get_max_temperature",
+      downloader = ".get_worldclim_max_temperature",
       arguments = list()
     ),
-    precipitation = list(
+    worldclim_precipitation = list(
       type = "raster",
       source = "WorldClim",
-      downloader = ".get_precipitation",
+      downloader = ".get_worldclim_precipitation",
       arguments = list()
     ),
     chirps = list(
@@ -89,22 +89,22 @@ available_resources <- function(resources = NULL) {
       downloader = ".get_chirps",
       arguments = list()
     ),
-    ecoregions = list(
+    teow = list(
       type = "vector",
       source = "WWF",
-      downloader = ".get_ecoregions",
+      downloader = ".get_teow",
       arguments = list()
     ),
-    mangrove = list(
+    gmw = list(
       type = "vector",
       source = "Global Mangrove Watch",
-      downloader = ".get_mangrove",
+      downloader = ".get_gmw",
       arguments = list()
     ),
-    srtmdem = list(
+    nasa_srtm = list(
       type = "raster",
       source = "SRTM",
-      downloader = ".get_srtmdem",
+      downloader = ".get_nasa_srtm",
       arguments = list()
     ),
     soilgrids = list(
