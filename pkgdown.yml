@@ -1,5 +1,5 @@
 pandoc: 2.7.3
-pkgdown: 2.0.5
+pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   contributing: contributing.html
@@ -8,7 +8,7 @@ articles:
   terminology: terminology.html
   userguide: userguide.html
   workflow: workflow.html
-last_built: 2022-06-26T08:43Z
+last_built: 2022-08-01T18:56Z
 urls:
   reference: https://mapme-initiative.github.io/mapme.biodiversity/reference
   article: https://mapme-initiative.github.io/mapme.biodiversity/articles

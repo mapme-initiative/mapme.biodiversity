@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Contributing">
 <meta property="og:description" content="mapme.biodiversity">
@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -109,7 +109,7 @@
 <span id="cb2-2"><a href="#cb2-2"></a><span class="fu">git</span> checkout add-soilgrid-indicators</span></code></pre></div>
 <p>Below, we will assume that you develop your extension to the package in R Studio. The general guidelines to follow also apply if you choose different tooling for your development process, however, it will not be covered in this vignette. We assume that all R development dependencies for the state of the package when you used the <code>git clone</code> command are installed. The easiest way to ensure this is using devtools when in the package’s directory:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_dev_deps</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_dev_deps</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="adding-a-resource">Adding a resource<a class="anchor" aria-label="anchor" href="#adding-a-resource"></a>
@@ -165,19 +165,19 @@ Added a new dependency? Make sure to include a supporting statement for that dep
 <p>A resource is a supported dataset that can be downloaded from a user’s perspective<br>
 via the <code><a href="../reference/get_resources.html">get_resources()</a></code> function. Currently, the package supports only raster and vector resources. If you wish to submit the support of a new resource, please be aware that we will only accept new resources if they are associated with at least one indicator calculation. The very first step to adding a resource is to add it into the internal resource backlog function so that the package is aware of its existence. Once checkout to the new branch and having the project opened in R Studio, issue the following command to open the resource backlog file:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/file.edit.html" class="external-link">file.edit</a></span><span class="op">(</span><span class="st">"R/resources_backlog.R"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/file.edit.html" class="external-link">file.edit</a></span><span class="op">(</span><span class="st">"R/resources_backlog.R"</span><span class="op">)</span></span></code></pre></div>
 <p>This file keeps track of all supported resources in a list object. You will see that each resource shares a common structure and how it is specified. The name of the list object will be the name the package uses to identifiy a specific resource. Most importantly, the type argument specifies whether a resource is of type ‘raster’ or ‘vector’. If applicable, the source argument shall contain an URL pointing to a webpage documenting the resource. The downloader argument is the package internal function name that is used to download the resource. This function is the most important code file for a new resource. Then, arguments and their default value to govern the download process can be specified. If no additional arguments are needed just enter an empty list. For the <code>soilgrids</code> resource, the internal backlog looks like this (don’t spend too much effort in understanding the arguments just yet. These will become clearer when we “write” the downloader. When contributing a new resource, it is usually an iterative process between the backlog and the downloader to identify those arguments that need to be specified by users):</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">soilgrids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-  type <span class="op">=</span> <span class="st">"raster"</span>,
-  source <span class="op">=</span> <span class="st">"https://www.isric.org/explore/soilgrids"</span>,
-  downloader <span class="op">=</span> <span class="st">".get_soilgrids"</span>,
-  arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-    layers <span class="op">=</span> <span class="st">"clay"</span>,
-    depths <span class="op">=</span> <span class="st">"0-5cm"</span>,
-    stats <span class="op">=</span> <span class="st">"mean"</span>
-  <span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">soilgrids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  type <span class="op">=</span> <span class="st">"raster"</span>,</span>
+<span>  source <span class="op">=</span> <span class="st">"https://www.isric.org/explore/soilgrids"</span>,</span>
+<span>  downloader <span class="op">=</span> <span class="st">".get_soilgrids"</span>,</span>
+<span>  arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    layers <span class="op">=</span> <span class="st">"clay"</span>,</span>
+<span>    depths <span class="op">=</span> <span class="st">"0-5cm"</span>,</span>
+<span>    stats <span class="op">=</span> <span class="st">"mean"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>With the resource being backlogged, the package now can find a resource called <code>soilgrids</code> of type <code>raster</code> and it can also identify the downloader function In this specific case, the package can also determine the default values of three arguments in case users did not specify anything. This is important information that will determine how the <code><a href="../reference/get_resources.html">get_resources()</a></code> function works when called by users.</p>
 </div>
 <div class="section level3">
@@ -185,30 +185,30 @@ via the <code><a href="../reference/get_resources.html">get_resources()</a></cod
 </h3>
 <p>By convention, the filename of a downloader <strong>MUST</strong> start with <code>get_&lt;resource_name&gt;.R</code> appended by the name of the resource. In the case of the soilgrids resource that translates to <code>get_soilgrids.R</code>. In the first part of such a downloader, make sure to include detailed documentation. This documentation should explain what this resource represents, where it comes from (including a citation), and the arguments users should specify to control what is downloaded. Importantly, this documentation <strong>MUST</strong> receive the roxygen tag <code>@docType data</code> as well as the <code>@keywords resource</code> tag, so that the documentation can be identified as a resource. The <code>NULL</code> value below the documentation <strong>MUST</strong> be included. Below is a template that should be used for documenting a resource.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#' Short title</span>
-<span class="co">#'</span>
-<span class="co">#' One or more description paragraphs might follow here. Please describe</span>
-<span class="co">#' required user arguments here, ideally as itemized lists.</span>
-<span class="co">#'</span>
-<span class="co">#' @name &lt;the short name of your resource, same as in the backlog&gt;</span>
-<span class="co">#' @docType data &lt;we document resources as a dataset&gt;</span>
-<span class="co">#' @keywords resource &lt;identifies the documentation as a resource&gt;</span>
-<span class="co">#' @format &lt;one sentence on data format and spatial extent&gt;</span>
-<span class="co">#' @references &lt;ideally a citable scientific publication&gt;</span>
-<span class="co">#' @source &lt;a link in the \url{} tag linking to an online documentation&gt;</span>
-<span class="cn">NULL</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#' Short title</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' One or more description paragraphs might follow here. Please describe</span></span>
+<span><span class="co">#' required user arguments here, ideally as itemized lists.</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' @name &lt;the short name of your resource, same as in the backlog&gt;</span></span>
+<span><span class="co">#' @docType data &lt;we document resources as a dataset&gt;</span></span>
+<span><span class="co">#' @keywords resource &lt;identifies the documentation as a resource&gt;</span></span>
+<span><span class="co">#' @format &lt;one sentence on data format and spatial extent&gt;</span></span>
+<span><span class="co">#' @references &lt;ideally a citable scientific publication&gt;</span></span>
+<span><span class="co">#' @source &lt;a link in the \url{} tag linking to an online documentation&gt;</span></span>
+<span><span class="cn">NULL</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="function-inputs-for-resources">Function inputs for resources<a class="anchor" aria-label="anchor" href="#function-inputs-for-resources"></a>
 </h3>
 <p>After documenting the resource, you can get started with implementing the actual downloader. The downloader is a package’s internal function that users do not directly interact with. By convention, we append package internal function names with a dot. Similar to the filename itself, resource downloaders should start with <code>.get_&lt;resource_name&gt;</code>. The first argument is always <code>x</code>, which corresponds to the portfolio object. Important attributes (e.g. the spatial-temporal extent) can be derived from this object. Then additional user-facing arguments might follow. After these arguments, each resource downloader receives the argument <code>rundir</code> which by default should point to the output of <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>, but will be pointing to an output directory on disk where the output shall be written to when used by users. Additionally, a logical called <code>verbose</code>, by default set to TRUE, controls the verbosity of the downloader as well as the dots argument. For the <code>soilgrids</code> resource, the function header thus looks like this:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">.get_soilgrids</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">layers</span>, <span class="va">depths</span>, <span class="va">stats</span>,
-                           <span class="va">rundir</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,
-                           <span class="va">verbose</span> <span class="op">=</span> <span class="cn">TRUE</span>,
-                           <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
-                           <span class="co"># downloader coder goes here</span>
-                           <span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">.get_soilgrids</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">layers</span>, <span class="va">depths</span>, <span class="va">stats</span>,</span>
+<span>                           <span class="va">rundir</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                           <span class="va">verbose</span> <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                           <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span>                           <span class="co"># downloader coder goes here</span></span>
+<span>                           <span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="check-arguments-and-retrieval-of-portfolio-wide-parameters">Check arguments and retrieval of portfolio-wide parameters<a class="anchor" aria-label="anchor" href="#check-arguments-and-retrieval-of-portfolio-wide-parameters"></a>
@@ -216,26 +216,26 @@ via the <code><a href="../reference/get_resources.html">get_resources()</a></cod
 <p>Before actually conducting any downloads, it is important that you as the provider of the new resource check extensively that all required arguments were correctly specified. That specifically applies to the user-defined variables that your downloader requires. The package framework cannot check for the correctness of these arguments. That is something that each downloader has to take care of. If some arguments are wrongly specified, the function should fail (via <code><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop()</a></code>) and gracefully inform users which arguments where misspecified and which values represent valid values. You can head over to the soilgrids downloader (use <code>file.edit("R/get_soilgrids.R")</code>) and analyze the first few lines of the file (up to line ~130) to see how the inputs are checked for the soilgrids resource.</p>
 <p>Some portfolio-wide parameters that might be important to your specific downloader can be determined by analyzing the <code>x</code> portfolio attributes. Currently, the following attributes with regard to a resource download are set, when users initialize their portfolio:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R">  <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"nitems"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"bbox"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"years"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">years</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"cores"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">cores</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"aria_bin"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">aria_bin</span></code></pre></div>
+<code class="sourceCode R"><span>  <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"nitems"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"bbox"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"years"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">years</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"cores"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">cores</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"aria_bin"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">aria_bin</span></span></code></pre></div>
 <p>Your resource downloader should take care that with these user-specified arguments and the portfolio-wide parameters the files matching the spatio-temporal extent of the portfolio are downloaded. These can be queried with the following syntax with the temporal extent of the portfolio as an example:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">years</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">years</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="using-helper-functions">Using helper functions<a class="anchor" aria-label="anchor" href="#using-helper-functions"></a>
 </h3>
 <p>If you construct several URLs and associated local filenames that you wish to iterate over, the package provides a helper function to download these files and skip already existing ones. The following code snippet shows how to use that function:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">aria_bin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">aria_bin</span>
-<span class="va">verbose</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">verbose</span>
-
-<span class="fu">.download_or_skip</span><span class="op">(</span>urls <span class="op">=</span> <span class="va">source_urls</span>, filenames <span class="op">=</span> <span class="va">target_filenames</span>,
-                  verbose <span class="op">=</span> <span class="va">verbose</span>, stubbornnes <span class="op">=</span> <span class="fl">6</span>, check_existencs <span class="op">=</span> <span class="cn">TRUE</span>,
-                  aria_bin <span class="op">=</span> <span class="va">aria_bin</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">aria_bin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">aria_bin</span></span>
+<span><span class="va">verbose</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">verbose</span></span>
+<span></span>
+<span><span class="fu">.download_or_skip</span><span class="op">(</span>urls <span class="op">=</span> <span class="va">source_urls</span>, filenames <span class="op">=</span> <span class="va">target_filenames</span>,</span>
+<span>                  verbose <span class="op">=</span> <span class="va">verbose</span>, stubbornnes <span class="op">=</span> <span class="fl">6</span>, check_existencs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                  aria_bin <span class="op">=</span> <span class="va">aria_bin</span><span class="op">)</span></span></code></pre></div>
 <p>This function will attempt to download the specified URLs to the corresponding local filenames. URLs for which a corresponding filename already exists will be skipped and information about this will be issued as a message if verbose is set to TRUE. The stubbornness controls the number of retries of failed downloads. If check_existence is set to TRUE, <code>RCurl::url.exists(url)</code> will be used to check if a given URL exists online. This check takes some time to run, but for some resources, it can be useful if you cannot be sure if the constructed URL exists on the remote location. Users are enabled to specify an executable aria2c installation to support parallel downloads. The value of the aria_bin variable will be <code>NULL</code> if no valid executable has been specified. Otherwise, the downloader will use the aria2c program to download the specified URLs.</p>
 <p>You are free and also encouraged to develop helper functions for your resource to increase the understandability and ease maintenance of your downloader. Any helper functions associated with your resource should be located in the same file. If you feel a helper function might serve a purpose across different resources, feel free to raise this in a comment and we can consider moving it to <code>R/utils.R</code>. Since helper functions are internal to the package, they <strong>MUST</strong> start with a dot. Package internal functions do not require a roxygen documentation. If you wish to include documentation to make your code easier to understand, make sure to add the <code>@keywords internal</code> and <code>@noRd</code> tags to your functions.</p>
 </div>
@@ -302,18 +302,18 @@ Added a new dependency? Make sure to include a supporting statement for that dep
 indicators are processed via the <code><a href="../reference/calc_indicators.html">calc_indicators()</a></code> function. We realized, that for large (potentially global) portfolios, depending on the spatial resolution of a resource, different processing modes substantially decrease the time needed for a computation. For high to medium resolution raster resources, processing on the asset level benefits computation time. However, spatially cropping coarse resolution datasets for a high number of assets introduces significant overhead, thus processing these resources on a portfolio level makes more sense.</p>
 <p>You are asked to provide the most sensible approach to your indicator when you submit it to the internal backlog. When adding an indicator there, the package is aware made aware of its existence. You can issue the following command to open the resource backlog file (or open it manually):</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/file.edit.html" class="external-link">file.edit</a></span><span class="op">(</span><span class="st">"R/indicator_backlog.R"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/file.edit.html" class="external-link">file.edit</a></span><span class="op">(</span><span class="st">"R/indicator_backlog.R"</span><span class="op">)</span></span></code></pre></div>
 <p>This file keeps track of all supported indicators in a list object. You will see that each indicator shares a common structure. The name of the list object will be the name the package uses to identify a specific indicator. Note, that the name of an indicator <strong>MUST NOT</strong> be equal to any other indicator or resource. The <code>processor</code> argument specifies the name of the function that you will provide for the indicator calculation. The <code>inputs</code> argument refers to the supported resources that are required inputs for your indicator. As a requirement, at least one resource needs to be specified, but your indicator can also depend on more resources. We also ask you to provide the type of the resource (e.g. <code>raster</code> or <code>vector</code>). In the <code>arguments</code> list object, you can specify any additional arguments that users need to specify if they want to call your indicator function. If there are no additional arguments, simply add an empty list. Please put sensible default values in case your indicator function requires some arguments. Finally, the <code>processing_mode</code> governs what your indicator functions will receive as inputs. In case you set it to <code>asset</code>, each call to your indicator function will receive a single asset and the required resources crop to the spatial extent of that asset. If you set it to <code>portfolio</code> the function will receive the whole portfolio object and all required resource at the spatial extent of the portfolio. Below, you will find an example for the <code>precipitation</code> indicator:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">precipitation</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-  processor <span class="op">=</span> <span class="st">".calc_precipitation"</span>,
-  inputs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>chirps <span class="op">=</span> <span class="st">"raster"</span><span class="op">)</span>,
-  arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-    scales_spi <span class="op">=</span> <span class="cn">NULL</span>,
-    engine <span class="op">=</span> <span class="st">"extract"</span>
-  <span class="op">)</span>,
-  processing_mode <span class="op">=</span> <span class="st">"portfolio"</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">precipitation</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  processor <span class="op">=</span> <span class="st">".calc_precipitation"</span>,</span>
+<span>  inputs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>chirps <span class="op">=</span> <span class="st">"raster"</span><span class="op">)</span>,</span>
+<span>  arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    scales_spi <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>    engine <span class="op">=</span> <span class="st">"extract"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  processing_mode <span class="op">=</span> <span class="st">"portfolio"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>If neither of the two processing modes lead to satisfactory processing times for your indicator, please leave an issue/comment to discuss the addition of another processing mode with the maintainers of the package.</p>
 </div>
 <div class="section level3">
@@ -321,18 +321,18 @@ indicators are processed via the <code><a href="../reference/calc_indicators.htm
 </h3>
 <p>By convention, the filename of a indicator processor <strong>MUST</strong> start with <code>calc_indicator_name.R</code> appended by the name of the resource. In the case of the precipitation indicator that translates to <code>calc_precipitation.R</code>. In the first part of such a indicator processor, make sure to include detailed documentation. This documentation should explain how it derives its numeric output, which resources are required for its calculation, and the arguments users should specify to control its functioning. Importantly, this documentation <strong>MUST</strong> receive the roxygen tag <code>@docType data</code> as well as the <code>@keywords indicator</code> tag, so that the documentation can be identified as an indicator The <code>NULL</code> value below the documentation <strong>MUST</strong> be included. Below is a template that should be used for documenting an indicator</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#' Short title</span>
-<span class="co">#'</span>
-<span class="co">#' One or more description paragraphs might follow here. Please describe</span>
-<span class="co">#' required resource and user arguments here, ideally as itemized lists.</span>
-<span class="co">#' Please document which processing engines are available for your indicator</span>
-<span class="co">#' and briefly describe how the indicator is derived from its inputs.</span>
-<span class="co">#'</span>
-<span class="co">#' @name &lt;the short name of your indicator, same as in the backlog&gt;</span>
-<span class="co">#' @docType data &lt;we document indicators as a dataset&gt;</span>
-<span class="co">#' @keywords indicator &lt;identifies the documentation as an indicator&gt;</span>
-<span class="co">#' @format &lt;one sentence on number of columns, columns names of ouput tibble&gt;</span>
-<span class="cn">NULL</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#' Short title</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' One or more description paragraphs might follow here. Please describe</span></span>
+<span><span class="co">#' required resource and user arguments here, ideally as itemized lists.</span></span>
+<span><span class="co">#' Please document which processing engines are available for your indicator</span></span>
+<span><span class="co">#' and briefly describe how the indicator is derived from its inputs.</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' @name &lt;the short name of your indicator, same as in the backlog&gt;</span></span>
+<span><span class="co">#' @docType data &lt;we document indicators as a dataset&gt;</span></span>
+<span><span class="co">#' @keywords indicator &lt;identifies the documentation as an indicator&gt;</span></span>
+<span><span class="co">#' @format &lt;one sentence on number of columns, columns names of ouput tibble&gt;</span></span>
+<span><span class="cn">NULL</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="function-inputs-for-indicators">Function inputs for indicators<a class="anchor" aria-label="anchor" href="#function-inputs-for-indicators"></a>
@@ -340,17 +340,17 @@ indicators are processed via the <code><a href="../reference/calc_indicators.htm
 <p>After documenting the indicator, you can get started with implementing the actual processor. An indicator processor is a package’s internal function that users do not directly interact with. By convention, we append package internal function names with a dot. Similar to the filename itself, indicator processors should start with <code>.calc_indicator_name&gt;</code>. The first argument and indicator processor receives is always <code>shp</code>, which corresponds to a single asset of the portfolio if you specified <code>processing_mode</code> as <code>"asset"</code> or the entire portfolio object if you specified <code>"portfolio"</code>. Important attributes (e.g. the spatial-temporal extent) can be derived from this object, irrespective if it represents a single asset or the whole portfolio. Then, one or more of the required resource are to be specified with the exact names as they are included in the resource backlog. Again, in case the <code>processing_mode</code> is set to <code>"asset"</code>, these resource will be spatial cropped to the extent of the single asset, in case it is set to <code>"portfolio"</code> the complete spatial extent of the portfolio is included. After the resource, any user-defined additional arguments will follow. You can assume that if users did not specify an arguments, the default values from the indicator backlog will be inserted instead. Note, that we define <code>engine</code> as an argument which is set by the users in order to give them more fine-control how the output is computed. We will have a close look at engines in below.</p>
 <p>All indicator functions also receive the argument <code>rundir</code>, where intermediate files can be written to. You do not have to take care of cleaning that directory, since the framework will clean up after the processing is done. Also, a logical controlling the verbosity is handed over that you should use to decide whether or not to print additional informative messages. For raster resources, we included a logical <code>todisk</code> governing if intermediate raster files shall be kept in memory or written to disk. Currently, the decision has to be handled by your indicator processor, however, we are evaluating possibilities to determine the behavior within the package itself. Last, the processing mode is specified. This can be helpful if you wish to supply your processor with the possibility to support either of the two modes. For the <code>precipitation</code> indicator, the function header will look like this:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">.calc_precipitation</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">shp</span>,
-                                <span class="va">chirps</span>,
-                                <span class="va">scales_spi</span> <span class="op">=</span> <span class="cn">NULL</span>,
-                                <span class="va">engine</span> <span class="op">=</span> <span class="st">"extract"</span>,
-                                <span class="va">rundir</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,
-                                <span class="va">verbose</span> <span class="op">=</span> <span class="cn">TRUE</span>,
-                                <span class="va">todisk</span> <span class="op">=</span> <span class="cn">FALSE</span>,
-                                <span class="va">processing_mode</span> <span class="op">=</span> <span class="st">"portfolio"</span>,
-                                <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
-                                <span class="co"># processor logic goes here</span>
-                                <span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">.calc_precipitation</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">shp</span>,</span>
+<span>                                <span class="va">chirps</span>,</span>
+<span>                                <span class="va">scales_spi</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>                                <span class="va">engine</span> <span class="op">=</span> <span class="st">"extract"</span>,</span>
+<span>                                <span class="va">rundir</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                                <span class="va">verbose</span> <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                                <span class="va">todisk</span> <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                                <span class="va">processing_mode</span> <span class="op">=</span> <span class="st">"portfolio"</span>,</span>
+<span>                                <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span>                                <span class="co"># processor logic goes here</span></span>
+<span>                                <span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="check-arguments-and-retrieval-of-portfolio-wide-parameters-1">Check arguments and retrieval of portfolio-wide parameters<a class="anchor" aria-label="anchor" href="#check-arguments-and-retrieval-of-portfolio-wide-parameters-1"></a>
@@ -358,7 +358,7 @@ indicators are processed via the <code><a href="../reference/calc_indicators.htm
 <p>Before actually conducting any computation, it is important that you as the provider of the new indicator check extensively that all required arguments were correctly specified. That specifically applies to the user-defined variables that your processor requires. The package framework cannot check for the correctness of these arguments. If some arguments are wrongly specified, the function should fail (via <code><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop()</a></code>) and gracefully inform users which arguments where misspecified and which values represent valid values. You can head over to the precipitation processor (use <code>file.edit("R/calc_precipitation.R")</code>) and analyze the first few lines of the file (up to line ~76) to see how the inputs are checked. Also note, that in case the required resource are <code>NULL</code> (that is the default value if an asset does not intersect with a resource), or if any other configurations (e.g. years only smaller 1981 for the case of the precipitation indicator) prevent a sensible processing of an indicator, we simply return <code>NA</code>. The package will then fill in the tibble values for that asset with <code>NA</code>, so users now that the given indicator could not be calculated there.</p>
 <p>Some portfolio-wide parameters that might be important to your specific indicator routine, and they can be derived via the <code><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes()</a></code> function, e.g. for the years attribute:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">years</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">shp</span><span class="op">)</span><span class="op">$</span><span class="va">years</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">years</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">shp</span><span class="op">)</span><span class="op">$</span><span class="va">years</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="using-helper-functions-1">Using helper functions<a class="anchor" aria-label="anchor" href="#using-helper-functions-1"></a>
@@ -387,12 +387,12 @@ indicators are processed via the <code><a href="../reference/calc_indicators.htm
 </h3>
 <p>An important difference of how to handle the processing between the <code>asset</code> and <code>portfolio</code> mode is that in the <code>asset</code> mode, the package handles the parallelization. However, in the case that processing is conducted in the <code>portfolio</code> mode, we ask you as a developer to iterate over all assets in the portfolio using the <a href="https://github.com/psolymos/pbapply" class="external-link">pbapply</a> package. Specifically, you can retrieve the number of cores available via the portfolios attributes:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">shp</span><span class="op">)</span><span class="op">$</span><span class="va">cores</span>
-<span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">pbapply</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pbapply/man/pbapply.html" class="external-link">pblapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">shp</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span>
-    <span class="co"># processing logic goes here</span>
-    <span class="va">obj</span><span class="op">$</span><span class="va">.id</span> <span class="op">&lt;-</span> <span class="va">i</span>
-    <span class="va">obj</span>
-    <span class="op">}</span>, cl <span class="op">=</span> <span class="va">cores</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">cores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">shp</span><span class="op">)</span><span class="op">$</span><span class="va">cores</span></span>
+<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">pbapply</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pbapply/man/pbapply.html" class="external-link">pblapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">shp</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="co"># processing logic goes here</span></span>
+<span>    <span class="va">obj</span><span class="op">$</span><span class="va">.id</span> <span class="op">&lt;-</span> <span class="va">i</span></span>
+<span>    <span class="va">obj</span></span>
+<span>    <span class="op">}</span>, cl <span class="op">=</span> <span class="va">cores</span><span class="op">)</span></span></code></pre></div>
 <p>It is important that you add a variable <code>.id</code> to the output tibble indicating the row number of the asset.</p>
 </div>
 <div class="section level3">
@@ -414,7 +414,7 @@ indicators are processed via the <code><a href="../reference/calc_indicators.htm
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
     </footer>
