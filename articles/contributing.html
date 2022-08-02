@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,7 +82,8 @@
 
 
 
-<script src="contributing_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Contributing</h1>
             
@@ -103,10 +104,10 @@
 <h2 id="getting-started">Getting started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
 </h2>
 <p>Ideally, you clone the GitHub repository via the git command in a command line on Linux and MacOS systems or via the GitHub Desktop application on Windows. On Linux, the command would look like this:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">git</span> clone https://github.com/mapme-initiative/mapme.biodiversity</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/mapme-initiative/mapme.biodiversity</span></code></pre></div>
 <p>We do not accept pushes to main, thus the first step would be to create a specific branch for your extension. In this tutorial, we will pretend to reimplement the <code>soilgrids</code> resources and the associated <code>soilproperties</code> indicator, so that we create a branch reflecting this. Don’t forget to checkout to the newly created branch!</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">git</span> branch add-soilgrid-indicators</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="fu">git</span> checkout add-soilgrid-indicators</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> branch add-soilgrid-indicators</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout add-soilgrid-indicators</span></code></pre></div>
 <p>Below, we will assume that you develop your extension to the package in R Studio. The general guidelines to follow also apply if you choose different tooling for your development process, however, it will not be covered in this vignette. We assume that all R development dependencies for the state of the package when you used the <code>git clone</code> command are installed. The easiest way to ensure this is using devtools when in the package’s directory:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_dev_deps</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -117,7 +118,7 @@
 <div class="section level3">
 <h3 id="checklist">Checklist<a class="anchor" aria-label="anchor" href="#checklist"></a>
 </h3>
-<ul>
+<ul class="task-list">
 <li>
 <input type="checkbox" disabled>
 Add the new resource to <code>R/resources_backlog.R</code> following the standardized template</li>
@@ -262,7 +263,7 @@ via the <code><a href="../reference/get_resources.html">get_resources()</a></cod
 <div class="section level3">
 <h3 id="checklist-1">Checklist<a class="anchor" aria-label="anchor" href="#checklist-1"></a>
 </h3>
-<ul>
+<ul class="task-list">
 <li>
 <input type="checkbox" disabled>
 Add the new indicator to <code>R/indicators_backlog.R</code> following the standardized template</li>
