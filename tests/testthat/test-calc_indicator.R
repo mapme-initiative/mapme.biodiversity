@@ -22,24 +22,24 @@ test_that("calc_indicator works", {
   )
 
   portfolio <- get_resources(portfolio,
-    resources = c("treecover2000", "lossyear"),
+    resources = c("gfw_treecover", "gfw_lossyear"),
     vers_treecover = "GFC-2020-v1.8",
     vers_lossyear = "GFC-2020-v1.8"
   )
 
   expect_message(
     calc_indicators(portfolio,
-      indicators = "treecover",
+      indicators = "treecover_area",
       min_cover = 10
     ),
     "was not specified. Setting to default value"
   )
 
   stat <- calc_indicators(portfolio,
-    indicators = "treecover",
+    indicators = "treecover_area",
     min_size = 5,
     min_cover = 30
-  )$treecover[[1]]
+  )$treecover_area[[1]]
 
   expect_snapshot(stat)
 
@@ -55,10 +55,10 @@ test_that("calc_indicator works", {
   )
 
   stat <- calc_indicators(portfolio,
-    indicators = "treecover",
+    indicators = "treecover_area",
     min_size = 5,
     min_cover = 30
-  )$treecover[[1]]
+  )$treecover_area[[1]]
 
   expect_snapshot(stat)
 })

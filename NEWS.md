@@ -1,6 +1,33 @@
 # mapme.biodiversity (development version)
 
 ## Breaking changes
+* extensive renaming of resources and indicators:
+
+* resources:
+* `treecover2000` -> `gfw_treecover`
+* `lossyear` -> `gfw_lossyear`
+* `greenhouse` -> `gfw_emissions`
+* `traveltime` -> `nelson_et_al`
+* `nasagrace` -> `nasa_grace` 
+* `mintemperature` -> `worldclim_min_temperature`
+* `maxtemperature` -> `worldclim_max_temperature`
+* `precipitation` -> `worldclim_precipitation`
+* `ecoregions` -> `teow`
+* `mangrove` -> `gmw`
+* `srtmdem` -> `nasa_srtm`
+
+* indicators:
+* `treecover` -> `treecover_area`
+* `emissions` -> `treecoverloss_emissions`
+* `treeloss` -> `treecover_area_and_emissions`
+* `chirpsprec` -> `precipitation_chirps`
+* `accessibility` -> `traveltime`
+* `popcount` -> `population_count`
+* `wctmin` -> `temperature_min_wc`
+* `wctmax` -> `temperature_max_wc`
+* `wcprec` -> `precipitation_wc`
+* `gmw` -> `mangroves_area`
+* `teow` -> `ecoregion`
 
 ## New features
 

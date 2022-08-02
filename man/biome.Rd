@@ -14,7 +14,7 @@ World (TEOW) - World Wildlife Fund (WWF) for polygons. For each polygon,
 the name and area of the biomes (in hectare) is returned.
 The required resources for this indicator are:
 \itemize{
-\item \link{ecoregions}
+\item \link{teow}
 }
 }
 \examples{
@@ -39,7 +39,7 @@ file.copy(resource_dir, temp_loc, recursive = TRUE)
     cores = 1,
     verbose = FALSE
   ) \%>\%
-  get_resources("ecoregions") \%>\%
+  get_resources("teow") \%>\%
   calc_indicators("biome") \%>\%
   tidyr::unnest(biome)))
 }

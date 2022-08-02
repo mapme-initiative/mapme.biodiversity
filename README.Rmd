@@ -71,11 +71,11 @@ list column to the original object.
       verbose = FALSE
     ) %>%
     get_resources(
-      resources = c("treecover2000", "lossyear", "greenhouse"),
+      resources = c("gfw_treecover", "gfw_lossyear", "gfw_emissions"),
       vers_treecover = "GFC-2020-v1.8", vers_lossyear = "GFC-2020-v1.8"
     ) %>%
-    calc_indicators("treeloss", min_size = 1, min_cover = 30) %>%
-    tidyr::unnest(treeloss))
+    calc_indicators("treecover_area_and_emissions", min_size = 1, min_cover = 30) %>%
+    tidyr::unnest(treecover_area_and_emissions))
 ```
 
 Head over to the [online documentation](https://mapme-initiative.github.io/mapme.biodiversity/index.html) 

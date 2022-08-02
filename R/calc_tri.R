@@ -7,7 +7,7 @@
 #' index (tri) statistics for polygons. For each polygon, the desired statistic/s
 #' (mean, median or sd) is/are returned.
 #' The required resources for this indicator are:
-#'  - [srtmdem]
+#'  - [nasa_srtm]
 #'
 #' The following arguments can be set:
 #' \describe{
@@ -56,7 +56,7 @@
 #'       cores = 1,
 #'       verbose = FALSE
 #'     ) %>%
-#'     get_resources("srtmdem") %>%
+#'     get_resources("nasa_srtm") %>%
 #'     calc_indicators("tri", stats_tri = c("mean", "median", "sd", "var"), engine = "extract") %>%
 #'     tidyr::unnest(tri)))
 #' }
@@ -70,7 +70,7 @@ NULL
 #' terra, or exactextract from exactextractr as desired.
 #'
 #' @param shp A single polygon for which to calculate the tri statistic
-#' @param srtmdem The elevation raster resource from SRTM
+#' @param nasa_srtm The elevation raster resource from SRTM
 #' @param stats_tri Function to be applied to compute statistics for polygons either
 #'   one or multiple inputs as character "mean", "median" or "sd".
 #' @param engine The preferred processing functions from either one of "zonal",
@@ -85,7 +85,7 @@ NULL
 #' @noRd
 
 .calc_tri <- function(shp,
-                      srtmdem,
+                      nasa_srtm,
                       engine = "zonal",
                       stats_tri = "mean",
                       rundir = tempdir(),
@@ -93,11 +93,11 @@ NULL
                       todisk = FALSE,
                       ...) {
   # check if input engines are correct
-  if (is.null(srtmdem)) {
+  if (is.null(nasa_srtm)) {
     return(NA)
   }
   # check if intermediate raster should be written to disk
-  if (ncell(srtmdem) > 1024 * 1024) todisk <- TRUE
+  if (ncell(nasa_srtm) > 1024 * 1024) todisk <- TRUE
   # check if input engine is correctly specified
   available_engines <- c("zonal", "extract", "exactextract")
   .check_engine(available_engines, engine)
@@ -107,7 +107,7 @@ NULL
 
   if (engine == "extract") {
     tibble_zstats <- .comp_tri_extract(
-      elevation = srtmdem,
+      elevation = nasa_srtm,
       shp = shp,
       stats = stats_tri,
       todisk = todisk,
@@ -116,7 +116,7 @@ NULL
     return(tibble_zstats)
   } else if (engine == "exactextract") {
     tibble_zstats <- .comp_tri_exact_extractr(
-      elevation = srtmdem,
+      elevation = nasa_srtm,
       shp = shp,
       stats = stats_tri,
       todisk = todisk,
@@ -125,7 +125,7 @@ NULL
     return(tibble_zstats)
   } else {
     tibble_zstats <- .comp_tri_zonal(
-      elevation = srtmdem,
+      elevation = nasa_srtm,
       shp = shp,
       stats = stats_tri,
       todisk = todisk,
@@ -152,28 +152,28 @@ NULL
                             ...) {
   shp_v <- vect(shp)
   rast_mask <- terra::mask(elevation,
-    shp_v,
-    filename =  ifelse(todisk, file.path(rundir, "elevation.tif"), ""),
-    overwrite = TRUE
+                           shp_v,
+                           filename =  ifelse(todisk, file.path(rundir, "elevation.tif"), ""),
+                           overwrite = TRUE
   )
   p_raster <- terra::rasterize(shp_v,
-    rast_mask,
-    field = 1:nrow(shp_v),
-    filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
-    overwrite = TRUE
+                               rast_mask,
+                               field = 1:nrow(shp_v),
+                               filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
+                               overwrite = TRUE
   )
   tri <- terra::terrain(rast_mask,
-    v = "TRI",
-    unit = "degrees",
-    neighbors = 8,
-    filename = ifelse(todisk, file.path(rundir, "terrain.tif"), ""),
-    overwrite = TRUE
+                        v = "TRI",
+                        unit = "degrees",
+                        neighbors = 8,
+                        filename = ifelse(todisk, file.path(rundir, "terrain.tif"), ""),
+                        overwrite = TRUE
   )
   zstats <- lapply(1:length(stats), function(i) {
     zstats <- terra::zonal(tri,
-      p_raster,
-      fun = stats[i],
-      na.rm = T
+                           p_raster,
+                           fun = stats[i],
+                           na.rm = T
     )
     tibble_zstats <- tibble(tri = zstats[, 2])
     names(tibble_zstats)[names(tibble_zstats) == "tri"] <-
@@ -202,17 +202,17 @@ NULL
                               ...) {
   shp_v <- vect(shp)
   tri <- terra::terrain(elevation,
-    v = "TRI",
-    unit = "degrees",
-    neighbors = 8,
-    filename = ifelse(todisk, file.path(rundir, "terrain.tif"), ""),
-    overwrite = TRUE
+                        v = "TRI",
+                        unit = "degrees",
+                        neighbors = 8,
+                        filename = ifelse(todisk, file.path(rundir, "terrain.tif"), ""),
+                        overwrite = TRUE
   )
   zstats <- lapply(1:length(stats), function(i) {
     zstats <- terra::extract(tri,
-      shp_v,
-      fun = stats[i],
-      na.rm = T
+                             shp_v,
+                             fun = stats[i],
+                             na.rm = T
     )
     tibble_zstats <- tibble(tri = zstats[, 2])
     names(tibble_zstats)[names(tibble_zstats) == "tri"] <-
@@ -246,11 +246,11 @@ NULL
     ))
   }
   tri <- terra::terrain(elevation,
-    v = "TRI",
-    unit = "degrees",
-    neighbors = 8,
-    filename = ifelse(todisk, file.path(rundir, "terrain.tif"), ""),
-    overwrite = TRUE
+                        v = "TRI",
+                        unit = "degrees",
+                        neighbors = 8,
+                        filename = ifelse(todisk, file.path(rundir, "terrain.tif"), ""),
+                        overwrite = TRUE
   )
   zstats <- lapply(1:length(stats), function(i) {
     if (stats[i] %in% c("sd", "var")) {

@@ -35,9 +35,9 @@ NULL
 #' @keywords internal
 #' @noRd
 
-.get_min_temperature <- function(x,
-                                 rundir = tempdir(),
-                                 verbose = TRUE) {
+.get_worldclim_min_temperature <- function(x,
+                                           rundir = tempdir(),
+                                           verbose = TRUE) {
   .get_climatic_variables(x = x, layer = "tmin", rundir, verbose)
 }
 
@@ -58,9 +58,9 @@ NULL
 #' @keywords internal
 #' @noRd
 
-.get_max_temperature <- function(x,
-                                 rundir = tempdir(),
-                                 verbose = TRUE) {
+.get_worldclim_max_temperature <- function(x,
+                                           rundir = tempdir(),
+                                           verbose = TRUE) {
   .get_climatic_variables(x = x, layer = "tmax", rundir, verbose)
 }
 
@@ -81,9 +81,9 @@ NULL
 #' @keywords internal
 #' @noRd
 
-.get_precipitation <- function(x,
-                               rundir = tempdir(),
-                               verbose = TRUE) {
+.get_worldclim_precipitation <- function(x,
+                                         rundir = tempdir(),
+                                         verbose = TRUE) {
   .get_climatic_variables(x = x, layer = "prec", rundir, verbose)
 }
 
