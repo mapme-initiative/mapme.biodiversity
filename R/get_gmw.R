@@ -74,46 +74,27 @@ NULL
 #' @noRd
 .unzip_mangrove <- function(zip, rundir) {
   bn <- basename(zip)
-  if (bn == "gmw-extent_2007.zip") {
-    gpkg <- file.path(rundir, "gmw-extent_2007.gpkg")
-    if (file.exists(gpkg)) {
-      return(gpkg)
-    }
-    utils::unzip(
-      zipfile = file.path(rundir, basename(paste0("gmw-extent_2007.zip"))),
-      exdir = rundir,
-    )
-    shp <- file.path(rundir, "GMW_2007_v2.0.shp")
-    shp <- read_sf(shp)
-    write_sf(shp, gpkg)
-    d_files <- list.files(rundir, full.names = T)
-    unlink(grep("gmw-extent*", d_files, value = T, invert = T),
-           recursive = T, force = T
-    )
-  } else {
-    year <- gsub(".*?([0-9]+).*", "\\1", bn)
-    gpkg <- file.path(rundir, paste0("gmw-extent_", year, ".gpkg"))
-    if (file.exists(gpkg)) {
-      return(gpkg)
-    }
-    utils::unzip(
-      zipfile = file.path(
-        rundir,
-        basename(paste0("gmw-extent_", year, ".zip"))
-      ),
-      exdir = rundir
-    )
-    shp <- paste0(
-      rundir, "/GMW_001_GlobalMangroveWatch_", year,
-      "/01_Data/GMW_", year, "_v2.shp"
-    )
-    shp <- read_sf(shp)
-    write_sf(shp, gpkg)
-    d_files <- list.files(rundir, full.names = T)
-    unlink(grep("gmw-extent*", d_files, value = T, invert = T),
-           recursive = T, force = T
-    )
+  year <- gsub(".*?([0-9]+).*", "\\1", bn)
+  gpkg <- file.path(rundir, paste0("gmw-extent_", year, ".gpkg"))
+  if (file.exists(gpkg)) {
+    return(gpkg)
   }
+  utils::unzip(
+    zipfile = file.path(
+      rundir,
+      basename(paste0("gmw-extent_", year, ".zip"))
+    ),
+    exdir = rundir
+  )
+  shp <- file.path(
+    rundir, paste0("gmw_v3_", year, "_vec.shp")
+  )
+  shp <- read_sf(shp)
+  write_sf(shp, gpkg)
+  d_files <- list.files(rundir, full.names = T)
+  unlink(grep("gmw-extent*", d_files, value = T, invert = T),
+         recursive = T, force = T
+  )
 }
 
 
