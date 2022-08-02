@@ -33,6 +33,8 @@
 
 ## Internal
 
+* adapted download routine to GMW v3 (#80)
+
 # mapme.biodiversity 0.1.2
 
 ## Internal
