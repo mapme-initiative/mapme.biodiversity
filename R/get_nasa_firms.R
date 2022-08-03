@@ -50,7 +50,7 @@ NULL
   if (!instrument %in% c("MODIS", "VIIRS_S_NPP")) {
     stop(
       paste("The selected instrument", instrument, "is not available. Please choose one of: MODIS or VIIRS_S_NPP")
-      )
+    )
   }
 
   if (instrument == "VIIRS_S_NPP") {
@@ -101,6 +101,7 @@ NULL
 #' @param wkt A well-known text representation of geometry
 #' @param rundir A directory where intermediate files are written to.
 #'
+#' @importFrom utils read.csv
 #' @return A character vector indicating country name
 #' @keywords internal
 #' @noRd
@@ -113,8 +114,8 @@ NULL
   downloads <- tryCatch(
     {
       download.file(url,
-        file.path(rundir, basename(paste0("World.zip"))),
-        quiet = TRUE
+                    file.path(rundir, basename(paste0("World.zip"))),
+                    quiet = TRUE
       )
     },
     error = function(e) e,
@@ -134,13 +135,13 @@ NULL
   iso_gadm <- data.frame(ISO3 = unique(gpkg$GID_0))
   # load ISO3 - country text file from the package
   iso_txt_file <- system.file("extdata", "countriesISO.csv",
-    package = "mapme.biodiversity"
+                              package = "mapme.biodiversity"
   )
   iso_txt <- read.csv(iso_txt_file)
   # merge
   iso_merged <- merge(iso_gadm,
-    iso_txt,
-    by = "ISO3"
+                      iso_txt,
+                      by = "ISO3"
   )
   # remove the world gpkg file
   unlink(file.path(rundir, "gadm_410.gpkg"))
@@ -195,6 +196,7 @@ NULL
 #'
 #' @param rundir A directory where intermediate files are written to.
 #'
+#' @importFrom utils read.csv
 #' @return A polygon object
 #' @keywords internal
 #' @noRd
@@ -203,7 +205,7 @@ NULL
 
   # bind all downloaded CSVs
   data_all <- list.files(rundir,
-    pattern = "*.csv", full.names = TRUE
+                         pattern = "*.csv", full.names = TRUE
   ) %>%
     lapply(read.csv) %>%
     dplyr::bind_rows()

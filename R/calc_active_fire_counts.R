@@ -63,6 +63,7 @@ NULL
                                      verbose = TRUE,
                                      todisk = FALSE,
                                      ...) {
+  acq_date <- NULL
   intersected <- suppressWarnings(st_intersection(nasa_firms, shp))
   intersected <- intersected %>%
     tidyr::separate(acq_date, c("yyyy", "mm", "dd"))
