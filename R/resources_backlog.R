@@ -122,7 +122,7 @@ available_resources <- function(resources = NULL) {
       source = "NASA FIRMS",
       downloader = ".get_nasa_firms",
       arguments = list(
-        instrument = "VIIRS_S_NPP"
+        instrument = "VIIRS"
       )
     )
   )

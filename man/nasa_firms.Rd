@@ -24,7 +24,7 @@ temperature, and fire radiative power (frp). The data from MODIS is available fr
 The data from the following instruments are available:
 \itemize{
 \item "MODIS"
-\item "VIIRS_S_NPP"
+\item "VIIRS"
 }
 
 The following argument should be specified by users:
