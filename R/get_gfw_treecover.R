@@ -65,7 +65,7 @@ NULL
     xmin = -180, xmax = 170, dx = 10,
     ymin = -50, ymax = 80, dy = 10
   )
-  tile_ids <- st_intersects(st_as_sfc(bbox), grid_gfc)[[1]]
+  tile_ids <- st_intersects(st_as_sfc(bbox), grid_gfc)
   if (length(tile_ids) == 0) {
     stop("The extent of the portfolio does not intersect with the GFW grid.",
       call. = FALSE
