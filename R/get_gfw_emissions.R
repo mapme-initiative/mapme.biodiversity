@@ -38,7 +38,7 @@ NULL
 .get_gfw_emissions <- function(x,
                                verbose = TRUE,
                                rundir = tempdir()) {
-  bbox <- x
+  bbox <- st_bbox(x)
   index_file <- system.file("extdata", "greenhouse_index.geosjon", package = "mapme.biodiversity")
   spatialindex <- st_read(index_file, quiet = TRUE)
   targets <- unlist(st_intersects(st_as_sfc(bbox), spatialindex))
