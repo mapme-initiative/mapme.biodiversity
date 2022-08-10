@@ -57,7 +57,7 @@ NULL
     )
   }
   # make the GFW grid and construct urls for intersecting tiles
-  bbox <- st_bbox(x)
+  bbox <- x
   baseurl <- sprintf(
     "https://storage.googleapis.com/earthenginepartners-hansen/%s/",
     vers_lossyear
