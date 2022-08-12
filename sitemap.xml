@@ -37,12 +37,6 @@
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/news/index.html</loc>
   </url>
   <url>
-    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/active_fire_counts.html</loc>
-  </url>
-  <url>
-    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/active_fire_properties.html</loc>
-  </url>
-  <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/available_indicators.html</loc>
   </url>
   <url>
@@ -104,9 +98,6 @@
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/mangroves_area.html</loc>
-  </url>
-  <url>
-    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/nasa_firms.html</loc>
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/nasa_grace.html</loc>
