@@ -56,7 +56,6 @@ NULL
     )
   }
   # make the GFW grid and construct urls for intersecting tiles
-  bbox <- x
   baseurl <- sprintf(
     "https://storage.googleapis.com/earthenginepartners-hansen/%s/",
     vers_treecover
@@ -65,7 +64,7 @@ NULL
     xmin = -180, xmax = 170, dx = 10,
     ymin = -50, ymax = 80, dy = 10
   )
-  tile_ids <- st_intersects(st_as_sfc(bbox), grid_gfc)
+  tile_ids <- unlist(st_intersects(x, grid_gfc))
   if (length(tile_ids) == 0) {
     stop("The extent of the portfolio does not intersect with the GFW grid.",
       call. = FALSE
