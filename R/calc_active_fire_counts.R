@@ -56,7 +56,6 @@ NULL
 #' @keywords internal
 #' @noRd
 
-
 .calc_active_fire_counts <- function(shp,
                                      nasa_firms,
                                      rundir = tempdir(),
@@ -65,8 +64,8 @@ NULL
                                      ...) {
   acq_date <- NULL
   intersected <- suppressWarnings(st_intersection(nasa_firms, shp))
-  intersected <- intersected %>%
-    tidyr::separate(acq_date, c("yyyy", "mm", "dd"))
+  if(nrow(intersected) == 0) return(NA)
+  intersected <-  tidyr::separate(intersected, acq_date, c("yyyy", "mm", "dd"))
   years <- unique(intersected$yyyy)
   data <- lapply(1:length(years), function(i) {
     n <- nrow(intersected[intersected$yyyy == paste0(years[i]), ])
