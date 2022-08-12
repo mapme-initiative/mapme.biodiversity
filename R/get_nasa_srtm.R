@@ -29,13 +29,12 @@ NULL
 .get_nasa_srtm <- function(x,
                            rundir = tempdir(),
                            verbose = TRUE) {
-  bbox <- st_bbox(x)
   # make the SRTM grid and construct urls for intersecting tiles
   grid_srtm <- .make_global_grid(
     xmin = -180, xmax = 180, dx = 5,
     ymin = -60, ymax = 60, dy = 5
   )
-  tile_ids <- st_intersects(st_as_sfc(bbox), grid_srtm)[[1]]
+  tile_ids <- unlist(st_intersects(x, grid_srtm))
   if (length(tile_ids) == 0) {
     stop("The extent of the portfolio does not intersect with the SRTM grid.")
   }
