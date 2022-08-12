@@ -31,6 +31,7 @@ jobs:
           needs: website
 
       - name: Deploy package
+        if: github.event_name != 'pull_request'
         run: |
           git config --local user.name "$GITHUB_ACTOR"
           git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
