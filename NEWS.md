@@ -31,6 +31,8 @@
 
 ## New features
 
+- added NASA FIRMS data set for active fire monitoring
+
 ## Internal
 
 * adapted download routine to GMW v3 (#80)

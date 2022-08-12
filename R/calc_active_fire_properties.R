@@ -66,14 +66,10 @@ NULL
                                          todisk = FALSE,
                                          ...) {
   intersected <- suppressWarnings(st_intersection(nasa_firms, shp))
+  if(nrow(intersected) == 0) return(NA)
   intersected <- tidyr::extract(intersected, geom,
-    into = c("Lon", "Lat"), "\\((.*),(.*)\\)",
+    into = c("longitude", "latitude"), "\\((.*),(.*)\\)",
     conv = T
   )
-  results <- intersected[, c(
-    "bright_ti4", "scan", "track", "acq_date", "acq_time",
-    "satellite", "instrument", "confidence", "version",
-    "bright_ti5", "frp", "daynight", "type", "Lon", "Lat"
-  )]
-  results
+  dplyr::select(intersected, -geom)
 }

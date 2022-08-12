@@ -27,11 +27,17 @@ test_that(".get_nasa_firms works", {
   attributes(portfolio)$testing <- TRUE
   expect_error(
     .get_nasa_firms(portfolio),
-    "The target years do not intersect with the availability of active_fire."
+    "The target years do not intersect with the availability of nasa_firms"
   )
 
   expect_error(
     .get_nasa_firms(portfolio, instrument = "VIIRS_NOAA"),
     "The selected instrument VIIRS_NOAA is not available. Please choose one of: MODIS or VIIRS"
+  )
+
+  attributes(portfolio)$years = 2012
+  expect_equal(
+    .get_nasa_firms(portfolio),
+    "VIIRS_2012.zip"
   )
 })
