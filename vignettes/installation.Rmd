@@ -29,7 +29,7 @@ the path to the executable binary is known to the user and we test it if
 provided during portfolio initialization.
 
 Given that the above requirements are met, installing the `{mapme.biodiversity}` 
-current CRAN release is then achieved trough the following function call: 
+current CRAN release is then achieved through the following function call: 
 
 ```{r installation-cran, eval = FALSE}
 install.packages("mapme.biodiversity")
