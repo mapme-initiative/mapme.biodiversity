@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 ```
 
 
-This sections describes how to install the `{mapme.biodiversity}` package. 
+This section describes how to install the `{mapme.biodiversity}` package. 
 Since the package handles spatial data, we assume that you have
 a working installation of [GDAL](https://gdal.org/index.html) and [PROJ](https://proj.org/) 
 on your system. The GDAL installation needs to be found on your PATH variable, 
