@@ -39,7 +39,7 @@ you can access it once you have calculated your indicators.
 The package will add a unique asset identifier called <code>assetid</code> and
 add *nested list columns* for each indicator. Portfolio-wide arguments are set as 
 attributes during the call of <code>init_portfolio()</code>. Except from these additional
-arguments, an portfolio object actually is and will behave as a familiar <code>{sf}</code>
+arguments, a portfolio object actually is and will behave as a familiar <code>{sf}</code>
 object in any important regard.
 
 - **Resources**: A resource is a supported dataset that can be downloaded via the 
