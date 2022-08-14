@@ -22,7 +22,7 @@ related datasets and associated indicators that can be utilized to monitor
 and evaluate the effectiveness of protection efforts. Several indicators are 
 available at regular intervals for almost two decades (2000 to 2020). This allows
 users to analyse spatial and temporal dynamics of their biodiversity portfolios.
-The package abstracts away repetitive task, such as temporal and
+The package abstracts away repetitive tasks, such as temporal and
 spatial selection of resources. This allows a seamless approach to quantitative 
 data analysis even for very large (potentially global) portfolios where users 
 are enabled to focus on the aims of their analysis. The package
