@@ -73,7 +73,7 @@ the numeric outputs. Currently, these engines are based on either <code>terra::z
 great care to set these engines to sensible defaults. However, to 
 customize your workflow you can choose to use a different engine instead.
 
-- **Processing Modes**: The processing mode is is an important concept if you wish 
+- **Processing Modes**: The processing mode is an important concept if you wish 
 to extend the package with a new indicator, but not so much if you simply want to
 use for your statistical analysis. For most indicators the default processing 
 mode is equal to <code>'asset'</code>, meaning that for each asset in the 
