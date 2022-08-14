@@ -54,7 +54,7 @@ Once you have decided on an indicator you are interested in, you can initialize
 a biodiversity portfolio by using an sf-object that only contains geometries of 
 type `POLYGON` via the `init_portfolio()` function call. This will set some 
 important information that is needed further down the processing 
-chain. We can then request the download of a resources that is required to 
+chain. We can then request the download of a resource that is required to 
 calculate specific indicators. Once the indicator has been calculated for
 individually for all assets in a portfolio, the data is returned as a nested 
 list column to the original object. 
