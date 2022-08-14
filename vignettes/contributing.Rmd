@@ -47,7 +47,7 @@ git clone https://github.com/mapme-initiative/mapme.biodiversity
 We do not accept pushes to main, thus the first step would be to create
 a specific branch for your extension. In this tutorial, we will pretend to 
 reimplement the `soilgrids` resources and the associated `soilproperties` 
-indicator, so that we create a branch reflecting this. Don't forget to checkout
+indicator, so that we create a branch reflecting this. Don't forget to check out
 to the newly created branch!
 
 ```bash
@@ -82,7 +82,7 @@ devtools::install_dev_deps()
 - [ ] Add a small example data set of your resource to `inst/res/resource_name/`
 - [ ] Added a new dependency? Make sure to include a supporting statement for that dependency in your PR!
 
-## Introducing a new resources to the backlog
+## Introducing a new resource to the backlog
 
 A resource is a supported dataset that can be downloaded from a user's perspective  
 via the <code>get_resources()</code> function. Currently, the package supports
@@ -100,7 +100,7 @@ file.edit("R/resources_backlog.R")
 
 This file keeps track of all supported resources in a list object. You will
 see that each resource shares a common structure and how it is specified. The name
-of the list object will be the name the package uses to identifiy a specific resource.
+of the list object will be the name the package uses to identify a specific resource.
 Most importantly, the type argument specifies whether a resource is of type 'raster'
 or 'vector'. If applicable, the source argument shall contain an URL pointing
 to a webpage documenting the resource. The downloader argument is the package
@@ -111,7 +111,10 @@ arguments are needed just enter an empty list. For the `soilgrids` resource,
 the internal backlog looks like this (don't spend too much effort in understanding
 the arguments just yet. These will become clearer when we "write" the downloader.
 When contributing a new resource, it is usually an iterative process between
-the backlog and the downloader to identify those arguments that need to be specified
+the backlog and the downloader to 
+
+
+y those arguments that need to be specified
 by users):
 
 ```{r soilgrid_backlog, eval = FALSE}
@@ -278,7 +281,7 @@ We ask you to provide a small subset of your ressource to `inst/res/resource_nam
 so that indicators that depend on the resource can be tested without the need
 to actual download the resource. Because there are some restrictions to the final
 size of the package, we ask you to put substantial effort in reducing the size of
-the files to a minimum. This includes to crop all resource samples to the spatial
+the files to a minimum. This includes cropping all resource samples to the spatial
 extent of the polygon provided in `inst/extdata/sierra_de_neibe_478140.gpkg` or
 a polygon of similar size supplied by you in case it the spatial extent does
 not intersect with your resource. For raster resources, if the original raster
@@ -428,7 +431,7 @@ names as they are included in the resource backlog. Again, in case the
 to the extent of the single asset, in case it is set to `"portfolio"` the
 complete spatial extent of the portfolio is included.
 After the resource, any user-defined additional arguments will follow. You
-can assume that if users did not specify an arguments, the default values
+can assume that if users did not specify an argument, the default values
 from the indicator backlog will be inserted instead. Note, that 
 we define `engine` as an argument which is set by the users in order to give
 them more fine-control how the output is computed. We will have a close look 
