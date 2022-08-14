@@ -95,7 +95,7 @@ very large polygons sequentially or substantially reduce the number of cores.
 thoroughly tested that the provided routines also work on Windows machines, 
 the sequential processing of large numbers of polygons can take a while. If 
 you wish to process large portfolios in parallel, please make sure to use a UNIX
-based operating system (e.g. by using an [docker image](https://hub.docker.com/r/rocker/geospatial)).
+based operating system (e.g. by using a [docker image](https://hub.docker.com/r/rocker/geospatial)).
 
 - we took a great effort to evaluate the most efficient processing routines for
 each indicator. If you submit a new indicator where you have a more
