@@ -71,7 +71,7 @@ calculated (e.g. for polygons over the ocean and the `?treeloss` indicator),
 the numeric outputs. Currently, these engines are based on either <code>terra::zonal()</code>,
 <code>terra::extract()</code>, or <code>exactextractr::exact_extract()</code>. We took 
 great care to set these engines to sensible defaults. However, to 
-customize your workflow you can chose to use a different engine instead.
+customize your workflow you can choose to use a different engine instead.
 
 - **Processing Modes**: The processing mode is is an important concept if you wish 
 to extend the package with a new indicator, but not so much if you simply want to
