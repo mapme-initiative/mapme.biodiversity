@@ -27,7 +27,7 @@ feel free to raise an issue and we will happily discuss how we can support your
 ideas. If you have not already done so, make sure to read [Terminology](terminology.html)
 vignette to get familiar with the most important concepts of this package.
 
-Note that we use the [tidyverse styleguide](https://style.tidyverse.org/) 
+Note that we use the [tidyverse style guide](https://style.tidyverse.org/) 
 for the package. That specifically means that function and variable names should 
 follow the snake case pattern. We also use the arrow assignment operator (`<-`). 
 When submitting a PR that does not consistently follow the tidyverse style guide, 
