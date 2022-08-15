@@ -38,17 +38,17 @@ NULL
 .get_gfw_emissions <- function(x,
                                verbose = TRUE,
                                rundir = tempdir()) {
-  bbox <- st_bbox(x)
+
   index_file <- system.file("extdata", "greenhouse_index.geosjon", package = "mapme.biodiversity")
   spatialindex <- st_read(index_file, quiet = TRUE)
-  targets <- unlist(st_intersects(st_as_sfc(bbox), spatialindex))
-  tileids <- spatialindex$tile_id[targets]
+  tile_ids <- unlist(st_intersects(x, spatialindex))
+  tile_ids <- spatialindex$tile_id[tile_ids]
   urls <- as.character(
-    spatialindex$Mg_CO2e_px_download[spatialindex$tile_id %in% tileids]
+    spatialindex$Mg_CO2e_px_download[spatialindex$tile_id %in% tile_ids]
   )
   filenames <- file.path(
     rundir,
-    sprintf("gfw_forest_carbon_gross_emissions_Mg_CO2e_px_%s.tif", tileids)
+    sprintf("gfw_forest_carbon_gross_emissions_Mg_CO2e_px_%s.tif", tile_ids)
   )
   if (attr(x, "testing")) {
     return(basename(filenames))
