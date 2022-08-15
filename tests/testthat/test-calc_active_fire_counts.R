@@ -13,4 +13,5 @@ test_that("active fire count works", {
   expect_snapshot(
     .calc_active_fire_counts(shp, nasa_firms)
   )
+
 })
