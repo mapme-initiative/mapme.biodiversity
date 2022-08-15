@@ -61,7 +61,7 @@ The sf-object contains a single object of geometry type `MULTIPOLYGON`. The
 `{mapme.biodiversity}` package, however, only supports geometries of type `POLYGON`,
 thus we need to cast the geometry before we advance. The resulting sf object 
 also contains some metadata, that will be retained throughout the complete
-workflow. Because some of the casted geometries represent artifacts of the digitization 
+workflow. Because some of the cast geometries represent artifacts of the digitization 
 process, in this example we will subset to only the largest polygon.
 
 ```{r cast}
