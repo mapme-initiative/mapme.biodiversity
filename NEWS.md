@@ -31,9 +31,20 @@
 
 ## New features
 
+- new resource(s):
+  - nasa_firms
+- new indicator(s):
+  - active_fire_properties
+  - active_fire_counts
+
 ## Internal
 
 * adapted download routine to GMW v3 (#80)
+
+## Bug fixes
+
+* fixing issue #84 concerning intersection of tiled datasets (#86, @Jo-Schie)
+
 
 # mapme.biodiversity 0.1.2
 

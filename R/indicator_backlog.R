@@ -169,6 +169,18 @@ available_indicators <- function(indicator = NULL) {
       inputs = list(teow = "vector"),
       arguments = list(),
       processing_mode = "asset"
+    ),
+    active_fire_properties = list(
+      name = ".calc_active_fire_properties",
+      inputs = list(nasa_firms = "vector"),
+      arguments = list(),
+      processing_mode = "asset"
+    ),
+    active_fire_counts = list(
+      name = ".calc_active_fire_counts",
+      inputs = list(nasa_firms = "vector"),
+      arguments = list(),
+      processing_mode = "asset"
     )
   )
 
