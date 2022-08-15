@@ -79,6 +79,7 @@ cat(sprintf("Supported resources:\n- %s\n\nSupported indicators:\n- %s",
     ## - gfw_lossyear
     ## - gfw_treecover
     ## - gmw
+    ## - nasa_firms
     ## - nasa_grace
     ## - nasa_srtm
     ## - nelson_et_al
@@ -90,6 +91,8 @@ cat(sprintf("Supported resources:\n- %s\n\nSupported indicators:\n- %s",
     ## - worldpop
     ## 
     ## Supported indicators:
+    ## - active_fire_counts
+    ## - active_fire_properties
     ## - biome
     ## - drought_indicator
     ## - ecoregion
