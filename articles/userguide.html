@@ -193,15 +193,16 @@
 <p>You can check which indicators are available via the <code><a href="../reference/available_indicators.html">available_indicators()</a></code> function. For this, we inspect the names of the returned object:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="../reference/available_indicators.html">available_indicators</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] "biome"                        "drought_indicator"           </span></span>
-<span><span class="co">#&gt;  [3] "ecoregion"                    "elevation"                   </span></span>
-<span><span class="co">#&gt;  [5] "landcover"                    "mangroves_area"              </span></span>
-<span><span class="co">#&gt;  [7] "population_count"             "precipitation_chirps"        </span></span>
-<span><span class="co">#&gt;  [9] "precipitation_wc"             "soilproperties"              </span></span>
-<span><span class="co">#&gt; [11] "temperature_max_wc"           "temperature_min_wc"          </span></span>
-<span><span class="co">#&gt; [13] "traveltime"                   "treecover_area"              </span></span>
-<span><span class="co">#&gt; [15] "treecover_area_and_emissions" "treecoverloss_emissions"     </span></span>
-<span><span class="co">#&gt; [17] "tri"</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] "active_fire_counts"           "active_fire_properties"      </span></span>
+<span><span class="co">#&gt;  [3] "biome"                        "drought_indicator"           </span></span>
+<span><span class="co">#&gt;  [5] "ecoregion"                    "elevation"                   </span></span>
+<span><span class="co">#&gt;  [7] "landcover"                    "mangroves_area"              </span></span>
+<span><span class="co">#&gt;  [9] "population_count"             "precipitation_chirps"        </span></span>
+<span><span class="co">#&gt; [11] "precipitation_wc"             "soilproperties"              </span></span>
+<span><span class="co">#&gt; [13] "temperature_max_wc"           "temperature_min_wc"          </span></span>
+<span><span class="co">#&gt; [15] "traveltime"                   "treecover_area"              </span></span>
+<span><span class="co">#&gt; [17] "treecover_area_and_emissions" "treecoverloss_emissions"     </span></span>
+<span><span class="co">#&gt; [19] "tri"</span></span></code></pre></div>
 <p>Say, we are interested in the precipitation indicator based on the CHIRPS dataset. We can learn more about this indicator and its required resources by using either of the commands below or, if you are viewing the online version, head over to the <a href="https://mapme-initiative.github.io/mapme.biodiversity/reference/precipitation_chirps.html">precipitation_chirps</a> documentation.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">?</span><span class="va">precipitation_chirps</span></span>
@@ -213,11 +214,11 @@
 <span><span class="co">#&gt;  [1] "chirps"                    "esalandcover"             </span></span>
 <span><span class="co">#&gt;  [3] "gfw_emissions"             "gfw_lossyear"             </span></span>
 <span><span class="co">#&gt;  [5] "gfw_treecover"             "gmw"                      </span></span>
-<span><span class="co">#&gt;  [7] "nasa_grace"                "nasa_srtm"                </span></span>
-<span><span class="co">#&gt;  [9] "nelson_et_al"              "soilgrids"                </span></span>
-<span><span class="co">#&gt; [11] "teow"                      "worldclim_max_temperature"</span></span>
-<span><span class="co">#&gt; [13] "worldclim_min_temperature" "worldclim_precipitation"  </span></span>
-<span><span class="co">#&gt; [15] "worldpop"</span></span></code></pre></div>
+<span><span class="co">#&gt;  [7] "nasa_firms"                "nasa_grace"               </span></span>
+<span><span class="co">#&gt;  [9] "nasa_srtm"                 "nelson_et_al"             </span></span>
+<span><span class="co">#&gt; [11] "soilgrids"                 "teow"                     </span></span>
+<span><span class="co">#&gt; [13] "worldclim_max_temperature" "worldclim_min_temperature"</span></span>
+<span><span class="co">#&gt; [15] "worldclim_precipitation"   "worldpop"</span></span></code></pre></div>
 <p>For the purpose of this vignette, we are going to download the <code>chirps</code> resource. We can get more detailed information about a given resource, by using either of the commands below to open up the help page. If you are viewing the online version of this documentation, you can simply head over to the <a href="https://mapme-initiative.github.io/mapme.biodiversity/reference/chirps.html">chirps</a> resource documentation.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">?</span><span class="va">chirps</span></span>
@@ -333,9 +334,9 @@
 <span>  dsn <span class="op">=</span> <span class="va">tmp_output</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Writing layer `metadata' to data source </span></span>
-<span><span class="co">#&gt;   `/tmp/RtmpYU0PYz/file38b171a7c507.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt;   `/tmp/RtmpPEbxrh/file39312b3af4d.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">#&gt; Writing 20 features with 2 fields and geometry type Polygon.</span></span>
-<span><span class="co">#&gt; Updating layer `precipitation_chirps' to data source `/tmp/RtmpYU0PYz/file38b171a7c507.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt; Updating layer `precipitation_chirps' to data source `/tmp/RtmpPEbxrh/file39312b3af4d.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">#&gt; Writing 240 features with 5 fields without geometries.</span></span>
 <span><span class="op">(</span><span class="va">portfolio_from_disk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_portfolio.html">read_portfolio</a></span><span class="op">(</span><span class="va">tmp_output</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Simple feature collection with 20 features and 3 fields</span></span>
