@@ -147,7 +147,7 @@ only matching resources are returned.
 
 The argument `cores` specifies the number of CPU cores available to the indicator 
 routines for parallel processing. Parallel processing is deactivated on Windows 
-by default. If you use another operating system you may set to a value greater 
+by default. If you use another operating system, you may set to a value greater 
 1 if you wish to activate parallel processing. 
 
 Finally, the `verbose` logical controls whether or not the package
@@ -179,7 +179,7 @@ resource and it accepts three arguments, namely the `scales_spi`, `spi_prev_year
 and `engine` arguments. `scales_spi` determines the time-scale for the calculation of the Standardized-Precipitation-Index (SPI), while `spi_prev_years` indicates how many 
 previous years are included in the fitting process.
 The `engine` argument controls how zonal statistics for each asset in the portfolio
-is extracted.
+are extracted.
 
 With that information at hand, we can start to retrieve the required resource. 
 We can learn about all available resources using the <code>available_resources()</code> 
@@ -225,13 +225,13 @@ sample_portfolio <- get_resources(
 
 # Calculate specific indicators
 
-The next step consists of calculating specific indicators. Note, 
+The next step consists of calculating specific indicators. Note 
 that each indicator requires one or more resources that were made available 
 via the <code>get_resources()</code> function explained above. Here, we are going
 to calculate the `precipitation_chirps` indicator which is based on the `chirps` resource.
 Since the resource has been made available in the previous step, we can continue
-requesting the calculation of our desired indicator. Note, the below
-command would issue an error in case a required resource has not been made
+requesting the calculation of our desired indicator. Note the command below
+would issue an error in case a required resource has not been made
 available via <code>get_resources()</code> beforehand.
 
 ```{r calc_indicator}
