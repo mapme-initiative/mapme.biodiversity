@@ -31,7 +31,11 @@
 
 ## New features
 
-- added NASA FIRMS data set for active fire monitoring
+- new resource(s):
+  - nasa_firms
+- new indicator(s):
+  - active_fire_properties
+  - active_fire_counts
 
 ## Internal
 
