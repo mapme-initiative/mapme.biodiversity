@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 
 In the following we will demonstrate an idealized workflow based on a subset
 of the CHIRPS dataset that is delivered together with this package. You can follow
-along the code snippets below to reproduce the results. Please note, that
+along the code snippets below to reproduce the results. Please note that
 to reduce the time it takes to process this vignette, we will not download
 any resources from the internet. In a real use case, thus processing time
 might substantially increase because resources have to be downloaded and real
@@ -44,7 +44,7 @@ other geospatial software
 First, we will load the `{mapme.biodiversity}` and the `{sf}` package for handling
 spatial vector data. For tabular data handling and the creation of a plot, we will
 also load the `{dplyr}` and `{ggplot2}` packages.
-Then, we will read an package internal GeoPackage which includes the geometry of a 
+Then, we will read a package internal GeoPackage which includes the geometry of a 
 protected area in the Dominican Republic from the WDPA database.
 
 ```{r setup, message=FALSE}
@@ -61,7 +61,7 @@ The sf-object contains a single object of geometry type `MULTIPOLYGON`. The
 `{mapme.biodiversity}` package, however, only supports geometries of type `POLYGON`,
 thus we need to cast the geometry before we advance. The resulting sf object 
 also contains some metadata, that will be retained throughout the complete
-workflow. Because some of the casted geometries represent artifacts of the digitization 
+workflow. Because some of the cast geometries represent artifacts of the digitization 
 process, in this example we will subset to only the largest polygon.
 
 ```{r cast}
@@ -147,7 +147,7 @@ only matching resources are returned.
 
 The argument `cores` specifies the number of CPU cores available to the indicator 
 routines for parallel processing. Parallel processing is deactivated on Windows 
-by default. If you use another operating system you may set to a value greater 
+by default. If you use another operating system, you may set to a value greater 
 1 if you wish to activate parallel processing. 
 
 Finally, the `verbose` logical controls whether or not the package
@@ -179,7 +179,7 @@ resource and it accepts three arguments, namely the `scales_spi`, `spi_prev_year
 and `engine` arguments. `scales_spi` determines the time-scale for the calculation of the Standardized-Precipitation-Index (SPI), while `spi_prev_years` indicates how many 
 previous years are included in the fitting process.
 The `engine` argument controls how zonal statistics for each asset in the portfolio
-is extracted.
+are extracted.
 
 With that information at hand, we can start to retrieve the required resource. 
 We can learn about all available resources using the <code>available_resources()</code> 
@@ -225,13 +225,13 @@ sample_portfolio <- get_resources(
 
 # Calculate specific indicators
 
-The next step consists of calculating specific indicators. Note, 
+The next step consists of calculating specific indicators. Note 
 that each indicator requires one or more resources that were made available 
 via the <code>get_resources()</code> function explained above. Here, we are going
 to calculate the `precipitation_chirps` indicator which is based on the `chirps` resource.
 Since the resource has been made available in the previous step, we can continue
-requesting the calculation of our desired indicator. Note, the below
-command would issue an error in case a required resource has not been made
+requesting the calculation of our desired indicator. Note the command below
+would issue an error in case a required resource has not been made
 available via <code>get_resources()</code> beforehand.
 
 ```{r calc_indicator}

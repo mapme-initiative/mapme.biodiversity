@@ -22,7 +22,7 @@ related datasets and associated indicators that can be utilized to monitor
 and evaluate the effectiveness of protection efforts. Several indicators are 
 available at regular intervals for almost two decades (2000 to 2020). This allows
 users to analyse spatial and temporal dynamics of their biodiversity portfolios.
-The package abstracts away repetitive task, such as temporal and
+The package abstracts away repetitive tasks, such as temporal and
 spatial selection of resources. This allows a seamless approach to quantitative 
 data analysis even for very large (potentially global) portfolios where users 
 are enabled to focus on the aims of their analysis. The package
@@ -39,8 +39,8 @@ raster data.
 `mapme.biodiversity` provides a standardized interface to download and analyse
 a great variety of biodiversity related spatial datasets allowing users to 
 focus on the aims of their analysis. The sometimes cumbersome process of handling
-different spatial dataformats and the spatial and temporal selection is handled
-internally. Many organizations provide and continue to provide value-added
+different spatial data formats and the spatial and temporal selection is handled
+internally. Many organizations provide value-added
 datasets related to biodiversity. These organizations often use different 
 technology stacks to distribute their data. `mapme.biodiversity` contains
 simple routines to communicate with these different backends to 
@@ -95,7 +95,7 @@ very large polygons sequentially or substantially reduce the number of cores.
 thoroughly tested that the provided routines also work on Windows machines, 
 the sequential processing of large numbers of polygons can take a while. If 
 you wish to process large portfolios in parallel, please make sure to use a UNIX
-based operating system (e.g. by using an [docker image](https://hub.docker.com/r/rocker/geospatial)).
+based operating system (e.g. by using a [docker image](https://hub.docker.com/r/rocker/geospatial)).
 
 - we took a great effort to evaluate the most efficient processing routines for
 each indicator. If you submit a new indicator where you have a more
