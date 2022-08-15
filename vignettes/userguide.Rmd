@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 
 In the following we will demonstrate an idealized workflow based on a subset
 of the CHIRPS dataset that is delivered together with this package. You can follow
-along the code snippets below to reproduce the results. Please note, that
+along the code snippets below to reproduce the results. Please note that
 to reduce the time it takes to process this vignette, we will not download
 any resources from the internet. In a real use case, thus processing time
 might substantially increase because resources have to be downloaded and real
@@ -44,7 +44,7 @@ other geospatial software
 First, we will load the `{mapme.biodiversity}` and the `{sf}` package for handling
 spatial vector data. For tabular data handling and the creation of a plot, we will
 also load the `{dplyr}` and `{ggplot2}` packages.
-Then, we will read an package internal GeoPackage which includes the geometry of a 
+Then, we will read a package internal GeoPackage which includes the geometry of a 
 protected area in the Dominican Republic from the WDPA database.
 
 ```{r setup, message=FALSE}
