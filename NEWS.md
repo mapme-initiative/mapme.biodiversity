@@ -35,6 +35,11 @@
 
 * adapted download routine to GMW v3 (#80)
 
+## Bug fixes
+
+* fixing issue #84 concerning intersection of tiled datasets (#86, @Jo-Schie)
+
+
 # mapme.biodiversity 0.1.2
 
 ## Internal
