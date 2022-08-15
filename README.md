@@ -153,3 +153,6 @@ object.
 Head over to the [online
 documentation](https://mapme-initiative.github.io/mapme.biodiversity/index.html)
 find more detailed information about the package.
+
+## Important note for global scale analysis
+In the current version on CRAN there is a bug that may cause issue when downloading  tiled data (Global Forest Watch, ESA Landcover, SRTM) for global portfolios. It is described [here](https://github.com/mapme-initiative/mapme.biodiversity/issues/84). It is fixed in the current version on Github which you can download as described above
