@@ -28,29 +28,33 @@ one or multiple inputs as character "mean", "median" or "sd".}
 }
 }
 \examples{
-library(sf)
-library(mapme.biodiversity)
+if (Sys.getenv("NOT_CRAN") == "true") {
+  library(sf)
+  library(mapme.biodiversity)
 
-temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-if(!file.exists(temp_loc)){
-dir.create(temp_loc)
-resource_dir <- system.file("res", package = "mapme.biodiversity")
-file.copy(resource_dir, temp_loc, recursive = TRUE)
-}
+  temp_loc <- file.path(tempdir(), "mapme.biodiversity")
+  if(!file.exists(temp_loc)){
+    dir.create(temp_loc)
+    resource_dir <- system.file("res", package = "mapme.biodiversity")
+    file.copy(resource_dir, temp_loc, recursive = TRUE)
+  }
 
-(try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+  (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
                         package = "mapme.biodiversity") \%>\%
-  read_sf() \%>\%
-  init_portfolio(
-    years = 2022,
-    outdir = file.path(temp_loc, "res"),
-    tmpdir = tempdir(),
-    add_resources = FALSE,
-    cores = 1,
-    verbose = FALSE
-  ) \%>\%
-  get_resources("nasa_grace") \%>\%
-  calc_indicators("drought_indicator", stats_drought = c("mean", "median"), engine = "extract") \%>\%
-  tidyr::unnest(drought_indicator)))
+         read_sf() \%>\%
+         init_portfolio(
+           years = 2022,
+           outdir = file.path(temp_loc, "res"),
+           tmpdir = tempdir(),
+           add_resources = FALSE,
+           cores = 1,
+           verbose = FALSE
+         ) \%>\%
+         get_resources("nasa_grace") \%>\%
+         calc_indicators("drought_indicator",
+                         stats_drought = c("mean", "median"),
+                         engine = "extract") \%>\%
+         tidyr::unnest(drought_indicator)))
+}
 }
 \keyword{indicator}

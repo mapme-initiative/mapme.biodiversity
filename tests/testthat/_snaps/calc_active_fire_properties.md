@@ -22,5 +22,4 @@
       #   longitude <dbl>, latitude <dbl>, and abbreviated variable names
       #   1: bright_ti4, 2: acq_date, 3: acq_time, 4: satellite, 5: instrument,
       #   6: confidence, 7: bright_ti5
-      # i Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names
 
