@@ -1,7 +1,8 @@
 # mapme.biodiversity (development version)
 
 ## Breaking changes
-* extensive renaming of resources and indicators:
+* extensive renaming of resources and indicators. These are handled gracefully
+until the next release (i.e. a warning is issued and names are replaced):
 
 * resources:
 * `treecover2000` -> `gfw_treecover`
