@@ -1,4 +1,5 @@
 test_that("emissions works", {
+  options(pillar.advice = FALSE)
   shp <- read_sf(
     system.file("extdata", "gfw_sample.gpkg",
       package = "mapme.biodiversity"

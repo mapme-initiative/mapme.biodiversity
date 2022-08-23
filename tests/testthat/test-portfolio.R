@@ -1,4 +1,5 @@
 test_that("init_portfolio works", {
+  options(pillar.advice = FALSE)
   aoi <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
                 package = "mapme.biodiversity"
