@@ -62,4 +62,8 @@ test_that("calc_indicator works", {
   )$treecover_area[[1]]
 
   expect_snapshot(stat)
+
+  expect_warning(
+    calc_indicators(portfolio, "treecover")
+  )
 })
