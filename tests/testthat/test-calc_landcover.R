@@ -1,5 +1,4 @@
 test_that("esa global landcover works", {
-  options(pillar.advice = FALSE)
   shp <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
                 package = "mapme.biodiversity"

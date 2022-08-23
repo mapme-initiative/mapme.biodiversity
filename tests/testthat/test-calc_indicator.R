@@ -1,5 +1,4 @@
 test_that("calc_indicator works", {
-  options(pillar.advice = FALSE)
   aoi <- read_sf(
     system.file("extdata", "gfw_sample.gpkg",
       package = "mapme.biodiversity"
