@@ -3,4 +3,5 @@ library(mapme.biodiversity)
 library(pbapply)
 
 pboptions(type = "none")
+options(pillar.advice = FALSE)
 test_check("mapme.biodiversity")
