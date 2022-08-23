@@ -1,6 +1,5 @@
 test_that("active fire count works", {
   skip_on_os("mac")
-  options(pillar.advice = FALSE)
   shp <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
                 package = "mapme.biodiversity"
