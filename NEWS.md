@@ -40,6 +40,7 @@
 ## Internal
 
 * adapted download routine to GMW v3 (#80)
+* removed data.table from imports
 
 ## Bug fixes
 

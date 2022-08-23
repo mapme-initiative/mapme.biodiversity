@@ -26,7 +26,6 @@ Depends:
     R (>= 3.5.0)
 Imports:
     curl,
-    data.table,
     dplyr,
     httr,
     magrittr,
