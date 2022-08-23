@@ -1,4 +1,5 @@
 test_that(".calc_population_count works", {
+  options(pillar.advice = FALSE)
   shp <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
                 package = "mapme.biodiversity"
