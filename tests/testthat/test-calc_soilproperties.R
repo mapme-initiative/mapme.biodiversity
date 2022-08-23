@@ -1,5 +1,4 @@
 test_that("soilpoperties works", {
-  options(pillar.advice = FALSE)
   shp <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
       package = "mapme.biodiversity"
@@ -12,7 +11,6 @@ test_that("soilpoperties works", {
   ), pattern = ".tif$", full.names = TRUE)
 
   soilgrids <- rast(soilgrids)
-
 
   expect_equal(
     .calc_soilproperties(shp, NULL),

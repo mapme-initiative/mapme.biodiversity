@@ -1,5 +1,4 @@
 test_that("treecover area and emissions works", {
-  options(pillar.advice = FALSE)
   shp <- read_sf(
     system.file("extdata", "gfw_sample.gpkg",
       package = "mapme.biodiversity"

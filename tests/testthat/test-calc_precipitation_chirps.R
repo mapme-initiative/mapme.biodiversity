@@ -1,13 +1,10 @@
 test_that("precipitation indicator works", {
-  options(pillar.advice = FALSE)
   shp <- read_sf(
     system.file("extdata", "gfw_sample.gpkg",
                 package = "mapme.biodiversity"
     )
   )
   shp <- suppressWarnings(st_cast(shp, to = "POLYGON"))[1, ]
-  pbapply::pboptions(type = "none")
-  options(pillar.advice = FALSE)
 
   chirps <- list.files(system.file("res", "chirps",
                                    package = "mapme.biodiversity"
