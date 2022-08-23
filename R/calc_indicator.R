@@ -21,6 +21,9 @@
 #' @keywords function
 #' @export
 calc_indicators <- function(x, indicators, ...) {
+
+  # depreciation warining for old indicator names
+  indicators <- .depreciation_warning(indicators, resource = FALSE)
   # check if the requested resource is supported
   required_resources <- .check_requested_indicator(indicators)
   # check if any of the requested resources is already locally available
@@ -41,7 +44,6 @@ calc_indicators <- function(x, indicators, ...) {
     suppressMessages(sf_use_s2(FALSE))
     on.exit(suppressMessages(sf_use_s2(s2_org)))
   }
-
   for (indicator in indicators) x <- .get_single_indicator(x, indicator, ...)
   x
 }
