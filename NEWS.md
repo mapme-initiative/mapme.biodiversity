@@ -1,5 +1,9 @@
 # mapme.biodiversity (development version)
 
+## Bug fixes
+- fixes a bug that occurred for tiled resources when multiple assets are within 
+the same tile
+
 # mapme.biodiversity 0.2.0
 
 ## Breaking changes
