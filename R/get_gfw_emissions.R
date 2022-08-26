@@ -41,7 +41,7 @@ NULL
 
   index_file <- system.file("extdata", "greenhouse_index.geosjon", package = "mapme.biodiversity")
   spatialindex <- st_read(index_file, quiet = TRUE)
-  tile_ids <- unlist(st_intersects(x, spatialindex))
+  tile_ids <- unique(unlist(st_intersects(x, spatialindex)))
   tile_ids <- spatialindex$tile_id[tile_ids]
   urls <- as.character(
     spatialindex$Mg_CO2e_px_download[spatialindex$tile_id %in% tile_ids]
