@@ -54,3 +54,4 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
 SystemRequirements: GDAL (>= 3.0.0), PROJ (>= 4.8.0)
+Language: en-GB

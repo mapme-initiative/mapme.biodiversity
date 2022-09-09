@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_nasa_grace.R
 \name{.get_nasagrace_url}
 \alias{.get_nasagrace_url}
-\title{Helper function to construct GRACE urls}
+\title{Helper function to construct GRACE URLs}
 \usage{
 .get_nasagrace_url(target_year)
 }
@@ -13,6 +13,6 @@
 A character vector
 }
 \description{
-Helper function to construct GRACE urls
+Helper function to construct GRACE URLs
 }
 \keyword{internal}

@@ -3,7 +3,7 @@
 \docType{data}
 \name{soilgrids}
 \alias{soilgrids}
-\title{Soildgrids data layers}
+\title{SoilGrids data layers}
 \format{
 A global tiled raster resource available for all land areas.
 }
@@ -11,7 +11,7 @@ A global tiled raster resource available for all land areas.
 \url{https://www.isric.org/explore/soilgrids}
 }
 \description{
-Soilgrids is a project combining global observation data with
+SoilGrids is a project combining global observation data with
 machine learning to map the spatial distribution of soil properties across
 the globe. It is produced at a spatial resolution of 250 meters and each
 parameters is mapped at different depths. In order to be able to assess
@@ -35,9 +35,9 @@ The following parameters are available:
 \details{
 Users can specify the following arguments:
 \describe{
-\item{layer}{The soil parameter as a single charachter}
-\item{depth}{The requested depth as a single chrachter}
-\item{stat}{The predicted statistic as a single charachter}
+\item{layer}{The soil parameter as a single character}
+\item{depth}{The requested depth as a single character}
+\item{stat}{The predicted statistic as a single character}
 }
 
 Except for \code{ocs}, which is only available for a depth of \code{"0-30cm"},

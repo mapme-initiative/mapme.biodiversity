@@ -25,7 +25,7 @@ requested indicator.
 }
 \description{
 With \code{calc_indicators()} specific biodiversity indicators
-can be calculated. A requirment is that the ressources that
+can be calculated. A requirement is that the resources that
 are mandatory inputs for the requested indicators are available
 locally. Multiple indicators and their respective additional
 arguments can be supplied. You can check available indicators and

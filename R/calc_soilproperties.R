@@ -1,10 +1,10 @@
 #' Calculate Zonal Soil Properties
 #'
 #' This indicator allows the extraction of zonal statistics for resource layers
-#' previously downloaded from soilgrids, thus in total supporting the calculation
+#' previously downloaded from SoilGrids, thus in total supporting the calculation
 #' of zonal statistics for 10 different soil properties at 6 different depths for
 #' a total of 4 different model outputs (stat). Zonal statistics will be calculated
-#' for all soilgrid layers that have been previously made available vie \code{get_resources()}.
+#' for all SoilGrid layers that have been previously made available vie \code{get_resources()}.
 #' The required resource for this indicator is:
 #'  - [soilgrids]
 #'
@@ -20,8 +20,8 @@
 #' @name soilproperties
 #' @docType data
 #' @keywords indicator
-#' @format A tibble with a column for the soilgrid layer, the depth and the model
-#'   output statistic as well as additionall columns for all zonal statistics
+#' @format A tibble with a column for the SoilGrid layer, the depth and the model
+#'   output statistic as well as additional columns for all zonal statistics
 #'   specified via \code{stats_soil}
 #' @examples
 #' library(sf)

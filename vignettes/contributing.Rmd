@@ -201,11 +201,11 @@ has to take care of. If some arguments are wrongly specified, the function
 should fail (via `stop()`) and gracefully inform users which arguments where
 misspecified and which values represent valid values. You can head
 over to the soilgrids downloader (use `file.edit("R/get_soilgrids.R")`) and 
-analyze the first few lines of the file (up to line ~130) to see how the
+analyse the first few lines of the file (up to line ~130) to see how the
 inputs are checked for the soilgrids resource.
 
 Some portfolio-wide parameters that might be important to your specific downloader
-can be determined by analyzing the `x` portfolio attributes. Currently, the following
+can be determined by analysing the `x` portfolio attributes. Currently, the following
 attributes with regard to a resource download are set, when users initialize their portfolio:
 
 ```r
@@ -277,7 +277,7 @@ to GeoPackages (`.gpkg`) and will be appended to the portfolio as is.
 
 ## Adding sample resource for package internal testing
 
-We ask you to provide a small subset of your ressource to `inst/res/resource_name`
+We ask you to provide a small subset of your resource to `inst/res/resource_name`
 so that indicators that depend on the resource can be tested without the need
 to actual download the resource. Because there are some restrictions to the final
 size of the package, we ask you to put substantial effort in reducing the size of
@@ -285,12 +285,12 @@ the files to a minimum. This includes cropping all resource samples to the spati
 extent of the polygon provided in `inst/extdata/sierra_de_neibe_478140.gpkg` or
 a polygon of similar size supplied by you in case it the spatial extent does
 not intersect with your resource. For raster resources, if the original raster
-is encoded as float, consider changing the datatype to integer by introducing a
+is encoded as float, consider changing the data type to integer by introducing a
 scale factor. Also, please use a compression algorithm to further reduce the file 
 size. For vector resources, consider reducing the number of vertices in case
 the geometries are very complex.
 
-## A note on dependecies for resources
+## A note on dependencies for resources
 
 Note, that a resource **SHALL NOT** add additional dependencies to the package. If
 you add dependencies we require you to add a supporting statement to your PR
@@ -445,7 +445,7 @@ whether or not to print additional informative messages. For raster resources,
 we included a logical `todisk` governing if intermediate raster files shall
 be kept in memory or written to disk. Currently, the decision has to be 
 handled by your indicator processor, however, we are evaluating possibilities
-to determine the behavior within the package itself. Last, the processing
+to determine the behaviour within the package itself. Last, the processing
 mode is specified. This can be helpful if you wish to supply your processor
 with the possibility to support either of the two modes. For the `precipitation`
 indicator, the function header will look like this:
@@ -474,7 +474,7 @@ for the correctness of these arguments. If some arguments are wrongly specified,
 the function should fail (via `stop()`) and gracefully inform users which 
 arguments where misspecified and which values represent valid values. 
 You can head over to the precipitation processor (use `file.edit("R/calc_precipitation.R")`) and 
-analyze the first few lines of the file (up to line ~76) to see how the
+analyse the first few lines of the file (up to line ~76) to see how the
 inputs are checked. Also note, that in case the required resource are `NULL` 
 (that is the default value if an asset does not intersect with a resource), or
 if any other configurations (e.g. years only smaller 1981 for the case of the
@@ -562,7 +562,7 @@ the row number of the asset.
 ## Defining the output of indicator functions
 
 Indicator functions, should return a tibble in long format as their output without
-"hiding" any variables in column names. Beside from that requirment, the output
+"hiding" any variables in column names. Beside from that requirement, the output
 of your indicator does not need to follow any specific shape, except that columns
 shall be equal across all assets. In case that you cannot calculate the indicator
 for a specific indicator (e.g. because the extents do not overlap), simply

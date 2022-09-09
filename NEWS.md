@@ -141,5 +141,5 @@ only writing to the temporal directory (#22).
 ## Internal
 
 * Introduced absolute URLS in userguide.Rmd pointing to the online documentation (#59)
-* \value tags added to all exported functions explaining what is the output/sideffect (#59)
+* \value tags added to all exported functions explaining what is the output/side effect (#59)
 * using requireNamespace() instead of installed.packages() to check if packages listed in SUGGEST are loadable (#58)

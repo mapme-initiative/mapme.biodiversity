@@ -1,4 +1,4 @@
-#' Year of forest loss occurence
+#' Year of forest loss occurrence
 #'
 #' This resource is part of the publication by Hansen et al. (2013)
 #' "High-Resolution Global Maps of 21st-Century Forest Cover Change". It

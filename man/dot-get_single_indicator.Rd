@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{A sf object returned by init_portfolio().}
 
-\item{indicator}{A variable length charcter vector with the indicators to
+\item{indicator}{A variable length character vector with the indicators to
 calculate.}
 
 \item{...}{Additional arguments required by the requested indicators.}

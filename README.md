@@ -26,7 +26,7 @@ cloud-infrastructures such as AWS or AZURE using in the statistical
 programming language R. The package allows for the analysis of global
 biodiversity portfolios with a thousand or millions of AOIs which is
 normally only possible on dedicated platforms such as the Google Earth
-Engine. It provides the possibility to e.g. analyze the World Database
+Engine. It provides the possibility to e.g. analyse the World Database
 of Protected Areas (WDPA) for a number of relevant indicators. The
 primary use case of this package is to support scientific analysis and
 data science for individuals and organizations who seek to preserve the

@@ -9,7 +9,7 @@ A tibble with a column for number of fire events and corresponding year.
 }
 \description{
 This function allows to efficiently calculate the number of fire
-events occured in the region of interest from the NASA FIRMS active
+events occurred in the region of interest from the NASA FIRMS active
 fire polygon datasets. For each polygon, the fire event counts for
 the desired year is returned.
 The required resources for this indicator are:

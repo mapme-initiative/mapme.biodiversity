@@ -18,7 +18,7 @@ temperature, maximum temperature, and mean precipitation layers. The layers are
 available to download for the period 2000 - 2018 on monthly basis from WorldClim.
 }
 \details{
-Enlisted different resources can be reqested with their dedicated functions:
+Enlisted different resources can be requested with their dedicated functions:
 \describe{
 \item{tmin}{Encoded as (°C), representing the minimum temperature per output grid cell.}
 \item{tmax}{Encoded as (°C), representing the maximum temperature per output grid cell.}

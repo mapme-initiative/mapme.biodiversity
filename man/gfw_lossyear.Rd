@@ -3,7 +3,7 @@
 \docType{data}
 \name{gfw_lossyear}
 \alias{gfw_lossyear}
-\title{Year of forest loss occurence}
+\title{Year of forest loss occurrence}
 \format{
 A global tiled raster resource available for all land areas.
 }
