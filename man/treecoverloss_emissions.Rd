@@ -23,7 +23,7 @@ The required resources for this indicator are:
 \details{
 The following arguments can be set:
 \describe{
-\item{min_size}{The minum size of a forest patch to be considered as forest in ha.}
+\item{min_size}{The minimum size of a forest patch to be considered as forest in ha.}
 \item{min_cover}{The minimum cover percentage per pixel to be considered as forest.}
 }
 }

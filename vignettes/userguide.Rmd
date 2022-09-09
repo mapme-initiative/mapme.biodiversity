@@ -61,7 +61,7 @@ The sf-object contains a single object of geometry type `MULTIPOLYGON`. The
 `{mapme.biodiversity}` package, however, only supports geometries of type `POLYGON`,
 thus we need to cast the geometry before we advance. The resulting sf object 
 also contains some metadata, that will be retained throughout the complete
-workflow. Because some of the cast geometries represent artifacts of the digitization 
+workflow. Because some of the cast geometries represent artefacts of the digitization 
 process, in this example we will subset to only the largest polygon.
 
 ```{r cast}
@@ -70,7 +70,7 @@ process, in this example we will subset to only the largest polygon.
 
 In the following, we will simulate a portfolio consisting of several polygons (assets,
 in the jargon of this package). To this end, we create smaller polygons within 
-the original extent of the main polygon. This way, we can showcase the behavior 
+the original extent of the main polygon. This way, we can showcase the behaviour 
 of the `{mapme.biodiversity}` package for portfolios that contain multiple assets. 
 We will only select single assets with geometry type `POLYGON` that lie within 
 the original boundary of the protected area.
@@ -134,14 +134,14 @@ there. Thus, please ensure that you have write access to these directories and t
 there is sufficient free disk space to support the analysis of your portfolio. 
 
 In case your share a common `outdir` across different portfolios, with the 
-`add_resources` arguments controls the behavior of the portfolio initialization. 
+`add_resources` arguments controls the behaviour of the portfolio initialization. 
 If set to `TRUE`, the function will automatically search for all available 
 resources and add these as attributes to the portfolio, without further checking
 if these resources actually match its spatio-temporal extent. Only use this if 
 you are sure that for your current portfolio, all resources have been previously
 downloaded. If set to `FALSE`, no pre-existing resources will be added to the
 portfolio. Once you request a specific portfolio for your resources, only
-those files will be downloaded that are missing in `outdir`. This behavior is
+those files will be downloaded that are missing in `outdir`. This behaviour is
 beneficial if you share the `outdir` between different projects to ensure that 
 only matching resources are returned.
 

@@ -1,4 +1,4 @@
-#' Year of forest loss occurence
+#' Year of forest loss occurrence
 #'
 #' This resource is part of the publication by Hansen et al. (2013)
 #' "High-Resolution Global Maps of 21st-Century Forest Cover Change". It
@@ -65,7 +65,7 @@ NULL
     xmin = -180, xmax = 170, dx = 10,
     ymin = -50, ymax = 80, dy = 10
   )
-  tile_ids <- unlist(st_intersects(x, grid_gfc))
+  tile_ids <- unique(unlist(st_intersects(x, grid_gfc)))
   if (length(tile_ids) == 0) {
     stop("The extent of the portfolio does not intersect with the GFW grid.",
       call. = FALSE

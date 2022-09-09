@@ -39,7 +39,7 @@ NULL
     xmin = -180, xmax = 180, dx = 20,
     ymin = -60, ymax = 80, dy = 20
   )
-  tile_ids <- unlist(st_intersects(x, grid_esa))
+  tile_ids <- unique(unlist(st_intersects(x, grid_esa)))
   if (length(tile_ids) == 0) {
     stop(paste("The extent of the portfolio does not ",
       "intersect with the Land Cover grid.",

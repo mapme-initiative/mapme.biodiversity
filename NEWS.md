@@ -1,5 +1,14 @@
 # mapme.biodiversity (development version)
 
+# mapme.biodiversity 0.2.1
+
+## Bug fixes
+- fixes a serious bug that occurred for tiled resources when multiple assets are within 
+the same tile resulting in returning the same tile multiple times
+
+## Internal
+- tests to catch above mentioned bug have been introduced for tiled resources
+
 # mapme.biodiversity 0.2.0
 
 ## Breaking changes
@@ -132,5 +141,5 @@ only writing to the temporal directory (#22).
 ## Internal
 
 * Introduced absolute URLS in userguide.Rmd pointing to the online documentation (#59)
-* \value tags added to all exported functions explaining what is the output/sideffect (#59)
+* \value tags added to all exported functions explaining what is the output/side effect (#59)
 * using requireNamespace() instead of installed.packages() to check if packages listed in SUGGEST are loadable (#58)

@@ -26,7 +26,7 @@ cloud-infrastructures such as AWS or AZURE using in the statistical
 programming language R. The package allows for the analysis of global
 biodiversity portfolios with a thousand or millions of AOIs which is
 normally only possible on dedicated platforms such as the Google Earth
-Engine. It provides the possibility to e.g. analyze the World Database
+Engine. It provides the possibility to e.g. analyse the World Database
 of Protected Areas (WDPA) for a number of relevant indicators. The
 primary use case of this package is to support scientific analysis and
 data science for individuals and organizations who seek to preserve the
@@ -151,17 +151,7 @@ object.
     ## 1 478140 Sierra de Neiba National Park DOM         1  2016      2832     2357.
     ## 2 478140 Sierra de Neiba National Park DOM         1  2017      3468     2345.
     ## # … with 1 more variable: geom <POLYGON [°]>
-    ## # ℹ Use `colnames()` to see all variable names
 
 Head over to the [online
 documentation](https://mapme-initiative.github.io/mapme.biodiversity/index.html)
 find more detailed information about the package.
-
-## Important note for global scale analysis
-
-In the current version on CRAN (0.1.2) there is a bug that may cause
-issue when downloading tiled data (Global Forest Watch, ESA Landcover,
-SRTM) for global portfolios. It is described
-[here](https://github.com/mapme-initiative/mapme.biodiversity/issues/84).
-It is fixed in the current version on Github which you can download as
-described above.

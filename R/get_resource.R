@@ -138,7 +138,7 @@ get_resources <- function(x, resources, ...) {
   if (selected_resource[[1]]$type == "raster") {
     tindex_file <- file.path(rundir, paste0("tileindex_", resource, ".gpkg"))
     if (file.exists(tindex_file)) file.remove(tindex_file)
-    footprints <- lapply(downloaded_files, function(file) {
+    footprints <- lapply(unique(downloaded_files), function(file) {
       tmp <- rast(file)
       footprint <- st_as_sf(st_as_sfc(st_bbox(tmp)))
       st_geometry(footprint) <- "geom"

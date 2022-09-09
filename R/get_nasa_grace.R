@@ -44,7 +44,7 @@ NULL
 }
 
 
-#' Helper function to construct GRACE urls
+#' Helper function to construct GRACE URLs
 #'
 #' @param target_year
 #'

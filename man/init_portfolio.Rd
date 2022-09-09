@@ -51,7 +51,7 @@ is printed.}
 }
 \value{
 The sf portfolio object \code{x} with amended attributes controlling the
-processing behavior further down the processing chain.
+processing behaviour further down the processing chain.
 }
 \description{
 This function expects an \code{sf} object as its first argument that contains

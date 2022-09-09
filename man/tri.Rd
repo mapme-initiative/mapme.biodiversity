@@ -17,7 +17,7 @@ The range of index values and corresponding meaning:
 }
 \description{
 Terrain Ruggedness Index is a measurement developed by Riley, et al. (1999).
-The elevation difference between the center pixel and its eight immediate
+The elevation difference between the centre pixel and its eight immediate
 pixels are squared and then averaged and its square root is taken to get
 the TRI value. This function allows to efficiently calculate terrain ruggedness
 index (tri) statistics for polygons. For each polygon, the desired statistic/s

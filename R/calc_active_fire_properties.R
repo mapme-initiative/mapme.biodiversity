@@ -1,7 +1,7 @@
 #' Calculate active fire properties based on NASA FIRMS polygons
 #'
 #' This function allows to efficiently extract the properties of fire
-#' events occured in the region of interest from the NASA FIRMS active
+#' events occurred in the region of interest from the NASA FIRMS active
 #' fire polygon datasets. For each polygon, the fire events properties
 #' like fire pixel brightness temperature, and fire radiative power (frp)
 #' along with fire hotspots for the desired year is returned.

@@ -29,4 +29,21 @@ test_that(".get_gfw_emissions works", {
     .get_gfw_emissions(portfolio),
     "gfw_forest_carbon_gross_emissions_Mg_CO2e_px_20N_080W.tif"
   )
+
+  # adds test to check for multiple polygons in the same tile
+  splitted_aoi <- st_as_sf(st_make_grid(aoi, n = 2))
+  portfolio <- init_portfolio(splitted_aoi,
+                              years = 2000:2020,
+                              outdir = outdir,
+                              tmpdir = tmpdir,
+                              cores = 1,
+                              add_resources = FALSE,
+                              verbose = TRUE
+  )
+  attributes(portfolio)$testing <- TRUE
+  expect_equal(
+    .get_gfw_emissions(portfolio),
+    "gfw_forest_carbon_gross_emissions_Mg_CO2e_px_20N_080W.tif"
+  )
+
 })

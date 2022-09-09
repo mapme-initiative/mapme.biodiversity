@@ -34,11 +34,12 @@ NULL
     xmin = -180, xmax = 180, dx = 5,
     ymin = -60, ymax = 60, dy = 5
   )
-  tile_ids <- unlist(st_intersects(x, grid_srtm))
+  tile_ids <- unique(unlist(st_intersects(x, grid_srtm)))
   if (length(tile_ids) == 0) {
     stop("The extent of the portfolio does not intersect with the SRTM grid.")
   }
   urls <- unlist(sapply(tile_ids, function(tile) .get_srtm_url(tile)))
+
   if (attr(x, "testing")) {
     return(basename(urls))
   }

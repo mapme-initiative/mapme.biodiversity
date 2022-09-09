@@ -1,6 +1,6 @@
-#' Soildgrids data layers
+#' SoilGrids data layers
 #'
-#' Soilgrids is a project combining global observation data with
+#' SoilGrids is a project combining global observation data with
 #' machine learning to map the spatial distribution of soil properties across
 #' the globe. It is produced at a spatial resolution of 250 meters and each
 #' parameters is mapped at different depths. In order to be able to assess
@@ -23,9 +23,9 @@
 #'
 #' Users can specify the following arguments:
 #' \describe{
-#'   \item{layer}{The soil parameter as a single charachter}
-#'   \item{depth}{The requested depth as a single chrachter}
-#'   \item{stat}{The predicted statistic as a single charachter}
+#'   \item{layer}{The soil parameter as a single character}
+#'   \item{depth}{The requested depth as a single character}
+#'   \item{stat}{The predicted statistic as a single character}
 #'   }
 #'
 #' Except for \code{ocs}, which is only available for a depth of \code{"0-30cm"},
@@ -67,7 +67,7 @@ NULL
 #' @param x A sf portfolio object
 #' @param layers A charchter vector indicating the layers to download from
 #'   soilgrids
-#' @param depths A charachter vector indicating the depths to download
+#' @param depths A character vector indicating the depths to download
 #' @param stats A chrachter vector indicating the statistics to download.
 #' @param rundir The directory where temporary and final results are written to.
 #' @param verbose A logical controlling the verbosity.

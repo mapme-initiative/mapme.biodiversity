@@ -38,7 +38,7 @@
 #'   added to the portfolio. Defaults to TRUE. Setting it to FALSE can be of use
 #'   e.g. if a previous download has terminated unexpectedly in order to resume.
 #' @return The sf portfolio object `x` with amended attributes controlling the
-#'   processing behavior further down the processing chain.
+#'   processing behaviour further down the processing chain.
 #' @keywords function
 #' @export
 init_portfolio <- function(x,

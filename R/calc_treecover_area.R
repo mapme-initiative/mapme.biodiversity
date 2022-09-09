@@ -2,7 +2,7 @@
 #'
 #' This functions allows to efficiently calculate treecover statistics for
 #' polygons. For each year in the analysis timeframe, the forest losses in
-#' preceeding and the current years are substracted from the treecover in the
+#' preceding and the current years are subtracted from the treecover in the
 #' year 2000 and actual treecover figures within the polygon are returned.
 #' The required resources for this indicator are:
 #'  - [gfw_treecover]
@@ -10,7 +10,7 @@
 #'
 #' The following arguments can be set:
 #' \describe{
-#'   \item{min_size}{The minum size of a forest patch to be considered as forest in ha.}
+#'   \item{min_size}{The minimum size of a forest patch to be considered as forest in ha.}
 #'   \item{min_cover}{The minimum cover percentage per pixel to be considered as forest.}
 #' }
 #'
