@@ -26,4 +26,20 @@ test_that(".get_esalandcover works", {
   expect_equal(
     .get_esalandcover(portfolio),
                "W080N20_LC100_v3.0.1_2015.tif")
+
+  # adds test to check for multiple polygons in the same tile
+  splitted_aoi <- st_as_sf(st_make_grid(aoi, n = 2))
+  portfolio <- init_portfolio(splitted_aoi,
+                              years = 2015,
+                              outdir = outdir,
+                              tmpdir = tmpdir,
+                              cores = 1,
+                              add_resources = FALSE,
+                              verbose = TRUE
+  )
+  attributes(portfolio)$testing <- TRUE
+  expect_equal(
+    .get_esalandcover(portfolio),
+    "W080N20_LC100_v3.0.1_2015.tif"
+  )
 })

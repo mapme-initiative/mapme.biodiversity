@@ -30,4 +30,20 @@ test_that(".get_nasa_srtm works", {
     .get_nasa_srtm(portfolio),
     "srtm_22_09.zip"
   )
+
+  # adds test to check for multiple polygons in the same tile
+  splitted_aoi <- st_as_sf(st_make_grid(aoi, n = 2))
+  portfolio <- init_portfolio(splitted_aoi,
+                              years = 2000:2020,
+                              outdir = outdir,
+                              tmpdir = tmpdir,
+                              cores = 1,
+                              add_resources = FALSE,
+                              verbose = TRUE
+  )
+  attributes(portfolio)$testing <- TRUE
+  expect_equal(
+    .get_nasa_srtm(portfolio),
+    "srtm_22_09.zip"
+  )
 })

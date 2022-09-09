@@ -28,4 +28,20 @@ test_that(".get_gfw_lossyear works", {
     .get_gfw_lossyear(portfolio, vers_lossyear = "GFC-2020-v1.8"),
     "Hansen_GFC-2020-v1.8_lossyear_20N_080W.tif"
   )
+
+  # adds test to check for multiple polygons in the same tile
+  splitted_aoi <- st_as_sf(st_make_grid(aoi, n = 2))
+  portfolio <- init_portfolio(splitted_aoi,
+                              years = 2000:2020,
+                              outdir = outdir,
+                              tmpdir = tmpdir,
+                              cores = 1,
+                              add_resources = FALSE,
+                              verbose = TRUE
+  )
+  attributes(portfolio)$testing <- TRUE
+  expect_equal(
+    .get_gfw_lossyear(portfolio, vers_lossyear = "GFC-2020-v1.8"),
+    "Hansen_GFC-2020-v1.8_lossyear_20N_080W.tif"
+  )
 })

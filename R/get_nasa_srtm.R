@@ -39,6 +39,7 @@ NULL
     stop("The extent of the portfolio does not intersect with the SRTM grid.")
   }
   urls <- unlist(sapply(tile_ids, function(tile) .get_srtm_url(tile)))
+
   if (attr(x, "testing")) {
     return(basename(urls))
   }

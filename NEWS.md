@@ -1,8 +1,13 @@
 # mapme.biodiversity (development version)
 
+# mapme.biodiversity 0.2.1
+
 ## Bug fixes
-- fixes a bug that occurred for tiled resources when multiple assets are within 
-the same tile
+- fixes a serious bug that occurred for tiled resources when multiple assets are within 
+the same tile resulting in returning the same tile multiple times
+
+## Internal
+- tests to catch above mentioned bug have been introduced for tiled resources
 
 # mapme.biodiversity 0.2.0
 
