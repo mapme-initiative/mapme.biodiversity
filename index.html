@@ -57,7 +57,7 @@
     
     <a class="navbar-brand me-2" href="index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -114,7 +114,7 @@
 <h2 id="about">About<a class="anchor" aria-label="anchor" href="#about"></a>
 </h2>
 <p>Biodiversity areas, especially primary forests, provide multiple ecosystem services for the local population and the planet as a whole. The rapid expansion of human landuse into natural ecosystems and the impacts of the global climate crisis put natural ecosystems and the global biodiversity under threat.</p>
-<p>The mapme.biodiversity package helps to analyse a number of biodiversity related indicators and biodiversity threats based on freely available geodata-sources such as the Global Forest Watch. It supports computational efficient routines and heavy parallelization in cloud-infrastructures such as AWS or AZURE using in the statistical programming language R. The package allows for the analysis of global biodiversity portfolios with a thousand or millions of AOIs which is normally only possible on dedicated platforms such as the Google Earth Engine. It provides the possibility to e.g. analyze the World Database of Protected Areas (WDPA) for a number of relevant indicators. The primary use case of this package is to support scientific analysis and data science for individuals and organizations who seek to preserve the planet biodiversity. It’s development is funded by the German Development Bank KfW.</p>
+<p>The mapme.biodiversity package helps to analyse a number of biodiversity related indicators and biodiversity threats based on freely available geodata-sources such as the Global Forest Watch. It supports computational efficient routines and heavy parallelization in cloud-infrastructures such as AWS or AZURE using in the statistical programming language R. The package allows for the analysis of global biodiversity portfolios with a thousand or millions of AOIs which is normally only possible on dedicated platforms such as the Google Earth Engine. It provides the possibility to e.g. analyse the World Database of Protected Areas (WDPA) for a number of relevant indicators. The primary use case of this package is to support scientific analysis and data science for individuals and organizations who seek to preserve the planet biodiversity. It’s development is funded by the German Development Bank KfW.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -207,14 +207,8 @@
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="do">##    &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;         &lt;chr&gt;   &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;     &lt;dbl&gt;</span></span>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 478140 Sierra de Neiba National Park DOM         1  2016      2832     2357.</span></span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 478140 Sierra de Neiba National Park DOM         1  2017      3468     2345.</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="do">## # … with 1 more variable: geom &lt;POLYGON [°]&gt;</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="do">## # ℹ Use `colnames()` to see all variable names</span></span></code></pre></div>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="do">## # … with 1 more variable: geom &lt;POLYGON [°]&gt;</span></span></code></pre></div>
 <p>Head over to the <a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">online documentation</a> find more detailed information about the package.</p>
-</div>
-<div class="section level2">
-<h2 id="important-note-for-global-scale-analysis">Important note for global scale analysis<a class="anchor" aria-label="anchor" href="#important-note-for-global-scale-analysis"></a>
-</h2>
-<p>In the current version on CRAN (0.1.2) there is a bug that may cause issue when downloading tiled data (Global Forest Watch, ESA Landcover, SRTM) for global portfolios. It is described <a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/84" class="external-link">here</a>. It is fixed in the current version on Github which you can download as described above.</p>
 </div>
 </div>
 
