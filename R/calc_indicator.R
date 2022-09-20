@@ -98,7 +98,14 @@ calc_indicators <- function(x, indicators, ...) {
   if (processing_mode == "asset") {
     # apply function with parameters and add hidden id column
     results <- pbapply::pblapply(1:nrow(x), function(i) {
-      .prep_and_compute(x[i, ], params, i)
+      res <- .prep_and_compute(x[i, ], params, i)
+      res_out <- res
+      if (nrow(res) == 0) {
+        res_na <- tibble(data.frame(t(rep(NA, ncol(res)))))
+        names(res_na) <- names(res)
+        res_out <- res_na
+      }
+      return(res_out)
     }, cl = cores)
   } else {
     results <- .prep_and_compute(x, params, 1)
