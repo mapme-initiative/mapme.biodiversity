@@ -66,3 +66,22 @@ test_that("calc_indicator works", {
     calc_indicators(portfolio, "treecover")
   )
 })
+
+test_that("calc_indicator handles non-intersecting regions correctly", {
+  coords <- data.frame (
+    lon = c(-43.59019, -44.42497),
+    lat = c(-22.75776, -25.50908)
+  )
+
+  pts <- st_as_sf(coords, coords = c("lon", "lat"), crs = 4326)
+  x <- st_buffer(pts, c(1000, 10000))
+  res <- x %>% init_portfolio(2000:2021,
+    cores = 1,
+    verbose = FALSE) %>%
+  get_resources(
+    resources = c("teow")
+  ) %>% calc_indicators("ecoregion")
+
+  expect_lt(res$ecoregion[[1]]$area * 1e4 - as.numeric(st_area(x)[1]), 1e-3)
+  expect_equal(res$ecoregion[[2]]$area, NA_real_)
+})
