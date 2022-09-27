@@ -1,5 +1,9 @@
 # mapme.biodiversity (development version)
 
+## Bug fixes
+- case when one or multiple assets return NA instead of a tibble is now properly
+tested and handled (#101)
+
 # mapme.biodiversity 0.2.1
 
 ## Bug fixes
