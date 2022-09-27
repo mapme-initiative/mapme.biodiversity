@@ -108,19 +108,8 @@ calc_indicators <- function(x, indicators, ...) {
   # remove terra tmpdir
   unlink(file.path(tmpdir, "terra"), recursive = TRUE, force = TRUE)
   terra::terraOptions(tempdir = terra_org)
-  # bind results to data.frame
-  index_tbl <- purrr::map_lgl(results, function(x) inherits(x, "tbl_df"))
-  if(any(index_tbl) & any(!index_tbl)){
-    colnames <- names(results[[which(index_tbl)[1]]])
-    fill <- rep(NA, length(colnames))
-    names(fill) <- colnames
-    for (i in which(!index_tbl)) results[[i]] <- fill
-    results <- tibble(dplyr::bind_rows(results, .id = ".id"))
-  } else if (any(!index_tbl)) {
-    results <- tibble(.id = x$assetid, value = rep(NA, nrow(x)))
-  } else {
-    results <- tibble(dplyr::bind_rows(results, .id = ".id"))
-  }
+  # bind the asset results
+  results <- .bind_assets(results)
   # nest the results
   results <- nest(results, !!indicator := !.id)
   # attach results
@@ -248,4 +237,35 @@ calc_indicators <- function(x, indicators, ...) {
     return(NULL)
   }
   cropped
+}
+
+
+.bind_assets <- function(results){
+  # bind results to data.frame
+  index_tbl <- purrr::map_lgl(results, function(x) inherits(x, "tbl_df"))
+
+  # case all assets returned tibbles
+  if(all(index_tbl)){
+    return(dplyr::bind_rows(results, .id = ".id"))
+  }
+
+  # case all assets returned NA
+  if(all(!index_tbl)){
+    return(
+      tibble::tibble(
+        .id = as.character(1:length(results)),
+        value = rep(NA, length(results))
+      )
+    )
+  }
+
+  # case some assets returned NA
+  if(any(index_tbl) & any(!index_tbl)){
+    colnames <- names(results[[which(index_tbl)[1]]])
+    fill_values <- lapply(1:length(colnames), function(x) return(NA))
+    fill_values <- tibble::as_tibble(data.frame(fill_values))
+    names(fill_values) <- colnames
+    for (i in which(!index_tbl)) results[[i]] <- fill_values
+    return(tibble::tibble(dplyr::bind_rows(results, .id = ".id")))
+  }
 }
