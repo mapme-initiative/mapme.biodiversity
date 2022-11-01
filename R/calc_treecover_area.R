@@ -99,7 +99,7 @@ NULL
       return(tibble(years = NA, treecover = NA))
     }
   }
-  # if (ncell(gfw_treecover) > 1024 * 1024) todisk <- TRUE
+
   # check if gfw_treecover only contains 0s, e.g. on the ocean
   minmax_gfw_treecover <- unique(as.vector(minmax(gfw_treecover)))
   if (length(minmax_gfw_treecover) == 1) {
@@ -142,7 +142,6 @@ NULL
   arearaster <- cellSize(
     gfw_treecover,
     unit = "ha",
-    # filename = ifelse(todisk, file.path(rundir, "arearaster.tif"), ""),
     datatype = "FLT4S",
     overwrite = TRUE
   )
@@ -150,14 +149,12 @@ NULL
   polyraster <- rasterize(
     vect(shp), gfw_treecover,
     field = 1, touches = TRUE,
-    # filename = ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
     datatype = "INT1U",
     overwrite = TRUE
   )
   # mask gfw_treecover
   gfw_treecover <- mask(
     gfw_treecover, polyraster,
-    # filename =  ifelse(todisk, file.path(rundir, "gfw_treecover.tif"), ""),
     datatype = "INT1U",
     overwrite = TRUE
   )
@@ -165,7 +162,6 @@ NULL
   # mask lossyear
   gfw_lossyear <- mask(
     gfw_lossyear, polyraster,
-    # filename =  ifelse(todisk, file.path(rundir, "gfw_lossyear.tif"), ""),
     datatype = "INT1U",
     overwrite = TRUE
   )
@@ -174,7 +170,6 @@ NULL
     gfw_treecover,
     rcl = matrix(c(0, min_cover, 0, min_cover, 100, 1), ncol = 3, byrow = TRUE),
     include.lowest = TRUE,
-    # filename = ifelse(todisk, file.path(rundir, "binary_gfw_treecover.tif"), ""),
     datatype = "INT1U",
     overwrite = TRUE
   )
@@ -182,7 +177,6 @@ NULL
   patched <- patches(
     binary_gfw_treecover,
     directions = 4, zeroAsNA = TRUE,
-    # filename = ifelse(todisk, file.path(rundir, "patched.tif"), ""),
     datatype = "INT4U",
     overwrite = TRUE
   )
@@ -197,14 +191,12 @@ NULL
   patchsizes <- zonal(
     arearaster, patched, sum,
     as.raster = TRUE,
-    # filename = ifelse(todisk, file.path(rundir, "patchsizes.tif"), ""),
     datatype = "FLT4S",
     overwrite = TRUE
   )
   # remove patches smaller than threshold
   binary_gfw_treecover <- ifel(
     patchsizes < min_size, 0, binary_gfw_treecover,
-    # filename = ifelse(todisk, file.path(rundir, "binary_gfw_treecover.tif"), ""),
     datatype = "INT1U",
     overwrite = TRUE
   )
@@ -223,14 +215,12 @@ NULL
   # set no loss occurrences to NA
   gfw_lossyear <- ifel(
     gfw_lossyear == 0, NA, gfw_lossyear,
-    # filename = ifelse(todisk, file.path(rundir, "gfw_lossyear.tif"), ""),
     datatype = "INT1U",
     overwrite = TRUE
   )
   # exclude non-tree pixels from lossyear layer
   gfw_lossyear <- mask(
     gfw_lossyear, binary_gfw_treecover,
-    # filename = ifelse(todisk, file.path(rundir, "gfw_lossyear.tif"), ""),
     datatype = "INT1U",
     overwrite = TRUE
   )
@@ -240,14 +230,12 @@ NULL
     y <- y - 2000
     current_gfw_treecover <- ifel(
       gfw_lossyear <= y, 0, binary_gfw_treecover,
-      # filename = ifelse(todisk, file.path(rundir, "current_gfw_treecover.tif"), ""),
       datatype = "INT1U",
       overwrite = TRUE
     )
     current_arearaster <- mask(
       arearaster, current_gfw_treecover,
       maskvalues = c(NA, 0),
-      # filename = ifelse(todisk, file.path(rundir, "current_area.tif"), ""),
       datatype = "FLT4S",
       overwrite = TRUE
     )
