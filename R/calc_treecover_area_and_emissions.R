@@ -69,8 +69,6 @@ NULL
 #'   considered forest in the year 2000.
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
-# #' @param todisk Logical indicating whether or not temporary raster files shall
-#'   be written to disk
 #' @param ... additional arguments
 #' @return A tibble
 #' @importFrom stringr str_sub
@@ -84,7 +82,6 @@ NULL
                                                min_cover = 35,
                                                rundir = tempdir(),
                                                verbose = TRUE,
-                                               # todisk = FALSE,
                                                ...) {
 
   # initial argument checks
