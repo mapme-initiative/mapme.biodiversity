@@ -4,6 +4,10 @@
 - case when one or multiple assets return NA instead of a tibble is now properly
 tested and handled (#101)
 
+- Rasters are no longer temporary written to disk to ommit a bug caused by 
+  applying mask/classify to an already existing raster file (#108, @Jo-Schie)
+
+
 # mapme.biodiversity 0.2.1
 
 ## Bug fixes
