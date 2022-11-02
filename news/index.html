@@ -61,16 +61,20 @@
 <h2 class="pkg-version" data-toc-text="development version" id="mapmebiodiversity-development-version">mapme.biodiversity (development version)<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-development-version"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
-<ul><li>case when one or multiple assets return NA instead of a tibble is now properly tested and handled (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/101" class="external-link">#101</a>)</li></ul></div>
+<ul><li><p>case when one or multiple assets return NA instead of a tibble is now properly tested and handled (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/101" class="external-link">#101</a>)</p></li>
+<li><p>Rasters are no longer temporary written to disk to ommit a bug caused by applying mask/classify to an already existing raster file (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/108" class="external-link">#108</a>, <a href="https://github.com/Jo-Schie" class="external-link">@Jo-Schie</a>)</p></li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.1" id="mapmebiodiversity-021">mapme.biodiversity 0.2.1<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-021"></a></h2><p class="text-muted">CRAN release: 2022-09-09</p>
 <div class="section level3">
 <h3 id="bug-fixes-0-2-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-2-1"></a></h3>
-<ul><li>fixes a serious bug that occurred for tiled resources when multiple assets are within the same tile resulting in returning the same tile multiple times</li></ul></div>
+<ul><li>fixes a serious bug that occurred for tiled resources when multiple assets are within the same tile resulting in returning the same tile multiple times</li>
+</ul></div>
 <div class="section level3">
 <h3 id="internal-0-2-1">Internal<a class="anchor" aria-label="anchor" href="#internal-0-2-1"></a></h3>
-<ul><li>tests to catch above mentioned bug have been introduced for tiled resources</li></ul></div>
+<ul><li>tests to catch above mentioned bug have been introduced for tiled resources</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="mapmebiodiversity-020">mapme.biodiversity 0.2.0<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-020"></a></h2><p class="text-muted">CRAN release: 2022-08-23</p>
@@ -104,8 +108,11 @@
 </ul></div>
 <div class="section level3">
 <h3 id="new-features-0-2-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-2-0"></a></h3>
-<ul><li>new resource(s):<ul><li>nasa_firms</li></ul></li>
-<li>new indicator(s):<ul><li>active_fire_properties</li>
+<ul><li>new resource(s):
+<ul><li>nasa_firms</li>
+</ul></li>
+<li>new indicator(s):
+<ul><li>active_fire_properties</li>
 <li>active_fire_counts</li>
 </ul></li>
 </ul></div>
@@ -116,7 +123,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-2-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-2-0"></a></h3>
-<ul><li>fixing issue <a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/84" class="external-link">#84</a> concerning intersection of tiled datasets (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/86" class="external-link">#86</a>, <a href="https://github.com/Jo-Schie" class="external-link">@Jo-Schie</a>)</li></ul></div>
+<ul><li>fixing issue <a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/84" class="external-link">#84</a> concerning intersection of tiled datasets (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/86" class="external-link">#86</a>, <a href="https://github.com/Jo-Schie" class="external-link">@Jo-Schie</a>)</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.2" id="mapmebiodiversity-012">mapme.biodiversity 0.1.2<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-012"></a></h2><p class="text-muted">CRAN release: 2022-06-24</p>
@@ -144,20 +152,24 @@
 <h2 class="pkg-version" data-toc-text="0.1.0" id="mapmebiodiversity-010">mapme.biodiversity 0.1.0<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-010"></a></h2><p class="text-muted">CRAN release: 2022-04-27</p>
 <div class="section level3">
 <h3 id="breaking-changes-0-1-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-1-0"></a></h3>
-<ul><li>renamed ‘.assetid’ to ‘assetid’ (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/22" class="external-link">#22</a>)</li></ul></div>
+<ul><li>renamed ‘.assetid’ to ‘assetid’ (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/22" class="external-link">#22</a>)</li>
+</ul></div>
 <div class="section level3">
 <h3 id="new-features-0-1-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-1-0"></a></h3>
-<ul><li>None</li></ul></div>
+<ul><li>None</li>
+</ul></div>
 <div class="section level3">
 <h3 id="internal-0-1-0">Internal<a class="anchor" aria-label="anchor" href="#internal-0-1-0"></a></h3>
-<ul><li>ensures that tests and examples adhere to CRAN policies of only writing to the temporal directory (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/22" class="external-link">#22</a>).</li></ul></div>
+<ul><li>ensures that tests and examples adhere to CRAN policies of only writing to the temporal directory (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/22" class="external-link">#22</a>).</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.1" id="mapmebiodiversity-001">mapme.biodiversity 0.0.1<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-001"></a></h2><p class="text-muted">CRAN release: 2022-04-19</p>
 <div class="section level3">
 <h3 id="initial-release-0-0-1">Initial release<a class="anchor" aria-label="anchor" href="#initial-release-0-0-1"></a></h3>
 <ul><li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
-<li>initial supported resources are:<ul><li>ecoregions</li>
+<li>initial supported resources are:
+<ul><li>ecoregions</li>
 <li>esalandcover</li>
 <li>greenhouse</li>
 <li>lossyear</li>
@@ -170,7 +182,8 @@
 <li>worldclim</li>
 <li>worldpop</li>
 </ul></li>
-<li>initial supported indicators are:<ul><li>acessibility</li>
+<li>initial supported indicators are:
+<ul><li>acessibility</li>
 <li>biome</li>
 <li>chirpsprec</li>
 <li>drought_indicator</li>

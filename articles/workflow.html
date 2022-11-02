@@ -87,9 +87,11 @@
 <script src="workflow_files/chromatography-0.1/chromatography.js"></script><script src="workflow_files/DiagrammeR-binding-1.0.9/DiagrammeR.js"></script><div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Workflow</h1>
-                        <h4 data-toc-skip class="author">Darius A. Görgen</h4>
+                        <h4 data-toc-skip class="author">Darius A.
+Görgen</h4>
             
-            <h4 data-toc-skip class="date">Last modified: 2022-09-27</h4>
+            <h4 data-toc-skip class="date">Last modified:
+2022-11-02</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/mapme-initiative/mapme.biodiversity/blob/HEAD/vignettes/workflow.Rmd" class="external-link"><code>vignettes/workflow.Rmd</code></a></small>
       <div class="d-none name"><code>workflow.Rmd</code></div>
@@ -97,17 +99,25 @@
 
     
     
-<p>The most important steps of the processing workflow of <a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> are described here. A typical workflow consists of the following steps:</p>
+<p>The most important steps of the processing workflow of
+<a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> are described here. A typical workflow
+consists of the following steps:</p>
 <ul>
-<li>initialization of a portfolio object from an <a href="https://r-spatial.github.io/sf/" class="external-link">sf</a> object together with portfolio-wide parameters</li>
-<li>identify the required resources needed for the indicators you want to calculate</li>
-<li>download one or more resources that are required for your desired indicators</li>
-<li>automated calculation of the indicators for all assets within a portfolio</li>
-<li>then, you are free to conduct your statistical analysis within R, or,</li>
-<li>you can export the portfolio as a GeoPackage to share with others or use it with other Geo-spatial software (e.g. QGIS)</li>
+<li>initialization of a portfolio object from an <a href="https://r-spatial.github.io/sf/" class="external-link">sf</a>
+object together with portfolio-wide parameters</li>
+<li>identify the required resources needed for the indicators you want
+to calculate</li>
+<li>download one or more resources that are required for your desired
+indicators</li>
+<li>automated calculation of the indicators for all assets within a
+portfolio</li>
+<li>then, you are free to conduct your statistical analysis within R,
+or,</li>
+<li>you can export the portfolio as a GeoPackage to share with others or
+use it with other Geo-spatial software (e.g. QGIS)</li>
 </ul>
-<div id="htmlwidget-ba163e3c8dfb50c1c251" style="width:480px;height:480px;" class="DiagrammeR html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ba163e3c8dfb50c1c251">{"x":{"diagram":"\n  graph TB\n\n    classDef default fill:#c2dddd,stroke-width:2px,stroke:#034858;\n\n    A(Portfolio initialization)\n    B(Get resources)\n    C(Calculate indicators)\n    D(Statistical analysis within R)\n    E(Export to GeoPackage)\n    A-->B\n    B-->C\n    C-->D\n    C-->E\n\n"},"evals":[],"jsHooks":[]}</script></main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+<div id="htmlwidget-c45eebe5ad29f3d190dc" style="width:480px;height:480px;" class="DiagrammeR html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c45eebe5ad29f3d190dc">{"x":{"diagram":"\n  graph TB\n\n    classDef default fill:#c2dddd,stroke-width:2px,stroke:#034858;\n\n    A(Portfolio initialization)\n    B(Get resources)\n    C(Calculate indicators)\n    D(Statistical analysis within R)\n    E(Export to GeoPackage)\n    A-->B\n    B-->C\n    C-->D\n    C-->E\n\n"},"evals":[],"jsHooks":[]}</script></main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
 </div>
 
