@@ -22,7 +22,7 @@ available_resources <- function(resources = NULL) {
       source = "https://data.globalforestwatch.org/documents/tree-cover-2000/explore",
       downloader = ".get_gfw_treecover",
       arguments = list(
-        vers_treecover = "GFC-2020-v1.8"
+        vers_treecover = "GFC-2021-v1.9"
       )
     ),
     gfw_lossyear = list(
@@ -30,7 +30,7 @@ available_resources <- function(resources = NULL) {
       source = "https://data.globalforestwatch.org/documents/tree-cover-loss/explore",
       downloader = ".get_gfw_lossyear",
       arguments = list(
-        vers_lossyear = "GFC-2020-v1.8"
+        vers_lossyear = "GFC-2021-v1.9"
       )
     ),
     gfw_emissions = list(
