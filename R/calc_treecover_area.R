@@ -112,7 +112,7 @@ NULL
   )
 
   if (is.numeric(min_cover)) {
-    min_cover <- as.integer(round(min_cover))
+    min_cover <- as.numeric(min_cover)
   } else {
     stop(min_cover_msg, call. = FALSE)
   }
