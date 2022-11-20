@@ -1,7 +1,6 @@
 #' Treecover for the year 2000
 #'
 #' This resource is part of the publication by Hansen et al. (2013)
-#' "High-Resolution Global Maps of 21st-Century Forest Cover Change". It
 #' represents "tree cover in the year 2000, defined as canopy closure for all
 #' vegetation taller than 5m in height. Encoded as a percentage per output grid
 #' cell, in the range 0–100." Due to changes in the satellites products used
@@ -13,7 +12,7 @@
 #' The following argument can be set:
 #' \describe{
 #'   \item{vers_treecover}{The version of the dataset to download. Defaults to
-#'   "GFC-2020-v1.8". Check mapme.biodiversity:::.available_gfw_versions()
+#'   "GFC-2021-v1.9". Check mapme.biodiversity:::.available_gfw_versions()
 #'   to get a list of available versions}
 #' }
 #'
@@ -34,14 +33,14 @@ NULL
 #'
 #' @param x An sf object returned by init_portfolio
 #' @param vers_treecover The version to download, defaults to
-#'   \code{"GFC-2020-v1.8"}.
+#'   \code{"GFC-2021-v1.9"}.
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose Logical controlling verbosity.
 #' @keywords internal
 #' @noRd
 #'
 .get_gfw_treecover <- function(x,
-                               vers_treecover = "GFC-2020-v1.8",
+                               vers_treecover = "GFC-2021-v1.9",
                                rundir = tempdir(),
                                verbose = TRUE) {
 
@@ -90,6 +89,7 @@ NULL
 .available_gfw_versions <- function() {
   c(
     "GFC-2015-v1.3", "GFC-2016-v1.4", "GFC-2017-v1.5",
-    "GFC-2018-v1.6", "GFC-2019-v1.7", "GFC-2020-v1.8"
+    "GFC-2018-v1.6", "GFC-2019-v1.7", "GFC-2020-v1.8",
+    "GFC-2021-v1.9"
   )
 }
