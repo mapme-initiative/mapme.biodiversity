@@ -15,7 +15,7 @@ This resource is part of the publication by Harris et al. (2021)
 "Global maps of twenty-first century forest carbon fluxes.". It
 represents "the greenhouse gas
 emissions arising from stand-replacing forest disturbances that occurred in
-each modelled year (megagrams CO2 emissions/ha, between 2001 and 2020).
+each modelled year (megagrams CO2 emissions/ha, between 2001 and 2021).
 Emissions include all relevant ecosystem carbon pools (aboveground biomass,
 belowground biomass, dead wood, litter, soil) and greenhouse gases (CO2, CH4,
 N2O)." The area unit that is downloaded here corresponds to the

@@ -13,10 +13,10 @@ A global tiled raster resource available for all land areas.
 \description{
 This resource is part of the publication by Hansen et al. (2013)
 "High-Resolution Global Maps of 21st-Century Forest Cover Change". It
-represents "Forest loss during the period 2000–2020, defined as a
+represents "Forest loss during the period 2000–2021, defined as a
 stand-replacement disturbance, or a change from a forest to non-forest state.
 Encoded as either 0 (no loss) or else a value in the range 1–20, representing
-loss detected primarily in the year 2001–2020, respectively." Due to changes
+loss detected primarily in the year 2001–2021, respectively." Due to changes
 in the satellites products used in the compilation of the tree loss product,
 results before the year 2011 and afterwards are not directly comparable
 until reprocessing has finished. Users should be aware of this limitation,
@@ -27,7 +27,7 @@ delimited by the year 2011.
 The following argument can be set:
 \describe{
 \item{vers_lossyear}{The version of the dataset to download. Defaults to
-"GFC-2020-v1.8". Check \code{mapme.biodiversity:::.available_gfw_versions()}
+"GFC-2021-v1.9". Check \code{mapme.biodiversity:::.available_gfw_versions()}
 to get a list of available versions}
 }
 }
