@@ -159,8 +159,8 @@ artefacts of the digitization process, in this example we will subset to
 only the largest polygon.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_cast.html" class="external-link">st_cast</a></span><span class="op">(</span><span class="va">aoi</span>, to <span class="op">=</span> <span class="st">"POLYGON"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in st_cast.sf(aoi, to = "POLYGON"): repeating attributes for all sub-</span></span>
-<span><span class="co">#&gt; geometries for which they may not be constant</span></span>
+<span><span class="co">#&gt; Warning in st_cast.sf(aoi, to = "POLYGON"): repeating attributes for all</span></span>
+<span><span class="co">#&gt; sub-geometries for which they may not be constant</span></span>
 <span><span class="co">#&gt; Simple feature collection with 1 feature and 4 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POLYGON</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
@@ -479,9 +479,9 @@ it.</p>
 <span>  dsn <span class="op">=</span> <span class="va">tmp_output</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Writing layer `metadata' to data source </span></span>
-<span><span class="co">#&gt;   `/tmp/RtmprK3UGO/file45695eb28be3.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt;   `/tmp/RtmpHBMZAf/file2aac482defb5.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">#&gt; Writing 20 features with 2 fields and geometry type Polygon.</span></span>
-<span><span class="co">#&gt; Updating layer `precipitation_chirps' to data source `/tmp/RtmprK3UGO/file45695eb28be3.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt; Updating layer `precipitation_chirps' to data source `/tmp/RtmpHBMZAf/file2aac482defb5.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">#&gt; Writing 240 features with 5 fields without geometries.</span></span>
 <span><span class="op">(</span><span class="va">portfolio_from_disk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_portfolio.html">read_portfolio</a></span><span class="op">(</span><span class="va">tmp_output</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Simple feature collection with 20 features and 3 fields</span></span>

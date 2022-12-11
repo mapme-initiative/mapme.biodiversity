@@ -64,6 +64,11 @@
 <ul><li><p>case when one or multiple assets return NA instead of a tibble is now properly tested and handled (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/101" class="external-link">#101</a>)</p></li>
 <li><p>Rasters are no longer temporary written to disk to ommit a bug caused by applying mask/classify to an already existing raster file (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/108" class="external-link">#108</a>, <a href="https://github.com/Jo-Schie" class="external-link">@Jo-Schie</a>)</p></li>
 </ul></div>
+<div class="section level3">
+<h3 id="internal-development-version">Internal<a class="anchor" aria-label="anchor" href="#internal-development-version"></a></h3>
+<ul><li>
+<code>.make_global_grid()</code> now specifies the CRS when constructing the bounding box and returns the grid in the specified CRS instead of Lat/Lon</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.1" id="mapmebiodiversity-021">mapme.biodiversity 0.2.1<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-021"></a></h2><p class="text-muted">CRAN release: 2022-09-09</p>
