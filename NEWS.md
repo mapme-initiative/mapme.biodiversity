@@ -7,6 +7,10 @@ tested and handled (#101)
 - Rasters are no longer temporary written to disk to ommit a bug caused by 
   applying mask/classify to an already existing raster file (#108, @Jo-Schie)
 
+## Internal
+- `.make_global_grid()` now specifies the CRS when constructing the bounding box
+ and returns the grid in the specified CRS instead of Lat/Lon
+
 
 # mapme.biodiversity 0.2.1
 
