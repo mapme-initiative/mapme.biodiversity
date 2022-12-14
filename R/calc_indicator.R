@@ -242,7 +242,7 @@ calc_indicators <- function(x, indicators, ...) {
 
 .bind_assets <- function(results){
   # bind results to data.frame
-  index_tbl <- purrr::map_lgl(results, function(x) inherits(x, "tbl_df"))
+  index_tbl <- purrr::map_lgl(results, function(x) inherits(x, c("tbl_df", "data.frame")))
 
   # case all assets returned tibbles
   if(all(index_tbl)){

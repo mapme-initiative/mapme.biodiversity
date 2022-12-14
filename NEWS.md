@@ -6,6 +6,9 @@ tested and handled (#101)
 
 - Rasters are no longer temporary written to disk to ommit a bug caused by 
   applying mask/classify to an already existing raster file (#108, @Jo-Schie)
+  
+- Bug with soilproperties set to NA caused by the function to return a data.frame
+  instead of a tibble was fixed (#116)
 
 ## Internal
 - `.make_global_grid()` now specifies the CRS when constructing the bounding box

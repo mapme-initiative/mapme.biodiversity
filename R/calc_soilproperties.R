@@ -136,7 +136,7 @@ NULL
   conv_df$layer <- row.names(conv_df)
   results <- merge(results, conv_df)
   for (stat in stats) results[[stat]] <- results[[stat]] / results[["conversion_factor"]]
-  results[, c("layer", "depth", "stat", stats)]
+  as_tibble(results[, c("layer", "depth", "stat", stats)])
 }
 
 .soil_extract <- function(shp = NULL,
@@ -177,7 +177,7 @@ NULL
   conv_df$layer <- row.names(conv_df)
   results <- merge(results, conv_df)
   for (stat in stats) results[[stat]] <- results[[stat]] / results[["conversion_factor"]]
-  results[, c("layer", "depth", "stat", stats)]
+  as_tibble(results[, c("layer", "depth", "stat", stats)])
 }
 
 .soil_exactextractr <- function(soilgrids = NULL,
@@ -226,5 +226,5 @@ NULL
   conv_df$layer <- row.names(conv_df)
   results <- merge(results, conv_df)
   for (stat in stats) results[[stat]] <- results[[stat]] / results[["conversion_factor"]]
-  results[, c("layer", "depth", "stat", stats)]
+  as_tibble(results[, c("layer", "depth", "stat", stats)])
 }

@@ -4,7 +4,7 @@
 #' @docType package
 #' @title mapme.biodiversity - Global biodiversity portfolio analysis
 #' @import sf terra
-#' @importFrom tibble tibble
+#' @importFrom tibble tibble as_tibble
 #' @importFrom magrittr "%>%"
 #' @importFrom utils download.file
 #' @noRd
