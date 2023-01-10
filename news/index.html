@@ -61,19 +61,19 @@
 <h2 class="pkg-version" data-toc-text="development version" id="mapmebiodiversity-development-version">mapme.biodiversity (development version)<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-development-version"></a></h2>
 <div class="section level3">
 <h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
-<ul><li>GFW resources are now updated to use the latest version allowing analysis for the additional year of 2021</li>
+<ul><li>GFW resources are now updated to use the latest version allowing analysis for the additional year of 2021 (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/123" class="external-link">#123</a>, <a href="https://github.com/fBedecarrats" class="external-link">@fBedecarrats</a>)</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
 <ul><li><p>case when one or multiple assets return NA instead of a tibble is now properly tested and handled (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/101" class="external-link">#101</a>)</p></li>
-<li><p>Rasters are no longer temporary written to disk to ommit a bug caused by applying mask/classify to an already existing raster file (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/108" class="external-link">#108</a>, <a href="https://github.com/Jo-Schie" class="external-link">@Jo-Schie</a>)</p></li>
+<li><p>Rasters are no longer temporary written to disk to omit a bug caused by applying mask/classify to an already existing raster file (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/108" class="external-link">#108</a>, <a href="https://github.com/Jo-Schie" class="external-link">@Jo-Schie</a>)</p></li>
 <li><p>Bug with soilproperties set to NA caused by the function to return a data.frame instead of a tibble was fixed (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/116" class="external-link">#116</a>)</p></li>
 <li><p>both, <code>treecoverloss_emissions</code> and <code>treecover_area_and_emissions</code> now return 0 instead of NaN for observation years where now forest loss occurred (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/120" class="external-link">#120</a>)</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="internal-development-version">Internal<a class="anchor" aria-label="anchor" href="#internal-development-version"></a></h3>
-<ul><li>
-<code>.make_global_grid()</code> now specifies the CRS when constructing the bounding box and returns the grid in the specified CRS instead of Lat/Lon</li>
+<ul><li><p><code>.make_global_grid()</code> now specifies the CRS when constructing the bounding box and returns the grid in the specified CRS instead of Lat/Lon</p></li>
+<li><p><code>.calc_active_fire_properties</code> now uses st_coordinates to retrieve locations of fires (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/119" class="external-link">#119</a>, <a href="https://github.com/DavisVaughan" class="external-link">@DavisVaughan</a>)</p></li>
 </ul></div>
 </div>
     <div class="section level2">
