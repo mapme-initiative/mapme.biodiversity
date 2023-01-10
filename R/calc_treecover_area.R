@@ -124,8 +124,7 @@ NULL
     "anumeric value greater 0.",
     sep = ""
   )
-  if (!is.numeric(min_size)) stop(min_size_msg, call. = FALSE)
-  if (min_size <= 0) stop(min_size_msg, call. = FALSE)
+  if (!is.numeric(min_size) | min_size <= 0) stop(min_size_msg, call. = FALSE)
 
   # skip if the area of the
 
