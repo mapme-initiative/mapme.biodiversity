@@ -125,7 +125,7 @@ NULL
     sep = ""
   )
   if (is.numeric(min_size)) {
-    min_size <- as.integer(round(min_size))
+    min_size <- as.numeric(round(min_size))
   } else {
     stop(min_size_msg, call. = FALSE)
   }
