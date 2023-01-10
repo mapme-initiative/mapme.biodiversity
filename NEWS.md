@@ -1,5 +1,9 @@
 # mapme.biodiversity (development version)
 
+## New features
+- GFW resources are now updated to use the latest version allowing analysis for 
+  the additional year of 2021
+
 ## Bug fixes
 - case when one or multiple assets return NA instead of a tibble is now properly
 tested and handled (#101)
