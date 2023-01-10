@@ -141,12 +141,7 @@ NULL
     "must be a numeric value greater 0.",
     sep = ""
   )
-  if (is.numeric(min_size)) {
-    min_size <- as.numeric(round(min_size))
-  } else {
-    stop(min_size_msg, call. = FALSE)
-  }
-  if (min_size <= 0) stop(min_size_msg, call. = FALSE)
+  if (!is.numeric(min_size) | min_size <= 0) stop(min_size_msg, call. = FALSE)
 
   #------------------------------------------------------------------------------
   # start calculation if everything is set up correctly
