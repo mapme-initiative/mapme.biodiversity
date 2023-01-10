@@ -67,9 +67,12 @@ NULL
                                          ...) {
   intersected <- suppressWarnings(st_intersection(nasa_firms, shp))
   if(nrow(intersected) == 0) return(NA)
-  intersected <- tidyr::extract(intersected, geom,
-    into = c("longitude", "latitude"), "\\((.*),(.*)\\)",
-    conv = T
+  coordinates <- st_coordinates(intersected)
+  intersected <- dplyr::as_tibble(intersected)
+  intersected <- dplyr::select(intersected, -geom)
+  dplyr::mutate(
+    intersected,
+    longitude = coordinates[, 1, drop = TRUE],
+    latitude = coordinates[, 2, drop = TRUE]
   )
-  dplyr::select(intersected, -geom)
 }
