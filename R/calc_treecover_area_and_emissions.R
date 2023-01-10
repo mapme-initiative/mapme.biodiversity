@@ -258,12 +258,10 @@ NULL
     )[2]
     ha_sum_gfw_treecover <- as.numeric(ha_sum_gfw_treecover)
 
-    current_losslayer <- ifel(
-      gfw_lossyear == y, 1, 0
+    current_gfw_emissions <- ifel(
+      gfw_lossyear == y, gfw_emissions, 0
     )
-    current_gfw_emissions <- mask(
-      gfw_emissions, current_losslayer, maskvalues = 0
-    )
+    # terra
     # terra engine
     emissions_sum <- zonal(current_gfw_emissions, polyraster, sum, na.rm = TRUE)[2]
     emissions_sum <- as.numeric(emissions_sum)

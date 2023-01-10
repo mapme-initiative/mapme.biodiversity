@@ -10,6 +10,10 @@ tested and handled (#101)
 - Bug with soilproperties set to NA caused by the function to return a data.frame
   instead of a tibble was fixed (#116)
 
+- both, `treecoverloss_emissions` and `treecover_area_and_emissions` now return
+  0 instead of NaN for observation years where now forest loss occurred (#120)
+
+
 ## Internal
 - `.make_global_grid()` now specifies the CRS when constructing the bounding box
  and returns the grid in the specified CRS instead of Lat/Lon

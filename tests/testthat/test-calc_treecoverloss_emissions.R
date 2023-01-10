@@ -72,5 +72,11 @@ test_that("emissions works", {
   attributes(shp)$years <- 2000:2005
   stats_treecover <- .calc_treecoverloss_emissions(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_size = 1, min_cover = 10)
   stats_treeloss <- .calc_treecover_area_and_emissions(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_size = 1, min_cover = 10)[, c(1, 2)]
-  expect_equal(stats_treecover, stats_treecover)
+  expect_equal(stats_treecover, stats_treeloss)
+
+  # test that emissions and forest loss are returned as 0 if now loss occurs
+  gfw_lossyear[gfw_lossyear == 3] = 1
+  stats_treeloss <- .calc_treecoverloss_emissions(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_size = 1, min_cover = 10)
+  expect_equal(stats_treeloss$emissions[stats_treeloss$years == 2003], 0)
+
 })
