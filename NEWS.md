@@ -2,13 +2,13 @@
 
 ## New features
 - GFW resources are now updated to use the latest version allowing analysis for 
-  the additional year of 2021
+  the additional year of 2021 (#123, @fBedecarrats)
 
 ## Bug fixes
 - case when one or multiple assets return NA instead of a tibble is now properly
 tested and handled (#101)
 
-- Rasters are no longer temporary written to disk to ommit a bug caused by 
+- Rasters are no longer temporary written to disk to omit a bug caused by 
   applying mask/classify to an already existing raster file (#108, @Jo-Schie)
   
 - Bug with soilproperties set to NA caused by the function to return a data.frame
@@ -21,6 +21,9 @@ tested and handled (#101)
 ## Internal
 - `.make_global_grid()` now specifies the CRS when constructing the bounding box
  and returns the grid in the specified CRS instead of Lat/Lon
+ 
+- `.calc_active_fire_properties` now uses st_coordinates to retrieve locations
+ of fires (#119, @DavisVaughan)
 
 
 # mapme.biodiversity 0.2.1
