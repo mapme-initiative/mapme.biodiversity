@@ -213,11 +213,8 @@ NULL
   # get forest cover statistics for each year
   yearly_emission_values <- lapply(years, function(y) {
     y <- y - 2000
-    current_losslayer <- ifel(
-      gfw_lossyear == y, 1, 0
-    )
-    current_gfw_emissions <- mask(
-      gfw_emissions, current_losslayer, maskvalues = 0
+    current_gfw_emissions <- ifel(
+      gfw_lossyear == y, gfw_emissions, 0
     )
     # terra engine
     emissions_sum <- zonal(current_gfw_emissions, polyraster, sum, na.rm = TRUE)[2]
