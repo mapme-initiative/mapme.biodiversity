@@ -1,5 +1,9 @@
 # mapme.biodiversity (development version)
 
+## New features
+- GFW resources are now updated to use the latest version allowing analysis for 
+  the additional year of 2021
+
 ## Bug fixes
 - case when one or multiple assets return NA instead of a tibble is now properly
 tested and handled (#101)
@@ -9,6 +13,10 @@ tested and handled (#101)
   
 - Bug with soilproperties set to NA caused by the function to return a data.frame
   instead of a tibble was fixed (#116)
+
+- both, `treecoverloss_emissions` and `treecover_area_and_emissions` now return
+  0 instead of NaN for observation years where now forest loss occurred (#120)
+
 
 ## Internal
 - `.make_global_grid()` now specifies the CRS when constructing the bounding box

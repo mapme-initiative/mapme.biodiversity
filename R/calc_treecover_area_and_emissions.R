@@ -45,7 +45,7 @@
 #'   ) %>%
 #'   get_resources(
 #'     resources = c("gfw_treecover", "gfw_lossyear", "gfw_emissions"),
-#'     vers_treecover = "GFC-2020-v1.8", vers_lossyear = "GFC-2020-v1.8"
+#'     vers_treecover = "GFC-2021-v1.9", vers_lossyear = "GFC-2021-v1.9"
 #'   ) %>%
 #'   calc_indicators("treecover_area_and_emissions", min_size = 1, min_cover = 30) %>%
 #'   tidyr::unnest(treecover_area_and_emissions)))
@@ -142,7 +142,7 @@ NULL
     sep = ""
   )
   if (is.numeric(min_size)) {
-    min_size <- as.integer(round(min_size))
+    min_size <- as.numeric(round(min_size))
   } else {
     stop(min_size_msg, call. = FALSE)
   }
@@ -258,12 +258,10 @@ NULL
     )[2]
     ha_sum_gfw_treecover <- as.numeric(ha_sum_gfw_treecover)
 
-    current_losslayer <- ifel(
-      gfw_lossyear == y, 1, 0
+    current_gfw_emissions <- ifel(
+      gfw_lossyear == y, gfw_emissions, 0
     )
-    current_gfw_emissions <- mask(
-      gfw_emissions, current_losslayer, maskvalues = 0
-    )
+    # terra
     # terra engine
     emissions_sum <- zonal(current_gfw_emissions, polyraster, sum, na.rm = TRUE)[2]
     emissions_sum <- as.numeric(emissions_sum)

@@ -52,7 +52,7 @@ if (!file.exists(temp_loc)) {
   ) \%>\%
   get_resources(
     resources = c("gfw_treecover", "gfw_lossyear", "gfw_emissions"),
-    vers_treecover = "GFC-2020-v1.8", vers_lossyear = "GFC-2020-v1.8"
+    vers_treecover = "GFC-2021-v1.9", vers_lossyear = "GFC-2021-v1.9"
   ) \%>\%
   calc_indicators("treecoverloss_emissions", min_size = 1, min_cover = 30) \%>\%
   tidyr::unnest(treecoverloss_emissions)))

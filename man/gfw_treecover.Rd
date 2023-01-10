@@ -12,7 +12,6 @@ A global tiled raster resource available for all land areas.
 }
 \description{
 This resource is part of the publication by Hansen et al. (2013)
-"High-Resolution Global Maps of 21st-Century Forest Cover Change". It
 represents "tree cover in the year 2000, defined as canopy closure for all
 vegetation taller than 5m in height. Encoded as a percentage per output grid
 cell, in the range 0–100." Due to changes in the satellites products used
@@ -25,7 +24,7 @@ of the analysis spans over the two periods delimited by the year 2011.
 The following argument can be set:
 \describe{
 \item{vers_treecover}{The version of the dataset to download. Defaults to
-"GFC-2020-v1.8". Check mapme.biodiversity:::.available_gfw_versions()
+"GFC-2021-v1.9". Check mapme.biodiversity:::.available_gfw_versions()
 to get a list of available versions}
 }
 }
