@@ -42,7 +42,7 @@ if (!file.exists(temp_loc)) {
     cores = 1,
     verbose = FALSE
   ) \%>\%
-  get_resources("nasa_firms") \%>\%
+  get_resources("nasa_firms", instrument = c("VIIRS")) \%>\%
   calc_indicators("active_fire_properties") \%>\%
   tidyr::unnest(active_fire_properties)))
 }

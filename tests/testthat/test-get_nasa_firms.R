@@ -28,7 +28,7 @@ test_that(".get_nasa_firms works", {
 
   expect_error(
     .get_nasa_firms(portfolio, instrument = "VIIRS_NOAA"),
-    "The selected instrument VIIRS_NOAA is not available. Please choose one of: MODIS or VIIRS"
+    "The selected instrument VIIRS_NOAA is not available."
   )
 
   expect_error(

@@ -47,49 +47,64 @@ NULL
                             rundir = tempdir(),
                             verbose = TRUE) {
 
-  target_years <- attributes(x)$years
+  org_target_years <- attributes(x)$years
 
-  if (!instrument %in% c("MODIS", "VIIRS")) {
+  if (!any(instrument %in% c("MODIS", "VIIRS"))) {
     stop(
-      paste("The selected instrument", instrument, "is not available. Please choose one of: MODIS or VIIRS")
+      paste("The selected instrument",
+            instrument[which(!instrument %in% c("MODIS", "VIIRS"))],
+            "is not available. Please choose between MODIS and VIIRS")
     )
   }
 
-  if (instrument == "VIIRS") {
-    available_years <- c(2012:2021)
-    target_years <- .check_available_years(
-      target_years, available_years, "nasa_firms"
+  filenames <- c()
+  for (sensor in instrument){
+    if (sensor == "VIIRS") {
+      available_years <- c(2012:2021)
+      target_years <- .check_available_years(
+        org_target_years, available_years, "nasa_firms"
+      )
+    } else {
+      available_years <- c(2000:2021)
+      target_years <- .check_available_years(
+        org_target_years, available_years, "nasa_firms"
+      )
+    }
+
+    urls <- unlist(sapply(target_years,
+                          function(year) .get_firms_url(year, sensor)
+    ))
+    filename <- file.path(
+      rundir,
+      basename(paste0(sensor, "_", target_years, ".zip"))
     )
-  } else {
-    available_years <- c(2000:2021)
-    target_years <- .check_available_years(
-      target_years, available_years, "nasa_firms"
+    filenames <- c(filenames, filename)
+
+    if (attr(x, "testing")) {
+      next()
+    }
+
+    # start download in a temporal directory within tmpdir
+    aria_bin <- attributes(x)$aria_bin
+    .download_or_skip(urls, filename, verbose, aria_bin = aria_bin)
+
+    # unzip zip files
+    sapply(filename, function(zip) .unzip_firms(zip, rundir, sensor))
+    # remove unneeded files
+    unlink(
+      grep("*.gpkg$|*.zip$",
+           list.files(rundir, full.names = T), value = T, invert = T),
+      recursive = T, force = T
     )
   }
-
-  urls <- unlist(sapply(target_years, function(year) .get_firms_url(year, instrument)))
-  filenames <- file.path(
-    rundir,
-    basename(paste0(instrument, "_", target_years, ".zip"))
-  )
-
+  # return filenames if testing is activated
   if (attr(x, "testing")) {
     return(basename(filenames))
   }
-
-  # start download in a temporal directory within tmpdir
-  aria_bin <- attributes(x)$aria_bin
-  .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin)
-
-  # unzip zip files
-  sapply(filenames, function(zip) .unzip_firms(zip, rundir, instrument))
-  # remove unnecessary files
-  d_files <- list.files(rundir, full.names = T)
-  unlink(grep("_20*", d_files, value = T, invert = T),
-         recursive = T, force = T
-  )
-  # return paths to the gpkg
-  list.files(rundir, full.names = T, pattern = ".gpkg$")
+  # return paths to the gpkg for target years
+  grep(paste(org_target_years, collapse = "|"),
+       list.files(rundir, full.names = T, pattern = ".gpkg$"),
+       value = TRUE)
 }
 
 

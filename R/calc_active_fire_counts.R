@@ -10,7 +10,7 @@
 #' @name active_fire_counts
 #' @docType data
 #' @keywords indicator
-#' @format A tibble with a column for number of fire events and corresponding year.
+#' @format A tibble with a column for number of fire events per year and instrument.
 #' @examples
 #' library(sf)
 #' library(mapme.biodiversity)
@@ -55,7 +55,6 @@ NULL
 #' @return A tibble
 #' @keywords internal
 #' @noRd
-
 .calc_active_fire_counts <- function(shp,
                                      nasa_firms,
                                      rundir = tempdir(),
@@ -63,18 +62,21 @@ NULL
                                      todisk = FALSE,
                                      ...) {
   acq_date <- NULL
+  year <- NULL
+  instrument <- NULL
+  # select required columns and rbind objects
+  nasa_firms <- lapply(nasa_firms, function(x){
+    dplyr::select(x, acq_date, instrument)
+  }) %>%
+    dplyr::bind_rows()
+
   intersected <- suppressWarnings(st_intersection(nasa_firms, shp))
   if(nrow(intersected) == 0) return(NA)
-  intersected <-  tidyr::separate(intersected, acq_date, c("yyyy", "mm", "dd"))
-  years <- unique(intersected$yyyy)
-  data <- lapply(1:length(years), function(i) {
-    n <- nrow(intersected[intersected$yyyy == paste0(years[i]), ])
-    df <- data.frame(
-      year = years[i],
-      active_fire_counts = n
-    )
-    df
-  })
-  results <- do.call(rbind, data)
-  results
+  intersected <- dplyr::as_tibble(intersected)
+  intersected <- dplyr::select(intersected, -geom)
+  intersected <-  tidyr::separate(intersected, acq_date, c("year", "month", "day"))
+  intersected %>%
+    dplyr::group_by(instrument, year) %>%
+    dplyr::summarise(active_fire_counts = dplyr::n()) %>%
+    dplyr::ungroup()
 }
