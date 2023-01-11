@@ -36,7 +36,7 @@
 #'     cores = 1,
 #'     verbose = FALSE
 #'   ) %>%
-#'   get_resources("nasa_firms", instrument = c("VIIRS")) %>%
+#'   get_resources("nasa_firms", instrument = "VIIRS") %>%
 #'   calc_indicators("active_fire_properties") %>%
 #'   tidyr::unnest(active_fire_properties)))
 NULL
@@ -44,7 +44,7 @@ NULL
 #' Calculate active fire properties based on FIRMS
 #'
 #' Considering FIRMS polygons from NASA users can extract the
-#' properties of fire events occured in the region of interest for
+#' properties of fire events occurred in the region of interest for
 #' years 2000-2021 (MODIS) and 2012-2021 (VIIRS).
 #'
 #' @param shp A single polygon for which to calculate the active fire properties
@@ -71,7 +71,7 @@ NULL
   })
   # row bind the frames
   nasa_firms = dplyr::bind_rows(nasa_firms)
-  intersected <- suppressWarnings(st_intersection(nasa_firms, shp))
+  intersected <- suppressWarnings(st_intersection(nasa_firms, st_geometry(shp)))
   if(nrow(intersected) == 0) return(NA)
   coordinates <- st_coordinates(intersected)
   intersected <- dplyr::as_tibble(intersected)
