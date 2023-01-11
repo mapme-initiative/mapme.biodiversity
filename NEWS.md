@@ -3,6 +3,10 @@
 ## New features
 - GFW resources are now updated to use the latest version allowing analysis for 
   the additional year of 2021 (#123, @fBedecarrats)
+  
+- fire indicators now allow the simultaneous calculation of indicators based on 
+  MODIS and VIIRS. Before users had to chose between one of the instruments for
+  each analysis
 
 ## Bug fixes
 - case when one or multiple assets return NA instead of a tibble is now properly

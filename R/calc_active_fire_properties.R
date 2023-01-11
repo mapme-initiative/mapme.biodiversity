@@ -36,7 +36,7 @@
 #'     cores = 1,
 #'     verbose = FALSE
 #'   ) %>%
-#'   get_resources("nasa_firms") %>%
+#'   get_resources("nasa_firms", instrument = c("VIIRS")) %>%
 #'   calc_indicators("active_fire_properties") %>%
 #'   tidyr::unnest(active_fire_properties)))
 NULL
@@ -57,14 +57,20 @@ NULL
 #' @return A tibble
 #' @keywords internal
 #' @noRd
-
-
 .calc_active_fire_properties <- function(shp,
                                          nasa_firms,
                                          rundir = tempdir(),
                                          verbose = TRUE,
                                          todisk = FALSE,
                                          ...) {
+
+  # change quality flag to charachter to allow binding MODIS and VIIRS
+  nasa_firms <- lapply(nasa_firms, function(x){
+    x$confidence = as.character(x$confidence)
+    x
+  })
+  # row bind the frames
+  nasa_firms = dplyr::bind_rows(nasa_firms)
   intersected <- suppressWarnings(st_intersection(nasa_firms, shp))
   if(nrow(intersected) == 0) return(NA)
   coordinates <- st_coordinates(intersected)
