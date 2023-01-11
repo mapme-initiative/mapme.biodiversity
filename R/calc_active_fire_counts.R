@@ -34,7 +34,7 @@
 #'     cores = 1,
 #'     verbose = FALSE
 #'   ) %>%
-#'   get_resources("nasa_firms") %>%
+#'   get_resources("nasa_firms", instrument = "VIIRS") %>%
 #'   calc_indicators("active_fire_counts") %>%
 #'   tidyr::unnest(active_fire_counts)))
 NULL
@@ -42,7 +42,7 @@ NULL
 #' Calculate active fire counts based on FIRMS
 #'
 #' Considering FIRMS polygons from NASA users can compute the
-#' number of fire events occured in the region of interest for
+#' number of fire events occurred in the region of interest for
 #' years 2000-2021 (MODIS) and 2012-2021 (VIIRS).
 #'
 #' @param shp A single polygon for which to calculate the active fire counts
@@ -70,7 +70,7 @@ NULL
   }) %>%
     dplyr::bind_rows()
 
-  intersected <- suppressWarnings(st_intersection(nasa_firms, shp))
+  intersected <- suppressWarnings(st_intersection(nasa_firms, st_geometry(shp)))
   if(nrow(intersected) == 0) return(NA)
   intersected <- dplyr::as_tibble(intersected)
   intersected <- dplyr::select(intersected, -geom)
