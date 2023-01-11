@@ -114,37 +114,32 @@ including lon/lat coordinates.</p>
 <span class="r-in"><span>    cores <span class="op">=</span> <span class="fl">1</span>,</span></span>
 <span class="r-in"><span>    verbose <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="get_resources.html">get_resources</a></span><span class="op">(</span><span class="st">"nasa_firms"</span>, instrument <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"VIIRS"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="get_resources.html">get_resources</a></span><span class="op">(</span><span class="st">"nasa_firms"</span>, instrument <span class="op">=</span> <span class="st">"VIIRS"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="calc_indicators.html">calc_indicators</a></span><span class="op">(</span><span class="st">"active_fire_properties"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">active_fire_properties</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error in unpack(data, any_of(cols), names_sep = names_sep, names_repair = names_repair) : </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Names must be unique.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> These names are duplicated:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   * "WDPAID" at locations 1 and 19.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   * "NAME" at locations 2 and 20.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   * "DESIG_ENG" at locations 3 and 21.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   * "ISO3" at locations 4 and 22.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   * "assetid" at locations 5 and 23.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">ℹ</span> Use argument `names_repair` to specify repair strategy.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Error in unpack(data, any_of(cols), names_sep = names_sep, names_repair = names_repair) : \n  Names must be unique.\n\033[31m✖\033[39m These names are duplicated:\n  * \"WDPAID\" at locations 1 and 19.\n  * \"NAME\" at locations 2 and 20.\n  * \"DESIG_ENG\" at locations 3 and 21.\n  * \"ISO3\" at locations 4 and 22.\n  * \"assetid\" at locations 5 and 23.\n\033[34mℹ\033[39m Use argument `names_repair` to specify repair strategy.\n"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "try-error"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"condition")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB; font-weight: bold;">&lt;error/vctrs_error_names_must_be_unique&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in </span><span style="color: #5555FF; font-weight: bold;">`unpack()`</span><span style="font-weight: bold;">:</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Names must be unique.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> These names are duplicated:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   * "WDPAID" at locations 1 and 19.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   * "NAME" at locations 2 and 20.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   * "DESIG_ENG" at locations 3 and 21.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   * "ISO3" at locations 4 and 22.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   * "assetid" at locations 5 and 23.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">ℹ</span> Use argument `names_repair` to specify repair strategy.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Backtrace:</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">  1. </span><span style="font-weight: bold;">pkgdown</span>::deploy_to_branch(new_process = FALSE)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 40. </span><span style="font-weight: bold;">tidyr</span>:::unnest.data.frame(., active_fire_properties)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> 41. </span><span style="color: #5555FF; font-weight: bold;">tidyr::unpack(</span><span style="color: #FF55FF; font-weight: bold;">names_repair = names_repair</span><span style="color: #5555FF; font-weight: bold;">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 21 features and 20 fields</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POLYGON</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  WGS 84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 21 × 21</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    WDPAID NAME         DESIG…¹ ISO3  assetid brigh…²  scan track acq_d…³ acq_t…⁴</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> <span style="text-decoration: underline;">478</span>140 Sierra de N… Nation… DOM         1    338.  0.49  0.41 2021-0…    <span style="text-decoration: underline;">1</span>812</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> <span style="text-decoration: underline;">478</span>140 Sierra de N… Nation… DOM         1    341.  0.39  0.36 2021-0…    <span style="text-decoration: underline;">1</span>754</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> <span style="text-decoration: underline;">478</span>140 Sierra de N… Nation… DOM         1    298.  0.67  0.73 2021-0…     524</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> <span style="text-decoration: underline;">478</span>140 Sierra de N… Nation… DOM         1    299.  0.67  0.73 2021-0…     524</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> <span style="text-decoration: underline;">478</span>140 Sierra de N… Nation… DOM         1    333.  0.33  0.55 2021-0…    <span style="text-decoration: underline;">1</span>718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> <span style="text-decoration: underline;">478</span>140 Sierra de N… Nation… DOM         1    345.  0.68  0.74 2021-0…    <span style="text-decoration: underline;">1</span>700</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> <span style="text-decoration: underline;">478</span>140 Sierra de N… Nation… DOM         1    346.  0.42  0.45 2021-0…    <span style="text-decoration: underline;">1</span>736</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> <span style="text-decoration: underline;">478</span>140 Sierra de N… Nation… DOM         1    346.  0.41  0.61 2021-0…    <span style="text-decoration: underline;">1</span>712</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> <span style="text-decoration: underline;">478</span>140 Sierra de N… Nation… DOM         1    336.  0.39  0.36 2021-0…    <span style="text-decoration: underline;">1</span>754</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> <span style="text-decoration: underline;">478</span>140 Sierra de N… Nation… DOM         1    331.  0.39  0.36 2021-0…    <span style="text-decoration: underline;">1</span>754</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 11 more rows, 11 more variables: satellite &lt;chr&gt;, instrument &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   confidence &lt;chr&gt;, version &lt;int&gt;, bright_ti5 &lt;dbl&gt;, frp &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   daynight &lt;chr&gt;, type &lt;int&gt;, longitude &lt;dbl&gt;, latitude &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   geom &lt;POLYGON [°]&gt;, and abbreviated variable names ¹​DESIG_ENG, ²​bright_ti4,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ³​acq_date, ⁴​acq_time</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
