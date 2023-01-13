@@ -5,7 +5,7 @@
 [![Coverage
 Status](https://img.shields.io/codecov/c/github/mapme-initiative/mapme.biodiversity/master.svg)](https://codecov.io/github/mapme-initiative/mapme.biodiversity?branch=master)
 [![CRAN
-status](https://badges.cranchecks.info/summary/mapme.biodiversity.svg)](https://CRAN.R-project.org/package=mapme.biodiversity)
+status](https://badges.cranchecks.info/summary/mapme.biodiversity.svg)](https://cran.r-project.org/web/checks/check_results_mapme.biodiversity.html)
 [![CRAN
 version](https://www.r-pkg.org/badges/version/mapme.biodiversity)](https://CRAN.R-project.org/package=mapme.biodiversity)
 [![License: GPL
