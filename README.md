@@ -8,8 +8,7 @@ Status](https://img.shields.io/codecov/c/github/mapme-initiative/mapme.biodivers
 status](https://badges.cranchecks.info/summary/mapme.biodiversity.svg)](https://cran.r-project.org/web/checks/check_results_mapme.biodiversity.html)
 [![CRAN
 version](https://www.r-pkg.org/badges/version/mapme.biodiversity)](https://CRAN.R-project.org/package=mapme.biodiversity)
-[![License: GPL
-(\>=3)](https://img.shields.io/badge/License-GPL%20(%3E%253D%203)-blue.svg)](https://choosealicense.com/licenses/gpl-3.0/)
+[![License](https://img.shields.io/badge/License-GPL%20(%3E=3)-brightgreen.svg?style=flat)](https://choosealicense.com/licenses/gpl-3.0/)
 
 <!-- badges: end -->
 
