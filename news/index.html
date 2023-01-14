@@ -62,7 +62,8 @@
 <div class="section level3">
 <h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
 <ul><li><p>GFW resources are now updated to use the latest version allowing analysis for the additional year of 2021 (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/123" class="external-link">#123</a>, <a href="https://github.com/fBedecarrats" class="external-link">@fBedecarrats</a>)</p></li>
-<li><p>fire indicators now allow the simultaneous calculation of indicators based on MODIS and VIIRS. Before users had to chose between one of the instruments for each analysis</p></li>
+<li><p>GFW indicators now accecpt numeric <code>min_size</code> argument allowing to specify fractional covers (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/110" class="external-link">#110</a>)</p></li>
+<li><p>fire indicators now allow the simultaneous calculation of indicators based on MODIS and VIIRS. Before users had to chose between one of the instruments for each analysis (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/126" class="external-link">#126</a>)</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
@@ -73,7 +74,7 @@
 </ul></div>
 <div class="section level3">
 <h3 id="internal-development-version">Internal<a class="anchor" aria-label="anchor" href="#internal-development-version"></a></h3>
-<ul><li><p><code>.make_global_grid()</code> now specifies the CRS when constructing the bounding box and returns the grid in the specified CRS instead of Lat/Lon</p></li>
+<ul><li><p><code>.make_global_grid()</code> now specifies the CRS when constructing the bounding box and returns the grid in the specified CRS instead of Lat/Lon (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/113" class="external-link">#113</a>)</p></li>
 <li><p><code>.calc_active_fire_properties</code> now uses st_coordinates to retrieve locations of fires (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/119" class="external-link">#119</a>, <a href="https://github.com/DavisVaughan" class="external-link">@DavisVaughan</a>)</p></li>
 </ul></div>
 </div>
