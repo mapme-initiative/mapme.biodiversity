@@ -5,7 +5,11 @@
 [![Coverage
 Status](https://img.shields.io/codecov/c/github/mapme-initiative/mapme.biodiversity/master.svg)](https://codecov.io/github/mapme-initiative/mapme.biodiversity?branch=master)
 [![CRAN
-status](https://www.r-pkg.org/badges/version/mapme.biodiversity)](https://CRAN.R-project.org/package=mapme.biodiversity)
+status](https://badges.cranchecks.info/summary/mapme.biodiversity.svg)](https://cran.r-project.org/web/checks/check_results_mapme.biodiversity.html)
+[![CRAN
+version](https://www.r-pkg.org/badges/version/mapme.biodiversity)](https://CRAN.R-project.org/package=mapme.biodiversity)
+[![License](https://img.shields.io/badge/License-GPL%20(%3E=3)-brightgreen.svg?style=flat)](https://choosealicense.com/licenses/gpl-3.0/)
+
 <!-- badges: end -->
 
 # mapme.biodiversity <img src="man/figures/logo.png" align="right" height="110"/>
@@ -14,7 +18,7 @@ status](https://www.r-pkg.org/badges/version/mapme.biodiversity)](https://CRAN.R
 
 Biodiversity areas, especially primary forests, provide multiple
 ecosystem services for the local population and the planet as a whole.
-The rapid expansion of human landuse into natural ecosystems and the
+The rapid expansion of human land use into natural ecosystems and the
 impacts of the global climate crisis put natural ecosystems and the
 global biodiversity under threat.
 
@@ -62,7 +66,7 @@ library(mapme.biodiversity)
 library(sf)
 ```
 
-    ## Linking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE
+    ## Linking to GEOS 3.11.1, GDAL 3.6.1, PROJ 9.1.1; sf_use_s2() is TRUE
 
 ``` r
 resources <- names(available_resources())

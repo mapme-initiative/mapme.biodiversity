@@ -4,9 +4,12 @@
 - GFW resources are now updated to use the latest version allowing analysis for 
   the additional year of 2021 (#123, @fBedecarrats)
   
+- GFW indicators now accecpt numeric `min_size` argument allowing to specify
+  fractional covers (#110)
+  
 - fire indicators now allow the simultaneous calculation of indicators based on 
   MODIS and VIIRS. Before users had to chose between one of the instruments for
-  each analysis
+  each analysis (#126)
 
 ## Bug fixes
 - case when one or multiple assets return NA instead of a tibble is now properly
@@ -24,7 +27,7 @@ tested and handled (#101)
 
 ## Internal
 - `.make_global_grid()` now specifies the CRS when constructing the bounding box
- and returns the grid in the specified CRS instead of Lat/Lon
+ and returns the grid in the specified CRS instead of Lat/Lon (#113)
  
 - `.calc_active_fire_properties` now uses st_coordinates to retrieve locations
  of fires (#119, @DavisVaughan)
