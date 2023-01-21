@@ -21,6 +21,7 @@
 #' @keywords indicator
 #' @format A tibble with a column for years and emissions (in Mg)
 #' @examples
+#' if (Sys.getenv("NOT_CRAN") == "true") {
 #' library(sf)
 #' library(mapme.biodiversity)
 #'
@@ -49,6 +50,7 @@
 #'   ) %>%
 #'   calc_indicators("treecoverloss_emissions", min_size = 1, min_cover = 30) %>%
 #'   tidyr::unnest(treecoverloss_emissions)))
+#' }
 NULL
 
 #' Calculate emissions statistics

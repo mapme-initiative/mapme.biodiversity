@@ -21,6 +21,7 @@
 #' @keywords indicator
 #' @format A tibble with a column for years, treecover (in ha), and emissions (in Mg CO2)
 #' @examples
+#' if (Sys.getenv("NOT_CRAN") == "true") {
 #' library(sf)
 #' library(mapme.biodiversity)
 #'
@@ -49,6 +50,7 @@
 #'   ) %>%
 #'   calc_indicators("treecover_area_and_emissions", min_size = 1, min_cover = 30) %>%
 #'   tidyr::unnest(treecover_area_and_emissions)))
+#' }
 NULL
 
 

@@ -19,6 +19,7 @@
 #' @keywords indicator
 #' @format A tibble with a column for years and treecover (in ha)
 #' @examples
+#' if (Sys.getenv("NOT_CRAN") == "true") {
 #' library(sf)
 #' library(mapme.biodiversity)
 #'
@@ -47,6 +48,7 @@
 #'   ) %>%
 #'   calc_indicators("treecover_area", min_size = 1, min_cover = 30) %>%
 #'   tidyr::unnest(treecover_area)))
+#' }
 NULL
 
 #' Calculate tree cover per year based on GFW data sets
