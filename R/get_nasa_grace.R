@@ -50,6 +50,7 @@ NULL
 #'
 #' @return A character vector
 #' @keywords internal
+#' @noRd
 .get_nasagrace_url <- function(target_year) {
   available_years <- c(2003:2022)
   dates <- seq.Date(as.Date("2003/02/03"), as.Date("2022/05/16"), by = "week")

@@ -47,6 +47,7 @@ calc_indicators <- function(x, indicators, ...) {
 #' @param ... Additional arguments required by the requested indicators.
 #'
 #' @keywords internal
+#' @noRd
 #' @importFrom dplyr relocate last_col
 #' @importFrom tidyr nest
 .get_single_indicator <- function(x, indicator, ...) {

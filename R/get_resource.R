@@ -63,6 +63,7 @@ get_resources <- function(x, resources, ...) {
 #'   function are matched. If there are missing arguments, the default value is
 #'   used.
 #' @keywords internal
+#' @noRd
 .get_single_resource <- function(x, resource, ...) {
   args <- list(...)
   atts <- attributes(x)
