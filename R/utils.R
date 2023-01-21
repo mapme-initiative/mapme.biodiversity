@@ -302,7 +302,7 @@
         }
 
         status <- download.file(missing_urls[i], missing_filenames[i],
-                                quiet = TRUE, "libcurl",
+                                quiet = TRUE,
                                 mode = ifelse(Sys.info()["sysname"] == "Windows", "wb", "w")
         )
         if (status != 0) {

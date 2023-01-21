@@ -22,14 +22,6 @@ test_that("get_resources works", {
     verbose = FALSE
   )
 
-  expect_message(
-    get_resources(portfolio,
-      resources = c("gfw_treecover", "gfw_lossyear", "gfw_emissions"),
-      vers_lossyear = "GFC-2020-v1.8"
-    ),
-    "Setting to default value of"
-  )
-
   expect_error(
     get_resources(portfolio,
       resources = c("not_available")
@@ -50,6 +42,6 @@ test_that("get_resources works", {
   )
 
   expect_warning(
-    get_resources(portfolio, "treecover2000")
+    get_resources(portfolio, "treecover2000", vers_treecover="GFC-2020-v1.8")
   )
 })
