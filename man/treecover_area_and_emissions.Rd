@@ -28,6 +28,7 @@ The following arguments can be set:
 }
 }
 \examples{
+if (Sys.getenv("NOT_CRAN") == "true") {
 library(sf)
 library(mapme.biodiversity)
 
@@ -56,5 +57,6 @@ if (!file.exists(temp_loc)) {
   ) \%>\%
   calc_indicators("treecover_area_and_emissions", min_size = 1, min_cover = 30) \%>\%
   tidyr::unnest(treecover_area_and_emissions)))
+}
 }
 \keyword{indicator}

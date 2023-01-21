@@ -32,18 +32,6 @@ calc_indicators <- function(x, indicators, ...) {
     existing_resources, required_resources,
     needed = TRUE
   )
-  # Fix for MacOS CI error with duplicated vertices in vector resources
-  # Error in s2_geography_from_wkb(x, oriented = oriented, check = check) :
-  # Evaluation error: Found 1 feature with invalid spherical geometry.
-  # [1] Loop 0 is not valid: Edge 821 is degenerate (duplicate vertex).
-  # https://github.com/r-spatial/sf/issues/1762 suggests to deactivate s2,
-  # proposition of https://github.com/r-spatial/sf/issues/1902 to dissable
-  # s2 and fix the geometry has failed, thus for now falling back to lwgeom
-  if (Sys.info()["sysname"] == "Darwin" | grepl("darwin", Sys.info()["sysname"])) {
-    s2_org <- sf_use_s2()
-    suppressMessages(sf_use_s2(FALSE))
-    on.exit(suppressMessages(sf_use_s2(s2_org)))
-  }
   for (indicator in indicators) x <- .get_single_indicator(x, indicator, ...)
   x
 }
@@ -59,6 +47,7 @@ calc_indicators <- function(x, indicators, ...) {
 #' @param ... Additional arguments required by the requested indicators.
 #'
 #' @keywords internal
+#' @noRd
 #' @importFrom dplyr relocate last_col
 #' @importFrom tidyr nest
 .get_single_indicator <- function(x, indicator, ...) {

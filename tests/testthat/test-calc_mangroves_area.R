@@ -1,5 +1,4 @@
 test_that("mangrove extent works", {
-  skip_on_os("mac")
   shp <- read_sf(
     system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
                 package = "mapme.biodiversity"

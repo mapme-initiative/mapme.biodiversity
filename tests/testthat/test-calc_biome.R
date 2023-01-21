@@ -1,5 +1,4 @@
 test_that("biome computation works", {
-  skip_on_os("mac")
   shp <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
                 package = "mapme.biodiversity"

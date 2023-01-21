@@ -8,18 +8,33 @@
 A global tiled raster resource available for all land areas.
 }
 \source{
-\url{https://srtm.csi.cgiar.org/}
+https://srtm.csi.cgiar.org/
 }
 \description{
-This resource is published by Farr et al. (2007) "The Shuttle Radar Topography
-Mission". The layer represents the 30m global terrestrial digital elevation model
+This resource is published by Jarvis et al. (2008) "Hole-filled seamless SRTM data V4".
+The layer represents the 30m global terrestrial digital elevation model
 from the NASA Shuttle Radar Topographic Mission (SRTM), available for download as
 5 degree x 5 degree tiles. It is encoded as meter, representing the elevation
 at the particular grid cell.
 }
+\details{
+\strong{Important Note}:
+
+As of January 2023, the SSL certificate of the website where this resource is downloaded
+from has expired. We include a check and inform users that this resource might not
+be downloaded without unsetting SSL certification checks on their own risk.
+The maintainers of the website have been contacted and asked to renew the
+certificate. Until then, users can decide to disable the SSL certification
+checks for their preferred downloading method. Using wget as an example, the
+following options can be set to disable the SSL checks at your own risk:
+
+\code{httr::set_config(httr::config(ssl_verifypeer = 0L))}
+\code{options(download.file.method="wget", download.file.extra="--no-check-certificate")}
+
+This assumes that your are \emph{not} using the aria2 downloader.
+}
 \references{
-NASA Shuttle Radar Topography Mission (SRTM)(2013). Shuttle Radar
-Topography Mission (SRTM) Global. Distributed by OpenTopography.
-https://doi.org/10.5069/G9445JDF. Accessed: 2022-03-17
+Jarvis A., H.I. Reuter, A. Nelson, E. Guevara, 2008,
+Hole-filled seamless SRTM data V4, International Centre for Tropical Agriculture (CIAT).
 }
 \keyword{resource}

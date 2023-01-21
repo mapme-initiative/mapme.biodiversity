@@ -1,19 +1,31 @@
-# mapme.biodiversity (development version)
+# mapme.biodiversity 0.3.0
+
+## Breaking changes
+
+- on MacOS s2-based calculations are now enabled so users can expect the package
+  to return numerically equivalent results on any operating system (#131)
+  
+- the online source for the `nasa_srtm` resource shows an expired SSL certificate
+  since November 2022. The get_resources()` function now includes an error and 
+  instructions how to disable SSL certification at a users own risk. The 
+  websites maintainers have been contacted and asked to renew the certification. (#131)
 
 ## New features
+
 - GFW resources are now updated to use the latest version allowing analysis for 
   the additional year of 2021 (#123, @fBedecarrats)
   
-- GFW indicators now accecpt numeric `min_size` argument allowing to specify
+- GFW indicators now accept numeric `min_size` argument allowing to specify
   fractional covers (#110)
   
 - fire indicators now allow the simultaneous calculation of indicators based on 
   MODIS and VIIRS. Before users had to chose between one of the instruments for
   each analysis (#126)
-
+  
 ## Bug fixes
+
 - case when one or multiple assets return NA instead of a tibble is now properly
-tested and handled (#101)
+  tested and handled (#101)
 
 - Rasters are no longer temporary written to disk to omit a bug caused by 
   applying mask/classify to an already existing raster file (#108, @Jo-Schie)
@@ -23,14 +35,19 @@ tested and handled (#101)
 
 - both, `treecoverloss_emissions` and `treecover_area_and_emissions` now return
   0 instead of NaN for observation years where now forest loss occurred (#120)
-
-
+  
 ## Internal
+
 - `.make_global_grid()` now specifies the CRS when constructing the bounding box
- and returns the grid in the specified CRS instead of Lat/Lon (#113)
+  and returns the grid in the specified CRS instead of Lat/Lon (#113)
  
 - `.calc_active_fire_properties` now uses st_coordinates to retrieve locations
- of fires (#119, @DavisVaughan)
+  of fires (#119, @DavisVaughan)
+  
+- tests for MacOS have been re-enabled (#131)
+
+- tests for downloading `nasa_srtm` resource are skipped because the SSL certificate
+  of the online source has expired (#131)
 
 
 # mapme.biodiversity 0.2.1
