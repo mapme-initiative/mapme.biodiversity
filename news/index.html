@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,24 +58,31 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="mapmebiodiversity-development-version">mapme.biodiversity (development version)<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.3.0" id="mapmebiodiversity-030">mapme.biodiversity 0.3.0<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-030"></a></h2>
 <div class="section level3">
-<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<h3 id="breaking-changes-0-3-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-3-0"></a></h3>
+<ul><li><p>on MacOS s2-based calculations are now enabled so users can expect the package to return numerically equivalent results on any operating system (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/131" class="external-link">#131</a>)</p></li>
+<li><p>the online source for the <code>nasa_srtm</code> resource shows an expired SSL certificate since November 2022. The get_resources()` function now includes an error and instructions how to disable SSL certification at a users own risk. The websites maintainers have been contacted and asked to renew the certification. (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/131" class="external-link">#131</a>)</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-0-3-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-3-0"></a></h3>
 <ul><li><p>GFW resources are now updated to use the latest version allowing analysis for the additional year of 2021 (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/123" class="external-link">#123</a>, <a href="https://github.com/fBedecarrats" class="external-link">@fBedecarrats</a>)</p></li>
-<li><p>GFW indicators now accecpt numeric <code>min_size</code> argument allowing to specify fractional covers (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/110" class="external-link">#110</a>)</p></li>
+<li><p>GFW indicators now accept numeric <code>min_size</code> argument allowing to specify fractional covers (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/110" class="external-link">#110</a>)</p></li>
 <li><p>fire indicators now allow the simultaneous calculation of indicators based on MODIS and VIIRS. Before users had to chose between one of the instruments for each analysis (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/126" class="external-link">#126</a>)</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<h3 id="bug-fixes-0-3-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-3-0"></a></h3>
 <ul><li><p>case when one or multiple assets return NA instead of a tibble is now properly tested and handled (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/101" class="external-link">#101</a>)</p></li>
 <li><p>Rasters are no longer temporary written to disk to omit a bug caused by applying mask/classify to an already existing raster file (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/108" class="external-link">#108</a>, <a href="https://github.com/Jo-Schie" class="external-link">@Jo-Schie</a>)</p></li>
 <li><p>Bug with soilproperties set to NA caused by the function to return a data.frame instead of a tibble was fixed (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/116" class="external-link">#116</a>)</p></li>
 <li><p>both, <code>treecoverloss_emissions</code> and <code>treecover_area_and_emissions</code> now return 0 instead of NaN for observation years where now forest loss occurred (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/120" class="external-link">#120</a>)</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="internal-development-version">Internal<a class="anchor" aria-label="anchor" href="#internal-development-version"></a></h3>
+<h3 id="internal-0-3-0">Internal<a class="anchor" aria-label="anchor" href="#internal-0-3-0"></a></h3>
 <ul><li><p><code>.make_global_grid()</code> now specifies the CRS when constructing the bounding box and returns the grid in the specified CRS instead of Lat/Lon (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/113" class="external-link">#113</a>)</p></li>
 <li><p><code>.calc_active_fire_properties</code> now uses st_coordinates to retrieve locations of fires (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/119" class="external-link">#119</a>, <a href="https://github.com/DavisVaughan" class="external-link">@DavisVaughan</a>)</p></li>
+<li><p>tests for MacOS have been re-enabled (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/131" class="external-link">#131</a>)</p></li>
+<li><p>tests for downloading <code>nasa_srtm</code> resource are skipped because the SSL certificate of the online source has expired (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/131" class="external-link">#131</a>)</p></li>
 </ul></div>
 </div>
     <div class="section level2">
