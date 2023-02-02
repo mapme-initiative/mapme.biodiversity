@@ -26,12 +26,6 @@ test_that(".get_nasa_srtm works", {
   # Add testing attribute in order to skip downloads
   attributes(portfolio)$testing <- TRUE
 
-  expect_error(
-    .get_nasa_srtm(portfolio),
-    "SSL certification"
-  )
-
-  skip("Disabled until SSL certification is renewed.")
   expect_equal(
     suppressWarnings(.get_nasa_srtm(portfolio)),
     "srtm_22_09.zip"

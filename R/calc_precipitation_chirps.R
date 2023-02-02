@@ -145,7 +145,7 @@ NULL
       target_spi <- chirps[[which(layer_years %in% target_years_spi)]]
       spi_chirps <- app(target_spi,
                         scale = scale, fun = function(x, scale) {
-                          SPEI::spi(x, scale = scale, na.rm = TRUE)$fitted
+                          SPEI::spi(x, scale = scale, na.rm = TRUE, verbose=FALSE)$fitted
                         }, cores = cores, overwrite = TRUE, wopt = list(filetype = "GTiff"),
                         filename =
                           ifelse(todisk, file.path(rundir, paste0("spi_", scale, ".tif")), "")
