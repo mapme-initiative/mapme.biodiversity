@@ -205,8 +205,7 @@ NULL
 .prec_zonal <- function(shp, absolute, anomaly, spi, todisk, rundir) {
   dates <- as.Date(paste0(substr(names(absolute), 13, 19), ".01"), "%Y.%m.%d")
 
-  shp_v <- vect(shp)
-  p_raster <- terra::rasterize(shp_v,
+  p_raster <- terra::rasterize(shp,
                                absolute,
                                field = 1,
                                touches = TRUE,
@@ -234,9 +233,8 @@ NULL
 
 .prec_extract <- function(shp, absolute, anomaly, spi, todisk, rundir) {
   dates <- as.Date(paste0(substr(names(absolute), 13, 19), ".01"), "%Y.%m.%d")
-  shp_v <- vect(shp)
-  absolute <- terra::extract(absolute, shp_v, fun = "mean")
-  anomaly <- terra::extract(anomaly, shp_v, fun = "mean")
+  absolute <- terra::extract(absolute, shp, fun = "mean")
+  anomaly <- terra::extract(anomaly, shp, fun = "mean")
 
   results <- tibble(
     dates = dates,
@@ -245,7 +243,7 @@ NULL
   )
 
   if (!is.null(spi)) {
-    spi <- lapply(spi, function(x) as.numeric(terra::extract(x, shp_v, fun = "mean"))[-1])
+    spi <- lapply(spi, function(x) as.numeric(terra::extract(x, shp, fun = "mean"))[-1])
     tibble(cbind(results, as.data.frame(spi)))
   } else {
     results

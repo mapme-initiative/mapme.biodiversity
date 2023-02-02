@@ -147,16 +147,16 @@ NULL
                                 todisk = FALSE,
                                 rundir = tempdir(),
                                 ...) {
-  shp_v <- vect(shp)
+
   nasa_grace <- terra::mask(nasa_grace,
-                            shp_v,
+                            shp,
                             filename =  ifelse(todisk, file.path(rundir, "nasa_grace.tif"), ""),
                             overwrite = TRUE
   )
 
-  p_raster <- terra::rasterize(shp_v,
+  p_raster <- terra::rasterize(shp,
                                nasa_grace,
-                               field = 1:nrow(shp_v),
+                               field = 1:nrow(shp),
                                touches = TRUE,
                                filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
                                overwrite = TRUE
@@ -194,11 +194,10 @@ NULL
                                   nasa_grace = NULL,
                                   stats = "mean",
                                   ...) {
-  shp_v <- vect(shp)
   results <- lapply(1:length(stats), function(j) {
     out <- terra::extract(
       nasa_grace,
-      shp_v,
+      shp,
       fun = stats[j],
       na.rm = T
     )

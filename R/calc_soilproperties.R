@@ -98,7 +98,6 @@ NULL
                         todisk = FALSE,
                         rundir = tempdir(),
                         ...) {
-  shp_v <- vect(shp)
   parameters <- gsub(".tif", "", names(soilgrids))
   parameters <- lapply(parameters, function(param) {
     splitted <- strsplit(param, "_")[[1]]
@@ -107,13 +106,13 @@ NULL
   })
 
   soilgrids_mask <- terra::mask(soilgrids,
-    shp_v,
+    shp,
     filename =  ifelse(todisk, file.path(rundir, "soilgrids.tif"), ""),
     overwrite = TRUE
   )
-  p_raster <- terra::rasterize(shp_v,
+  p_raster <- terra::rasterize(shp,
     soilgrids_mask,
-    field = 1:nrow(shp_v),
+    field = 1:nrow(shp),
     filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
     overwrite = TRUE
   )
@@ -145,7 +144,6 @@ NULL
                           todisk = todisk,
                           rundir = tempdir(),
                           ...) {
-  shp_v <- vect(shp)
   parameters <- gsub(".tif", "", names(soilgrids))
   parameters <- lapply(parameters, function(param) {
     splitted <- strsplit(param, "_")[[1]]
@@ -154,13 +152,13 @@ NULL
   })
 
   soilgrids_mask <- terra::mask(soilgrids,
-    shp_v,
+    shp,
     filename =  ifelse(todisk, file.path(rundir, "soilgrids.tif"), ""),
     overwrite = TRUE
   )
   results <- lapply(stats, function(stat) {
     out <- terra::extract(soilgrids_mask,
-      shp_v,
+      shp,
       fun = stat,
       na.rm = T
     )

@@ -180,16 +180,15 @@ NULL
                                   todisk = FALSE,
                                   rundir = tempdir(),
                                   ...) {
-  shp_v <- vect(shp)
   worldclim <- terra::mask(worldclim,
-    shp_v,
+    shp,
     filename =  ifelse(todisk, file.path(rundir, "worldclim.tif"), ""),
     datatype = "INT1U",
     overwrite = TRUE
   )
-  p_raster <- terra::rasterize(shp_v,
+  p_raster <- terra::rasterize(shp,
     worldclim,
-    field = 1:nrow(shp_v),
+    field = 1:nrow(shp),
     touches = TRUE,
     filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
     datatype = "INT1U",
@@ -227,12 +226,11 @@ NULL
                                     shp = NULL,
                                     stats = "mean",
                                     ...) {
-  shp_v <- vect(shp)
   layer <- strsplit(names(worldclim), "_")[[1]][3]
   results <- lapply(1:length(stats), function(j) {
     out <- terra::extract(
       worldclim,
-      shp_v,
+      shp,
       fun = stats[j],
       na.rm = T
     )

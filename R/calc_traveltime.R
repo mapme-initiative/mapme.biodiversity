@@ -137,23 +137,21 @@ NULL
                                    todisk = FALSE,
                                    rundir = tempdir(),
                                    ...) {
-  shp_v <- vect(shp)
   nelson_et_al <- terra::mask(nelson_et_al,
-                              shp_v,
+                              shp,
                               filename =  ifelse(todisk, file.path(rundir, "traveltime.tif"), ""),
                               datatype = "INT1U",
                               overwrite = TRUE
   )
-  p_raster <- terra::rasterize(shp_v,
+  p_raster <- terra::rasterize(shp,
                                nelson_et_al,
-                               field = 1:nrow(shp_v),
+                               field = 1:nrow(shp),
                                touches = TRUE,
                                filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
                                datatype = "INT1U",
                                overwrite = TRUE
   )
 
-  shp_v <- vect(shp)
   results <- lapply(1:length(stats), function(j) {
     out <- terra::zonal(
       nelson_et_al,
@@ -184,11 +182,10 @@ NULL
                                      nelson_et_al = NULL,
                                      stats = "mean",
                                      ...) {
-  shp_v <- vect(shp)
   results <- lapply(1:length(stats), function(j) {
     out <- terra::extract(
       nelson_et_al,
-      shp_v,
+      shp,
       fun = stats[j],
       na.rm = T
     )

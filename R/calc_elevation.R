@@ -131,10 +131,9 @@ NULL
                               shp = NULL,
                               stats = "mean",
                               ...) {
-  shp_v <- vect(shp)
   zstats <- lapply(1:length(stats), function(i) {
     zstats <- terra::extract(elevation,
-      shp_v,
+      shp,
       fun = stats[i],
       na.rm = T
     )
@@ -162,15 +161,14 @@ NULL
                             todisk = FALSE,
                             rundir = tempdir(),
                             ...) {
-  shp_v <- vect(shp)
   rast_mask <- terra::mask(elevation,
-    shp_v,
+    shp,
     filename =  ifelse(todisk, file.path(rundir, "elevation.tif"), ""),
     overwrite = TRUE
   )
-  p_raster <- terra::rasterize(shp_v,
+  p_raster <- terra::rasterize(shp,
     rast_mask,
-    field = 1:nrow(shp_v),
+    field = 1:nrow(shp),
     filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
     overwrite = TRUE
   )

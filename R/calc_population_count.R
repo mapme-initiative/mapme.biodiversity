@@ -138,16 +138,15 @@ NULL
                                  todisk = FALSE,
                                  rundir = tempdir(),
                                  ...) {
-  shp_v <- vect(shp)
   worldpop <- terra::mask(worldpop,
-                          shp_v,
+                          shp,
                           filename =  ifelse(todisk, file.path(rundir, "worldpop.tif"), ""),
                           datatype = "INT1U",
                           overwrite = TRUE
   )
-  p_raster <- terra::rasterize(shp_v,
+  p_raster <- terra::rasterize(shp,
                                worldpop,
-                               field = 1:nrow(shp_v),
+                               field = 1:nrow(shp),
                                touches = TRUE,
                                filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
                                datatype = "INT1U",
@@ -184,11 +183,10 @@ NULL
                                    shp = NULL,
                                    stats = "sum",
                                    ...) {
-  shp_v <- vect(shp)
   results <- lapply(1:length(stats), function(j) {
     out <- terra::extract(
       worldpop,
-      shp_v,
+      shp,
       fun = stats[j],
       na.rm = T
     )

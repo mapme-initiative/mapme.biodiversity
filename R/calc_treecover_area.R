@@ -139,7 +139,7 @@ NULL
   )
   # rasterize the polygon
   polyraster <- rasterize(
-    vect(shp), gfw_treecover,
+    shp, gfw_treecover,
     field = 1, touches = TRUE
   )
   # mask gfw_treecover

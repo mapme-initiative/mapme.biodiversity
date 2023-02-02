@@ -93,8 +93,7 @@ NULL
                                todisk = FALSE,
                                ...) {
   # mask raster per shapefile
-  shp_v <- vect(shp)
-  esa_mask <- terra::mask(esalandcover, shp_v)
+  esa_mask <- terra::mask(esalandcover, shp)
   # compute area of each cell
   arearaster <- cellSize(
     esa_mask,

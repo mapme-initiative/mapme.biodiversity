@@ -150,15 +150,15 @@ NULL
                             todisk = FALSE,
                             rundir = tempdir,
                             ...) {
-  shp_v <- vect(shp)
+
   rast_mask <- terra::mask(elevation,
-                           shp_v,
+                           shp,
                            filename =  ifelse(todisk, file.path(rundir, "elevation.tif"), ""),
                            overwrite = TRUE
   )
-  p_raster <- terra::rasterize(shp_v,
+  p_raster <- terra::rasterize(shp,
                                rast_mask,
-                               field = 1:nrow(shp_v),
+                               field = 1:nrow(shp),
                                filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
                                overwrite = TRUE
   )
@@ -200,7 +200,6 @@ NULL
                               todisk = todisk,
                               rundir = rundir,
                               ...) {
-  shp_v <- vect(shp)
   tri <- terra::terrain(elevation,
                         v = "TRI",
                         unit = "degrees",
@@ -210,7 +209,7 @@ NULL
   )
   zstats <- lapply(1:length(stats), function(i) {
     zstats <- terra::extract(tri,
-                             shp_v,
+                             shp,
                              fun = stats[i],
                              na.rm = T
     )
