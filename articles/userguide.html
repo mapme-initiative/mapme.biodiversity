@@ -414,7 +414,7 @@ at these objects.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2010-04-01      165  41.6    0.412 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2010-05-01      200 -<span style="color: #BB0000;">20.7</span>    0.108 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2010-06-01      227 110      0.815 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2010-07-01      159  75.8   <span style="color: #BB0000;">NA</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2010-07-01      159  75.8    1.01  </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2010-08-01      100 -<span style="color: #BB0000;">18.5</span>    1.60  </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2010-09-01      111 -<span style="color: #BB0000;">65.3</span>   -<span style="color: #BB0000;">0.064</span><span style="color: #BB0000; text-decoration: underline;">0</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2010-10-01      105 -<span style="color: #BB0000;">53.4</span>   -<span style="color: #BB0000;">1.05</span>  </span></span>
@@ -437,7 +437,7 @@ data object relatively small.</p>
 <code class="sourceCode R"><span><span class="va">geometries</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">sample_portfolio</span>, <span class="va">assetid</span><span class="op">)</span></span>
 <span><span class="va">sample_portfolio</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">precipitation_chirps</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">precipitation_chirps</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">assetid</span> <span class="op">==</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 12 × 6</span></span></span>
 <span><span class="co">#&gt;    assetid WDPAID dates      absolute anomaly   spi_3</span></span>
@@ -448,7 +448,7 @@ data object relatively small.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>       3 <span style="text-decoration: underline;">478</span>140 2010-04-01      129   32.2   0.523 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>       3 <span style="text-decoration: underline;">478</span>140 2010-05-01      159  -<span style="color: #BB0000;">10.3</span>   0.169 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>       3 <span style="text-decoration: underline;">478</span>140 2010-06-01      170   78     0.842 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>       3 <span style="text-decoration: underline;">478</span>140 2010-07-01      139   64.6  <span style="color: #BB0000;">NA</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>       3 <span style="text-decoration: underline;">478</span>140 2010-07-01      139   64.6   1.02  </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>       3 <span style="text-decoration: underline;">478</span>140 2010-08-01       98   -<span style="color: #BB0000;">3.67</span>  1.78  </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>       3 <span style="text-decoration: underline;">478</span>140 2010-09-01      100  -<span style="color: #BB0000;">38.6</span>   0.376 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>       3 <span style="text-decoration: underline;">478</span>140 2010-10-01      104  -<span style="color: #BB0000;">35.6</span>  -<span style="color: #BB0000;">0.762</span> </span></span>
@@ -479,9 +479,9 @@ it.</p>
 <span>  dsn <span class="op">=</span> <span class="va">tmp_output</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Writing layer `metadata' to data source </span></span>
-<span><span class="co">#&gt;   `/tmp/Rtmptl7MxL/file2b7220bc49c.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt;   `/tmp/RtmpxxjN2f/file2a9e19e01393.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">#&gt; Writing 20 features with 2 fields and geometry type Polygon.</span></span>
-<span><span class="co">#&gt; Updating layer `precipitation_chirps' to data source `/tmp/Rtmptl7MxL/file2b7220bc49c.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt; Updating layer `precipitation_chirps' to data source `/tmp/RtmpxxjN2f/file2a9e19e01393.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">#&gt; Writing 240 features with 5 fields without geometries.</span></span>
 <span><span class="op">(</span><span class="va">portfolio_from_disk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_portfolio.html">read_portfolio</a></span><span class="op">(</span><span class="va">tmp_output</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Simple feature collection with 20 features and 3 fields</span></span>
