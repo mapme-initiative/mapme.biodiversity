@@ -63,7 +63,7 @@ test_that("calc_indicator works", {
   expect_snapshot(stat)
 
   expect_warning(
-    calc_indicators(portfolio, "treecover")
+    calc_indicators(portfolio, "treecover", min_size = 1, min_cover = 10)
   )
 })
 
