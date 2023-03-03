@@ -9,7 +9,6 @@ init_portfolio(
   years,
   outdir = getwd(),
   tmpdir = tempdir(),
-  cores = parallel::detectCores() - 1,
   add_resources = TRUE,
   aria_bin = NULL,
   verbose = TRUE
@@ -34,11 +33,6 @@ raster calculations we will set the temporal directory for the \code{terra}
 package here. Please make sure that enough disk space is available because
 some intermediate calculations can become quite large.}
 
-\item{cores}{An integer value indicating the number of cores on the host
-machine available for indicator calculation. It defaults to
-\code{parallel::detectCores() - 1} cores, i.e. one core less than all
-available cores.}
-
 \item{add_resources}{Logical if existing resources in 'outdir' should be
 added to the portfolio. Defaults to TRUE. Setting it to FALSE can be of use
 e.g. if a previous download has terminated unexpectedly in order to resume.}
@@ -61,9 +55,8 @@ indicators will be calculated further down the processing chain. Some
 preliminary checks are conducted, e.g. that the CRS of the object is
 EPSG:4326 otherwise it will be transformed. Some portfolio wide parameters
 such as the output directory for downloaded data sets, a temporal directory
-for intermediate calculation of the number of cores available for the
-indicator calculation can be set by the user to have more fine-control of
-the workflow. However, these parameters are also set to sensible defaults
+for intermediate calculations can be set by the user to have more fine-control
+of the workflow. However, these parameters are also set to sensible defaults
 and thus can be omitted during portfolio initialization.
 }
 \keyword{function}

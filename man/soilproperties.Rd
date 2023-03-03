@@ -49,7 +49,6 @@ file.copy(resource_dir, temp_loc, recursive = TRUE)
     outdir = file.path(temp_loc, "res"),
     tmpdir = tempdir(),
     add_resources = FALSE,
-    cores = 1,
     verbose = FALSE
   ) \%>\%
   get_resources("soilgrids",

@@ -17,7 +17,6 @@ test_that(".get_gmw works", {
                               years = 2007:2008,
                               outdir = outdir,
                               tmpdir = tmpdir,
-                              cores = 1,
                               add_resources = FALSE,
                               verbose = FALSE
   )

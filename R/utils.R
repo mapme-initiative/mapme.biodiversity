@@ -296,7 +296,7 @@
     retry <- TRUE
     counter <- 1
     while (retry) {
-      unsuccessful <- pbapply::pblapply(seq_along(missing_urls), function(i) {
+      unsuccessful <- purrr::map(seq_along(missing_urls), function(i) {
         if (file.exists(missing_filenames[i])) {
           return(NULL) # file exists locally
         }

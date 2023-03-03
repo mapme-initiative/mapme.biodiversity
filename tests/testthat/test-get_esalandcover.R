@@ -17,7 +17,6 @@ test_that(".get_esalandcover works", {
     years = 2015,
     outdir = outdir,
     tmpdir = tmpdir,
-    cores = 1,
     add_resources = FALSE,
     verbose = FALSE
   )
@@ -33,7 +32,6 @@ test_that(".get_esalandcover works", {
                               years = 2015,
                               outdir = outdir,
                               tmpdir = tmpdir,
-                              cores = 1,
                               add_resources = FALSE,
                               verbose = TRUE
   )

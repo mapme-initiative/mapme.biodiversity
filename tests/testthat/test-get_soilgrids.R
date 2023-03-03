@@ -17,7 +17,6 @@ test_that("get_soilgrids works", {
                               years = 2000:2020,
                               outdir = outdir,
                               tmpdir = tmpdir,
-                              cores = 1,
                               add_resources = FALSE,
                               verbose = FALSE
   )

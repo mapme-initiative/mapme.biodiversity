@@ -13,7 +13,6 @@ test_that("mangrove extent works", {
     out <- st_make_valid(out)
   })
   names(gmw) <- basename(source)
-  attributes(shp)$cores <- 1
   expect_snapshot(
     .calc_mangroves_area(shp, gmw)
   )

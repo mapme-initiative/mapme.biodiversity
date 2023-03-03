@@ -8,7 +8,6 @@ test_that("active fire count works", {
                                    package = "mapme.biodiversity"
   ), pattern = ".gpkg$", full.names = TRUE)
   nasa_firms <- read_sf(source)
-  attributes(shp)$cores <- 1
   expect_snapshot(
     .calc_active_fire_counts(shp, list(nasa_firms))
   )

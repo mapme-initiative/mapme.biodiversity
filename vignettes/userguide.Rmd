@@ -113,7 +113,6 @@ sample_portfolio <- init_portfolio(
   outdir = file.path(outdir, "res"),
   tmpdir = outdir,
   add_resources = FALSE,
-  cores = 1,
   verbose = TRUE
 )
 plot(sample_portfolio["assetid"])
@@ -144,11 +143,6 @@ portfolio. Once you request a specific portfolio for your resources, only
 those files will be downloaded that are missing in `outdir`. This behaviour is
 beneficial if you share the `outdir` between different projects to ensure that 
 only matching resources are returned.
-
-The argument `cores` specifies the number of CPU cores available to the indicator 
-routines for parallel processing. Parallel processing is deactivated on Windows 
-by default. If you use another operating system, you may set to a value greater 
-1 if you wish to activate parallel processing. 
 
 Finally, the `verbose` logical controls whether or not the package
 will print informative messages during the calculations. Note, 

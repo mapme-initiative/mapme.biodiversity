@@ -9,7 +9,6 @@ test_that("traveltime works", {
   ), pattern = ".tif$", full.names = TRUE)
   nelson_et_al <- rast(nelson_et_al)
   attributes(shp)$years <- 2015
-  attributes(shp)$cores <- 1
   expect_error(
     .calc_traveltime(shp, nelson_et_al, engine = "not-available"),
     "Engine 'not-available' is not an available engine. Please choose one of:"

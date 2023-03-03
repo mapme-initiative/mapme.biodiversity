@@ -21,7 +21,6 @@ test_that("emissions works", {
   gfw_emissions <- rast(gfw_emissions)
 
   attributes(shp)$years <- 1990:1999
-  attributes(shp)$cores <- 1
 
   expect_warning(
     .calc_treecoverloss_emissions(shp, gfw_treecover, gfw_lossyear, gfw_emissions),

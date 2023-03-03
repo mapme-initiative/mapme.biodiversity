@@ -9,7 +9,6 @@ test_that("esa global landcover works", {
   ), pattern = ".tif$", full.names = TRUE)
   esalandcover <- rast(esalandcover)
   attributes(shp)$years <- 2015:2020
-  attributes(shp)$cores <- 1
   expect_snapshot(
     .calc_landcover(shp, esalandcover)
   )

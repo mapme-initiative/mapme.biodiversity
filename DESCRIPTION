@@ -27,9 +27,10 @@ Depends:
 Imports:
     curl,
     dplyr,
+    furrr,
     httr,
     magrittr,
-    pbapply,
+    progressr,
     purrr,
     rvest,
     sf,
@@ -41,6 +42,7 @@ Imports:
 Suggests: 
     DiagrammeR,
     exactextractr,
+    future,
     ggplot2,
     knitr,
     lwgeom,
@@ -51,7 +53,7 @@ VignetteBuilder:
     knitr
 Config/testthat/edition: 3
 Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
-SystemRequirements: GDAL (>= 3.0.0), PROJ (>= 4.8.0)
 Language: en-GB
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+SystemRequirements: GDAL (>= 3.0.0), PROJ (>= 4.8.0)

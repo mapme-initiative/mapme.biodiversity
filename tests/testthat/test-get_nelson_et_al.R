@@ -17,7 +17,6 @@ test_that(".get_nelson_et_al works", {
                               years = 2000:2020,
                               outdir = outdir,
                               tmpdir = tmpdir,
-                              cores = 1,
                               add_resources = FALSE,
                               verbose = TRUE
   )

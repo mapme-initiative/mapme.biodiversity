@@ -11,7 +11,6 @@ test_that("precipitation indicator works", {
   ), pattern = ".cog$", full.names = TRUE)
   chirps <- rast(chirps)
   attributes(shp)$years <- 1970:1980
-  attributes(shp)$cores <- 1
   expect_warning(
     .calc_precipitation_chirps(shp, chirps),
     "Cannot calculate precipitation statistics for years smaller than 1981"

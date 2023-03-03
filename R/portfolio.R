@@ -7,9 +7,8 @@
 #' preliminary checks are conducted, e.g. that the CRS of the object is
 #' EPSG:4326 otherwise it will be transformed. Some portfolio wide parameters
 #' such as the output directory for downloaded data sets, a temporal directory
-#' for intermediate calculation of the number of cores available for the
-#' indicator calculation can be set by the user to have more fine-control of
-#' the workflow. However, these parameters are also set to sensible defaults
+#' for intermediate calculations can be set by the user to have more fine-control
+#' of the workflow. However, these parameters are also set to sensible defaults
 #' and thus can be omitted during portfolio initialization.
 #'
 #' @param x The sf object to be transformed to a portfolio
@@ -26,10 +25,6 @@
 #'   raster calculations we will set the temporal directory for the \code{terra}
 #'   package here. Please make sure that enough disk space is available because
 #'   some intermediate calculations can become quite large.
-#' @param cores An integer value indicating the number of cores on the host
-#'   machine available for indicator calculation. It defaults to
-#'   \code{parallel::detectCores() - 1} cores, i.e. one core less than all
-#'   available cores.
 #' @param aria_bin A character vector to an aria2c executable for parallel
 #'  downloads
 #' @param verbose Logical, defaults to TRUE, indicating if progress information
@@ -45,7 +40,6 @@ init_portfolio <- function(x,
                            years,
                            outdir = getwd(),
                            tmpdir = tempdir(),
-                           cores = parallel::detectCores() - 1,
                            add_resources = TRUE,
                            aria_bin = NULL,
                            verbose = TRUE) {
@@ -54,16 +48,6 @@ init_portfolio <- function(x,
   }
   if (!dir.exists(outdir)) dir.create(outdir, recursive = TRUE)
   if (!dir.exists(tmpdir)) dir.create(tmpdir, recursive = TRUE)
-  if (Sys.info()["sysname"] == "Windows" & cores > 1) {
-    warning(paste("Parallel processing on Windows currently is not supported.",
-      "Setting number of cores to 1",
-      sep = " "
-    ))
-    cores <- 1
-  }
-
-  # deactivate progress bar if verbose is set to FALSE
-  if (!verbose) pbapply::pboptions(type = "none")
 
   if (!is.null(aria_bin)) {
     aria_output <- try(system2(aria_bin, args = "--version", stdout = TRUE, stderr = FALSE), silent = TRUE)
@@ -120,7 +104,6 @@ init_portfolio <- function(x,
   attr(x, "years") <- years
   attr(x, "outdir") <- outdir
   attr(x, "tmpdir") <- tmpdir
-  attr(x, "cores") <- cores
   attr(x, "verbose") <- verbose
   attr(x, "aria_bin") <- aria_bin
   attr(x, "testing") <- FALSE

@@ -13,7 +13,6 @@ test_that("ecoregion computation works", {
     out <- st_make_valid(out)
   })
   names(teow) <- basename(source)
-  attributes(shp)$cores <- 1
   expect_snapshot(
     .calc_ecoregion(shp, teow)
   )

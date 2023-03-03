@@ -9,7 +9,6 @@ test_that("terrain ruggedness index works", {
   ), pattern = ".tif$", full.names = TRUE)
   nasa_srtm <- rast(nasa_srtm)
   attributes(shp)$years <- 2022
-  attributes(shp)$cores <- 1
   expect_error(
     .calc_tri(shp, nasa_srtm, engine = "not-available"),
     "Engine 'not-available' is not an available engine. Please choose one of:"

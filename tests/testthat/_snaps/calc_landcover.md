@@ -11,10 +11,10 @@
        3 shrubs                2017   506.
        4 shrubs                2018   506.
        5 shrubs                2019   506.
-       6 herbaceous_vegetation 2015  1836.
-       7 herbaceous_vegetation 2016  1836.
-       8 herbaceous_vegetation 2017  1836.
-       9 herbaceous_vegetation 2018  1836.
-      10 herbaceous_vegetation 2019  1836.
+       6 herbaceous_vegetation 2015  1833.
+       7 herbaceous_vegetation 2016  1833.
+       8 herbaceous_vegetation 2017  1833.
+       9 herbaceous_vegetation 2018  1833.
+      10 herbaceous_vegetation 2019  1833.
       # ... with 45 more rows
 

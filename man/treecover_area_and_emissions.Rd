@@ -48,7 +48,6 @@ if (!file.exists(temp_loc)) {
     outdir = file.path(temp_loc, "res"),
     tmpdir = tempdir(),
     add_resources = FALSE,
-    cores = 1,
     verbose = FALSE
   ) \%>\%
   get_resources(

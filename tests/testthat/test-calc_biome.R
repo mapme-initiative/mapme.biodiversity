@@ -13,7 +13,6 @@ test_that("biome computation works", {
     out <- st_make_valid(out)
   })
   names(teow) <- basename(source)
-  attributes(shp)$cores <- 1
   expect_snapshot(
     .calc_biome(shp, teow)
   )

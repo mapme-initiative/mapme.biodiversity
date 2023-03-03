@@ -17,7 +17,6 @@ test_that(".get_climaticVariables works", {
     years = 2000:2018,
     outdir = outdir,
     tmpdir = tmpdir,
-    cores = 1,
     add_resources = FALSE,
     verbose = FALSE
   )

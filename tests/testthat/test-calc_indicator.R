@@ -15,7 +15,6 @@ test_that("calc_indicator works", {
   aoi <- suppressWarnings(st_cast(aoi, to = "POLYGON"))[1, ]
   portfolio <- init_portfolio(aoi,
                               years = 2000:2005,
-                              cores = 1,
                               outdir = outdir,
                               tmpdir = tmpdir,
                               verbose = FALSE
@@ -43,11 +42,9 @@ test_that("calc_indicator works", {
 
   expect_snapshot(stat)
 
-  cores <- ifelse(Sys.info()["sysname"] == "Windows", 1, 2)
 
   portfolio <- init_portfolio(aoi,
                               years = 2000:2005,
-                              cores = cores,
                               outdir = outdir,
                               tmpdir = tmpdir,
                               add_resources = TRUE,
@@ -66,7 +63,6 @@ test_that("calc_indicator works", {
     calc_indicators(portfolio, "treecover")
   )
 })
-
 
 test_that(".bind_assets works correctly", {
 
