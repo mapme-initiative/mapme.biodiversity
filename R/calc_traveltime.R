@@ -79,8 +79,6 @@ NULL
   if (is.null(nelson_et_al)) {
     return(NA)
   }
-  # check if intermediate raster should be written to disk
-  if (ncell(nelson_et_al) > 1024 * 1024) todisk <- TRUE
   # check if input engine is correctly specified
   available_engines <- c("zonal", "extract", "exactextract")
   .check_engine(available_engines, engine)
@@ -90,11 +88,7 @@ NULL
 
   # set max value of 65535 to NA
   nelson_et_al <- clamp(nelson_et_al,
-                        lower = -Inf, upper = 65534, values = FALSE,
-                        filename = ifelse(todisk, file.path(rundir, "traveltime.tif"), ""),
-                        overwrite = TRUE,
-                        datatype = "INT1U",
-                        filetype = "GTiff"
+                        lower = -Inf, upper = 65534, values = FALSE
   )
 
   extractor <- switch(
