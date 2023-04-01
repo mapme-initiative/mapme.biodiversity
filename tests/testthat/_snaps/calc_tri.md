@@ -1,40 +1,21 @@
 # terrain ruggedness index works
 
     Code
-      .calc_tri(shp, nasa_srtm)
+      result$tri_mean
     Output
-      # A tibble: 1 x 1
-        tri_mean
-           <dbl>
-      1     25.7
+      [1] 25.65258
 
 ---
 
     Code
-      .calc_tri(shp, nasa_srtm, stats = c("mean", "median", "sd"))
+      result_extract$tri_mean
     Output
-      # A tibble: 1 x 3
-        tri_mean tri_median tri_sd
-           <dbl>      <dbl>  <dbl>
-      1     25.7       23.4   14.7
+      [1] 25.93228
 
 ---
 
     Code
-      .calc_tri(shp, nasa_srtm, engine = "extract")
+      result_exact$tri_mean
     Output
-      # A tibble: 1 x 1
-        tri_mean
-           <dbl>
-      1     25.9
-
----
-
-    Code
-      .calc_tri(shp, nasa_srtm, engine = "exactextract")
-    Output
-      # A tibble: 1 x 1
-        tri_mean
-           <dbl>
-      1     25.9
+      [1] 25.92207
 

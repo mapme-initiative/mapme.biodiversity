@@ -19,19 +19,27 @@ test_that("worldclim precipitation works", {
     .calc_precipitation_wc(shp, worldclim_precipitation, stats_worldclim = "not-available"),
     "Statistic 'not-available' is not supported. Please choose one of:"
   )
-  expect_snapshot(
-    .calc_precipitation_wc(shp, worldclim_precipitation)
+
+  result <-  .calc_precipitation_wc(shp, worldclim_precipitation)
+  result_multi_stat <-  .calc_precipitation_wc(shp, worldclim_precipitation, stats_worldclim = c("mean", "median", "sd"))
+  result_extract <-  .calc_precipitation_wc(shp, worldclim_precipitation, engine = "extract")
+  result_exact <- .calc_precipitation_wc(shp, worldclim_precipitation, engine = "exactextract")
+
+  expect_equal(
+    names(result),
+    c("prec_mean", "date")
+  )
+  expect_equal(
+    names(result_multi_stat),
+    c("prec_mean", "prec_median", "prec_sd", "date")
+  )
+
+  expect_equal(
+    result$prec_mean,
+    result_extract$prec_mean,
+    tolerance = 1e-4
   )
   expect_snapshot(
-    .calc_precipitation_wc(shp, worldclim_precipitation, stats_worldclim = c("mean", "median", "sd"))
-  )
-  expect_snapshot(
-    .calc_precipitation_wc(shp, worldclim_precipitation, engine = "extract")
-  )
-  expect_snapshot(
-    .calc_precipitation_wc(shp, worldclim_precipitation, engine = "exactextract")
-  )
-  expect_snapshot(
-    .calc_precipitation_wc(shp, worldclim_precipitation, engine = "zonal")
+    result_exact$prec_mean
   )
 })

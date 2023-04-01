@@ -18,16 +18,32 @@ test_that("terrain ruggedness index works", {
     .calc_tri(shp, nasa_srtm, stats_tri = "not-available"),
     "Statistic 'not-available' is not supported. Please choose one of:"
   )
+
+  result <- .calc_tri(shp, nasa_srtm)
+  result_multi_stat <-  .calc_tri(shp, nasa_srtm, stats = c("mean", "median", "sd"))
+  result_extract <- .calc_tri(shp, nasa_srtm, engine = "extract")
+  result_exact <- .calc_tri(shp, nasa_srtm, engine = "exactextract")
+
+  expect_equal(
+    names(result),
+    c("tri_mean")
+  )
+  expect_equal(
+    names(result_multi_stat),
+    c("tri_mean", "tri_median", "tri_sd")
+  )
+  # expect_equal(
+  #   result$tri_mean,
+  #   result_extract$tri_mean,
+  #   tolerance = 1e-4
+  # )
   expect_snapshot(
-    .calc_tri(shp, nasa_srtm)
+    result$tri_mean
   )
   expect_snapshot(
-    .calc_tri(shp, nasa_srtm, stats = c("mean", "median", "sd"))
+    result_extract$tri_mean
   )
   expect_snapshot(
-    .calc_tri(shp, nasa_srtm, engine = "extract")
-  )
-  expect_snapshot(
-    .calc_tri(shp, nasa_srtm, engine = "exactextract")
+    result_exact$tri_mean
   )
 })

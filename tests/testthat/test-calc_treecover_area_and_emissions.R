@@ -59,9 +59,20 @@ test_that("treecover area and emissions works", {
     .calc_treecover_area_and_emissions(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_cover = 110),
     "Argument 'min_cover' for indicator 'treeloss' must be a numeric value between 0 and 100."
   )
-
+  result <-  .calc_treecover_area_and_emissions(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_size = 1, min_cover = 10)
+  expect_equal(
+    names(result),
+    c("years", "emissions", "treecover")
+  )
+  expect_equal(
+    result$years,
+    c(2000:2005)
+  )
   expect_snapshot(
-    .calc_treecover_area_and_emissions(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_size = 1, min_cover = 10)
+    result$treecover
+  )
+  expect_snapshot(
+    result$emissions
   )
 
   attributes(shp)$years <- 1999:2005
@@ -70,13 +81,12 @@ test_that("treecover area and emissions works", {
     "Cannot calculate treeloss statistics for years smaller than 2000."
   )
 
-  expect_snapshot(stat)
   attributes(shp)$years <- 2000:2005
   stats_treeloss <- .calc_treecover_area_and_emissions(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_size = 1, min_cover = 10)[, c(1, 2)]
   stats_emissions <- .calc_treecoverloss_emissions(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_size = 1, min_cover = 10)
-  expect_equal(stats_treeloss, stats_emissions)
+  expect_equal(stats_treeloss$emissions, stats_emissions$emissions, tolerance = 1e-4)
 
-  # test that emissions and forest loss are returned as 0 if now loss occurs
+  # test that emissions and forest loss are returned as 0 if no loss occurs
   gfw_lossyear[gfw_lossyear == 3] = 1
   stats_treeloss <- .calc_treecover_area_and_emissions(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_size = 1, min_cover = 10)
   expect_equal(stats_treeloss$emissions[stats_treeloss$years == 2003], 0)

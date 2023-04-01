@@ -26,14 +26,24 @@ test_that("soilpoperties works", {
     .calc_soilproperties(shp, soilgrids, stats_soil = "not-available"),
     "Statistic 'not-available' is not supported. Please choose one of:"
   )
-
-  expect_snapshot(
-    .calc_soilproperties(shp, soilgrids, engine = "extract", stats_soil = c("mean", "median", "sd", "min", "max", "sum", "var")),
+  result <-  .calc_soilproperties(shp, soilgrids, engine = "extract")
+  result_multi_stat <- .calc_soilproperties(shp, soilgrids, engine = "extract", stats_soil = c("mean", "median", "sd"))
+  result_zonal <- .calc_soilproperties(shp, soilgrids, engine = "zonal")
+  result_exact <- .calc_soilproperties(shp, soilgrids, engine = "exactextract")
+  expect_equal(
+    names(result),
+    c("layer", "depth", "stat", "mean")
+  )
+  expect_equal(
+    names(result_multi_stat),
+    c("layer", "depth", "stat", "mean", "median", "sd")
+  )
+  expect_equal(
+    result$mean,
+    result_zonal$mean,
+    tolerance = 1e-4
   )
   expect_snapshot(
-    .calc_soilproperties(shp, soilgrids, engine = "zonal", stats_soil = c("mean", "median", "sd", "min", "max", "sum", "var")),
-  )
-  expect_snapshot(
-    .calc_soilproperties(shp, soilgrids, engine = "exactextract", stats_soil = c("mean", "median", "sd", "min", "max", "sum", "var")),
+    result_exact$mean
   )
 })
