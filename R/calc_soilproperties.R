@@ -58,14 +58,11 @@ NULL
                                  stats_soil = "mean",
                                  rundir = tempdir(),
                                  verbose = TRUE,
-                                 todisk = FALSE,
                                  ...) {
   # check if input engines are correct
   if (is.null(soilgrids)) {
     return(NA)
   }
-  # check if intermediate raster should be written to disk
-  if (ncell(soilgrids) > 1024 * 1024) todisk <- TRUE
   # check if input engine is correctly specified
   available_engines <- c("zonal", "extract", "exactextract")
   .check_engine(available_engines, engine)
@@ -73,31 +70,24 @@ NULL
   available_stats <- c("mean", "median", "sd", "min", "max", "sum", "var")
   .check_stats(available_stats, stats_soil)
 
-  if (engine == "extract") {
-    extractor <- .soil_extract
-  }
-  if (engine == "exactextract") {
-    extractor <- .soil_exactextractr
-  }
-  if (engine == "zonal") {
-    extractor <- .soil_zonal
-  }
+
+  extractor <- switch(
+    engine,
+    "extract" = .soil_extract,
+    "exactextract" = .soil_exactextractr,
+    "zonal" = .soil_zonal
+  )
 
   extractor(
     shp = shp,
     soilgrids = soilgrids,
-    stats = stats_soil,
-    todisk = todisk,
-    rundir = rundir
+    stats = stats_soil
   )
 }
 
 .soil_zonal <- function(shp = NULL,
                         soilgrids,
-                        stats = "mean",
-                        todisk = FALSE,
-                        rundir = tempdir(),
-                        ...) {
+                        stats = "mean") {
   shp_v <- vect(shp)
   parameters <- gsub(".tif", "", names(soilgrids))
   parameters <- lapply(parameters, function(param) {
@@ -106,22 +96,20 @@ NULL
     splitted
   })
 
-  soilgrids_mask <- terra::mask(soilgrids,
-    shp_v,
-    filename =  ifelse(todisk, file.path(rundir, "soilgrids.tif"), ""),
-    overwrite = TRUE
+  soilgrids_mask <- terra::mask(
+    soilgrids,
+    shp_v
   )
-  p_raster <- terra::rasterize(shp_v,
+  p_raster <- terra::rasterize(
+    shp_v,
     soilgrids_mask,
-    field = 1:nrow(shp_v),
-    filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
-    overwrite = TRUE
+    field = 1:nrow(shp_v)
   )
   results <- lapply(stats, function(stat) {
     out <- terra::zonal(soilgrids_mask,
-      p_raster,
-      fun = stat,
-      na.rm = T
+                        p_raster,
+                        fun = stat,
+                        na.rm = T
     )
     as.numeric(out[-1])
   })
@@ -141,10 +129,7 @@ NULL
 
 .soil_extract <- function(shp = NULL,
                           soilgrids = NULL,
-                          stats = "mean",
-                          todisk = todisk,
-                          rundir = tempdir(),
-                          ...) {
+                          stats = "mean") {
   shp_v <- vect(shp)
   parameters <- gsub(".tif", "", names(soilgrids))
   parameters <- lapply(parameters, function(param) {
@@ -154,15 +139,13 @@ NULL
   })
 
   soilgrids_mask <- terra::mask(soilgrids,
-    shp_v,
-    filename =  ifelse(todisk, file.path(rundir, "soilgrids.tif"), ""),
-    overwrite = TRUE
+                                shp_v
   )
   results <- lapply(stats, function(stat) {
     out <- terra::extract(soilgrids_mask,
-      shp_v,
-      fun = stat,
-      na.rm = T
+                          shp_v,
+                          fun = stat,
+                          na.rm = T
     )
     as.numeric(out[-1])
   })
@@ -182,10 +165,7 @@ NULL
 
 .soil_exactextractr <- function(soilgrids = NULL,
                                 shp = NULL,
-                                stats = "mean",
-                                todisk = todisk,
-                                rundir = tempdir(),
-                                ...) {
+                                stats = "mean") {
   if(!requireNamespace("exactextractr", quietly = TRUE)){
     stop(paste(
       "Needs package 'exactextractr' to be installed.",
