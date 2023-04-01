@@ -161,16 +161,12 @@ NULL
     stop(sprintf("Engine %s is not an available engine. Please choose one of: %s", engine, paste(available_engines, collapse = ", ")))
   }
 
-  if (engine == "extract") {
-    extractor <- .prec_extract
-  }
-  if (engine == "exactextract") {
-    extractor <- .prec_exact_extractr
-  }
-  if (engine == "zonal") {
-    extractor <- .prec_zonal
-  }
-
+  extractor <- switch(
+    engine,
+    "extract" = .prec_extract,
+    "zonal" = .prec_zonal,
+    "exactextract" = .prec_exact_extractr
+  )
 
   if (processing_mode == "asset") {
     results <- extractor(
@@ -178,7 +174,6 @@ NULL
       absolute = target_chirps,
       anomaly = anomaly_chirps,
       spi = spi_chirps,
-      todisk = todisk,
       rundir = rundir
     )
   }
@@ -190,7 +185,6 @@ NULL
         absolute = target_chirps,
         anomaly = anomaly_chirps,
         spi = spi_chirps,
-        todisk = todisk,
         rundir = rundir
       )
       out
@@ -199,16 +193,19 @@ NULL
   results
 }
 
-.prec_zonal <- function(shp, absolute, anomaly, spi, todisk, rundir) {
+.prec_zonal <- function(
+    shp,
+    absolute,
+    anomaly,
+    spi) {
+
   dates <- as.Date(paste0(substr(names(absolute), 13, 19), ".01"), "%Y.%m.%d")
 
   shp_v <- vect(shp)
   p_raster <- terra::rasterize(shp_v,
                                absolute,
                                field = 1,
-                               touches = TRUE,
-                               filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
-                               overwrite = TRUE
+                               touches = TRUE
   )
 
   absolute <- terra::zonal(absolute, p_raster, fun = "mean")
@@ -229,7 +226,7 @@ NULL
 }
 
 
-.prec_extract <- function(shp, absolute, anomaly, spi, todisk, rundir) {
+.prec_extract <- function(shp, absolute, anomaly, spi, rundir) {
   dates <- as.Date(paste0(substr(names(absolute), 13, 19), ".01"), "%Y.%m.%d")
   shp_v <- vect(shp)
   absolute <- terra::extract(absolute, shp_v, fun = "mean")
@@ -250,7 +247,7 @@ NULL
 }
 
 
-.prec_exact_extractr <- function(shp, absolute, anomaly, spi, todisk, rundir) {
+.prec_exact_extractr <- function(shp, absolute, anomaly, spi, rundir) {
   if (!requireNamespace("exactextractr", quietly = TRUE)) {
     stop(paste(
       "Needs package 'exactextractr' to be installed.",
