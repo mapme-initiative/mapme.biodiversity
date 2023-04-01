@@ -65,8 +65,6 @@ NULL
 #'   order to fit the SPI. Defaults to 8.
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
-#' @param todisk Logical indicating whether or not temporary raster files shall
-#'   be written to disk
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
@@ -78,7 +76,6 @@ NULL
                                        engine = "extract",
                                        rundir = tempdir(),
                                        verbose = TRUE,
-                                       todisk = FALSE,
                                        processing_mode = "portfolio",
                                        ...) {
   if (!requireNamespace("SPEI", quietly = TRUE) & !is.null(scales_spi)) {
@@ -90,7 +87,6 @@ NULL
   if (is.null(chirps)) {
     return(NA)
   }
-  if (ncell(chirps) > 1024 * 1024) todisk <- TRUE
   years <- attributes(shp)$years
   cores <- attributes(shp)$cores
 
@@ -112,12 +108,13 @@ NULL
 
   src_names <- names(chirps)
   # set values smaller 0 to NA
-  chirps <- clamp(chirps,
-                  lower = 0, upper = Inf, values = FALSE,
-                  filename = ifelse(todisk, file.path(rundir, "chirps.tif"), ""),
-                  overwrite = TRUE,
-                  filetype = "GTiff"
+  chirps <- clamp(
+    chirps,
+    lower = 0,
+    upper = Inf,
+    values = FALSE
   )
+
   layer_years <- as.numeric(substr(src_names, 13, 17))
   climate_chirps <- chirps[[which(layer_years %in% 1981:2010)]]
   target_chirps <- chirps[[which(layer_years %in% years)]]
@@ -127,10 +124,10 @@ NULL
   layer_months <- as.numeric(substr(layer_names, 18, 19))
   # chirps[chirps < 0] = NA
   climate_chirps <- lapply(1:12, function(i) {
-    app(climate_chirps[[layer_months == i]],
-        fun = "mean", cores = cores,
-        filename = ifelse(todisk, file.path(rundir, paste0("chirps_", i, ".tif")), ""),
-        overwrite = TRUE, wopt = list(filetype = "GTiff")
+    app(
+      climate_chirps[[layer_months == i]],
+      fun = "mean",
+      cores = cores
     )
   })
   climate_chirps <- do.call(c, climate_chirps)
@@ -143,12 +140,13 @@ NULL
       target_years_spi <- years[1] - spi_prev_years
       target_years_spi <- target_years_spi:years[length(years)]
       target_spi <- chirps[[which(layer_years %in% target_years_spi)]]
-      spi_chirps <- app(target_spi,
-                        scale = scale, fun = function(x, scale) {
-                          SPEI::spi(x, scale = scale, na.rm = TRUE, verbose=FALSE)$fitted
-                        }, cores = cores, overwrite = TRUE, wopt = list(filetype = "GTiff"),
-                        filename =
-                          ifelse(todisk, file.path(rundir, paste0("spi_", scale, ".tif")), "")
+      spi_chirps <- app(
+        target_spi,
+        scale = scale,
+        fun = function(x, scale) {
+          SPEI::spi(x, scale = scale, na.rm = TRUE, verbose=FALSE)$fitted
+        },
+        cores = cores
       )
       names(spi_chirps) <- names(target_spi)
       spi_chirps[[names(target_chirps)]]
@@ -162,7 +160,6 @@ NULL
   if (!engine %in% available_engines) {
     stop(sprintf("Engine %s is not an available engine. Please choose one of: %s", engine, paste(available_engines, collapse = ", ")))
   }
-
 
   if (engine == "extract") {
     extractor <- .prec_extract

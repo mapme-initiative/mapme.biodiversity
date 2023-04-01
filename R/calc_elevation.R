@@ -66,8 +66,6 @@ NULL
 #'   "extract" or "exactextract" as character.
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
-#' @param todisk Logical indicating whether or not temporary raster files shall
-#'   be written to disk
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
@@ -79,13 +77,10 @@ NULL
                             stats_elevation = "mean",
                             rundir = tempdir(),
                             verbose,
-                            todisk = FALSE,
                             ...) {
   if (is.null(nasa_srtm)) {
     return(NA)
   }
-  # check if intermediate raster should be written to disk
-  if (ncell(nasa_srtm) > 1024 * 1024) todisk <- TRUE
   # check if input engine is correctly specified
   available_engines <- c("zonal", "extract", "exactextract")
   .check_engine(available_engines, engine)
@@ -93,30 +88,19 @@ NULL
   available_stats <- c("mean", "median", "sd", "min", "max", "sum", "var")
   .check_stats(available_stats, stats_elevation)
 
-  if (engine == "extract") {
-    tibble_zstats <- .comp_dem_extract(
-      elevation = nasa_srtm,
-      shp = shp,
-      stats = stats_elevation
-    )
-    return(tibble_zstats)
-  } else if (engine == "exactextract") {
-    tibble_zstats <- .comp_dem_exact_extractr(
-      elevation = nasa_srtm,
-      shp = shp,
-      stats = stats_elevation
-    )
-    return(tibble_zstats)
-  } else {
-    tibble_zstats <- .comp_dem_zonal(
-      elevation = nasa_srtm,
-      shp = shp,
-      stats = stats_elevation,
-      todisk = todisk,
-      rundir = rundir
-    )
-    return(tibble_zstats)
-  }
+  extractor <- switch(
+    engine,
+    "extract" = .comp_dem_extract,
+    "exactextract" = .comp_dem_exact_extractr,
+    "zonal" = .comp_dem_zonal)
+
+  results <- extractor(
+    elevation = nasa_srtm,
+    shp = shp,
+    stats = stats_elevation
+  )
+
+  results
 }
 
 #' Helper function to compute statistics using routines from terra extract
@@ -129,14 +113,13 @@ NULL
 
 .comp_dem_extract <- function(elevation = NULL,
                               shp = NULL,
-                              stats = "mean",
-                              ...) {
+                              stats = "mean") {
   shp_v <- vect(shp)
   zstats <- lapply(1:length(stats), function(i) {
     zstats <- terra::extract(elevation,
-      shp_v,
-      fun = stats[i],
-      na.rm = T
+                             shp_v,
+                             fun = stats[i],
+                             na.rm = T
     )
     tibble_zstats <- tibble(elev = zstats[, 2])
     names(tibble_zstats)[names(tibble_zstats) == "elev"] <-
@@ -158,27 +141,22 @@ NULL
 
 .comp_dem_zonal <- function(elevation = NULL,
                             shp = NULL,
-                            stats = "mean",
-                            todisk = FALSE,
-                            rundir = tempdir(),
-                            ...) {
+                            stats = "mean") {
   shp_v <- vect(shp)
   rast_mask <- terra::mask(elevation,
-    shp_v,
-    filename =  ifelse(todisk, file.path(rundir, "elevation.tif"), ""),
-    overwrite = TRUE
+                           shp_v,
+                           overwrite = TRUE
   )
   p_raster <- terra::rasterize(shp_v,
-    rast_mask,
-    field = 1:nrow(shp_v),
-    filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
-    overwrite = TRUE
+                               rast_mask,
+                               field = 1:nrow(shp_v),
+                               overwrite = TRUE
   )
   zstats <- lapply(1:length(stats), function(i) {
     zstats <- terra::zonal(rast_mask,
-      p_raster,
-      fun = stats[i],
-      na.rm = T
+                           p_raster,
+                           fun = stats[i],
+                           na.rm = T
     )
     tibble_zstats <- tibble(elev = zstats[, 2])
     names(tibble_zstats)[names(tibble_zstats) == "elev"] <-
@@ -200,8 +178,7 @@ NULL
 
 .comp_dem_exact_extractr <- function(elevation = NULL,
                                      shp = NULL,
-                                     stats = "mean",
-                                     ...) {
+                                     stats = "mean") {
   if (!requireNamespace("exactextractr", quietly = TRUE)) {
     stop(paste(
       "Needs package 'exactextractr' to be installed.",
