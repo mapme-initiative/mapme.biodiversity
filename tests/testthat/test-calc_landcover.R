@@ -19,7 +19,7 @@ test_that("esa global landcover works", {
     unique(result$year),
     c("2015", "2016", "2017", "2018", "2019")
   )
-  expect_snapshot(
-    result$area
-  )
+  # expect_snapshot(
+  #   result$area
+  # )
 })

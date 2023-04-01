@@ -1,11 +1,11 @@
 test_that("terrain ruggedness index works", {
   shp <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
-      package = "mapme.biodiversity"
+                package = "mapme.biodiversity"
     )
   )
   nasa_srtm <- list.files(system.file("res", "nasa_srtm",
-    package = "mapme.biodiversity"
+                                      package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)
   nasa_srtm <- rast(nasa_srtm)
   attributes(shp)$years <- 2022
@@ -32,16 +32,10 @@ test_that("terrain ruggedness index works", {
     names(result_multi_stat),
     c("tri_mean", "tri_median", "tri_sd")
   )
-  # expect_equal(
-  #   result$tri_mean,
-  #   result_extract$tri_mean,
-  #   tolerance = 1e-4
-  # )
-  expect_snapshot(
-    result$tri_mean
-  )
-  expect_snapshot(
-    result_extract$tri_mean
+  expect_equal(
+    result$tri_mean,
+    result_extract$tri_mean,
+    tolerance = 1e-4
   )
   expect_snapshot(
     result_exact$tri_mean
