@@ -144,13 +144,11 @@ NULL
                             stats = "mean") {
   shp_v <- vect(shp)
   rast_mask <- terra::mask(elevation,
-                           shp_v,
-                           overwrite = TRUE
+                           shp_v
   )
   p_raster <- terra::rasterize(shp_v,
                                rast_mask,
-                               field = 1:nrow(shp_v),
-                               overwrite = TRUE
+                               field = 1:nrow(shp_v)
   )
   zstats <- lapply(1:length(stats), function(i) {
     zstats <- terra::zonal(rast_mask,

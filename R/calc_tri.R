@@ -105,34 +105,20 @@ NULL
   available_stats <- c("mean", "median", "sd", "min", "max", "sum", "var")
   .check_stats(available_stats, stats_tri)
 
-  if (engine == "extract") {
-    tibble_zstats <- .comp_tri_extract(
-      elevation = nasa_srtm,
-      shp = shp,
-      stats = stats_tri,
-      todisk = todisk,
-      rundir = rundir
-    )
-    return(tibble_zstats)
-  } else if (engine == "exactextract") {
-    tibble_zstats <- .comp_tri_exact_extractr(
-      elevation = nasa_srtm,
-      shp = shp,
-      stats = stats_tri,
-      todisk = todisk,
-      rundir = rundir
-    )
-    return(tibble_zstats)
-  } else {
-    tibble_zstats <- .comp_tri_zonal(
-      elevation = nasa_srtm,
-      shp = shp,
-      stats = stats_tri,
-      todisk = todisk,
-      rundir = rundir
-    )
-    return(tibble_zstats)
-  }
+
+  extractor <- switch(
+    engine,
+    "extract" = .comp_tri_extract,
+    "exactextract" = .comp_tri_exact_extractr,
+    "zonal" = .comp_tri_zonal)
+
+  results <- extractor(
+    elevation = nasa_srtm,
+    shp = shp,
+    stats = stats_tri
+  )
+
+  results
 }
 
 
@@ -146,28 +132,19 @@ NULL
 
 .comp_tri_zonal <- function(elevation = NULL,
                             shp = NULL,
-                            stats = "mean",
-                            todisk = FALSE,
-                            rundir = tempdir,
-                            ...) {
+                            stats = "mean") {
   shp_v <- vect(shp)
   rast_mask <- terra::mask(elevation,
-                           shp_v,
-                           filename =  ifelse(todisk, file.path(rundir, "elevation.tif"), ""),
-                           overwrite = TRUE
+                           shp_v
   )
   p_raster <- terra::rasterize(shp_v,
                                rast_mask,
-                               field = 1:nrow(shp_v),
-                               filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
-                               overwrite = TRUE
+                               field = 1:nrow(shp_v)
   )
   tri <- terra::terrain(rast_mask,
                         v = "TRI",
                         unit = "degrees",
-                        neighbors = 8,
-                        filename = ifelse(todisk, file.path(rundir, "terrain.tif"), ""),
-                        overwrite = TRUE
+                        neighbors = 8
   )
   zstats <- lapply(1:length(stats), function(i) {
     zstats <- terra::zonal(tri,
@@ -196,17 +173,12 @@ NULL
 
 .comp_tri_extract <- function(elevation = NULL,
                               shp = NULL,
-                              stats = "mean",
-                              todisk = todisk,
-                              rundir = rundir,
-                              ...) {
+                              stats = "mean") {
   shp_v <- vect(shp)
   tri <- terra::terrain(elevation,
                         v = "TRI",
                         unit = "degrees",
-                        neighbors = 8,
-                        filename = ifelse(todisk, file.path(rundir, "terrain.tif"), ""),
-                        overwrite = TRUE
+                        neighbors = 8
   )
   zstats <- lapply(1:length(stats), function(i) {
     zstats <- terra::extract(tri,
@@ -235,10 +207,7 @@ NULL
 
 .comp_tri_exact_extractr <- function(elevation = NULL,
                                      shp = NULL,
-                                     stats = "mean",
-                                     todisk = todisk,
-                                     rundir = rundir,
-                                     ...) {
+                                     stats = "mean") {
   if (!requireNamespace("exactextractr", quietly = TRUE)) {
     stop(paste(
       "Needs package 'exactextractr' to be installed.",
@@ -248,9 +217,7 @@ NULL
   tri <- terra::terrain(elevation,
                         v = "TRI",
                         unit = "degrees",
-                        neighbors = 8,
-                        filename = ifelse(todisk, file.path(rundir, "terrain.tif"), ""),
-                        overwrite = TRUE
+                        neighbors = 8
   )
   zstats <- lapply(1:length(stats), function(i) {
     if (stats[i] %in% c("sd", "var")) {
