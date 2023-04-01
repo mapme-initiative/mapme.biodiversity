@@ -202,14 +202,19 @@ NULL
   dates <- as.Date(paste0(substr(names(absolute), 13, 19), ".01"), "%Y.%m.%d")
 
   shp_v <- vect(shp)
-  p_raster <- terra::rasterize(shp_v,
-                               absolute,
-                               field = 1,
-                               touches = TRUE
-  )
-
-  absolute <- terra::zonal(absolute, p_raster, fun = "mean")
-  anomaly <- terra::zonal(anomaly, p_raster, fun = "mean")
+  p_raster <- terra::rasterize(
+    shp_v,
+    absolute,
+    field = 1,
+    touches = TRUE)
+  absolute <- terra::zonal(
+    absolute,
+    p_raster,
+    fun = "mean")
+  anomaly <- terra::zonal(
+    anomaly,
+    p_raster,
+    fun = "mean")
 
   results <- tibble(
     dates = dates,
@@ -229,8 +234,14 @@ NULL
 .prec_extract <- function(shp, absolute, anomaly, spi, rundir) {
   dates <- as.Date(paste0(substr(names(absolute), 13, 19), ".01"), "%Y.%m.%d")
   shp_v <- vect(shp)
-  absolute <- terra::extract(absolute, shp_v, fun = "mean")
-  anomaly <- terra::extract(anomaly, shp_v, fun = "mean")
+  absolute <- terra::extract(
+    absolute,
+    shp_v,
+    fun = "mean")
+  anomaly <- terra::extract(
+    anomaly,
+    shp_v,
+    fun = "mean")
 
   results <- tibble(
     dates = dates,
@@ -256,8 +267,14 @@ NULL
   }
   dates <- as.Date(paste0(substr(names(absolute), 13, 19), ".01"), "%Y.%m.%d")
 
-  absolute <- exactextractr::exact_extract(absolute, shp, fun = "mean")
-  anomaly <- exactextractr::exact_extract(anomaly, shp, fun = "mean")
+  absolute <- exactextractr::exact_extract(
+    absolute,
+    shp,
+    fun = "mean")
+  anomaly <- exactextractr::exact_extract(
+    anomaly,
+    shp,
+    fun = "mean")
 
 
   results <- tibble(

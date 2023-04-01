@@ -94,13 +94,11 @@ NULL
     "exactextract" = .comp_dem_exact_extractr,
     "zonal" = .comp_dem_zonal)
 
-  results <- extractor(
+  extractor(
     elevation = nasa_srtm,
     shp = shp,
     stats = stats_elevation
   )
-
-  results
 }
 
 #' Helper function to compute statistics using routines from terra extract
@@ -116,11 +114,11 @@ NULL
                               stats = "mean") {
   shp_v <- vect(shp)
   zstats <- lapply(1:length(stats), function(i) {
-    zstats <- terra::extract(elevation,
-                             shp_v,
-                             fun = stats[i],
-                             na.rm = T
-    )
+    zstats <- terra::extract(
+      elevation,
+      shp_v,
+      fun = stats[i],
+      na.rm = T)
     tibble_zstats <- tibble(elev = zstats[, 2])
     names(tibble_zstats)[names(tibble_zstats) == "elev"] <-
       paste0("elevation_", stats[i])
@@ -143,19 +141,19 @@ NULL
                             shp = NULL,
                             stats = "mean") {
   shp_v <- vect(shp)
-  rast_mask <- terra::mask(elevation,
-                           shp_v
-  )
-  p_raster <- terra::rasterize(shp_v,
-                               rast_mask,
-                               field = 1:nrow(shp_v)
-  )
+  rast_mask <- terra::mask(
+    elevation,
+    shp_v)
+  p_raster <- terra::rasterize(
+    shp_v,
+    rast_mask,
+    field = 1:nrow(shp_v))
   zstats <- lapply(1:length(stats), function(i) {
-    zstats <- terra::zonal(rast_mask,
-                           p_raster,
-                           fun = stats[i],
-                           na.rm = T
-    )
+    zstats <- terra::zonal(
+      rast_mask,
+      p_raster,
+      fun = stats[i],
+      na.rm = T)
     tibble_zstats <- tibble(elev = zstats[, 2])
     names(tibble_zstats)[names(tibble_zstats) == "elev"] <-
       paste0("elevation_", stats[i])
@@ -188,14 +186,12 @@ NULL
       zstats <- exactextractr::exact_extract(
         elevation,
         shp,
-        fun = ifelse(stats[i] == "sd", "stdev", "variance")
-      )
+        fun = ifelse(stats[i] == "sd", "stdev", "variance"))
     } else {
       zstats <- exactextractr::exact_extract(
         elevation,
         shp,
-        fun = stats[i]
-      )
+        fun = stats[i])
     }
     tibble_zstats <- tibble(elev = zstats)
     names(tibble_zstats)[names(tibble_zstats) == "elev"] <-

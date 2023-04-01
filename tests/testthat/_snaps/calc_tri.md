@@ -3,7 +3,7 @@
     Code
       result$tri_mean
     Output
-      [1] 25.65258
+      [1] 25.93228
 
 ---
 

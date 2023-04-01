@@ -117,14 +117,15 @@ NULL
                                    shp = NULL,
                                    stats = "mean") {
   shp_v <- vect(shp)
-  nelson_et_al <- terra::mask(nelson_et_al,
-                              shp_v
-  )
-  p_raster <- terra::rasterize(shp_v,
-                               nelson_et_al,
-                               field = 1:nrow(shp_v),
-                               touches = TRUE
-  )
+  nelson_et_al <- terra::mask(
+    nelson_et_al,
+    shp_v)
+
+  p_raster <- terra::rasterize(
+    shp_v,
+    nelson_et_al,
+    field = 1:nrow(shp_v),
+    touches = TRUE)
 
   shp_v <- vect(shp)
   results <- lapply(1:length(stats), function(j) {
@@ -132,8 +133,8 @@ NULL
       nelson_et_al,
       p_raster,
       fun = stats[j],
-      na.rm = T
-    )
+      na.rm = T)
+
     out <- tibble(minutes = unlist(out[-1]))
     names(out) <- paste0("minutes_", stats[j])
     out
@@ -162,8 +163,8 @@ NULL
       nelson_et_al,
       shp_v,
       fun = stats[j],
-      na.rm = T
-    )
+      na.rm = T)
+
     out <- tibble(minutes = unlist(out[-1]))
     names(out) <- paste0("minutes_", stats[j])
     out
