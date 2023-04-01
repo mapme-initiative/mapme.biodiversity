@@ -69,18 +69,11 @@ NULL
   # compute area of each cell
   arearaster <- cellSize(
     esa_mask,
-    unit = "ha",
-    datatype = "FLT4S",
-    overwrite = TRUE
-  )
-  patchsizes <- zonal(
-    arearaster, esa_mask, sum,
-    datatype = "FLT4S",
-    overwrite = TRUE
-  )
+    unit = "ha")
+  patchsizes <- zonal(arearaster, esa_mask, sum)
   # create discrete classification coding
   discrete_classes <-
-    base::data.frame(
+    data.frame(
       value = c(0, 111:116, 121:126, seq(20, 100, 10), 200),
       classes = c(
         "no_data", "closed_forest_evergreen_needle_leaf", "closed_forest_evergreen_broad_leaf", "closed_forest_deciduous_needle_leaf",
@@ -94,8 +87,7 @@ NULL
   out <- merge(
     x = patchsizes, y = discrete_classes,
     by.x = colnames(patchsizes)[1],
-    by.y = colnames(discrete_classes)[1]
-  )
+    by.y = colnames(discrete_classes)[1])
   result <- out[, -1]
   layernames <- tools::file_path_sans_ext(names(esalandcover))
   years <- as.numeric(sapply(layernames, function(layer) strsplit(layer, "_")[[1]][4]))
