@@ -23,7 +23,7 @@ test_that("drought indicator works", {
   result_multi_stats <- .calc_drought_indicator(shp, nasa_grace, stats = c("mean", "median", "sd"))
   result_zonal <- .calc_drought_indicator(shp, nasa_grace, engine = "zonal")
   result_extract <-  .calc_drought_indicator(shp, nasa_grace, engine = "extract")
-  result_exact <-  .calc_drought_indicator(shp, nasa_grace, engine = "exactextractr")
+  result_exact <-  .calc_drought_indicator(shp, nasa_grace, engine = "exactextract")
 
   expect_equal(
     names(result[[1]]),
