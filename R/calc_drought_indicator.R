@@ -134,27 +134,15 @@ NULL
                                 rundir = tempdir(),
                                 ...) {
   shp_v <- vect(shp)
-  nasa_grace <- terra::mask(
-    nasa_grace,
-    shp_v
-  )
-
-  p_raster <- terra::rasterize(
-    shp_v,
-    nasa_grace,
-    field = 1:nrow(shp_v),
-    touches = TRUE
-  )
-
   results <- lapply(1:length(stats),
                     function(j) {
                       out <- terra::zonal(
                         nasa_grace,
-                        p_raster,
+                        shp_v,
                         fun = stats[j],
                         na.rm = T
                       )
-                      out <- tibble(wetness = as.numeric(out[-1]))
+                      out <- tibble(wetness = as.numeric(out))
                       names(out) <- paste0("wetness_", stats[j])
                       out
                     })

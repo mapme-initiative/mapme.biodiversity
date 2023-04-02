@@ -95,23 +95,13 @@ NULL
     names(splitted) <- c("layer", "depth", "stat")
     splitted
   })
-
-  soilgrids_mask <- terra::mask(
-    soilgrids,
-    shp_v
-  )
-  p_raster <- terra::rasterize(
-    shp_v,
-    soilgrids_mask,
-    field = 1:nrow(shp_v)
-  )
   results <- lapply(stats, function(stat) {
-    out <- terra::zonal(soilgrids_mask,
-                        p_raster,
+    out <- terra::zonal(soilgrids,
+                        shp_v,
                         fun = stat,
                         na.rm = T
     )
-    as.numeric(out[-1])
+    as.numeric(out)
   })
 
   names(results) <- stats

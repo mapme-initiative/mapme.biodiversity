@@ -113,29 +113,18 @@ NULL
 #' @keywords internal
 #' @noRd
 
-.comp_traveltime_zonal <- function(nelson_et_al = NULL,
-                                   shp = NULL,
+.comp_traveltime_zonal <- function(shp = NULL,
+                                   nelson_et_al = NULL,
                                    stats = "mean") {
-  shp_v <- vect(shp)
-  nelson_et_al <- terra::mask(
-    nelson_et_al,
-    shp_v)
-
-  p_raster <- terra::rasterize(
-    shp_v,
-    nelson_et_al,
-    field = 1:nrow(shp_v),
-    touches = TRUE)
-
   shp_v <- vect(shp)
   results <- lapply(1:length(stats), function(j) {
     out <- terra::zonal(
       nelson_et_al,
-      p_raster,
+      shp_v,
       fun = stats[j],
       na.rm = T)
 
-    out <- tibble(minutes = unlist(out[-1]))
+    out <- tibble(minutes = unlist(out))
     names(out) <- paste0("minutes_", stats[j])
     out
   })

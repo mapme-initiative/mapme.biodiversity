@@ -130,22 +130,13 @@ NULL
                             shp = NULL,
                             stats = "mean") {
   shp_v <- vect(shp)
-  tri_mask <- terra::mask(
-    tri,
-    shp_v
-  )
-  p_raster <- terra::rasterize(
-    shp_v,
-    tri_mask,
-    field = 1:nrow(shp_v)
-  )
   zstats <- lapply(1:length(stats), function(i) {
     zstats <- terra::zonal(
-      tri_mask,
-      p_raster,
+      tri,
+      shp_v,
       fun = stats[i],
       na.rm = T)
-    tibble_zstats <- tibble(tri = zstats[, 2])
+    tibble_zstats <- tibble(tri = as.numeric(zstats))
     names(tibble_zstats)[names(tibble_zstats) == "tri"] <-
       paste0("tri_", stats[i])
     return(tibble_zstats)

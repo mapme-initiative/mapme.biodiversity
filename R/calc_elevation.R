@@ -141,20 +141,13 @@ NULL
                             shp = NULL,
                             stats = "mean") {
   shp_v <- vect(shp)
-  rast_mask <- terra::mask(
-    elevation,
-    shp_v)
-  p_raster <- terra::rasterize(
-    shp_v,
-    rast_mask,
-    field = 1:nrow(shp_v))
   zstats <- lapply(1:length(stats), function(i) {
     zstats <- terra::zonal(
-      rast_mask,
-      p_raster,
+      elevation,
+      shp_v,
       fun = stats[i],
       na.rm = T)
-    tibble_zstats <- tibble(elev = zstats[, 2])
+    tibble_zstats <- tibble(elev = as.numeric(zstats))
     names(tibble_zstats)[names(tibble_zstats) == "elev"] <-
       paste0("elevation_", stats[i])
     return(tibble_zstats)

@@ -124,25 +124,14 @@ NULL
                                  shp = NULL,
                                  stats = "sum") {
   shp_v <- vect(shp)
-  worldpop <- terra::mask(
-    worldpop,
-    shp_v
-  )
-  p_raster <- terra::rasterize(
-    shp_v,
-    worldpop,
-    field = 1:nrow(shp_v),
-    touches = TRUE
-  )
-
   results <- lapply(1:length(stats), function(j) {
     out <- terra::zonal(
       worldpop,
-      p_raster,
+      shp_v,
       fun = stats[j],
       na.rm = T
     )
-    out <- tibble(population = unlist(out[-1]))
+    out <- tibble(population = unlist(out))
     names(out) <- paste0("popcount_", stats[j])
     out
   })

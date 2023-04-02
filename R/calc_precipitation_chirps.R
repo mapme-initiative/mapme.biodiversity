@@ -173,8 +173,7 @@ NULL
       shp = shp,
       absolute = target_chirps,
       anomaly = anomaly_chirps,
-      spi = spi_chirps,
-      rundir = rundir
+      spi = spi_chirps
     )
   }
 
@@ -184,8 +183,7 @@ NULL
         shp = shp[i, ],
         absolute = target_chirps,
         anomaly = anomaly_chirps,
-        spi = spi_chirps,
-        rundir = rundir
+        spi = spi_chirps
       )
       out
     }, cl = cores)
@@ -202,28 +200,23 @@ NULL
   dates <- as.Date(paste0(substr(names(absolute), 13, 19), ".01"), "%Y.%m.%d")
 
   shp_v <- vect(shp)
-  p_raster <- terra::rasterize(
-    shp_v,
-    absolute,
-    field = 1,
-    touches = TRUE)
   absolute <- terra::zonal(
     absolute,
-    p_raster,
+    shp_v,
     fun = "mean")
   anomaly <- terra::zonal(
     anomaly,
-    p_raster,
+    shp_v,
     fun = "mean")
 
   results <- tibble(
     dates = dates,
-    absolute = as.numeric(absolute)[-1],
-    anomaly = as.numeric(anomaly)[-1]
+    absolute = as.numeric(absolute),
+    anomaly = as.numeric(anomaly)
   )
 
   if (!is.null(spi)) {
-    spi <- lapply(spi, function(x) as.numeric(terra::zonal(x, p_raster, fun = "mean"))[-1])
+    spi <- lapply(spi, function(x) as.numeric(terra::zonal(x, shp_v, fun = "mean")))
     tibble(cbind(results, as.data.frame(spi)))
   } else {
     results
@@ -231,7 +224,7 @@ NULL
 }
 
 
-.prec_extract <- function(shp, absolute, anomaly, spi, rundir) {
+.prec_extract <- function(shp, absolute, anomaly, spi) {
   dates <- as.Date(paste0(substr(names(absolute), 13, 19), ".01"), "%Y.%m.%d")
   shp_v <- vect(shp)
   absolute <- terra::extract(
@@ -258,7 +251,7 @@ NULL
 }
 
 
-.prec_exact_extractr <- function(shp, absolute, anomaly, spi, rundir) {
+.prec_exact_extractr <- function(shp, absolute, anomaly, spi) {
   if (!requireNamespace("exactextractr", quietly = TRUE)) {
     stop(paste(
       "Needs package 'exactextractr' to be installed.",

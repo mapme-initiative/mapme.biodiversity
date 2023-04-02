@@ -19,23 +19,26 @@ test_that("srtm elevation works", {
     "Statistic 'not-available' is not supported. Please choose one of:"
   )
   result <- .calc_elevation(shp, nasa_srtm)
-  expect_equal(
-    names(result),
-    c("elevation_mean")
-  )
-  result_multi_stat <-  .calc_elevation(shp, nasa_srtm, stats = c("mean", "median", "sd"))
-  expect_equal(
-    names(result_multi_stat),
-    c("elevation_mean", "elevation_median", "elevation_sd")
-  )
-
+  result_multi_stat <- .calc_elevation(shp, nasa_srtm, stats = c("mean", "median", "sd"))
+  result_zonal <- .calc_elevation(shp, nasa_srtm, engine = "zonal")
   result_extract <- .calc_elevation(shp, nasa_srtm, engine = "extract")
   result_exact <- .calc_elevation(shp, nasa_srtm, engine = "exactextract")
+
   expect_equal(
-    result$elevation_mean,
-    result_extract$elevation_mean
-  )
+    names(result),
+    c("elevation_mean"))
+  expect_equal(
+    names(result_multi_stat),
+    c("elevation_mean", "elevation_median", "elevation_sd"))
+  expect_equal(
+    names(result_zonal),
+    names(result_extract))
+  expect_equal(
+    names(result_zonal),
+    names(result_exact))
+  expect_equal(
+    result_zonal$elevation_mean,
+    result_extract$elevation_mean)
   expect_snapshot(
-    result_exact$elevation_mean
-  )
+    result_exact$elevation_mean)
 })

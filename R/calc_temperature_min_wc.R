@@ -158,25 +158,15 @@ NULL
                                   shp = NULL,
                                   stats = "mean") {
   shp_v <- vect(shp)
-  worldclim <- terra::mask(
-    worldclim,
-    shp_v)
-
-  p_raster <- terra::rasterize(
-    shp_v,
-    worldclim,
-    field = 1:nrow(shp_v),
-    touches = TRUE)
-
   layer <- strsplit(names(worldclim), "_")[[1]][3]
   results <- lapply(1:length(stats), function(j) {
     out <- terra::zonal(
       worldclim,
-      p_raster,
+      shp_v,
       fun = stats[j],
       na.rm = T
     )
-    out <- tibble(worldclim = unlist(out[-1]))
+    out <- tibble(worldclim = unlist(out))
     names(out) <- paste0(layer, "_", stats[j])
     out
   })
