@@ -18,19 +18,29 @@ test_that("traveltime works", {
     .calc_traveltime(shp, nelson_et_al, stats_accessibility = "not-available"),
     "Statistic 'not-available' is not supported. Please choose one of:"
   )
+
+  result <- .calc_traveltime(shp, nelson_et_al)
+  result_multi_stat <- .calc_traveltime(shp, nelson_et_al, stats = c("mean", "median", "sd"))
+  result_zonal <-  .calc_traveltime(shp, nelson_et_al, engine = "zonal")
+  result_extract <-  .calc_traveltime(shp, nelson_et_al, engine = "extract")
+  result_exact <-  .calc_traveltime(shp, nelson_et_al, engine = "exactextract")
+
+  expect_equal(
+    names(result),
+    c("minutes_mean", "distance"))
+  expect_equal(
+    names(result_multi_stat),
+    c("minutes_mean", "minutes_median", "minutes_sd", "distance"))
+  expect_equal(
+    names(result_zonal),
+    names(result_extract))
+  expect_equal(
+    names(result_zonal),
+    names(result_exact))
+  expect_equal(
+    result_zonal$minutes_mean,
+    result_zonal$minutes_mean,
+    tolerance = 1e-4)
   expect_snapshot(
-    .calc_traveltime(shp, nelson_et_al)
-  )
-  expect_snapshot(
-    .calc_traveltime(shp, nelson_et_al, engine = "zonal")
-  )
-  expect_snapshot(
-    .calc_traveltime(shp, nelson_et_al, stats = c("mean", "median", "sd", "min", "max", "sum", "var"))
-  )
-  expect_snapshot(
-    .calc_traveltime(shp, nelson_et_al, engine = "extract")
-  )
-  expect_snapshot(
-    .calc_traveltime(shp, nelson_et_al, engine = "exactextract")
-  )
+    result_exact$minutes_mean)
 })

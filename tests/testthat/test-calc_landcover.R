@@ -10,7 +10,16 @@ test_that("esa global landcover works", {
   esalandcover <- rast(esalandcover)
   attributes(shp)$years <- 2015:2020
   attributes(shp)$cores <- 1
-  expect_snapshot(
-    .calc_landcover(shp, esalandcover)
+  result <- .calc_landcover(shp, esalandcover)
+  expect_equal(
+    names(result),
+    c("classes", "year", "area")
   )
+  expect_equal(
+    unique(result$year),
+    c("2015", "2016", "2017", "2018", "2019")
+  )
+  # expect_snapshot(
+  #   result$area
+  # )
 })

@@ -77,8 +77,6 @@ NULL
 #'   "extract" or "exactextract" as character.
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
-#' @param todisk Logical indicating whether or not temporary raster files shall
-#'   be written to disk
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
@@ -90,14 +88,11 @@ NULL
                       stats_tri = "mean",
                       rundir = tempdir(),
                       verbose = TRUE,
-                      todisk = FALSE,
                       ...) {
   # check if input engines are correct
   if (is.null(nasa_srtm)) {
     return(NA)
   }
-  # check if intermediate raster should be written to disk
-  if (ncell(nasa_srtm) > 1024 * 1024) todisk <- TRUE
   # check if input engine is correctly specified
   available_engines <- c("zonal", "extract", "exactextract")
   .check_engine(available_engines, engine)
@@ -105,77 +100,43 @@ NULL
   available_stats <- c("mean", "median", "sd", "min", "max", "sum", "var")
   .check_stats(available_stats, stats_tri)
 
-  if (engine == "extract") {
-    tibble_zstats <- .comp_tri_extract(
-      elevation = nasa_srtm,
-      shp = shp,
-      stats = stats_tri,
-      todisk = todisk,
-      rundir = rundir
-    )
-    return(tibble_zstats)
-  } else if (engine == "exactextract") {
-    tibble_zstats <- .comp_tri_exact_extractr(
-      elevation = nasa_srtm,
-      shp = shp,
-      stats = stats_tri,
-      todisk = todisk,
-      rundir = rundir
-    )
-    return(tibble_zstats)
-  } else {
-    tibble_zstats <- .comp_tri_zonal(
-      elevation = nasa_srtm,
-      shp = shp,
-      stats = stats_tri,
-      todisk = todisk,
-      rundir = rundir
-    )
-    return(tibble_zstats)
-  }
+  tri <- terra::terrain(
+    nasa_srtm,
+    v = "TRI",
+    unit = "degrees",
+    neighbors = 8)
+
+  extractor <- switch(
+    engine,
+    "extract" = .comp_tri_extract,
+    "exactextract" = .comp_tri_exact_extractr,
+    "zonal" = .comp_tri_zonal)
+
+  extractor(
+    tri = tri,
+    shp = shp,
+    stats = stats_tri)
 }
 
 
 #' Helper function to compute statistics using routines from terra zonal
 #'
-#' @param elevation elevation raster from which to compute statistics
+#' @param tri tri raster from which to compute statistics
 #'
 #' @return A data-frame
 #' @keywords internal
 #' @noRd
-
-.comp_tri_zonal <- function(elevation = NULL,
+.comp_tri_zonal <- function(tri = NULL,
                             shp = NULL,
-                            stats = "mean",
-                            todisk = FALSE,
-                            rundir = tempdir,
-                            ...) {
+                            stats = "mean") {
   shp_v <- vect(shp)
-  rast_mask <- terra::mask(elevation,
-                           shp_v,
-                           filename =  ifelse(todisk, file.path(rundir, "elevation.tif"), ""),
-                           overwrite = TRUE
-  )
-  p_raster <- terra::rasterize(shp_v,
-                               rast_mask,
-                               field = 1:nrow(shp_v),
-                               filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
-                               overwrite = TRUE
-  )
-  tri <- terra::terrain(rast_mask,
-                        v = "TRI",
-                        unit = "degrees",
-                        neighbors = 8,
-                        filename = ifelse(todisk, file.path(rundir, "terrain.tif"), ""),
-                        overwrite = TRUE
-  )
   zstats <- lapply(1:length(stats), function(i) {
-    zstats <- terra::zonal(tri,
-                           p_raster,
-                           fun = stats[i],
-                           na.rm = T
-    )
-    tibble_zstats <- tibble(tri = zstats[, 2])
+    zstats <- terra::zonal(
+      tri,
+      shp_v,
+      fun = stats[i],
+      na.rm = T)
+    tibble_zstats <- tibble(tri = as.numeric(zstats))
     names(tibble_zstats)[names(tibble_zstats) == "tri"] <-
       paste0("tri_", stats[i])
     return(tibble_zstats)
@@ -188,32 +149,21 @@ NULL
 
 #' Helper function to compute statistics using routines from terra extract
 #'
-#' @param elevation elevation raster from which to compute statistics
+#' @param tri tri raster from which to compute statistics
 #'
 #' @return A data-frame
 #' @keywords internal
 #' @noRd
-
-.comp_tri_extract <- function(elevation = NULL,
+.comp_tri_extract <- function(tri = NULL,
                               shp = NULL,
-                              stats = "mean",
-                              todisk = todisk,
-                              rundir = rundir,
-                              ...) {
+                              stats = "mean") {
   shp_v <- vect(shp)
-  tri <- terra::terrain(elevation,
-                        v = "TRI",
-                        unit = "degrees",
-                        neighbors = 8,
-                        filename = ifelse(todisk, file.path(rundir, "terrain.tif"), ""),
-                        overwrite = TRUE
-  )
   zstats <- lapply(1:length(stats), function(i) {
-    zstats <- terra::extract(tri,
-                             shp_v,
-                             fun = stats[i],
-                             na.rm = T
-    )
+    zstats <- terra::extract(
+      tri,
+      shp_v,
+      fun = stats[i],
+      na.rm = T)
     tibble_zstats <- tibble(tri = zstats[, 2])
     names(tibble_zstats)[names(tibble_zstats) == "tri"] <-
       paste0("tri_", stats[i])
@@ -227,31 +177,21 @@ NULL
 
 #' Helper function to compute statistics using routines from exactextractr
 #'
-#' @param elevation elevation raster from which to compute statistics
+#' @param tri tri raster from which to compute statistics
 #'
 #' @return A data-frame
 #' @keywords internal
 #' @noRd
 
-.comp_tri_exact_extractr <- function(elevation = NULL,
+.comp_tri_exact_extractr <- function(tri = NULL,
                                      shp = NULL,
-                                     stats = "mean",
-                                     todisk = todisk,
-                                     rundir = rundir,
-                                     ...) {
+                                     stats = "mean") {
   if (!requireNamespace("exactextractr", quietly = TRUE)) {
     stop(paste(
       "Needs package 'exactextractr' to be installed.",
       "Consider installing with 'install.packages('exactextractr')"
     ))
   }
-  tri <- terra::terrain(elevation,
-                        v = "TRI",
-                        unit = "degrees",
-                        neighbors = 8,
-                        filename = ifelse(todisk, file.path(rundir, "terrain.tif"), ""),
-                        overwrite = TRUE
-  )
   zstats <- lapply(1:length(stats), function(i) {
     if (stats[i] %in% c("sd", "var")) {
       zstats <- exactextractr::exact_extract(

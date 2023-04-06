@@ -9,13 +9,30 @@ test_that("active fire count works", {
   ), pattern = ".gpkg$", full.names = TRUE)
   nasa_firms <- read_sf(source)
   attributes(shp)$cores <- 1
-  expect_snapshot(
-    .calc_active_fire_counts(shp, list(nasa_firms))
-  )
-  nasa_firms2 <- list(nasa_firms, nasa_firms)
-  nasa_firms2[[2]]$instrument <- "MODIS"
-  expect_snapshot(
-    .calc_active_fire_counts(shp, nasa_firms2)
+  result <- .calc_active_fire_counts(shp, list(nasa_firms))
+  expect_equal(
+    names(result), c("instrument", "year", "active_fire_counts")
   )
 
+  expect_equal(
+    result$instrument,
+    "VIIRS"
+  )
+  expect_equal(
+    result$year,
+    "2021"
+  )
+  expect_equal(
+    result$active_fire_counts,
+    21
+  )
+
+  # test that it works with both VIRRS and MODIS sensors
+  nasa_firms2 <- list(nasa_firms, nasa_firms)
+  nasa_firms2[[2]]$instrument <- "MODIS"
+  result2 <- .calc_active_fire_counts(shp, nasa_firms2)
+  expect_equal(
+    result2$instrument,
+    c("MODIS", "VIIRS")
+  )
 })

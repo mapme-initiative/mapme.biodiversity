@@ -64,8 +64,6 @@ NULL
 #'   "extract" or "exactextract" as character.
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
-#' @param todisk Logical indicating whether or not temporary raster files shall
-#'   be written to disk
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
@@ -77,13 +75,10 @@ NULL
                              stats_accessibility = "mean",
                              rundir = tempdir(),
                              verbose = TRUE,
-                             todisk = FALSE,
                              ...) {
   if (is.null(nelson_et_al)) {
     return(NA)
   }
-  # check if intermediate raster should be written to disk
-  if (ncell(nelson_et_al) > 1024 * 1024) todisk <- TRUE
   # check if input engine is correctly specified
   available_engines <- c("zonal", "extract", "exactextract")
   .check_engine(available_engines, engine)
@@ -93,34 +88,21 @@ NULL
 
   # set max value of 65535 to NA
   nelson_et_al <- clamp(nelson_et_al,
-                        lower = -Inf, upper = 65534, values = FALSE,
-                        filename = ifelse(todisk, file.path(rundir, "traveltime.tif"), ""),
-                        overwrite = TRUE,
-                        datatype = "INT1U",
-                        filetype = "GTiff"
+                        lower = -Inf, upper = 65534, values = FALSE
   )
 
-  if (engine == "extract") {
-    .comp_traveltime_extract(
-      shp = shp,
-      nelson_et_al = nelson_et_al,
-      stats = stats_accessibility
-    )
-  } else if (engine == "exactextract") {
-    .comp_traveltime_exact_extract(
-      shp = shp,
-      nelson_et_al = nelson_et_al,
-      stats = stats_accessibility
-    )
-  } else {
-    .comp_traveltime_zonal(
-      nelson_et_al = nelson_et_al,
-      shp = shp,
-      stats = stats_accessibility,
-      todisk = todisk,
-      rundir = rundir
-    )
-  }
+  extractor <- switch(
+    engine,
+    "extract" =  .comp_traveltime_extract,
+    "exactextract" = .comp_traveltime_exact_extract,
+    "zonal" = .comp_traveltime_zonal
+  )
+
+  extractor(
+    shp,
+    nelson_et_al,
+    stats_accessibility
+  )
 }
 
 #' Helper function to compute statistics using routines from terra zonal
@@ -131,37 +113,18 @@ NULL
 #' @keywords internal
 #' @noRd
 
-.comp_traveltime_zonal <- function(nelson_et_al = NULL,
-                                   shp = NULL,
-                                   stats = "mean",
-                                   todisk = FALSE,
-                                   rundir = tempdir(),
-                                   ...) {
-  shp_v <- vect(shp)
-  nelson_et_al <- terra::mask(nelson_et_al,
-                              shp_v,
-                              filename =  ifelse(todisk, file.path(rundir, "traveltime.tif"), ""),
-                              datatype = "INT1U",
-                              overwrite = TRUE
-  )
-  p_raster <- terra::rasterize(shp_v,
-                               nelson_et_al,
-                               field = 1:nrow(shp_v),
-                               touches = TRUE,
-                               filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
-                               datatype = "INT1U",
-                               overwrite = TRUE
-  )
-
+.comp_traveltime_zonal <- function(shp = NULL,
+                                   nelson_et_al = NULL,
+                                   stats = "mean") {
   shp_v <- vect(shp)
   results <- lapply(1:length(stats), function(j) {
     out <- terra::zonal(
       nelson_et_al,
-      p_raster,
+      shp_v,
       fun = stats[j],
-      na.rm = T
-    )
-    out <- tibble(minutes = unlist(out[-1]))
+      na.rm = T)
+
+    out <- tibble(minutes = unlist(out))
     names(out) <- paste0("minutes_", stats[j])
     out
   })
@@ -182,16 +145,15 @@ NULL
 
 .comp_traveltime_extract <- function(shp = NULL,
                                      nelson_et_al = NULL,
-                                     stats = "mean",
-                                     ...) {
+                                     stats = "mean") {
   shp_v <- vect(shp)
   results <- lapply(1:length(stats), function(j) {
     out <- terra::extract(
       nelson_et_al,
       shp_v,
       fun = stats[j],
-      na.rm = T
-    )
+      na.rm = T)
+
     out <- tibble(minutes = unlist(out[-1]))
     names(out) <- paste0("minutes_", stats[j])
     out
@@ -213,8 +175,7 @@ NULL
 
 .comp_traveltime_exact_extract <- function(shp = NULL,
                                            nelson_et_al = NULL,
-                                           stats = "mean",
-                                           ...) {
+                                           stats = "mean") {
   if(!requireNamespace("exactextractr", quietly = TRUE)){
     stop(paste(
       "Needs package 'exactextractr' to be installed.",

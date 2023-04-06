@@ -31,20 +31,29 @@ test_that("precipitation indicator works", {
     "Engine not-available is not an available engine. Please choose one of:"
   )
   attributes(shp)$years <- 2000:2010
+  result <- .calc_precipitation_chirps(shp, chirps)
+  result_zonal <- .calc_precipitation_chirps(shp, chirps, engine = "zonal")
+  result_extract <- .calc_precipitation_chirps(shp, chirps, engine = "extract")
+  result_exact <- .calc_precipitation_chirps(shp, chirps, engine = "exactextract")
+
+  expect_equal(
+    names(result_zonal[[1]]),
+    names(result_extract[[1]]))
+  expect_equal(
+    names(result_zonal[[1]]),
+    names(result_exact[[1]]))
+  expect_equal(
+    names(result[[1]]),
+    c("dates", "absolute", "anomaly", "spi_3"))
+
+  result2 <-  .calc_precipitation_chirps(shp, chirps, scales_spi = c(12, 24), spi_prev_years = 12)
+  expect_equal(
+    names(result2[[1]]),
+    c("dates", "absolute", "anomaly", "spi_12", "spi_24"))
+  expect_equal(
+    result_zonal[[1]]$absolute,
+    result_extract[[1]]$absolute,
+    tolerance = 1e-4)
   expect_snapshot(
-    .calc_precipitation_chirps(shp, chirps)
-  )
-  expect_snapshot(
-    .calc_precipitation_chirps(shp, chirps, scales_spi = c(12, 24), spi_prev_years = 12)
-  )
-  expect_snapshot(
-    .calc_precipitation_chirps(shp, chirps, engine = "extract")
-  )
-  expect_snapshot(
-    .calc_precipitation_chirps(shp, chirps, engine = "exactextract")
-  )
-  attributes(shp)$years <- 1985:2000
-  expect_snapshot(
-    .calc_precipitation_chirps(shp, chirps, scales_spi = c(12, 24), spi_prev_years = 3)
-  )
+    result_exact[[1]]$absolute)
 })

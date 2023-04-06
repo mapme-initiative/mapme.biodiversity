@@ -1,5 +1,15 @@
 # mapme.biodiversity (development version)
 
+## Internal
+
+- extensive re-writting of testing infrastructure for indicator functions omitting
+the usage of snapshot tests as far as possible (#142)
+
+- extensive re-factoring of engines in raster-vector indicators using switch statements
+
+- re-factoring usage of terra functions excluding the `todisk` flag and 
+related arguments
+
 # mapme.biodiversity 0.3.0
 
 ## Breaking changes

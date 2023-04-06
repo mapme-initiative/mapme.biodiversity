@@ -14,7 +14,18 @@ test_that("mangrove extent works", {
   })
   names(gmw) <- basename(source)
   attributes(shp)$cores <- 1
-  expect_snapshot(
-    .calc_mangroves_area(shp, gmw)
+  result <- .calc_mangroves_area(shp, gmw)
+  expect_equal(
+    names(result),
+    c("mangrove_extent", "year")
+  )
+  expect_equal(
+    result$mangrove_extent,
+    c(1214.88, 1206.61),
+    tolerance = 1e-4
+  )
+  expect_equal(
+    result$year,
+    c("1996", "2016")
   )
 })

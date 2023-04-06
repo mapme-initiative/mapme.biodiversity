@@ -18,19 +18,29 @@ test_that(".calc_population_count works", {
     .calc_population_count(shp, worldpop, stats_popcount = "not-available"),
     "Statistic 'not-available' is not supported. Please choose one of:"
   )
+
+  result <- .calc_population_count(shp, worldpop)
+  result_multi_stat <-  .calc_population_count(shp, worldpop, stats_popcount = c("mean", "median", "sd"))
+  result_zonal <- .calc_population_count(shp, worldpop, engine = "zonal")
+  result_extract <- .calc_population_count(shp, worldpop, engine = "extract")
+  result_exact <- .calc_population_count(shp, worldpop, engine = "exactextract")
+
+  expect_equal(
+    names(result),
+    c("popcount_sum", "year"))
+  expect_equal(
+    names(result_multi_stat),
+    c("popcount_mean", "popcount_median", "popcount_sd", "year"))
+  expect_equal(
+    names(result_zonal),
+    names(result_extract))
+  expect_equal(
+    names(result_zonal),
+    names(result_exact))
+  expect_equal(
+    result_zonal$popcount_sum,
+    result_extract$popcount_sum,
+    tolerance = 1e-4)
   expect_snapshot(
-    .calc_population_count(shp, worldpop)
-  )
-  expect_snapshot(
-    .calc_population_count(shp, worldpop, stats_popcount = c("mean", "median", "sd"))
-  )
-  expect_snapshot(
-    .calc_population_count(shp, worldpop, engine = "extract")
-  )
-  expect_snapshot(
-    .calc_population_count(shp, worldpop, engine = "exactextract")
-  )
-  expect_snapshot(
-    .calc_population_count(shp, worldpop, engine = "zonal")
-  )
+    result_exact$popcount_sum)
 })

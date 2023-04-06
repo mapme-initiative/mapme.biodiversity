@@ -1,30 +1,14 @@
 # calc_indicator works
 
     Code
-      stat
+      stat$treecover
     Output
-      # A tibble: 6 x 2
-        years treecover
-        <int>     <dbl>
-      1  2000     2005.
-      2  2001     2005.
-      3  2002     2003.
-      4  2003     1969.
-      5  2004     1959.
-      6  2005     1955.
+      [1] 2005.175 2004.664 2002.985 1968.824 1959.262 1955.029
 
 ---
 
     Code
-      stat
+      stat$treecover
     Output
-      # A tibble: 6 x 2
-        years treecover
-        <int>     <dbl>
-      1  2000     2005.
-      2  2001     2005.
-      3  2002     2003.
-      4  2003     1969.
-      5  2004     1959.
-      6  2005     1955.
+      [1] 2005.175 2004.664 2002.985 1968.824 1959.262 1955.029
 
