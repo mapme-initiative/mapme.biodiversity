@@ -39,8 +39,15 @@ test_that("calc_indicator works", {
                           min_size = 5,
                           min_cover = 30
   )$treecover_area[[1]]
-
-  expect_snapshot(stat)
+  expect_equal(
+    names(stat),
+    c("years", "treecover")
+  )
+  expect_equal(
+    stat$years,
+    2000:2005
+  )
+  expect_snapshot(stat$treecover)
 
 
   portfolio <- init_portfolio(aoi,
@@ -57,7 +64,15 @@ test_that("calc_indicator works", {
                           min_cover = 30
   )$treecover_area[[1]]
 
-  expect_snapshot(stat)
+  expect_equal(
+    names(stat),
+    c("years", "treecover")
+  )
+  expect_equal(
+    stat$years,
+    2000:2005
+  )
+  expect_snapshot(stat$treecover)
 
   expect_warning(
     calc_indicators(portfolio, "treecover")

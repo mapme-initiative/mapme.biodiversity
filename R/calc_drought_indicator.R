@@ -65,8 +65,6 @@ NULL
 #'   "extract" or "exactextract" as character.
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
-#' @param todisk Logical indicating whether or not temporary raster files shall
-#'   be written to disk
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
@@ -78,7 +76,6 @@ NULL
                                     stats_drought = "mean",
                                     rundir = tempdir(),
                                     verbose = TRUE,
-                                    todisk = FALSE,
                                     processing_mode = "portfolio",
                                     ...) {
 
@@ -86,8 +83,6 @@ NULL
   if (is.null(nasa_grace)) {
     return(NA)
   }
-  # check if intermediate raster should be written to disk
-  if (ncell(nasa_grace) > 1024 * 1024) todisk <- TRUE
   # check if input engine is correctly specified
   available_engines <- c("zonal", "extract", "exactextract")
   .check_engine(available_engines, engine)
@@ -95,23 +90,17 @@ NULL
   available_stats <- c("mean", "median", "sd", "min", "max", "sum", "var")
   .check_stats(available_stats, stats_drought)
 
-  if (engine == "extract") {
-    extractor <- .comp_drought_extract
-  }
-  if (engine == "exactextract") {
-    extractor <- .comp_drought_exact_extract
-  }
-  if (engine == "zonal") {
-    extractor <- .comp_drought_zonal
-  }
-
+  extractor <- switch(
+    engine,
+    "extract" = .comp_drought_extract,
+    "exactextract" = .comp_drought_exact_extract,
+    "zonal" = .comp_drought_zonal)
 
   if (processing_mode == "asset") {
     results <- extractor(
       nasa_grace = nasa_grace,
       shp = shp,
       stats = stats_drought,
-      todisk = todisk,
       rundir = rundir
     )
   }
@@ -122,12 +111,10 @@ NULL
         nasa_grace = nasa_grace,
         shp = shp[i, ],
         stats = stats_drought,
-        todisk = todisk,
         rundir = rundir
       )
     })
   }
-
   results
 }
 
@@ -142,36 +129,21 @@ NULL
 .comp_drought_zonal <- function(nasa_grace = NULL,
                                 shp = NULL,
                                 stats = "mean",
-                                todisk = FALSE,
                                 rundir = tempdir(),
                                 ...) {
   shp_v <- vect(shp)
-  nasa_grace <- terra::mask(nasa_grace,
-                            shp_v,
-                            filename =  ifelse(todisk, file.path(rundir, "nasa_grace.tif"), ""),
-                            overwrite = TRUE
-  )
-
-  p_raster <- terra::rasterize(shp_v,
-                               nasa_grace,
-                               field = 1:nrow(shp_v),
-                               touches = TRUE,
-                               filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
-                               overwrite = TRUE
-  )
-
-  results <- lapply(1:length(stats), function(j) {
-    out <- terra::zonal(
-      nasa_grace,
-      p_raster,
-      fun = stats[j],
-      na.rm = T
-    )
-    out <- tibble(wetness = as.numeric(out[-1]))
-    names(out) <- paste0("wetness_", stats[j])
-    out
-  })
-
+  results <- lapply(1:length(stats),
+                    function(j) {
+                      out <- terra::zonal(
+                        nasa_grace,
+                        shp_v,
+                        fun = stats[j],
+                        na.rm = T
+                      )
+                      out <- tibble(wetness = as.numeric(out))
+                      names(out) <- paste0("wetness_", stats[j])
+                      out
+                    })
   results <- tibble(do.call(cbind, results))
   bn <- names(nasa_grace)
   time_frame <- sub(".*(\\d{8}).*", "\\1", bn)

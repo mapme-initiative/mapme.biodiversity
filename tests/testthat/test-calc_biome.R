@@ -13,7 +13,15 @@ test_that("biome computation works", {
     out <- st_make_valid(out)
   })
   names(teow) <- basename(source)
-  expect_snapshot(
-    .calc_biome(shp, teow)
-  )
+  result <- .calc_biome(shp, teow)
+  expect_equal(
+    names(result),
+    c("biomes", "area"))
+  expect_equal(
+    result$biomes,
+    "Tropical & Subtropical Coniferous Forests")
+  expect_equal(
+    result$area,
+    18352.24,
+    tolerance = 1e-4)
 })

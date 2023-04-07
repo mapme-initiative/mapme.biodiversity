@@ -59,8 +59,17 @@ test_that("treecover works", {
   )
 
 
+  result <- .calc_treecover_area(shp, gfw_treecover, gfw_lossyear, min_size = 1, min_cover = 10)
+  expect_equal(
+    names(result),
+    c("years", "treecover")
+  )
+  expect_equal(
+    result$years,
+    c(2000:2005)
+  )
   expect_snapshot(
-    .calc_treecover_area(shp, gfw_treecover, gfw_lossyear, min_size = 1, min_cover = 10)
+    result$treecover
   )
 
   attributes(shp)$years <- 1999:2005
@@ -69,9 +78,8 @@ test_that("treecover works", {
     "Cannot calculate treecover statistics for years smaller than 2000."
   )
 
-  expect_snapshot(stat)
   attributes(shp)$years <- 2000:2005
   stats_treecover <- .calc_treecover_area(shp, gfw_treecover, gfw_lossyear, min_size = 1, min_cover = 10)
   stats_treeloss <- .calc_treecover_area_and_emissions(shp, gfw_treecover, gfw_lossyear, gfw_emissions, min_size = 1, min_cover = 10)[, c(1, 3)]
-  expect_equal(stats_treecover, stats_treecover)
+  expect_equal(stats_treecover$treecover, stats_treeloss$treecover)
 })

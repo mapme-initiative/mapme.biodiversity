@@ -17,19 +17,33 @@ test_that("drought indicator works", {
     .calc_drought_indicator(shp, nasa_grace, stats_drought = "not-available"),
     "Statistic 'not-available' is not supported. Please choose one of:"
   )
+
+  result <- .calc_drought_indicator(shp, nasa_grace)
+  result_multi_stats <- .calc_drought_indicator(shp, nasa_grace, stats = c("mean", "median", "sd"))
+  result_zonal <- .calc_drought_indicator(shp, nasa_grace, engine = "zonal")
+  result_extract <-  .calc_drought_indicator(shp, nasa_grace, engine = "extract")
+  result_exact <-  .calc_drought_indicator(shp, nasa_grace, engine = "exactextract")
+
+  expect_equal(
+    names(result[[1]]),
+    c("wetness_mean", "date"))
+  expect_equal(
+    names(result_multi_stats[[1]]),
+    c("wetness_mean", "wetness_median", "wetness_sd", "date"))
+  expect_equal(
+    names(result_zonal),
+    names(result_extract))
+  expect_equal(
+    names(result_zonal),
+    names(result_exact))
+  expect_equal(
+    result[[1]]$wetness_mean,
+    result_zonal[[1]]$wetness_mean,
+    tolerance = 1e-4)
+  expect_equal(
+    result_zonal[[1]]$wetness_mean,
+    result_extract[[1]]$wetness_mean,
+    tolerance = 1e-4)
   expect_snapshot(
-    .calc_drought_indicator(shp, nasa_grace)
-  )
-  expect_snapshot(
-    .calc_drought_indicator(shp, nasa_grace, engine = "zonal")
-  )
-  expect_snapshot(
-    .calc_drought_indicator(shp, nasa_grace, stats = c("mean", "median", "sd"))
-  )
-  expect_snapshot(
-    .calc_drought_indicator(shp, nasa_grace, engine = "extract")
-  )
-  expect_snapshot(
-    .calc_drought_indicator(shp, nasa_grace, engine = "exactextract")
-  )
+    result_exact[[1]]$wetness_mean)
 })

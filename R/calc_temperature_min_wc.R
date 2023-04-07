@@ -66,8 +66,6 @@ NULL
 #'   "extract" or "exactextract" as character.
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
-#' @param todisk Logical indicating whether or not temporary raster files shall
-#'   be written to disk
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
@@ -79,7 +77,6 @@ NULL
                                      stats_worldclim = "mean",
                                      rundir = tempdir(),
                                      verbose = TRUE,
-                                     todisk = FALSE,
                                      ...) {
   results <- .calc_worldclim(
     shp = shp,
@@ -87,8 +84,7 @@ NULL
     engine = engine,
     stats_worldclim = stats_worldclim,
     rundir = rundir,
-    verbose = verbose,
-    todisk = todisk
+    verbose = verbose
   )
   results
 }
@@ -104,8 +100,6 @@ NULL
 #'   "extract" or "exactextract" as character.
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
-#' @param todisk Logical indicating whether or not temporary raster files shall
-#'   be written to disk
 #' @param ... additional arguments
 #'
 #' @return A data-frame
@@ -118,13 +112,10 @@ NULL
                             stats_worldclim = "mean",
                             rundir = tempdir(),
                             verbose = TRUE,
-                            todisk = FALSE,
                             ...) {
   if (is.null(worldclim)) {
     return(NA)
   }
-  # check if intermediate raster should be written to disk
-  if (ncell(worldclim) > 1024 * 1024) todisk <- TRUE
   # check if input engine is correctly specified
   available_engines <- c("zonal", "extract", "exactextract")
   .check_engine(available_engines, engine)
@@ -133,35 +124,24 @@ NULL
   .check_stats(available_stats, stats_worldclim)
 
   # set max value of 65535 to NA
-  worldclim <- clamp(worldclim,
-    lower = -Inf, upper = 65534, values = FALSE,
-    filename = ifelse(todisk, file.path(rundir, "worldclim.tif"), ""),
-    overwrite = TRUE,
-    datatype = "INT1U",
-    filetype = "GTiff"
+  worldclim <- clamp(
+    worldclim,
+    lower = -Inf,
+    upper = 65534,
+    values = FALSE)
+
+  extractor <- switch(
+    engine,
+    "extract" = .comp_worldclim_extract,
+    "exactextract" = .comp_worldclim_exact_extract,
+    "zonal" =  .comp_worldclim_zonal
   )
 
-  if (engine == "extract") {
-    .comp_worldclim_extract(
-      shp = shp,
-      worldclim = worldclim,
-      stats = stats_worldclim
-    )
-  } else if (engine == "exactextract") {
-    .comp_worldclim_exact_extract(
-      shp = shp,
-      worldclim = worldclim,
-      stats = stats_worldclim
-    )
-  } else {
-    .comp_worldclim_zonal(
-      worldclim = worldclim,
-      shp = shp,
-      stats = stats_worldclim,
-      todisk = todisk,
-      rundir = rundir
-    )
-  }
+  extractor(
+    shp = shp,
+    worldclim = worldclim,
+    stats = stats_worldclim
+  )
 }
 
 
@@ -175,34 +155,17 @@ NULL
 
 .comp_worldclim_zonal <- function(worldclim = NULL,
                                   shp = NULL,
-                                  stats = "mean",
-                                  todisk = FALSE,
-                                  rundir = tempdir(),
-                                  ...) {
+                                  stats = "mean") {
   shp_v <- vect(shp)
-  worldclim <- terra::mask(worldclim,
-    shp_v,
-    filename =  ifelse(todisk, file.path(rundir, "worldclim.tif"), ""),
-    datatype = "INT1U",
-    overwrite = TRUE
-  )
-  p_raster <- terra::rasterize(shp_v,
-    worldclim,
-    field = 1:nrow(shp_v),
-    touches = TRUE,
-    filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
-    datatype = "INT1U",
-    overwrite = TRUE
-  )
   layer <- strsplit(names(worldclim), "_")[[1]][3]
   results <- lapply(1:length(stats), function(j) {
     out <- terra::zonal(
       worldclim,
-      p_raster,
+      shp_v,
       fun = stats[j],
       na.rm = T
     )
-    out <- tibble(worldclim = unlist(out[-1]))
+    out <- tibble(worldclim = unlist(out))
     names(out) <- paste0(layer, "_", stats[j])
     out
   })
@@ -224,8 +187,7 @@ NULL
 
 .comp_worldclim_extract <- function(worldclim = NULL,
                                     shp = NULL,
-                                    stats = "mean",
-                                    ...) {
+                                    stats = "mean") {
   shp_v <- vect(shp)
   layer <- strsplit(names(worldclim), "_")[[1]][3]
   results <- lapply(1:length(stats), function(j) {
@@ -254,12 +216,9 @@ NULL
 #' @return A data-frame
 #' @keywords internal
 #' @noRd
-
-
 .comp_worldclim_exact_extract <- function(worldclim = NULL,
                                           shp = NULL,
-                                          stats = "mean",
-                                          ...) {
+                                          stats = "mean"){
   if (!requireNamespace("exactextractr", quietly = TRUE)) {
     stop(paste(
       "Needs package 'exactextractr' to be installed.",

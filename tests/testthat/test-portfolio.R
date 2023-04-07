@@ -109,8 +109,12 @@ test_that("init_portfolio works", {
     write_portfolio(portfolio, tmpfile, quiet = TRUE)
   )
 
-  expect_snapshot(
-    read_portfolio(tmpfile)
+  expect_silent(
+    portfolio2 <- read_portfolio(tmpfile)
+  )
+  expect_equal(
+    names(portfolio2),
+    c("WDPAID", "NAME", "DESIG_ENG", "ISO3", "assetid", "treecover_area", "geom")
   )
 
   file.remove(tmpfile)

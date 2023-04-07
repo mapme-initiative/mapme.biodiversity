@@ -66,8 +66,6 @@ NULL
 #'   "extract" or "exactextract" as character.
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
-#' @param todisk Logical indicating whether or not temporary raster files shall
-#'   be written to disk
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
@@ -79,7 +77,6 @@ NULL
                                      stats_worldclim = "mean",
                                      rundir = tempdir(),
                                      verbose = TRUE,
-                                     todisk = FALSE,
                                      ...) {
   results <- .calc_worldclim(
     shp = shp,
@@ -87,8 +84,7 @@ NULL
     engine = engine,
     stats_worldclim = stats_worldclim,
     rundir = rundir,
-    verbose = verbose,
-    todisk = todisk
+    verbose = verbose
   )
   results
 }

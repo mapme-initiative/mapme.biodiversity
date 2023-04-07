@@ -19,21 +19,33 @@ test_that("soilpoperties works", {
 
   expect_error(
     .calc_soilproperties(shp, soilgrids, engine = "not-available"),
-    "Engine 'not-available' is not an available engine. Please choose one of: zonal, extract, exactextract"
-  )
-
+    "Engine 'not-available' is not an available engine. Please choose one of: zonal, extract, exactextract")
   expect_error(
     .calc_soilproperties(shp, soilgrids, stats_soil = "not-available"),
-    "Statistic 'not-available' is not supported. Please choose one of:"
-  )
+    "Statistic 'not-available' is not supported. Please choose one of:")
 
+  result <-  .calc_soilproperties(shp, soilgrids)
+  result_multi_stat <- .calc_soilproperties(shp, soilgrids, engine = "extract", stats_soil = c("mean", "median", "sd"))
+  result_zonal <- .calc_soilproperties(shp, soilgrids, engine = "zonal")
+  result_extract <-  .calc_soilproperties(shp, soilgrids, engine = "extract")
+  result_exact <- .calc_soilproperties(shp, soilgrids, engine = "exactextract")
+
+  expect_equal(
+    names(result),
+    c("layer", "depth", "stat", "mean"))
+  expect_equal(
+    names(result_multi_stat),
+    c("layer", "depth", "stat", "mean", "median", "sd"))
+  expect_equal(
+    names(result_zonal),
+    names(result_extract))
+  expect_equal(
+    names(result_zonal),
+    names(result_exact))
+  expect_equal(
+    result_zonal$mean,
+    result_extract$mean,
+    tolerance = 1e-4)
   expect_snapshot(
-    .calc_soilproperties(shp, soilgrids, engine = "extract", stats_soil = c("mean", "median", "sd", "min", "max", "sum", "var")),
-  )
-  expect_snapshot(
-    .calc_soilproperties(shp, soilgrids, engine = "zonal", stats_soil = c("mean", "median", "sd", "min", "max", "sum", "var")),
-  )
-  expect_snapshot(
-    .calc_soilproperties(shp, soilgrids, engine = "exactextract", stats_soil = c("mean", "median", "sd", "min", "max", "sum", "var")),
-  )
+    result_exact$mean)
 })

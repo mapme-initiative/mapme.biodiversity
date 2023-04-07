@@ -64,8 +64,6 @@ NULL
 #'   "extract" or "exactextract" as character.
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
-#' @param todisk Logical indicating whether or not temporary raster files shall
-#'   be written to disk
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
@@ -77,13 +75,10 @@ NULL
                                    stats_popcount = "sum",
                                    rundir = tempdir(),
                                    verbose = TRUE,
-                                   todisk = FALSE,
                                    ...) {
   if (is.null(worldpop)) {
     return(NA)
   }
-  # check if intermediate raster should be written to disk
-  if (ncell(worldpop) > 1024 * 1024) todisk <- TRUE
   # check if input engine is correctly specified
   available_engines <- c("zonal", "extract", "exactextract")
   .check_engine(available_engines, engine)
@@ -92,35 +87,28 @@ NULL
   .check_stats(available_stats, stats_popcount)
 
   # set max value of 65535 to NA
-  worldpop <- clamp(worldpop,
-                    lower = -Inf, upper = 65534, values = FALSE,
-                    filename = ifelse(todisk, file.path(rundir, "worldpop.tif"), ""),
-                    overwrite = TRUE,
-                    datatype = "INT1U",
-                    filetype = "GTiff"
+  worldpop <- clamp(
+    worldpop,
+    lower = -Inf,
+    upper = 65534,
+    values = FALSE
   )
 
-  if (engine == "extract") {
-    .comp_worldpop_extract(
-      shp = shp,
-      worldpop = worldpop,
-      stats = stats_popcount
-    )
-  } else if (engine == "exactextract") {
-    .comp_worldpop_exact_extract(
-      shp = shp,
-      worldpop = worldpop,
-      stats = stats_popcount
-    )
-  } else {
-    .comp_worldpop_zonal(
-      worldpop = worldpop,
-      shp = shp,
-      stats = stats_popcount,
-      todisk = todisk,
-      rundir = rundir
-    )
-  }
+  extractor <- switch(
+    engine,
+    "extract" = .comp_worldpop_extract,
+    "exactextract" = .comp_worldpop_exact_extract,
+    "zonal" = .comp_worldpop_zonal)
+
+  results <- extractor(
+    shp = shp,
+    worldpop = worldpop,
+    stats = stats_popcount
+  )
+  layer_names <- names(worldpop)
+  year_name <- unlist(lapply(layer_names, function(x) strsplit(x, "_")[[1]][2]))
+  results$year <- year_name
+  results
 }
 
 #' Helper function to compute statistics using routines from terra zonal
@@ -133,42 +121,20 @@ NULL
 
 .comp_worldpop_zonal <- function(worldpop = NULL,
                                  shp = NULL,
-                                 stats = "sum",
-                                 todisk = FALSE,
-                                 rundir = tempdir(),
-                                 ...) {
+                                 stats = "sum") {
   shp_v <- vect(shp)
-  worldpop <- terra::mask(worldpop,
-                          shp_v,
-                          filename =  ifelse(todisk, file.path(rundir, "worldpop.tif"), ""),
-                          datatype = "INT1U",
-                          overwrite = TRUE
-  )
-  p_raster <- terra::rasterize(shp_v,
-                               worldpop,
-                               field = 1:nrow(shp_v),
-                               touches = TRUE,
-                               filename =  ifelse(todisk, file.path(rundir, "polygon.tif"), ""),
-                               datatype = "INT1U",
-                               overwrite = TRUE
-  )
-
   results <- lapply(1:length(stats), function(j) {
     out <- terra::zonal(
       worldpop,
-      p_raster,
+      shp_v,
       fun = stats[j],
       na.rm = T
     )
-    out <- tibble(population = unlist(out[-1]))
+    out <- tibble(population = unlist(out))
     names(out) <- paste0("popcount_", stats[j])
     out
   })
-  results <- tibble(do.call(cbind, results))
-  layer_names <- names(worldpop)
-  year_name <- unlist(lapply(layer_names, function(x) strsplit(x, "_")[[1]][2]))
-  results$year <- year_name
-  results
+  tibble(do.call(cbind, results))
 }
 
 #' Helper function to compute statistics using routines from terra extract
@@ -181,8 +147,7 @@ NULL
 
 .comp_worldpop_extract <- function(worldpop = NULL,
                                    shp = NULL,
-                                   stats = "sum",
-                                   ...) {
+                                   stats = "sum") {
   shp_v <- vect(shp)
   results <- lapply(1:length(stats), function(j) {
     out <- terra::extract(
@@ -195,11 +160,7 @@ NULL
     names(out) <- paste0("popcount_", stats[j])
     out
   })
-  results <- tibble(do.call(cbind, results))
-  layer_names <- names(worldpop)
-  year_name <- unlist(lapply(layer_names, function(x) strsplit(x, "_")[[1]][2]))
-  results$year <- year_name
-  results
+  tibble(do.call(cbind, results))
 }
 
 #' Helper function to compute statistics using routines from exactextractr
@@ -238,9 +199,5 @@ NULL
     names(out) <- paste0("popcount_", stats[j])
     out
   })
-  results <- tibble(do.call(cbind, results))
-  layer_names <- names(worldpop)
-  year_name <- unlist(lapply(layer_names, function(x) strsplit(x, "_")[[1]][2]))
-  results$year <- year_name
-  results
+  tibble(do.call(cbind, results))
 }
