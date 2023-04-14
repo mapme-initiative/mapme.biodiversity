@@ -324,7 +324,7 @@ sample_portfolio %>%
 # Enabling parallel computing
 
 {mapme.biodiversity} follows the parallelization paradigm of the
-{[future](https://cran.r-project.org/web/packages/future/index.html)} 
+{[future](https://cran.r-project.org/package=future)} 
 package. That means that you as a user are in the control if and how you would 
 like to set up parallel processing. Currently, {mapme.biodiversity} supports 
 parallel processing on the asset level of the `calc_indicators()` function only. We
