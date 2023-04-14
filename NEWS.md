@@ -2,7 +2,7 @@
 
 ## Breaking changes
 
-- Changed the parallel backend to the [future](https://cran.r-project.org/web/packages/future/index.html) 
+- Changed the parallel backend to the [future](https://cran.r-project.org/package=future) 
   package. Parallel processing is now implemented by
   [furrr::future_map()](https://furrr.futureverse.org/reference/future_map.html)
   on the asset level within the calc_indicators() function. User code is now
