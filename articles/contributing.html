@@ -328,7 +328,6 @@ a resource download are set, when users initialize their portfolio:</p>
 <code class="sourceCode R"><span>  <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"nitems"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"bbox"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"years"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">years</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"cores"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">cores</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"aria_bin"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">aria_bin</span></span></code></pre></div>
 <p>Your resource downloader should take care that with these
 user-specified arguments and the portfolio-wide parameters the files
@@ -703,27 +702,6 @@ why this dependency is necessary for your indicator. We also ask you to
 add dependencies to the <code>Suggests</code> field of the
 <code>DESCRIPTION</code> file and that you check whether or not this
 dependency is installed at the beginning of your indicator routine.</p>
-</div>
-<div class="section level3">
-<h3 id="differences-between-processing-in-asset-or-portfolio-mode">Differences between processing in asset or portfolio mode<a class="anchor" aria-label="anchor" href="#differences-between-processing-in-asset-or-portfolio-mode"></a>
-</h3>
-<p>An important difference of how to handle the processing between the
-<code>asset</code> and <code>portfolio</code> mode is that in the
-<code>asset</code> mode, the package handles the parallelization.
-However, in the case that processing is conducted in the
-<code>portfolio</code> mode, we ask you as a developer to iterate over
-all assets in the portfolio using the <a href="https://github.com/psolymos/pbapply" class="external-link">pbapply</a> package.
-Specifically, you can retrieve the number of cores available via the
-portfolios attributes:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">shp</span><span class="op">)</span><span class="op">$</span><span class="va">cores</span></span>
-<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">pbapply</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pbapply/man/pbapply.html" class="external-link">pblapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">shp</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="co"># processing logic goes here</span></span>
-<span>    <span class="va">obj</span><span class="op">$</span><span class="va">.id</span> <span class="op">&lt;-</span> <span class="va">i</span></span>
-<span>    <span class="va">obj</span></span>
-<span>    <span class="op">}</span>, cl <span class="op">=</span> <span class="va">cores</span><span class="op">)</span></span></code></pre></div>
-<p>It is important that you add a variable <code>.id</code> to the
-output tibble indicating the row number of the asset.</p>
 </div>
 <div class="section level3">
 <h3 id="defining-the-output-of-indicator-functions">Defining the output of indicator functions<a class="anchor" aria-label="anchor" href="#defining-the-output-of-indicator-functions"></a>

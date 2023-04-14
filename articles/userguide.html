@@ -216,7 +216,6 @@ used to uniquely identify each asset in the portfolio.</p>
 <span>  outdir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">outdir</span>, <span class="st">"res"</span><span class="op">)</span>,</span>
 <span>  tmpdir <span class="op">=</span> <span class="va">outdir</span>,</span>
 <span>  add_resources <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  cores <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sample_portfolio</span><span class="op">[</span><span class="st">"assetid"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
@@ -232,7 +231,7 @@ file system of your machine. If these directories do not exist, the
 package attempts to create them. The <code>outdir</code> cannot be equal
 to the <code>tmpdir</code> argument. All downloaded resources will be
 written to their respective directories within <code>outdir</code>. We
-will set the <a href="https://rspatial.org/terra/" class="external-link">terra</a>’s package temporal directory to
+will set the <a href="https://rspatial.org/" class="external-link">terra</a>’s package temporal directory to
 directory within <code>tmpdir</code> and also any intermediate files
 during the calculation of an indicator will be written there. Thus,
 please ensure that you have write access to these directories and that
@@ -251,11 +250,6 @@ portfolio for your resources, only those files will be downloaded that
 are missing in <code>outdir</code>. This behaviour is beneficial if you
 share the <code>outdir</code> between different projects to ensure that
 only matching resources are returned.</p>
-<p>The argument <code>cores</code> specifies the number of CPU cores
-available to the indicator routines for parallel processing. Parallel
-processing is deactivated on Windows by default. If you use another
-operating system, you may set to a value greater 1 if you wish to
-activate parallel processing.</p>
 <p>Finally, the <code>verbose</code> logical controls whether or not the
 package will print informative messages during the calculations. Note,
 that even if set to <code>FALSE</code>, the package will inform users
@@ -355,10 +349,10 @@ issue an error in case a required resource has not been made available
 via <code><a href="../reference/get_resources.html">get_resources()</a></code> beforehand.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sample_portfolio</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_indicators.html">calc_indicators</a></span><span class="op">(</span><span class="va">sample_portfolio</span>,</span>
-<span>  indicators <span class="op">=</span> <span class="st">"precipitation_chirps"</span>,</span>
-<span>  scales_spi <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>  spi_prev_years <span class="op">=</span> <span class="fl">8</span>,</span>
-<span>  engine <span class="op">=</span> <span class="st">"extract"</span></span>
+<span>                                    indicators <span class="op">=</span> <span class="st">"precipitation_chirps"</span>,</span>
+<span>                                    scales_spi <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>                                    spi_prev_years <span class="op">=</span> <span class="fl">8</span>,</span>
+<span>                                    engine <span class="op">=</span> <span class="st">"extract"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>The function call will inform us that we have not specified the two
 required arguments but that the default values have been inserted. If
@@ -456,6 +450,39 @@ data object relatively small.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span>       3 <span style="text-decoration: underline;">478</span>140 2010-12-01        7   -<span style="color: #BB0000;">1.03</span>  0.337</span></span></code></pre></div>
 </div>
 <div class="section level2">
+<h2 id="enabling-parallel-computing">Enabling parallel computing<a class="anchor" aria-label="anchor" href="#enabling-parallel-computing"></a>
+</h2>
+<p>{mapme.biodiversity} follows the parallelization paradigm of the {<a href="https://cran.r-project.org/package=future" class="external-link">future</a>} package.
+That means that you as a user are in the control if and how you would
+like to set up parallel processing. Currently, {mapme.biodiversity}
+supports parallel processing on the asset level of the
+<code><a href="../reference/calc_indicators.html">calc_indicators()</a></code> function only. We also currently assume
+that parallel processing is done on the cores of a single machine. In
+future developments, we would like to support distributed processing. If
+you are working on a distributed use-cases, please contact the
+developers, e.g. via the <a href="https://github.com/mapme-initiative/mapme.biodiversity/discussions" class="external-link">discussion
+board</a> or mail.</p>
+<p>To process e.g. 6 assets in parallel and report a progress bar you
+will have to set up the following in your code:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org" class="external-link">future</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://progressr.futureverse.org" class="external-link">progressr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">multisession</span>, workers <span class="op">=</span> <span class="fl">6</span><span class="op">)</span> <span class="co"># set up parallel plan with 6 concurrent threads</span></span>
+<span></span>
+<span><span class="fu"><a href="https://progressr.futureverse.org/reference/with_progress.html" class="external-link">with_progress</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="va">portfolio</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_indicators.html">calc_indicators</a></span><span class="op">(</span></span>
+<span>    <span class="va">sample_portfolio</span>,</span>
+<span>    indicators <span class="op">=</span> <span class="st">"precipitation_chirps"</span>,</span>
+<span>    scales_spi <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>    spi_prev_years <span class="op">=</span> <span class="fl">8</span>,</span>
+<span>    engine <span class="op">=</span> <span class="st">"extract"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">sequential</span><span class="op">)</span> <span class="co"># close child processes </span></span></code></pre></div>
+</div>
+<div class="section level2">
 <h2 id="exporting-an-portfolio-object">Exporting an portfolio object<a class="anchor" aria-label="anchor" href="#exporting-an-portfolio-object"></a>
 </h2>
 <p>You can use the <code><a href="../reference/write_portfolio.html">write_portfolio()</a></code> function to save a
@@ -472,16 +499,16 @@ arguments that were set during the portfolio initialization are
 continue to use <a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> functionality on such
 a portfolio object, make sure to re-run <code><a href="../reference/init_portfolio.html">init_portfolio()</a></code> on
 it.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tmp_output</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".gpkg"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/write_portfolio.html">write_portfolio</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">sample_portfolio</span>,</span>
 <span>  dsn <span class="op">=</span> <span class="va">tmp_output</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Writing layer `metadata' to data source </span></span>
-<span><span class="co">#&gt;   `/tmp/RtmpfDwtMq/file2bf9180b8eaa.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt;   `/tmp/RtmpAy56VP/file25b346525406.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">#&gt; Writing 20 features with 2 fields and geometry type Polygon.</span></span>
-<span><span class="co">#&gt; Updating layer `precipitation_chirps' to data source `/tmp/RtmpfDwtMq/file2bf9180b8eaa.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt; Updating layer `precipitation_chirps' to data source `/tmp/RtmpAy56VP/file25b346525406.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">#&gt; Writing 240 features with 5 fields without geometries.</span></span>
 <span><span class="op">(</span><span class="va">portfolio_from_disk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_portfolio.html">read_portfolio</a></span><span class="op">(</span><span class="va">tmp_output</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Simple feature collection with 20 features and 3 fields</span></span>

@@ -135,7 +135,7 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Linking to GEOS 3.11.1, GDAL 3.6.1, PROJ 9.1.1; sf_use_s2() is TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Linking to GEOS 3.11.1, GDAL 3.6.2, PROJ 9.1.1; sf_use_s2() is TRUE</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">resources</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="reference/available_resources.html">available_resources</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">indicators</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="reference/available_indicators.html">available_indicators</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -189,7 +189,6 @@
 <span>      outdir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"res"</span>, package <span class="op">=</span> <span class="st">"mapme.biodiversity"</span><span class="op">)</span>,</span>
 <span>      tmpdir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"tmp"</span>, package <span class="op">=</span> <span class="st">"mapme.biodiversity"</span><span class="op">)</span>,</span>
 <span>      add_resources <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>      cores <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>      verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span>    <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="reference/get_resources.html">get_resources</a></span><span class="op">(</span></span>
@@ -208,7 +207,29 @@
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="do">##    &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;         &lt;chr&gt;   &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;     &lt;dbl&gt;</span></span>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 478140 Sierra de Neiba National Park DOM         1  2016      2832     2357.</span></span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 478140 Sierra de Neiba National Park DOM         1  2017      3468     2345.</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="do">## # … with 1 more variable: geom &lt;POLYGON [°]&gt;</span></span></code></pre></div>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="do">## # ℹ 1 more variable: geom &lt;POLYGON [°]&gt;</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="a-note-on-parallelization">A note on parallelization<a class="anchor" aria-label="anchor" href="#a-note-on-parallelization"></a>
+</h2>
+<p>{mapme.biodiversity} follows the parallelization paradigm of the {<a href="https://cran.r-project.org/package=future" class="external-link">future</a>} package. That means that you as a user are in the control if and how you would like to set up parallel processing. Currently, {mapme.biodiversity} supports parallel processing on the asset level of the <code><a href="reference/calc_indicators.html">calc_indicators()</a></code> function only. We also currently assume that parallel processing is done on the cores of a single machine. In future developments, we would like to support distributed processing. If you are working on a distributed use-cases, please contact the developers, e.g. via the <a href="https://github.com/mapme-initiative/mapme.biodiversity/discussions" class="external-link">discussion board</a> or mail.</p>
+<p>To process 6 assets in parallel and report a progress bar you will have to set up the following in your code:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org" class="external-link">future</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://progressr.futureverse.org" class="external-link">progressr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">multisession</span>, workers <span class="op">=</span> <span class="fl">6</span><span class="op">)</span> <span class="co"># set up parallel plan</span></span>
+<span></span>
+<span><span class="fu"><a href="https://progressr.futureverse.org/reference/with_progress.html" class="external-link">with_progress</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="va">portfolio</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/calc_indicators.html">calc_indicators</a></span><span class="op">(</span></span>
+<span>    <span class="va">portfolio</span>,</span>
+<span>    <span class="st">"treeover_area_and_emissions"</span>,</span>
+<span>    min_size <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>    min_cover <span class="op">=</span> <span class="fl">30</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">sequential</span><span class="op">)</span> <span class="co"># close child processes </span></span></code></pre></div>
 <p>Head over to the <a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">online documentation</a> find more detailed information about the package.</p>
 </div>
 </div>
