@@ -13,70 +13,127 @@ test_that("calc_indicator works", {
   tmpdir <- tempdir()
 
   aoi <- suppressWarnings(st_cast(aoi, to = "POLYGON"))[1, ]
-  portfolio <- init_portfolio(aoi,
-                              years = 2000:2005,
-                              outdir = outdir,
-                              tmpdir = tmpdir,
-                              verbose = FALSE
-  )
+  portfolio <- init_portfolio(
+    aoi,
+    years = 2000:2005,
+    outdir = outdir,
+    tmpdir = tmpdir,
+    verbose = FALSE)
 
-  portfolio <- get_resources(portfolio,
-                             resources = c("gfw_treecover", "gfw_lossyear"),
-                             vers_treecover = "GFC-2020-v1.8",
-                             vers_lossyear = "GFC-2020-v1.8"
-  )
+  portfolio <- get_resources(
+    portfolio,
+    resources = c("gfw_treecover", "gfw_lossyear"),
+    vers_treecover = "GFC-2020-v1.8",
+    vers_lossyear = "GFC-2020-v1.8")
 
   expect_message(
-    calc_indicators(portfolio,
-                    indicators = "treecover_area",
-                    min_cover = 10
-    ),
-    "was not specified. Setting to default value"
-  )
+    calc_indicators(
+      portfolio,
+      indicators = "treecover_area",
+      min_cover = 10),
+    "was not specified. Setting to default value")
 
-  stat <- calc_indicators(portfolio,
-                          indicators = "treecover_area",
-                          min_size = 5,
-                          min_cover = 30
-  )$treecover_area[[1]]
-  expect_equal(
-    names(stat),
-    c("years", "treecover")
-  )
-  expect_equal(
-    stat$years,
-    2000:2005
-  )
-  expect_snapshot(stat$treecover)
-
-
-  portfolio <- init_portfolio(aoi,
-                              years = 2000:2005,
-                              outdir = outdir,
-                              tmpdir = tmpdir,
-                              add_resources = TRUE,
-                              verbose = FALSE
-  )
-
-  stat <- calc_indicators(portfolio,
-                          indicators = "treecover_area",
-                          min_size = 5,
-                          min_cover = 30
-  )$treecover_area[[1]]
+  stat <- calc_indicators(
+    portfolio,
+    indicators = "treecover_area",
+    min_size = 5,
+    min_cover = 30)$treecover_area[[1]]
 
   expect_equal(
     names(stat),
-    c("years", "treecover")
-  )
+    c("years", "treecover"))
   expect_equal(
     stat$years,
-    2000:2005
-  )
-  expect_snapshot(stat$treecover)
+    2000:2005)
+  expect_equal(
+    stat$treecover,
+    c(2005.175, 2004.664, 2002.985, 1968.824, 1959.262, 1955.029),
+    tolerance = 1e-3)
 
+  portfolio <- init_portfolio(
+    aoi,
+    years = 2000:2005,
+    outdir = outdir,
+    tmpdir = tmpdir,
+    add_resources = TRUE,
+    verbose = FALSE)
+
+  stat <- calc_indicators(
+    portfolio,
+    indicators = "treecover_area",
+    min_size = 5,
+    min_cover = 30
+  )$treecover_area[[1]]
+
+  expect_equal(
+    names(stat),
+    c("years", "treecover"))
+  expect_equal(
+    stat$years,
+    2000:2005)
+  expect_equal(
+    stat$treecover,
+    c(2005.175, 2004.664, 2002.985, 1968.824, 1959.262, 1955.029),
+    tolerance = 1e-3)
   expect_warning(
     calc_indicators(portfolio, "treecover")
   )
+})
+
+test_that("Parallelization works", {
+  aoi <- read_sf(
+    system.file("extdata", "gfw_sample.gpkg",
+                package = "mapme.biodiversity"
+    )
+  )
+
+  temp_loc <- file.path(tempdir(), "mapme.biodiversity")
+  dir.create(temp_loc, showWarnings = FALSE)
+  resource_dir <- system.file("res", package = "mapme.biodiversity")
+  file.copy(resource_dir, temp_loc, recursive = TRUE)
+  outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
+  tmpdir <- tempdir()
+
+  aoi <- suppressWarnings(st_cast(aoi, to = "POLYGON"))[1, ]
+  aoi <- st_as_sf(st_make_grid(aoi, n = 3))
+
+  portfolio <- init_portfolio(
+    aoi,
+    years = 2000:2005,
+    outdir = outdir,
+    tmpdir = tmpdir,
+    verbose = FALSE)
+
+  portfolio <- get_resources(
+    portfolio,
+    resources = c("gfw_treecover", "gfw_lossyear"),
+    vers_treecover = "GFC-2020-v1.8",
+    vers_lossyear = "GFC-2020-v1.8")
+
+  library(future)
+  plan(multisession, workers = 2)
+  stat <- calc_indicators(
+    portfolio,
+    indicators = "treecover_area",
+    min_size = 5,
+    min_cover = 30)
+  plan(sequential)
+
+  expect_equal(
+    names(stat),
+    c("assetid", "treecover_area", "x"))
+  expect_equal(
+    nrow(stat),
+    9)
+
+  stat <- lapply(stat$treecover_area, function(x)x$treecover)
+  names(stat) <- 1:length(stat)
+  stat <- rowSums(as.data.frame(stat))
+
+  expect_equal(
+    stat,
+    c(2603.803, 2600.664, 2596.358, 2557.306, 2540.299, 2532.707),
+    tolerance = 1e-3)
 })
 
 test_that(".bind_assets works correctly", {

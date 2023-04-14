@@ -230,10 +230,10 @@ available via <code>get_resources()</code> beforehand.
 
 ```{r calc_indicator}
 sample_portfolio <- calc_indicators(sample_portfolio,
-  indicators = "precipitation_chirps",
-  scales_spi = 3,
-  spi_prev_years = 8,
-  engine = "extract"
+                                    indicators = "precipitation_chirps",
+                                    scales_spi = 3,
+                                    spi_prev_years = 8,
+                                    engine = "extract"
 )
 ```
 
@@ -319,6 +319,40 @@ sample_portfolio %>%
   st_drop_geometry() %>%
   tidyr::unnest(precipitation_chirps) %>%
   filter(assetid == 3)
+```
+
+# Enabling parallel computing
+
+{mapme.biodiversity} follows the parallelization paradigm of the
+{[future](https://cran.r-project.org/web/packages/future/index.html)} 
+package. That means that you as a user are in the control if and how you would 
+like to set up parallel processing. Currently, {mapme.biodiversity} supports 
+parallel processing on the asset level of the `calc_indicators()` function only. We
+also currently assume that parallel processing is done on the cores of a single 
+machine. In future developments, we would like to support distributed processing.
+If you are working on a distributed use-cases, please contact the developers,
+e.g. via the [discussion board](https://github.com/mapme-initiative/mapme.biodiversity/discussions) or mail.
+
+To process e.g. 6 assets in parallel and report a progress bar you will have to set 
+up the following in your code:
+
+```{r parallel, eval = FALSE}
+library(future)
+library(progressr)
+
+plan(multisession, workers = 6) # set up parallel plan with 6 concurrent threads
+
+with_progress({
+  portfolio <- calc_indicators(
+    sample_portfolio,
+    indicators = "precipitation_chirps",
+    scales_spi = 3,
+    spi_prev_years = 8,
+    engine = "extract"
+  )
+})
+
+plan(sequential) # close child processes 
 ```
 
 # Exporting an portfolio object

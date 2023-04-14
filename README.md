@@ -143,17 +143,23 @@ object.
     tidyr::unnest(treecover_area_and_emissions))
 ```
 
-    ## Simple feature collection with 2 features and 8 fields
+    ## Error in get(as.character(FUN), mode = "function", envir = envir) : 
+    ##   object 'fun' of mode 'function' was not found
+
+    ## Warning in .prep_and_compute(x[i, ], params, i): Error occured at polygon 1 with the following error message: Error in get(as.character(FUN), mode = "function", envir = envir) : 
+    ##   object 'fun' of mode 'function' was not found
+    ## . 
+    ##  Returning NAs.
+
+    ## Simple feature collection with 1 feature and 6 fields
     ## Geometry type: POLYGON
     ## Dimension:     XY
     ## Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931
     ## Geodetic CRS:  WGS 84
-    ## # A tibble: 2 × 9
-    ##   WDPAID NAME            DESIG_ENG     ISO3  assetid years emissions treecover
-    ##    <dbl> <chr>           <chr>         <chr>   <int> <int>     <dbl>     <dbl>
-    ## 1 478140 Sierra de Neiba National Park DOM         1  2016      2832     2357.
-    ## 2 478140 Sierra de Neiba National Park DOM         1  2017      3468     2345.
-    ## # … with 1 more variable: geom <POLYGON [°]>
+    ## # A tibble: 1 × 7
+    ##   WDPAID NAME            DESIG_ENG ISO3  assetid value                      geom
+    ##    <dbl> <chr>           <chr>     <chr>   <int> <lgl>             <POLYGON [°]>
+    ## 1 478140 Sierra de Neiba National… DOM         1 NA    ((-71.76134 18.66333, -7…
 
 ## A note on parallelization
 

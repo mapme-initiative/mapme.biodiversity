@@ -25,6 +25,7 @@
 #'   raster calculations we will set the temporal directory for the \code{terra}
 #'   package here. Please make sure that enough disk space is available because
 #'   some intermediate calculations can become quite large.
+#' @param cores Deprecated. Use future-style parallelzation instead.
 #' @param aria_bin A character vector to an aria2c executable for parallel
 #'  downloads
 #' @param verbose Logical, defaults to TRUE, indicating if progress information
@@ -40,6 +41,7 @@ init_portfolio <- function(x,
                            years,
                            outdir = getwd(),
                            tmpdir = tempdir(),
+                           cores = NULL,
                            add_resources = TRUE,
                            aria_bin = NULL,
                            verbose = TRUE) {
@@ -81,6 +83,14 @@ init_portfolio <- function(x,
     )
   }
   x$assetid <- 1:nrow(x)
+
+  if (!is.null(cores)){
+    warning(
+      "Argument cores is deprecated. To enable parallel processing\n",
+      "use future-style parallelization by enabling e.g. future::plan(future::multisession, workers = n).\n",
+      "Learn more at https://mapme-initiative.github.io/mapme.biodiversity/#a-note-on-parallelization"
+    )
+  }
 
   # check if resources already exist
   resources <- list()
