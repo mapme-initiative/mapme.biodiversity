@@ -158,15 +158,14 @@ object.
 ## A note on parallelization
 
 {mapme.biodiversity} follows the parallelization paradigm of the
-{[future](https://cran.r-project.org/web/packages/future/index.html)}
-package. That means that you as a user are in the control if and how you
-would like to set up parallel processing. Currently,
-{mapme.biodiversity} supports parallel processing on the asset level of
-the `calc_indicators()` function only. We also currently assume that
-parallel processing is done on the cores of a single machine. In future
-developments, we would like to support distributed processing. If you
-are working on a distributed use-cases, please contact the developers,
-e.g. via the [discussion
+{[future](https://cran.r-project.org/package=future)} package. That
+means that you as a user are in the control if and how you would like to
+set up parallel processing. Currently, {mapme.biodiversity} supports
+parallel processing on the asset level of the `calc_indicators()`
+function only. We also currently assume that parallel processing is done
+on the cores of a single machine. In future developments, we would like
+to support distributed processing. If you are working on a distributed
+use-cases, please contact the developers, e.g. via the [discussion
 board](https://github.com/mapme-initiative/mapme.biodiversity/discussions)
 or mail.
 
