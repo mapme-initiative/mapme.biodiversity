@@ -9,6 +9,7 @@ init_portfolio(
   years,
   outdir = getwd(),
   tmpdir = tempdir(),
+  cores = NULL,
   add_resources = TRUE,
   aria_bin = NULL,
   verbose = TRUE
@@ -32,6 +33,8 @@ to create it. Cannot be equal to the output directory. Note, that for
 raster calculations we will set the temporal directory for the \code{terra}
 package here. Please make sure that enough disk space is available because
 some intermediate calculations can become quite large.}
+
+\item{cores}{Deprecated. Use future-style parallelzation instead.}
 
 \item{add_resources}{Logical if existing resources in 'outdir' should be
 added to the portfolio. Defaults to TRUE. Setting it to FALSE can be of use
