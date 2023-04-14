@@ -58,7 +58,6 @@ calc_indicators <- function(x, indicators, ...) {
   available_resources <- atts$resources
   tmpdir <- file.path(atts$tmpdir, indicator)
   dir.create(tmpdir, showWarnings = FALSE)
-  cores <- atts$cores
   verbose <- atts$verbose
 
   # retrieve the selected indicator
@@ -77,7 +76,6 @@ calc_indicators <- function(x, indicators, ...) {
   params$fun <- fun
   params$available_resources <- available_resources
   params$required_resources <- required_resources
-  params$cores <- cores
   params$processing_mode <- processing_mode
   # set terra temporal directory to rundir
   terra_org <- tempdir()
@@ -85,10 +83,12 @@ calc_indicators <- function(x, indicators, ...) {
   terra::terraOptions(tempdir = file.path(tmpdir, "terra"))
 
   if (processing_mode == "asset") {
+    p <- progressr::progressor(steps = nrow(x))
     # apply function with parameters and add hidden id column
-    results <- pbapply::pblapply(1:nrow(x), function(i) {
+    results <- furrr::future_map(1:nrow(x), function(i) {
+      p()
       .prep_and_compute(x[i, ], params, i)
-    }, cl = cores)
+    }, .options = furrr::furrr_options(seed = TRUE))
   } else {
     results <- .prep_and_compute(x, params, 1)
   }

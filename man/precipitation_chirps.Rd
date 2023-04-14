@@ -51,7 +51,6 @@ if (Sys.getenv("NOT_CRAN") == "true") {
       years = 2010,
       outdir = file.path(temp_loc, "res"),
       tmpdir = tempdir(),
-      cores = 1,
       verbose = FALSE
     ) \%>\%
     get_resources("chirps") \%>\%

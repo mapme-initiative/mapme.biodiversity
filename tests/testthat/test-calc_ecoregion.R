@@ -13,16 +13,13 @@ test_that("ecoregion computation works", {
     out <- st_make_valid(out)
   })
   names(teow) <- basename(source)
-  attributes(shp)$cores <- 1
   result <- .calc_ecoregion(shp, teow)
   expect_equal(
     names(result),
-    c("ecoregions", "area")
-  )
+    c("ecoregions", "area"))
   expect_equal(
     result$area,
     18352.24,
-    tolerance = 1e-4
-  )
+    tolerance = 1e-4)
 })
 

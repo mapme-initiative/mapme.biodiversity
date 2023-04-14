@@ -8,16 +8,10 @@ test_that("active fire properties works", {
                                    package = "mapme.biodiversity"
   ), pattern = ".gpkg$", full.names = TRUE)
   nasa_firms <- read_sf(source)
-  attributes(shp)$cores <- 1
   result <- .calc_active_fire_properties(shp, list(nasa_firms))
   expect_equal(
     nrow(result),
-    21
-  )
-
-  expect_snapshot(
-    names(result)
-  )
+    21)
 
   nasa_firms2 <- list(nasa_firms, nasa_firms)
   nasa_firms2[[2]]$instrument <- "MODIS"

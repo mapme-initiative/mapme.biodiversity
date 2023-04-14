@@ -9,7 +9,6 @@ test_that("drought indicator works", {
   ), pattern = ".tif$", full.names = TRUE)
   nasa_grace <- rast(nasa_grace)
   attributes(shp)$years <- 2003:2022
-  attributes(shp)$cores <- 1
   expect_error(
     .calc_drought_indicator(shp, nasa_grace, engine = "not-available"),
     "Engine 'not-available' is not an available engine. Please choose one of:"

@@ -10,7 +10,6 @@ test_that("worldclim precipitation works", {
   ), pattern = ".tif$", full.names = TRUE)
   worldclim_precipitation <- rast(worldclim_precipitation)
   attributes(shp)$years <- 2000:2022
-  attributes(shp)$cores <- 1
   expect_error(
     .calc_precipitation_wc(shp, worldclim_precipitation, engine = "not-available"),
     "Engine 'not-available' is not an available engine. Please choose one of:"

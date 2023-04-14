@@ -1,5 +1,16 @@
 # mapme.biodiversity (development version)
 
+## Breaking changes
+
+- Changed the parallel backend to the [future](https://cran.r-project.org/package=future) 
+  package. Parallel processing is now implemented by
+  [furrr::future_map()](https://furrr.futureverse.org/reference/future_map.html)
+  on the asset level within the calc_indicators() function. User code is now
+  required to set up a [plan()](https://future.futureverse.org/reference/plan.html)
+  to enable parallel processing. The function call needs to be wrapped on the user
+  side with [progressr::with_progress()](https://progressr.futureverse.org/reference/with_progress.html)
+  to show a progress bar.
+
 ## Internal
 
 - extensive re-writting of testing infrastructure for indicator functions omitting

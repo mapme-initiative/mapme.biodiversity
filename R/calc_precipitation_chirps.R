@@ -44,7 +44,6 @@
 #'       years = 2010,
 #'       outdir = file.path(temp_loc, "res"),
 #'       tmpdir = tempdir(),
-#'       cores = 1,
 #'       verbose = FALSE
 #'     ) %>%
 #'     get_resources("chirps") %>%
@@ -88,7 +87,6 @@ NULL
     return(NA)
   }
   years <- attributes(shp)$years
-  cores <- attributes(shp)$cores
 
   if (!is.null(scales_spi)) {
     if (any(scales_spi < 0) | any(scales_spi > 48)) {
@@ -126,9 +124,7 @@ NULL
   climate_chirps <- lapply(1:12, function(i) {
     app(
       climate_chirps[[layer_months == i]],
-      fun = "mean",
-      cores = cores
-    )
+      fun = "mean")
   })
   climate_chirps <- do.call(c, climate_chirps)
   names(climate_chirps) <- c(1:12)
@@ -145,9 +141,7 @@ NULL
         scale = scale,
         fun = function(x, scale) {
           SPEI::spi(x, scale = scale, na.rm = TRUE, verbose=FALSE)$fitted
-        },
-        cores = cores
-      )
+        })
       names(spi_chirps) <- names(target_spi)
       spi_chirps[[names(target_chirps)]]
     })
@@ -178,7 +172,7 @@ NULL
   }
 
   if (processing_mode == "portfolio") {
-    results <- pbapply::pblapply(1:nrow(shp), function(i) {
+    results <- purrr::map(1:nrow(shp), function(i) {
       out <- extractor(
         shp = shp[i, ],
         absolute = target_chirps,
@@ -186,7 +180,7 @@ NULL
         spi = spi_chirps
       )
       out
-    }, cl = cores)
+    })
   }
   results
 }

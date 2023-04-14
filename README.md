@@ -66,7 +66,7 @@ library(mapme.biodiversity)
 library(sf)
 ```
 
-    ## Linking to GEOS 3.11.1, GDAL 3.6.1, PROJ 9.1.1; sf_use_s2() is TRUE
+    ## Linking to GEOS 3.11.1, GDAL 3.6.2, PROJ 9.1.1; sf_use_s2() is TRUE
 
 ``` r
 resources <- names(available_resources())
@@ -133,7 +133,6 @@ object.
       outdir = system.file("res", package = "mapme.biodiversity"),
       tmpdir = system.file("tmp", package = "mapme.biodiversity"),
       add_resources = FALSE,
-      cores = 1,
       verbose = FALSE
     ) %>%
     get_resources(
@@ -154,7 +153,42 @@ object.
     ##    <dbl> <chr>           <chr>         <chr>   <int> <int>     <dbl>     <dbl>
     ## 1 478140 Sierra de Neiba National Park DOM         1  2016      2832     2357.
     ## 2 478140 Sierra de Neiba National Park DOM         1  2017      3468     2345.
-    ## # … with 1 more variable: geom <POLYGON [°]>
+    ## # ℹ 1 more variable: geom <POLYGON [°]>
+
+## A note on parallelization
+
+{mapme.biodiversity} follows the parallelization paradigm of the
+{[future](https://cran.r-project.org/package=future)} package. That
+means that you as a user are in the control if and how you would like to
+set up parallel processing. Currently, {mapme.biodiversity} supports
+parallel processing on the asset level of the `calc_indicators()`
+function only. We also currently assume that parallel processing is done
+on the cores of a single machine. In future developments, we would like
+to support distributed processing. If you are working on a distributed
+use-cases, please contact the developers, e.g. via the [discussion
+board](https://github.com/mapme-initiative/mapme.biodiversity/discussions)
+or mail.
+
+To process 6 assets in parallel and report a progress bar you will have
+to set up the following in your code:
+
+``` r
+library(future)
+library(progressr)
+
+plan(multisession, workers = 6) # set up parallel plan
+
+with_progress({
+  portfolio <- calc_indicators(
+    portfolio,
+    "treeover_area_and_emissions",
+    min_size = 1,
+    min_cover = 30
+  )
+})
+
+plan(sequential) # close child processes 
+```
 
 Head over to the [online
 documentation](https://mapme-initiative.github.io/mapme.biodiversity/index.html)

@@ -212,7 +212,6 @@ attributes with regard to a resource download are set, when users initialize the
   attr(x, "nitems") <- nrow(x)
   attr(x, "bbox") <- st_bbox(x)
   attr(x, "years") <- years
-  attr(x, "cores") <- cores
   attr(x, "aria_bin") <- aria_bin
 ```
 
@@ -537,27 +536,6 @@ indicator. We also ask you to add dependencies to the `Suggests` field of the
 `DESCRIPTION` file and that you check whether or not this dependency is installed
 at the beginning of your indicator routine.
 
-## Differences between processing in asset or portfolio mode
-
-An important difference of how to handle the processing between the `asset` and
-`portfolio` mode is that in the `asset` mode, the package handles the parallelization.
-However, in the case that processing is conducted in the `portfolio` mode, we ask
-you as a developer to iterate over all assets in the portfolio using the `{pbapply}`
-package. Specifically, you can retrieve the number of cores available via
-the portfolios attributes:
-
-```r
-cores <- attributes(shp)$cores
-results <- pbapply::pblapply(1:nrow(shp), function(i) {
-    # processing logic goes here
-    obj$.id <- i
-    obj
-    }, cl = cores)
-
-```
-
-It is important that you add a variable `.id` to the output tibble indicating
-the row number of the asset.
 
 ## Defining the output of indicator functions
 

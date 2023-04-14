@@ -40,7 +40,6 @@
 #'            outdir = file.path(temp_loc, "res"),
 #'            tmpdir = tempdir(),
 #'            add_resources = FALSE,
-#'            cores = 1,
 #'            verbose = FALSE
 #'          ) %>%
 #'          get_resources("nasa_grace") %>%
@@ -107,8 +106,7 @@ NULL
   }
 
   if (processing_mode == "portfolio") {
-    cores <- attributes(shp)$cores
-    results <- lapply(1:nrow(shp), function(i) {
+    results <- purrr::map(1:nrow(shp), function(i) {
       out <- extractor(
         nasa_grace = nasa_grace,
         shp = shp[i, ],

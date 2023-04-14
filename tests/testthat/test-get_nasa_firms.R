@@ -19,7 +19,6 @@ test_that(".get_nasa_firms works", {
                               years = 2010,
                               outdir = outdir,
                               tmpdir = tmpdir,
-                              cores = 1,
                               add_resources = FALSE,
                               verbose = FALSE
   )

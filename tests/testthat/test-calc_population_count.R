@@ -9,7 +9,6 @@ test_that(".calc_population_count works", {
   ), pattern = ".tif$", full.names = TRUE)
   worldpop <- rast(worldpop)
   attributes(shp)$years <- 2000:2022
-  attributes(shp)$cores <- 1
   expect_error(
     .calc_population_count(shp, worldpop, engine = "not-available"),
     "Engine 'not-available' is not an available engine. Please choose one of:"

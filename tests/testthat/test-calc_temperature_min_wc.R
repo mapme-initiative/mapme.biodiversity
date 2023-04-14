@@ -10,7 +10,6 @@ test_that("worldclim minimum temperature works", {
   ), pattern = ".tif$", full.names = TRUE)
   worldclim_min_temperature <- rast(worldclim_min_temperature)
   attributes(shp)$years <- 2000:2022
-  attributes(shp)$cores <- 1
   expect_error(
     .calc_temperature_min_wc(shp, worldclim_min_temperature, engine = "not-available"),
     "Engine 'not-available' is not an available engine. Please choose one of:"

@@ -15,7 +15,6 @@ test_that("get_resources works", {
 
   portfolio <- init_portfolio(aoi,
     years = 2000:2020,
-    cores = 1,
     outdir = outdir,
     tmpdir = tmpdir,
     add_resources = FALSE,
