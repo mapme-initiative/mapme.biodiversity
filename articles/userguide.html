@@ -481,6 +481,14 @@ will have to set up the following in your code:</p>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">sequential</span><span class="op">)</span> <span class="co"># close child processes </span></span></code></pre></div>
+<p>Note, that the above code uses <code><a href="https://future.futureverse.org/reference/multisession.html" class="external-link">future::multisession()</a></code> as
+the parallel backend. This backend will resolve the calculation in
+multiple background R sessions. You should use that backend if you are
+operating on Windows, using R Studio or otherwise are not sure about
+which backend to use. In case you are operating on a system that allows
+process forking and are <em>not</em> using R Studio, consider using
+<code><a href="https://future.futureverse.org/reference/multicore.html" class="external-link">future::multicore()</a></code> for more efficient parallel
+processing.</p>
 </div>
 <div class="section level2">
 <h2 id="exporting-an-portfolio-object">Exporting an portfolio object<a class="anchor" aria-label="anchor" href="#exporting-an-portfolio-object"></a>
@@ -506,9 +514,9 @@ it.</p>
 <span>  dsn <span class="op">=</span> <span class="va">tmp_output</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Writing layer `metadata' to data source </span></span>
-<span><span class="co">#&gt;   `/tmp/RtmpAy56VP/file25b346525406.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt;   `/tmp/Rtmppu6yD0/file21ac357438a7.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">#&gt; Writing 20 features with 2 fields and geometry type Polygon.</span></span>
-<span><span class="co">#&gt; Updating layer `precipitation_chirps' to data source `/tmp/RtmpAy56VP/file25b346525406.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt; Updating layer `precipitation_chirps' to data source `/tmp/Rtmppu6yD0/file21ac357438a7.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">#&gt; Writing 240 features with 5 fields without geometries.</span></span>
 <span><span class="op">(</span><span class="va">portfolio_from_disk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_portfolio.html">read_portfolio</a></span><span class="op">(</span><span class="va">tmp_output</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Simple feature collection with 20 features and 3 fields</span></span>
