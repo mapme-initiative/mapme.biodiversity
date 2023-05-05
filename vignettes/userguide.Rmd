@@ -355,6 +355,13 @@ with_progress({
 plan(sequential) # close child processes 
 ```
 
+Note, that the above code uses `future::multisession()` as the parallel backend.
+This backend will resolve the calculation in multiple background R sessions.
+You should use that backend if you are operating on Windows, using R Studio or
+otherwise are not sure about which backend to use. In case you are operating on 
+a system that allows process forking and are *not* using R Studio, consider
+using `future::multicore()` for more efficient parallel processing.
+
 # Exporting an portfolio object
 
 You can use the <code>write_portfolio()</code> function to save a processed 
