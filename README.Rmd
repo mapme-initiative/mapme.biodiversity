@@ -134,6 +134,13 @@ with_progress({
 plan(sequential) # close child processes 
 ```
 
+Note, that the above code uses `future::multisession()` as the parallel backend.
+This backend will resolve the calculation in multiple background R sessions.
+You should use that backend if you are operating on Windows, using R Studio or
+otherwise are not sure about which backend to use. In case you are operating on 
+a system that allows process forking and are *not* using R Studio, consider
+using `future::multicore()` for more efficient parallel processing.
+
 Head over to the [online
 documentation](https://mapme-initiative.github.io/mapme.biodiversity/index.html)
 find more detailed information about the package.
