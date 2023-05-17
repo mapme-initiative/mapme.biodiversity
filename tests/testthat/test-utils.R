@@ -75,29 +75,6 @@ test_that(".check_available_years works", {
   expect_equal(out, 2011)
 })
 
-test_that(".check_engine works", {
-  expect_error(
-    .check_engine(c("zonal", "extract"), c("not_implemented", "not_implemented2")),
-    "Please specify only one engine of:"
-  )
-  expect_error(
-    .check_engine(c("zonal", "extract"), "not_implemented"),
-    "Engine 'not_implemented' is not an available engine. Please choose one of:"
-  )
-})
-
-test_that(".check_stats works", {
-  expect_error(
-    .check_stats(c("mean", "min", "max"), c("mean", "min", "other")),
-    "Statistic 'other' is not supported. Please choose one of: mean, min, max"
-  )
-  expect_error(
-    .check_stats(c("mean", "min"), c("mean", "other", "other2")),
-    "Statistics 'other', 'other2' are not supported. Please choose one of: mean, min"
-  )
-})
-
-
 test_that(".download_or_skip works", {
   skip_on_cran()
   urls <- rep("https://github.com/mapme-initiative/mapme.biodiversity/blob/main/R/utils.R", 3)

@@ -64,8 +64,6 @@ NULL
 #'    "sd" or "var".
 #' @param engine The preferred processing functions from either one of "zonal",
 #'   "extract" or "exactextract" as character.
-#' @param rundir A directory where intermediate files are written to.
-#' @param verbose A directory where intermediate files are written to.
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
@@ -75,16 +73,12 @@ NULL
                                      worldclim_min_temperature,
                                      engine = "extract",
                                      stats_worldclim = "mean",
-                                     rundir = tempdir(),
-                                     verbose = TRUE,
                                      ...) {
   results <- .calc_worldclim(
     shp = shp,
     worldclim = worldclim_min_temperature,
     engine = engine,
-    stats_worldclim = stats_worldclim,
-    rundir = rundir,
-    verbose = verbose
+    stats_worldclim = stats_worldclim
   )
   results
 }
@@ -98,31 +92,17 @@ NULL
 #'    "sd" or "var".
 #' @param engine The preferred processing functions from either one of "zonal",
 #'   "extract" or "exactextract" as character.
-#' @param rundir A directory where intermediate files are written to.
-#' @param verbose A directory where intermediate files are written to.
-#' @param ... additional arguments
 #'
 #' @return A data-frame
 #' @keywords internal
 #' @noRd
-
 .calc_worldclim <- function(shp,
                             worldclim,
                             engine = "extract",
-                            stats_worldclim = "mean",
-                            rundir = tempdir(),
-                            verbose = TRUE,
-                            ...) {
+                            stats_worldclim = "mean"){
   if (is.null(worldclim)) {
     return(NA)
   }
-  # check if input engine is correctly specified
-  available_engines <- c("zonal", "extract", "exactextract")
-  .check_engine(available_engines, engine)
-  # check if only supoorted stats have been specified
-  available_stats <- c("mean", "median", "sd", "min", "max", "sum", "var")
-  .check_stats(available_stats, stats_worldclim)
-
   # set max value of 65535 to NA
   worldclim <- clamp(
     worldclim,
@@ -130,124 +110,19 @@ NULL
     upper = 65534,
     values = FALSE)
 
-  extractor <- switch(
-    engine,
-    "extract" = .comp_worldclim_extract,
-    "exactextract" = .comp_worldclim_exact_extract,
-    "zonal" =  .comp_worldclim_zonal
-  )
+  layer <- strsplit(names(worldclim), "_")[[1]][3]
 
-  extractor(
+  results <- .select_engine(
     shp = shp,
-    worldclim = worldclim,
-    stats = stats_worldclim
+    raster = worldclim,
+    stats = stats_worldclim,
+    engine = engine,
+    name = layer,
+    mode = "asset"
   )
-}
 
-
-#' Helper function to compute statistics using routines from terra zonal
-#'
-#' @param worldclim worldclim raster from which to compute statistics
-#'
-#' @return A data-frame
-#' @keywords internal
-#' @noRd
-
-.comp_worldclim_zonal <- function(worldclim = NULL,
-                                  shp = NULL,
-                                  stats = "mean") {
-  shp_v <- vect(shp)
-  layer <- strsplit(names(worldclim), "_")[[1]][3]
-  results <- lapply(1:length(stats), function(j) {
-    out <- terra::zonal(
-      worldclim,
-      shp_v,
-      fun = stats[j],
-      na.rm = T
-    )
-    out <- tibble(worldclim = unlist(out))
-    names(out) <- paste0(layer, "_", stats[j])
-    out
-  })
-  results <- tibble(do.call(cbind, results))
-  layer_names <- names(worldclim)
-  date_name <- unlist(lapply(layer_names, function(x) strsplit(x, "_")[[1]][4]))
-  date_name <- paste0(tools::file_path_sans_ext(date_name), "-01")
-  results$date <- as.Date(date_name, "%Y-%m-%d")
-  results
-}
-
-#' Helper function to compute statistics using routines from terra extract
-#'
-#' @param worldclim worldclim raster from which to compute statistics
-#'
-#' @return A data-frame
-#' @keywords internal
-#' @noRd
-
-.comp_worldclim_extract <- function(worldclim = NULL,
-                                    shp = NULL,
-                                    stats = "mean") {
-  shp_v <- vect(shp)
-  layer <- strsplit(names(worldclim), "_")[[1]][3]
-  results <- lapply(1:length(stats), function(j) {
-    out <- terra::extract(
-      worldclim,
-      shp_v,
-      fun = stats[j],
-      na.rm = T
-    )
-    out <- tibble(worldclim = unlist(out[-1]))
-    names(out) <- paste0(layer, "_", stats[j])
-    out
-  })
-  results <- tibble(do.call(cbind, results))
-  layer_names <- names(worldclim)
-  date_name <- unlist(lapply(layer_names, function(x) strsplit(x, "_")[[1]][4]))
-  date_name <- paste0(tools::file_path_sans_ext(date_name), "-01")
-  results$date <- as.Date(date_name, "%Y-%m-%d")
-  results
-}
-
-#' Helper function to compute statistics using routines from exactextractr
-#'
-#' @param worldclim worldclim raster from which to compute statistics
-#'
-#' @return A data-frame
-#' @keywords internal
-#' @noRd
-.comp_worldclim_exact_extract <- function(worldclim = NULL,
-                                          shp = NULL,
-                                          stats = "mean"){
-  if (!requireNamespace("exactextractr", quietly = TRUE)) {
-    stop(paste(
-      "Needs package 'exactextractr' to be installed.",
-      "Consider installing with 'install.packages('exactextractr')"
-    ))
-  }
-  layer <- strsplit(names(worldclim), "_")[[1]][3]
-  results <- lapply(1:length(stats), function(j) {
-    if (stats[j] %in% c("sd", "var")) {
-      out <- exactextractr::exact_extract(
-        worldclim,
-        shp,
-        fun = ifelse(stats[j] == "sd", "stdev", "variance")
-      )
-    } else {
-      out <- exactextractr::exact_extract(
-        worldclim,
-        shp,
-        fun = stats[j]
-      )
-    }
-    out <- tibble(worldclim = unlist(out))
-    names(out) <- paste0(layer, "_", stats[j])
-    out
-  })
-  results <- tibble(do.call(cbind, results))
-  layer_names <- names(worldclim)
-  date_name <- unlist(lapply(layer_names, function(x) strsplit(x, "_")[[1]][4]))
-  date_name <- paste0(tools::file_path_sans_ext(date_name), "-01")
-  results$date <- as.Date(date_name, "%Y-%m-%d")
+  dates <- unlist(lapply(names(worldclim), function(x) strsplit(x, "_")[[1]][4]))
+  dates <- paste0(tools::file_path_sans_ext(dates), "-01")
+  results$date <- as.Date(dates, "%Y-%m-%d")
   results
 }

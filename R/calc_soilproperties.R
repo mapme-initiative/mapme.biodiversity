@@ -50,7 +50,6 @@
 #'   calc_indicators("soilproperties", stats_soil = c("mean", "median"), engine = "extract") %>%
 #'   tidyr::unnest(soilproperties)))
 NULL
-
 .calc_soilproperties <- function(shp,
                                  soilgrids,
                                  engine = "zonal",
@@ -62,64 +61,14 @@ NULL
   if (is.null(soilgrids)) {
     return(NA)
   }
-  # check if input engine is correctly specified
-  available_engines <- c("zonal", "extract", "exactextract")
-  .check_engine(available_engines, engine)
-  # check if only supoorted stats have been specified
-  available_stats <- c("mean", "median", "sd", "min", "max", "sum", "var")
-  .check_stats(available_stats, stats_soil)
-
-
-  extractor <- switch(
-    engine,
-    "extract" = .soil_extract,
-    "exactextract" = .soil_exactextractr,
-    "zonal" = .soil_zonal
-  )
-
-  extractor(
+  results <- .select_engine(
     shp = shp,
-    soilgrids = soilgrids,
-    stats = stats_soil
+    raster = soilgrids,
+    stats = stats_soil,
+    engine = engine,
+    mode = "asset"
   )
-}
 
-.soil_zonal <- function(shp = NULL,
-                        soilgrids,
-                        stats = "mean") {
-  shp_v <- vect(shp)
-  parameters <- gsub(".tif", "", names(soilgrids))
-  parameters <- lapply(parameters, function(param) {
-    splitted <- strsplit(param, "_")[[1]]
-    names(splitted) <- c("layer", "depth", "stat")
-    splitted
-  })
-  results <- lapply(stats, function(stat) {
-    out <- terra::zonal(soilgrids,
-                        shp_v,
-                        fun = stat,
-                        na.rm = T
-    )
-    as.numeric(out)
-  })
-
-  names(results) <- stats
-  results <- as.data.frame(results)
-  results$layer <- sapply(parameters, function(para) para["layer"])
-  results$depth <- sapply(parameters, function(para) para["depth"])
-  results$stat <- sapply(parameters, function(para) para["stat"])
-  conv_df <- lapply(.sg_layers, function(y) as.data.frame(y))
-  conv_df <- do.call(rbind, conv_df)["conversion_factor"]
-  conv_df$layer <- row.names(conv_df)
-  results <- merge(results, conv_df)
-  for (stat in stats) results[[stat]] <- results[[stat]] / results[["conversion_factor"]]
-  as_tibble(results[, c("layer", "depth", "stat", stats)])
-}
-
-.soil_extract <- function(shp = NULL,
-                          soilgrids = NULL,
-                          stats = "mean") {
-  shp_v <- vect(shp)
   parameters <- gsub(".tif", "", names(soilgrids))
   parameters <- lapply(parameters, function(param) {
     splitted <- strsplit(param, "_")[[1]]
@@ -127,73 +76,17 @@ NULL
     splitted
   })
 
-  soilgrids_mask <- terra::mask(soilgrids,
-                                shp_v
-  )
-  results <- lapply(stats, function(stat) {
-    out <- terra::extract(soilgrids_mask,
-                          shp_v,
-                          fun = stat,
-                          na.rm = T
-    )
-    as.numeric(out[-1])
-  })
-
-  names(results) <- stats
-  results <- as.data.frame(results)
   results$layer <- sapply(parameters, function(para) para["layer"])
   results$depth <- sapply(parameters, function(para) para["depth"])
   results$stat <- sapply(parameters, function(para) para["stat"])
+
+  # conversion to conventional units
   conv_df <- lapply(.sg_layers, function(y) as.data.frame(y))
   conv_df <- do.call(rbind, conv_df)["conversion_factor"]
   conv_df$layer <- row.names(conv_df)
-  results <- merge(results, conv_df)
-  for (stat in stats) results[[stat]] <- results[[stat]] / results[["conversion_factor"]]
-  as_tibble(results[, c("layer", "depth", "stat", stats)])
-}
-
-.soil_exactextractr <- function(soilgrids = NULL,
-                                shp = NULL,
-                                stats = "mean") {
-  if(!requireNamespace("exactextractr", quietly = TRUE)){
-    stop(paste(
-      "Needs package 'exactextractr' to be installed.",
-      "Consider installing with 'install.packages('exactextractr')"
-    ))
-  }
-  parameters <- gsub(".tif", "", names(soilgrids))
-  parameters <- lapply(parameters, function(param) {
-    splitted <- strsplit(param, "_")[[1]]
-    names(splitted) <- c("layer", "depth", "stat")
-    splitted
-  })
-
-  results <- lapply(stats, function(stat) {
-    if (stat %in% c("sd", "var")) {
-      out <- exactextractr::exact_extract(
-        soilgrids,
-        shp,
-        fun = ifelse(stat == "sd", "stdev", "variance")
-      )
-    } else {
-      out <- exactextractr::exact_extract(
-        soilgrids,
-        shp,
-        fun = stat
-      )
-    }
-    as.numeric(out)
-  })
-
-  names(results) <- stats
-  results <- as.data.frame(results)
-  results$layer <- sapply(parameters, function(para) para["layer"])
-  results$depth <- sapply(parameters, function(para) para["depth"])
-  results$stat <- sapply(parameters, function(para) para["stat"])
-  conv_df <- lapply(.sg_layers, function(y) as.data.frame(y))
-  conv_df <- do.call(rbind, conv_df)["conversion_factor"]
-  conv_df$layer <- row.names(conv_df)
-  results <- merge(results, conv_df)
-  for (stat in stats) results[[stat]] <- results[[stat]] / results[["conversion_factor"]]
-  as_tibble(results[, c("layer", "depth", "stat", stats)])
+  results <- tibble(merge(results, conv_df))
+  # apply conversion factor
+  for (stat in stats_soil) results[[stat]] <- results[[stat]] / results[["conversion_factor"]]
+  # select cols in right order
+  as_tibble(results[, c("layer", "depth", "stat", stats_soil)])
 }
