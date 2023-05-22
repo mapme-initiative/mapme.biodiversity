@@ -98,9 +98,7 @@ available_engines <- c("zonal", "extract", "exactextract")
 
   results <- purrr::map_dfc(stats, function(stat){
     org_stat <- stat
-    if (stat %in% c("sd", "var"))
-      stat <- ifelse(stat == "sd", "stdev", "variance")
-
+    stat <- if(stat %in% c("sd", "var")) ifelse(stat == "sd", "stdev", "variance")
     out <- exactextractr::exact_extract(
       raster,
       shp,
