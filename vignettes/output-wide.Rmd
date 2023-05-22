@@ -2,7 +2,7 @@
 title: "Transform indicator output to wide-format"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Wide-format}
+  %\VignetteIndexEntry{Transform indicator output to wide-format}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -114,12 +114,12 @@ print(port_wide_2)
 ```
 Instead of 9 rows, we get a tibble with 108 rows (9 assets * 12), with the metadata
 for each asset as well as the geometry column being repeated. This is not desirable,
-especially for portfolios with large numbers of assets where the repetetion of the
+especially for portfolios with large numbers of assets where the repetition of the
 geometry data can cause very large objects.
 Now, let's investigate how we still are able to get a wide output.
 A valid approach is to re-shape the indicators per asset to a wide format before
-the unnesting. For this, let's write a function which takes the precipitation
-indicator of a single asset as input and transforms it to a wide-format.
+unnesting the indicator column. For this, let's write a function which takes the 
+precipitation indicator of a single asset as input and transforms it to a wide-format.
 
 ```{r fun-prec-to-wide}
 prec2wide <- function(data){
