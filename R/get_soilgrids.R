@@ -106,14 +106,15 @@ NULL
 
   if (any(!depths %in% .sg_depths)) {
     na_depths <- depths[which(!depths %in% .sg_depths)]
-    stop(sprintf(
-      paste("The selected depth range(s) '%s' is/are not available. ",
-        "Please choose one of: %s.",
-        sep = ""
+    stop(
+      sprintf(
+        paste("The selected depth range(s) '%s' is/are not available. ",
+          "Please choose one of: %s.",
+          sep = ""
+        ),
+        na_depths, paste(.sg_depths, collapse = ", ")
       ),
-      na_depths, paste(.sg_depths, collapse = ", ")
-    ),
-    call. = FALSE
+      call. = FALSE
     )
   }
 

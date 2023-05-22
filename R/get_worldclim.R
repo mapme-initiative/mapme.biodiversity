@@ -132,14 +132,15 @@ NULL
   nontarget_years <- available_years[!available_years %in% target_years]
 
   for (i in seq_along(nontarget_years)) {
-    unlink(file.path(
-      rundir,
-      paste0(
-        "wc2.1_2.5m_", layer, "_",
-        nontarget_years[i], "*.tif"
-      )
-    ),
-    recursive = T, force = T
+    unlink(
+      file.path(
+        rundir,
+        paste0(
+          "wc2.1_2.5m_", layer, "_",
+          nontarget_years[i], "*.tif"
+        )
+      ),
+      recursive = T, force = T
     )
   }
 

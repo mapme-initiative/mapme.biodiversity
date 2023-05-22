@@ -41,6 +41,6 @@ test_that("get_resources works", {
   )
 
   expect_warning(
-    get_resources(portfolio, "treecover2000", vers_treecover="GFC-2020-v1.8")
+    get_resources(portfolio, "treecover2000", vers_treecover = "GFC-2020-v1.8")
   )
 })

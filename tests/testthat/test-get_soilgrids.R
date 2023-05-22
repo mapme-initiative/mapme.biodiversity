@@ -1,7 +1,7 @@
 test_that("get_soilgrids works", {
   aoi <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
-                package = "mapme.biodiversity"
+      package = "mapme.biodiversity"
     )
   )
   aoi <- suppressWarnings(st_cast(aoi, to = "POLYGON")[1, ])
@@ -14,45 +14,46 @@ test_that("get_soilgrids works", {
   tmpdir <- tempdir()
 
   portfolio <- init_portfolio(aoi,
-                              years = 2000:2020,
-                              outdir = outdir,
-                              tmpdir = tmpdir,
-                              add_resources = FALSE,
-                              verbose = FALSE
+    years = 2000:2020,
+    outdir = outdir,
+    tmpdir = tmpdir,
+    add_resources = FALSE,
+    verbose = FALSE
   )
   # Add testing attribute in order to skip downloads
   attributes(portfolio)$testing <- TRUE
 
   expect_snapshot(
     .get_soilgrids(portfolio,
-                   resources = "soilgrids",
-                   layers = names(.sg_layers),
-                   depths = .sg_depths,
-                   stats = .sg_stats
+      resources = "soilgrids",
+      layers = names(.sg_layers),
+      depths = .sg_depths,
+      stats = .sg_stats
     )
   )
 
 
   expect_error(
     .get_soilgrids(portfolio,
-                   layers = "not-available",
-                   depths = .sg_depths,
-                   stats = .sg_stats)
-  )
-
-  expect_error(
-    .get_soilgrids(portfolio,
-                  layers = names(.sg_layers),
-                  depths = "not-available",
-                  stats = .sg_stats
+      layers = "not-available",
+      depths = .sg_depths,
+      stats = .sg_stats
     )
   )
 
   expect_error(
     .get_soilgrids(portfolio,
-                  layers = names(.sg_layers),
-                  depths = .sg_depths,
-                  stats = "not-available"
+      layers = names(.sg_layers),
+      depths = "not-available",
+      stats = .sg_stats
+    )
+  )
+
+  expect_error(
+    .get_soilgrids(portfolio,
+      layers = names(.sg_layers),
+      depths = .sg_depths,
+      stats = "not-available"
     )
   )
 
