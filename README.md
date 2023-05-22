@@ -9,7 +9,6 @@ status](https://badges.cranchecks.info/summary/mapme.biodiversity.svg)](https://
 [![CRAN
 version](https://www.r-pkg.org/badges/version/mapme.biodiversity)](https://CRAN.R-project.org/package=mapme.biodiversity)
 [![License](https://img.shields.io/badge/License-GPL%20(%3E=3)-brightgreen.svg?style=flat)](https://choosealicense.com/licenses/gpl-3.0/)
-
 <!-- badges: end -->
 
 # mapme.biodiversity <img src="man/figures/logo.png" align="right" height="110"/>
