@@ -61,6 +61,8 @@ navbar:
          href: articles/terminology.html
        - text: Workflow
          href: articles/workflow.html
+       - text: Wide Output
+         href: articles/output-wide.html
        - text: Contributing
          href: articles/contributing.html
    github:
