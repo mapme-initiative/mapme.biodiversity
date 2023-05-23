@@ -136,9 +136,10 @@ order to fit the SPI. Defaults to 8 years.</p></dd>
 <span class="r-in"><span>    <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="get_resources.html">get_resources</a></span><span class="op">(</span><span class="st">"chirps"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="calc_indicators.html">calc_indicators</a></span><span class="op">(</span><span class="st">"precipitation_chirps"</span>,</span></span>
-<span class="r-in"><span>    engine <span class="op">=</span> <span class="st">"exactextract"</span>,</span></span>
-<span class="r-in"><span>    scales_spi <span class="op">=</span> <span class="fl">3</span>,</span></span>
-<span class="r-in"><span>    spi_prev_years <span class="op">=</span> <span class="fl">8</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>      engine <span class="op">=</span> <span class="st">"exactextract"</span>,</span></span>
+<span class="r-in"><span>      scales_spi <span class="op">=</span> <span class="fl">3</span>,</span></span>
+<span class="r-in"><span>      spi_prev_years <span class="op">=</span> <span class="fl">8</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>    <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">precipitation_chirps</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 12 features and 9 fields</span>

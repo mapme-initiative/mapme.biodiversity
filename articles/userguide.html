@@ -349,10 +349,10 @@ issue an error in case a required resource has not been made available
 via <code><a href="../reference/get_resources.html">get_resources()</a></code> beforehand.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sample_portfolio</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_indicators.html">calc_indicators</a></span><span class="op">(</span><span class="va">sample_portfolio</span>,</span>
-<span>                                    indicators <span class="op">=</span> <span class="st">"precipitation_chirps"</span>,</span>
-<span>                                    scales_spi <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>                                    spi_prev_years <span class="op">=</span> <span class="fl">8</span>,</span>
-<span>                                    engine <span class="op">=</span> <span class="st">"extract"</span></span>
+<span>  indicators <span class="op">=</span> <span class="st">"precipitation_chirps"</span>,</span>
+<span>  scales_spi <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  spi_prev_years <span class="op">=</span> <span class="fl">8</span>,</span>
+<span>  engine <span class="op">=</span> <span class="st">"extract"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>The function call will inform us that we have not specified the two
 required arguments but that the default values have been inserted. If
@@ -480,7 +480,7 @@ will have to set up the following in your code:</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">sequential</span><span class="op">)</span> <span class="co"># close child processes </span></span></code></pre></div>
+<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">sequential</span><span class="op">)</span> <span class="co"># close child processes</span></span></code></pre></div>
 <p>Note, that the above code uses <code><a href="https://future.futureverse.org/reference/multisession.html" class="external-link">future::multisession()</a></code> as
 the parallel backend. This backend will resolve the calculation in
 multiple background R sessions. You should use that backend if you are
@@ -514,9 +514,9 @@ it.</p>
 <span>  dsn <span class="op">=</span> <span class="va">tmp_output</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Writing layer `metadata' to data source </span></span>
-<span><span class="co">#&gt;   `/tmp/Rtmp5MTGVf/file22285757d4bf.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt;   `/tmp/RtmpVvCb41/file23694a9e99c8.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">#&gt; Writing 20 features with 2 fields and geometry type Polygon.</span></span>
-<span><span class="co">#&gt; Updating layer `precipitation_chirps' to data source `/tmp/Rtmp5MTGVf/file22285757d4bf.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt; Updating layer `precipitation_chirps' to data source `/tmp/RtmpVvCb41/file23694a9e99c8.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">#&gt; Writing 240 features with 5 fields without geometries.</span></span>
 <span><span class="op">(</span><span class="va">portfolio_from_disk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_portfolio.html">read_portfolio</a></span><span class="op">(</span><span class="va">tmp_output</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Simple feature collection with 20 features and 3 fields</span></span>
