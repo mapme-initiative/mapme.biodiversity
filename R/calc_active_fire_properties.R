@@ -62,16 +62,17 @@ NULL
                                          verbose = TRUE,
                                          todisk = FALSE,
                                          ...) {
-
   # change quality flag to charachter to allow binding MODIS and VIIRS
-  nasa_firms <- lapply(nasa_firms, function(x){
-    x$confidence = as.character(x$confidence)
+  nasa_firms <- lapply(nasa_firms, function(x) {
+    x$confidence <- as.character(x$confidence)
     x
   })
   # row bind the frames
-  nasa_firms = dplyr::bind_rows(nasa_firms)
+  nasa_firms <- dplyr::bind_rows(nasa_firms)
   intersected <- suppressWarnings(st_intersection(nasa_firms, st_geometry(shp)))
-  if(nrow(intersected) == 0) return(NA)
+  if (nrow(intersected) == 0) {
+    return(NA)
+  }
   coordinates <- st_coordinates(intersected)
   intersected <- dplyr::as_tibble(intersected)
   intersected <- dplyr::select(intersected, -geom)

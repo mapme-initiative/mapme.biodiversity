@@ -1,7 +1,7 @@
 test_that("calc_indicator works", {
   aoi <- read_sf(
     system.file("extdata", "gfw_sample.gpkg",
-                package = "mapme.biodiversity"
+      package = "mapme.biodiversity"
     )
   )
 
@@ -18,45 +18,24 @@ test_that("calc_indicator works", {
     years = 2000:2005,
     outdir = outdir,
     tmpdir = tmpdir,
-    verbose = FALSE)
+    verbose = FALSE
+  )
 
   portfolio <- get_resources(
     portfolio,
     resources = c("gfw_treecover", "gfw_lossyear"),
     vers_treecover = "GFC-2020-v1.8",
-    vers_lossyear = "GFC-2020-v1.8")
+    vers_lossyear = "GFC-2020-v1.8"
+  )
 
   expect_message(
     calc_indicators(
       portfolio,
       indicators = "treecover_area",
-      min_cover = 10),
-    "was not specified. Setting to default value")
-
-  stat <- calc_indicators(
-    portfolio,
-    indicators = "treecover_area",
-    min_size = 5,
-    min_cover = 30)$treecover_area[[1]]
-
-  expect_equal(
-    names(stat),
-    c("years", "treecover"))
-  expect_equal(
-    stat$years,
-    2000:2005)
-  expect_equal(
-    stat$treecover,
-    c(2005.175, 2004.664, 2002.985, 1968.824, 1959.262, 1955.029),
-    tolerance = 1e-3)
-
-  portfolio <- init_portfolio(
-    aoi,
-    years = 2000:2005,
-    outdir = outdir,
-    tmpdir = tmpdir,
-    add_resources = TRUE,
-    verbose = FALSE)
+      min_cover = 10
+    ),
+    "was not specified. Setting to default value"
+  )
 
   stat <- calc_indicators(
     portfolio,
@@ -67,14 +46,47 @@ test_that("calc_indicator works", {
 
   expect_equal(
     names(stat),
-    c("years", "treecover"))
+    c("years", "treecover")
+  )
   expect_equal(
     stat$years,
-    2000:2005)
+    2000:2005
+  )
   expect_equal(
     stat$treecover,
     c(2005.175, 2004.664, 2002.985, 1968.824, 1959.262, 1955.029),
-    tolerance = 1e-3)
+    tolerance = 1e-3
+  )
+
+  portfolio <- init_portfolio(
+    aoi,
+    years = 2000:2005,
+    outdir = outdir,
+    tmpdir = tmpdir,
+    add_resources = TRUE,
+    verbose = FALSE
+  )
+
+  stat <- calc_indicators(
+    portfolio,
+    indicators = "treecover_area",
+    min_size = 5,
+    min_cover = 30
+  )$treecover_area[[1]]
+
+  expect_equal(
+    names(stat),
+    c("years", "treecover")
+  )
+  expect_equal(
+    stat$years,
+    2000:2005
+  )
+  expect_equal(
+    stat$treecover,
+    c(2005.175, 2004.664, 2002.985, 1968.824, 1959.262, 1955.029),
+    tolerance = 1e-3
+  )
   expect_warning(
     calc_indicators(portfolio, "treecover")
   )
@@ -83,7 +95,7 @@ test_that("calc_indicator works", {
 test_that("Parallelization works", {
   aoi <- read_sf(
     system.file("extdata", "gfw_sample.gpkg",
-                package = "mapme.biodiversity"
+      package = "mapme.biodiversity"
     )
   )
 
@@ -102,13 +114,15 @@ test_that("Parallelization works", {
     years = 2000:2005,
     outdir = outdir,
     tmpdir = tmpdir,
-    verbose = FALSE)
+    verbose = FALSE
+  )
 
   portfolio <- get_resources(
     portfolio,
     resources = c("gfw_treecover", "gfw_lossyear"),
     vers_treecover = "GFC-2020-v1.8",
-    vers_lossyear = "GFC-2020-v1.8")
+    vers_lossyear = "GFC-2020-v1.8"
+  )
 
   library(future)
   plan(multisession, workers = 2)
@@ -116,28 +130,31 @@ test_that("Parallelization works", {
     portfolio,
     indicators = "treecover_area",
     min_size = 5,
-    min_cover = 30)
+    min_cover = 30
+  )
   plan(sequential)
 
   expect_equal(
     names(stat),
-    c("assetid", "treecover_area", "x"))
+    c("assetid", "treecover_area", "x")
+  )
   expect_equal(
     nrow(stat),
-    9)
+    9
+  )
 
-  stat <- lapply(stat$treecover_area, function(x)x$treecover)
+  stat <- lapply(stat$treecover_area, function(x) x$treecover)
   names(stat) <- 1:length(stat)
   stat <- rowSums(as.data.frame(stat))
 
   expect_equal(
     stat,
     c(2603.803, 2600.664, 2596.358, 2557.306, 2540.299, 2532.707),
-    tolerance = 1e-3)
+    tolerance = 1e-3
+  )
 })
 
 test_that(".bind_assets works correctly", {
-
   # Case 1: All assets return equally shaped tibble
   results <- list(
     tibble::tibble(
@@ -151,7 +168,7 @@ test_that(".bind_assets works correctly", {
   )
 
   expected_results <- tibble::tibble(
-    .id = c("1","1","2","2"),
+    .id = c("1", "1", "2", "2"),
     year = c(2010, 2011, 2010, 2011),
     value = c(0.5, 1.0, 0.0, 0.5)
   )
@@ -168,7 +185,7 @@ test_that(".bind_assets works correctly", {
   )
 
   expected_results <- tibble::tibble(
-    .id = c("1","2"),
+    .id = c("1", "2"),
     value = c(NA, NA)
   )
 
@@ -187,7 +204,7 @@ test_that(".bind_assets works correctly", {
   )
 
   expected_results <- tibble::tibble(
-    .id = c("1","1","2"),
+    .id = c("1", "1", "2"),
     year = c(2010, 2011, NA),
     value = c(0.5, 1.0, NA)
   )
@@ -196,5 +213,4 @@ test_that(".bind_assets works correctly", {
     .bind_assets(results),
     expected_results
   )
-
 })

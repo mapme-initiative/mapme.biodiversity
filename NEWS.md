@@ -13,6 +13,8 @@
 
 ## Internal
 
+- applying tidyverse coding style to existing code
+
 - re-factoring of vector-raster zonal statistic engines (#150)
 
 - extensive re-writting of testing infrastructure for indicator functions omitting

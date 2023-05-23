@@ -3,7 +3,7 @@
 test_that(".get_nasa_firms works", {
   aoi <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-                package = "mapme.biodiversity"
+      package = "mapme.biodiversity"
     )
   )
   aoi <- suppressWarnings(st_cast(aoi, to = "POLYGON")[1, ])
@@ -16,11 +16,11 @@ test_that(".get_nasa_firms works", {
   tmpdir <- tempdir()
 
   portfolio <- init_portfolio(aoi,
-                              years = 2010,
-                              outdir = outdir,
-                              tmpdir = tmpdir,
-                              add_resources = FALSE,
-                              verbose = FALSE
+    years = 2010,
+    outdir = outdir,
+    tmpdir = tmpdir,
+    add_resources = FALSE,
+    verbose = FALSE
   )
   # Add testing attribute in order to skip downloads
   attributes(portfolio)$testing <- TRUE
@@ -35,7 +35,7 @@ test_that(".get_nasa_firms works", {
     "The target years do not intersect with the availability of nasa_firms"
   )
 
-  attributes(portfolio)$years = 2012
+  attributes(portfolio)$years <- 2012
   expect_equal(
     .get_nasa_firms(portfolio),
     "VIIRS_2012.zip"

@@ -86,6 +86,6 @@ NULL
     stats = stats_elevation,
     engine = engine,
     name = "elevation",
-    mode = "asset")
+    mode = "asset"
+  )
 }
-

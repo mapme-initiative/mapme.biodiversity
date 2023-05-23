@@ -97,7 +97,8 @@ NULL
     nasa_srtm,
     v = "TRI",
     unit = "degrees",
-    neighbors = 8)
+    neighbors = 8
+  )
 
   .select_engine(
     shp = shp,
@@ -105,5 +106,6 @@ NULL
     stats = stats_tri,
     engine = engine,
     name = "tri",
-    mode = "asset")
+    mode = "asset"
+  )
 }

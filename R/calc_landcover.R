@@ -18,14 +18,15 @@
 #' library(mapme.biodiversity)
 #'
 #' temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-#' if(!file.exists(temp_loc)){
-#' dir.create(temp_loc)
-#' resource_dir <- system.file("res", package = "mapme.biodiversity")
-#' file.copy(resource_dir, temp_loc, recursive = TRUE)
+#' if (!file.exists(temp_loc)) {
+#'   dir.create(temp_loc)
+#'   resource_dir <- system.file("res", package = "mapme.biodiversity")
+#'   file.copy(resource_dir, temp_loc, recursive = TRUE)
 #' }
 #'
 #' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-#'                         package = "mapme.biodiversity") %>%
+#'   package = "mapme.biodiversity"
+#' ) %>%
 #'   read_sf() %>%
 #'   init_portfolio(
 #'     years = 2016:2017,
@@ -76,16 +77,18 @@ NULL
       "closed_forest_deciduous_broad_leaf", "closed_forest_mixed", "closed_forest_unknown", "open_forest_evergreen_needle_leaf",
       "open_forest_evergreen_broad_leaf", "open_forest_deciduous_needle_leaf", "open_forest_deciduous_broad_leaf",
       "open_forest_mixed", "open_forest_unknown", "shrubs", "herbaceous_vegetation", "cropland", "built_up", "bare_vegetation",
-      "snow_and_ice", "permanent_water_bodies", "herbaceous_wetland", "moss_and_lichen", "open_sea"))
+      "snow_and_ice", "permanent_water_bodies", "herbaceous_wetland", "moss_and_lichen", "open_sea"
+    )
+  )
   # merge results
   out <- merge(
     x = patchsizes, y = discrete_classes,
     by.x = colnames(patchsizes)[1],
-    by.y = colnames(discrete_classes)[1])
-  result <- out[ ,-1]
+    by.y = colnames(discrete_classes)[1]
+  )
+  result <- out[, -1]
   layernames <- tools::file_path_sans_ext(names(esalandcover))
   years <- as.numeric(sapply(layernames, function(layer) strsplit(layer, "_")[[1]][4]))
   names(result)[1:length(years)] <- years
   tidyr::pivot_longer(result, cols = 1:length(years), names_to = "year", values_to = "area")
 }
-

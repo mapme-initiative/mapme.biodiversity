@@ -25,19 +25,25 @@ test_that("srtm elevation works", {
 
   expect_equal(
     names(result),
-    c("elevation_mean"))
+    c("elevation_mean")
+  )
   expect_equal(
     names(result_multi_stat),
-    c("elevation_mean", "elevation_median", "elevation_sd"))
+    c("elevation_mean", "elevation_median", "elevation_sd")
+  )
   expect_equal(
     names(result_zonal),
-    names(result_extract))
+    names(result_extract)
+  )
   expect_equal(
     names(result_zonal),
-    names(result_exact))
+    names(result_exact)
+  )
   expect_equal(
     result_zonal$elevation_mean,
-    result_extract$elevation_mean)
+    result_extract$elevation_mean
+  )
   expect_snapshot(
-    result_exact$elevation_mean)
+    result_exact$elevation_mean
+  )
 })

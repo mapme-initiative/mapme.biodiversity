@@ -1,12 +1,12 @@
 test_that("biome computation works", {
   shp <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
-                package = "mapme.biodiversity"
+      package = "mapme.biodiversity"
     )
   )
   shp <- st_make_valid(shp)
   source <- list.files(system.file("res", "teow",
-                                   package = "mapme.biodiversity"
+    package = "mapme.biodiversity"
   ), pattern = ".gpkg$", full.names = TRUE)
   teow <- lapply(1:length(source), function(j) {
     out <- read_sf(source[[j]])
@@ -16,12 +16,15 @@ test_that("biome computation works", {
   result <- .calc_biome(shp, teow)
   expect_equal(
     names(result),
-    c("biomes", "area"))
+    c("biomes", "area")
+  )
   expect_equal(
     result$biomes,
-    "Tropical & Subtropical Coniferous Forests")
+    "Tropical & Subtropical Coniferous Forests"
+  )
   expect_equal(
     result$area,
     18352.24,
-    tolerance = 1e-4)
+    tolerance = 1e-4
+  )
 })

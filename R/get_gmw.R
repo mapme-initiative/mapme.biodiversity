@@ -93,7 +93,7 @@ NULL
   write_sf(shp, gpkg)
   d_files <- list.files(rundir, full.names = T)
   unlink(grep("gmw-extent*", d_files, value = T, invert = T),
-         recursive = T, force = T
+    recursive = T, force = T
   )
 }
 

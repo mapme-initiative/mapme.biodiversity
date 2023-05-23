@@ -93,15 +93,15 @@ NULL
   if (any(!range %in% df_index$range)) {
     index <- which(!range %in% df_index$range)
     basemsg <- paste("The selected %s not available ranges ",
-                     "for traveltime Available ranges are %s.",
-                     sep = ""
+      "for traveltime Available ranges are %s.",
+      sep = ""
     )
     if (length(index) == 1) {
       body <- sprintf("range '%s' is", range[index])
     } else {
       body <- sprintf("ranges '%s' are", paste(range[index], collapse = "', '"))
     }
-    if(verbose) message(sprintf(basemsg, body, paste(df_index$range, collapse = ", ")))
+    if (verbose) message(sprintf(basemsg, body, paste(df_index$range, collapse = ", ")))
     range <- range[-index]
     filenames <- filenames[-index]
     if (length(range) == 0) {
@@ -113,7 +113,7 @@ NULL
       } else {
         body <- sprintf("ranges of %s.", paste(range, collapse = ", "))
       }
-      if(verbose) message(sprintf(basemsg, body))
+      if (verbose) message(sprintf(basemsg, body))
     }
   }
 
