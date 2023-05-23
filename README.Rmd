@@ -67,9 +67,11 @@ library(sf)
 
 resources <- names(available_resources())
 indicators <- names(available_indicators())
-cat(sprintf("Supported resources:\n- %s\n\nSupported indicators:\n- %s",
-            paste(resources, collapse = "\n- "),
-            paste(indicators, collapse = "\n- ")))
+cat(sprintf(
+  "Supported resources:\n- %s\n\nSupported indicators:\n- %s",
+  paste(resources, collapse = "\n- "),
+  paste(indicators, collapse = "\n- ")
+))
 ```
 
 Once you have decided on an indicator you are interested in, you can
@@ -84,20 +86,20 @@ object.
 
 ```{r calculation}
 (system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
-    sf::read_sf() %>%
-    init_portfolio(
-      years = 2016:2017,
-      outdir = system.file("res", package = "mapme.biodiversity"),
-      tmpdir = system.file("tmp", package = "mapme.biodiversity"),
-      add_resources = FALSE,
-      verbose = FALSE
-    ) %>%
-    get_resources(
-      resources = c("gfw_treecover", "gfw_lossyear", "gfw_emissions"),
-      vers_treecover = "GFC-2020-v1.8", vers_lossyear = "GFC-2020-v1.8"
-    ) %>%
-    calc_indicators("treecover_area_and_emissions", min_size = 1, min_cover = 30) %>%
-    tidyr::unnest(treecover_area_and_emissions))
+  sf::read_sf() %>%
+  init_portfolio(
+    years = 2016:2017,
+    outdir = system.file("res", package = "mapme.biodiversity"),
+    tmpdir = system.file("tmp", package = "mapme.biodiversity"),
+    add_resources = FALSE,
+    verbose = FALSE
+  ) %>%
+  get_resources(
+    resources = c("gfw_treecover", "gfw_lossyear", "gfw_emissions"),
+    vers_treecover = "GFC-2020-v1.8", vers_lossyear = "GFC-2020-v1.8"
+  ) %>%
+  calc_indicators("treecover_area_and_emissions", min_size = 1, min_cover = 30) %>%
+  tidyr::unnest(treecover_area_and_emissions))
 ```
 
 
@@ -131,7 +133,7 @@ with_progress({
   )
 })
 
-plan(sequential) # close child processes 
+plan(sequential) # close child processes
 ```
 
 Note, that the above code uses `future::multisession()` as the parallel backend.

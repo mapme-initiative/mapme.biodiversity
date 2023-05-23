@@ -65,8 +65,6 @@ NULL
 #'    "sd" or "var".
 #' @param engine The preferred processing functions from either one of "zonal",
 #'   "extract" or "exactextract" as character.
-#' @param rundir A directory where intermediate files are written to.
-#' @param verbose A directory where intermediate files are written to.
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
@@ -76,16 +74,12 @@ NULL
                                    worldclim_precipitation,
                                    engine = "extract",
                                    stats_worldclim = "mean",
-                                   rundir = tempdir(),
-                                   verbose = TRUE,
                                    ...) {
   results <- .calc_worldclim(
     shp = shp,
     worldclim = worldclim_precipitation,
     engine = engine,
-    stats_worldclim = stats_worldclim,
-    rundir = rundir,
-    verbose = verbose
+    stats_worldclim = stats_worldclim
   )
   results
 }

@@ -64,16 +64,18 @@ NULL
   year <- NULL
   instrument <- NULL
   # select required columns and rbind objects
-  nasa_firms <- lapply(nasa_firms, function(x){
+  nasa_firms <- lapply(nasa_firms, function(x) {
     dplyr::select(x, acq_date, instrument)
   }) %>%
     dplyr::bind_rows()
 
   intersected <- suppressWarnings(st_intersection(nasa_firms, st_geometry(shp)))
-  if(nrow(intersected) == 0) return(NA)
+  if (nrow(intersected) == 0) {
+    return(NA)
+  }
   intersected <- dplyr::as_tibble(intersected)
   intersected <- dplyr::select(intersected, -geom)
-  intersected <-  tidyr::separate(intersected, acq_date, c("year", "month", "day"))
+  intersected <- tidyr::separate(intersected, acq_date, c("year", "month", "day"))
   intersected %>%
     dplyr::group_by(instrument, year) %>%
     dplyr::summarise(active_fire_counts = dplyr::n()) %>%

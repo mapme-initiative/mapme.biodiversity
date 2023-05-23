@@ -22,33 +22,33 @@
 #' @format A tibble with a column for years and emissions (in Mg)
 #' @examples
 #' if (Sys.getenv("NOT_CRAN") == "true") {
-#' library(sf)
-#' library(mapme.biodiversity)
+#'   library(sf)
+#'   library(mapme.biodiversity)
 #'
-#' temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-#' if (!file.exists(temp_loc)) {
-#'   dir.create(temp_loc)
-#'   resource_dir <- system.file("res", package = "mapme.biodiversity")
-#'   file.copy(resource_dir, temp_loc, recursive = TRUE)
-#' }
+#'   temp_loc <- file.path(tempdir(), "mapme.biodiversity")
+#'   if (!file.exists(temp_loc)) {
+#'     dir.create(temp_loc)
+#'     resource_dir <- system.file("res", package = "mapme.biodiversity")
+#'     file.copy(resource_dir, temp_loc, recursive = TRUE)
+#'   }
 #'
-#' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-#'   package = "mapme.biodiversity"
-#' ) %>%
-#'   read_sf() %>%
-#'   init_portfolio(
-#'     years = 2016:2017,
-#'     outdir = file.path(temp_loc, "res"),
-#'     tmpdir = tempdir(),
-#'     add_resources = FALSE,
-#'     verbose = FALSE
+#'   (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+#'     package = "mapme.biodiversity"
 #'   ) %>%
-#'   get_resources(
-#'     resources = c("gfw_treecover", "gfw_lossyear", "gfw_emissions"),
-#'     vers_treecover = "GFC-2021-v1.9", vers_lossyear = "GFC-2021-v1.9"
-#'   ) %>%
-#'   calc_indicators("treecoverloss_emissions", min_size = 1, min_cover = 30) %>%
-#'   tidyr::unnest(treecoverloss_emissions)))
+#'     read_sf() %>%
+#'     init_portfolio(
+#'       years = 2016:2017,
+#'       outdir = file.path(temp_loc, "res"),
+#'       tmpdir = tempdir(),
+#'       add_resources = FALSE,
+#'       verbose = FALSE
+#'     ) %>%
+#'     get_resources(
+#'       resources = c("gfw_treecover", "gfw_lossyear", "gfw_emissions"),
+#'       vers_treecover = "GFC-2021-v1.9", vers_lossyear = "GFC-2021-v1.9"
+#'     ) %>%
+#'     calc_indicators("treecoverloss_emissions", min_size = 1, min_cover = 30) %>%
+#'     tidyr::unnest(treecoverloss_emissions)))
 #' }
 NULL
 
@@ -77,7 +77,6 @@ NULL
                                           rundir = tempdir(),
                                           verbose = TRUE,
                                           ...) {
-
   # initial argument checks
   # handling of return value if resources are missing, e.g. no overlap
   if (any(is.null(gfw_treecover), is.null(gfw_lossyear), is.null(gfw_emissions))) {

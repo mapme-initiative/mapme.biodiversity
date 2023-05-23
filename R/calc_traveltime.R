@@ -25,14 +25,15 @@
 #' library(mapme.biodiversity)
 #'
 #' temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-#' if(!file.exists(temp_loc)){
-#' dir.create(temp_loc)
-#' resource_dir <- system.file("res", package = "mapme.biodiversity")
-#' file.copy(resource_dir, temp_loc, recursive = TRUE)
+#' if (!file.exists(temp_loc)) {
+#'   dir.create(temp_loc)
+#'   resource_dir <- system.file("res", package = "mapme.biodiversity")
+#'   file.copy(resource_dir, temp_loc, recursive = TRUE)
 #' }
 #'
 #' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-#'                         package = "mapme.biodiversity") %>%
+#'   package = "mapme.biodiversity"
+#' ) %>%
 #'   read_sf() %>%
 #'   init_portfolio(
 #'     years = 2022,
@@ -67,7 +68,6 @@ NULL
 #' @return A tibble
 #' @keywords internal
 #' @noRd
-
 .calc_traveltime <- function(shp,
                              nelson_et_al,
                              engine = "extract",
@@ -78,130 +78,16 @@ NULL
   if (is.null(nelson_et_al)) {
     return(NA)
   }
-  # check if input engine is correctly specified
-  available_engines <- c("zonal", "extract", "exactextract")
-  .check_engine(available_engines, engine)
-  # check if only supoorted stats have been specified
-  available_stats <- c("mean", "median", "sd", "min", "max", "sum", "var")
-  .check_stats(available_stats, stats_accessibility)
-
   # set max value of 65535 to NA
-  nelson_et_al <- clamp(nelson_et_al,
-                        lower = -Inf, upper = 65534, values = FALSE
+  nelson_et_al <- clamp(nelson_et_al, lower = -Inf, upper = 65534, values = FALSE)
+  results <- .select_engine(
+    shp = shp,
+    raster = nelson_et_al,
+    stats = stats_accessibility,
+    engine = engine,
+    name = "minutes",
+    mode = "asset"
   )
-
-  extractor <- switch(
-    engine,
-    "extract" =  .comp_traveltime_extract,
-    "exactextract" = .comp_traveltime_exact_extract,
-    "zonal" = .comp_traveltime_zonal
-  )
-
-  extractor(
-    shp,
-    nelson_et_al,
-    stats_accessibility
-  )
-}
-
-#' Helper function to compute statistics using routines from terra zonal
-#'
-#' @param nelson_et_al nelson_et_al raster from which to compute statistics
-#'
-#' @return A data-frame
-#' @keywords internal
-#' @noRd
-
-.comp_traveltime_zonal <- function(shp = NULL,
-                                   nelson_et_al = NULL,
-                                   stats = "mean") {
-  shp_v <- vect(shp)
-  results <- lapply(1:length(stats), function(j) {
-    out <- terra::zonal(
-      nelson_et_al,
-      shp_v,
-      fun = stats[j],
-      na.rm = T)
-
-    out <- tibble(minutes = unlist(out))
-    names(out) <- paste0("minutes_", stats[j])
-    out
-  })
-  results <- tibble(do.call(cbind, results))
-  layer_names <- names(nelson_et_al)
-  distance_name <- unlist(lapply(layer_names, function(x) strsplit(x, "-|.tif")[[1]][2]))
-  results$distance <- distance_name
-  results
-}
-
-#' Helper function to compute statistics using routines from terra extract
-#'
-#' @param nelson_et_al nelson_et_al raster from which to compute statistics
-#'
-#' @return A data-frame
-#' @keywords internal
-#' @noRd
-
-.comp_traveltime_extract <- function(shp = NULL,
-                                     nelson_et_al = NULL,
-                                     stats = "mean") {
-  shp_v <- vect(shp)
-  results <- lapply(1:length(stats), function(j) {
-    out <- terra::extract(
-      nelson_et_al,
-      shp_v,
-      fun = stats[j],
-      na.rm = T)
-
-    out <- tibble(minutes = unlist(out[-1]))
-    names(out) <- paste0("minutes_", stats[j])
-    out
-  })
-  results <- tibble(do.call(cbind, results))
-  layer_names <- names(nelson_et_al)
-  distance_name <- unlist(lapply(layer_names, function(x) strsplit(x, "-|.tif")[[1]][2]))
-  results$distance <- distance_name
-  results
-}
-
-#' Helper function to compute statistics using routines from exactextractr
-#'
-#' @param nelson_et_al nelson_et_al raster from which to compute statistics
-#'
-#' @return A data-frame
-#' @keywords internal
-#' @noRd
-
-.comp_traveltime_exact_extract <- function(shp = NULL,
-                                           nelson_et_al = NULL,
-                                           stats = "mean") {
-  if(!requireNamespace("exactextractr", quietly = TRUE)){
-    stop(paste(
-      "Needs package 'exactextractr' to be installed.",
-      "Consider installing with 'install.packages('exactextractr')"
-    ))
-  }
-  results <- lapply(1:length(stats), function(j) {
-    if (stats[j] %in% c("sd", "var")) {
-      out <- exactextractr::exact_extract(
-        nelson_et_al,
-        shp,
-        fun = ifelse(stats[j] == "sd", "stdev", "variance")
-      )
-    } else {
-      out <- exactextractr::exact_extract(
-        nelson_et_al,
-        shp,
-        fun = stats[j]
-      )
-    }
-    out <- tibble(minutes = unlist(out))
-    names(out) <- paste0("minutes_", stats[j])
-    out
-  })
-  results <- tibble(do.call(cbind, results))
-  layer_names <- names(nelson_et_al)
-  distance_name <- unlist(lapply(layer_names, function(x) strsplit(x, "-|.tif")[[1]][2]))
-  results$distance <- distance_name
+  results$distance <- unlist(lapply(names(nelson_et_al), function(x) strsplit(x, "-|.tif")[[1]][2]))
   results
 }

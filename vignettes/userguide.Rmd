@@ -230,10 +230,10 @@ available via <code>get_resources()</code> beforehand.
 
 ```{r calc_indicator}
 sample_portfolio <- calc_indicators(sample_portfolio,
-                                    indicators = "precipitation_chirps",
-                                    scales_spi = 3,
-                                    spi_prev_years = 8,
-                                    engine = "extract"
+  indicators = "precipitation_chirps",
+  scales_spi = 3,
+  spi_prev_years = 8,
+  engine = "extract"
 )
 ```
 
@@ -352,7 +352,7 @@ with_progress({
   )
 })
 
-plan(sequential) # close child processes 
+plan(sequential) # close child processes
 ```
 
 Note, that the above code uses `future::multisession()` as the parallel backend.

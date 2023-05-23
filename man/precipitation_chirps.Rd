@@ -55,9 +55,10 @@ if (Sys.getenv("NOT_CRAN") == "true") {
     ) \%>\%
     get_resources("chirps") \%>\%
     calc_indicators("precipitation_chirps",
-    engine = "exactextract",
-    scales_spi = 3,
-    spi_prev_years = 8) \%>\%
+      engine = "exactextract",
+      scales_spi = 3,
+      spi_prev_years = 8
+    ) \%>\%
     tidyr::unnest(precipitation_chirps)))
 }
 }
