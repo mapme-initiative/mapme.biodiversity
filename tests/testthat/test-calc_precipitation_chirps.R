@@ -27,7 +27,7 @@ test_that("precipitation indicator works", {
   )
   expect_error(
     .calc_precipitation_chirps(shp, chirps, engine = "not-available"),
-    "Engine not-available is not an available engine. Please choose one of:"
+    "Engine 'not-available' is not an available engine. Please choose one of:"
   )
   attributes(shp)$years <- 2000:2010
   result <- .calc_precipitation_chirps(shp, chirps)

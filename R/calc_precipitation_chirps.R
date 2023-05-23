@@ -150,130 +150,61 @@ NULL
     spi_chirps <- NULL
   }
 
-  available_engines <- c("zonal", "extract", "exactextract")
-  if (!engine %in% available_engines) {
-    stop(sprintf("Engine %s is not an available engine. Please choose one of: %s", engine, paste(available_engines, collapse = ", ")))
-  }
+  # extract zonal statistics
+  results_absolute <- .select_engine(
+    shp = shp,
+    raster = target_chirps,
+    stats = "mean",
+    engine = engine,
+    mode = processing_mode)
 
-  extractor <- switch(
-    engine,
-    "extract" = .prec_extract,
-    "zonal" = .prec_zonal,
-    "exactextract" = .prec_exact_extractr
-  )
+  results_anomaly <- .select_engine(
+    shp = shp,
+    raster = anomaly_chirps,
+    stats = "mean",
+    engine = engine,
+    mode = processing_mode)
 
-  if (processing_mode == "asset") {
-    results <- extractor(
-      shp = shp,
-      absolute = target_chirps,
-      anomaly = anomaly_chirps,
-      spi = spi_chirps
-    )
-  }
-
-  if (processing_mode == "portfolio") {
-    results <- purrr::map(1:nrow(shp), function(i) {
-      out <- extractor(
-        shp = shp[i, ],
-        absolute = target_chirps,
-        anomaly = anomaly_chirps,
-        spi = spi_chirps
-      )
-      out
+  if(!is.null(spi_chirps)){
+    results_spi <- purrr::map(1:nrow(shp), function(i){
+      results_shp <- purrr::lmap(spi_chirps, function(x){
+        result <- .select_engine(
+          shp = shp[i,],
+          raster = x[[1]],
+          stats = "mean",
+          engine = engine,
+          name = names(x),
+          mode = "asset")
+        names(result) <- names(x)
+        result
+      })
+      dplyr::bind_cols(results_shp)
     })
+    if(processing_mode == "asset") results_spi <- results_spi[[1]]
+  }
+
+  dates <- as.Date(paste0(substr(names(target_chirps), 13, 19), ".01"), "%Y.%m.%d")
+
+  if (processing_mode == "portfolio"){
+    results <- purrr::map(1:nrow(shp), function(i){
+      result <- tibble(
+        dates = dates,
+        absolute = as.numeric(results_absolute[[i]]$mean),
+        anomaly = as.numeric(results_anomaly[[i]]$mean)
+      )
+      if (!is.null(scales_spi)){
+        result <- dplyr::bind_cols(result, results_spi[[i]])
+      }
+    })
+  } else {
+    results <-   tibble(
+      dates = dates,
+      absolute = as.numeric(results_absolute$mean),
+      anomaly = as.numeric(results_anomaly$mean)
+    )
+    if (!is.null(scales_spi)){
+      results <- dplyr::bind_cols(results, results_spi)
+    }
   }
   results
-}
-
-.prec_zonal <- function(
-    shp,
-    absolute,
-    anomaly,
-    spi) {
-
-  dates <- as.Date(paste0(substr(names(absolute), 13, 19), ".01"), "%Y.%m.%d")
-
-  shp_v <- vect(shp)
-  absolute <- terra::zonal(
-    absolute,
-    shp_v,
-    fun = "mean")
-  anomaly <- terra::zonal(
-    anomaly,
-    shp_v,
-    fun = "mean")
-
-  results <- tibble(
-    dates = dates,
-    absolute = as.numeric(absolute),
-    anomaly = as.numeric(anomaly)
-  )
-
-  if (!is.null(spi)) {
-    spi <- lapply(spi, function(x) as.numeric(terra::zonal(x, shp_v, fun = "mean")))
-    tibble(cbind(results, as.data.frame(spi)))
-  } else {
-    results
-  }
-}
-
-
-.prec_extract <- function(shp, absolute, anomaly, spi) {
-  dates <- as.Date(paste0(substr(names(absolute), 13, 19), ".01"), "%Y.%m.%d")
-  shp_v <- vect(shp)
-  absolute <- terra::extract(
-    absolute,
-    shp_v,
-    fun = "mean")
-  anomaly <- terra::extract(
-    anomaly,
-    shp_v,
-    fun = "mean")
-
-  results <- tibble(
-    dates = dates,
-    absolute = as.numeric(absolute)[-1],
-    anomaly = as.numeric(anomaly)[-1]
-  )
-
-  if (!is.null(spi)) {
-    spi <- lapply(spi, function(x) as.numeric(terra::extract(x, shp_v, fun = "mean"))[-1])
-    tibble(cbind(results, as.data.frame(spi)))
-  } else {
-    results
-  }
-}
-
-
-.prec_exact_extractr <- function(shp, absolute, anomaly, spi) {
-  if (!requireNamespace("exactextractr", quietly = TRUE)) {
-    stop(paste(
-      "Needs package 'exactextractr' to be installed.",
-      "Consider installing with 'install.packages('exactextractr')"
-    ))
-  }
-  dates <- as.Date(paste0(substr(names(absolute), 13, 19), ".01"), "%Y.%m.%d")
-
-  absolute <- exactextractr::exact_extract(
-    absolute,
-    shp,
-    fun = "mean")
-  anomaly <- exactextractr::exact_extract(
-    anomaly,
-    shp,
-    fun = "mean")
-
-
-  results <- tibble(
-    dates = dates,
-    absolute = as.numeric(absolute),
-    anomaly = as.numeric(anomaly)
-  )
-
-  if (!is.null(spi)) {
-    spi <- lapply(spi, function(x) as.numeric(exactextractr::exact_extract(x, shp, fun = "mean")))
-    tibble(cbind(results, as.data.frame(spi)))
-  } else {
-    results
-  }
 }

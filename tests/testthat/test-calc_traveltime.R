@@ -14,7 +14,7 @@ test_that("traveltime works", {
     "Engine 'not-available' is not an available engine. Please choose one of:"
   )
   expect_error(
-    .calc_traveltime(shp, nelson_et_al, stats_accessibility = "not-available"),
+    .calc_traveltime(shp, nelson_et_al, stats = "not-available"),
     "Statistic 'not-available' is not supported. Please choose one of:"
   )
 

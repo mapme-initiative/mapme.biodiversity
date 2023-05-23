@@ -92,12 +92,6 @@ NULL
   if (is.null(nasa_srtm)) {
     return(NA)
   }
-  # check if input engine is correctly specified
-  available_engines <- c("zonal", "extract", "exactextract")
-  .check_engine(available_engines, engine)
-  # check if only supoorted stats have been specified
-  available_stats <- c("mean", "median", "sd", "min", "max", "sum", "var")
-  .check_stats(available_stats, stats_tri)
 
   tri <- terra::terrain(
     nasa_srtm,
@@ -105,112 +99,11 @@ NULL
     unit = "degrees",
     neighbors = 8)
 
-  extractor <- switch(
-    engine,
-    "extract" = .comp_tri_extract,
-    "exactextract" = .comp_tri_exact_extractr,
-    "zonal" = .comp_tri_zonal)
-
-  extractor(
-    tri = tri,
+  .select_engine(
     shp = shp,
-    stats = stats_tri)
-}
-
-
-#' Helper function to compute statistics using routines from terra zonal
-#'
-#' @param tri tri raster from which to compute statistics
-#'
-#' @return A data-frame
-#' @keywords internal
-#' @noRd
-.comp_tri_zonal <- function(tri = NULL,
-                            shp = NULL,
-                            stats = "mean") {
-  shp_v <- vect(shp)
-  zstats <- lapply(1:length(stats), function(i) {
-    zstats <- terra::zonal(
-      tri,
-      shp_v,
-      fun = stats[i],
-      na.rm = T)
-    tibble_zstats <- tibble(tri = as.numeric(zstats))
-    names(tibble_zstats)[names(tibble_zstats) == "tri"] <-
-      paste0("tri_", stats[i])
-    return(tibble_zstats)
-  })
-  unlist_zstats <- do.call(cbind, zstats)
-  tibble_zstats <- tibble(unlist_zstats)
-  return(tibble_zstats)
-}
-
-
-#' Helper function to compute statistics using routines from terra extract
-#'
-#' @param tri tri raster from which to compute statistics
-#'
-#' @return A data-frame
-#' @keywords internal
-#' @noRd
-.comp_tri_extract <- function(tri = NULL,
-                              shp = NULL,
-                              stats = "mean") {
-  shp_v <- vect(shp)
-  zstats <- lapply(1:length(stats), function(i) {
-    zstats <- terra::extract(
-      tri,
-      shp_v,
-      fun = stats[i],
-      na.rm = T)
-    tibble_zstats <- tibble(tri = zstats[, 2])
-    names(tibble_zstats)[names(tibble_zstats) == "tri"] <-
-      paste0("tri_", stats[i])
-    return(tibble_zstats)
-  })
-  unlist_zstats <- do.call(cbind, zstats)
-  tibble_zstats <- tibble(unlist_zstats)
-  return(tibble_zstats)
-}
-
-
-#' Helper function to compute statistics using routines from exactextractr
-#'
-#' @param tri tri raster from which to compute statistics
-#'
-#' @return A data-frame
-#' @keywords internal
-#' @noRd
-
-.comp_tri_exact_extractr <- function(tri = NULL,
-                                     shp = NULL,
-                                     stats = "mean") {
-  if (!requireNamespace("exactextractr", quietly = TRUE)) {
-    stop(paste(
-      "Needs package 'exactextractr' to be installed.",
-      "Consider installing with 'install.packages('exactextractr')"
-    ))
-  }
-  zstats <- lapply(1:length(stats), function(i) {
-    if (stats[i] %in% c("sd", "var")) {
-      zstats <- exactextractr::exact_extract(
-        tri,
-        shp,
-        fun = ifelse(stats[i] == "sd", "stdev", "variance")
-      )
-    } else {
-      zstats <- exactextractr::exact_extract(
-        tri,
-        shp,
-        fun = stats[i]
-      )
-    }
-    tibble_zstats <- tibble(tri = zstats)
-    names(tibble_zstats)[names(tibble_zstats) == "tri"] <-
-      paste0("tri_", stats[i])
-    return(tibble_zstats)
-  })
-  unlist_zstats <- do.call(cbind, zstats)
-  tibble_zstats <- tibble(unlist_zstats)
-  return(tibble_zstats)
+    raster = tri,
+    stats = stats_tri,
+    engine = engine,
+    name = "tri",
+    mode = "asset")
 }

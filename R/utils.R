@@ -214,47 +214,6 @@
   target_years
 }
 
-.check_engine <- function(implemented_engines, queried_engine) {
-  if (length(queried_engine) > 1) {
-    stop(sprintf(
-      "Please specify only one engine of: %s.",
-      paste(implemented_engines, collapse = ", ")
-    ))
-  }
-
-  if (!queried_engine %in% implemented_engines) {
-    stop(sprintf(
-      paste("Engine '%s' is not an available engine.",
-            "Please choose one of: %s",
-            collapse = " "
-      ),
-      queried_engine, paste(implemented_engines, collapse = ", ")
-    ))
-  }
-}
-
-.check_stats <- function(implemented_stats, queried_stats) {
-  if (any(!queried_stats %in% implemented_stats)) {
-    not_available <- queried_stats[which(!queried_stats %in% implemented_stats)]
-    msg_body <- "%s '%s' %s not supported. Please choose one of: %s"
-    if (length(not_available) == 1) {
-      stat <- "Statistic"
-      verb <- "is"
-    } else {
-      stat <- "Statistics"
-      verb <- "are"
-    }
-    msg <- sprintf(
-      msg_body, stat,
-      paste(not_available, collapse = "', '"),
-      verb,
-      paste(implemented_stats, collapse = ", ")
-    )
-    stop(msg)
-  }
-}
-
-
 #' Helper to check valid urls
 #'
 #' @param urls address to the datasource

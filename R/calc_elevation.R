@@ -80,117 +80,12 @@ NULL
   if (is.null(nasa_srtm)) {
     return(NA)
   }
-  # check if input engine is correctly specified
-  available_engines <- c("zonal", "extract", "exactextract")
-  .check_engine(available_engines, engine)
-  # check if only supoorted stats have been specified
-  available_stats <- c("mean", "median", "sd", "min", "max", "sum", "var")
-  .check_stats(available_stats, stats_elevation)
-
-  extractor <- switch(
-    engine,
-    "extract" = .comp_dem_extract,
-    "exactextract" = .comp_dem_exact_extractr,
-    "zonal" = .comp_dem_zonal)
-
-  extractor(
-    elevation = nasa_srtm,
+  .select_engine(
     shp = shp,
-    stats = stats_elevation
-  )
+    raster = nasa_srtm,
+    stats = stats_elevation,
+    engine = engine,
+    name = "elevation",
+    mode = "asset")
 }
 
-#' Helper function to compute statistics using routines from terra extract
-#'
-#' @param elevation elevation raster from which to compute statistics
-#'
-#' @return A data-frame
-#' @keywords internal
-#' @noRd
-
-.comp_dem_extract <- function(elevation = NULL,
-                              shp = NULL,
-                              stats = "mean") {
-  shp_v <- vect(shp)
-  zstats <- lapply(1:length(stats), function(i) {
-    zstats <- terra::extract(
-      elevation,
-      shp_v,
-      fun = stats[i],
-      na.rm = T)
-    tibble_zstats <- tibble(elev = zstats[, 2])
-    names(tibble_zstats)[names(tibble_zstats) == "elev"] <-
-      paste0("elevation_", stats[i])
-    return(tibble_zstats)
-  })
-  unlist_zstats <- do.call(cbind, zstats)
-  tibble_zstats <- tibble(unlist_zstats)
-  return(tibble_zstats)
-}
-
-#' Helper function to compute statistics using routines from terra zonal
-#'
-#' @param elevation elevation raster from which to compute statistics
-#'
-#' @return A data-frame
-#' @keywords internal
-#' @noRd
-
-.comp_dem_zonal <- function(elevation = NULL,
-                            shp = NULL,
-                            stats = "mean") {
-  shp_v <- vect(shp)
-  zstats <- lapply(1:length(stats), function(i) {
-    zstats <- terra::zonal(
-      elevation,
-      shp_v,
-      fun = stats[i],
-      na.rm = T)
-    tibble_zstats <- tibble(elev = as.numeric(zstats))
-    names(tibble_zstats)[names(tibble_zstats) == "elev"] <-
-      paste0("elevation_", stats[i])
-    return(tibble_zstats)
-  })
-  unlist_zstats <- do.call(cbind, zstats)
-  tibble_zstats <- tibble(unlist_zstats)
-  return(tibble_zstats)
-}
-
-#' Helper function to compute statistics using routines from exactextractr
-#'
-#' @param elevation elevation raster from which to compute statistics
-#'
-#' @return A data-frame
-#' @keywords internal
-#' @noRd
-
-.comp_dem_exact_extractr <- function(elevation = NULL,
-                                     shp = NULL,
-                                     stats = "mean") {
-  if (!requireNamespace("exactextractr", quietly = TRUE)) {
-    stop(paste(
-      "Needs package 'exactextractr' to be installed.",
-      "Consider installing with 'install.packages('exactextractr')"
-    ))
-  }
-  zstats <- lapply(1:length(stats), function(i) {
-    if (stats[i] %in% c("sd", "var")) {
-      zstats <- exactextractr::exact_extract(
-        elevation,
-        shp,
-        fun = ifelse(stats[i] == "sd", "stdev", "variance"))
-    } else {
-      zstats <- exactextractr::exact_extract(
-        elevation,
-        shp,
-        fun = stats[i])
-    }
-    tibble_zstats <- tibble(elev = zstats)
-    names(tibble_zstats)[names(tibble_zstats) == "elev"] <-
-      paste0("elevation_", stats[i])
-    return(tibble_zstats)
-  })
-  unlist_zstats <- do.call(cbind, zstats)
-  tibble_zstats <- tibble(unlist_zstats)
-  return(tibble_zstats)
-}

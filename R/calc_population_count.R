@@ -79,12 +79,6 @@ NULL
   if (is.null(worldpop)) {
     return(NA)
   }
-  # check if input engine is correctly specified
-  available_engines <- c("zonal", "extract", "exactextract")
-  .check_engine(available_engines, engine)
-  # check if only supoorted stats have been specified
-  available_stats <- c("mean", "median", "sd", "min", "max", "sum", "var")
-  .check_stats(available_stats, stats_popcount)
 
   # set max value of 65535 to NA
   worldpop <- clamp(
@@ -94,110 +88,15 @@ NULL
     values = FALSE
   )
 
-  extractor <- switch(
-    engine,
-    "extract" = .comp_worldpop_extract,
-    "exactextract" = .comp_worldpop_exact_extract,
-    "zonal" = .comp_worldpop_zonal)
-
-  results <- extractor(
+  results <- .select_engine(
     shp = shp,
-    worldpop = worldpop,
-    stats = stats_popcount
-  )
-  layer_names <- names(worldpop)
-  year_name <- unlist(lapply(layer_names, function(x) strsplit(x, "_")[[1]][2]))
-  results$year <- year_name
+    raster = worldpop,
+    stats = stats_popcount,
+    engine = engine,
+    name = "popcount",
+    mode = "asset")
+
+  years <- unlist(lapply(names(worldpop), function(x) strsplit(x, "_")[[1]][2]))
+  results$year <- years
   results
-}
-
-#' Helper function to compute statistics using routines from terra zonal
-#'
-#' @param worldpop population count raster from which to compute statistics
-#'
-#' @return A data-frame
-#' @keywords internal
-#' @noRd
-
-.comp_worldpop_zonal <- function(worldpop = NULL,
-                                 shp = NULL,
-                                 stats = "sum") {
-  shp_v <- vect(shp)
-  results <- lapply(1:length(stats), function(j) {
-    out <- terra::zonal(
-      worldpop,
-      shp_v,
-      fun = stats[j],
-      na.rm = T
-    )
-    out <- tibble(population = unlist(out))
-    names(out) <- paste0("popcount_", stats[j])
-    out
-  })
-  tibble(do.call(cbind, results))
-}
-
-#' Helper function to compute statistics using routines from terra extract
-#'
-#' @param worldpop population count raster from which to compute statistics
-#'
-#' @return A data-frame
-#' @keywords internal
-#' @noRd
-
-.comp_worldpop_extract <- function(worldpop = NULL,
-                                   shp = NULL,
-                                   stats = "sum") {
-  shp_v <- vect(shp)
-  results <- lapply(1:length(stats), function(j) {
-    out <- terra::extract(
-      worldpop,
-      shp_v,
-      fun = stats[j],
-      na.rm = T
-    )
-    out <- tibble(population = unlist(out[-1]))
-    names(out) <- paste0("popcount_", stats[j])
-    out
-  })
-  tibble(do.call(cbind, results))
-}
-
-#' Helper function to compute statistics using routines from exactextractr
-#'
-#' @param worldpop population count raster from which to compute statistics
-#'
-#' @return A data-frame
-#' @keywords internal
-#' @noRd
-
-.comp_worldpop_exact_extract <- function(worldpop = NULL,
-                                         shp = NULL,
-                                         stats = "sum",
-                                         ...) {
-  if(!requireNamespace("exactextractr", quietly = TRUE)){
-    stop(paste(
-      "Needs package 'exactextractr' to be installed.",
-      "Consider installing with 'install.packages('exactextractr')"
-    ))
-  }
-  results <- lapply(1:length(stats), function(j) {
-    if (stats[j] %in% c("sd", "var")) {
-      out <- exactextractr::exact_extract(
-        worldpop,
-        shp,
-        fun = ifelse(stats[j] == "sd", "stdev", "variance")
-      )
-    } else {
-      out <- exactextractr::exact_extract(
-        worldpop,
-        shp,
-        fun = stats[j]
-      )
-    }
-    out <- tibble(population = unlist(out))
-    names(out) <- paste0("popcount_", stats[j])
-    out
-  })
-  tibble(do.call(cbind, results))
 }
