@@ -1,13 +1,13 @@
 test_that("precipitation indicator works", {
   shp <- read_sf(
     system.file("extdata", "gfw_sample.gpkg",
-                package = "mapme.biodiversity"
+      package = "mapme.biodiversity"
     )
   )
   shp <- suppressWarnings(st_cast(shp, to = "POLYGON"))[1, ]
 
   chirps <- list.files(system.file("res", "chirps",
-                                   package = "mapme.biodiversity"
+    package = "mapme.biodiversity"
   ), pattern = ".cog$", full.names = TRUE)
   chirps <- rast(chirps)
   attributes(shp)$years <- 1970:1980
@@ -37,22 +37,28 @@ test_that("precipitation indicator works", {
 
   expect_equal(
     names(result_zonal[[1]]),
-    names(result_extract[[1]]))
+    names(result_extract[[1]])
+  )
   expect_equal(
     names(result_zonal[[1]]),
-    names(result_exact[[1]]))
+    names(result_exact[[1]])
+  )
   expect_equal(
     names(result[[1]]),
-    c("dates", "absolute", "anomaly", "spi_3"))
+    c("dates", "absolute", "anomaly", "spi_3")
+  )
 
-  result2 <-  .calc_precipitation_chirps(shp, chirps, scales_spi = c(12, 24), spi_prev_years = 12)
+  result2 <- .calc_precipitation_chirps(shp, chirps, scales_spi = c(12, 24), spi_prev_years = 12)
   expect_equal(
     names(result2[[1]]),
-    c("dates", "absolute", "anomaly", "spi_12", "spi_24"))
+    c("dates", "absolute", "anomaly", "spi_12", "spi_24")
+  )
   expect_equal(
     result_zonal[[1]]$absolute,
     result_extract[[1]]$absolute,
-    tolerance = 1e-4)
+    tolerance = 1e-4
+  )
   expect_snapshot(
-    result_exact[[1]]$absolute)
+    result_exact[[1]]$absolute
+  )
 })

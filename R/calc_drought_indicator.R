@@ -26,27 +26,29 @@
 #'   library(mapme.biodiversity)
 #'
 #'   temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-#'   if(!file.exists(temp_loc)){
+#'   if (!file.exists(temp_loc)) {
 #'     dir.create(temp_loc)
 #'     resource_dir <- system.file("res", package = "mapme.biodiversity")
 #'     file.copy(resource_dir, temp_loc, recursive = TRUE)
 #'   }
 #'
 #'   (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-#'                         package = "mapme.biodiversity") %>%
-#'          read_sf() %>%
-#'          init_portfolio(
-#'            years = 2022,
-#'            outdir = file.path(temp_loc, "res"),
-#'            tmpdir = tempdir(),
-#'            add_resources = FALSE,
-#'            verbose = FALSE
-#'          ) %>%
-#'          get_resources("nasa_grace") %>%
-#'          calc_indicators("drought_indicator",
-#'                          stats_drought = c("mean", "median"),
-#'                          engine = "extract") %>%
-#'          tidyr::unnest(drought_indicator)))
+#'     package = "mapme.biodiversity"
+#'   ) %>%
+#'     read_sf() %>%
+#'     init_portfolio(
+#'       years = 2022,
+#'       outdir = file.path(temp_loc, "res"),
+#'       tmpdir = tempdir(),
+#'       add_resources = FALSE,
+#'       verbose = FALSE
+#'     ) %>%
+#'     get_resources("nasa_grace") %>%
+#'     calc_indicators("drought_indicator",
+#'       stats_drought = c("mean", "median"),
+#'       engine = "extract"
+#'     ) %>%
+#'     tidyr::unnest(drought_indicator)))
 #' }
 NULL
 
@@ -78,7 +80,6 @@ NULL
                                     verbose = TRUE,
                                     processing_mode = "portfolio",
                                     ...) {
-
   # check if input engines are correct
   if (is.null(nasa_grace)) {
     return(NA)
@@ -89,14 +90,16 @@ NULL
     stats = stats_drought,
     engine = engine,
     name = "wetness",
-    mode = processing_mode)
+    mode = processing_mode
+  )
 
   dates <- sub(".*(\\d{8}).*", "\\1", names(nasa_grace))
   dates <- as.Date(dates, format = "%Y%m%d")
-  if (processing_mode == "portfolio"){
-    results <- purrr::map(results, function(x){
+  if (processing_mode == "portfolio") {
+    results <- purrr::map(results, function(x) {
       x$date <- dates
-      x})
+      x
+    })
   } else {
     results$date <- dates
   }

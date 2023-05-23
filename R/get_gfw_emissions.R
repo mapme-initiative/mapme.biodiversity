@@ -38,7 +38,6 @@ NULL
 .get_gfw_emissions <- function(x,
                                verbose = TRUE,
                                rundir = tempdir()) {
-
   index_file <- system.file("extdata", "greenhouse_index.geosjon", package = "mapme.biodiversity")
   spatialindex <- st_read(index_file, quiet = TRUE)
   tile_ids <- unique(unlist(st_intersects(x, spatialindex)))

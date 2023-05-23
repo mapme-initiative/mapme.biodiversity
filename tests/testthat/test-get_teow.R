@@ -2,7 +2,7 @@ test_that(".get_teow works", {
   skip("Skipping test for .get_teow because it requires active downloads.")
   aoi <- read_sf(
     system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
-                package = "mapme.biodiversity"
+      package = "mapme.biodiversity"
     )
   )
   aoi <- suppressWarnings(st_cast(aoi, to = "POLYGON")[1, ])
@@ -15,11 +15,11 @@ test_that(".get_teow works", {
   tmpdir <- tempdir()
 
   portfolio <- init_portfolio(aoi,
-                              years = 2000:2010,
-                              outdir = outdir,
-                              tmpdir = tmpdir,
-                              add_resources = FALSE,
-                              verbose = FALSE
+    years = 2000:2010,
+    outdir = outdir,
+    tmpdir = tmpdir,
+    add_resources = FALSE,
+    verbose = FALSE
   )
   # Add testing attribute in order to skip downloads
   attributes(portfolio)$testing <- TRUE

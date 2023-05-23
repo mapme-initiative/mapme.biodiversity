@@ -21,7 +21,6 @@
 #' @keywords function
 #' @export
 calc_indicators <- function(x, indicators, ...) {
-
   # depreciation warining for old indicator names
   indicators <- .depreciation_warning(indicators, resource = FALSE)
   # check if the requested resource is supported
@@ -229,17 +228,17 @@ calc_indicators <- function(x, indicators, ...) {
 }
 
 
-.bind_assets <- function(results){
+.bind_assets <- function(results) {
   # bind results to data.frame
   index_tbl <- purrr::map_lgl(results, function(x) inherits(x, c("tbl_df", "data.frame")))
 
   # case all assets returned tibbles
-  if(all(index_tbl)){
+  if (all(index_tbl)) {
     return(dplyr::bind_rows(results, .id = ".id"))
   }
 
   # case all assets returned NA
-  if(all(!index_tbl)){
+  if (all(!index_tbl)) {
     return(
       tibble::tibble(
         .id = as.character(1:length(results)),
@@ -249,9 +248,11 @@ calc_indicators <- function(x, indicators, ...) {
   }
 
   # case some assets returned NA
-  if(any(index_tbl) & any(!index_tbl)){
+  if (any(index_tbl) & any(!index_tbl)) {
     colnames <- names(results[[which(index_tbl)[1]]])
-    fill_values <- lapply(1:length(colnames), function(x) return(NA))
+    fill_values <- lapply(1:length(colnames), function(x) {
+      return(NA)
+    })
     fill_values <- tibble::as_tibble(data.frame(fill_values))
     names(fill_values) <- colnames
     for (i in which(!index_tbl)) results[[i]] <- fill_values

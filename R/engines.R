@@ -12,8 +12,8 @@ available_engines <- c("zonal", "extract", "exactextract")
   if (!queried_engine %in% available_engines) {
     stop(sprintf(
       paste("Engine '%s' is not an available engine.",
-            "Please choose one of: %s",
-            collapse = " "
+        "Please choose one of: %s",
+        collapse = " "
       ),
       queried_engine, paste(available_engines, collapse = ", ")
     ))
@@ -35,79 +35,85 @@ available_engines <- c("zonal", "extract", "exactextract")
       msg_body, stat,
       paste(not_available, collapse = "', '"),
       verb,
-      paste(available_stats, collapse = ", "))
+      paste(available_stats, collapse = ", ")
+    )
     stop(msg)
   }
 }
 
-.select_engine <- function(shp, raster, stats, engine, name = NULL, mode = "asset"){
-
+.select_engine <- function(shp, raster, stats, engine, name = NULL, mode = "asset") {
   .check_stats(stats)
   .check_engine(engine)
 
-  engine <- switch(
-    engine,
-    "extract" =  .engine_extract,
+  engine <- switch(engine,
+    "extract" = .engine_extract,
     "exactextract" = .engine_exact_extract,
-    "zonal" = .engine_zonal)
+    "zonal" = .engine_zonal
+  )
 
-  if (mode == "asset"){
+  if (mode == "asset") {
     result <- engine(shp, raster, stats, name)
   } else {
     result <- purrr::map(1:nrow(shp), function(i) {
-      engine(shp[i,], raster, stats, name)})
+      engine(shp[i, ], raster, stats, name)
+    })
   }
   result
 }
 
-.engine_zonal <- function(shp, raster, stats, name = NULL){
-  results <- purrr::map_dfc(stats, function(stat){
+.engine_zonal <- function(shp, raster, stats, name = NULL) {
+  results <- purrr::map_dfc(stats, function(stat) {
     out <- terra::zonal(
       raster,
       vect(shp),
       fun = stat,
-      na.rm = TRUE)
+      na.rm = TRUE
+    )
     out <- tibble(as.numeric(out))
     names(out) <- ifelse(is.null(name), stat, paste(name, "_", stat, sep = ""))
-    out})
+    out
+  })
   results
 }
 
-.engine_extract <- function(shp, raster, stats, name = NULL){
-  results <- purrr::map_dfc(stats, function(stat){
+.engine_extract <- function(shp, raster, stats, name = NULL) {
+  results <- purrr::map_dfc(stats, function(stat) {
     out <- terra::extract(
       raster,
       shp,
       fun = stat,
       na.rm = TRUE,
-      ID = FALSE)
+      ID = FALSE
+    )
     out <- tibble(as.numeric(out))
-    names(out) <-  ifelse(is.null(name), stat, paste(name, "_", stat, sep = ""))
-    out})
+    names(out) <- ifelse(is.null(name), stat, paste(name, "_", stat, sep = ""))
+    out
+  })
   results
 }
 
-.engine_exact_extract <- function(shp, raster, stats, name = NULL){
-
-  if(!requireNamespace("exactextractr", quietly = TRUE)){
+.engine_exact_extract <- function(shp, raster, stats, name = NULL) {
+  if (!requireNamespace("exactextractr", quietly = TRUE)) {
     stop(paste(
       "Needs package 'exactextractr' to be installed.",
       "Consider installing with 'install.packages('exactextractr')"
     ))
   }
 
-  results <- purrr::map_dfc(stats, function(stat){
+  results <- purrr::map_dfc(stats, function(stat) {
     org_stat <- stat
-    if (stat %in% c("sd", "var")){
+    if (stat %in% c("sd", "var")) {
       stat <- ifelse(stat == "sd", "stdev", "variance")
     }
 
     out <- exactextractr::exact_extract(
       raster,
       shp,
-      fun = stat)
+      fun = stat
+    )
     out <- tibble(as.numeric(out))
-    names(out) <-  ifelse(is.null(name), stat, paste(name, "_", org_stat, sep = ""))
-    out})
+    names(out) <- ifelse(is.null(name), stat, paste(name, "_", org_stat, sep = ""))
+    out
+  })
   results
 }

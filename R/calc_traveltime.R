@@ -25,14 +25,15 @@
 #' library(mapme.biodiversity)
 #'
 #' temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-#' if(!file.exists(temp_loc)){
-#' dir.create(temp_loc)
-#' resource_dir <- system.file("res", package = "mapme.biodiversity")
-#' file.copy(resource_dir, temp_loc, recursive = TRUE)
+#' if (!file.exists(temp_loc)) {
+#'   dir.create(temp_loc)
+#'   resource_dir <- system.file("res", package = "mapme.biodiversity")
+#'   file.copy(resource_dir, temp_loc, recursive = TRUE)
 #' }
 #'
 #' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-#'                         package = "mapme.biodiversity") %>%
+#'   package = "mapme.biodiversity"
+#' ) %>%
 #'   read_sf() %>%
 #'   init_portfolio(
 #'     years = 2022,
@@ -74,7 +75,9 @@ NULL
                              rundir = tempdir(),
                              verbose = TRUE,
                              ...) {
-  if (is.null(nelson_et_al)) return(NA)
+  if (is.null(nelson_et_al)) {
+    return(NA)
+  }
   # set max value of 65535 to NA
   nelson_et_al <- clamp(nelson_et_al, lower = -Inf, upper = 65534, values = FALSE)
   results <- .select_engine(
@@ -83,7 +86,8 @@ NULL
     stats = stats_accessibility,
     engine = engine,
     name = "minutes",
-    mode = "asset")
+    mode = "asset"
+  )
   results$distance <- unlist(lapply(names(nelson_et_al), function(x) strsplit(x, "-|.tif")[[1]][2]))
   results
 }

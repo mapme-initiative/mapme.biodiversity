@@ -99,7 +99,7 @@ NULL
 .calc_worldclim <- function(shp,
                             worldclim,
                             engine = "extract",
-                            stats_worldclim = "mean"){
+                            stats_worldclim = "mean") {
   if (is.null(worldclim)) {
     return(NA)
   }
@@ -108,7 +108,8 @@ NULL
     worldclim,
     lower = -Inf,
     upper = 65534,
-    values = FALSE)
+    values = FALSE
+  )
 
   layer <- strsplit(names(worldclim), "_")[[1]][3]
 

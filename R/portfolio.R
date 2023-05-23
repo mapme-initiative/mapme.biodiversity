@@ -84,7 +84,7 @@ init_portfolio <- function(x,
   }
   x$assetid <- 1:nrow(x)
 
-  if (!is.null(cores)){
+  if (!is.null(cores)) {
     warning(
       "Argument cores is deprecated. To enable parallel processing\n",
       "use future-style parallelization by enabling e.g. future::plan(future::multisession, workers = n).\n",

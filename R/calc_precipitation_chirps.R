@@ -48,9 +48,10 @@
 #'     ) %>%
 #'     get_resources("chirps") %>%
 #'     calc_indicators("precipitation_chirps",
-#'     engine = "exactextract",
-#'     scales_spi = 3,
-#'     spi_prev_years = 8) %>%
+#'       engine = "exactextract",
+#'       scales_spi = 3,
+#'       spi_prev_years = 8
+#'     ) %>%
 #'     tidyr::unnest(precipitation_chirps)))
 #' }
 NULL
@@ -95,8 +96,8 @@ NULL
   }
   if (any(years < 1981)) {
     warning(paste("Cannot calculate precipitation statistics ",
-                  "for years smaller than 1981",
-                  sep = ""
+      "for years smaller than 1981",
+      sep = ""
     ))
     years <- years[years >= 1981]
     if (length(years) == 0) {
@@ -124,7 +125,8 @@ NULL
   climate_chirps <- lapply(1:12, function(i) {
     app(
       climate_chirps[[layer_months == i]],
-      fun = "mean")
+      fun = "mean"
+    )
   })
   climate_chirps <- do.call(c, climate_chirps)
   names(climate_chirps) <- c(1:12)
@@ -140,8 +142,9 @@ NULL
         target_spi,
         scale = scale,
         fun = function(x, scale) {
-          SPEI::spi(x, scale = scale, na.rm = TRUE, verbose=FALSE)$fitted
-        })
+          SPEI::spi(x, scale = scale, na.rm = TRUE, verbose = FALSE)$fitted
+        }
+      )
       names(spi_chirps) <- names(target_spi)
       spi_chirps[[names(target_chirps)]]
     })
@@ -156,53 +159,56 @@ NULL
     raster = target_chirps,
     stats = "mean",
     engine = engine,
-    mode = processing_mode)
+    mode = processing_mode
+  )
 
   results_anomaly <- .select_engine(
     shp = shp,
     raster = anomaly_chirps,
     stats = "mean",
     engine = engine,
-    mode = processing_mode)
+    mode = processing_mode
+  )
 
-  if(!is.null(spi_chirps)){
-    results_spi <- purrr::map(1:nrow(shp), function(i){
-      results_shp <- purrr::lmap(spi_chirps, function(x){
+  if (!is.null(spi_chirps)) {
+    results_spi <- purrr::map(1:nrow(shp), function(i) {
+      results_shp <- purrr::lmap(spi_chirps, function(x) {
         result <- .select_engine(
-          shp = shp[i,],
+          shp = shp[i, ],
           raster = x[[1]],
           stats = "mean",
           engine = engine,
           name = names(x),
-          mode = "asset")
+          mode = "asset"
+        )
         names(result) <- names(x)
         result
       })
       dplyr::bind_cols(results_shp)
     })
-    if(processing_mode == "asset") results_spi <- results_spi[[1]]
+    if (processing_mode == "asset") results_spi <- results_spi[[1]]
   }
 
   dates <- as.Date(paste0(substr(names(target_chirps), 13, 19), ".01"), "%Y.%m.%d")
 
-  if (processing_mode == "portfolio"){
-    results <- purrr::map(1:nrow(shp), function(i){
+  if (processing_mode == "portfolio") {
+    results <- purrr::map(1:nrow(shp), function(i) {
       result <- tibble(
         dates = dates,
         absolute = as.numeric(results_absolute[[i]]$mean),
         anomaly = as.numeric(results_anomaly[[i]]$mean)
       )
-      if (!is.null(scales_spi)){
+      if (!is.null(scales_spi)) {
         result <- dplyr::bind_cols(result, results_spi[[i]])
       }
     })
   } else {
-    results <-   tibble(
+    results <- tibble(
       dates = dates,
       absolute = as.numeric(results_absolute$mean),
       anomaly = as.numeric(results_anomaly$mean)
     )
-    if (!is.null(scales_spi)){
+    if (!is.null(scales_spi)) {
       results <- dplyr::bind_cols(results, results_spi)
     }
   }

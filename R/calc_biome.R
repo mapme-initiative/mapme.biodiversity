@@ -16,14 +16,15 @@
 #' library(mapme.biodiversity)
 #'
 #' temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-#' if(!file.exists(temp_loc)){
-#' dir.create(temp_loc)
-#' resource_dir <- system.file("res", package = "mapme.biodiversity")
-#' file.copy(resource_dir, temp_loc, recursive = TRUE)
+#' if (!file.exists(temp_loc)) {
+#'   dir.create(temp_loc)
+#'   resource_dir <- system.file("res", package = "mapme.biodiversity")
+#'   file.copy(resource_dir, temp_loc, recursive = TRUE)
 #' }
 #'
 #' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-#'                         package = "mapme.biodiversity") %>%
+#'   package = "mapme.biodiversity"
+#' ) %>%
 #'   read_sf() %>%
 #'   init_portfolio(
 #'     years = 2001,
@@ -65,7 +66,9 @@ NULL
   biomes <- NULL
   new_area <- NULL
   area <- NULL
-  if(nrow(teow[[1]]) == 0) return(NA)
+  if (nrow(teow[[1]]) == 0) {
+    return(NA)
+  }
 
   merged <- .comp_teow(
     shp = shp,

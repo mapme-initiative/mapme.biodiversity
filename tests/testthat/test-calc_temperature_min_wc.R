@@ -19,28 +19,34 @@ test_that("worldclim minimum temperature works", {
     "Statistic 'not-available' is not supported. Please choose one of:"
   )
 
-  result <-  .calc_temperature_min_wc(shp, worldclim_min_temperature)
+  result <- .calc_temperature_min_wc(shp, worldclim_min_temperature)
   result_multi_stat <- .calc_temperature_min_wc(shp, worldclim_min_temperature, stats_worldclim = c("mean", "median", "sd"))
-  result_zonal <-  .calc_temperature_min_wc(shp, worldclim_min_temperature, engine = "zonal")
-  result_extract <-  .calc_temperature_min_wc(shp, worldclim_min_temperature, engine = "extract")
-  result_exact <-  .calc_temperature_min_wc(shp, worldclim_min_temperature, engine = "exactextract")
+  result_zonal <- .calc_temperature_min_wc(shp, worldclim_min_temperature, engine = "zonal")
+  result_extract <- .calc_temperature_min_wc(shp, worldclim_min_temperature, engine = "extract")
+  result_exact <- .calc_temperature_min_wc(shp, worldclim_min_temperature, engine = "exactextract")
 
   expect_equal(
     names(result),
-    c("tmin_mean", "date"))
+    c("tmin_mean", "date")
+  )
   expect_equal(
     names(result_multi_stat),
-    c("tmin_mean", "tmin_median", "tmin_sd", "date"))
+    c("tmin_mean", "tmin_median", "tmin_sd", "date")
+  )
   expect_equal(
     names(result_zonal),
-    names(result_extract))
+    names(result_extract)
+  )
   expect_equal(
     names(result_zonal),
-    names(result_exact))
+    names(result_exact)
+  )
   expect_equal(
     result_zonal$tmin_mean,
     result_extract$tmin_mean,
-    tolerance = 1e-4)
+    tolerance = 1e-4
+  )
   expect_snapshot(
-    result_exact$tmin_mean)
+    result_exact$tmin_mean
+  )
 })

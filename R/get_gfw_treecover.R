@@ -43,7 +43,6 @@ NULL
                                vers_treecover = "GFC-2021-v1.9",
                                rundir = tempdir(),
                                verbose = TRUE) {
-
   # check that version is correct
   if (!vers_treecover %in% .available_gfw_versions()) {
     stop(

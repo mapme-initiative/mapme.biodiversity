@@ -98,9 +98,9 @@ NULL
   )
 }
 
-.warn_about_ssl <- function(){
+.warn_about_ssl <- function() {
   status <- try(httr::http_error("https://srtm.csi.cgiar.org/"), silent = TRUE)
-  if(inherits(status, "try-error")){
+  if (inherits(status, "try-error")) {
     msg <- paste0(
       "The data source for 'nasa_srtm' has an expired SSL certificate.\n ",
       "You can disable SSL checks if you still want to download the resource.\n ",
