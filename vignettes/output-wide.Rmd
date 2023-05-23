@@ -40,8 +40,10 @@ realistic portfolio.
 
 ```{r read-poly}
 aoi <- read_sf(
-  system.file("extdata", "sierra_de_neiba_478140_2.gpkg", 
-              package = "mapme.biodiversity"))
+  system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+    package = "mapme.biodiversity"
+  )
+)
 aoi <- st_as_sf(st_make_grid(aoi, n = 3))
 print(aoi)
 ```
@@ -94,7 +96,7 @@ statistics from worldclim.
 
 ```{r calc-prec}
 port_w_chirps <- get_resources(port, "worldclim_precipitation")
-port_w_prec <- calc_indicators(port_w_chirps, "precipitation_wc", stats_worldclim= "mean")
+port_w_prec <- calc_indicators(port_w_chirps, "precipitation_wc", stats_worldclim = "mean")
 print(port_w_prec)
 ```
 We see that similar to the elevation indicator, the output consists of 9 rows
@@ -122,7 +124,7 @@ unnesting the indicator column. For this, let's write a function which takes the
 precipitation indicator of a single asset as input and transforms it to a wide-format.
 
 ```{r fun-prec-to-wide}
-prec2wide <- function(data){
+prec2wide <- function(data) {
   pivot_wider(data, names_from = date, values_from = prec_mean, names_prefix = "prec-")
 }
 prec2wide(port_w_prec$precipitation_wc[[1]])
