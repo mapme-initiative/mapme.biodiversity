@@ -25,7 +25,7 @@ global biodiversity under threat.
 The mapme.biodiversity package helps to analyse a number of biodiversity
 related indicators and biodiversity threats based on freely available
 geodata-sources such as the Global Forest Watch. It supports
-computational efficient routines and heavy parallelization in
+computational efficient routines and heavy parallel computing in
 cloud-infrastructures such as AWS or AZURE using in the statistical
 programming language R. The package allows for the analysis of global
 biodiversity portfolios with a thousand or millions of AOIs which is
@@ -103,9 +103,9 @@ object.
 ```
 
 
-## A note on parallelization
+## A note on parallel computing
 
-{mapme.biodiversity} follows the parallelization paradigm of the
+{mapme.biodiversity} follows the parallel computing paradigm of the
 {[future](https://cran.r-project.org/package=future)} 
 package. That means that you as a user are in the control if and how you would 
 like to set up parallel processing. Currently, {mapme.biodiversity} supports 
