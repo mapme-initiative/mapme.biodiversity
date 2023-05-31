@@ -109,7 +109,7 @@ available_resources <- function(resources = NULL) {
     ),
     soilgrids = list(
       type = "raster",
-      source = "https://www.isric.org/explore/soilgrids",
+      source = "ISRIC",
       downloader = ".get_soilgrids",
       arguments = list(
         layers = "clay",
@@ -123,6 +123,14 @@ available_resources <- function(resources = NULL) {
       downloader = ".get_nasa_firms",
       arguments = list(
         instrument = "VIIRS"
+      )
+    ),
+    ucdp_ged = list(
+      type = "vector",
+      source = "UCDP",
+      downloader = ".get_ucdp_ged",
+      arguments = list(
+        version = "latest"
       )
     )
   )
