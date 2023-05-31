@@ -130,7 +130,7 @@ available_resources <- function(resources = NULL) {
       source = "UCDP",
       downloader = ".get_ucdp_ged",
       arguments = list(
-        version = "latest"
+        version_ged = "latest"
       )
     )
   )
