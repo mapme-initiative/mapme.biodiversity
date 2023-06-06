@@ -1,5 +1,14 @@
 # mapme.biodiversity (development version)
 
+## New features
+
+- Added a new resource called `fritz_et_al` providing a raster layer of deforestation
+  drivers in tropical forests based on [Fritz et al. (2022)](https://www.frontiersin.org/articles/10.3389/fcosc.2022.830248/full)
+
+- Added a new indicator called `deforestation_drivers` using the `fritz_et_al` resource
+  to obtain information on the absolute and relative area driving forest losses in 
+  assets for the period 2008-2019
+
 ## Breaking changes
 
 - Changed the parallel backend to the [future](https://cran.r-project.org/package=future) 
