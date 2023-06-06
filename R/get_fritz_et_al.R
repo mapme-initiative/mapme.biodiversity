@@ -64,25 +64,27 @@ NULL
   )
 
   .unzip_and_remove(filename, rundir, remove = FALSE)
-  tif_file <- grep("*.tif$", list.files(rundir, full.names = TRUE), value = TRUE)
-  if (length(tif_file) > 1) tif_file <- grep("geo", tif_file, value = TRUE, invert = TRUE)
+  files <- list.files(rundir, full.names = TRUE)
+  geo_file <- grep("geo", files, value = TRUE)
+  if (length(geo_file) > 0) {
+    return(geo_file)
+  }
+  tif_file <- grep("*.tif$", file, value = TRUE)
   geo_file <- file.path(rundir, paste0("geo_", basename(tif_file)))
 
-  if (!file.exists(geo_file)) {
-    drivers <- rast(tif_file)
-    if (verbose) {
-      message("Projecting Fritz et al. (2022) deforestation drivers to geographic coordinates.")
-    }
-    project(drivers, "EPSG:4326",
-      filename = geo_file, datatype = "INT2U",
-      overwrite = TRUE, progress = TRUE, method = "near"
-    )
-
-    del_files <- grep(basename(geo_file), list.files(rundir, full.names = TRUE),
-      value = TRUE, invert = TRUE
-    )
-    del_files <- grep("zip", del_files, value = TRUE, invert = TRUE)
-    file.remove(del_files)
+  drivers <- rast(tif_file)
+  if (verbose) {
+    message("Projecting Fritz et al. (2022) deforestation drivers to geographic coordinates.")
   }
+  project(drivers, "EPSG:4326",
+    filename = geo_file, datatype = "INT2U",
+    overwrite = TRUE, progress = TRUE, method = "near"
+  )
+
+  del_files <- grep(basename(geo_file), list.files(rundir, full.names = TRUE),
+    value = TRUE, invert = TRUE
+  )
+  del_files <- grep("zip", del_files, value = TRUE, invert = TRUE)
+  file.remove(del_files)
   return(geo_file)
 }
