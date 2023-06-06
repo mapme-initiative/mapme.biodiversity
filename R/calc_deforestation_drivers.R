@@ -71,6 +71,6 @@ NULL
     tidyr::replace_na(list(area = 0)) %>%
     dplyr::select(class, area) %>%
     dplyr::mutate(percent = area / sum(area)) %>%
-    tidyr::replace_na(list(percent = 0))
-  tibble::as_tibble()
+    tidyr::replace_na(list(percent = 0)) %>%
+    tibble::as_tibble()
 }
