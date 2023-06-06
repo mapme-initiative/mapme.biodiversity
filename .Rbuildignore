@@ -30,3 +30,4 @@ vignettes/installation.Rmd
 vignettes/contributing.Rmd
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
+^data-raw$
