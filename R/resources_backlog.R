@@ -124,6 +124,14 @@ available_resources <- function(resources = NULL) {
       arguments = list(
         instrument = "VIIRS"
       )
+    ),
+    fritz_et_al = list(
+      type = "raster",
+      source = "IIASA",
+      downloader = ".get_fritz_et_al",
+      arguments = list(
+        res_drivers = 100
+      )
     )
   )
 

@@ -181,6 +181,12 @@ available_indicators <- function(indicator = NULL) {
       inputs = list(nasa_firms = "vector"),
       arguments = list(),
       processing_mode = "asset"
+    ),
+    deforestation_drivers = list(
+      name = ".calc_deforestation_drivers",
+      inputs = list(fritz_et_al = "raster"),
+      arguments = list(),
+      processing_mode = "portfolio"
     )
   )
 
