@@ -57,6 +57,8 @@ navbar:
          href: articles/terminology.html
        - text: Workflow
          href: articles/workflow.html
+       - text: Access
+         href: articles/access.html
        - text: Contributing
          href: articles/contributing.html
    github:
