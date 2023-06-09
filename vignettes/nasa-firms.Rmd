@@ -1,8 +1,8 @@
 ---
-title: "Access"
+title: "NASA FIRMS"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Access}
+  %\VignetteIndexEntry{NASA FIRMS}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---

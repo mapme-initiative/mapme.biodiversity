@@ -28,7 +28,7 @@ vignettes/workflow.Rmd
 vignettes/introduction.Rmd
 vignettes/installation.Rmd
 vignettes/contributing.Rmd
-vignettes/access.Rmd
+vignettes/nasa-firms.Rmd
 vignettes/assets
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
