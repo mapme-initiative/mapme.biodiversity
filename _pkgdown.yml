@@ -44,7 +44,7 @@ reference:
 navbar:
   bg: primary
   structure:
-    left: [home, quickstart, articles, reference, news]
+    left: [home, quickstart, articles, examples, reference, news]
     right: [github]
   components:
    quickstart:
@@ -61,10 +61,13 @@ navbar:
          href: articles/terminology.html
        - text: Workflow
          href: articles/workflow.html
-       - text: Wide Output
-         href: articles/output-wide.html
        - text: Contributing
          href: articles/contributing.html
+   examples:
+     text: Examples
+     menu:
+       - text: Wide Output
+         href: articles/output-wide.html
    github:
      icon: fab fa-github fa-lg
      href: https://github.com/mapme-initiative/mapme.biodiversity/
