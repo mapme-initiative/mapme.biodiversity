@@ -5,10 +5,11 @@ articles:
   contributing: contributing.html
   installation: installation.html
   introduction: introduction.html
+  output-wide: output-wide.html
   terminology: terminology.html
   userguide: userguide.html
   workflow: workflow.html
-last_built: 2023-06-06T10:24Z
+last_built: 2023-06-13T10:13Z
 urls:
   reference: https://mapme-initiative.github.io/mapme.biodiversity/reference
   article: https://mapme-initiative.github.io/mapme.biodiversity/articles

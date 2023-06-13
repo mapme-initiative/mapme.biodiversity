@@ -31,6 +31,12 @@
     <a class="dropdown-item" href="../articles/contributing.html">Contributing</a>
   </div>
 </li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-examples">Examples</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-examples">
+    <a class="dropdown-item" href="../articles/output-wide.html">Wide Output</a>
+  </div>
+</li>
 <li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
@@ -64,10 +70,14 @@
 <ul><li>Changed the parallel backend to the <a href="https://cran.r-project.org/package=future" class="external-link">future</a> package. Parallel processing is now implemented by <a href="https://furrr.futureverse.org/reference/future_map.html" class="external-link">furrr::future_map()</a> on the asset level within the calc_indicators() function. User code is now required to set up a <a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan()</a> to enable parallel processing. The function call needs to be wrapped on the user side with <a href="https://progressr.futureverse.org/reference/with_progress.html" class="external-link">progressr::with_progress()</a> to show a progress bar.</li>
 </ul></div>
 <div class="section level3">
+<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<ul><li>added a new vignette for the web-version of the package only informing about how to obtain wide-output from indicators</li>
+</ul></div>
+<div class="section level3">
 <h3 id="internal-development-version">Internal<a class="anchor" aria-label="anchor" href="#internal-development-version"></a></h3>
 <ul><li><p>applying tidyverse coding style to existing code</p></li>
 <li><p>re-factoring of vector-raster zonal statistic engines (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/150" class="external-link">#150</a>)</p></li>
-<li><p>extensive re-writting of testing infrastructure for indicator functions omitting the usage of snapshot tests as far as possible (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/142" class="external-link">#142</a>)</p></li>
+<li><p>extensive re-writing of testing infrastructure for indicator functions omitting the usage of snapshot tests as far as possible (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/142" class="external-link">#142</a>)</p></li>
 <li><p>extensive re-factoring of engines in raster-vector indicators using switch statements</p></li>
 <li><p>re-factoring usage of terra functions excluding the <code>todisk</code> flag and related arguments</p></li>
 </ul></div>
