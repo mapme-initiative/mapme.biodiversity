@@ -373,7 +373,7 @@ cols <- map2color(dens_emp$v,
 
 persp3d(dens_emp$v,
   col = cols, xlab = "X", ylab = "Y", zlab = "Fire Intensity",
-  main = "Intensity for Q1", aspect = c(1, 1, .65)
+  main = "Fire intensity for Q2", aspect = c(1, 1, .65)
 )
 control <- par3dinterpControl(spin3d(axis = c(0, 0, 1)), 0, 12, steps = 40)
 rglwidget() %>% playwidget(control, step = 0.01, loop = TRUE, rate = 0.5)
