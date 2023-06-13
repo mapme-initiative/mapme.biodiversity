@@ -62,6 +62,8 @@ navbar:
    examples:
      text: Examples
      menu:
+       - text: Wide Output
+         href: articles/output-wide.html
        - text: NASA FIRMS
          href: articles/nasa-firms.html
    github:
