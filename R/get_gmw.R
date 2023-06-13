@@ -86,9 +86,14 @@ NULL
     ),
     exdir = rundir
   )
-  shp <- file.path(
-    rundir, paste0("gmw_v3_", year, "_vec.shp")
-  )
+  # Source data from 2018 doesn't correspond to the pattern for other years.
+  # We need to create an exception for it.
+  if (year == 2018) {
+    shp <- file.path(rundir,
+                     paste0("GMW_v3_2018/00_Data/gmw_v3_", year, ".shp"))
+  } else {
+    shp <- file.path(rundir, paste0("gmw_v3_", year, "_vec.shp"))
+  }
   shp <- read_sf(shp)
   write_sf(shp, gpkg)
   d_files <- list.files(rundir, full.names = T)
