@@ -15,6 +15,9 @@
 
 - added a new vignette for the web-version of the package only informing
   about how to obtain wide-output from indicators
+  
+- added a new vignette for the web-version for a custom analysis of the NASA
+  FIRMS resource in the example section
 
 ## Internal
 
