@@ -1,0 +1,223 @@
+---
+title: "Transform indicator output to wide-format"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Transform indicator output to wide-format}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(sf)
+library(dplyr)
+library(tidyr)
+library(mapme.biodiversity)
+```
+
+## Objectives
+
+This tutorial gives you some information how to transform the output of
+the mapme-biodiversity package to a wide format for exchange with other
+(geospatial-)software, such as QGIS. This is necessary because the
+package uses the so-called nested-list format by default to support very
+different indicators that each may come in its own format. However, this
+format is specific to R and to use the data in other software thus
+requires some additional steps to be taken. This vignette thus shows you
+how you can obtain a wide-format for your portfolio that you can easily
+export and use with other software.
+
+## What are long vs. wide tables?
+
+Tabular data can be structured in two different ways, which are usually
+referred to as long and wide format. Most people are more familiar with
+the wide format, because this is a format we as humans would naturally
+structure our data when we work with spreadsheets, e.g. in Excel. In
+wide-format, the identifier of a observation is included exactly once
+and does not repeat itself (see Table A). In the long format, the
+identifier as well as other qualifying variables, might be repeated
+several times to uniquely identify each observation is a single row (see
+Table B). The long format is often required when interacting with
+computers, e.g. to make plots with ggplot2. The content of the two is
+exactly the same either way, the one might be just more friendly to
+humans than to computers. If you are familiar with the R tidyverse, you
+might also have heard of the term *tidy* data. In terms of tabular data
+you can imagine *tidy* data to be referring to data in a long table
+which naturally fulfills the following requirements:
+
+-   each variable has its own column
+-   each observation has its own row
+-   each value has its own cell
+
+![Fig. 1: Example of a wide and long table holding the same
+data.](assets/img/wide-long-tables.png)
+
+Table A, in that sense, is not *tidy* since the year variable is not
+found in its own column but instead it is scattered in two different
+columns. Table B is a long format with each variable being found in
+exactly one column. In that sense, each individual row represents
+exactly one observation, meaning the observation of a specific country
+in a specific year.
+
+When we structure data in the long format the objects will usually have
+a larger memory footprint than compared to a wide format. For smaller
+objects or data types with small memory consumption, this might not pose
+a serious limitation to the workflow. However, geometry information,
+here indicated as a WKT string, might quickly accumulate a large
+proportion of the available memory, even more so if the portfolio
+consists of a high number of complex geometries that are then copied to
+fit the the long-format requirement. For that\
+reason, this packages uses a nested-list format to hold tables for
+indicators as single columns within the portfolio. The remainder of this
+tutorial will show you in more detail\
+how you can work with those R specific data format.
+
+## The simple case - single-row indicators
+
+We start by reading a GeoPackage from disk. For the sake of the
+argument, we split the original single polygon into 9 distinct polygons
+to simulate a realistic portfolio consisting of multiple assets.
+
+```{r read-poly}
+aoi <- read_sf(
+  system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+    package = "mapme.biodiversity"
+  )
+)
+aoi <- st_as_sf(st_make_grid(aoi, n = 3))
+print(aoi)
+```
+
+As a simple example, suppose we interested in extracting the average
+elevation per asset in our portfolio. As usual, we will have to make
+available the SRTM resource as well as requesting the calculation of the
+respective indicator.
+
+```{r calc-elev}
+port <- init_portfolio(
+  aoi,
+  years = 2018,
+  outdir = system.file("res", package = "mapme.biodiversity"),
+  tmpdir = system.file("tmp", package = "mapme.biodiversity"),
+  add_resources = TRUE
+)
+
+port_w_srtm <- get_resources(port, "nasa_srtm")
+port_w_elev <- calc_indicators(port_w_srtm, "elevation", stats_elevation = "mean")
+print(port_w_elev)
+```
+
+As we can observe from the output, two new columns were added to the sf
+object. The first is called `assetid` and simply is a unique identifier
+of the respective asset. The second column is called `elevation` and is
+of type `list` indicating that it represents a nested-list column. What
+that means is that we are able to maintain the rectangular shape of our
+original data (e.g. one polygon per row), while supporting arbitrarily
+shaped outputs for indicators. Let's observe how the elevation indicator
+looks like:
+
+```{r investigate-elev}
+print(port_w_elev$elevation[[1]])
+```
+
+From the syntax above, you can see how you can access a single object
+within the nested list column (e.g. by using the list accessor `[[`). In
+this case, the shape of elevation indicator is a single-row and
+single-column tibble with the mean elevation as its value. Because the
+indicator elevation comes without a temporal axis, we can simply unnest
+the elevation column to get to a wide-format output:
+
+```{r elev-to-wide}
+port_wide_1 <- tidyr::unnest(port_w_elev, elevation)
+print(port_wide_1)
+```
+
+In this case, the result has 9 rows just like the original data frame.
+We can now export our portfolio for example as a geopackage that can be
+read directly into e.g. QGIS or as a CSV without the geospatial
+information:
+
+```{r simple-export}
+st_write(port_wide_1, dsn = tempfile(fileext = ".gpkg"))
+write.csv(st_drop_geometry(port_wide_1), file = tempfile(fileext = ".csv"))
+```
+
+## The harder case - indicators with multi-row output
+
+Let's continue to query an indicator which has a multi-row output, i.e.
+precipitation statistics from [WorldClim](https://www.worldclim.org/).
+
+```{r calc-prec}
+port_w_chirps <- get_resources(port, "worldclim_precipitation")
+port_w_prec <- calc_indicators(port_w_chirps, "precipitation_wc", stats_worldclim = "mean")
+print(port_w_prec)
+```
+
+We see that similar to the elevation indicator, the output consists of 9
+rows with the precipitation indicator as a single nested-list column.
+Note, however, the differences when we take a look at the shape of a the
+indicator for a specific asset:
+
+```{r investigate-precip}
+print(port_w_prec$precipitation_wc[[1]])
+```
+
+For a single asset, we obtain a tibble with 12 rows (for each month in
+the queried year 2018). Now, if we just simply unnest this indicator
+column observe what happens to the shape of the output:
+
+```{r prec-unnest}
+port_wide_2 <- tidyr::unnest(port_w_prec, precipitation_wc)
+print(port_wide_2)
+```
+
+Instead of 9 rows, we get a tibble with 108 rows (9 assets \* 12), with
+the metadata for each asset as well as the geometry column being
+repeated. This is not desirable, especially for portfolios with large
+numbers of assets where the repetition of the geometry data can cause
+very large objects. Now, let's investigate how we still are able to get
+a wide output. A valid approach is to re-shape the indicators per asset
+to a wide format before unnesting the indicator column. For this, let's
+write a function which takes the precipitation indicator of a single
+asset as input and transforms it to a wide-format.
+
+```{r fun-prec-to-wide}
+prec2wide <- function(data) {
+  pivot_wider(data, names_from = date, values_from = prec_mean, names_prefix = "prec-")
+}
+prec2wide(port_w_prec$precipitation_wc[[1]])
+```
+
+From the example output above we see that our custom `prec2wide()`
+functions takes a single tibble as input, puts in the dates appended by
+`prec-` as column names and the associated average precipitation values
+as a single row. Now, we can use functionality of the `purrr` package to
+map this function over our indicator column, save the result in a new
+column (or simply overwrite the original), and finally simply call
+unnest to get the output in a wide format.
+
+```{r prec-to-wide}
+port_w_prec$precipitation_wc2 <- purrr::map(port_w_prec$precipitation_wc, prec2wide)
+port_w_prec <- select(port_w_prec, assetid, precipitation_wc2)
+port_wide_3 <- unnest(port_w_prec, precipitation_wc2)
+
+print(port_wide_3)
+```
+
+We can now use `st_write()` to save this wide-format sf object to a
+geospatial format of our choice or drop the geometry information
+altogether and dump the data into a csv.
+
+```{r write-output}
+st_write(port_wide_3, dsn = tempfile(fileext = ".gpkg"))
+write.csv(st_drop_geometry(port_wide_3), file = tempfile(fileext = ".csv"))
+```
