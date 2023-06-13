@@ -3,7 +3,7 @@
 
 [![R-CMD-check](https://github.com/mapme-initiative/mapme.biodiversity/workflows/R-CMD-check/badge.svg)](https://github.com/mapme-initiative/mapme.biodiversity/actions)
 [![Coverage
-Status](https://img.shields.io/codecov/c/github/mapme-initiative/mapme.biodiversity/master.svg)](https://codecov.io/github/mapme-initiative/mapme.biodiversity?branch=master)
+Status](https://img.shields.io/codecov/c/github/mapme-initiative/mapme.biodiversity/master.svg)](https://app.codecov.io/github/mapme-initiative/mapme.biodiversity?branch=main)
 [![CRAN
 status](https://badges.cranchecks.info/summary/mapme.biodiversity.svg)](https://cran.r-project.org/web/checks/check_results_mapme.biodiversity.html)
 [![CRAN
@@ -81,6 +81,7 @@ cat(sprintf(
     ## Supported resources:
     ## - chirps
     ## - esalandcover
+    ## - fritz_et_al
     ## - gfw_emissions
     ## - gfw_lossyear
     ## - gfw_treecover
@@ -100,6 +101,7 @@ cat(sprintf(
     ## - active_fire_counts
     ## - active_fire_properties
     ## - biome
+    ## - deforestation_drivers
     ## - drought_indicator
     ## - ecoregion
     ## - elevation
