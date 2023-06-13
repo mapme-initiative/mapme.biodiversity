@@ -91,10 +91,14 @@ NULL
   if (year == 2018) {
     shp <- file.path(rundir,
                      paste0("GMW_v3_2018/00_Data/gmw_v3_", year, ".shp"))
+    # For unkown reason 2018 data is also in EPSG:3857 (WGS84 pseudo mercator)
+    # instead of EPSG:4326 (WGS84), we need to reproject to avoid errors
+    shp <- read_sf(shp) %>%
+      st_transform(crs = 4326)
   } else {
     shp <- file.path(rundir, paste0("gmw_v3_", year, "_vec.shp"))
+    shp <- read_sf(shp)
   }
-  shp <- read_sf(shp)
   write_sf(shp, gpkg)
   d_files <- list.files(rundir, full.names = T)
   unlink(grep("gmw-extent*", d_files, value = T, invert = T),
