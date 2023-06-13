@@ -16,10 +16,6 @@ home:
     href: https://mapme-initiative.org/
   - text: Read the Open Source Guide
     href: https://github.com/mapme-initiative/mapme.osg
-  - text: Browse source code
-    href: https://github.com/mapme-initiative/mapme.biodiversity
-  - text: File an issue
-    href: https://github.com/mapme-initiative/mapme.biodiversity/issues
 
 reference:
   - title: Functions

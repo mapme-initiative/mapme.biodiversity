@@ -25,7 +25,7 @@ global biodiversity under threat.
 The mapme.biodiversity package helps to analyse a number of biodiversity
 related indicators and biodiversity threats based on freely available
 geodata-sources such as the Global Forest Watch. It supports
-computational efficient routines and heavy parallelization in
+computational efficient routines and heavy parallel computing in
 cloud-infrastructures such as AWS or AZURE using in the statistical
 programming language R. The package allows for the analysis of global
 biodiversity portfolios with a thousand or millions of AOIs which is
@@ -71,9 +71,11 @@ library(sf)
 ``` r
 resources <- names(available_resources())
 indicators <- names(available_indicators())
-cat(sprintf("Supported resources:\n- %s\n\nSupported indicators:\n- %s",
-            paste(resources, collapse = "\n- "),
-            paste(indicators, collapse = "\n- ")))
+cat(sprintf(
+  "Supported resources:\n- %s\n\nSupported indicators:\n- %s",
+  paste(resources, collapse = "\n- "),
+  paste(indicators, collapse = "\n- ")
+))
 ```
 
     ## Supported resources:
@@ -127,20 +129,20 @@ object.
 
 ``` r
 (system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
-    sf::read_sf() %>%
-    init_portfolio(
-      years = 2016:2017,
-      outdir = system.file("res", package = "mapme.biodiversity"),
-      tmpdir = system.file("tmp", package = "mapme.biodiversity"),
-      add_resources = FALSE,
-      verbose = FALSE
-    ) %>%
-    get_resources(
-      resources = c("gfw_treecover", "gfw_lossyear", "gfw_emissions"),
-      vers_treecover = "GFC-2020-v1.8", vers_lossyear = "GFC-2020-v1.8"
-    ) %>%
-    calc_indicators("treecover_area_and_emissions", min_size = 1, min_cover = 30) %>%
-    tidyr::unnest(treecover_area_and_emissions))
+  sf::read_sf() %>%
+  init_portfolio(
+    years = 2016:2017,
+    outdir = system.file("res", package = "mapme.biodiversity"),
+    tmpdir = system.file("tmp", package = "mapme.biodiversity"),
+    add_resources = FALSE,
+    verbose = FALSE
+  ) %>%
+  get_resources(
+    resources = c("gfw_treecover", "gfw_lossyear", "gfw_emissions"),
+    vers_treecover = "GFC-2020-v1.8", vers_lossyear = "GFC-2020-v1.8"
+  ) %>%
+  calc_indicators("treecover_area_and_emissions", min_size = 1, min_cover = 30) %>%
+  tidyr::unnest(treecover_area_and_emissions))
 ```
 
     ## Simple feature collection with 2 features and 8 fields
@@ -155,9 +157,9 @@ object.
     ## 2 478140 Sierra de Neiba National Park DOM         1  2017      3468     2345.
     ## # ℹ 1 more variable: geom <POLYGON [°]>
 
-## A note on parallelization
+## A note on parallel computing
 
-{mapme.biodiversity} follows the parallelization paradigm of the
+{mapme.biodiversity} follows the parallel computing paradigm of the
 {[future](https://cran.r-project.org/package=future)} package. That
 means that you as a user are in the control if and how you would like to
 set up parallel processing. Currently, {mapme.biodiversity} supports
@@ -187,7 +189,7 @@ with_progress({
   )
 })
 
-plan(sequential) # close child processes 
+plan(sequential) # close child processes
 ```
 
 Note, that the above code uses `future::multisession()` as the parallel
