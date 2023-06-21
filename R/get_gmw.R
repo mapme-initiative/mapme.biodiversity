@@ -89,8 +89,7 @@ NULL
   shp <- file.path(
     rundir, paste0("gmw_v3_", year, "_vec.shp")
   )
-  shp <- read_sf(shp)
-  write_sf(shp, gpkg)
+  gdal_utils(util = "vectortranslate", shp, gpkg)
   d_files <- list.files(rundir, full.names = T)
   unlink(grep("gmw-extent*", d_files, value = T, invert = T),
     recursive = T, force = T
