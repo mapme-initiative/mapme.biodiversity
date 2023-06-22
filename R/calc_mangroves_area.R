@@ -42,7 +42,7 @@ NULL
 #'
 #' Considering 25 meter spatial resolution global polygons users can compute
 #' the mangrve extent area for their area of interest available from 1996 to
-#' 2016 with periodic updates in between.
+#' 2020 with periodic updates in between.
 #'
 #' @param shp A single polygon for which to calculate the mangrove extent
 #' @param gmw The mangrove vector resource (GMW)
