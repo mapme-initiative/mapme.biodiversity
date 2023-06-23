@@ -79,14 +79,13 @@ NULL
     tif_file <- grep("geo", tif_file, value = TRUE, invert = TRUE)
   }
   geo_file <- file.path(rundir, identifier)
-
-  drivers <- rast(tif_file)
-  if (verbose) {
-    message("Projecting Fritz et al. (2022) deforestation drivers to geographic coordinates.")
-  }
-  project(drivers, "EPSG:4326",
-    filename = geo_file, datatype = "INT2U",
-    overwrite = TRUE, progress = verbose, method = "near"
+  sf::gdal_utils("warp", tif_file, geo_file,
+    options = c(
+      "-t_srs", "EPSG:4326",
+      "-r", "near",
+      "-ot", "Byte",
+      "-co", "COMPRESS=LZW"
+    )
   )
 
   # delete all files accept with geo component in name
