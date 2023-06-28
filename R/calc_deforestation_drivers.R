@@ -47,11 +47,6 @@ NULL
   if (is.null(fritz_et_al)) {
     return(NA)
   }
-  purrr::map(1:nrow(shp), function(i) .drivers_asset(shp[i, ], fritz_et_al))
-}
-
-.drivers_asset <- function(shp,
-                           fritz_et_al) {
   classes <- data.frame(
     class = c(
       "commercial agriculture", "commercial oil palm",

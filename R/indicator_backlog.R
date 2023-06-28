@@ -186,7 +186,7 @@ available_indicators <- function(indicator = NULL) {
       name = ".calc_deforestation_drivers",
       inputs = list(fritz_et_al = "raster"),
       arguments = list(),
-      processing_mode = "portfolio"
+      processing_mode = "asset"
     )
   )
 
