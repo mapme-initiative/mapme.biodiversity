@@ -19,6 +19,11 @@
   to enable parallel processing. The function call needs to be wrapped on the user
   side with [progressr::with_progress()](https://progressr.futureverse.org/reference/with_progress.html)
   to show a progress bar.
+  
+## New features
+
+- added a new vignette for the web-version of the package only informing
+  about how to obtain wide-output from indicators
 
 ## Internal
 
@@ -26,7 +31,7 @@
 
 - re-factoring of vector-raster zonal statistic engines (#150)
 
-- extensive re-writting of testing infrastructure for indicator functions omitting
+- extensive re-writing of testing infrastructure for indicator functions omitting
 the usage of snapshot tests as far as possible (#142)
 
 - extensive re-factoring of engines in raster-vector indicators using switch statements

@@ -28,6 +28,8 @@ vignettes/workflow.Rmd
 vignettes/introduction.Rmd
 vignettes/installation.Rmd
 vignettes/contributing.Rmd
+vignettes/output-wide.Rmd
+vignettes/assets
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
 ^data-raw$
