@@ -15,8 +15,6 @@ test_that("deforestation drivers orks", {
 
   result <- .calc_deforestation_drivers(shp, drivers)
 
-  expect_true(inherits(result, "list"))
-  result <- result[[1]]
   expect_true(inherits(result, "tbl_df"))
 
   expect_equal(
