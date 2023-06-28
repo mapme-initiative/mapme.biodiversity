@@ -6,7 +6,7 @@
 \title{Global Mangrove Extent Polygon}
 \format{
 Global mangrove extent polygon available for years 1996, 2007-2010,
-2015, and 2016.
+and 2015-2020.
 }
 \source{
 \url{https://data.unep-wcmc.org/datasets/45}
@@ -16,7 +16,7 @@ This resource is part of the publication by Bunting et al. (2018)
 "The Global Mangrove Watch—A New 2010 Global Baseline of Mangrove Extent".
 The polygons represent the mangrove, which is tropical coastal vegetation
 and considered the most significant part of the marine ecosystem. This
-resource is available for the period 1996- 2016 from Global Mangrove Watch
+resource is available for the period 1996- 2020 from Global Mangrove Watch
 (GMW), providing geospatial information about global mangrove extent.
 }
 \references{
