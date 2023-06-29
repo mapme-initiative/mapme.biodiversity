@@ -31,7 +31,7 @@ nasa_srtm
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/userguide.html">Quickstart</a>
+  <a class="nav-link" href="../articles/quickstart.html">Quickstart</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
@@ -44,9 +44,10 @@ nasa_srtm
   </div>
 </li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-examples">Examples</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-examples">
-    <a class="dropdown-item" href="../articles/output-wide.html">Wide Output</a>
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-how-to-s">How To's</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-how-to-s">
+    <a class="dropdown-item" href="../articles/output-wide.html">Transform output to wide</a>
+    <a class="dropdown-item" href="../articles/nasa-firms.html">Use downloaded resources</a>
   </div>
 </li>
 <li class="active nav-item">
@@ -132,23 +133,19 @@ one or multiple inputs as character.  Supported statistics are: "mean",
 <span class="r-in"><span>    <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>    <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">elevation</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error in map(.x, .f, ...) : <span style="color: #00BBBB;">ℹ</span> In index: 4.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Caused by error:</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> [extract] not a valid function</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Error occured at polygon 1 with the following error message: Error in map(.x, .f, ...) : <span style="color: #00BBBB;">ℹ</span> In index: 4.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Caused by error:</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> [extract] not a valid function</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> . </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>  Returning NAs.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 6 fields</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POLYGON</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  WGS 84</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 7</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   WDPAID NAME            DESIG_ENG ISO3  assetid value                      geom</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">478</span>140 Sierra de Neiba National… DOM         1 <span style="color: #BB0000;">NA</span>    ((-71.76134 18.66333, -7…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;simpleError in .warn_about_ssl(): The data source for 'nasa_srtm' has an expired SSL certificate.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  You can disable SSL checks if you still want to download the resource.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Note, that when disabling SSL certification you understand and accept</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  the associated risks. See `?nasa_srtm` for further information.&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;simpleWarning: Download for resource nasa_srtm failed. Returning unmodified portfolio object.&gt;</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Download for resource nasa_srtm failed. Returning unmodified portfolio object.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in .check_existing_resources(existing_resources, required_resources,  : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   The following required resource is not available: nasa_srtm.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Error in .check_existing_resources(existing_resources, required_resources,  : \n  The following required resource is not available: nasa_srtm.\n"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "try-error"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"condition")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;simpleError in .check_existing_resources(existing_resources, required_resources,     needed = TRUE): The following required resource is not available: nasa_srtm.&gt;</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

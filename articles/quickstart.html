@@ -43,7 +43,7 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="active nav-item">
-  <a class="nav-link" href="../articles/userguide.html">Quickstart</a>
+  <a class="nav-link" href="../articles/quickstart.html">Quickstart</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
@@ -56,9 +56,10 @@
   </div>
 </li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-examples">Examples</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-examples">
-    <a class="dropdown-item" href="../articles/output-wide.html">Wide Output</a>
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-how-to-s">How To's</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-how-to-s">
+    <a class="dropdown-item" href="../articles/output-wide.html">Transform output to wide</a>
+    <a class="dropdown-item" href="../articles/nasa-firms.html">Use downloaded resources</a>
   </div>
 </li>
 <li class="nav-item">
@@ -94,8 +95,8 @@
       <img src="../logo.png" class="logo" alt=""><h1>Quickstart</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/mapme-initiative/mapme.biodiversity/blob/HEAD/vignettes/userguide.Rmd" class="external-link"><code>vignettes/userguide.Rmd</code></a></small>
-      <div class="d-none name"><code>userguide.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/mapme-initiative/mapme.biodiversity/blob/HEAD/vignettes/quickstart.Rmd" class="external-link"><code>vignettes/quickstart.Rmd</code></a></small>
+      <div class="d-none name"><code>quickstart.Rmd</code></div>
     </div>
 
     
@@ -225,7 +226,7 @@ used to uniquely identify each asset in the portfolio.</p>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sample_portfolio</span><span class="op">[</span><span class="st">"assetid"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<p><img src="userguide_files/figure-html/init_portfolio-1.png" width="120%" height="120%"></p>
+<p><img src="quickstart_files/figure-html/init_portfolio-1.png" width="120%" height="120%"></p>
 <p>The first argument, <code>x</code>, is the sf-object that we want to
 turn into a portfolio. The argument <code>years</code> allows us to
 restrict our analysis to certain years only. Certain resources with a
@@ -427,7 +428,7 @@ compared to the 1981-2010 climate normal period (make sure to read the
 detailed indicator documentation via
 <code><a href="../reference/precipitation_chirps.html">?precipitation_chirps</a></code>). Let’s quickly visualize the results
 for a single asset:</p>
-<p><img src="userguide_files/figure-html/plot_precipitation-1.png" width="364.583333333333"><img src="userguide_files/figure-html/plot_precipitation-2.png" width="364.583333333333"><img src="userguide_files/figure-html/plot_precipitation-3.png" width="364.583333333333"></p>
+<p><img src="quickstart_files/figure-html/plot_precipitation-1.png" width="364.583333333333"><img src="quickstart_files/figure-html/plot_precipitation-2.png" width="364.583333333333"><img src="quickstart_files/figure-html/plot_precipitation-3.png" width="364.583333333333"></p>
 <p>If you wish to conduct your statistical analysis in R, you can use
 <a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a> functionality to unnest one or multiple columns.
 Especially for large portfolios, it is usually a good idea to keep the
@@ -520,9 +521,9 @@ it.</p>
 <span>  dsn <span class="op">=</span> <span class="va">tmp_output</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Writing layer `metadata' to data source </span></span>
-<span><span class="co">#&gt;   `/tmp/Rtmp5Z72jZ/file210d60de073e.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt;   `/tmp/RtmpTUwkMb/file22de2919f715.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">#&gt; Writing 20 features with 2 fields and geometry type Polygon.</span></span>
-<span><span class="co">#&gt; Updating layer `precipitation_chirps' to data source `/tmp/Rtmp5Z72jZ/file210d60de073e.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt; Updating layer `precipitation_chirps' to data source `/tmp/RtmpTUwkMb/file22de2919f715.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">#&gt; Writing 240 features with 5 fields without geometries.</span></span>
 <span><span class="op">(</span><span class="va">portfolio_from_disk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_portfolio.html">read_portfolio</a></span><span class="op">(</span><span class="va">tmp_output</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Simple feature collection with 20 features and 3 fields</span></span>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="mapme.biodiversity">
-<title>Transform indicator output to wide-format • mapme.biodiversity</title>
+<title>How To: Transform indicator output to wide-format • mapme.biodiversity</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -17,7 +17,7 @@
 <link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Transform indicator output to wide-format">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="How To: Transform indicator output to wide-format">
 <meta property="og:description" content="mapme.biodiversity">
 <meta property="og:image" content="https://mapme-initiative.github.io/mapme.biodiversity/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -43,7 +43,7 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
-  <a class="nav-link" href="../articles/userguide.html">Quickstart</a>
+  <a class="nav-link" href="../articles/quickstart.html">Quickstart</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
@@ -56,9 +56,10 @@
   </div>
 </li>
 <li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-examples">Examples</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-examples">
-    <a class="dropdown-item" href="../articles/output-wide.html">Wide Output</a>
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-how-to-s">How To's</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-how-to-s">
+    <a class="dropdown-item" href="../articles/output-wide.html">Transform output to wide</a>
+    <a class="dropdown-item" href="../articles/nasa-firms.html">Use downloaded resources</a>
   </div>
 </li>
 <li class="nav-item">
@@ -91,7 +92,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Transform indicator output to wide-format</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>How To: Transform indicator output to wide-format</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/mapme-initiative/mapme.biodiversity/blob/HEAD/vignettes/output-wide.Rmd" class="external-link"><code>vignettes/output-wide.Rmd</code></a></small>
@@ -168,11 +169,10 @@ not pose a serious limitation to the workflow. However, geometry
 information, here indicated as a WKT string, might quickly accumulate a
 large proportion of the available memory, even more so if the portfolio
 consists of a high number of complex geometries that are then copied to
-fit the the long-format requirement. For that<br>
-reason, this packages uses a nested-list format to hold tables for
-indicators as single columns within the portfolio. The remainder of this
-tutorial will show you in more detail<br>
-how you can work with those R specific data format.</p>
+fit the the long-format requirement. For that reason, this packages uses
+a nested-list format to hold tables for indicators as single columns
+within the portfolio. The remainder of this tutorial will show you in
+more detail how you can work with those R specific data format.</p>
 </div>
 <div class="section level2">
 <h2 id="the-simple-case---single-row-indicators">The simple case - single-row indicators<a class="anchor" aria-label="anchor" href="#the-simple-case---single-row-indicators"></a>
@@ -203,10 +203,10 @@ to simulate a realistic portfolio consisting of multiple assets.</p>
 <span><span class="co">#&gt; 7 POLYGON ((-71.80933 18.6584...</span></span>
 <span><span class="co">#&gt; 8 POLYGON ((-71.65022 18.6584...</span></span>
 <span><span class="co">#&gt; 9 POLYGON ((-71.49111 18.6584...</span></span></code></pre></div>
-<p>As a simple example, suppose we interested in extracting the average
-elevation per asset in our portfolio. As usual, we will have to make
-available the SRTM resource as well as requesting the calculation of the
-respective indicator.</p>
+<p>As a simple example, suppose we interested in extracting the sum of
+population counts in our portfolio. As usual, we will have to make
+available the WorldPop resource as well as requesting the calculation of
+the respective indicator.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">port</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init_portfolio.html">init_portfolio</a></span><span class="op">(</span></span>
 <span>  <span class="va">aoi</span>,</span>
@@ -216,80 +216,80 @@ respective indicator.</p>
 <span>  add_resources <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">port_w_srtm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_resources.html">get_resources</a></span><span class="op">(</span><span class="va">port</span>, <span class="st">"nasa_srtm"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Starting process to download resource 'nasa_srtm'........</span></span>
-<span><span class="co">#&gt; Checking URLs for existence. This may take a while...</span></span>
+<span><span class="va">port_w_nelson</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_resources.html">get_resources</a></span><span class="op">(</span><span class="va">port</span>, <span class="st">"nelson_et_al"</span>, range_traveltime <span class="op">=</span> <span class="st">"20k_50k"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Starting process to download resource 'nelson_et_al'........</span></span>
 <span><span class="co">#&gt; Skipping existing files in output directory.</span></span>
-<span><span class="va">port_w_elev</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_indicators.html">calc_indicators</a></span><span class="op">(</span><span class="va">port_w_srtm</span>, <span class="st">"elevation"</span>, stats_elevation <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Argument 'engine' for resource 'elevation' was not specified. Setting to default value of 'zonal'.</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">port_w_elev</span><span class="op">)</span></span>
+<span><span class="va">port_w_traveltime</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_indicators.html">calc_indicators</a></span><span class="op">(</span><span class="va">port_w_nelson</span>, <span class="st">"traveltime"</span>, stats_accessibility <span class="op">=</span> <span class="st">"sum"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Argument 'engine' for resource 'traveltime' was not specified. Setting to default value of 'extract'.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">port_w_traveltime</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Simple feature collection with 9 features and 2 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POLYGON</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
 <span><span class="co">#&gt; Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span></span>
 <span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 3</span></span></span>
-<span><span class="co">#&gt;   assetid elevation                                                            x</span></span>
+<span><span class="co">#&gt;   assetid traveltime                                                           x</span></span>
 <span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>                                                   <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       1 <span style="color: #949494;">&lt;tibble [1 × 1]&gt;</span> ((-71.80933 18.57668, -71.65022 18.57668, -71.65022 …</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       2 <span style="color: #949494;">&lt;tibble [1 × 1]&gt;</span> ((-71.65022 18.57668, -71.49111 18.57668, -71.49111 …</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       3 <span style="color: #949494;">&lt;tibble [1 × 1]&gt;</span> ((-71.49111 18.57668, -71.33201 18.57668, -71.33201 …</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       4 <span style="color: #949494;">&lt;tibble [1 × 1]&gt;</span> ((-71.80933 18.61756, -71.65022 18.61756, -71.65022 …</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>       5 <span style="color: #949494;">&lt;tibble [1 × 1]&gt;</span> ((-71.65022 18.61756, -71.49111 18.61756, -71.49111 …</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>       6 <span style="color: #949494;">&lt;tibble [1 × 1]&gt;</span> ((-71.49111 18.61756, -71.33201 18.61756, -71.33201 …</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>       7 <span style="color: #949494;">&lt;tibble [1 × 1]&gt;</span> ((-71.80933 18.65844, -71.65022 18.65844, -71.65022 …</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>       8 <span style="color: #949494;">&lt;tibble [1 × 1]&gt;</span> ((-71.65022 18.65844, -71.49111 18.65844, -71.49111 …</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>       9 <span style="color: #949494;">&lt;tibble [1 × 1]&gt;</span> ((-71.49111 18.65844, -71.33201 18.65844, -71.33201 …</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       1 <span style="color: #949494;">&lt;tibble [1 × 2]&gt;</span> ((-71.80933 18.57668, -71.65022 18.57668, -71.65022 …</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       2 <span style="color: #949494;">&lt;tibble [1 × 2]&gt;</span> ((-71.65022 18.57668, -71.49111 18.57668, -71.49111 …</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       3 <span style="color: #949494;">&lt;tibble [1 × 2]&gt;</span> ((-71.49111 18.57668, -71.33201 18.57668, -71.33201 …</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       4 <span style="color: #949494;">&lt;tibble [1 × 2]&gt;</span> ((-71.80933 18.61756, -71.65022 18.61756, -71.65022 …</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>       5 <span style="color: #949494;">&lt;tibble [1 × 2]&gt;</span> ((-71.65022 18.61756, -71.49111 18.61756, -71.49111 …</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>       6 <span style="color: #949494;">&lt;tibble [1 × 2]&gt;</span> ((-71.49111 18.61756, -71.33201 18.61756, -71.33201 …</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>       7 <span style="color: #949494;">&lt;tibble [1 × 2]&gt;</span> ((-71.80933 18.65844, -71.65022 18.65844, -71.65022 …</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>       8 <span style="color: #949494;">&lt;tibble [1 × 2]&gt;</span> ((-71.65022 18.65844, -71.49111 18.65844, -71.49111 …</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>       9 <span style="color: #949494;">&lt;tibble [1 × 2]&gt;</span> ((-71.49111 18.65844, -71.33201 18.65844, -71.33201 …</span></span></code></pre></div>
 <p>As we can observe from the output, two new columns were added to the
 sf object. The first is called <code>assetid</code> and simply is a
 unique identifier of the respective asset. The second column is called
-<code>elevation</code> and is of type <code>list</code> indicating that
+<code>traveltime</code> and is of type <code>list</code> indicating that
 it represents a nested-list column. What that means is that we are able
 to maintain the rectangular shape of our original data (e.g. one polygon
 per row), while supporting arbitrarily shaped outputs for indicators.
-Let’s observe how the elevation indicator looks like:</p>
+Let’s observe how the traveltime indicator looks like in this
+instance:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">port_w_elev</span><span class="op">$</span><span class="va">elevation</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 1</span></span></span>
-<span><span class="co">#&gt;   elevation_mean</span></span>
-<span><span class="co">#&gt;            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>           489.</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">port_w_traveltime</span><span class="op">$</span><span class="va">traveltime</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 2</span></span></span>
+<span><span class="co">#&gt;   minutes_sum distance</span></span>
+<span><span class="co">#&gt;         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>        <span style="text-decoration: underline;">4</span>732 20k_50k</span></span></code></pre></div>
 <p>From the syntax above, you can see how you can access a single object
 within the nested list column (e.g. by using the list accessor
-<code>[[</code>). In this case, the shape of elevation indicator is a
-single-row and single-column tibble with the mean elevation as its
-value. Because the indicator elevation comes without a temporal axis, we
-can simply unnest the elevation column to get to a wide-format
+<code>[[</code>). In this case, the shape of the traveltime indicator is
+a single-row and two-column tibble with the average minutes and the
+distance category as its value. Because the indicator comes as a single
+row, we can simply unnest the traveltime column to get to a wide-format
 output:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">port_wide_1</span> <span class="op">&lt;-</span> <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">port_w_elev</span>, <span class="va">elevation</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">port_wide_1</span> <span class="op">&lt;-</span> <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">port_w_traveltime</span>, <span class="va">traveltime</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">port_wide_1</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Simple feature collection with 9 features and 2 fields</span></span>
+<span><span class="co">#&gt; Simple feature collection with 9 features and 3 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POLYGON</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
 <span><span class="co">#&gt; Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span></span>
 <span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 3</span></span></span>
-<span><span class="co">#&gt;   assetid elevation_mean                                                       x</span></span>
-<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                                           <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       1           489. ((-71.80933 18.57668, -71.65022 18.57668, -71.65022 18…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       2           902. ((-71.65022 18.57668, -71.49111 18.57668, -71.49111 18…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       3          <span style="text-decoration: underline;">1</span>222. ((-71.49111 18.57668, -71.33201 18.57668, -71.33201 18…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       4          <span style="text-decoration: underline;">1</span>252. ((-71.80933 18.61756, -71.65022 18.61756, -71.65022 18…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>       5          <span style="text-decoration: underline;">1</span>504. ((-71.65022 18.61756, -71.49111 18.61756, -71.49111 18…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>       6          <span style="text-decoration: underline;">1</span>225. ((-71.49111 18.61756, -71.33201 18.61756, -71.33201 18…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>       7          <span style="text-decoration: underline;">1</span>685. ((-71.80933 18.65844, -71.65022 18.65844, -71.65022 18…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>       8          <span style="text-decoration: underline;">1</span>319. ((-71.65022 18.65844, -71.49111 18.65844, -71.49111 18…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>       9           926. ((-71.49111 18.65844, -71.33201 18.65844, -71.33201 18…</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 4</span></span></span>
+<span><span class="co">#&gt;   assetid minutes_sum distance                                                 x</span></span>
+<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                        <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       1        <span style="text-decoration: underline;">4</span>732 20k_50k  ((-71.80933 18.57668, -71.65022 18.57668, -71.65…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       2        <span style="text-decoration: underline;">9</span>923 20k_50k  ((-71.65022 18.57668, -71.49111 18.57668, -71.49…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       3       <span style="text-decoration: underline;">10</span>645 20k_50k  ((-71.49111 18.57668, -71.33201 18.57668, -71.33…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       4        <span style="text-decoration: underline;">7</span>980 20k_50k  ((-71.80933 18.61756, -71.65022 18.61756, -71.65…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>       5       <span style="text-decoration: underline;">13</span>196 20k_50k  ((-71.65022 18.61756, -71.49111 18.61756, -71.49…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>       6        <span style="text-decoration: underline;">9</span>923 20k_50k  ((-71.49111 18.61756, -71.33201 18.61756, -71.33…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>       7       <span style="text-decoration: underline;">13</span>430 20k_50k  ((-71.80933 18.65844, -71.65022 18.65844, -71.65…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>       8       <span style="text-decoration: underline;">11</span>228 20k_50k  ((-71.65022 18.65844, -71.49111 18.65844, -71.49…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>       9        <span style="text-decoration: underline;">6</span>942 20k_50k  ((-71.49111 18.65844, -71.33201 18.65844, -71.33…</span></span></code></pre></div>
 <p>In this case, the result has 9 rows just like the original data
 frame. We can now export our portfolio for example as a geopackage that
 can be read directly into e.g. QGIS or as a CSV without the geospatial
 information:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">st_write</a></span><span class="op">(</span><span class="va">port_wide_1</span>, dsn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".gpkg"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Writing layer `file20985774694e' to data source </span></span>
-<span><span class="co">#&gt;   `/tmp/RtmpQj2GSM/file20985774694e.gpkg' using driver `GPKG'</span></span>
-<span><span class="co">#&gt; Writing 9 features with 2 fields and geometry type Polygon.</span></span>
+<span><span class="co">#&gt; Writing layer `file22a021218673' to data source </span></span>
+<span><span class="co">#&gt;   `/tmp/RtmppEJfkV/file22a021218673.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt; Writing 9 features with 3 fields and geometry type Polygon.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="va">port_wide_1</span><span class="op">)</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".csv"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -428,8 +428,8 @@ object to a geospatial format of our choice or drop the geometry
 information altogether and dump the data into a csv.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">st_write</a></span><span class="op">(</span><span class="va">port_wide_3</span>, dsn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".gpkg"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Writing layer `file20984062cc8b' to data source </span></span>
-<span><span class="co">#&gt;   `/tmp/RtmpQj2GSM/file20984062cc8b.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt; Writing layer `file22a03ee3a83f' to data source </span></span>
+<span><span class="co">#&gt;   `/tmp/RtmppEJfkV/file22a03ee3a83f.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">#&gt; Writing 9 features with 13 fields and geometry type Polygon.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="va">port_wide_3</span><span class="op">)</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".csv"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
