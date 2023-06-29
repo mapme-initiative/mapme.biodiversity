@@ -40,12 +40,12 @@ reference:
 navbar:
   bg: primary
   structure:
-    left: [home, quickstart, articles, examples, reference, news]
+    left: [home, quickstart, articles, how-to, reference, news]
     right: [github]
   components:
    quickstart:
      text: Quickstart
-     href: articles/userguide.html
+     href: articles/quickstart.html
    articles:
      text: Articles
      menu:
@@ -59,12 +59,12 @@ navbar:
          href: articles/workflow.html
        - text: Contributing
          href: articles/contributing.html
-   examples:
-     text: Examples
+   how-to:
+     text: How To's
      menu:
-       - text: Wide Output
+       - text: Transform output to wide
          href: articles/output-wide.html
-       - text: NASA FIRMS
+       - text: Use downloaded resources
          href: articles/nasa-firms.html
    github:
      icon: fab fa-github fa-lg

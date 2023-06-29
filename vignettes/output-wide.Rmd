@@ -1,8 +1,8 @@
 ---
-title: "Transform indicator output to wide-format"
+title: "How To: Transform indicator output to wide-format"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Transform indicator output to wide-format}
+  %\VignetteIndexEntry{How To: Transform indicator output to wide-format}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
