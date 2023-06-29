@@ -40,17 +40,16 @@ Imports:
     tidyr,
     tidyselect
 Suggests: 
-    DiagrammeR,
     exactextractr,
     future,
     ggplot2,
     knitr,
-    lwgeom,
     rmarkdown,
     SPEI,
     testthat (>= 3.0.0)
 VignetteBuilder: 
     knitr
+Config/Needs/website: rgl, spatstat, lubridate, DiagrammeR
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-GB
