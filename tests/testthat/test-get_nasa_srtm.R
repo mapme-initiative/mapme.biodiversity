@@ -1,5 +1,7 @@
 test_that(".get_nasa_srtm works", {
   skip_on_cran()
+  check <- try(.warn_about_ssl())
+  if (inherits(check, "try-error")) skip(message = "SSL error for NASA SRTM")
   aoi <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
       package = "mapme.biodiversity"
