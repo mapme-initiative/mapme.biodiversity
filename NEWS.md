@@ -19,6 +19,9 @@
 - added a new vignette for the web-version for a custom analysis of the NASA
   FIRMS resource in the example section
 
+- added the data for years 2017-2020 to the Global Mangrove Watch resource 
+
+
 ## Internal
 
 - applying tidyverse coding style to existing code
