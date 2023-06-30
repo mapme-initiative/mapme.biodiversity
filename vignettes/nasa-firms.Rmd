@@ -33,9 +33,10 @@ national park.
 First, we start by loading the required packages needed for the
 analysis.
 
-```{r load-pkgs, message=FALSE, warning=FALSE}
+```{r load-pkgs, message=FALSE, warning=FALSE, eval=FALSE}
 library(sf)
 library(rgl)
+library(wdpar)
 library(dplyr)
 library(purrr)
 library(units)
