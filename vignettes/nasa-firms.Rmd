@@ -36,6 +36,7 @@ analysis.
 ```{r load-pkgs, message=FALSE, warning=FALSE}
 library(sf)
 library(rgl)
+library(wdpar)
 library(dplyr)
 library(purrr)
 library(units)
