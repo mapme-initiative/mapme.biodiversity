@@ -26,7 +26,7 @@ Depends: R (>= 3.5.0)
 SystemRequirements: GDAL (>= 3.0.0), PROJ (>= 4.8.0)
 Imports: curl, dplyr, furrr, httr, magrittr, progressr, purrr, rvest, sf,
     stringr, terra, tibble, tidyr, tidyselect
-Suggests: exactextractr, future, ggplot2, knitr, rmarkdown, SPEI, 
+Suggests: exactextractr, future, ggplot2, knitr, rmarkdown, rstac, SPEI, 
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
 Config/Needs/website: DiagrammeR, lubridate, manipulateWidget, rgl, spatstat, 

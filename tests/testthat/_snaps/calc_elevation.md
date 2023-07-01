@@ -3,5 +3,5 @@
     Code
       result_exact$elevation_mean
     Output
-      [1] 1706.97
+      [1] 1704.491
 

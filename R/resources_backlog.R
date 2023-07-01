@@ -105,7 +105,9 @@ available_resources <- function(resources = NULL) {
       type = "raster",
       source = "SRTM",
       downloader = ".get_nasa_srtm",
-      arguments = list()
+      arguments = list(
+        download_srtm = TRUE
+      )
     ),
     soilgrids = list(
       type = "raster",
