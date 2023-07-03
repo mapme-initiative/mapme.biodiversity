@@ -2,7 +2,7 @@ library(aws.s3)
 library(wdpar)
 library(mapme.biodiversity)
 library(sf)
-
+library(tidyverse)
 # Launch locally on Windows
 system(paste0(getwd(),
               "~/trials/minio.exe server C:/minio --console-address :9090"))
@@ -10,7 +10,8 @@ system(paste0(getwd(),
 Sys.setenv("AWS_ACCESS_KEY_ID" = "minioadmin",
            "AWS_SECRET_ACCESS_KEY" = "minioadmin",
            "AWS_S3_ENDPOINT"= "localhost:9000",
-           "AWS_SESSION_TOKEN" = "")
+           "AWS_SESSION_TOKEN" = "",
+           "AWS_HTTPS" = "FALSE")
 
 # Create bucket and load it with data
 put_bucket("myuser", region = "", use_https = FALSE)
@@ -32,7 +33,7 @@ my_s3_portfolio <- get_bucket("myuser", prefix = "mapme", region = "",
 list.dirs <- function(x, ...) {
   if(class(x) == "s3_bucket") {
     unname(purrr::map_chr(x, "Key")) |>
-      sringr::str_extract("/(.*)/") |>
+      stringr::str_extract("/(.*)/") |>
       stringr::str_remove_all("/") |>
       unique()
   } else {
@@ -42,7 +43,7 @@ list.dirs <- function(x, ...) {
 
 list.files <- function(x, pattern = ".*", ...) {
   if (class(x) == "s3_bucket") {
-    bucket <- stringr::str_remove(outdir[["Contents"]][["Bucket"]],
+    bucket <- stringr::str_remove(x[["Contents"]][["Bucket"]],
                                   "/mapme") |>
       paste0("/")
     out <- unname(purrr::map_chr(x, "Key")) |>
@@ -56,7 +57,7 @@ list.files <- function(x, pattern = ".*", ...) {
 
 file.path <- function(x, y, ...) {
   if (class(x) == "s3_bucket") {
-    get_bucket(bucket = stringr::str_remove(outdir[["Contents"]][["Bucket"]],
+    get_bucket(bucket = stringr::str_remove(x[["Contents"]][["Bucket"]],
                                             "/mapme"),
                prefix = paste0("mapme/", y),
                region = "",
