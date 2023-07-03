@@ -1,83 +1,98 @@
-devtools::install_github("cboettig/minioclient")
-
-library(minioclient)
-install_mc()
-test <- mc_ls("s3/fbedecarrats/mapme_biodiversity", recursive = TRUE)
+library(aws.s3)
+library(wdpar)
+library(mapme.biodiversity)
+library(sf)
 
 # Launch locally on Windows
 system(paste0(getwd(),
-              "/trials/minio.exe server C:/minio --console-address :9090"))
+              "~/trials/minio.exe server C:/minio --console-address :9090"))
 # Environment variables
 Sys.setenv("AWS_ACCESS_KEY_ID" = "minioadmin",
            "AWS_SECRET_ACCESS_KEY" = "minioadmin",
            "AWS_S3_ENDPOINT"= "localhost:9000",
            "AWS_SESSION_TOKEN" = "")
-# With minioclient
-mc_alias_set(alias = "minio", scheme = "http")
-# with aws.s3
 
-
-
-
-library(aws.s3)
-bucketlist(region = "", use_https = FALSE)
-
+# Create bucket and load it with data
 put_bucket("myuser", region = "", use_https = FALSE)
 
-my_files <- list.files("trials/mapme_senegal", recursive = TRUE, full.name = TRUE) %>%
-  str_remove("trials/")
-map2(my_files, my_files, put_object, bucket = "myuser", region = "", use_https = FALSE)
+bucketlist(region = "", use_https = FALSE)
 
-my_s3_bucket <- get_bucket("myuser", region = "", use_https = FALSE)
+my_files <- list.files("trials/mapme_senegal", recursive = TRUE, full.name = TRUE)
+my_dests <- my_files %>%
+  str_replace("^trials/mapme_senegal/", "mapme/")
 
-put_bucket("myuser/mapme_senegal", region = "", use_https = FALSE)
+map2(my_files, my_dests, put_object, bucket = "myuser",
+     region = "", use_https = FALSE)
 
-my_s3_porfolio <- get_bucket("myuser/mapme_senegal", region = "",
-                             use_https = FALSE)
+# create an object of s3 bucket with aws.s3
+my_s3_portfolio <- get_bucket("myuser", prefix = "mapme", region = "",
+                           use_https = FALSE)
 
-bucket_name <- stringr::str_split_1(my_porfolio_name, "/")[1]
-
-
-
-
-list.test <- function(x, ...) {
+# Three functions that handle portfolios from s3
+list.dirs <- function(x, ...) {
   if(class(x) == "s3_bucket") {
-    endpoint_as_str <- deparse(substitute(x))
-    bucket_name_str <- stringr::str_split_1(endpoint_as_str, "/")[1]
-    print(paste(endpoint_as_str, bucket_name_str))
+    unname(purrr::map_chr(x, "Key")) |>
+      sringr::str_extract("/(.*)/") |>
+      stringr::str_remove_all("/") |>
+      unique()
+  } else {
+    base::list.dirs()
   }
 }
 
-list.test(my_s3_bucket)
-
-
-list.test(
-)
-eval(parse(text = "my_s3_bucket"))
-
-# Emulate list.files
-list.files.s3_bucket <- function(x, ...) {
-  unname(purrr::map_chr(x, "Key"))
-}
-
-
 list.files <- function(x, pattern = ".*", ...) {
   if (class(x) == "s3_bucket") {
-    unname(purrr::map_chr(x, "Key")) |>
+    bucket <- stringr::str_remove(outdir[["Contents"]][["Bucket"]],
+                                  "/mapme") |>
+      paste0("/")
+    out <- unname(purrr::map_chr(x, "Key")) |>
       stringr::str_subset(pattern)
+    paste0("/vsis3/", bucket, out)
   } else {
     base::list.files(x, ...)
   }
 }
 
 
-list.dirs <- function(x, ...) {
-  if
-
+file.path <- function(x, y, ...) {
+  if (class(x) == "s3_bucket") {
+    get_bucket(bucket = stringr::str_remove(outdir[["Contents"]][["Bucket"]],
+                                            "/mapme"),
+               prefix = paste0("mapme/", y),
+               region = "",
+               use_https = FALSE) # |>
+      # purrr::map_chr("Key") |>
+      # unname()
+  } else {
+    file.path()
+  }
 }
 
+dir.exists <- function(paths) {
+  if (class(paths) == "s3_bucket") TRUE
+  else base::dir.exists(paths)
+}
 
+# Load polygons
+parc_saloum <- wdpa_read("trials/WDPA/WDPA_Jun2023_SEN-shapefile.zip") %>%
+  filter(st_geometry_type(.) == "MULTIPOLYGON") %>%
+  filter(NAME == "Delta du Saloum" & DESIG == "Parc National") %>%
+  st_cast("POLYGON")
 
-list.files(my_s3_bucket, pattern = ".gpkg$")
-list.files("trials/mapme_senegal/gmw", pattern = ".gpkg$", full.names = TRUE)
+mapme_senegal <- init_portfolio(x = parc_saloum,
+                                outdir = my_s3_portfolio,
+                                years = 2000:2020,
+                                add_resources = TRUE)
+
+# This doesn't work: apparently, due to vsis3 not working
+mapme_senegal <- calc_indicators(mapme_senegal, "mangroves_area")
+
+# Apparently vsis3 doesn't work from this setup. due to https?
+test <- read_sf("/vsis3/myuser/mapme/gmw/gmw-extent_2007.gpkg")
+
+# This works however
+test <- s3read_using(object = "mapme/gmw/gmw-extent_2007.gpkg",
+                     FUN = read_sf,
+                     bucket = "myuser",
+                     opts = list("region" = "", "use_https" = "FALSE"))
 
