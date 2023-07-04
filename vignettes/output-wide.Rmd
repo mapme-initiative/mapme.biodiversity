@@ -1,8 +1,8 @@
 ---
-title: "Transform indicator output to wide-format"
+title: "How To: Transform indicator output to wide-format"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Transform indicator output to wide-format}
+  %\VignetteIndexEntry{How To: Transform indicator output to wide-format}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -75,10 +75,9 @@ a serious limitation to the workflow. However, geometry information,
 here indicated as a WKT string, might quickly accumulate a large
 proportion of the available memory, even more so if the portfolio
 consists of a high number of complex geometries that are then copied to
-fit the the long-format requirement. For that\
-reason, this packages uses a nested-list format to hold tables for
-indicators as single columns within the portfolio. The remainder of this
-tutorial will show you in more detail\
+fit the the long-format requirement. For that reason, this packages uses a 
+nested-list format to hold tables for indicators as single columns within the 
+portfolio. The remainder of this tutorial will show you in more detail
 how you can work with those R specific data format.
 
 ## The simple case - single-row indicators
@@ -97,9 +96,9 @@ aoi <- st_as_sf(st_make_grid(aoi, n = 3))
 print(aoi)
 ```
 
-As a simple example, suppose we interested in extracting the average
-elevation per asset in our portfolio. As usual, we will have to make
-available the SRTM resource as well as requesting the calculation of the
+As a simple example, suppose we interested in extracting the sum
+of population counts in our portfolio. As usual, we will have to make
+available the WorldPop resource as well as requesting the calculation of the
 respective indicator.
 
 ```{r calc-elev}
@@ -111,33 +110,33 @@ port <- init_portfolio(
   add_resources = TRUE
 )
 
-port_w_srtm <- get_resources(port, "nasa_srtm")
-port_w_elev <- calc_indicators(port_w_srtm, "elevation", stats_elevation = "mean")
-print(port_w_elev)
+port_w_nelson <- get_resources(port, "nelson_et_al", range_traveltime = "20k_50k")
+port_w_traveltime <- calc_indicators(port_w_nelson, "traveltime", stats_accessibility = "sum")
+print(port_w_traveltime)
 ```
 
 As we can observe from the output, two new columns were added to the sf
 object. The first is called `assetid` and simply is a unique identifier
-of the respective asset. The second column is called `elevation` and is
+of the respective asset. The second column is called `traveltime` and is
 of type `list` indicating that it represents a nested-list column. What
 that means is that we are able to maintain the rectangular shape of our
 original data (e.g. one polygon per row), while supporting arbitrarily
-shaped outputs for indicators. Let's observe how the elevation indicator
-looks like:
+shaped outputs for indicators. Let's observe how the traveltime indicator
+looks like in this instance:
 
 ```{r investigate-elev}
-print(port_w_elev$elevation[[1]])
+print(port_w_traveltime$traveltime[[1]])
 ```
 
 From the syntax above, you can see how you can access a single object
 within the nested list column (e.g. by using the list accessor `[[`). In
-this case, the shape of elevation indicator is a single-row and
-single-column tibble with the mean elevation as its value. Because the
-indicator elevation comes without a temporal axis, we can simply unnest
-the elevation column to get to a wide-format output:
+this case, the shape of the traveltime indicator is a single-row and
+two-column tibble with the average minutes and the distance category as its value. 
+Because the indicator comes as a single row, we can simply unnest
+the traveltime column to get to a wide-format output:
 
 ```{r elev-to-wide}
-port_wide_1 <- tidyr::unnest(port_w_elev, elevation)
+port_wide_1 <- tidyr::unnest(port_w_traveltime, traveltime)
 print(port_wide_1)
 ```
 
