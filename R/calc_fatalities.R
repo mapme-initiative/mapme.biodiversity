@@ -121,7 +121,7 @@ NULL
                              rundir = tempdir(),
                              verbose = TRUE,
                              ...) {
-  date_prec <- where_prec <- date_start <- NULL
+  date_prec <- where_prec <- date_start <- type_of_violence <- NULL
   year <- month <- deaths_a <- deaths_b <- NULL
 
   ucdp_ged <- ucdp_ged[[1]]
