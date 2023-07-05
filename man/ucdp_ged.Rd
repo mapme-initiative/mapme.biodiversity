@@ -25,7 +25,7 @@ The following versions are available
 \item 5.0
 \item 17.1
 \item 17.2
-\item 18.1"
+\item 18.1
 \item 19.1
 \item 20.1
 \item 21.1

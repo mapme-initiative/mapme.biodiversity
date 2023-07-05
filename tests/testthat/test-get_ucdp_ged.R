@@ -2,7 +2,7 @@
 
 test_that(".get_ucdp_ged works", {
   aoi <- read_sf(
-    system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+    system.file("extdata", "burundi.gpkg",
       package = "mapme.biodiversity"
     )
   )
@@ -32,11 +32,17 @@ test_that(".get_ucdp_ged works", {
 
   expect_equal(
     .get_ucdp_ged(portfolio, version = "latest"),
-    "ged221-csv.zip"
+    "ged231-csv.gpkg"
   )
 
   expect_equal(
     .get_ucdp_ged(portfolio, version = "21.1"),
-    "ged211-csv.zip"
+    "ged211-csv.gpkg"
+  )
+
+  skip_on_cran()
+  expect_equal(
+    .ucdp_versions(),
+    c("5.0", "17.1", "17.2", "18.1", "19.1", "652.1601.1911", "20.1", "21.1", "22.1", "23.1")
   )
 })

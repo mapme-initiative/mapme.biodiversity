@@ -1,5 +1,13 @@
 # mapme.biodiversity (development version)
 
+## New features
+
+- added new resource called `ucdp_ged` providing a database of violent conflict
+  from 1989 to today
+
+- added a new indicator called `fatalities` aggregating number of deaths
+  by type of conflict on a monthly time scale based on the `ucdp_ged` resource.
+
 ## Breaking changes
 
 - Changed the parallel backend to the [future](https://cran.r-project.org/package=future) 

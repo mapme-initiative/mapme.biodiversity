@@ -11,7 +11,7 @@
 #' - 5.0
 #' - 17.1
 #' - 17.2
-#' - 18.1"
+#' - 18.1
 #' - 19.1
 #' - 20.1
 #' - 21.1
@@ -62,33 +62,34 @@ NULL
 
   version <- paste0("ged", stringr::str_remove_all(version_ged, "\\."), "-csv.zip")
 
-  base_url <- "https://ucdp.uu.se/downloads/ged/"
-  download_url <- paste0(base_url, version)
-  filename <- file.path(rundir, version)
+  base_url <- "/vsizip/vsicurl/https://ucdp.uu.se/downloads/ged/"
+  url <- paste0(base_url, version)
+  if (version_ged == "19.1") {
+    url <- paste0(url, "/ged191.csv")
+  } else if (version_ged == "5.0") {
+    url <- paste0(url, "/ged50.csv")
+  }
+  filename <- file.path(rundir, str_replace(version, "zip", "gpkg"))
 
   # return early if testing
   if (attr(x, "testing")) {
     return(basename(filename))
   }
 
-  aria_bin <- attributes(x)$aria_bin
-  .download_or_skip(download_url,
-    filename,
-    verbose = verbose,
-    check_existence = FALSE,
-    aria_bin = aria_bin
+  if (file.exists(filename)) {
+    return(filename)
+  }
+
+  gdal_utils(
+    util = "vectortranslate",
+    source = url,
+    destination = filename,
+    options = c(
+      "-a_srs", "EPSG:4326",
+      "-oo", "GEOM_POSSIBLE_NAMES=geom_wkt"
+    )
   )
-
-  # read data and transform to sf
-  csv <- unzip(filename, list = TRUE)$Name
-  data <- read.csv(unz(filename, csv))
-  data <- as_tibble(data)
-  data <- st_as_sf(data, wkt = "geom_wkt")
-  st_crs(data) <- st_crs("EPSG:4326")
-
-  gpkg <- file.path(rundir, stringr::str_replace(version, ".zip", ".gpkg"))
-  write_sf(data, gpkg, delete_dsn = TRUE)
-  gpkg
+  filename
 }
 
 

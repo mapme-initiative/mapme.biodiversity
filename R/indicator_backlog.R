@@ -181,6 +181,15 @@ available_indicators <- function(indicator = NULL) {
       inputs = list(nasa_firms = "vector"),
       arguments = list(),
       processing_mode = "asset"
+    ),
+    fatalities = list(
+      name = ".calc_fatalities",
+      inputs = list("ucdp_ged" = "vector"),
+      arguments = list(
+        precision_location = 1,
+        precision_time = 1
+      ),
+      processing_mode = "asset"
     )
   )
 
