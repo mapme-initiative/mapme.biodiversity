@@ -4,7 +4,7 @@
 #' "The Global Mangrove Watch—A New 2010 Global Baseline of Mangrove Extent".
 #' The polygons represent the mangrove, which is tropical coastal vegetation
 #' and considered the most significant part of the marine ecosystem. This
-#' resource is available for the period 1996- 2016 from Global Mangrove Watch
+#' resource is available for the period 1996- 2020 from Global Mangrove Watch
 #' (GMW), providing geospatial information about global mangrove extent.
 #'
 #'
@@ -12,7 +12,7 @@
 #' @docType data
 #' @keywords resource
 #' @format Global mangrove extent polygon available for years 1996, 2007-2010,
-#'   2015, and 2016.
+#'   and 2015-2020.
 #' @references Bunting P., Rosenqvist A., Lucas R., Rebelo L-M., Hilarides L.,
 #' Thomas N., Hardy A., Itoh T., Shimada M. and Finlayson C.M. (2018). The Global
 #' Mangrove Watch – a New 2010 Global Baseline of Mangrove Extent. Remote Sensing
@@ -34,7 +34,7 @@ NULL
                      rundir = tempdir(),
                      verbose = TRUE) {
   target_years <- attributes(x)$years
-  available_years <- c(1996, 2007:2010, 2015, 2016)
+  available_years <- c(1996, 2007:2010, 2015:2020)
   target_years <- .check_available_years(
     target_years, available_years, "mangroveextent"
   )
@@ -86,11 +86,19 @@ NULL
     ),
     exdir = rundir
   )
-  shp <- file.path(
-    rundir, paste0("gmw_v3_", year, "_vec.shp")
-  )
-  shp <- read_sf(shp)
-  write_sf(shp, gpkg)
+
+  # Source data from 2018 doesn't correspond to the pattern for other years.
+  # We need to create an exception for it.
+  if (year == 2018) {
+    shp <- file.path(rundir,
+                     paste0("GMW_v3_2018/00_Data/gmw_v3_", year, ".shp"))
+  } else {
+    shp <- file.path(rundir, paste0("gmw_v3_", year, "_vec.shp"))
+  }
+  
+  gdal_utils(util = "vectortranslate", shp, gpkg,
+             options = c("-t_srs", "EPSG:4326"))
+  
   d_files <- list.files(rundir, full.names = T)
   unlink(grep("gmw-extent*", d_files, value = T, invert = T),
     recursive = T, force = T
@@ -106,7 +114,7 @@ NULL
 #' @keywords internal
 #' @noRd
 .get_mangrove_url <- function(target_year) {
-  available_years <- c(1996, 2007:2010, 2015, 2016)
+  available_years <- c(1996, 2007:2010, 2015:2020)
   if (target_year %in% available_years) {
     paste0("https://wcmc.io/GMW_", target_year)
   } else {

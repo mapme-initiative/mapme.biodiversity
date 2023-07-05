@@ -1,7 +1,4 @@
-test_that(".get_nasa_srtm works", {
-  skip_on_cran()
-  check <- try(.warn_about_ssl())
-  if (inherits(check, "try-error")) skip(message = "SSL error for NASA SRTM")
+test_that(".get_fritz_et_al works", {
   aoi <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
       package = "mapme.biodiversity"
@@ -23,27 +20,20 @@ test_that(".get_nasa_srtm works", {
     add_resources = FALSE,
     verbose = TRUE
   )
-
   # Add testing attribute in order to skip downloads
   attributes(portfolio)$testing <- TRUE
-
   expect_equal(
-    suppressWarnings(.get_nasa_srtm(portfolio)),
-    "srtm_22_09.zip"
+    .get_fritz_et_al(portfolio, res_drivers = 100, rundir = file.path(outdir, "fritz_et_al")),
+    "Deforestation_Drivers_100m_IIASA.zip"
   )
 
-  # adds test to check for multiple polygons in the same tile
-  splitted_aoi <- st_as_sf(st_make_grid(aoi, n = 2))
-  portfolio <- init_portfolio(splitted_aoi,
-    years = 2000:2020,
-    outdir = outdir,
-    tmpdir = tmpdir,
-    add_resources = FALSE,
-    verbose = TRUE
-  )
-  attributes(portfolio)$testing <- TRUE
   expect_equal(
-    suppressWarnings(.get_nasa_srtm(portfolio)),
-    "srtm_22_09.zip"
+    .get_fritz_et_al(portfolio, res_drivers = 1000, rundir = file.path(outdir, "fritz_et_al")),
+    "Deforestation_drivers_1km_IIASA_.zip"
+  )
+
+  expect_error(
+    .get_fritz_et_al(portfolio, res_drivers = 200, rundir = file.path(outdir, "fritz_et_al")),
+    "Fritz et al. resource is available only at resolutions 100 and 1.000"
   )
 })
