@@ -81,6 +81,7 @@ cat(sprintf(
     ## Supported resources:
     ## - chirps
     ## - esalandcover
+    ## - fritz_et_al
     ## - gfw_emissions
     ## - gfw_lossyear
     ## - gfw_treecover
@@ -91,6 +92,7 @@ cat(sprintf(
     ## - nelson_et_al
     ## - soilgrids
     ## - teow
+    ## - ucdp_ged
     ## - worldclim_max_temperature
     ## - worldclim_min_temperature
     ## - worldclim_precipitation
@@ -100,9 +102,11 @@ cat(sprintf(
     ## - active_fire_counts
     ## - active_fire_properties
     ## - biome
+    ## - deforestation_drivers
     ## - drought_indicator
     ## - ecoregion
     ## - elevation
+    ## - fatalities
     ## - landcover
     ## - mangroves_area
     ## - population_count
