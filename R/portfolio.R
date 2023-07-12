@@ -45,7 +45,7 @@ init_portfolio <- function(x,
                            add_resources = TRUE,
                            aria_bin = NULL,
                            verbose = TRUE) {
-  if (outdir == tmpdir) {
+  if (any(outdir == tmpdir)) {
     stop("Parameters outdir and tmpdir need to point to different directories.")
   }
   if (!dir.exists(outdir)) dir.create(outdir, recursive = TRUE)
