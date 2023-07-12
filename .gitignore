@@ -7,3 +7,6 @@ docs
 inst/doc
 cran-comments.md
 CRAN-SUBMISSION
+trials/minio.exe
+trials/mapme*
+trials/WDPA*

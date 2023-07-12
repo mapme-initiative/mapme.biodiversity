@@ -71,7 +71,9 @@ get_resources <- function(x, resources, ...) {
   tmpdir <- atts$tmpdir
   verbose <- atts$verbose
   rundir <- file.path(outdir, resource)
-  dir.create(rundir, showWarnings = FALSE)
+    if (class(outdir) != "s3_bucket") {
+    dir.create(rundir, showWarnings = FALSE)
+  }
   selected_resource <- available_resources(resource)
   # match function
   fun <- match.fun(selected_resource[[1]]$downloader)
