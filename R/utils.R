@@ -402,3 +402,82 @@
   }
   names
 }
+
+#' Helper to list DIRECTORIES in local file system or data lake
+#'
+#' @param x target on local filesystem or S3 bucket.
+#' @keywords internal
+#' @noRd
+.list_dirs <- function(x, ...) {
+  if(class(x) == "s3_bucket") {
+    unname(purrr::map_chr(x, "Key")) |>
+      stringr::str_extract("/(.*)/") |>
+      stringr::str_remove_all("/") |>
+      unique()
+  } else {
+    base::list.dirs()
+  }
+}
+
+
+#' Helper to list files in local file system or data lake
+#'
+#' @param x Target on local filesystem or S3 bucket.
+#' @param pattern Regular expression. the default is \code{".*"}.
+#' @keywords internal
+#' @noRd
+.list_files <- function(x, pattern = ".*", ...) {
+  if (class(x) == "s3_bucket") {
+    bucket <- stringr::str_remove(x[["Contents"]][["Bucket"]],
+                                  "/mapme") |>
+      paste0("/")
+    out <- unname(purrr::map_chr(x, "Key")) |>
+      stringr::str_subset(pattern)
+    paste0("/vsis3/", bucket, out)
+  } else {
+    base::list.files(x, ...)
+  }
+}
+
+#' Helper to extract path from local file system or build equivalent for S3
+#'
+#' @param x Target on local filesystem or S3 bucket.
+#' @param y Prefix. TODO : extract from bucket attributes
+#' @keywords internal
+#' @noRd
+.file_path <- function(x, y, ...) {
+  if (class(x) == "s3_bucket" & length(x) > 0) {
+    get_bucket(bucket = stringr::str_remove(x[["Contents"]][["Bucket"]],
+                                            "/mapme"),
+               prefix = paste0("mapme/", y),
+               region = "",
+               use_https = FALSE)
+  } else if (class(x) == "s3_bucket" & length(x) == 0) {
+    paste("/vsis3", attr(x, "Name"), attr(x, "Prefix"), y,
+          sep = "/")
+  } else {
+    base::file.path()
+  }
+}
+
+
+#' Helper to check directory existence or skip if S3
+#'
+#' @param paths paths as returned by file_path
+#' @keywords internal
+#' @noRd
+.dir_exists <- function(paths) {
+  if (class(paths) == "s3_bucket") TRUE
+  else base::dir.exists(paths)
+}
+
+#' Helper to create directory or skip if S3
+#'
+#' @param x the outdir target: (files or S3)
+#' @keywords internal
+#' @noRd
+.dir_create <- function(x, ...) {
+  if (!class(attr(x, "outdir")) == "s3_bucket") {
+    dir.create(x, ...)
+  }
+}
