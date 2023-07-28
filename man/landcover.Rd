@@ -5,7 +5,8 @@
 \alias{landcover}
 \title{Calculate area of different landcover classes}
 \format{
-A tibble with a column for area (in ha) per landcover class
+A tibble with a column for area (in ha) and the percentage covered per
+landcover class
 }
 \description{
 The land cover data shows us how much of the region is covered by forests,

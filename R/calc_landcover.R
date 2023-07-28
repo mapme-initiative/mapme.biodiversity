@@ -12,7 +12,8 @@
 #' @name landcover
 #' @docType data
 #' @keywords indicator
-#' @format A tibble with a column for area (in ha) per landcover class
+#' @format A tibble with a column for area (in ha) and the percentage covered per
+#'   landcover class
 #' @examples
 #' library(sf)
 #' library(mapme.biodiversity)
@@ -60,35 +61,38 @@ NULL
                             rundir = tempdir(),
                             verbose = TRUE,
                             ...) {
+  percentage <- NULL
+  year <- NULL
+  classes <- NULL
+
   if (is.null(esalandcover)) {
     return(NA)
   }
 
   shp_v <- vect(shp)
   esa_mask <- terra::mask(esalandcover, shp_v)
-  # compute area of each cell
-  arearaster <- cellSize(esa_mask, unit = "ha")
-  patchsizes <- zonal(arearaster, esa_mask, sum)
-  # create discrete classification coding
-  discrete_classes <- data.frame(
-    value = c(0, 111:116, 121:126, seq(20, 100, 10), 200),
-    classes = c(
-      "no_data", "closed_forest_evergreen_needle_leaf", "closed_forest_evergreen_broad_leaf", "closed_forest_deciduous_needle_leaf",
-      "closed_forest_deciduous_broad_leaf", "closed_forest_mixed", "closed_forest_unknown", "open_forest_evergreen_needle_leaf",
-      "open_forest_evergreen_broad_leaf", "open_forest_deciduous_needle_leaf", "open_forest_deciduous_broad_leaf",
-      "open_forest_mixed", "open_forest_unknown", "shrubs", "herbaceous_vegetation", "cropland", "built_up", "bare_vegetation",
-      "snow_and_ice", "permanent_water_bodies", "herbaceous_wetland", "moss_and_lichen", "open_sea"
-    )
-  )
-  # merge results
-  out <- merge(
-    x = patchsizes, y = discrete_classes,
-    by.x = colnames(patchsizes)[1],
-    by.y = colnames(discrete_classes)[1]
-  )
-  result <- out[, -1]
-  layernames <- tools::file_path_sans_ext(names(esalandcover))
-  years <- as.numeric(sapply(layernames, function(layer) strsplit(layer, "_")[[1]][4]))
-  names(result)[1:length(years)] <- years
-  tidyr::pivot_longer(result, cols = 1:length(years), names_to = "year", values_to = "area")
+  arearaster <- cellSize(esa_mask, mask = TRUE, unit = "ha")
+  total_size <- as.numeric(global(arearaster, fun = sum, na.rm = TRUE))
+
+  purrr::map_dfr(1:nlyr(esa_mask), function(i) {
+    zonal(arearaster, esa_mask[[i]], sum) %>%
+      tidyr::pivot_longer(cols = -area, names_to = "year", values_to = "code") %>%
+      dplyr::left_join(.esa_landcover_classes, by = "code") %>%
+      dplyr::mutate(
+        percentage = area / total_size,
+        year = regmatches(year, regexpr("\\d{4}", year))
+      ) %>%
+      dplyr::select(classes, year, area, percentage)
+  })
 }
+
+.esa_landcover_classes <- data.frame(
+  code = c(0, 111:116, 121:126, seq(20, 100, 10), 200),
+  classes = c(
+    "no_data", "closed_forest_evergreen_needle_leaf", "closed_forest_evergreen_broad_leaf", "closed_forest_deciduous_needle_leaf",
+    "closed_forest_deciduous_broad_leaf", "closed_forest_mixed", "closed_forest_unknown", "open_forest_evergreen_needle_leaf",
+    "open_forest_evergreen_broad_leaf", "open_forest_deciduous_needle_leaf", "open_forest_deciduous_broad_leaf",
+    "open_forest_mixed", "open_forest_unknown", "shrubs", "herbaceous_vegetation", "cropland", "built_up", "bare_vegetation",
+    "snow_and_ice", "permanent_water_bodies", "herbaceous_wetland", "moss_and_lichen", "open_sea"
+  )
+)
