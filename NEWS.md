@@ -8,6 +8,14 @@
 - Added a new indicator called `deforestation_drivers` using the `fritz_et_al` resource
   to obtain information on the absolute and relative area driving forest losses in 
   assets for the period 2008-2019
+  
+  - added a new vignette for the web-version of the package only informing
+  about how to obtain wide-output from indicators
+  
+- added a new vignette for the web-version for a custom analysis of the NASA
+  FIRMS resource in the example section
+
+- added the data for years 2017-2020 to the Global Mangrove Watch resource 
 
 ## Breaking changes
 
@@ -19,17 +27,11 @@
   to enable parallel processing. The function call needs to be wrapped on the user
   side with [progressr::with_progress()](https://progressr.futureverse.org/reference/with_progress.html)
   to show a progress bar.
-  
-## New features
 
-- added a new vignette for the web-version of the package only informing
-  about how to obtain wide-output from indicators
-  
-- added a new vignette for the web-version for a custom analysis of the NASA
-  FIRMS resource in the example section
+## Bug Fixes
 
-- added the data for years 2017-2020 to the Global Mangrove Watch resource 
-
+- `esalandcover` indicator now returns the value per each land cover class 
+  exactly once (#177)
 
 ## Internal
 
