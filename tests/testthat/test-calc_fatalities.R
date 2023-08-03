@@ -34,7 +34,7 @@ test_that(".calc_fatalities works", {
   result_default <- .calc_fatalities(shp, list(ucdp_ged))
   result_all <- .calc_fatalities(shp, list(ucdp_ged), precision_location = 7, precision_time = 5)
 
-  cols <- c("month", "type_of_violence", "deaths_civilians", "deaths_unknown", "deaths_total")
+  cols <- c("month", "type_of_violence", "deaths_civilians", "deaths_unknown", "deaths_total", "event_count")
   n_rows <- 72
 
   expect_equal(
@@ -53,6 +53,11 @@ test_that(".calc_fatalities works", {
   )
 
   expect_equal(
+    sum(result_default$event_count),
+    1
+  )
+
+  expect_equal(
     names(result_all),
     cols
   )
@@ -65,5 +70,10 @@ test_that(".calc_fatalities works", {
   expect_equal(
     sum(result_all$deaths_total),
     403
+  )
+
+  expect_equal(
+    sum(result_all$event_count),
+    22
   )
 })

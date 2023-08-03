@@ -171,21 +171,23 @@ NULL
     dplyr::filter(year %in% target_years) %>%
     dplyr::summarise(
       dplyr::across(
-        tidyr::starts_with("deaths_"),
+        tidyselect::starts_with("deaths_"),
         ~ sum(as.numeric(.x))
       ),
+      event_count = dplyr::n(),
       .by = c(year, month, type_of_violence)
     ) %>%
     dplyr::right_join(months_tibble, by = c("year", "month", "type_of_violence")) %>%
     dplyr::mutate(dplyr::across(
-      tidyr::starts_with("deaths_"),
+      tidyselect::starts_with(c("deaths_", "event_")),
       ~ tidyr::replace_na(.x, 0)
     )) %>%
     dplyr::mutate(
-      deaths_total = rowSums(dplyr::across(tidyr::starts_with("deaths_")))
+      deaths_total = rowSums(dplyr::across(tidyselect::starts_with("deaths_")))
     ) %>%
     dplyr::mutate(month = as.Date(paste0(year, "-", month, "-01"))) %>%
     dplyr::select(-year, -deaths_a, -deaths_b) %>%
+    dplyr::relocate(event_count, .after = tidyselect::last_col()) %>%
     dplyr::arrange(month, type_of_violence) %>%
     dplyr::mutate(type_of_violence = dplyr::case_when(
       type_of_violence == 1 ~ "state-based conflict",
