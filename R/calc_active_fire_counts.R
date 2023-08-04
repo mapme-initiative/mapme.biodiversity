@@ -44,21 +44,16 @@ NULL
 #' number of fire events occurred in the region of interest for
 #' years 2000-2021 (MODIS) and 2012-2021 (VIIRS).
 #'
-#' @param shp A single polygon for which to calculate the active fire counts
+#' @param x A single polygon for which to calculate the active fire counts
 #' @param nasa_firms The active fire vector resource (NASA - FIRMS)
-#' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
-#' @param todisk Logical indicating whether or not temporary vector files shall
-#'   be written to disk
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
 #' @noRd
-.calc_active_fire_counts <- function(shp,
+.calc_active_fire_counts <- function(x,
                                      nasa_firms,
-                                     rundir = tempdir(),
                                      verbose = TRUE,
-                                     todisk = FALSE,
                                      ...) {
   acq_date <- NULL
   year <- NULL
@@ -69,7 +64,7 @@ NULL
   }) %>%
     dplyr::bind_rows()
 
-  intersected <- suppressWarnings(st_intersection(nasa_firms, st_geometry(shp)))
+  intersected <- suppressWarnings(st_intersection(nasa_firms, st_geometry(x)))
   if (nrow(intersected) == 0) {
     return(NA)
   }
@@ -81,3 +76,12 @@ NULL
     dplyr::summarise(active_fire_counts = dplyr::n()) %>%
     dplyr::ungroup()
 }
+
+
+register_indicator(
+  name = "active_fire_counts",
+  resources = list(nasa_firms = "vector"),
+  fun = .calc_active_fire_counts,
+  arguments = list(),
+  processing_mode = "asset"
+)

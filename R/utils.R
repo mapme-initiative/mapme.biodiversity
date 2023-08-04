@@ -34,7 +34,7 @@
   }
   required_resources <- sapply(
     available_indicators()[indicators],
-    function(x) names(x$inputs)
+    function(x) names(x$resources)
   )
   required_resources <- unique(unlist(required_resources))
   as.vector(required_resources)

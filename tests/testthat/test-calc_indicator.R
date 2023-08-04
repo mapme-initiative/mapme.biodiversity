@@ -214,3 +214,87 @@ test_that(".bind_assets works correctly", {
     expected_results
   )
 })
+
+
+test_that(".prep works correctly", {
+  x <- read_sf(
+    system.file("extdata", "gfw_sample.gpkg",
+      package = "mapme.biodiversity"
+    )
+  )
+
+  temp_loc <- file.path(tempdir(), "mapme.biodiversity")
+  dir.create(temp_loc, showWarnings = FALSE)
+  resource_dir <- system.file("res", package = "mapme.biodiversity")
+  file.copy(resource_dir, temp_loc, recursive = TRUE)
+  outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
+  tmpdir <- tempdir()
+
+  x <- suppressWarnings(st_cast(x, to = "POLYGON"))[1, ]
+  x <- st_as_sf(st_make_grid(x, n = 3))
+
+  x <- init_portfolio(
+    x,
+    years = 2000:2005,
+    outdir = outdir,
+    tmpdir = tmpdir,
+    verbose = FALSE
+  )
+
+  x <- get_resources(
+    x,
+    resources = c("gfw_treecover", "gfw_lossyear"),
+    vers_treecover = "GFC-2020-v1.8",
+    vers_lossyear = "GFC-2020-v1.8"
+  )
+
+  available_resources <- attr(x, "resources")
+  required_resources <- available_indicators("treecover_area")[[1]]$resources
+  output <- .prep(x, available_resources, required_resources)
+
+  expect_equal(
+    length(output),
+    2
+  )
+  expect_equal(
+    names(output),
+    c("gfw_treecover", "gfw_lossyear")
+  )
+  expect_true(
+    inherits(output[[1]], "SpatRaster"),
+  )
+
+
+  x2 <- read_sf(list.files(
+    system.file("extdata", package = "mapme.biodiversity"),
+    pattern = "shell_beach", full.names = TRUE
+  ))
+  required_resources <- available_indicators("mangroves_area")[[1]]$resources
+  output <- .prep(x2, available_resources, required_resources)
+
+  expect_equal(
+    length(output),
+    1
+  )
+  expect_equal(
+    names(output),
+    "gmw"
+  )
+  output <- output$gmw
+  expect_equal(
+    length(output),
+    2
+  )
+  expect_equal(
+    names(output),
+    c("gmw-extent_1996.gpkg", "gmw-extent_2016.gpkg")
+  )
+  expect_true(
+    inherits(output[[1]], "sf")
+  )
+
+  expect_error(
+    .prep(x, available_resources, list(gmw = "sth")),
+    "Resource type 'sth' currently not supported"
+  )
+})

@@ -44,25 +44,20 @@ NULL
 #' the mangrve extent area for their area of interest available from 1996 to
 #' 2020 with periodic updates in between.
 #'
-#' @param shp A single polygon for which to calculate the mangrove extent
+#' @param x A single polygon for which to calculate the mangrove extent
 #' @param gmw The mangrove vector resource (GMW)
-#' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
-#' @param todisk Logical indicating whether or not temporary vector files shall
-#'   be written to disk
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
 #' @noRd
 
-.calc_mangroves_area <- function(shp,
+.calc_mangroves_area <- function(x,
                                  gmw,
-                                 rundir = tempdir(),
                                  verbose = TRUE,
-                                 todisk = FALSE,
                                  ...) {
   results <- lapply(1:length(gmw), function(j) {
-    intersected <- suppressWarnings(st_intersection(gmw[[j]], shp))
+    intersected <- suppressWarnings(st_intersection(gmw[[j]], x))
     area <- st_area(intersected) %>%
       as.numeric() %>%
       sum() %>%
@@ -75,3 +70,11 @@ NULL
   results <- tibble(do.call(rbind, results))
   results
 }
+
+register_indicator(
+  name = "mangroves_area",
+  resources = list(gmw = "vector"),
+  fun = .calc_mangroves_area,
+  arguments = list(),
+  processing_mode = "asset"
+)

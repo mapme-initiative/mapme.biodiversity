@@ -83,3 +83,12 @@ NULL
   # return all paths to the downloaded files
   filenames
 }
+
+
+register_resource(
+  name = "gfw_lossyear",
+  type = "raster",
+  source = "https://data.globalforestwatch.org/documents/tree-cover-loss/explore",
+  fun = .get_gfw_lossyear,
+  arguments <- list(vers_lossyear = "GFC-2021-v1.9")
+)

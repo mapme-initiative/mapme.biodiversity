@@ -44,23 +44,18 @@ NULL
 #' retrieve the name of the biomes and compute the corresponding area
 #' of the particular biomes for their polygons.
 #'
-#' @param shp A single polygon for which to calculate the biomes statistic
+#' @param x A single polygon for which to calculate the biomes statistic
 #' @param teow The teow vector resource (TEOW - WWF)
-#' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
-#' @param todisk Logical indicating whether or not temporary vector files shall
-#'   be written to disk
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
 #' @noRd
 
 
-.calc_biome <- function(shp,
+.calc_biome <- function(x,
                         teow,
-                        rundir = tempdir(),
                         verbose = TRUE,
-                        todisk = FALSE,
                         ...) {
   BIOME_NAME <- NULL
   biomes <- NULL
@@ -71,11 +66,9 @@ NULL
   }
 
   merged <- .comp_teow(
-    shp = shp,
+    x = x,
     teow = teow,
-    rundir = rundir,
-    verbose = verbose,
-    todisk = todisk
+    verbose = verbose
   )
   out <- merged %>%
     dplyr::select(BIOME_NAME, new_area)
@@ -88,3 +81,11 @@ NULL
     dplyr::summarise(area = sum(as.numeric(area)))
   results_biome
 }
+
+register_indicator(
+  name = "biome",
+  resources = list(teow = "vector"),
+  fun = .calc_biome,
+  arguments = list(),
+  processing_mode = "asset"
+)

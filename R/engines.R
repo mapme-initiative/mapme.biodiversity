@@ -41,7 +41,7 @@ available_engines <- c("zonal", "extract", "exactextract")
   }
 }
 
-.select_engine <- function(shp, raster, stats, engine, name = NULL, mode = "asset") {
+.select_engine <- function(x, raster, stats, engine, name = NULL, mode = "asset") {
   .check_stats(stats)
   .check_engine(engine)
 
@@ -52,20 +52,20 @@ available_engines <- c("zonal", "extract", "exactextract")
   )
 
   if (mode == "asset") {
-    result <- engine(shp, raster, stats, name)
+    result <- engine(x, raster, stats, name)
   } else {
-    result <- purrr::map(1:nrow(shp), function(i) {
-      engine(shp[i, ], raster, stats, name)
+    result <- purrr::map(1:nrow(x), function(i) {
+      engine(x[i, ], raster, stats, name)
     })
   }
   result
 }
 
-.engine_zonal <- function(shp, raster, stats, name = NULL) {
+.engine_zonal <- function(x, raster, stats, name = NULL) {
   results <- purrr::map_dfc(stats, function(stat) {
     out <- terra::zonal(
       raster,
-      vect(shp),
+      vect(x),
       fun = stat,
       na.rm = TRUE
     )
@@ -76,11 +76,11 @@ available_engines <- c("zonal", "extract", "exactextract")
   results
 }
 
-.engine_extract <- function(shp, raster, stats, name = NULL) {
+.engine_extract <- function(x, raster, stats, name = NULL) {
   results <- purrr::map_dfc(stats, function(stat) {
     out <- terra::extract(
       raster,
-      shp,
+      x,
       fun = stat,
       na.rm = TRUE,
       ID = FALSE
@@ -92,7 +92,7 @@ available_engines <- c("zonal", "extract", "exactextract")
   results
 }
 
-.engine_exact_extract <- function(shp, raster, stats, name = NULL) {
+.engine_exact_extract <- function(x, raster, stats, name = NULL) {
   if (!requireNamespace("exactextractr", quietly = TRUE)) {
     stop(paste(
       "Needs package 'exactextractr' to be installed.",
@@ -108,7 +108,7 @@ available_engines <- c("zonal", "extract", "exactextract")
 
     out <- exactextractr::exact_extract(
       raster,
-      shp,
+      x,
       fun = stat
     )
     out <- tibble(as.numeric(out))

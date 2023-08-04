@@ -71,3 +71,11 @@ NULL
     NULL
   }
 }
+
+register_resource(
+  name = "nasa_grace",
+  type = "raster",
+  source = "https://nasagrace.unl.edu/globaldata/",
+  fun = .get_nasa_grace,
+  arguments <- list()
+)

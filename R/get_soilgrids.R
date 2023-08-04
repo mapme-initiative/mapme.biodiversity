@@ -275,3 +275,15 @@ NULL
   "60-100cm", "100-200cm", "0-30cm"
 )
 .sg_stats <- c("Q0.05", "Q0.5", "mean", "Q0.95")
+
+register_resource(
+  name = "soilgrids",
+  type = "raster",
+  source = "https://www.isric.org/explore/soilgrids",
+  fun = .get_soilgrids,
+  arguments <- list(
+    layers = "clay",
+    depths = "0-5cm",
+    stats = "mean"
+  )
+)

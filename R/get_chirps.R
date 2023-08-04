@@ -45,3 +45,11 @@ NULL
   )
   filenames
 }
+
+register_resource(
+  name = "chirps",
+  type = "raster",
+  source = "https://www.chc.ucsb.edu/data/chirps",
+  fun = .get_chirps,
+  arguments <- list()
+)

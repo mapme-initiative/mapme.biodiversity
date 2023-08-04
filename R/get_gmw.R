@@ -90,15 +90,19 @@ NULL
   # Source data from 2018 doesn't correspond to the pattern for other years.
   # We need to create an exception for it.
   if (year == 2018) {
-    shp <- file.path(rundir,
-                     paste0("GMW_v3_2018/00_Data/gmw_v3_", year, ".shp"))
+    shp <- file.path(
+      rundir,
+      paste0("GMW_v3_2018/00_Data/gmw_v3_", year, ".shp")
+    )
   } else {
     shp <- file.path(rundir, paste0("gmw_v3_", year, "_vec.shp"))
   }
-  
-  gdal_utils(util = "vectortranslate", shp, gpkg,
-             options = c("-t_srs", "EPSG:4326"))
-  
+
+  gdal_utils(
+    util = "vectortranslate", shp, gpkg,
+    options = c("-t_srs", "EPSG:4326")
+  )
+
   d_files <- list.files(rundir, full.names = T)
   unlink(grep("gmw-extent*", d_files, value = T, invert = T),
     recursive = T, force = T
@@ -126,3 +130,12 @@ NULL
     NULL
   }
 }
+
+
+register_resource(
+  name = "gmw",
+  type = "vector",
+  source = "https://data.unep-wcmc.org/datasets/45",
+  fun = .get_gmw,
+  arguments <- list()
+)

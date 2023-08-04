@@ -46,26 +46,24 @@ NULL
 #' can compute the area of the landcover classes among 23 discrete classes provided
 #' from ESA available for years 2015 to 2019.
 #'
-#' @param shp A single polygon for which to calculate the area of landcover classes
+#' @param x A single polygon for which to calculate the area of landcover classes
 #' @param esalandcover The landcover raster resource from ESA
-#' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
 #' @noRd
 
-.calc_landcover <- function(shp,
+.calc_landcover <- function(x,
                             esalandcover,
-                            rundir = tempdir(),
                             verbose = TRUE,
                             ...) {
   if (is.null(esalandcover)) {
     return(NA)
   }
 
-  shp_v <- vect(shp)
-  esa_mask <- terra::mask(esalandcover, shp_v)
+  x_v <- vect(x)
+  esa_mask <- terra::mask(esalandcover, x_v)
   # compute area of each cell
   arearaster <- cellSize(esa_mask, unit = "ha")
   patchsizes <- zonal(arearaster, esa_mask, sum)
@@ -92,3 +90,12 @@ NULL
   names(result)[1:length(years)] <- years
   tidyr::pivot_longer(result, cols = 1:length(years), names_to = "year", values_to = "area")
 }
+
+
+register_indicator(
+  name = "landcover",
+  resources = list(esalandcover = "raster"),
+  fun = .calc_landcover,
+  arguments = list(),
+  processing_mode = "asset"
+)

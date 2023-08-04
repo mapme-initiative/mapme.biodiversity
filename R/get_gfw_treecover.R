@@ -92,3 +92,12 @@ NULL
     "GFC-2021-v1.9"
   )
 }
+
+
+register_resource(
+  name = "gfw_treecover",
+  type = "raster",
+  source = "https://data.globalforestwatch.org/documents/tree-cover-2000/explore",
+  fun = .get_gfw_treecover,
+  arguments <- list(vers_treecover = "GFC-2021-v1.9")
+)
