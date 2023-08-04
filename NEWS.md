@@ -34,6 +34,10 @@
 - mapme.biodiversity no longer sets terra's temporal directory for you.
   Instead you have to call `terra::terraOptions()` manually
 
+## Bug Fixes
+
+- `esalandcover` indicator now returns the value per each land cover class 
+  exactly once (#177)
 
 ## Internal
 

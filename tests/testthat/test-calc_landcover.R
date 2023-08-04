@@ -12,7 +12,7 @@ test_that("esa global landcover works", {
   result <- .calc_landcover(shp, esalandcover)
   expect_equal(
     names(result),
-    c("classes", "year", "area")
+    c("classes", "year", "area", "percentage")
   )
   expect_equal(
     unique(result$year),
