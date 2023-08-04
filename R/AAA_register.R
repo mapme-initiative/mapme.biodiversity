@@ -42,6 +42,10 @@ register_resource <- function(name = NULL, type = NULL, source = NULL, fun = NUL
     stop("name needs to be a length 1 character")
   }
 
+  if (name %in% names(.pkgenv$resources)) {
+    stop(paste("resource with name", name, "already registered"))
+  }
+
   if (!type %in% c("vector", "raster")) {
     stop("type need to be one of 'vector' or 'raster'")
   }
@@ -128,6 +132,10 @@ register_indicator <- function(name = NULL, resources = NULL, fun = NULL,
 
   if (!inherits(name, "character") || length(name) > 1) {
     stop("name needs to be a length 1 character")
+  }
+
+  if (name %in% names(.pkgenv$indicators)) {
+    stop(paste("indicator with name", name, "already registered"))
   }
 
   if (!inherits(fun, "function")) {
