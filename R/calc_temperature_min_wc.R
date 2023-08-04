@@ -130,7 +130,7 @@ NULL
 
 register_indicator(
   name = "temperature_min_wc",
-  resources = list(worldclim = "raster"),
+  resources = list(worldclim_min_temperature = "raster"),
   fun = .calc_temperature_min_wc,
   arguments = list(
     engine = "extract",

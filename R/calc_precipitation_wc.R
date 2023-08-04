@@ -86,7 +86,7 @@ NULL
 
 register_indicator(
   name = "precipitation_wc",
-  resources = list(worldclim = "raster"),
+  resources = list(worldclim_precipitation = "raster"),
   fun = .calc_precipitation_wc,
   arguments = list(
     engine = "extract",

@@ -85,7 +85,7 @@ NULL
 
 register_indicator(
   name = "temperature_max_wc",
-  resources = list(worldclim = "raster"),
+  resources = list(worldclim_max_temperature = "raster"),
   fun = .calc_temperature_max_wc,
   arguments = list(
     engine = "extract",
