@@ -31,7 +31,6 @@ NULL
 #' @noRd
 
 .get_nasa_srtm <- function(x,
-                           download_srtm = TRUE,
                            rundir = tempdir(),
                            verbose = TRUE) {
   if (!requireNamespace("rstac", quietly = T)) {
@@ -56,10 +55,6 @@ NULL
 
   if (attr(x, "testing")) {
     return(basename(urls))
-  }
-
-  if (!download_srtm) {
-    return(paste0("/vsicurl/", urls))
   }
 
   filenames <- file.path(rundir, basename(urls))
