@@ -55,6 +55,8 @@
   registered to .pkgenv and queried there during runtime. This also allows
   users to register custom resources/indicator functions
   
+- removed deprecation warnings for old resource/indicator name
+  
 
 
 # mapme.biodiversity 0.3.0

@@ -24,9 +24,6 @@ get_resources <- function(x, resources, ...) {
   if (!connection_available) {
     stop("There seems to be no internet connection. Cannot download resources.")
   }
-
-  # depreciation warining for old resource names
-  resources <- .depreciation_warning(resources, resource = TRUE)
   # check if the requested resource is supported
   .check_requested_resources(resources)
   # check if any of the requested resources is already locally available

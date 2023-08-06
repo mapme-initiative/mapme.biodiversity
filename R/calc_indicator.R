@@ -21,8 +21,6 @@
 #' @keywords function
 #' @export
 calc_indicators <- function(x, indicators, ...) {
-  # depreciation warining for old indicator names
-  indicators <- .depreciation_warning(indicators, resource = FALSE)
   # check if the requested resource is supported
   required_resources <- .check_requested_indicator(indicators)
   # check if any of the requested resources is already locally available
