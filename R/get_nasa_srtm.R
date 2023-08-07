@@ -28,8 +28,8 @@ NULL
 #' @param verbose Logical controlling verbosity.
 #' @importFrom utils unzip
 #' @keywords internal
+#' @include register.R
 #' @noRd
-
 .get_nasa_srtm <- function(x,
                            rundir = tempdir(),
                            verbose = TRUE) {
@@ -69,3 +69,11 @@ NULL
   )
   filenames
 }
+
+register_resource(
+  name = "nasa_srtm",
+  type = "raster",
+  source = "https://planetarycomputer.microsoft.com/dataset/nasadem",
+  fun = .get_nasa_srtm,
+  arguments <- list()
+)

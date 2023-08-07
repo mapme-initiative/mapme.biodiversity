@@ -21,8 +21,6 @@
 #' @keywords function
 #' @export
 calc_indicators <- function(x, indicators, ...) {
-  # depreciation warining for old indicator names
-  indicators <- .depreciation_warning(indicators, resource = FALSE)
   # check if the requested resource is supported
   required_resources <- .check_requested_indicator(indicators)
   # check if any of the requested resources is already locally available
@@ -54,48 +52,32 @@ calc_indicators <- function(x, indicators, ...) {
   # get arguments from function call and portfolio object
   args <- list(...)
   atts <- attributes(x)
-  available_resources <- atts$resources
-  tmpdir <- file.path(atts$tmpdir, indicator)
-  dir.create(tmpdir, showWarnings = FALSE)
-  verbose <- atts$verbose
 
   # retrieve the selected indicator
   selected_indicator <- available_indicators(indicator)
-  # match function call
-  fun <- match.fun(selected_indicator[[1]]$name)
-  # required resources
-  required_resources <- selected_indicator[[1]]$inputs
   # get processing mode
-  processing_mode <- selected_indicator[[1]]$processing_mode
+  processing_mode <- selected_indicator[[indicator]]$processing_mode
   # matching the specified arguments to the required arguments
   params <- .check_resource_arguments(selected_indicator, args)
   # append parameters
   params$verbose <- atts$verbose
-  params$tmpdir <- tmpdir
-  params$fun <- fun
-  params$available_resources <- available_resources
-  params$required_resources <- required_resources
-  params$processing_mode <- processing_mode
-  # set terra temporal directory to rundir
-  terra_org <- tempdir()
-  dir.create(file.path(tmpdir, "terra"), showWarnings = FALSE)
-  terra::terraOptions(tempdir = file.path(tmpdir, "terra"))
+  fun <- selected_indicator[[indicator]]$fun
+  available_resources <- atts$resources
+  required_resources <- selected_indicator[[indicator]]$resources
 
   if (processing_mode == "asset") {
     p <- progressr::progressor(steps = nrow(x))
     # apply function with parameters and add hidden id column
     results <- furrr::future_map(1:nrow(x), function(i) {
       p()
-      .prep_and_compute(x[i, ], params, i)
+      resources <- .prep(x[i, ], atts$resources, required_resources)
+      .compute(x[i, ], resources, fun, params, i)
     }, .options = furrr::furrr_options(seed = TRUE))
   } else {
-    results <- .prep_and_compute(x, params, 1)
+    resources <- .prep(x, atts$resources, required_resources)
+    results <- .compute(x, resources, fun, params, 1)
   }
-  # cleanup the tmpdir for indicator
-  unlink(tmpdir, recursive = TRUE, force = TRUE)
-  # remove terra tmpdir
-  unlink(file.path(tmpdir, "terra"), recursive = TRUE, force = TRUE)
-  terra::terraOptions(tempdir = terra_org)
+
   # bind the asset results
   results <- .bind_assets(results)
   # nest the results
@@ -108,65 +90,39 @@ calc_indicators <- function(x, indicators, ...) {
 }
 
 
-#' Internal indicator routine
-#'
-#' Helper to abstract preparation and computation
-#' of indicators per polygon
-#' @keywords internal
-#' @noRd
-.prep_and_compute <- function(shp, params, i) {
-  rundir <- file.path(params$tmpdir, i) # create a rundir name
-  dir.create(rundir, showWarnings = FALSE) # create the current rundir
-  params$rundir <- rundir # change rundir
-  params$shp <- shp # enter specific polygon
-  # .read_source should return NULL if an error occurs
-  processed_resources <- .read_source(params, rundir)
-  params <- append(params, processed_resources)
-  # call the indicator function with the associated parameters
-  out <- try(do.call(params$fun, args = params))
-  if (length(out) == 1) {
-    if (is.na(out)) {
-      out <- list(NA)
+
+.prep <- function(x, available_resources, required_resources) {
+  resources <- purrr::imap(
+    required_resources, function(resource_type, resource_name) {
+      if (resource_type == "raster") {
+        tindex <- read_sf(available_resources[resource_name], quiet = TRUE)
+        resource <- .read_raster_source(x, tindex)
+      } else if (resource_type == "vector") {
+        resource <- .read_vector_source(x, available_resources[[resource_name]])
+      } else {
+        stop(sprintf("Resource type '%s' currently not supported", resource_type))
+      }
+      resource
     }
-  }
-  if (inherits(out, "try-error")) {
-    warning(sprintf("Error occured at polygon %s with the following error message: %s. \n Returning NAs.", i, out))
-    out <- list(NA)
-  }
-  unlink(rundir, recursive = TRUE, force = TRUE) # delete the current rundir
-  out # return
+  )
+
+  names(resources) <- names(resources)
+  resources
 }
 
-.read_source <- function(params, rundir) {
-  required_resources <- params$required_resources
-  available_resources <- params$available_resources
-  shp <- params$shp
 
-  processed_resources <- lapply(seq_along(required_resources), function(i) {
-    resource_type <- required_resources[[i]]
-    resource_name <- names(required_resources)[[i]]
-
-    if (resource_type == "raster") {
-      tindex <- read_sf(available_resources[resource_name], quiet = TRUE)
-      out <- .read_raster_source(shp, tindex, rundir)
-    } else if (resource_type == "vector") {
-      out <- lapply(available_resources[[resource_name]], function(source) {
-        tmp <- read_sf(source, wkt_filter = st_as_text(st_as_sfc(st_bbox(shp))))
-        st_make_valid(tmp)
-      })
-      names(out) <- basename(available_resources[[resource_name]])
-    } else {
-      stop(sprintf("Resource type '%s' currently not supported", resource_type))
-    }
-    out
+.read_vector_source <- function(x, vector_sources) {
+  vectors <- purrr::map(vector_sources, function(source) {
+    tmp <- read_sf(source, wkt_filter = st_as_text(st_as_sfc(st_bbox(x))))
+    st_make_valid(tmp)
   })
-  names(processed_resources) <- names(required_resources)
-  processed_resources
+  names(vectors) <- basename(vector_sources)
+  vectors
 }
 
 
 
-.read_raster_source <- function(shp, tindex, rundir) {
+.read_raster_source <- function(x, tindex) {
   all_bboxes <- lapply(1:nrow(tindex), function(i) paste(as.numeric(st_bbox(tindex[i, ])), collapse = " "))
   is_stacked <- length(unique(unlist(all_bboxes))) == 1
 
@@ -179,7 +135,7 @@ calc_indicators <- function(x, indicators, ...) {
     is_unique <- length(unique(unlist(all_bboxes))) == nrow(tindex)
 
     if (is_unique) { # all tiles have a different bounding box
-      target_files <- tindex$location[unlist(st_intersects(shp, tindex))]
+      target_files <- tindex$location[unlist(st_intersects(x, tindex))]
 
       if (length(target_files) == 0) {
         warning("No intersection with resource.")
@@ -188,7 +144,7 @@ calc_indicators <- function(x, indicators, ...) {
         out <- terra::rast(target_files)
       } else {
         # create a vrt for multiple targets
-        vrt_name <- tempfile("vrt", fileext = ".vrt", tmpdir = rundir)
+        vrt_name <- tempfile("vrt", fileext = ".vrt")
         out <- terra::vrt(target_files, filename = vrt_name)
       }
     } else { # some tiles share the same bboxes, and others do not, needs proper merging
@@ -210,7 +166,7 @@ calc_indicators <- function(x, indicators, ...) {
         target_files <- tindex$location[j:(j + temporal_gap)]
         org_filename <- basename(target_files[1])
         filename <- tools::file_path_sans_ext(org_filename)
-        vrt_name <- file.path(rundir, sprintf("vrt_%s.vrt", filename))
+        vrt_name <- tempfile(pattern = sprintf("vrt_%s.vrt", filename))
         tmp <- terra::vrt(target_files, filename = vrt_name)
         names(tmp) <- org_filename
         tmp
@@ -218,8 +174,9 @@ calc_indicators <- function(x, indicators, ...) {
       out <- do.call(c, out)
     }
   }
+
   # crop the source to the extent of the current polygon
-  cropped <- try(terra::crop(out, terra::vect(shp)))
+  cropped <- try(terra::crop(out, terra::vect(x)))
   if (inherits(cropped, "try-error")) {
     warning(as.character(cropped))
     return(NULL)
@@ -227,6 +184,25 @@ calc_indicators <- function(x, indicators, ...) {
   cropped
 }
 
+
+.compute <- function(x, resources, fun, args, i) {
+  args <- append(args, resources)
+  args$x <- x
+
+  # call the indicator function with the associated parameters
+  out <- try(do.call(fun, args = args))
+
+  if (length(out) == 1) {
+    if (is.na(out)) {
+      out <- list(NA)
+    }
+  }
+  if (inherits(out, "try-error")) {
+    warning(sprintf("Error occured at polygon %s with the following error message: %s. \n Returning NAs.", i, out))
+    out <- list(NA)
+  }
+  out # return
+}
 
 .bind_assets <- function(results) {
   # bind results to data.frame

@@ -23,8 +23,8 @@ NULL
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose Logical controlling verbosity.
 #' @keywords internal
+#' @include register.R
 #' @noRd
-
 .get_esalandcover <- function(x,
                               rundir = tempdir(),
                               verbose = TRUE) {
@@ -129,3 +129,12 @@ NULL
     return(NULL)
   }
 }
+
+
+register_resource(
+  name = "esalandcover",
+  type = "raster",
+  source = "https://registry.opendata.aws/esa-worldcover-vito/",
+  fun = .get_esalandcover,
+  arguments <- list()
+)

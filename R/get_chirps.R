@@ -21,7 +21,7 @@
 #' \doi{10.1038/sdata.2015.66}
 NULL
 
-
+#' @include register.R
 .get_chirps <- function(x,
                         rundir = tempdir(),
                         verbose = TRUE) {
@@ -45,3 +45,11 @@ NULL
   )
   filenames
 }
+
+register_resource(
+  name = "chirps",
+  type = "raster",
+  source = "https://www.chc.ucsb.edu/data/chirps",
+  fun = .get_chirps,
+  arguments <- list()
+)

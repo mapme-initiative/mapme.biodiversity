@@ -57,7 +57,7 @@ NULL
 #' from package terra, extract from package terra, or exactextract from exactextractr
 #' as desired.
 #'
-#' @param shp A single polygon for which to calculate the minimum temperature statistic
+#' @param x A single polygon for which to calculate the minimum temperature statistic
 #' @param worldclim_min_temperature minimum temperature raster from which to compute statistics
 #' @param stats_worldclim Function to be applied to compute statistics for polygons
 #'    either one or multiple inputs as character "min", "max", "sum", "mean", "median"
@@ -67,15 +67,16 @@ NULL
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
+#' @include register.R
 #' @noRd
 
-.calc_temperature_min_wc <- function(shp,
+.calc_temperature_min_wc <- function(x,
                                      worldclim_min_temperature,
                                      engine = "extract",
                                      stats_worldclim = "mean",
                                      ...) {
   results <- .calc_worldclim(
-    shp = shp,
+    x = x,
     worldclim = worldclim_min_temperature,
     engine = engine,
     stats_worldclim = stats_worldclim
@@ -86,7 +87,7 @@ NULL
 #' Helper function to compute worldclim statistics
 #'
 #' @param worldclim worldclim raster from which to compute statistics
-#' @param shp A single polygon for which to calculate the climatic statistic
+#' @param x A single polygon for which to calculate the climatic statistic
 #' @param stats_worldclim Function to be applied to compute statistics for polygons
 #'    either one or multiple inputs as character "min", "max", "sum", "mean", "median"
 #'    "sd" or "var".
@@ -95,8 +96,9 @@ NULL
 #'
 #' @return A data-frame
 #' @keywords internal
+#' @include register.R
 #' @noRd
-.calc_worldclim <- function(shp,
+.calc_worldclim <- function(x,
                             worldclim,
                             engine = "extract",
                             stats_worldclim = "mean") {
@@ -114,7 +116,7 @@ NULL
   layer <- strsplit(names(worldclim), "_")[[1]][3]
 
   results <- .select_engine(
-    shp = shp,
+    x = x,
     raster = worldclim,
     stats = stats_worldclim,
     engine = engine,
@@ -127,3 +129,14 @@ NULL
   results$date <- as.Date(dates, "%Y-%m-%d")
   results
 }
+
+register_indicator(
+  name = "temperature_min_wc",
+  resources = list(worldclim_min_temperature = "raster"),
+  fun = .calc_temperature_min_wc,
+  arguments = list(
+    engine = "extract",
+    stats_worldclim = "mean"
+  ),
+  processing_mode = "asset"
+)

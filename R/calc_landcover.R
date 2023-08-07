@@ -47,18 +47,17 @@ NULL
 #' can compute the area of the landcover classes among 23 discrete classes provided
 #' from ESA available for years 2015 to 2019.
 #'
-#' @param shp A single polygon for which to calculate the area of landcover classes
+#' @param x A single polygon for which to calculate the area of landcover classes
 #' @param esalandcover The landcover raster resource from ESA
-#' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
+#' @include register.R
 #' @noRd
 
-.calc_landcover <- function(shp,
+.calc_landcover <- function(x,
                             esalandcover,
-                            rundir = tempdir(),
                             verbose = TRUE,
                             ...) {
   percentage <- NULL
@@ -69,8 +68,8 @@ NULL
     return(NA)
   }
 
-  shp_v <- vect(shp)
-  esa_mask <- terra::mask(esalandcover, shp_v)
+  x_v <- vect(x)
+  esa_mask <- terra::mask(esalandcover, x_v)
   arearaster <- cellSize(esa_mask, mask = TRUE, unit = "ha")
   total_size <- as.numeric(global(arearaster, fun = sum, na.rm = TRUE))
 
@@ -95,4 +94,12 @@ NULL
     "open_forest_mixed", "open_forest_unknown", "shrubs", "herbaceous_vegetation", "cropland", "built_up", "bare_vegetation",
     "snow_and_ice", "permanent_water_bodies", "herbaceous_wetland", "moss_and_lichen", "open_sea"
   )
+)
+
+register_indicator(
+  name = "landcover",
+  resources = list(esalandcover = "raster"),
+  fun = .calc_landcover,
+  arguments = list(),
+  processing_mode = "asset"
 )

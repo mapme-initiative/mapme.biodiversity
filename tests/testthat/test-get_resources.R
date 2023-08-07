@@ -39,8 +39,4 @@ test_that("get_resources works", {
     ),
     "The following requested resources are already available: gfw_treecover, gfw_lossyear, gfw_emissions."
   )
-
-  expect_warning(
-    get_resources(portfolio, "treecover2000", vers_treecover = "GFC-2020-v1.8")
-  )
 })

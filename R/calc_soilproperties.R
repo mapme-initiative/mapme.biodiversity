@@ -51,11 +51,12 @@
 #'   calc_indicators("soilproperties", stats_soil = c("mean", "median"), engine = "extract") %>%
 #'   tidyr::unnest(soilproperties)))
 NULL
-.calc_soilproperties <- function(shp,
+
+#' @include register.R
+.calc_soilproperties <- function(x,
                                  soilgrids,
-                                 engine = "zonal",
+                                 engine = "extract",
                                  stats_soil = "mean",
-                                 rundir = tempdir(),
                                  verbose = TRUE,
                                  ...) {
   # check if input engines are correct
@@ -63,7 +64,7 @@ NULL
     return(NA)
   }
   results <- .select_engine(
-    shp = shp,
+    x = x,
     raster = soilgrids,
     stats = stats_soil,
     engine = engine,
@@ -91,3 +92,14 @@ NULL
   # select cols in right order
   as_tibble(results[, c("layer", "depth", "stat", stats_soil)])
 }
+
+register_indicator(
+  name = "soilproperties",
+  resources = list(soilgrids = "raster"),
+  fun = .calc_soilproperties,
+  arguments = list(
+    engine = "extract",
+    stats_soil = "mean"
+  ),
+  processing_mode = "asset"
+)

@@ -56,23 +56,22 @@ NULL
 #' can specify the functions i.e. zonal from package terra, extract from package
 #' terra, or exactextract from exactextractr as desired.
 #'
-#' @param shp A single polygon for which to calculate the accessibility statistic
+#' @param x A single polygon for which to calculate the accessibility statistic
 #' @param nelson_et_al The nelson_et_al raster resource (Weiß et al. (2018))
 #' @param stats_accessibility Function to be applied to compute statistics for polygons
 #'    either one or multiple inputs as character "mean", "median" or "sd".
 #' @param engine The preferred processing functions from either one of "zonal",
 #'   "extract" or "exactextract" as character.
-#' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
+#' @include register.R
 #' @noRd
-.calc_traveltime <- function(shp,
+.calc_traveltime <- function(x,
                              nelson_et_al,
                              engine = "extract",
                              stats_accessibility = "mean",
-                             rundir = tempdir(),
                              verbose = TRUE,
                              ...) {
   if (is.null(nelson_et_al)) {
@@ -81,7 +80,7 @@ NULL
   # set max value of 65535 to NA
   nelson_et_al <- clamp(nelson_et_al, lower = -Inf, upper = 65534, values = FALSE)
   results <- .select_engine(
-    shp = shp,
+    x = x,
     raster = nelson_et_al,
     stats = stats_accessibility,
     engine = engine,
@@ -91,3 +90,14 @@ NULL
   results$distance <- unlist(lapply(names(nelson_et_al), function(x) strsplit(x, "-|.tif")[[1]][2]))
   results
 }
+
+register_indicator(
+  name = "traveltime",
+  resources = list(nelson_et_al = "raster"),
+  fun = .calc_traveltime,
+  arguments = list(
+    engine = "extract",
+    stats_accessibility = "mean"
+  ),
+  processing_mode = "asset"
+)

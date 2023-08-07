@@ -57,31 +57,29 @@ NULL
 #' can specify the functions i.e. zonal from package terra, extract from package
 #' terra, or exactextract from exactextractr as desired.
 #'
-#' @param shp A single polygon for which to calculate the elevation statistic
+#' @param x A single polygon for which to calculate the elevation statistic
 #' @param nasa_srtm The elevation raster resource from SRTM
 #' @param stats Function to be applied to compute statistics for polygons either
 #'   one or multiple inputs as character "mean", "median" or "sd".
 #' @param engine The preferred processing functions from either one of "zonal",
 #'   "extract" or "exactextract" as character.
-#' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
+#' @include register.R
 #' @noRd
-
-.calc_elevation <- function(shp,
+.calc_elevation <- function(x,
                             nasa_srtm,
-                            engine = "zonal",
+                            engine = "extract",
                             stats_elevation = "mean",
-                            rundir = tempdir(),
                             verbose,
                             ...) {
   if (is.null(nasa_srtm)) {
     return(NA)
   }
   .select_engine(
-    shp = shp,
+    x = x,
     raster = nasa_srtm,
     stats = stats_elevation,
     engine = engine,
@@ -89,3 +87,14 @@ NULL
     mode = "asset"
   )
 }
+
+register_indicator(
+  name = "elevation",
+  resources = list(nasa_srtm = "raster"),
+  fun = .calc_elevation,
+  arguments = list(
+    engine = "extract",
+    stats_elevation = "mean"
+  ),
+  processing_mode = "asset"
+)

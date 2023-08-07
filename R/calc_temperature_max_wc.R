@@ -57,7 +57,7 @@ NULL
 #' from package terra, extract from package terra, or exactextract from exactextractr
 #' as desired.
 #'
-#' @param shp A single polygon for which to calculate the maximum temperature statistic
+#' @param x A single polygon for which to calculate the maximum temperature statistic
 #' @param worldclim_max_temperature maximum temperature raster from which to compute statistics
 #' @param stats_worldclim Function to be applied to compute statistics for polygons
 #'    either one or multiple inputs as character "min", "max", "sum", "mean", "median"
@@ -67,18 +67,29 @@ NULL
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
+#' @include register.R
 #' @noRd
-
-.calc_temperature_max_wc <- function(shp,
+.calc_temperature_max_wc <- function(x,
                                      worldclim_max_temperature,
                                      engine = "extract",
                                      stats_worldclim = "mean",
                                      ...) {
   results <- .calc_worldclim(
-    shp = shp,
+    x = x,
     worldclim = worldclim_max_temperature,
     engine = engine,
     stats_worldclim = stats_worldclim
   )
   results
 }
+
+register_indicator(
+  name = "temperature_max_wc",
+  resources = list(worldclim_max_temperature = "raster"),
+  fun = .calc_temperature_max_wc,
+  arguments = list(
+    engine = "extract",
+    stats_worldclim = "mean"
+  ),
+  processing_mode = "asset"
+)

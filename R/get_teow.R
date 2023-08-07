@@ -28,8 +28,8 @@ NULL
 #' @param verbose Logical controlling verbosity.
 #' @importFrom utils unzip
 #' @keywords internal
+#' @include register.R
 #' @noRd
-
 .get_teow <- function(x,
                       rundir = tempdir(),
                       verbose = TRUE) {
@@ -70,3 +70,11 @@ NULL
   # return paths to the gpkg
   filename
 }
+
+register_resource(
+  name = "teow",
+  type = "vector",
+  source = "https://www.worldwildlife.org/publications/terrestrial-ecoregions-of-the-world",
+  fun = .get_teow,
+  arguments <- list()
+)

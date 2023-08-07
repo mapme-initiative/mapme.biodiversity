@@ -58,7 +58,7 @@ NULL
 #' from package terra, extract from package terra, or exactextract from exactextractr
 #' as desired.
 #'
-#' @param shp A single polygon for which to calculate the precipitation statistic
+#' @param x A single polygon for which to calculate the precipitation statistic
 #' @param worldclim_precipitation precipitation raster from which to compute statistics
 #' @param stats_worldclim Function to be applied to compute statistics for polygons
 #'    either one or multiple inputs as character "min", "max", "sum", "mean", "median"
@@ -68,18 +68,29 @@ NULL
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
+#' @include register.R
 #' @noRd
-
-.calc_precipitation_wc <- function(shp,
+.calc_precipitation_wc <- function(x,
                                    worldclim_precipitation,
                                    engine = "extract",
                                    stats_worldclim = "mean",
                                    ...) {
   results <- .calc_worldclim(
-    shp = shp,
+    x = x,
     worldclim = worldclim_precipitation,
     engine = engine,
     stats_worldclim = stats_worldclim
   )
   results
 }
+
+register_indicator(
+  name = "precipitation_wc",
+  resources = list(worldclim_precipitation = "raster"),
+  fun = .calc_precipitation_wc,
+  arguments = list(
+    engine = "extract",
+    stats_worldclim = "mean"
+  ),
+  processing_mode = "asset"
+)

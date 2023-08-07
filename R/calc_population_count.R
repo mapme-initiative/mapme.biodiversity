@@ -56,25 +56,23 @@ NULL
 #' or var to compute. Also, users can specify the functions i.e. zonal from package
 #' terra, extract from package terra, or exactextract from exactextractr as desired.
 #'
-#' @param shp A single polygon for which to calculate the population count statistic
+#' @param x A single polygon for which to calculate the population count statistic
 #' @param worldpop The population count raster resource from worldPop
 #' @param stats_popcount Function to be applied to compute statistics for polygons
 #'    either one or multiple inputs as character "min", "max", "sum", "mean", "median"
 #'    "sd" or "var".
 #' @param engine The preferred processing functions from either one of "zonal",
 #'   "extract" or "exactextract" as character.
-#' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
+#' @include register.R
 #' @noRd
-
-.calc_population_count <- function(shp,
+.calc_population_count <- function(x,
                                    worldpop,
                                    engine = "extract",
                                    stats_popcount = "sum",
-                                   rundir = tempdir(),
                                    verbose = TRUE,
                                    ...) {
   if (is.null(worldpop)) {
@@ -90,7 +88,7 @@ NULL
   )
 
   results <- .select_engine(
-    shp = shp,
+    x = x,
     raster = worldpop,
     stats = stats_popcount,
     engine = engine,
@@ -102,3 +100,14 @@ NULL
   results$year <- years
   results
 }
+
+register_indicator(
+  name = "population_count",
+  resources = list(worldpop = "raster"),
+  fun = .calc_population_count,
+  arguments = list(
+    engine = "extract",
+    stats_popcount = "sum"
+  ),
+  processing_mode = "asset"
+)

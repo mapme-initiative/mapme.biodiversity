@@ -24,14 +24,12 @@ get_resources <- function(x, resources, ...) {
   if (!connection_available) {
     stop("There seems to be no internet connection. Cannot download resources.")
   }
-
-  # depreciation warining for old resource names
-  resources <- .depreciation_warning(resources, resource = TRUE)
   # check if the requested resource is supported
   .check_requested_resources(resources)
   # check if any of the requested resources is already locally available
   existing_resources <- attributes(x)$resources
   resources <- .check_existing_resources(names(existing_resources), resources)
+
   if (length(resources) == 0) {
     return(x)
   }
@@ -67,63 +65,36 @@ get_resources <- function(x, resources, ...) {
 .get_single_resource <- function(x, resource, ...) {
   args <- list(...)
   atts <- attributes(x)
-  outdir <- atts$outdir
-  tmpdir <- atts$tmpdir
-  verbose <- atts$verbose
-  rundir <- file.path(outdir, resource)
+
+  rundir <- file.path(atts$outdir, resource)
   dir.create(rundir, showWarnings = FALSE)
+
   selected_resource <- available_resources(resource)
   # match function
-  fun <- match.fun(selected_resource[[1]]$downloader)
+  fun <- selected_resource[[resource]]$fun
   # matching the specified arguments to the required arguments
   params <- .check_resource_arguments(selected_resource, args)
   params$x <- x
   params$rundir <- rundir
-  params$verbose <- verbose
-  # set terra temporal directory to rundir
-  terra_org <- tempdir()
-  dir.create(file.path(tmpdir, "terra"), showWarnings = FALSE)
-  terra::terraOptions(tempdir = file.path(tmpdir, "terra"))
+  params$verbose <- atts$verbose
+
   # conduct download function, TODO: we can think of an efficient way for
   # parallel downloads here or further upstream
   # if files to not exist use download function to download to tmpdir
-  if (verbose) {
+  if (atts$verbose) {
     message(sprintf("Starting process to download resource '%s'........", resource))
   }
 
-  downloaded_files <- tryCatch(
-    {
-      do.call(fun, args = params)
-    },
-    error = function(cond) {
-      print(cond)
-      warning(
-        sprintf(
-          paste("Download for resource %s failed. ",
-            "Returning unmodified portfolio object.",
-            sep = ""
-          ),
-          resource
-        ),
-        call. = FALSE
-      )
-      return(NA)
-    },
-    warning = function(cond) {
-      print(cond)
-      warning(
-        sprintf(
-          paste("Download for resource %s failed. ",
-            "Returning unmodified portfolio object.",
-            sep = ""
-          ),
-          resource
-        ),
-        call. = FALSE
-      )
-      return(NA)
-    }
-  )
+  downloaded_files <- try(do.call(fun, args = params))
+  if (inherits(downloaded_files, "try-error")) {
+    stop(sprintf(
+      paste("Download for resource %s failed. ",
+        "Returning unmodified portfolio object.",
+        sep = ""
+      ),
+      resource
+    ))
+  }
 
   if (attr(x, "testing")) {
     return(downloaded_files)
@@ -136,9 +107,10 @@ get_resources <- function(x, resources, ...) {
   }
 
   # if the selected resource is a raster resource create tileindex
-  if (selected_resource[[1]]$type == "raster") {
+  if (selected_resource[[resource]]$type == "raster") {
     tindex_file <- file.path(rundir, paste0("tileindex_", resource, ".gpkg"))
     if (file.exists(tindex_file)) file.remove(tindex_file)
+
     footprints <- lapply(unique(downloaded_files), function(file) {
       tmp <- rast(file)
       footprint <- st_as_sf(st_as_sfc(st_bbox(tmp)))
@@ -146,14 +118,11 @@ get_resources <- function(x, resources, ...) {
       footprint$location <- sources(tmp)
       footprint
     })
+
     footprints <- do.call(rbind, footprints)
     write_sf(footprints, dsn = tindex_file)
     downloaded_files <- tindex_file
   }
-
-  # remove terra tmpdir
-  unlink(file.path(tmpdir, "terra"), recursive = TRUE, force = TRUE)
-  terra::terraOptions(tempdir = terra_org)
 
   # add the new resource to the attributes of the portfolio object
   resource_to_add <- list(downloaded_files)
