@@ -73,7 +73,7 @@ NULL
 register_resource(
   name = "nasa_srtm",
   type = "raster",
-  source = "https://srtm.csi.cgiar.org/",
+  source = "https://planetarycomputer.microsoft.com/dataset/nasadem",
   fun = .get_nasa_srtm,
   arguments <- list()
 )
