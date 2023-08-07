@@ -43,7 +43,7 @@ jobs:
           Rscript -e 'pkgdown::build_site_github_pages(dest_dir = "docs", preview = FALSE, install = FALSE)'
 
       - uses: actions/upload-artifact@v3
-        if: github.event_name == "pull_request"
+        if: github.event_name == 'pull_request'
         with:
           name: pkgdown_build
           path: docs/
