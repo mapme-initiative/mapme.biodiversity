@@ -66,6 +66,7 @@ NULL
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
+#' @include register.R
 #' @noRd
 .calc_traveltime <- function(x,
                              nelson_et_al,

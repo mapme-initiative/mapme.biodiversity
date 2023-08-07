@@ -50,6 +50,7 @@ NULL
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
+#' @include register.R
 #' @noRd
 .calc_active_fire_counts <- function(x,
                                      nasa_firms,

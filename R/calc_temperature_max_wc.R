@@ -67,8 +67,8 @@ NULL
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
+#' @include register.R
 #' @noRd
-
 .calc_temperature_max_wc <- function(x,
                                      worldclim_max_temperature,
                                      engine = "extract",

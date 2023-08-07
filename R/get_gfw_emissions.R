@@ -34,6 +34,7 @@ NULL
 #' @param verbose Logical controlling verbosity.
 #' @param rundir A directory where intermediate files are written to.
 #' @keywords internal
+#' @include register.R
 #' @noRd
 .get_gfw_emissions <- function(x,
                                verbose = TRUE,

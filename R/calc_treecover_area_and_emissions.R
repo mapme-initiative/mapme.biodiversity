@@ -73,6 +73,7 @@ NULL
 #' @return A tibble
 #' @importFrom stringr str_sub
 #' @keywords internal
+#' @include register.R
 #' @noRd
 .calc_treecover_area_and_emissions <- function(x,
                                                gfw_treecover,

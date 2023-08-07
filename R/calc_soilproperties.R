@@ -51,6 +51,8 @@
 #'   calc_indicators("soilproperties", stats_soil = c("mean", "median"), engine = "extract") %>%
 #'   tidyr::unnest(soilproperties)))
 NULL
+
+#' @include register.R
 .calc_soilproperties <- function(x,
                                  soilgrids,
                                  engine = "extract",

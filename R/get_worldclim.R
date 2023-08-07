@@ -33,8 +33,8 @@ NULL
 #' @importFrom utils unzip
 #' @name WorldClim_Minimum_Temperature
 #' @keywords internal
+#' @include register.R
 #' @noRd
-
 .get_worldclim_min_temperature <- function(x,
                                            rundir = tempdir(),
                                            verbose = TRUE) {
@@ -54,8 +54,8 @@ NULL
 #' @importFrom utils unzip
 #' @name WorldClim_Maximum_Temperature
 #' @keywords internal
+#' @include register.R
 #' @noRd
-
 .get_worldclim_max_temperature <- function(x,
                                            rundir = tempdir(),
                                            verbose = TRUE) {
@@ -77,8 +77,8 @@ NULL
 #' @importFrom utils unzip
 #' @name WorldClim_Mean_Precipitation
 #' @keywords internal
+#' @include register.R
 #' @noRd
-
 .get_worldclim_precipitation <- function(x,
                                          rundir = tempdir(),
                                          verbose = TRUE) {

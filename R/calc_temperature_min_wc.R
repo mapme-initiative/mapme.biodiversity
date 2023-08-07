@@ -67,6 +67,7 @@ NULL
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
+#' @include register.R
 #' @noRd
 
 .calc_temperature_min_wc <- function(x,
@@ -95,6 +96,7 @@ NULL
 #'
 #' @return A data-frame
 #' @keywords internal
+#' @include register.R
 #' @noRd
 .calc_worldclim <- function(x,
                             worldclim,

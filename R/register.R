@@ -205,6 +205,7 @@ register_indicator <- function(name = NULL, resources = NULL, fun = NULL,
 #' @return A list object.
 #' @export
 #' @keywords resource
+#' @include register.R
 #' @examples
 #' names(available_resources())
 available_resources <- function(resources = NULL) {
@@ -234,6 +235,7 @@ available_resources <- function(resources = NULL) {
 #' @return A list object.
 #' @export
 #' @keywords indicator
+#' @include register.R
 #' @examples
 #' names(available_indicators())
 available_indicators <- function(indicators = NULL) {

@@ -78,8 +78,8 @@ NULL
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
+#' @include register.R
 #' @noRd
-
 .calc_tri <- function(x,
                       nasa_srtm,
                       engine = "extract",

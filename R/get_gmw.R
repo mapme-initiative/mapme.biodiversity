@@ -28,8 +28,8 @@ NULL
 #' @param verbose Logical controlling verbosity.
 #' @importFrom utils unzip
 #' @keywords internal
+#' @include register.R
 #' @noRd
-
 .get_gmw <- function(x,
                      rundir = tempdir(),
                      verbose = TRUE) {

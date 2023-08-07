@@ -69,8 +69,8 @@ NULL
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
+#' @include register.R
 #' @noRd
-
 .calc_drought_indicator <- function(x,
                                     nasa_grace,
                                     engine = "extract",

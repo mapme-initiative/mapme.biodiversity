@@ -52,6 +52,7 @@ NULL
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
+#' @include register.R
 #' @noRd
 .calc_active_fire_properties <- function(x,
                                          nasa_firms,

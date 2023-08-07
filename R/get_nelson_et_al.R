@@ -46,8 +46,8 @@ NULL
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose Logical controlling verbosity.
 #' @keywords internal
+#' @include register.R
 #' @noRd
-
 .get_nelson_et_al <- function(x,
                               range_traveltime = "20k_50k",
                               rundir = tempdir(),

@@ -40,8 +40,8 @@ NULL
 #' @param verbose Logical controlling verbosity.
 #' @importFrom utils unzip
 #' @keywords internal
+#' @include register.R
 #' @noRd
-
 .get_nasa_firms <- function(x,
                             instrument = "VIIRS",
                             rundir = tempdir(),

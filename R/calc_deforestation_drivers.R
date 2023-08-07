@@ -38,6 +38,9 @@
 #'   tidyr::unnest(deforestation_drivers)))
 NULL
 
+
+#' @include register.R
+#' @noRd
 .calc_deforestation_drivers <- function(x,
                                         fritz_et_al,
                                         verbose = TRUE,

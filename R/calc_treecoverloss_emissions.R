@@ -66,6 +66,7 @@ NULL
 #' @return A tibble
 #' @importFrom stringr str_sub
 #' @keywords internal
+#' @include register.R
 #' @noRd
 .calc_treecoverloss_emissions <- function(x,
                                           gfw_treecover,

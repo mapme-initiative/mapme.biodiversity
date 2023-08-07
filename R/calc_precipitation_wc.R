@@ -68,8 +68,8 @@ NULL
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
+#' @include register.R
 #' @noRd
-
 .calc_precipitation_wc <- function(x,
                                    worldclim_precipitation,
                                    engine = "extract",

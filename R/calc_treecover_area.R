@@ -69,6 +69,7 @@ NULL
 #' @return A tibble
 #' @importFrom stringr str_sub
 #' @keywords internal
+#' @include register.R
 #' @noRd
 .calc_treecover_area <- function(x,
                                  gfw_treecover,

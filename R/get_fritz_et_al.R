@@ -38,6 +38,8 @@
 #' @source \url{https://zenodo.org/record/7997885}
 NULL
 
+
+#' @include register.R
 .get_fritz_et_al <- function(x,
                              res_drivers = 100,
                              rundir = tempdir(),

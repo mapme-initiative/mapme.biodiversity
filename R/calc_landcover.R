@@ -53,6 +53,7 @@ NULL
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
+#' @include register.R
 #' @noRd
 
 .calc_landcover <- function(x,
@@ -94,8 +95,8 @@ NULL
     "snow_and_ice", "permanent_water_bodies", "herbaceous_wetland", "moss_and_lichen", "open_sea"
   )
 )
-                             
- register_indicator(
+
+register_indicator(
   name = "landcover",
   resources = list(esalandcover = "raster"),
   fun = .calc_landcover,

@@ -39,6 +39,7 @@ NULL
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
 #' @keywords internal
+#' @include register.R
 #' @noRd
 .get_gfw_lossyear <- function(x,
                               vers_lossyear = "GFC-2021-v1.9",
