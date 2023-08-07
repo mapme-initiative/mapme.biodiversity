@@ -3,5 +3,5 @@
     Code
       result_exact$tri_mean
     Output
-      [1] 25.92207
+      [1] 33.27108
 
