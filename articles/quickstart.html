@@ -339,8 +339,8 @@ Required arguments for a resource are simply added as usual:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sample_portfolio</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_resources.html">get_resources</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">sample_portfolio</span>,</span>
-<span>  resources <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"chirps"</span>, <span class="st">"treecover2000"</span><span class="op">)</span>,</span>
-<span>  vers_treecover <span class="op">=</span> <span class="st">"GFC-2020-v1.8"</span></span>
+<span>  resources <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"chirps"</span>, <span class="st">"gfw_treecover"</span><span class="op">)</span>,</span>
+<span>  vers_treecover <span class="op">=</span> <span class="st">"GFC-2021-v1.9"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -522,9 +522,9 @@ it.</p>
 <span>  dsn <span class="op">=</span> <span class="va">tmp_output</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Writing layer `metadata' to data source </span></span>
-<span><span class="co">#&gt;   `/tmp/RtmpKu6Tjx/file29ef78e79938.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt;   `/tmp/RtmpP3HGko/file2a7166563992.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">#&gt; Writing 20 features with 2 fields and geometry type Polygon.</span></span>
-<span><span class="co">#&gt; Updating layer `precipitation_chirps' to data source `/tmp/RtmpKu6Tjx/file29ef78e79938.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt; Updating layer `precipitation_chirps' to data source `/tmp/RtmpP3HGko/file2a7166563992.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">#&gt; Writing 240 features with 5 fields without geometries.</span></span>
 <span><span class="op">(</span><span class="va">portfolio_from_disk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_portfolio.html">read_portfolio</a></span><span class="op">(</span><span class="va">tmp_output</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Simple feature collection with 20 features and 3 fields</span></span>

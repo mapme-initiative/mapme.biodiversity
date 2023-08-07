@@ -68,17 +68,17 @@
 <h2 class="pkg-version" data-toc-text="development version" id="mapmebiodiversity-development-version">mapme.biodiversity (development version)<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-development-version"></a></h2>
 <div class="section level3">
 <h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
-<ul><li><p>Added a new resource called <code>fritz_et_al</code> providing a raster layer of deforestation drivers in tropical forests based on <a href="https://www.frontiersin.org/articles/10.3389/fcosc.2022.830248/full" class="external-link">Fritz et al. (2022)</a></p></li>
-<li>
-<p>Added a new indicator called <code>deforestation_drivers</code> using the <code>fritz_et_al</code> resource to obtain information on the absolute and relative area driving forest losses in assets for the period 2008-2019</p>
-<ul><li>added a new vignette for the web-version of the package only informing about how to obtain wide-output from indicators</li>
-</ul></li>
+<ul><li><p>added two new exported functions <code><a href="../reference/register_resource.html">register_resource()</a></code> and <code><a href="../reference/register_indicator.html">register_indicator()</a></code> which allow users to register custom functions for resources/indicators</p></li>
+<li><p>added a new resource called <code>fritz_et_al</code> providing a raster layer of deforestation drivers in tropical forests based on <a href="https://www.frontiersin.org/articles/10.3389/fcosc.2022.830248/full" class="external-link">Fritz et al. (2022)</a></p></li>
+<li><p>added a new indicator called <code>deforestation_drivers</code> using the <code>fritz_et_al</code> resource to obtain information on the absolute and relative area driving forest losses in assets for the period 2008-2019</p></li>
+<li><p>added a new vignette for the web-version of the package only informing about how to obtain wide-output from indicators</p></li>
 <li><p>added a new vignette for the web-version for a custom analysis of the NASA FIRMS resource in the example section</p></li>
 <li><p>added the data for years 2017-2020 to the Global Mangrove Watch resource</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="breaking-changes-development-version">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
-<ul><li>Changed the parallel backend to the <a href="https://cran.r-project.org/package=future" class="external-link">future</a> package. Parallel processing is now implemented by <a href="https://furrr.futureverse.org/reference/future_map.html" class="external-link">furrr::future_map()</a> on the asset level within the calc_indicators() function. User code is now required to set up a <a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan()</a> to enable parallel processing. The function call needs to be wrapped on the user side with <a href="https://progressr.futureverse.org/reference/with_progress.html" class="external-link">progressr::with_progress()</a> to show a progress bar.</li>
+<ul><li><p>Changed the parallel backend to the <a href="https://cran.r-project.org/package=future" class="external-link">future</a> package. Parallel processing is now implemented by <a href="https://furrr.futureverse.org/reference/future_map.html" class="external-link">furrr::future_map()</a> on the asset level within the calc_indicators() function. User code is now required to set up a <a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan()</a> to enable parallel processing. The function call needs to be wrapped on the user side with <a href="https://progressr.futureverse.org/reference/with_progress.html" class="external-link">progressr::with_progress()</a> to show a progress bar.</p></li>
+<li><p>mapme.biodiversity no longer sets terra’s temporal directory for you. Instead you have to call <code><a href="https://rdrr.io/pkg/terra/man/terraOptions.html" class="external-link">terra::terraOptions()</a></code> manually</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
@@ -87,11 +87,12 @@
 </ul></div>
 <div class="section level3">
 <h3 id="internal-development-version">Internal<a class="anchor" aria-label="anchor" href="#internal-development-version"></a></h3>
-<ul><li><p>applying tidyverse coding style to existing code</p></li>
-<li><p>re-factoring of vector-raster zonal statistic engines (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/150" class="external-link">#150</a>)</p></li>
+<ul><li><p>applying tidyverse coding style to existing code (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/156" class="external-link">#156</a>, <a href="https://github.com/karpfen" class="external-link">@karpfen</a>)</p></li>
+<li><p>extensive re-factoring of vector-raster zonal statistic engines (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/150" class="external-link">#150</a>)</p></li>
 <li><p>extensive re-writing of testing infrastructure for indicator functions omitting the usage of snapshot tests as far as possible (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/142" class="external-link">#142</a>)</p></li>
-<li><p>extensive re-factoring of engines in raster-vector indicators using switch statements</p></li>
-<li><p>re-factoring usage of terra functions excluding the <code>todisk</code> flag and related arguments</p></li>
+<li><p><code>rundir</code> and <code>todisk</code> arguments removed from indicator functions since they were of no practical use</p></li>
+<li><p>instead of a resource and indicator backlog, resources and indicators are now registered to .pkgenv and queried there during runtime. This also allows users to register custom resources/indicator functions</p></li>
+<li><p>removed deprecation warnings for old resource/indicator name</p></li>
 </ul></div>
 </div>
     <div class="section level2">
