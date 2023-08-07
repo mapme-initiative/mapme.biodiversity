@@ -30,7 +30,7 @@ jobs:
       R_KEEP_PKG_SOURCE: yes
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: r-lib/actions/setup-pandoc@v2
 
@@ -47,7 +47,8 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: rcmdcheck
+          extra-packages: any::rcmdcheck
+          needs: check
 
       - name: "dev version for spatial packages"
         if: ${{ matrix.config.dev }}
@@ -55,3 +56,5 @@ jobs:
            Rscript -e "install.packages('remotes')" -e "remotes::install_github('r-spatial/sf')" -e "remotes::install_github('rspatial/terra')"
 
       - uses: r-lib/actions/check-r-package@v2
+        with:
+          upload-snapshots: true
