@@ -11,7 +11,7 @@ test_that("test register_resource works", {
 
   expect_error(
     register_resource(),
-    "Neither name, type, fun or arguments can be NULL"
+    "neither name, type, fun or arguments can be NULL"
   )
 
   expect_error(
@@ -19,7 +19,7 @@ test_that("test register_resource works", {
       name = 1, type = type, source = source,
       fun = test_fun, arguments = arguments
     ),
-    "name needs to be a length 1 character"
+    "name needs to be a single charachter string"
   )
 
   expect_error(
@@ -27,7 +27,7 @@ test_that("test register_resource works", {
       name = name, type = "unknown", source = source,
       fun = test_fun, arguments = arguments
     ),
-    "type need to be one of 'vector' or 'raster'"
+    "type needs to be one of 'vector' or 'raster'"
   )
 
   expect_error(
@@ -35,7 +35,7 @@ test_that("test register_resource works", {
       name = name, type = type, source = 1,
       fun = test_fun, arguments = arguments
     ),
-    "source needs to be a length 1 character"
+    "source needs to be a single charachter string"
   )
 
   expect_error(
@@ -70,7 +70,7 @@ test_that("test register_indicator works", {
 
   expect_error(
     register_indicator(),
-    "Neither name, resources, fun, arguments, or processing_mode can be NULL"
+    "neither name, resources, fun, arguments, or processing_mode can be NULL"
   )
 
   expect_error(
@@ -78,7 +78,7 @@ test_that("test register_indicator works", {
       name = 1, resources = resources, fun = test_fun,
       processing_mode = processing_mode, arguments = arguments
     ),
-    "name needs to be a length 1 character"
+    "name needs to be a single charachter string"
   )
 
   expect_error(
@@ -87,7 +87,7 @@ test_that("test register_indicator works", {
       processing_mode = processing_mode,
       resources = append(resources, list(gfw_lossyear = "unknown"))
     ),
-    "The following resources have an unknown type specified"
+    "the following resources have an unknown type specified"
   )
 
   expect_error(
@@ -103,7 +103,7 @@ test_that("test register_indicator works", {
       name = name, resources = resources, fun = test_fun,
       processing_mode = "unknown", arguments = arguments
     ),
-    "processing_mode need to be one of 'asset' or 'portfolio'"
+    "processing_mode needs to be one of 'asset' or 'portfolio'"
   )
 
   expect_error(

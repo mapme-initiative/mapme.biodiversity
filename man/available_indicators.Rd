@@ -7,19 +7,18 @@
 available_indicators(indicators = NULL)
 }
 \arguments{
-\item{indicators}{Defaults to NULL meaning that a list with all available
-indicators will be returned. If a character vector is specified only the
-information about the requested indicator will be returned.}
+\item{indicators}{If \code{NULL} returns a list of all registered indicators
+(default). Otherwise only the ones specified.}
 }
 \value{
 A list object.
 }
 \description{
-This function returns a list of either all available indicators and some
-additional metadata or for one or more requested indicators. It can be used
-by users of the package to inform themselves about the available data sets
-and to learn about potentially additional arguments that should be specified
-when requesting the indicator.
+Returns a list of indicator names and parametrization options for the
+specified indicators. If no resource names are provided, it lists all
+available indicators, including custom registered ones.
+Use it to learn about possible additional arguments that can be specified
+when requesting an indicator.
 }
 \examples{
 names(available_indicators())
