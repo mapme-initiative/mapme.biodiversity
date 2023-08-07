@@ -139,16 +139,13 @@ get_resources <- function(x, resources, ...) {
   if (selected_resource[[1]]$type == "raster") {
     tindex_file <- file.path(rundir, paste0("tileindex_", resource, ".gpkg"))
     if (file.exists(tindex_file)) file.remove(tindex_file)
-    p <- progressr::progressor(steps = length(downloaded_files))
-    footprints <- furrr::future_map(downloaded_files, function(file) {
-      p()
+    footprints <- lapply(unique(downloaded_files), function(file) {
       tmp <- rast(file)
       footprint <- st_as_sf(st_as_sfc(st_bbox(tmp)))
       st_geometry(footprint) <- "geom"
       footprint$location <- sources(tmp)
       footprint
-    }, .options = furrr::furrr_options(seed = TRUE))
-
+    })
     footprints <- do.call(rbind, footprints)
     write_sf(footprints, dsn = tindex_file)
     downloaded_files <- tindex_file
