@@ -9,11 +9,24 @@
   by type of conflict on a monthly time scale based on the `ucdp_ged` resource.
   
 - Added a new resource called `fritz_et_al` providing a raster layer of deforestation
+
+- added two new exported functions `register_resource()` and `register_indicator()`
+  which allow users to register custom functions for resources/indicators
+
+- added a new resource called `fritz_et_al` providing a raster layer of deforestation
   drivers in tropical forests based on [Fritz et al. (2022)](https://www.frontiersin.org/articles/10.3389/fcosc.2022.830248/full)
 
-- Added a new indicator called `deforestation_drivers` using the `fritz_et_al` resource
+- added a new indicator called `deforestation_drivers` using the `fritz_et_al` resource
   to obtain information on the absolute and relative area driving forest losses in 
   assets for the period 2008-2019
+  
+- added a new vignette for the web-version of the package only informing
+  about how to obtain wide-output from indicators
+  
+- added a new vignette for the web-version for a custom analysis of the NASA
+  FIRMS resource in the example section
+
+- added the data for years 2017-2020 to the Global Mangrove Watch resource 
 
 
 ## Breaking changes
@@ -27,30 +40,38 @@
   side with [progressr::with_progress()](https://progressr.futureverse.org/reference/with_progress.html)
   to show a progress bar.
   
-## New features
+- mapme.biodiversity no longer sets terra's temporal directory for you.
+  Instead you have to call `terra::terraOptions()` manually
 
-- added a new vignette for the web-version of the package only informing
-  about how to obtain wide-output from indicators
-  
-- added a new vignette for the web-version for a custom analysis of the NASA
-  FIRMS resource in the example section
+## Bug Fixes
 
-- added the data for years 2017-2020 to the Global Mangrove Watch resource 
-
+- `esalandcover` indicator now returns the value per each land cover class 
+  exactly once (#177)
 
 ## Internal
 
-- applying tidyverse coding style to existing code
+- disabled examples requiring internet connection 
 
-- re-factoring of vector-raster zonal statistic engines (#150)
+- `terra` engines now use `get()` to resolve the requested zonal
+  statistic function
+
+- applying tidyverse coding style to existing code (#156, @karpfen)
+
+- extensive re-factoring of vector-raster zonal statistic engines (#150)
 
 - extensive re-writing of testing infrastructure for indicator functions omitting
-the usage of snapshot tests as far as possible (#142)
+  the usage of snapshot tests as far as possible (#142)
 
-- extensive re-factoring of engines in raster-vector indicators using switch statements
+- `rundir` and `todisk` arguments removed from indicator functions since they were
+  of no practical use
 
-- re-factoring usage of terra functions excluding the `todisk` flag and 
-related arguments
+- instead of a resource and indicator backlog, resources and indicators are now
+  registered to .pkgenv and queried there during runtime. This also allows
+  users to register custom resources/indicator functions
+  
+- removed deprecation warnings for old resource/indicator name
+  
+
 
 # mapme.biodiversity 0.3.0
 

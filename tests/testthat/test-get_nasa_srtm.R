@@ -1,7 +1,4 @@
 test_that(".get_nasa_srtm works", {
-  skip_on_cran()
-  check <- try(.warn_about_ssl())
-  if (inherits(check, "try-error")) skip(message = "SSL error for NASA SRTM")
   aoi <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
       package = "mapme.biodiversity"
@@ -28,8 +25,8 @@ test_that(".get_nasa_srtm works", {
   attributes(portfolio)$testing <- TRUE
 
   expect_equal(
-    suppressWarnings(.get_nasa_srtm(portfolio)),
-    "srtm_22_09.zip"
+    .get_nasa_srtm(portfolio),
+    "NASADEM_HGT_n18w072.tif"
   )
 
   # adds test to check for multiple polygons in the same tile
@@ -43,7 +40,7 @@ test_that(".get_nasa_srtm works", {
   )
   attributes(portfolio)$testing <- TRUE
   expect_equal(
-    suppressWarnings(.get_nasa_srtm(portfolio)),
-    "srtm_22_09.zip"
+    .get_nasa_srtm(portfolio),
+    "NASADEM_HGT_n18w072.tif"
   )
 })

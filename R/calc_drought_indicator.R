@@ -59,24 +59,22 @@ NULL
 #' can specify the functions i.e. zonal from package terra, extract from package
 #' terra, or exactextract from exactextractr as desired.
 #'
-#' @param shp A single polygon for which to calculate the drought statistic
+#' @param x A single polygon for which to calculate the drought statistic
 #' @param nasa_grace The drought indicator raster resource from NASA GRACE
 #' @param stats_drought Function to be applied to compute statistics for polygons
 #'    either one or multiple inputs as character "mean", "median" or "sd".
 #' @param engine The preferred processing functions from either one of "zonal",
 #'   "extract" or "exactextract" as character.
-#' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
+#' @include register.R
 #' @noRd
-
-.calc_drought_indicator <- function(shp,
+.calc_drought_indicator <- function(x,
                                     nasa_grace,
                                     engine = "extract",
                                     stats_drought = "mean",
-                                    rundir = tempdir(),
                                     verbose = TRUE,
                                     processing_mode = "portfolio",
                                     ...) {
@@ -85,7 +83,7 @@ NULL
     return(NA)
   }
   results <- .select_engine(
-    shp = shp,
+    x = x,
     raster = nasa_grace,
     stats = stats_drought,
     engine = engine,
@@ -105,3 +103,14 @@ NULL
   }
   results
 }
+
+register_indicator(
+  name = "drought_indicator",
+  resources = list(nasa_grace = "raster"),
+  fun = .calc_drought_indicator,
+  arguments = list(
+    engine = "extract",
+    stats_drought = "mean"
+  ),
+  processing_mode = "portfolio"
+)

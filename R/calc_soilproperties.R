@@ -24,38 +24,41 @@
 #'   output statistic as well as additional columns for all zonal statistics
 #'   specified via \code{stats_soil}
 #' @examples
-#' library(sf)
-#' library(mapme.biodiversity)
+#' if (Sys.getenv("NOT_CRAN") == "true") {
+#'   library(sf)
+#'   library(mapme.biodiversity)
 #'
-#' temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-#' if (!file.exists(temp_loc)) {
-#'   dir.create(temp_loc)
-#'   resource_dir <- system.file("res", package = "mapme.biodiversity")
-#'   file.copy(resource_dir, temp_loc, recursive = TRUE)
+#'   temp_loc <- file.path(tempdir(), "mapme.biodiversity")
+#'   if (!file.exists(temp_loc)) {
+#'     dir.create(temp_loc)
+#'     resource_dir <- system.file("res", package = "mapme.biodiversity")
+#'     file.copy(resource_dir, temp_loc, recursive = TRUE)
+#'   }
+#'
+#'   (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+#'     package = "mapme.biodiversity"
+#'   ) %>%
+#'     read_sf() %>%
+#'     init_portfolio(
+#'       years = 2022,
+#'       outdir = file.path(temp_loc, "res"),
+#'       tmpdir = tempdir(),
+#'       add_resources = FALSE,
+#'       verbose = FALSE
+#'     ) %>%
+#'     get_resources("soilgrids",
+#'       layers = c("clay", "silt"), depths = c("0-5cm", "5-15cm"), stats = "mean"
+#'     ) %>%
+#'     calc_indicators("soilproperties", stats_soil = c("mean", "median"), engine = "extract") %>%
+#'     tidyr::unnest(soilproperties)))
 #' }
-#'
-#' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-#'   package = "mapme.biodiversity"
-#' ) %>%
-#'   read_sf() %>%
-#'   init_portfolio(
-#'     years = 2022,
-#'     outdir = file.path(temp_loc, "res"),
-#'     tmpdir = tempdir(),
-#'     add_resources = FALSE,
-#'     verbose = FALSE
-#'   ) %>%
-#'   get_resources("soilgrids",
-#'     layers = c("clay", "silt"), depths = c("0-5cm", "5-15cm"), stats = "mean"
-#'   ) %>%
-#'   calc_indicators("soilproperties", stats_soil = c("mean", "median"), engine = "extract") %>%
-#'   tidyr::unnest(soilproperties)))
 NULL
-.calc_soilproperties <- function(shp,
+
+#' @include register.R
+.calc_soilproperties <- function(x,
                                  soilgrids,
-                                 engine = "zonal",
+                                 engine = "extract",
                                  stats_soil = "mean",
-                                 rundir = tempdir(),
                                  verbose = TRUE,
                                  ...) {
   # check if input engines are correct
@@ -63,7 +66,7 @@ NULL
     return(NA)
   }
   results <- .select_engine(
-    shp = shp,
+    x = x,
     raster = soilgrids,
     stats = stats_soil,
     engine = engine,
@@ -91,3 +94,14 @@ NULL
   # select cols in right order
   as_tibble(results[, c("layer", "depth", "stat", stats_soil)])
 }
+
+register_indicator(
+  name = "soilproperties",
+  resources = list(soilgrids = "raster"),
+  fun = .calc_soilproperties,
+  arguments = list(
+    engine = "extract",
+    stats_soil = "mean"
+  ),
+  processing_mode = "asset"
+)

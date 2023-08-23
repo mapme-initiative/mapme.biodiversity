@@ -54,27 +54,26 @@ NULL
 
 #' Calculate emissions statistics
 #'
-#' @param shp A single polygon for which to calculate the tree cover statistic
+#' @param x A single polygon for which to calculate the tree cover statistic
 #' @param gfw_treecover The treecover 2000 resource from GFW
 #' @param gfw_lossyear The lossyear resource from GFW
 #' @param gfw_emissions The greenhouse emission layer from GFW
 #' @param min_size The minimum size of a forest patch in ha.
 #' @param min_cover The minimum threshold of stand density for a pixel to be
 #'   considered forest in the year 2000.
-#' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
 #' @param ... additional arguments
 #' @return A tibble
 #' @importFrom stringr str_sub
 #' @keywords internal
+#' @include register.R
 #' @noRd
-.calc_treecoverloss_emissions <- function(shp,
+.calc_treecoverloss_emissions <- function(x,
                                           gfw_treecover,
                                           gfw_lossyear,
                                           gfw_emissions,
                                           min_size = 10,
                                           min_cover = 35,
-                                          rundir = tempdir(),
                                           verbose = TRUE,
                                           ...) {
   # initial argument checks
@@ -83,7 +82,7 @@ NULL
     return(NA)
   }
   # retrieve years from portfolio
-  years <- attributes(shp)$years
+  years <- attributes(x)$years
   if (any(years < 2000)) {
     warning(paste("Cannot calculate emissions statistics ",
       "for years smaller than 2000.",
@@ -132,7 +131,7 @@ NULL
   )
   # rasterize the polygon
   polyraster <- rasterize(
-    vect(shp), gfw_treecover,
+    vect(x), gfw_treecover,
     field = 1, touches = TRUE
   )
   # mask gfw_treecover
@@ -221,3 +220,19 @@ NULL
   # return a data-frame
   tibble(years = years, emissions = as.vector(unlist(yearly_emission_values)))
 }
+
+
+register_indicator(
+  name = "treecoverloss_emissions",
+  resources = list(
+    gfw_treecover = "raster",
+    gfw_lossyear = "raster",
+    gfw_emissions = "raster"
+  ),
+  fun = .calc_treecoverloss_emissions,
+  arguments = list(
+    min_size = 10,
+    min_cover = 35
+  ),
+  processing_mode = "asset"
+)

@@ -14,30 +14,32 @@
 #' @format A tibble with a column for the 15 different fire events variables
 #'   including lon/lat coordinates.
 #' @examples
-#' library(sf)
-#' library(mapme.biodiversity)
+#' if (Sys.getenv("NOT_CRAN") == "true") {
+#'   library(sf)
+#'   library(mapme.biodiversity)
 #'
-#' temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-#' if (!file.exists(temp_loc)) {
-#'   dir.create(temp_loc)
-#'   resource_dir <- system.file("res", package = "mapme.biodiversity")
-#'   file.copy(resource_dir, temp_loc, recursive = TRUE)
-#' }
+#'   temp_loc <- file.path(tempdir(), "mapme.biodiversity")
+#'   if (!file.exists(temp_loc)) {
+#'     dir.create(temp_loc)
+#'     resource_dir <- system.file("res", package = "mapme.biodiversity")
+#'     file.copy(resource_dir, temp_loc, recursive = TRUE)
+#'   }
 #'
-#' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-#'   package = "mapme.biodiversity"
-#' ) %>%
-#'   read_sf() %>%
-#'   init_portfolio(
-#'     years = 2021,
-#'     outdir = file.path(temp_loc, "res"),
-#'     tmpdir = tempdir(),
-#'     add_resources = FALSE,
-#'     verbose = FALSE
+#'   (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+#'     package = "mapme.biodiversity"
 #'   ) %>%
-#'   get_resources("nasa_firms", instrument = "VIIRS") %>%
-#'   calc_indicators("active_fire_properties") %>%
-#'   tidyr::unnest(active_fire_properties)))
+#'     read_sf() %>%
+#'     init_portfolio(
+#'       years = 2021,
+#'       outdir = file.path(temp_loc, "res"),
+#'       tmpdir = tempdir(),
+#'       add_resources = FALSE,
+#'       verbose = FALSE
+#'     ) %>%
+#'     get_resources("nasa_firms", instrument = "VIIRS") %>%
+#'     calc_indicators("active_fire_properties") %>%
+#'     tidyr::unnest(active_fire_properties)))
+#' }
 NULL
 
 #' Calculate active fire properties based on FIRMS
@@ -46,21 +48,17 @@ NULL
 #' properties of fire events occurred in the region of interest for
 #' years 2000-2021 (MODIS) and 2012-2021 (VIIRS).
 #'
-#' @param shp A single polygon for which to calculate the active fire properties
+#' @param x A single polygon for which to calculate the active fire properties
 #' @param nasa_firms The active fire vector resource (NASA - FIRMS)
-#' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
-#' @param todisk Logical indicating whether or not temporary vector files shall
-#'   be written to disk
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
+#' @include register.R
 #' @noRd
-.calc_active_fire_properties <- function(shp,
+.calc_active_fire_properties <- function(x,
                                          nasa_firms,
-                                         rundir = tempdir(),
                                          verbose = TRUE,
-                                         todisk = FALSE,
                                          ...) {
   # change quality flag to charachter to allow binding MODIS and VIIRS
   nasa_firms <- lapply(nasa_firms, function(x) {
@@ -69,7 +67,7 @@ NULL
   })
   # row bind the frames
   nasa_firms <- dplyr::bind_rows(nasa_firms)
-  intersected <- suppressWarnings(st_intersection(nasa_firms, st_geometry(shp)))
+  intersected <- suppressWarnings(st_intersection(nasa_firms, st_geometry(x)))
   if (nrow(intersected) == 0) {
     return(NA)
   }
@@ -82,3 +80,11 @@ NULL
     latitude = coordinates[, 2, drop = TRUE]
   )
 }
+
+register_indicator(
+  name = "active_fire_properties",
+  resources = list(nasa_firms = "vector"),
+  fun = .calc_active_fire_properties,
+  arguments = list(),
+  processing_mode = "asset"
+)

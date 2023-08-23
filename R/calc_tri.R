@@ -68,24 +68,22 @@ NULL
 #' can specify the functions i.e. zonal from package terra, extract from package
 #' terra, or exactextract from exactextractr as desired.
 #'
-#' @param shp A single polygon for which to calculate the tri statistic
+#' @param x A single polygon for which to calculate the tri statistic
 #' @param nasa_srtm The elevation raster resource from SRTM
 #' @param stats_tri Function to be applied to compute statistics for polygons either
 #'   one or multiple inputs as character "mean", "median" or "sd".
 #' @param engine The preferred processing functions from either one of "zonal",
 #'   "extract" or "exactextract" as character.
-#' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
+#' @include register.R
 #' @noRd
-
-.calc_tri <- function(shp,
+.calc_tri <- function(x,
                       nasa_srtm,
-                      engine = "zonal",
+                      engine = "extract",
                       stats_tri = "mean",
-                      rundir = tempdir(),
                       verbose = TRUE,
                       ...) {
   # check if input engines are correct
@@ -101,7 +99,7 @@ NULL
   )
 
   .select_engine(
-    shp = shp,
+    x = x,
     raster = tri,
     stats = stats_tri,
     engine = engine,
@@ -109,3 +107,14 @@ NULL
     mode = "asset"
   )
 }
+
+register_indicator(
+  name = "tri",
+  resources = list(nasa_srtm = "raster"),
+  fun = .calc_tri,
+  arguments = list(
+    engine = "extract",
+    stats_tri = "mean"
+  ),
+  processing_mode = "asset"
+)

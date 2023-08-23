@@ -102,7 +102,7 @@ NULL
 #' Then fatalities are aggregated on a monthly time scale. Missing months
 #' are filled with zeros.
 #'
-#' @param shp A single polygon for which to calculate the tri statistic
+#' @param x A single polygon for which to calculate the tri statistic
 #' @param ucdp_ged An sf object of the intersecting part of the UCDP database.
 #' @param precision_location A numeric indicating precision value for the
 #'   geolocation up to which events are included. Defaults to 1.
@@ -113,12 +113,12 @@ NULL
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
+#' @include register.R
 #' @noRd
-.calc_fatalities <- function(shp,
+.calc_fatalities <- function(x,
                              ucdp_ged,
                              precision_location = 1,
                              precision_time = 1,
-                             rundir = tempdir(),
                              verbose = TRUE,
                              ...) {
   date_prec <- where_prec <- date_start <- type_of_violence <- NULL
@@ -129,7 +129,7 @@ NULL
     return(NA)
   }
 
-  target_years <- attributes(shp)$years
+  target_years <- attributes(x)$years
   available_years <- c(1989:2023)
   target_years <- .check_available_years(
     target_years, available_years, "ucdp_ged"
@@ -196,3 +196,15 @@ NULL
     )) %>%
     tibble::as_tibble()
 }
+
+
+register_indicator(
+  name = "fatalities",
+  resources = list(ucdp_ged = "vector"),
+  fun = .calc_fatalities,
+  arguments = list(
+    precision_location = 1,
+    precision_time = 1
+  ),
+  processing_mode = "asset"
+)

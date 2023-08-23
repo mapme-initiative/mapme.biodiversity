@@ -34,7 +34,7 @@
   }
   required_resources <- sapply(
     available_indicators()[indicators],
-    function(x) names(x$inputs)
+    function(x) names(x$resources)
   )
   required_resources <- unique(unlist(required_resources))
   as.vector(required_resources)
@@ -179,14 +179,26 @@
 #' @keywords internal
 #' @noRd
 .unzip_and_remove <- function(zip, rundir, remove = TRUE) {
-  suppressWarnings(unzip(
-    zipfile = file.path(rundir, basename(zip)),
-    exdir = rundir,
-    overwrite = FALSE
-  ))
+  extension <- tools::file_ext(zip)
+  if (extension == "zip") {
+    filenames <- suppressWarnings(unzip(
+      zipfile = zip,
+      exdir = rundir,
+      overwrite = FALSE
+    ))
+  } else if (extension == "gz") {
+    filenames <- R.utils::gunzip(
+      zip,
+      skip = TRUE,
+      remove = FALSE
+    )
+  } else {
+    stop(paste0("decompression for ", extension, " files not implemented"))
+  }
   if (remove) {
     unlink(file.path(rundir, basename(zip)))
   }
+  return(filenames)
 }
 
 
@@ -307,98 +319,4 @@
     file.remove(tmpfile)
   }
   return(filenames)
-}
-
-
-.depreciation_warning <- function(names, resource) {
-  resources <- tibble(
-    old = c(
-      "treecover2000",
-      "lossyear",
-      "greenhouse",
-      "traveltime",
-      "nasagrace",
-      "mintemperature",
-      "maxtemperature",
-      "precipitation",
-      "ecoregions",
-      "mangrove",
-      "srtmdem"
-    ),
-    new = c(
-      "gfw_treecover",
-      "gfw_lossyear",
-      "gfw_emissions",
-      "nelson_et_al",
-      "nasa_grace",
-      "worldclim_min_temperature",
-      "worldclim_max_temperature",
-      "worldclim_precipitation",
-      "teow",
-      "gmw",
-      "nasa_srtm"
-    )
-  )
-
-  indicators <- tibble(
-    old = c(
-      "treecover",
-      "emissions",
-      "treeloss",
-      "chirpsprec",
-      "accessibility",
-      "popcount",
-      "wctmin",
-      "wctmax",
-      "wcprec",
-      "gmw",
-      "teow"
-    ),
-    new = c(
-      "treecover_area",
-      "treecoverloss_emissions",
-      "treecover_area_and_emissions",
-      "precipitation_chirps",
-      "traveltime",
-      "population_count",
-      "temperature_min_wc",
-      "temperature_max_wc",
-      "precipitation_wc",
-      "mangroves_area",
-      "ecoregion"
-    )
-  )
-
-  if (resource) {
-    basemsg <- paste("Resource '%s' has been renamed to '%s'. In the next release '%s'",
-      "will no longer be supported.\nPlease adjust your scripts accordingly.",
-      sep = " "
-    )
-    for (name in names) {
-      if (name %in% resources$old) {
-        old <- name
-        new <- resources$new[which(resources$old == name)]
-        msg <- sprintf(basemsg, old, new, old)
-        warning(msg)
-        names[names == name] <- new
-      }
-    }
-  }
-
-  if (!resource) {
-    basemsg <- paste("Indicator '%s' has been renamed to '%s'. In the next release '%s'",
-      "will no longer be supported.\nPlease adjust your scripts accordingly.",
-      sep = " "
-    )
-    for (name in names) {
-      if (name %in% indicators$old) {
-        old <- name
-        new <- indicators$new[which(indicators$old == name)]
-        msg <- sprintf(basemsg, old, new, old)
-        warning(msg)
-        names[names == name] <- new
-      }
-    }
-  }
-  names
 }

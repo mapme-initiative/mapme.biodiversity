@@ -20,33 +20,35 @@
 #' @keywords indicator
 #' @format A tibble with a column for maximum temperature statistics (in °C)
 #' @examples
-#' library(sf)
-#' library(mapme.biodiversity)
+#' if (Sys.getenv("NOT_CRAN") == "true") {
+#'   library(sf)
+#'   library(mapme.biodiversity)
 #'
-#' temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-#' if (!file.exists(temp_loc)) {
-#'   dir.create(temp_loc)
-#'   resource_dir <- system.file("res", package = "mapme.biodiversity")
-#'   file.copy(resource_dir, temp_loc, recursive = TRUE)
+#'   temp_loc <- file.path(tempdir(), "mapme.biodiversity")
+#'   if (!file.exists(temp_loc)) {
+#'     dir.create(temp_loc)
+#'     resource_dir <- system.file("res", package = "mapme.biodiversity")
+#'     file.copy(resource_dir, temp_loc, recursive = TRUE)
+#'   }
+#'
+#'   (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+#'     package = "mapme.biodiversity"
+#'   ) %>%
+#'     read_sf() %>%
+#'     init_portfolio(
+#'       years = 2018,
+#'       outdir = file.path(temp_loc, "res"),
+#'       tmpdir = tempdir(),
+#'       add_resources = FALSE,
+#'       verbose = FALSE
+#'     ) %>%
+#'     get_resources("worldclim_max_temperature") %>%
+#'     calc_indicators("temperature_max_wc",
+#'       stats_worldclim = c("mean", "median"),
+#'       engine = "extract"
+#'     ) %>%
+#'     tidyr::unnest(temperature_max_wc)))
 #' }
-#'
-#' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-#'   package = "mapme.biodiversity"
-#' ) %>%
-#'   read_sf() %>%
-#'   init_portfolio(
-#'     years = 2018,
-#'     outdir = file.path(temp_loc, "res"),
-#'     tmpdir = tempdir(),
-#'     add_resources = FALSE,
-#'     verbose = FALSE
-#'   ) %>%
-#'   get_resources("worldclim_max_temperature") %>%
-#'   calc_indicators("temperature_max_wc",
-#'     stats_worldclim = c("mean", "median"),
-#'     engine = "extract"
-#'   ) %>%
-#'   tidyr::unnest(temperature_max_wc)))
 NULL
 
 #' Calculate worldclim maximum temperature statistics
@@ -57,7 +59,7 @@ NULL
 #' from package terra, extract from package terra, or exactextract from exactextractr
 #' as desired.
 #'
-#' @param shp A single polygon for which to calculate the maximum temperature statistic
+#' @param x A single polygon for which to calculate the maximum temperature statistic
 #' @param worldclim_max_temperature maximum temperature raster from which to compute statistics
 #' @param stats_worldclim Function to be applied to compute statistics for polygons
 #'    either one or multiple inputs as character "min", "max", "sum", "mean", "median"
@@ -67,18 +69,29 @@ NULL
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
+#' @include register.R
 #' @noRd
-
-.calc_temperature_max_wc <- function(shp,
+.calc_temperature_max_wc <- function(x,
                                      worldclim_max_temperature,
                                      engine = "extract",
                                      stats_worldclim = "mean",
                                      ...) {
   results <- .calc_worldclim(
-    shp = shp,
+    x = x,
     worldclim = worldclim_max_temperature,
     engine = engine,
     stats_worldclim = stats_worldclim
   )
   results
 }
+
+register_indicator(
+  name = "temperature_max_wc",
+  resources = list(worldclim_max_temperature = "raster"),
+  fun = .calc_temperature_max_wc,
+  arguments = list(
+    engine = "extract",
+    stats_worldclim = "mean"
+  ),
+  processing_mode = "asset"
+)

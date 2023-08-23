@@ -21,8 +21,8 @@ NULL
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose Logical controlling verbosity.
 #' @keywords internal
+#' @include register.R
 #' @noRd
-
 .get_worldpop <- function(x,
                           rundir = tempdir(),
                           verbose = TRUE) {
@@ -95,3 +95,12 @@ NULL
     NULL
   }
 }
+
+
+register_resource(
+  name = "worldpop",
+  type = "raster",
+  source = "https://www.worldpop.org/",
+  fun = .get_worldpop,
+  arguments <- list()
+)

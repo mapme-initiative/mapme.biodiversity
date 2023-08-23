@@ -58,18 +58,18 @@ NULL
 
 #' Calculate precipitation statistics based on CHIRPS
 #'
-#' @param shp A single polygon for which to calculate the tree cover statistic
+#' @param x A single polygon for which to calculate the tree cover statistic
 #' @param chirps The CHIRPS resource
 #' @param scales_spi Integers specifying time-scales for SPI
 #' @param spi_prec_years Integer specyfing how many previous years to include in
 #'   order to fit the SPI. Defaults to 8.
-#' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
+#' @include register.R
 #' @noRd
-.calc_precipitation_chirps <- function(shp,
+.calc_precipitation_chirps <- function(x,
                                        chirps,
                                        scales_spi = 3,
                                        spi_prev_years = 8,
@@ -87,7 +87,7 @@ NULL
   if (is.null(chirps)) {
     return(NA)
   }
-  years <- attributes(shp)$years
+  years <- attributes(x)$years
 
   if (!is.null(scales_spi)) {
     if (any(scales_spi < 0) | any(scales_spi > 48)) {
@@ -155,7 +155,7 @@ NULL
 
   # extract zonal statistics
   results_absolute <- .select_engine(
-    shp = shp,
+    x = x,
     raster = target_chirps,
     stats = "mean",
     engine = engine,
@@ -163,7 +163,7 @@ NULL
   )
 
   results_anomaly <- .select_engine(
-    shp = shp,
+    x = x,
     raster = anomaly_chirps,
     stats = "mean",
     engine = engine,
@@ -171,20 +171,20 @@ NULL
   )
 
   if (!is.null(spi_chirps)) {
-    results_spi <- purrr::map(1:nrow(shp), function(i) {
-      results_shp <- purrr::lmap(spi_chirps, function(x) {
+    results_spi <- purrr::map(1:nrow(x), function(i) {
+      results_x <- purrr::lmap(spi_chirps, function(spi) {
         result <- .select_engine(
-          shp = shp[i, ],
-          raster = x[[1]],
+          x = x[i, ],
+          raster = spi[[1]],
           stats = "mean",
           engine = engine,
-          name = names(x),
+          name = names(spi),
           mode = "asset"
         )
-        names(result) <- names(x)
+        names(result) <- names(spi)
         result
       })
-      dplyr::bind_cols(results_shp)
+      dplyr::bind_cols(results_x)
     })
     if (processing_mode == "asset") results_spi <- results_spi[[1]]
   }
@@ -192,7 +192,7 @@ NULL
   dates <- as.Date(paste0(substr(names(target_chirps), 13, 19), ".01"), "%Y.%m.%d")
 
   if (processing_mode == "portfolio") {
-    results <- purrr::map(1:nrow(shp), function(i) {
+    results <- purrr::map(1:nrow(x), function(i) {
       result <- tibble(
         dates = dates,
         absolute = as.numeric(results_absolute[[i]]$mean),
@@ -214,3 +214,16 @@ NULL
   }
   results
 }
+
+
+register_indicator(
+  name = "precipitation_chirps",
+  resources = list(chirps = "raster"),
+  fun = .calc_precipitation_chirps,
+  arguments = list(
+    scales_spi = 3,
+    spi_prev_years = 8,
+    engine = "extract"
+  ),
+  processing_mode = "portfolio"
+)

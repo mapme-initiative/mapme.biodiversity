@@ -40,8 +40,8 @@ NULL
 #' @param verbose Logical controlling verbosity.
 #' @importFrom utils unzip
 #' @keywords internal
+#' @include register.R
 #' @noRd
-
 .get_nasa_firms <- function(x,
                             instrument = "VIIRS",
                             rundir = tempdir(),
@@ -197,3 +197,11 @@ NULL
     write_sf(data, dsn = gpkg, append = TRUE)
   })
 }
+
+register_resource(
+  name = "nasa_firms",
+  type = "vector",
+  source = "https://firms.modaps.eosdis.nasa.gov",
+  fun = .get_nasa_firms,
+  arguments <- list(instrument = "VIIRS")
+)

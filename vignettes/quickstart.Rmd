@@ -212,8 +212,8 @@ for a resource are simply added as usual:
 ```{r get_multi_resources, eval = FALSE}
 sample_portfolio <- get_resources(
   x = sample_portfolio,
-  resources = c("chirps", "treecover2000"),
-  vers_treecover = "GFC-2020-v1.8"
+  resources = c("chirps", "gfw_treecover"),
+  vers_treecover = "GFC-2021-v1.9"
 )
 ```
 

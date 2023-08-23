@@ -12,30 +12,32 @@
 #' @keywords indicator
 #' @format A tibble with a column for name of the ecoregions and corresponding area (in ha).
 #' @examples
-#' library(sf)
-#' library(mapme.biodiversity)
+#' if (Sys.getenv("NOT_CRAN") == "true") {
+#'   library(sf)
+#'   library(mapme.biodiversity)
 #'
-#' temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-#' if (!file.exists(temp_loc)) {
-#'   dir.create(temp_loc)
-#'   resource_dir <- system.file("res", package = "mapme.biodiversity")
-#'   file.copy(resource_dir, temp_loc, recursive = TRUE)
-#' }
+#'   temp_loc <- file.path(tempdir(), "mapme.biodiversity")
+#'   if (!file.exists(temp_loc)) {
+#'     dir.create(temp_loc)
+#'     resource_dir <- system.file("res", package = "mapme.biodiversity")
+#'     file.copy(resource_dir, temp_loc, recursive = TRUE)
+#'   }
 #'
-#' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-#'   package = "mapme.biodiversity"
-#' ) %>%
-#'   read_sf() %>%
-#'   init_portfolio(
-#'     years = 2001,
-#'     outdir = file.path(temp_loc, "res"),
-#'     tmpdir = tempdir(),
-#'     add_resources = FALSE,
-#'     verbose = FALSE
+#'   (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+#'     package = "mapme.biodiversity"
 #'   ) %>%
-#'   get_resources("teow") %>%
-#'   calc_indicators("ecoregion") %>%
-#'   tidyr::unnest(ecoregion)))
+#'     read_sf() %>%
+#'     init_portfolio(
+#'       years = 2001,
+#'       outdir = file.path(temp_loc, "res"),
+#'       tmpdir = tempdir(),
+#'       add_resources = FALSE,
+#'       verbose = FALSE
+#'     ) %>%
+#'     get_resources("teow") %>%
+#'     calc_indicators("ecoregion") %>%
+#'     tidyr::unnest(ecoregion)))
+#' }
 NULL
 
 #' Calculate terrestrial ecoregions statistics (TEOW) based on WWF
@@ -44,22 +46,19 @@ NULL
 #' retrieve the name of the ecoregions and compute the corresponding area
 #' of the particular ecoregions for their polygons.
 #'
-#' @param shp A single polygon for which to calculate the ecoregion statistics
+#' @param x A single polygon for which to calculate the ecoregion statistics
 #' @param teow The teow vector resource (TEOW - WWF)
-#' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
 #' @param todisk Logical indicating whether or not temporary vector files shall
 #'   be written to disk
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
+#' @include register.R
 #' @noRd
-
-.calc_ecoregion <- function(shp,
+.calc_ecoregion <- function(x,
                             teow,
-                            rundir = tempdir(),
                             verbose = TRUE,
-                            todisk = FALSE,
                             ...) {
   ECO_NAME <- NULL
   new_area <- NULL
@@ -69,11 +68,9 @@ NULL
     return(NA)
   }
   merged <- .comp_teow(
-    shp = shp,
+    x = x,
     teow = teow,
-    rundir = rundir,
-    verbose = verbose,
-    todisk = todisk
+    verbose = verbose
   )
   out <- merged %>%
     dplyr::select(ECO_NAME, new_area)
@@ -94,13 +91,11 @@ NULL
 #' @keywords internal
 #' @noRd
 
-.comp_teow <- function(shp,
+.comp_teow <- function(x,
                        teow,
-                       rundir = tempdir(),
                        verbose = TRUE,
-                       todisk = FALSE,
                        ...) {
-  intersected <- suppressWarnings(st_intersection(shp, teow[[1]]))
+  intersected <- suppressWarnings(st_intersection(x, teow[[1]]))
   biome_and_name <- data.frame(
     BIOME = c(1:14, 98, 99),
     BIOME_NAME = c(
@@ -130,3 +125,11 @@ NULL
   merged$new_area <- area
   return(merged)
 }
+
+register_indicator(
+  name = "ecoregion",
+  resources = list(teow = "vector"),
+  fun = .calc_ecoregion,
+  arguments = list(),
+  processing_mode = "asset"
+)

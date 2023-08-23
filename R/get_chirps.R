@@ -21,15 +21,15 @@
 #' \doi{10.1038/sdata.2015.66}
 NULL
 
-
+#' @include register.R
 .get_chirps <- function(x,
                         rundir = tempdir(),
                         verbose = TRUE) {
-  chirps_url <- "https://data.chc.ucsb.edu/products/CHIRPS-2.0/global_monthly/cogs/"
+  chirps_url <- "https://data.chc.ucsb.edu/products/CHIRPS-2.0/global_monthly/tifs/"
   chirps_list <- rvest::read_html(chirps_url) %>%
     rvest::html_elements("a") %>%
     rvest::html_text2()
-  chirps_list <- grep(".cog", chirps_list, value = TRUE)
+  chirps_list <- grep("*.tif.gz$", chirps_list, value = TRUE)
   urls <- paste(chirps_url, chirps_list, sep = "")
   filenames <- file.path(rundir, basename(urls))
   if (attr(x, "testing")) {
@@ -37,11 +37,24 @@ NULL
   }
 
   aria_bin <- attributes(x)$aria_bin
-  .download_or_skip(urls,
+  filenames <- .download_or_skip(
+    urls,
     filenames,
     verbose = verbose,
     check_existence = FALSE,
     aria_bin = aria_bin
   )
-  filenames
+
+  filenames <- purrr::walk(filenames, .unzip_and_remove,
+    rundir = rundir, remove = FALSE
+  )
+  gsub(".gz", "", filenames)
 }
+
+register_resource(
+  name = "chirps",
+  type = "raster",
+  source = "https://www.chc.ucsb.edu/data/chirps",
+  fun = .get_chirps,
+  arguments <- list()
+)

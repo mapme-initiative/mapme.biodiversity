@@ -12,37 +12,40 @@
 #'   the absolute area in ha, and the percentage in relation to the total
 #'   area of forest loss as indicated by the Fritz et al. (2022) resource.
 #' @examples
-#' library(sf)
-#' library(mapme.biodiversity)
+#' if (Sys.getenv("NOT_CRAN") == "true") {
+#'   library(sf)
+#'   library(mapme.biodiversity)
 #'
-#' temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-#' if (!file.exists(temp_loc)) {
-#'   dir.create(temp_loc)
-#'   resource_dir <- system.file("res", package = "mapme.biodiversity")
-#'   file.copy(resource_dir, temp_loc, recursive = TRUE)
-#' }
+#'   temp_loc <- file.path(tempdir(), "mapme.biodiversity")
+#'   if (!file.exists(temp_loc)) {
+#'     dir.create(temp_loc)
+#'     resource_dir <- system.file("res", package = "mapme.biodiversity")
+#'     file.copy(resource_dir, temp_loc, recursive = TRUE)
+#'   }
 #'
-#' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-#'   package = "mapme.biodiversity"
-#' ) %>%
-#'   read_sf() %>%
-#'   init_portfolio(
-#'     years = 2021,
-#'     outdir = file.path(temp_loc, "res"),
-#'     tmpdir = tempdir(),
-#'     add_resources = FALSE,
-#'     verbose = FALSE
+#'   (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+#'     package = "mapme.biodiversity"
 #'   ) %>%
-#'   get_resources("fritz_et_al", res_drivers = 100) %>%
-#'   calc_indicators("deforestation_drivers") %>%
-#'   tidyr::unnest(deforestation_drivers)))
+#'     read_sf() %>%
+#'     init_portfolio(
+#'       years = 2021,
+#'       outdir = file.path(temp_loc, "res"),
+#'       tmpdir = tempdir(),
+#'       add_resources = FALSE,
+#'       verbose = FALSE
+#'     ) %>%
+#'     get_resources("fritz_et_al", res_drivers = 100) %>%
+#'     calc_indicators("deforestation_drivers") %>%
+#'     tidyr::unnest(deforestation_drivers)))
+#' }
 NULL
 
-.calc_deforestation_drivers <- function(shp,
+
+#' @include register.R
+#' @noRd
+.calc_deforestation_drivers <- function(x,
                                         fritz_et_al,
-                                        rundir = tempdir(),
                                         verbose = TRUE,
-                                        todisk = FALSE,
                                         ...) {
   if (is.null(fritz_et_al)) {
     return(NA)
@@ -56,10 +59,10 @@ NULL
     ),
     code = c(1:7, 9, 80, 81)
   )
-  cropped <- mask(fritz_et_al, shp)
+  cropped <- mask(fritz_et_al, x)
   names(cropped) <- "code"
   arearaster <- cellSize(cropped, unit = "ha")
-  arearaster <- mask(arearaster, shp)
+  arearaster <- mask(arearaster, x)
   zonal_stat <- zonal(arearaster, cropped, fun = "sum")
 
   dplyr::left_join(classes, zonal_stat, by = "code") %>%
@@ -69,3 +72,11 @@ NULL
     tidyr::replace_na(list(percent = 0)) %>%
     tibble::as_tibble()
 }
+
+register_indicator(
+  name = "deforestation_drivers",
+  resources = list(fritz_et_al = "raster"),
+  fun = .calc_deforestation_drivers,
+  arguments = list(),
+  processing_mode = "asset"
+)

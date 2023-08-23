@@ -46,6 +46,7 @@ NULL
 #' @param verbose Logical controlling verbosity.
 #' @importFrom utils unzip read.csv
 #' @keywords internal
+#' @include register.R
 #' @noRd
 .get_ucdp_ged <- function(x,
                           version_ged = "latest",
@@ -105,3 +106,14 @@ NULL
   versions <- stringr::str_extract_all(versions, "\\d+(?:\\.\\d+)+")[[1]]
   versions
 }
+
+
+register_resource(
+  name = "ucdp_ged",
+  type = "vector",
+  source = "https://ucdp.uu.se/downloads/",
+  fun = .get_ucdp_ged,
+  arguments <- list(
+    version_ged = "latest"
+  )
+)

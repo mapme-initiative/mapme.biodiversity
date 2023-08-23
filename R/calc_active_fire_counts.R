@@ -12,30 +12,32 @@
 #' @keywords indicator
 #' @format A tibble with a column for number of fire events per year and instrument.
 #' @examples
-#' library(sf)
-#' library(mapme.biodiversity)
+#' if (Sys.getenv("NOT_CRAN") == "true") {
+#'   library(sf)
+#'   library(mapme.biodiversity)
 #'
-#' temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-#' if (!file.exists(temp_loc)) {
-#'   dir.create(temp_loc)
-#'   resource_dir <- system.file("res", package = "mapme.biodiversity")
-#'   file.copy(resource_dir, temp_loc, recursive = TRUE)
-#' }
+#'   temp_loc <- file.path(tempdir(), "mapme.biodiversity")
+#'   if (!file.exists(temp_loc)) {
+#'     dir.create(temp_loc)
+#'     resource_dir <- system.file("res", package = "mapme.biodiversity")
+#'     file.copy(resource_dir, temp_loc, recursive = TRUE)
+#'   }
 #'
-#' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-#'   package = "mapme.biodiversity"
-#' ) %>%
-#'   read_sf() %>%
-#'   init_portfolio(
-#'     years = 2021,
-#'     outdir = file.path(temp_loc, "res"),
-#'     tmpdir = tempdir(),
-#'     add_resources = FALSE,
-#'     verbose = FALSE
+#'   (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+#'     package = "mapme.biodiversity"
 #'   ) %>%
-#'   get_resources("nasa_firms", instrument = "VIIRS") %>%
-#'   calc_indicators("active_fire_counts") %>%
-#'   tidyr::unnest(active_fire_counts)))
+#'     read_sf() %>%
+#'     init_portfolio(
+#'       years = 2021,
+#'       outdir = file.path(temp_loc, "res"),
+#'       tmpdir = tempdir(),
+#'       add_resources = FALSE,
+#'       verbose = FALSE
+#'     ) %>%
+#'     get_resources("nasa_firms", instrument = "VIIRS") %>%
+#'     calc_indicators("active_fire_counts") %>%
+#'     tidyr::unnest(active_fire_counts)))
+#' }
 NULL
 
 #' Calculate active fire counts based on FIRMS
@@ -44,21 +46,17 @@ NULL
 #' number of fire events occurred in the region of interest for
 #' years 2000-2021 (MODIS) and 2012-2021 (VIIRS).
 #'
-#' @param shp A single polygon for which to calculate the active fire counts
+#' @param x A single polygon for which to calculate the active fire counts
 #' @param nasa_firms The active fire vector resource (NASA - FIRMS)
-#' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
-#' @param todisk Logical indicating whether or not temporary vector files shall
-#'   be written to disk
 #' @param ... additional arguments
 #' @return A tibble
 #' @keywords internal
+#' @include register.R
 #' @noRd
-.calc_active_fire_counts <- function(shp,
+.calc_active_fire_counts <- function(x,
                                      nasa_firms,
-                                     rundir = tempdir(),
                                      verbose = TRUE,
-                                     todisk = FALSE,
                                      ...) {
   acq_date <- NULL
   year <- NULL
@@ -69,7 +67,7 @@ NULL
   }) %>%
     dplyr::bind_rows()
 
-  intersected <- suppressWarnings(st_intersection(nasa_firms, st_geometry(shp)))
+  intersected <- suppressWarnings(st_intersection(nasa_firms, st_geometry(x)))
   if (nrow(intersected) == 0) {
     return(NA)
   }
@@ -81,3 +79,12 @@ NULL
     dplyr::summarise(active_fire_counts = dplyr::n()) %>%
     dplyr::ungroup()
 }
+
+
+register_indicator(
+  name = "active_fire_counts",
+  resources = list(nasa_firms = "vector"),
+  fun = .calc_active_fire_counts,
+  arguments = list(),
+  processing_mode = "asset"
+)

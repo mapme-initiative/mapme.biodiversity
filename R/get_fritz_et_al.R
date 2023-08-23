@@ -38,6 +38,8 @@
 #' @source \url{https://zenodo.org/record/7997885}
 NULL
 
+
+#' @include register.R
 .get_fritz_et_al <- function(x,
                              res_drivers = 100,
                              rundir = tempdir(),
@@ -97,3 +99,11 @@ NULL
   file.remove(del_files)
   return(geo_file)
 }
+
+register_resource(
+  name = "fritz_et_al",
+  type = "raster",
+  source = "https://zenodo.org/record/7997885/",
+  fun = .get_fritz_et_al,
+  arguments <- list(res_drivers = 100)
+)

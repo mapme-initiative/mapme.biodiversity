@@ -26,16 +26,16 @@ The mapme.biodiversity package helps to analyse a number of biodiversity
 related indicators and biodiversity threats based on freely available
 geodata-sources such as the Global Forest Watch. It supports
 computational efficient routines and heavy parallel computing in
-cloud-infrastructures such as AWS or AZURE using in the statistical
-programming language R. The package allows for the analysis of global
-biodiversity portfolios with a thousand or millions of AOIs which is
-normally only possible on dedicated platforms such as the Google Earth
-Engine. It provides the possibility to e.g. analyse the World Database
-of Protected Areas (WDPA) for a number of relevant indicators. The
-primary use case of this package is to support scientific analysis and
-data science for individuals and organizations who seek to preserve the
-planet biodiversity. It’s development is funded by the German
-Development Bank KfW.
+cloud-infrastructures such as AWS or Microsoft Azure using in the
+statistical programming language R. The package allows for the analysis
+of global biodiversity portfolios with a thousand or millions of AOIs
+which is normally only possible on dedicated platforms such as the
+Google Earth Engine. It provides the possibility to e.g. analyse the
+World Database of Protected Areas (WDPA) for a number of relevant
+indicators. The primary use case of this package is to support
+scientific analysis and data science for individuals and organizations
+who seek to preserve the planet biodiversity. Its development is funded
+by the German Development Bank KfW.
 
 ## Installation
 
@@ -187,7 +187,7 @@ plan(multisession, workers = 6) # set up parallel plan
 with_progress({
   portfolio <- calc_indicators(
     portfolio,
-    "treeover_area_and_emissions",
+    "treecover_area_and_emissions",
     min_size = 1,
     min_cover = 30
   )
@@ -199,9 +199,9 @@ plan(sequential) # close child processes
 Note, that the above code uses `future::multisession()` as the parallel
 backend. This backend will resolve the calculation in multiple
 background R sessions. You should use that backend if you are operating
-on Windows, using R Studio or otherwise are not sure about which backend
+on Windows, using RStudio or otherwise are not sure about which backend
 to use. In case you are operating on a system that allows process
-forking and are *not* using R Studio, consider using
+forking and are *not* using RStudio, consider using
 `future::multicore()` for more efficient parallel processing.
 
 Head over to the [online
