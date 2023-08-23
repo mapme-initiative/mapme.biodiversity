@@ -41,6 +41,11 @@
 
 ## Internal
 
+- disabled examples requiring internet connection 
+
+- `terra` engines now use `get()` to resolve the requested zonal
+  statistic function
+
 - applying tidyverse coding style to existing code (#156, @karpfen)
 
 - extensive re-factoring of vector-raster zonal statistic engines (#150)
