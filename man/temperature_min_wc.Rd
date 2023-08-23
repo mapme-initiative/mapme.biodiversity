@@ -28,33 +28,33 @@ one or multiple inputs as character. Supported statistics are: "mean",
 }
 \examples{
 if (Sys.getenv("NOT_CRAN") == "true") {
-library(sf)
-library(mapme.biodiversity)
+  library(sf)
+  library(mapme.biodiversity)
 
-temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-if (!file.exists(temp_loc)) {
-  dir.create(temp_loc)
-  resource_dir <- system.file("res", package = "mapme.biodiversity")
-  file.copy(resource_dir, temp_loc, recursive = TRUE)
-}
-
-(try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-  package = "mapme.biodiversity"
-) \%>\%
-  read_sf() \%>\%
-  init_portfolio(
-    years = 2018,
-    outdir = file.path(temp_loc, "res"),
-    tmpdir = tempdir(),
-    add_resources = FALSE,
-    verbose = FALSE
-  ) \%>\%
-  get_resources("worldclim_min_temperature") \%>\%
-  calc_indicators("temperature_min_wc",
-    stats_worldclim = c("mean", "median"),
-    engine = "extract"
-  ) \%>\%
-  tidyr::unnest(temperature_min_wc)))
+  temp_loc <- file.path(tempdir(), "mapme.biodiversity")
+  if (!file.exists(temp_loc)) {
+    dir.create(temp_loc)
+    resource_dir <- system.file("res", package = "mapme.biodiversity")
+    file.copy(resource_dir, temp_loc, recursive = TRUE)
   }
+
+  (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+    package = "mapme.biodiversity"
+  ) \%>\%
+    read_sf() \%>\%
+    init_portfolio(
+      years = 2018,
+      outdir = file.path(temp_loc, "res"),
+      tmpdir = tempdir(),
+      add_resources = FALSE,
+      verbose = FALSE
+    ) \%>\%
+    get_resources("worldclim_min_temperature") \%>\%
+    calc_indicators("temperature_min_wc",
+      stats_worldclim = c("mean", "median"),
+      engine = "extract"
+    ) \%>\%
+    tidyr::unnest(temperature_min_wc)))
+}
 }
 \keyword{indicator}
