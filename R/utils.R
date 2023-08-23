@@ -179,14 +179,26 @@
 #' @keywords internal
 #' @noRd
 .unzip_and_remove <- function(zip, rundir, remove = TRUE) {
-  suppressWarnings(unzip(
-    zipfile = file.path(rundir, basename(zip)),
-    exdir = rundir,
-    overwrite = FALSE
-  ))
+  extension <- tools::file_ext(zip)
+  if (extension == "zip") {
+    filenames <- suppressWarnings(unzip(
+      zipfile = zip,
+      exdir = rundir,
+      overwrite = FALSE
+    ))
+  } else if (extension == "gz") {
+    filenames <- R.utils::gunzip(
+      zip,
+      skip = TRUE,
+      remove = FALSE
+    )
+  } else {
+    stop(paste0("decompression for ", extension, " files not implemented"))
+  }
   if (remove) {
     unlink(file.path(rundir, basename(zip)))
   }
+  return(filenames)
 }
 
 

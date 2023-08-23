@@ -18,4 +18,3 @@ elevation_crop <- aggregate(elevation_crop, 4)
 writeRaster(elevation_crop, file.path("inst/res/nasa_srtm/", basename(tif)),
   overwrite = TRUE, gdal = c("COMPRESS=LZW", "PREDICTOR=2"), datatype = "INT2U"
 )
-devt
