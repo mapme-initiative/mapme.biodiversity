@@ -234,14 +234,14 @@
 <span><span class="fu"><a href="https://progressr.futureverse.org/reference/with_progress.html" class="external-link">with_progress</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">portfolio</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/calc_indicators.html">calc_indicators</a></span><span class="op">(</span></span>
 <span>    <span class="va">portfolio</span>,</span>
-<span>    <span class="st">"treeover_area_and_emissions"</span>,</span>
+<span>    <span class="st">"treecover_area_and_emissions"</span>,</span>
 <span>    min_size <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>    min_cover <span class="op">=</span> <span class="fl">30</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">sequential</span><span class="op">)</span> <span class="co"># close child processes</span></span></code></pre></div>
-<p>Note, that the above code uses <code><a href="https://future.futureverse.org/reference/multisession.html" class="external-link">future::multisession()</a></code> as the parallel backend. This backend will resolve the calculation in multiple background R sessions. You should use that backend if you are operating on Windows, using R Studio or otherwise are not sure about which backend to use. In case you are operating on a system that allows process forking and are <em>not</em> using R Studio, consider using <code><a href="https://future.futureverse.org/reference/multicore.html" class="external-link">future::multicore()</a></code> for more efficient parallel processing.</p>
+<p>Note, that the above code uses <code><a href="https://future.futureverse.org/reference/multisession.html" class="external-link">future::multisession()</a></code> as the parallel backend. This backend will resolve the calculation in multiple background R sessions. You should use that backend if you are operating on Windows, using RStudio or otherwise are not sure about which backend to use. In case you are operating on a system that allows process forking and are <em>not</em> using RStudio, consider using <code><a href="https://future.futureverse.org/reference/multicore.html" class="external-link">future::multicore()</a></code> for more efficient parallel processing.</p>
 <p>Head over to the <a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">online documentation</a> find more detailed information about the package.</p>
 </div>
 </div>
