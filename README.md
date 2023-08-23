@@ -92,6 +92,7 @@ cat(sprintf(
     ## - nelson_et_al
     ## - soilgrids
     ## - teow
+    ## - ucdp_ged
     ## - worldclim_max_temperature
     ## - worldclim_min_temperature
     ## - worldclim_precipitation
@@ -105,6 +106,7 @@ cat(sprintf(
     ## - drought_indicator
     ## - ecoregion
     ## - elevation
+    ## - fatalities
     ## - landcover
     ## - mangroves_area
     ## - population_count

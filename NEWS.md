@@ -2,6 +2,14 @@
 
 ## New features
 
+- added new resource called `ucdp_ged` providing a database of violent conflict
+  from 1989 to today
+
+- added a new indicator called `fatalities` aggregating number of deaths
+  by type of conflict on a monthly time scale based on the `ucdp_ged` resource.
+  
+- Added a new resource called `fritz_et_al` providing a raster layer of deforestation
+
 - added two new exported functions `register_resource()` and `register_indicator()`
   which allow users to register custom functions for resources/indicators
 
@@ -19,6 +27,7 @@
   FIRMS resource in the example section
 
 - added the data for years 2017-2020 to the Global Mangrove Watch resource 
+
 
 ## Breaking changes
 
