@@ -8,7 +8,7 @@ test_that("precipitation indicator works", {
 
   chirps <- list.files(system.file("res", "chirps",
     package = "mapme.biodiversity"
-  ), pattern = ".cog$", full.names = TRUE)
+  ), pattern = "tif$", full.names = TRUE)
   chirps <- rast(chirps)
   attributes(shp)$years <- 1970:1980
   expect_warning(
