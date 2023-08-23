@@ -66,7 +66,7 @@ available_engines <- c("zonal", "extract", "exactextract")
     out <- terra::zonal(
       raster,
       vect(x),
-      fun = stat,
+      fun = get(stat),
       na.rm = TRUE
     )
     out <- tibble(as.numeric(out))
@@ -81,7 +81,7 @@ available_engines <- c("zonal", "extract", "exactextract")
     out <- terra::extract(
       raster,
       x,
-      fun = stat,
+      fun = get(stat),
       na.rm = TRUE,
       ID = FALSE
     )

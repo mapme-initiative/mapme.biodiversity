@@ -20,33 +20,35 @@
 #' @keywords indicator
 #' @format A tibble with a column for maximum temperature statistics (in °C)
 #' @examples
-#' library(sf)
-#' library(mapme.biodiversity)
+#' if (Sys.getenv("NOT_CRAN") == "true") {
+#'   library(sf)
+#'   library(mapme.biodiversity)
 #'
-#' temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-#' if (!file.exists(temp_loc)) {
-#'   dir.create(temp_loc)
-#'   resource_dir <- system.file("res", package = "mapme.biodiversity")
-#'   file.copy(resource_dir, temp_loc, recursive = TRUE)
+#'   temp_loc <- file.path(tempdir(), "mapme.biodiversity")
+#'   if (!file.exists(temp_loc)) {
+#'     dir.create(temp_loc)
+#'     resource_dir <- system.file("res", package = "mapme.biodiversity")
+#'     file.copy(resource_dir, temp_loc, recursive = TRUE)
+#'   }
+#'
+#'   (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+#'     package = "mapme.biodiversity"
+#'   ) %>%
+#'     read_sf() %>%
+#'     init_portfolio(
+#'       years = 2018,
+#'       outdir = file.path(temp_loc, "res"),
+#'       tmpdir = tempdir(),
+#'       add_resources = FALSE,
+#'       verbose = FALSE
+#'     ) %>%
+#'     get_resources("worldclim_max_temperature") %>%
+#'     calc_indicators("temperature_max_wc",
+#'       stats_worldclim = c("mean", "median"),
+#'       engine = "extract"
+#'     ) %>%
+#'     tidyr::unnest(temperature_max_wc)))
 #' }
-#'
-#' (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-#'   package = "mapme.biodiversity"
-#' ) %>%
-#'   read_sf() %>%
-#'   init_portfolio(
-#'     years = 2018,
-#'     outdir = file.path(temp_loc, "res"),
-#'     tmpdir = tempdir(),
-#'     add_resources = FALSE,
-#'     verbose = FALSE
-#'   ) %>%
-#'   get_resources("worldclim_max_temperature") %>%
-#'   calc_indicators("temperature_max_wc",
-#'     stats_worldclim = c("mean", "median"),
-#'     engine = "extract"
-#'   ) %>%
-#'   tidyr::unnest(temperature_max_wc)))
 NULL
 
 #' Calculate worldclim maximum temperature statistics
