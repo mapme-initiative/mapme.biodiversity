@@ -68,7 +68,10 @@
 <h2 class="pkg-version" data-toc-text="development version" id="mapmebiodiversity-development-version">mapme.biodiversity (development version)<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-development-version"></a></h2>
 <div class="section level3">
 <h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
-<ul><li><p>added two new exported functions <code><a href="../reference/register_resource.html">register_resource()</a></code> and <code><a href="../reference/register_indicator.html">register_indicator()</a></code> which allow users to register custom functions for resources/indicators</p></li>
+<ul><li><p>added new resource called <code>ucdp_ged</code> providing a database of violent conflict from 1989 to today</p></li>
+<li><p>added a new indicator called <code>fatalities</code> aggregating number of deaths by type of conflict on a monthly time scale based on the <code>ucdp_ged</code> resource.</p></li>
+<li><p>Added a new resource called <code>fritz_et_al</code> providing a raster layer of deforestation</p></li>
+<li><p>added two new exported functions <code><a href="../reference/register_resource.html">register_resource()</a></code> and <code><a href="../reference/register_indicator.html">register_indicator()</a></code> which allow users to register custom functions for resources/indicators</p></li>
 <li><p>added a new resource called <code>fritz_et_al</code> providing a raster layer of deforestation drivers in tropical forests based on <a href="https://www.frontiersin.org/articles/10.3389/fcosc.2022.830248/full" class="external-link">Fritz et al. (2022)</a></p></li>
 <li><p>added a new indicator called <code>deforestation_drivers</code> using the <code>fritz_et_al</code> resource to obtain information on the absolute and relative area driving forest losses in assets for the period 2008-2019</p></li>
 <li><p>added a new vignette for the web-version of the package only informing about how to obtain wide-output from indicators</p></li>
