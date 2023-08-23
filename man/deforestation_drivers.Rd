@@ -18,6 +18,7 @@ resource is:
 }
 }
 \examples{
+if (Sys.getenv("NOT_CRAN") == "true") {
 library(sf)
 library(mapme.biodiversity)
 
@@ -42,5 +43,6 @@ if (!file.exists(temp_loc)) {
   get_resources("fritz_et_al", res_drivers = 100) \%>\%
   calc_indicators("deforestation_drivers") \%>\%
   tidyr::unnest(deforestation_drivers)))
+  }
 }
 \keyword{indicator}

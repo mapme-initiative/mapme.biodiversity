@@ -21,6 +21,7 @@ The required resources for this indicator are:
 }
 }
 \examples{
+if (Sys.getenv("NOT_CRAN") == "true") {
 library(sf)
 library(mapme.biodiversity)
 
@@ -45,5 +46,6 @@ if (!file.exists(temp_loc)) {
   get_resources("esalandcover") \%>\%
   calc_indicators("landcover") \%>\%
   tidyr::unnest(landcover)))
+  }
 }
 \keyword{indicator}

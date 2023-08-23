@@ -31,6 +31,7 @@ single or multiple inputs as character. Supported statistics are: "mean",
 }
 }
 \examples{
+if (Sys.getenv("NOT_CRAN") == "true") {
 library(sf)
 library(mapme.biodiversity)
 
@@ -57,5 +58,6 @@ if (!file.exists(temp_loc)) {
   ) \%>\%
   calc_indicators("soilproperties", stats_soil = c("mean", "median"), engine = "extract") \%>\%
   tidyr::unnest(soilproperties)))
+  }
 }
 \keyword{indicator}

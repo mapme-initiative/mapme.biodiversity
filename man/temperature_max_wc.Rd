@@ -27,6 +27,7 @@ one or multiple inputs as character. Supported statistics are: "mean",
 }
 }
 \examples{
+if (Sys.getenv("NOT_CRAN") == "true") {
 library(sf)
 library(mapme.biodiversity)
 
@@ -54,5 +55,6 @@ if (!file.exists(temp_loc)) {
     engine = "extract"
   ) \%>\%
   tidyr::unnest(temperature_max_wc)))
+  }
 }
 \keyword{indicator}

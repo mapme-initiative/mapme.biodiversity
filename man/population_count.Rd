@@ -30,6 +30,7 @@ one or multiple inputs as character. Supported statistics are: "mean",
 }
 }
 \examples{
+if (Sys.getenv("NOT_CRAN") == "true") {
 library(sf)
 library(mapme.biodiversity)
 
@@ -54,5 +55,6 @@ if (!file.exists(temp_loc)) {
   get_resources("worldpop") \%>\%
   calc_indicators("population_count", stats_popcount = c("sum", "median"), engine = "extract") \%>\%
   tidyr::unnest(population_count)))
+  }
 }
 \keyword{indicator}

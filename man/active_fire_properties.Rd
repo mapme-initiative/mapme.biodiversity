@@ -20,6 +20,7 @@ The required resources for this indicator are:
 }
 }
 \examples{
+if (Sys.getenv("NOT_CRAN") == "true") {
 library(sf)
 library(mapme.biodiversity)
 
@@ -44,5 +45,6 @@ if (!file.exists(temp_loc)) {
   get_resources("nasa_firms", instrument = "VIIRS") \%>\%
   calc_indicators("active_fire_properties") \%>\%
   tidyr::unnest(active_fire_properties)))
+  }
 }
 \keyword{indicator}
