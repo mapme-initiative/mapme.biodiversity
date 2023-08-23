@@ -185,7 +185,7 @@ plan(multisession, workers = 6) # set up parallel plan
 with_progress({
   portfolio <- calc_indicators(
     portfolio,
-    "treeover_area_and_emissions",
+    "treecover_area_and_emissions",
     min_size = 1,
     min_cover = 30
   )
@@ -197,9 +197,9 @@ plan(sequential) # close child processes
 Note, that the above code uses `future::multisession()` as the parallel
 backend. This backend will resolve the calculation in multiple
 background R sessions. You should use that backend if you are operating
-on Windows, using R Studio or otherwise are not sure about which backend
+on Windows, using RStudio or otherwise are not sure about which backend
 to use. In case you are operating on a system that allows process
-forking and are *not* using R Studio, consider using
+forking and are *not* using RStudio, consider using
 `future::multicore()` for more efficient parallel processing.
 
 Head over to the [online
