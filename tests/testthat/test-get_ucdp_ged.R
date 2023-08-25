@@ -1,6 +1,6 @@
 # test-get_ucdp_ged.R
-
 test_that(".get_ucdp_ged works", {
+  skip_on_cran()
   aoi <- read_sf(
     system.file("extdata", "burundi.gpkg",
       package = "mapme.biodiversity"
