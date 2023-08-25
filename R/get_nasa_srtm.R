@@ -39,7 +39,8 @@ NULL
       'Please run install.packages("rstac").'
     ))
   }
-  urls <- rstac::stac("https://planetarycomputer.microsoft.com/api/stac/v1/") %>%
+
+  try(urls <- rstac::stac("https://planetarycomputer.microsoft.com/api/stac/v1/") %>%
     rstac::stac_search(
       collection = "nasadem",
       bbox = as.numeric(st_bbox(x)),
@@ -47,7 +48,11 @@ NULL
     ) %>%
     rstac::get_request() %>%
     rstac::items_fetch() %>%
-    rstac::assets_url(asset_names = "elevation")
+    rstac::assets_url(asset_names = "elevation"))
+
+  if (inherits(urls, "try-error")) {
+    stop("Download for NASA SRTM resource was unsuccesfull")
+  }
 
   if (length(urls) == 0) {
     stop("The extent of the portfolio does not intersect with the SRTM grid.")
