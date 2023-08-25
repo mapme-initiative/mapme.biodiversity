@@ -18,31 +18,30 @@ The required resources for this indicator are:
 }
 }
 \examples{
-if (Sys.getenv("NOT_CRAN") == "true") {
+\dontshow{
+ mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
+}
+\dontrun{
   library(sf)
   library(mapme.biodiversity)
 
-  temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-  if (!file.exists(temp_loc)) {
-    dir.create(temp_loc)
-    resource_dir <- system.file("res", package = "mapme.biodiversity")
-    file.copy(resource_dir, temp_loc, recursive = TRUE)
-  }
+  outdir <- file.path(tempdir(), "mapme-data")
+  dir.create(outdir, showWarnings = FALSE)
 
-  (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+  aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
     package = "mapme.biodiversity"
   ) \%>\%
     read_sf() \%>\%
     init_portfolio(
       years = 2001,
-      outdir = file.path(temp_loc, "res"),
+      outdir = outdir,
       tmpdir = tempdir(),
       add_resources = FALSE,
       verbose = FALSE
     ) \%>\%
     get_resources("teow") \%>\%
     calc_indicators("biome") \%>\%
-    tidyr::unnest(biome)))
+    tidyr::unnest(biome)
 }
 }
 \keyword{indicator}

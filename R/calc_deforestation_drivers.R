@@ -12,31 +12,30 @@
 #'   the absolute area in ha, and the percentage in relation to the total
 #'   area of forest loss as indicated by the Fritz et al. (2022) resource.
 #' @examples
-#' if (Sys.getenv("NOT_CRAN") == "true") {
-#'   library(sf)
-#'   library(mapme.biodiversity)
+#' \dontshow{
+#' mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
+#' }
+#' \dontrun{
+#' library(sf)
+#' library(mapme.biodiversity)
 #'
-#'   temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-#'   if (!file.exists(temp_loc)) {
-#'     dir.create(temp_loc)
-#'     resource_dir <- system.file("res", package = "mapme.biodiversity")
-#'     file.copy(resource_dir, temp_loc, recursive = TRUE)
-#'   }
+#' outdir <- file.path(tempdir(), "mapme-data")
+#' dir.create(outdir, showWarnings = FALSE)
 #'
-#'   (try(aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-#'     package = "mapme.biodiversity"
+#' aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+#'   package = "mapme.biodiversity"
+#' ) %>%
+#'   read_sf() %>%
+#'   init_portfolio(
+#'     years = 2021,
+#'     outdir = outdir,
+#'     tmpdir = tempdir(),
+#'     add_resources = FALSE,
+#'     verbose = FALSE
 #'   ) %>%
-#'     read_sf() %>%
-#'     init_portfolio(
-#'       years = 2021,
-#'       outdir = file.path(temp_loc, "res"),
-#'       tmpdir = tempdir(),
-#'       add_resources = FALSE,
-#'       verbose = FALSE
-#'     ) %>%
-#'     get_resources("fritz_et_al", res_drivers = 100) %>%
-#'     calc_indicators("deforestation_drivers") %>%
-#'     tidyr::unnest(deforestation_drivers)))
+#'   get_resources("fritz_et_al", res_drivers = 100) %>%
+#'   calc_indicators("deforestation_drivers") %>%
+#'   tidyr::unnest(deforestation_drivers)
 #' }
 NULL
 

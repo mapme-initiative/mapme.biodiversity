@@ -75,24 +75,23 @@ temporal coding up to which events are included. Defaults to 1.}
 }
 }
 \examples{
-if (Sys.getenv("NOT_CRAN") == "true") {
+\dontshow{
+ mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
+}
+\dontrun{
   library(sf)
   library(mapme.biodiversity)
 
-  temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-  if (!file.exists(temp_loc)) {
-    dir.create(temp_loc)
-    resource_dir <- system.file("res", package = "mapme.biodiversity")
-    file.copy(resource_dir, temp_loc, recursive = TRUE)
-  }
+  outdir <- file.path(tempdir(), "mapme-data")
+  dir.create(outdir, showWarnings = FALSE)
 
-  (try(aoi <- system.file("extdata", "burundi.gpkg",
+  aoi <- system.file("extdata", "burundi.gpkg",
     package = "mapme.biodiversity"
   ) \%>\%
     read_sf() \%>\%
     init_portfolio(
       years = 1991:1992,
-      outdir = file.path(temp_loc, "res"),
+      outdir = outdir,
       tmpdir = tempdir(),
       add_resources = FALSE,
       verbose = FALSE
@@ -101,7 +100,7 @@ if (Sys.getenv("NOT_CRAN") == "true") {
     calc_indicators("fatalities",
       precision_location = 1, precision_time = 1
     ) \%>\%
-    tidyr::unnest(fatalities)))
+    tidyr::unnest(fatalities)
 }
 }
 \references{
