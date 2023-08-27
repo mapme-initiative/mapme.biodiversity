@@ -29,32 +29,32 @@ one or multiple inputs as character. Supported statistics are: "mean",
 }
 \examples{
 \dontshow{
- mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
+mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
 }
 \dontrun{
-  library(sf)
-  library(mapme.biodiversity)
+library(sf)
+library(mapme.biodiversity)
 
-  outdir <- file.path(tempdir(), "mapme-data")
-  dir.create(outdir, showWarnings = FALSE)
+outdir <- file.path(tempdir(), "mapme-data")
+dir.create(outdir, showWarnings = FALSE)
 
 
-  aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-    package = "mapme.biodiversity"
+aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+  package = "mapme.biodiversity"
+) \%>\%
+  read_sf() \%>\%
+  init_portfolio(
+    years = 2022,
+    outdir = outdir,
+    tmpdir = tempdir(),
+    add_resources = FALSE,
+    verbose = FALSE
   ) \%>\%
-    read_sf() \%>\%
-    init_portfolio(
-      years = 2022,
-      outdir = outdir,
-      tmpdir = tempdir(),
-      add_resources = FALSE,
-      verbose = FALSE
-    ) \%>\%
-    get_resources("nelson_et_al",
-      range_traveltime = c("5k_10k", "100k_200k", "500k_1mio", "1mio_5mio")
-    ) \%>\%
-    calc_indicators("traveltime", stats_accessibility = c("min", "max"), engine = "extract") \%>\%
-    tidyr::unnest(traveltime)
+  get_resources("nelson_et_al",
+    range_traveltime = c("5k_10k", "100k_200k", "500k_1mio", "1mio_5mio")
+  ) \%>\%
+  calc_indicators("traveltime", stats_accessibility = c("min", "max"), engine = "extract") \%>\%
+  tidyr::unnest(traveltime)
 }
 }
 \keyword{indicator}

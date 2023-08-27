@@ -19,29 +19,29 @@ The required resources for this indicator are:
 }
 \examples{
 \dontshow{
- mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
+mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
 }
 \dontrun{
-  library(sf)
-  library(mapme.biodiversity)
+library(sf)
+library(mapme.biodiversity)
 
-  outdir <- file.path(tempdir(), "mapme-data")
-  dir.create(outdir, showWarnings = FALSE)
+outdir <- file.path(tempdir(), "mapme-data")
+dir.create(outdir, showWarnings = FALSE)
 
-  aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-    package = "mapme.biodiversity"
+aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+  package = "mapme.biodiversity"
+) \%>\%
+  read_sf() \%>\%
+  init_portfolio(
+    years = 2001,
+    outdir = outdir,
+    tmpdir = tempdir(),
+    add_resources = FALSE,
+    verbose = FALSE
   ) \%>\%
-    read_sf() \%>\%
-    init_portfolio(
-      years = 2001,
-      outdir = outdir,
-      tmpdir = tempdir(),
-      add_resources = FALSE,
-      verbose = FALSE
-    ) \%>\%
-    get_resources("teow") \%>\%
-    calc_indicators("biome") \%>\%
-    tidyr::unnest(biome)
+  get_resources("teow") \%>\%
+  calc_indicators("biome") \%>\%
+  tidyr::unnest(biome)
 }
 }
 \keyword{indicator}

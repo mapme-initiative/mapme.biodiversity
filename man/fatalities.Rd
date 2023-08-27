@@ -76,31 +76,31 @@ temporal coding up to which events are included. Defaults to 1.}
 }
 \examples{
 \dontshow{
- mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
+mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
 }
 \dontrun{
-  library(sf)
-  library(mapme.biodiversity)
+library(sf)
+library(mapme.biodiversity)
 
-  outdir <- file.path(tempdir(), "mapme-data")
-  dir.create(outdir, showWarnings = FALSE)
+outdir <- file.path(tempdir(), "mapme-data")
+dir.create(outdir, showWarnings = FALSE)
 
-  aoi <- system.file("extdata", "burundi.gpkg",
-    package = "mapme.biodiversity"
+aoi <- system.file("extdata", "burundi.gpkg",
+  package = "mapme.biodiversity"
+) \%>\%
+  read_sf() \%>\%
+  init_portfolio(
+    years = 1991:1992,
+    outdir = outdir,
+    tmpdir = tempdir(),
+    add_resources = FALSE,
+    verbose = FALSE
   ) \%>\%
-    read_sf() \%>\%
-    init_portfolio(
-      years = 1991:1992,
-      outdir = outdir,
-      tmpdir = tempdir(),
-      add_resources = FALSE,
-      verbose = FALSE
-    ) \%>\%
-    get_resources("ucdp_ged", version_ged = "22.1") \%>\%
-    calc_indicators("fatalities",
-      precision_location = 1, precision_time = 1
-    ) \%>\%
-    tidyr::unnest(fatalities)
+  get_resources("ucdp_ged", version_ged = "22.1") \%>\%
+  calc_indicators("fatalities",
+    precision_location = 1, precision_time = 1
+  ) \%>\%
+  tidyr::unnest(fatalities)
 }
 }
 \references{

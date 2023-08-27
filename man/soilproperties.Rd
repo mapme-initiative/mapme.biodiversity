@@ -32,32 +32,32 @@ single or multiple inputs as character. Supported statistics are: "mean",
 }
 \examples{
 \dontshow{
- mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
+mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
 }
 \dontrun{
-  library(sf)
-  library(mapme.biodiversity)
+library(sf)
+library(mapme.biodiversity)
 
-  outdir <- file.path(tempdir(), "mapme-data")
-  dir.create(outdir, showWarnings = FALSE)
+outdir <- file.path(tempdir(), "mapme-data")
+dir.create(outdir, showWarnings = FALSE)
 
 
-  aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-    package = "mapme.biodiversity"
+aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+  package = "mapme.biodiversity"
+) \%>\%
+  read_sf() \%>\%
+  init_portfolio(
+    years = 2022,
+    outdir = outdir,
+    tmpdir = tempdir(),
+    add_resources = FALSE,
+    verbose = FALSE
   ) \%>\%
-    read_sf() \%>\%
-    init_portfolio(
-      years = 2022,
-      outdir = outdir,
-      tmpdir = tempdir(),
-      add_resources = FALSE,
-      verbose = FALSE
-    ) \%>\%
-    get_resources("soilgrids",
-      layers = c("clay", "silt"), depths = c("0-5cm", "5-15cm"), stats = "mean"
-    ) \%>\%
-    calc_indicators("soilproperties", stats_soil = c("mean", "median"), engine = "extract") \%>\%
-    tidyr::unnest(soilproperties)
+  get_resources("soilgrids",
+    layers = c("clay", "silt"), depths = c("0-5cm", "5-15cm"), stats = "mean"
+  ) \%>\%
+  calc_indicators("soilproperties", stats_soil = c("mean", "median"), engine = "extract") \%>\%
+  tidyr::unnest(soilproperties)
 }
 }
 \keyword{indicator}

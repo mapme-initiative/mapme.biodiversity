@@ -29,32 +29,32 @@ The following arguments can be set:
 }
 \examples{
 \dontshow{
- mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
+mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
 }
 \dontrun{
- library(sf)
- library(mapme.biodiversity)
+library(sf)
+library(mapme.biodiversity)
 
- outdir <- file.path(tempdir(), "mapme-data")
- dir.create(outdir, showWarnings = FALSE)
+outdir <- file.path(tempdir(), "mapme-data")
+dir.create(outdir, showWarnings = FALSE)
 
- aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-    package = "mapme.biodiversity"
-    ) \%>\%
-    read_sf() \%>\%
-    init_portfolio(
-      years = 2016:2017,
-      outdir = outdir,
-      tmpdir = tempdir(),
-      add_resources = FALSE,
-      verbose = FALSE
-    ) \%>\%
-    get_resources(
-      resources = c("gfw_treecover", "gfw_lossyear", "gfw_emissions"),
-      vers_treecover = "GFC-2021-v1.9", vers_lossyear = "GFC-2021-v1.9"
-    ) \%>\%
-    calc_indicators("treecoverloss_emissions", min_size = 1, min_cover = 30) \%>\%
-    tidyr::unnest(treecoverloss_emissions)
+aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+  package = "mapme.biodiversity"
+) \%>\%
+  read_sf() \%>\%
+  init_portfolio(
+    years = 2016:2017,
+    outdir = outdir,
+    tmpdir = tempdir(),
+    add_resources = FALSE,
+    verbose = FALSE
+  ) \%>\%
+  get_resources(
+    resources = c("gfw_treecover", "gfw_lossyear", "gfw_emissions"),
+    vers_treecover = "GFC-2021-v1.9", vers_lossyear = "GFC-2021-v1.9"
+  ) \%>\%
+  calc_indicators("treecoverloss_emissions", min_size = 1, min_cover = 30) \%>\%
+  tidyr::unnest(treecoverloss_emissions)
 }
 }
 \keyword{indicator}

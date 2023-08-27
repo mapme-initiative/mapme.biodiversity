@@ -33,33 +33,33 @@ order to fit the SPI. Defaults to 8 years.}
 }
 \examples{
 \dontshow{
- mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
+mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
 }
 \dontrun{
-  library(sf)
-  library(mapme.biodiversity)
+library(sf)
+library(mapme.biodiversity)
 
-  outdir <- file.path(tempdir(), "mapme-data")
-  dir.create(outdir, showWarnings = FALSE)
+outdir <- file.path(tempdir(), "mapme-data")
+dir.create(outdir, showWarnings = FALSE)
 
 
-  aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-    package = "mapme.biodiversity"
+aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+  package = "mapme.biodiversity"
+) \%>\%
+  read_sf() \%>\%
+  init_portfolio(
+    years = 2010,
+    outdir = outdir,
+    tmpdir = tempdir(),
+    verbose = FALSE
   ) \%>\%
-    read_sf() \%>\%
-    init_portfolio(
-      years = 2010,
-      outdir = outdir,
-      tmpdir = tempdir(),
-      verbose = FALSE
-    ) \%>\%
-    get_resources("chirps") \%>\%
-    calc_indicators("precipitation_chirps",
-      engine = "exactextract",
-      scales_spi = 3,
-      spi_prev_years = 8
-    ) \%>\%
-    tidyr::unnest(precipitation_chirps)
+  get_resources("chirps") \%>\%
+  calc_indicators("precipitation_chirps",
+    engine = "exactextract",
+    scales_spi = 3,
+    spi_prev_years = 8
+  ) \%>\%
+  tidyr::unnest(precipitation_chirps)
 }
 }
 \keyword{indicator}
