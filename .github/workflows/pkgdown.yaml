@@ -7,6 +7,8 @@ on:
     branches: [main]
   release:
     types: [published]
+  schedule:
+    - cron: "0 4 * * *"
   workflow_dispatch:
 
 name: pkgdown
