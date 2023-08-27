@@ -44,6 +44,8 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   get_resources("nasa_firms", instrument = "VIIRS") \%>\%
   calc_indicators("active_fire_properties") \%>\%
   tidyr::unnest(active_fire_properties)
+
+aoi
 }
 }
 \keyword{indicator}

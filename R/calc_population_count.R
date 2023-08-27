@@ -47,6 +47,8 @@
 #'   get_resources("worldpop") %>%
 #'   calc_indicators("population_count", stats_popcount = c("sum", "median"), engine = "extract") %>%
 #'   tidyr::unnest(population_count)
+#'
+#' aoi
 #' }
 NULL
 

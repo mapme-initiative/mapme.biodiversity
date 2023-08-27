@@ -36,6 +36,8 @@
 #'   get_resources("gmw") %>%
 #'   calc_indicators("mangroves_area") %>%
 #'   tidyr::unnest(mangroves_area)
+#'
+#' aoi
 #' }
 NULL
 

@@ -35,7 +35,6 @@
 #' outdir <- file.path(tempdir(), "mapme-data")
 #' dir.create(outdir, showWarnings = FALSE)
 #'
-#'
 #' aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
 #'   package = "mapme.biodiversity"
 #' ) %>%
@@ -53,6 +52,8 @@
 #'     spi_prev_years = 8
 #'   ) %>%
 #'   tidyr::unnest(precipitation_chirps)
+#'
+#' aoi
 #' }
 NULL
 

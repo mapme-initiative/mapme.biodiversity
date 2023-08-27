@@ -45,6 +45,8 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   get_resources("esalandcover") \%>\%
   calc_indicators("landcover") \%>\%
   tidyr::unnest(landcover)
+
+aoi
 }
 }
 \keyword{indicator}

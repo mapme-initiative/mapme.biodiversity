@@ -48,6 +48,8 @@
 #'     engine = "extract"
 #'   ) %>%
 #'   tidyr::unnest(drought_indicator)
+#'
+#' aoi
 #' }
 NULL
 

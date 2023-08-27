@@ -48,6 +48,8 @@
 #'   ) %>%
 #'   calc_indicators("traveltime", stats_accessibility = c("min", "max"), engine = "extract") %>%
 #'   tidyr::unnest(traveltime)
+#'
+#' aoi
 #' }
 NULL
 

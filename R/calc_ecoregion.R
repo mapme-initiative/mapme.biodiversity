@@ -36,6 +36,8 @@
 #'   get_resources("teow") %>%
 #'   calc_indicators("ecoregion") %>%
 #'   tidyr::unnest(ecoregion)
+#'
+#' aoi
 #' }
 NULL
 

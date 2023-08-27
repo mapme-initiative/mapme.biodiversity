@@ -30,7 +30,6 @@
 #' outdir <- file.path(tempdir(), "mapme-data")
 #' dir.create(outdir, showWarnings = FALSE)
 #'
-#'
 #' aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
 #'   package = "mapme.biodiversity"
 #' ) %>%
@@ -48,6 +47,8 @@
 #'     engine = "extract"
 #'   ) %>%
 #'   tidyr::unnest(temperature_max_wc)
+#'
+#' aoi
 #' }
 NULL
 

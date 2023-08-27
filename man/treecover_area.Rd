@@ -53,6 +53,8 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   ) \%>\%
   calc_indicators("treecover_area", min_size = 1, min_cover = 30) \%>\%
   tidyr::unnest(treecover_area)
+
+aoi
 }
 }
 \keyword{indicator}

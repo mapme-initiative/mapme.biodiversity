@@ -38,6 +38,8 @@
 #'   get_resources("nasa_firms", instrument = "VIIRS") %>%
 #'   calc_indicators("active_fire_properties") %>%
 #'   tidyr::unnest(active_fire_properties)
+#'
+#' aoi
 #' }
 NULL
 

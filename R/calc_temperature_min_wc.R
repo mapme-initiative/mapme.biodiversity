@@ -48,6 +48,8 @@
 #'     engine = "extract"
 #'   ) %>%
 #'   tidyr::unnest(temperature_min_wc)
+#'
+#' aoi
 #' }
 NULL
 

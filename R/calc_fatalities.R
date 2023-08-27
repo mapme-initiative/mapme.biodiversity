@@ -91,6 +91,8 @@
 #'     precision_location = 1, precision_time = 1
 #'   ) %>%
 #'   tidyr::unnest(fatalities)
+#'
+#' aoi
 #' }
 NULL
 

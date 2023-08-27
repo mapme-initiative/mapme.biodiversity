@@ -36,6 +36,8 @@
 #'   get_resources("teow") %>%
 #'   calc_indicators("biome") %>%
 #'   tidyr::unnest(biome)
+#'
+#' aoi
 #' }
 NULL
 

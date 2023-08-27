@@ -55,6 +55,8 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
     engine = "extract"
   ) \%>\%
   tidyr::unnest(temperature_min_wc)
+
+aoi
 }
 }
 \keyword{indicator}

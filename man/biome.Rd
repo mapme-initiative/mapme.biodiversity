@@ -42,6 +42,8 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   get_resources("teow") \%>\%
   calc_indicators("biome") \%>\%
   tidyr::unnest(biome)
+
+aoi
 }
 }
 \keyword{indicator}

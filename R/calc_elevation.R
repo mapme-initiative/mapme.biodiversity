@@ -46,6 +46,8 @@
 #'     stats_elevation = c("mean", "median", "sd", "var"), engine = "extract"
 #'   ) %>%
 #'   tidyr::unnest(elevation)
+#'
+#' aoi
 #' }
 NULL
 

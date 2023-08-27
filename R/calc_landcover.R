@@ -39,6 +39,8 @@
 #'   get_resources("esalandcover") %>%
 #'   calc_indicators("landcover") %>%
 #'   tidyr::unnest(landcover)
+#'
+#' aoi
 #' }
 NULL
 

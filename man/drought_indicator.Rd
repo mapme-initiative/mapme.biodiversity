@@ -55,6 +55,8 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
     engine = "extract"
   ) \%>\%
   tidyr::unnest(drought_indicator)
+
+aoi
 }
 }
 \keyword{indicator}

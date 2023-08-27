@@ -36,6 +36,8 @@
 #'   get_resources("fritz_et_al", res_drivers = 100) %>%
 #'   calc_indicators("deforestation_drivers") %>%
 #'   tidyr::unnest(deforestation_drivers)
+#'
+#' aoi
 #' }
 NULL
 

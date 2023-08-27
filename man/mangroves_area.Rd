@@ -42,6 +42,8 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   get_resources("gmw") \%>\%
   calc_indicators("mangroves_area") \%>\%
   tidyr::unnest(mangroves_area)
+
+aoi
 }
 }
 \keyword{indicator}

@@ -42,6 +42,8 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   get_resources("fritz_et_al", res_drivers = 100) \%>\%
   calc_indicators("deforestation_drivers") \%>\%
   tidyr::unnest(deforestation_drivers)
+
+aoi
 }
 }
 \keyword{indicator}

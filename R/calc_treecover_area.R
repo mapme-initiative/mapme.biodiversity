@@ -46,6 +46,8 @@
 #'   ) %>%
 #'   calc_indicators("treecover_area", min_size = 1, min_cover = 30) %>%
 #'   tidyr::unnest(treecover_area)
+#'
+#' aoi
 #' }
 NULL
 

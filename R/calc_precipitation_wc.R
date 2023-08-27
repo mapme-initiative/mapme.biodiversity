@@ -48,6 +48,8 @@
 #'     engine = "extract"
 #'   ) %>%
 #'   tidyr::unnest(precipitation_wc)
+#'
+#' aoi
 #' }
 NULL
 

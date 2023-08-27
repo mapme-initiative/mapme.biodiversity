@@ -57,6 +57,8 @@
 #'   get_resources("nasa_srtm") %>%
 #'   calc_indicators("tri", stats_tri = c("mean", "median", "sd", "var"), engine = "extract") %>%
 #'   tidyr::unnest(tri)
+#'
+#' aoi
 #' }
 NULL
 
