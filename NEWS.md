@@ -1,5 +1,7 @@
 # mapme.biodiversity (development version)
 
+# mapme.biodiversity 0.4.0
+
 ## New features
 
 - added new resource called `ucdp_ged` providing a database of violent conflict
@@ -10,15 +12,15 @@
   
 - Added a new resource called `fritz_et_al` providing a raster layer of deforestation
 
-- added two new exported functions `register_resource()` and `register_indicator()`
-  which allow users to register custom functions for resources/indicators
-
 - added a new resource called `fritz_et_al` providing a raster layer of deforestation
   drivers in tropical forests based on [Fritz et al. (2022)](https://www.frontiersin.org/articles/10.3389/fcosc.2022.830248/full)
 
 - added a new indicator called `deforestation_drivers` using the `fritz_et_al` resource
   to obtain information on the absolute and relative area driving forest losses in 
   assets for the period 2008-2019
+  
+- added two new exported functions `register_resource()` and `register_indicator()`
+  which allow users to register custom functions for resources/indicators
   
 - added a new vignette for the web-version of the package only informing
   about how to obtain wide-output from indicators
@@ -50,7 +52,9 @@
 
 ## Internal
 
-- disabled examples requiring internet connection 
+- disabled running examples on CRAN 
+
+- disabled tests for get_* functions on CRAN
 
 - `terra` engines now use `get()` to resolve the requested zonal
   statistic function

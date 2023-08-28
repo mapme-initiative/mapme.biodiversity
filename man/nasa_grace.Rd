@@ -7,9 +7,6 @@
 \format{
 Global raster layers available for years 2003 to present.
 }
-\source{
-\url{https://nasagrace.unl.edu/globaldata/}
-}
 \description{
 The resource is published by NASA GRACE Tellus. This data set
 reflects on potential drought conditions in the shallow groundwater section
