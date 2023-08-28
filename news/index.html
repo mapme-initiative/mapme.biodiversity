@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,32 +65,33 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="mapmebiodiversity-development-version">mapme.biodiversity (development version)<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.4.0" id="mapmebiodiversity-040">mapme.biodiversity 0.4.0<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-040"></a></h2>
 <div class="section level3">
-<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<h3 id="new-features-0-4-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-4-0"></a></h3>
 <ul><li><p>added new resource called <code>ucdp_ged</code> providing a database of violent conflict from 1989 to today</p></li>
 <li><p>added a new indicator called <code>fatalities</code> aggregating number of deaths by type of conflict on a monthly time scale based on the <code>ucdp_ged</code> resource.</p></li>
 <li><p>Added a new resource called <code>fritz_et_al</code> providing a raster layer of deforestation</p></li>
-<li><p>added two new exported functions <code><a href="../reference/register_resource.html">register_resource()</a></code> and <code><a href="../reference/register_indicator.html">register_indicator()</a></code> which allow users to register custom functions for resources/indicators</p></li>
 <li><p>added a new resource called <code>fritz_et_al</code> providing a raster layer of deforestation drivers in tropical forests based on <a href="https://www.frontiersin.org/articles/10.3389/fcosc.2022.830248/full" class="external-link">Fritz et al. (2022)</a></p></li>
 <li><p>added a new indicator called <code>deforestation_drivers</code> using the <code>fritz_et_al</code> resource to obtain information on the absolute and relative area driving forest losses in assets for the period 2008-2019</p></li>
+<li><p>added two new exported functions <code><a href="../reference/register_resource.html">register_resource()</a></code> and <code><a href="../reference/register_indicator.html">register_indicator()</a></code> which allow users to register custom functions for resources/indicators</p></li>
 <li><p>added a new vignette for the web-version of the package only informing about how to obtain wide-output from indicators</p></li>
 <li><p>added a new vignette for the web-version for a custom analysis of the NASA FIRMS resource in the example section</p></li>
 <li><p>added the data for years 2017-2020 to the Global Mangrove Watch resource</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="breaking-changes-development-version">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
+<h3 id="breaking-changes-0-4-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-4-0"></a></h3>
 <ul><li><p>Changed the parallel backend to the <a href="https://cran.r-project.org/package=future" class="external-link">future</a> package. Parallel processing is now implemented by <a href="https://furrr.futureverse.org/reference/future_map.html" class="external-link">furrr::future_map()</a> on the asset level within the calc_indicators() function. User code is now required to set up a <a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan()</a> to enable parallel processing. The function call needs to be wrapped on the user side with <a href="https://progressr.futureverse.org/reference/with_progress.html" class="external-link">progressr::with_progress()</a> to show a progress bar.</p></li>
 <li><p>mapme.biodiversity no longer sets terra’s temporal directory for you. Instead you have to call <code><a href="https://rdrr.io/pkg/terra/man/terraOptions.html" class="external-link">terra::terraOptions()</a></code> manually</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<h3 id="bug-fixes-0-4-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-4-0"></a></h3>
 <ul><li>
 <code>esalandcover</code> indicator now returns the value per each land cover class exactly once (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/177" class="external-link">#177</a>)</li>
 </ul></div>
 <div class="section level3">
-<h3 id="internal-development-version">Internal<a class="anchor" aria-label="anchor" href="#internal-development-version"></a></h3>
-<ul><li><p>disabled examples requiring internet connection</p></li>
+<h3 id="internal-0-4-0">Internal<a class="anchor" aria-label="anchor" href="#internal-0-4-0"></a></h3>
+<ul><li><p>disabled running examples on CRAN</p></li>
+<li><p>disabled tests for get_* functions on CRAN</p></li>
 <li><p><code>terra</code> engines now use <code><a href="https://rdrr.io/r/base/get.html" class="external-link">get()</a></code> to resolve the requested zonal statistic function</p></li>
 <li><p>applying tidyverse coding style to existing code (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/156" class="external-link">#156</a>, <a href="https://github.com/karpfen" class="external-link">@karpfen</a>)</p></li>
 <li><p>extensive re-factoring of vector-raster zonal statistic engines (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/150" class="external-link">#150</a>)</p></li>
