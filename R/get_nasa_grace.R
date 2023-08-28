@@ -11,7 +11,6 @@
 #' @docType data
 #' @keywords resource
 #' @format Global raster layers available for years 2003 to present.
-#' @source \url{https://nasagrace.unl.edu/globaldata/}
 NULL
 
 
