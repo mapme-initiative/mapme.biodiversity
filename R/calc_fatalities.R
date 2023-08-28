@@ -65,33 +65,34 @@
 #' @references Sundberg, Ralph, and Erik Melander, 2013, “Introducing the UCDP
 #'   Georeferenced Event Dataset”, Journal of Peace Research, vol.50, no.4, 523-532
 #' @examples
-#' if (Sys.getenv("NOT_CRAN") == "true") {
-#'   library(sf)
-#'   library(mapme.biodiversity)
+#' \dontshow{
+#' mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
+#' }
+#' \dontrun{
+#' library(sf)
+#' library(mapme.biodiversity)
 #'
-#'   temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-#'   if (!file.exists(temp_loc)) {
-#'     dir.create(temp_loc)
-#'     resource_dir <- system.file("res", package = "mapme.biodiversity")
-#'     file.copy(resource_dir, temp_loc, recursive = TRUE)
-#'   }
+#' outdir <- file.path(tempdir(), "mapme-data")
+#' dir.create(outdir, showWarnings = FALSE)
 #'
-#'   (try(aoi <- system.file("extdata", "burundi.gpkg",
-#'     package = "mapme.biodiversity"
+#' aoi <- system.file("extdata", "burundi.gpkg",
+#'   package = "mapme.biodiversity"
+#' ) %>%
+#'   read_sf() %>%
+#'   init_portfolio(
+#'     years = 1991:1992,
+#'     outdir = outdir,
+#'     tmpdir = tempdir(),
+#'     add_resources = FALSE,
+#'     verbose = FALSE
 #'   ) %>%
-#'     read_sf() %>%
-#'     init_portfolio(
-#'       years = 1991:1992,
-#'       outdir = file.path(temp_loc, "res"),
-#'       tmpdir = tempdir(),
-#'       add_resources = FALSE,
-#'       verbose = FALSE
-#'     ) %>%
-#'     get_resources("ucdp_ged", version_ged = "22.1") %>%
-#'     calc_indicators("fatalities",
-#'       precision_location = 1, precision_time = 1
-#'     ) %>%
-#'     tidyr::unnest(fatalities)))
+#'   get_resources("ucdp_ged", version_ged = "22.1") %>%
+#'   calc_indicators("fatalities",
+#'     precision_location = 1, precision_time = 1
+#'   ) %>%
+#'   tidyr::unnest(fatalities)
+#'
+#' aoi
 #' }
 NULL
 
@@ -122,7 +123,7 @@ NULL
                              verbose = TRUE,
                              ...) {
   date_prec <- where_prec <- date_start <- type_of_violence <- NULL
-  year <- month <- deaths_a <- deaths_b <- NULL
+  year <- month <- deaths_a <- deaths_b <- event_count <- NULL
 
   ucdp_ged <- ucdp_ged[[1]]
   if (length(ucdp_ged) == 0) {

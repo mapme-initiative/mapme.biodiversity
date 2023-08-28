@@ -1,4 +1,5 @@
 test_that(".get_gmw works", {
+  skip_on_cran()
   aoi <- read_sf(
     system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
       package = "mapme.biodiversity"

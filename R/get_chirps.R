@@ -26,9 +26,15 @@ NULL
                         rundir = tempdir(),
                         verbose = TRUE) {
   chirps_url <- "https://data.chc.ucsb.edu/products/CHIRPS-2.0/global_monthly/tifs/"
-  chirps_list <- rvest::read_html(chirps_url) %>%
+
+  try(chirps_list <- rvest::read_html(chirps_url) %>%
     rvest::html_elements("a") %>%
-    rvest::html_text2()
+    rvest::html_text2())
+
+  if (inherits(chirps_list, "try-error")) {
+    stop("Download for CHIRPS resource was unsuccesfull")
+  }
+
   chirps_list <- grep("*.tif.gz$", chirps_list, value = TRUE)
   urls <- paste(chirps_url, chirps_list, sep = "")
   filenames <- file.path(rundir, basename(urls))

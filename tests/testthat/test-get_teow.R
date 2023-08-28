@@ -1,5 +1,5 @@
 test_that(".get_teow works", {
-  skip("Skipping test for .get_teow because it requires active downloads.")
+  skip_on_cran()
   aoi <- read_sf(
     system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
       package = "mapme.biodiversity"

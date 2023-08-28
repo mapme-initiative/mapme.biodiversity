@@ -52,7 +52,11 @@ NULL
                           version_ged = "latest",
                           rundir = tempdir(),
                           verbose = TRUE) {
-  versions <- .ucdp_versions()
+  try(versions <- .ucdp_versions())
+
+  if (inherits(versions, "try-error")) {
+    stop("Available versions of UCDP GED could not be fetched")
+  }
 
   if (version_ged == "latest") version_ged <- versions[length(versions)]
 
