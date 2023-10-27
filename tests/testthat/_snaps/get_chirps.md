@@ -258,5 +258,6 @@
       [505] "chirps-v2.0.2023.01.tif.gz" "chirps-v2.0.2023.02.tif.gz"
       [507] "chirps-v2.0.2023.03.tif.gz" "chirps-v2.0.2023.04.tif.gz"
       [509] "chirps-v2.0.2023.05.tif.gz" "chirps-v2.0.2023.06.tif.gz"
-      [511] "chirps-v2.0.2023.07.tif.gz"
+      [511] "chirps-v2.0.2023.07.tif.gz" "chirps-v2.0.2023.08.tif.gz"
+      [513] "chirps-v2.0.2023.09.tif.gz"
 
