@@ -207,6 +207,12 @@ calc_indicators <- function(x, indicators, ...) {
 .bind_assets <- function(results) {
   # bind results to data.frame
   index_tbl <- purrr::map_lgl(results, function(x) inherits(x, c("tbl_df", "data.frame")))
+  # check for 0 length tibbles
+  n_rows <- sapply(results[index_tbl], nrow)
+  if (any(n_rows == 0)) {
+    stop(paste("0-length tibbles returned for some assets.\n",
+    "Make sure the indicator function returns NA if it cannot be calculated for an asset."))
+  }
 
   # case all assets returned tibbles
   if (all(index_tbl)) {
