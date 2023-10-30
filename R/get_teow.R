@@ -33,6 +33,7 @@ NULL
 .get_teow <- function(x,
                       rundir = tempdir(),
                       verbose = TRUE) {
+
   filename <- file.path(rundir, "wwf_terr_ecos.gpkg")
   # check if output file exists
   if (file.exists(filename)) {
