@@ -23,8 +23,9 @@ test_that(".get_teow works", {
   )
   # Add testing attribute in order to skip downloads
   attributes(portfolio)$testing <- TRUE
-  expect_snapshot(
-    .get_teow(portfolio) %>%
-      basename()
+  expect_equal(
+    .get_teow(portfolio, rundir = file.path(outdir, "teow")) %>%
+      basename(),
+    "wwf_terr_ecos.gpkg"
   )
 })
