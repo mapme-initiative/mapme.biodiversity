@@ -27,4 +27,10 @@ test_that("biome computation works", {
     18352.24,
     tolerance = 1e-4
   )
+  # check NA is returned for 0-length tibbles
+  st_geometry(shp) <- st_geometry(shp) + 5
+  st_crs(shp) <- st_crs(4326)
+  expect_equal(
+    .calc_biome(shp, teow),
+    NA)
 })
