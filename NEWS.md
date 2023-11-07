@@ -1,5 +1,9 @@
 # mapme.biodiversity (development version)
 
+## New features
+
+- GFW resources and indicators now include latest GFC-2022-v1.10 version.
+
 # mapme.biodiversity 0.4.0
 
 ## New features

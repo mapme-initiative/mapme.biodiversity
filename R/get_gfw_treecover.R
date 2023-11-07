@@ -12,7 +12,7 @@
 #' The following argument can be set:
 #' \describe{
 #'   \item{vers_treecover}{The version of the dataset to download. Defaults to
-#'   "GFC-2021-v1.9". Check mapme.biodiversity:::.available_gfw_versions()
+#'   "GFC-2022-v1.10". Check mapme.biodiversity:::.available_gfw_versions()
 #'   to get a list of available versions}
 #' }
 #'
@@ -33,14 +33,14 @@ NULL
 #'
 #' @param x An sf object returned by init_portfolio
 #' @param vers_treecover The version to download, defaults to
-#'   \code{"GFC-2021-v1.9"}.
+#'   \code{"GFC-2022-v1.10"}.
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose Logical controlling verbosity.
 #' @keywords internal
 #' @include register.R
 #' @noRd
 .get_gfw_treecover <- function(x,
-                               vers_treecover = "GFC-2021-v1.9",
+                               vers_treecover = "GFC-2022-v1.10",
                                rundir = tempdir(),
                                verbose = TRUE) {
   # check that version is correct
@@ -89,7 +89,7 @@ NULL
   c(
     "GFC-2015-v1.3", "GFC-2016-v1.4", "GFC-2017-v1.5",
     "GFC-2018-v1.6", "GFC-2019-v1.7", "GFC-2020-v1.8",
-    "GFC-2021-v1.9"
+    "GFC-2021-v1.9", "GFC-2022-v1.10"
   )
 }
 
@@ -99,5 +99,5 @@ register_resource(
   type = "raster",
   source = "https://data.globalforestwatch.org/documents/tree-cover-2000/explore",
   fun = .get_gfw_treecover,
-  arguments <- list(vers_treecover = "GFC-2021-v1.9")
+  arguments <- list(vers_treecover = "GFC-2022-v1.10")
 )
