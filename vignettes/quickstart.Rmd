@@ -198,7 +198,7 @@ to download. Additional arguments for the specific resource can be specified.
 The output of the function is the portfolio object with its attributes appended
 for the new resource, thus we simply can overwrite the `sample_portfolio` variable.
 
-```{r get_chirps}
+```{r get_esalandcover}
 sample_portfolio <- get_resources(x = sample_portfolio, resources = "esalandcover")
 ```
 
@@ -251,7 +251,7 @@ Let's quickly visualize the results for a single asset. For readability of the
 plot, we will aggregate several different types of forest into a single
 class before:
 
-```{r plot_precipitation, echo = FALSE, warning=FALSE, dpi = 50}
+```{r plot_landcover, echo = FALSE, dpi = 50, out.width="120%", out.height="120%"}
 data <- sample_portfolio %>%
   filter(assetid == 10) %>%
   st_drop_geometry() %>%
