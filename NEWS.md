@@ -1,5 +1,12 @@
 # mapme.biodiversity (development version)
 
+## General
+
+- Quickstart vignette now uses the ESA Landcover resource
+  as an example for how to use the package.
+
+## New features
+
 # mapme.biodiversity 0.4.0
 
 ## New features
