@@ -49,7 +49,7 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   ) \%>\%
   get_resources(
     resources = c("gfw_treecover", "gfw_lossyear"),
-    vers_treecover = "GFC-2021-v1.9", vers_lossyear = "GFC-2021-v1.9"
+    vers_treecover = "GFC-2022-v1.10", vers_lossyear = "GFC-2022-v1.10"
   ) \%>\%
   calc_indicators("treecover_area", min_size = 1, min_cover = 30) \%>\%
   tidyr::unnest(treecover_area)

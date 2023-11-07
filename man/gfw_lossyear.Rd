@@ -27,7 +27,7 @@ delimited by the year 2011.
 The following argument can be set:
 \describe{
 \item{vers_lossyear}{The version of the dataset to download. Defaults to
-"GFC-2021-v1.9". Check \code{mapme.biodiversity:::.available_gfw_versions()}
+"GFC-2022-v1.10". Check \code{mapme.biodiversity:::.available_gfw_versions()}
 to get a list of available versions}
 }
 }
