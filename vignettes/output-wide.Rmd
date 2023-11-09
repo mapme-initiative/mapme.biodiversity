@@ -96,10 +96,10 @@ aoi <- st_as_sf(st_make_grid(aoi, n = 3))
 print(aoi)
 ```
 
-As a simple example, suppose we interested in extracting the sum
-of population counts in our portfolio. As usual, we will have to make
-available the WorldPop resource as well as requesting the calculation of the
-respective indicator.
+As a simple example, suppose we interested in extracting the average traveltime
+to cities between 20,000 and 50,000 inhabitants in our portfolio. As usual, 
+we will have to make available the Nelson et al. resource as well as requesting 
+the calculation of the respective indicator.
 
 ```{r calc-elev}
 port <- init_portfolio(
@@ -111,7 +111,7 @@ port <- init_portfolio(
 )
 
 port_w_nelson <- get_resources(port, "nelson_et_al", range_traveltime = "20k_50k")
-port_w_traveltime <- calc_indicators(port_w_nelson, "traveltime", stats_accessibility = "sum")
+port_w_traveltime <- calc_indicators(port_w_nelson, "traveltime", stats_accessibility = "mean")
 print(port_w_traveltime)
 ```
 
@@ -161,7 +161,7 @@ port_w_prec <- calc_indicators(port_w_chirps, "precipitation_wc", stats_worldcli
 print(port_w_prec)
 ```
 
-We see that similar to the elevation indicator, the output consists of 9
+We see that similar to the traveltime indicator, the output consists of 9
 rows with the precipitation indicator as a single nested-list column.
 Note, however, the differences when we take a look at the shape of a the
 indicator for a specific asset:
