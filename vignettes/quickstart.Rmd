@@ -19,8 +19,8 @@ knitr::opts_chunk$set(
 # Introduction
 
 In the following we will demonstrate an idealized workflow based on a subset
-of the CHIRPS dataset that is delivered together with this package. You can follow
-along the code snippets below to reproduce the results. Please note that
+of the ESA Landcover dataset that is delivered together with this package. You 
+can follow along the code snippets below to reproduce the results. Please note that
 to reduce the time it takes to process this vignette, we will not download
 any resources from the internet. In a real use case, thus processing time
 might substantially increase because resources have to be downloaded and real
@@ -42,16 +42,15 @@ other geospatial software
 # Getting started
 
 First, we will load the `{mapme.biodiversity}` and the `{sf}` package for handling
-spatial vector data. For tabular data handling and the creation of a plot, we will
-also load the `{dplyr}` and `{ggplot2}` packages.
-Then, we will read a package internal GeoPackage which includes the geometry of a 
-protected area in the Dominican Republic from the WDPA database.
+spatial vector data. For tabular data handling, we will also load the `{dplyr}` 
+and `{tidyr}`packages. Then, we will read an internal GeoPackage which includes 
+the geometry of a protected area in the Dominican Republic from the WDPA database.
 
 ```{r setup, message=FALSE}
 library(mapme.biodiversity)
 library(sf)
 library(dplyr)
-library(ggplot2)
+library(tidyr)
 
 aoi_path <- system.file("extdata", "sierra_de_neiba_478140.gpkg", package = "mapme.biodiversity")
 (aoi <- read_sf(aoi_path))
@@ -61,8 +60,8 @@ The sf-object contains a single object of geometry type `MULTIPOLYGON`. The
 `{mapme.biodiversity}` package, however, only supports geometries of type `POLYGON`,
 thus we need to cast the geometry before we advance. The resulting sf object 
 also contains some metadata, that will be retained throughout the complete
-workflow. Because some of the cast geometries represent artefacts of the digitization 
-process, in this example we will subset to only the largest polygon.
+workflow. Because some of the cast geometries represent artefacts of the 
+digitization process, in this example we will subset to only the largest polygon.
 
 ```{r cast}
 (aoi <- st_cast(aoi, to = "POLYGON")[1, ])
@@ -70,7 +69,7 @@ process, in this example we will subset to only the largest polygon.
 
 In the following, we will simulate a portfolio consisting of several polygons (assets,
 in the jargon of this package). To this end, we create smaller polygons within 
-the original extent of the main polygon. This way, we can showcase the behaviour 
+the original extent of the main polygon. This way, we can showcase the behavior 
 of the `{mapme.biodiversity}` package for portfolios that contain multiple assets. 
 We will only select single assets with geometry type `POLYGON` that lie within 
 the original boundary of the protected area.
@@ -79,8 +78,7 @@ the original boundary of the protected area.
 aoi_gridded <- st_make_grid(
   x = st_bbox(aoi),
   n = c(10, 10),
-  square = FALSE
-) %>%
+  square = FALSE) %>%
   st_intersection(aoi) %>%
   st_as_sf() %>%
   mutate(geom_type = st_geometry_type(x)) %>%
@@ -101,7 +99,7 @@ identifier column called 'assetid' that is used to uniquely identify each
 asset in the portfolio.
 
 ```{r init_portfolio, dpi = 50, out.width="120%", out.height="120%"}
-# copying package internal resource to tempdir
+# copying package internal resource to a temporary location
 outdir <- file.path(tempdir(), "mapme.biodiversity")
 dir.create(outdir)
 resource_dir <- system.file("res", package = "mapme.biodiversity")
@@ -109,7 +107,7 @@ file.copy(resource_dir, outdir, recursive = TRUE)
 
 sample_portfolio <- init_portfolio(
   x = aoi_gridded,
-  years = 2010,
+  years = 2015,
   outdir = file.path(outdir, "res"),
   tmpdir = outdir,
   add_resources = FALSE,
@@ -122,32 +120,33 @@ The first argument, `x`, is the sf-object that we want to turn into a portfolio.
 The argument `years` allows us to restrict our analysis to certain years only.
 Certain resources with a temporal dimension are only processed for the portfolio's 
 temporal extent. All resource and indicator functions will inform the 
-user if the portfolio's temporal extents do not intersect. The `outdir` and `tmpdir` 
-arguments point towards directories on the local file system of your machine. 
-If these directories do not exist, the package attempts to create them.
+user if the portfolio's temporal extent does not intersect. The `outdir` and 
+`tmpdir` arguments point towards directories on the local file system of your 
+machine. If these directories do not exist, the package attempts to create them.
 The `outdir` cannot be equal to the `tmpdir` argument. All downloaded resources
-will be written to their respective directories within `outdir`. 
-We will set the `{terra}`'s package temporal directory to directory within `tmpdir`
-and also any intermediate files during the calculation of an indicator will be written 
-there. Thus, please ensure that you have write access to these directories and that
-there is sufficient free disk space to support the analysis of your portfolio. 
+will be written to respective directories nested within `outdir`. 
+Any intermediate files during the calculation of an indicator will be written 
+to `tmpdir`. Thus, please ensure that you have write access to both directories 
+and that there is sufficient free disk space to support the analysis of your 
+portfolio. 
 
-In case your share a common `outdir` across different portfolios, with the 
-`add_resources` arguments controls the behaviour of the portfolio initialization. 
-If set to `TRUE`, the function will automatically search for all available 
-resources and add these as attributes to the portfolio, without further checking
-if these resources actually match its spatio-temporal extent. Only use this if 
-you are sure that for your current portfolio, all resources have been previously
-downloaded. If set to `FALSE`, no pre-existing resources will be added to the
-portfolio. Once you request a specific portfolio for your resources, only
-those files will be downloaded that are missing in `outdir`. This behaviour is
-beneficial if you share the `outdir` between different projects to ensure that 
+In case your share a common `outdir` across different portfolios, the 
+`add_resources` arguments controls the behavior of the portfolio initialization. 
+If set to `TRUE`, the function will automatically search for resources already
+available and add these as attributes to the portfolio. Note, this will be done
+without further checking if these resources actually match the spatio-temporal 
+extent of the supplied portfolio. Only use this if you are sure that for your 
+current portfolio, all resources have been downloaded previously. If set to 
+`FALSE`, no pre-existing resources will be added to the portfolio. Once you 
+request a specific portfolio for your resources, only those files will be 
+downloaded that are missing to match its spatio-temporal extent. This behavior 
+is beneficial if you share the `outdir` between different projects to ensure that 
 only matching resources are returned.
 
 Finally, the `verbose` logical controls whether or not the package
 will print informative messages during the calculations. Note, 
 that even if set to `FALSE`, the package will inform users about any potential 
-error in specifying of arguments in the form of warnings and errors.
+errors or warnings.
 
 # Getting the right resources
 
@@ -158,22 +157,19 @@ function. For this, we inspect the names of the returned object:
 names(available_indicators())
 ```
 
-Say, we are interested in the precipitation indicator based on the CHIRPS dataset.
+Say, we are interested in the landcover indicator.
 We can learn more about this indicator and its required resources by using
 either of the commands below or, if you are viewing the online version, head
-over to the [precipitation_chirps](https://mapme-initiative.github.io/mapme.biodiversity/reference/precipitation_chirps.html) documentation.
+over to the [landcover](https://mapme-initiative.github.io/mapme.biodiversity/reference/landcover.html) documentation.
 
 ```{r helppage_indicator, eval = FALSE}
-?precipitation_chirps
-help(precipitation_chirps)
+?landcover
+help(landcover)
 ```
 
-By inspecting the help page we learned that this indicator requires the `chirps` 
-resource and it accepts three arguments, namely the `scales_spi`, `spi_prev_years`
-and `engine` arguments. `scales_spi` determines the time-scale for the calculation of the Standardized-Precipitation-Index (SPI), while `spi_prev_years` indicates how many 
-previous years are included in the fitting process.
-The `engine` argument controls how zonal statistics for each asset in the portfolio
-are extracted.
+By inspecting the help page we learned that this indicator requires the 
+`esalandcover` resource and it does not require to specify and further
+arguments.
 
 With that information at hand, we can start to retrieve the required resource. 
 We can learn about all available resources using the <code>available_resources()</code> 
@@ -183,26 +179,27 @@ function:
 names(available_resources())
 ```
 
-For the purpose of this vignette, we are going to download the `chirps` resource.
-We can get more detailed information about a given resource, by using either of 
-the commands below to open up the help page. If you are viewing the online 
-version of this documentation, you can simply head over to the [chirps](https://mapme-initiative.github.io/mapme.biodiversity/reference/chirps.html)
+For the purpose of this vignette, we are going to download the `esalandcover` 
+resource. We can get more detailed information about a given resource, by using 
+either of  the commands below to open up the help page. If you are viewing the 
+online version of this documentation, you can simply head over to the
+[esalandcover](https://mapme-initiative.github.io/mapme.biodiversity/reference/esalandcover.html)
 resource documentation.
 
 ```{r helppage_resource, eval = FALSE}
-?chirps
-help(chirps)
+?esalandcover
+help(esalandcover)
 ```
 
-We can now make the `chirps` resource available for our portfolio. We will
+We can now make the `esalandcover` resource available for our portfolio. We will
 use a common interface that is used for all resources, called <code>get_resources()</code>.
 We have to specify our portfolio object and the names of the resource(s) we wish
 to download. Additional arguments for the specific resource can be specified.
 The output of the function is the portfolio object with its attributes appended
 for the new resource, thus we simply can overwrite the `sample_portfolio` variable.
 
-```{r get_chirps}
-sample_portfolio <- get_resources(x = sample_portfolio, resources = "chirps")
+```{r get_esalandcover}
+sample_portfolio <- get_resources(x = sample_portfolio, resources = "esalandcover")
 ```
 
 In case you want to download more than one resource, you can use the same interface
@@ -212,100 +209,65 @@ for a resource are simply added as usual:
 ```{r get_multi_resources, eval = FALSE}
 sample_portfolio <- get_resources(
   x = sample_portfolio,
-  resources = c("chirps", "gfw_treecover"),
+  resources = c("esalandcover", "gfw_treecover"),
   vers_treecover = "GFC-2021-v1.9"
 )
 ```
 
 # Calculate specific indicators
 
-The next step consists of calculating specific indicators. Note 
-that each indicator requires one or more resources that were made available 
-via the <code>get_resources()</code> function explained above. Here, we are going
-to calculate the `precipitation_chirps` indicator which is based on the `chirps` resource.
-Since the resource has been made available in the previous step, we can continue
-requesting the calculation of our desired indicator. Note the command below
-would issue an error in case a required resource has not been made
+The next step consists of calculating specific indicators. Note that each 
+indicator requires one or more resources that were made available via the 
+<code>get_resources()</code> function explained above. Here, we are going
+to calculate the `landcover` indicator which is based on the `esalandcover` 
+resource. Since the resource has been made available in the previous step, we 
+can continue requesting the calculation of our desired indicator. Note the 
+command below would issue an error in case a required resource has not been made
 available via <code>get_resources()</code> beforehand.
 
 ```{r calc_indicator}
-sample_portfolio <- calc_indicators(sample_portfolio,
-  indicators = "precipitation_chirps",
-  scales_spi = 3,
-  spi_prev_years = 8,
-  engine = "extract"
-)
+sample_portfolio <- calc_indicators(sample_portfolio, indicators = "landcover")
 ```
-
-The function call will inform us that we have not specified the two required 
-arguments but that the default values have been inserted. If you get such a 
-message for other indicators and you do not know what they mean, head over to 
-the indicator help-page to learn about the available arguments.
 
 Now let's take a look at the results. We will select only some of the metadata
 and the output indicator column to get a clearer picture of what has happened.
 
 ```{r select_cols}
-(sample_portfolio <- sample_portfolio %>% select(assetid, WDPAID, precipitation_chirps))
+(sample_portfolio <- sample_portfolio %>% select(assetid, WDPAID, landcover))
 ```
 
 We obtained a new listed column in our sf object that is called like the requested
-indicator. For each asset in our portfolio, this column
-contains a tibble with 12 rows and 4 columns. Let's have a closer look at these 
-objects.
+indicator. For each asset in our portfolio, this column contains a tibble with 
+variable rows and 4 columns. Let's have a closer look at one of these objects.
 
 ```{r investigate_indicator}
-sample_portfolio$precipitation_chirps[10]
+sample_portfolio$landcover[10]
 ```
 
-For each asset, the result is a tibble in long format for 12 months in the year 
-2010. The precipitation indicator with the default setting delivered the absolute
-rainfall sum as well as the rainfall anomaly compared to the 1981-2010 climate 
-normal period (make sure to read the detailed indicator documentation via `?precipitation_chirps`).
-Let's quickly visualize the results for a single asset:
+For each asset, the result is a tibble in long format indicating the absolute 
+area (in ha) and percentage of different landcover types for the year 2015
+(make sure to read the detailed indicator documentation via `?landcover`).
+Let's quickly visualize the results for a single asset. For readability of the
+plot, we will aggregate several different types of forest into a single
+class before:
 
-```{r plot_precipitation, echo = FALSE, warning=FALSE, dpi = 50}
-sample_portfolio %>%
+```{r plot_landcover, echo = FALSE, dpi = 50, out.width="120%", out.height="120%"}
+data <- sample_portfolio %>%
   filter(assetid == 10) %>%
   st_drop_geometry() %>%
-  tidyr::unnest(precipitation_chirps) %>%
-  mutate(sign = ifelse(anomaly < 0, "lower than average", "higher than average")) %>%
-  ggplot() +
-  geom_bar(aes(x = dates, y = anomaly, fill = sign), stat = "identity") +
-  scale_fill_manual(values = c("darkblue", "brown2")) +
-  labs(
-    title = "Monthly precipitation anomaly for 2010 in regard to the 1981-2010 climate normal", x = "", y = "Precipitation anomaly [mm]",
-    fill = "Anomaly"
-  ) +
-  theme_classic() +
-  theme(legend.position = "bottom")
+  unnest(landcover)
 
-sample_portfolio %>%
-  filter(assetid == 10) %>%
-  st_drop_geometry() %>%
-  tidyr::unnest(precipitation_chirps) %>%
-  mutate(
-    spi_3 = ifelse(is.na(spi_3), 0, spi_3),
-    sign = ifelse(spi_3 < 0, "lower than average", "higher than average")
-  ) %>%
-  ggplot() +
-  geom_bar(aes(x = dates, y = spi_3, fill = sign), stat = "identity") +
-  scale_fill_manual(values = c("darkblue", "brown2")) +
-  labs(
-    title = "Monthly SPI value for 2010 (timescale = 3)", x = "Month", y = "SPI",
-    fill = "SPI"
-  ) +
-  theme_classic() +
-  theme(legend.position = "bottom")
+perc <- data$percentage
+names(perc) <- data$classes
+perc <- sort(perc, decreasing = TRUE) 
+index_forest <- grep("forest", names(perc))
+perc <- c(sum(perc[index_forest]), perc[-index_forest])
+names(perc)[1] = "forest"
 
-sample_portfolio %>%
-  filter(assetid == 10) %>%
-  st_drop_geometry() %>%
-  tidyr::unnest(precipitation_chirps) %>%
-  ggplot() +
-  geom_bar(aes(x = dates, y = absolute), stat = "identity", fill = "darkblue") +
-  labs(title = "Sum of monthly precipitation 2010", x = "", y = "Precipitation sum [mm]") +
-  theme_classic()
+barplot(perc, main = "Distribution of landcover in 2015",
+        xlab = "Landcover class", ylab = "Percentage  / 100", 
+        col = c("forestgreen", "orange", "lightgreen"))
+
 ```
 
 If you wish to conduct your statistical analysis in R, you can use `{tidyr}` functionality
@@ -317,7 +279,7 @@ to keep the size of the data object relatively small.
 geometries <- select(sample_portfolio, assetid)
 sample_portfolio %>%
   st_drop_geometry() %>%
-  tidyr::unnest(precipitation_chirps) %>%
+  tidyr::unnest(landcover) %>%
   filter(assetid == 3)
 ```
 
@@ -326,7 +288,7 @@ sample_portfolio %>%
 {mapme.biodiversity} follows the parallelization paradigm of the
 {[future](https://cran.r-project.org/package=future)} 
 package. That means that you as a user are in the control if and how you would 
-like to set up parallel processing. Currently, {mapme.biodiversity} supports 
+like to set up parallel processing. Currently, `{mapme.biodiversity}` supports 
 parallel processing on the asset level of the `calc_indicators()` function only. We
 also currently assume that parallel processing is done on the cores of a single 
 machine. In future developments, we would like to support distributed processing.
@@ -345,10 +307,7 @@ plan(multisession, workers = 6) # set up parallel plan with 6 concurrent threads
 with_progress({
   portfolio <- calc_indicators(
     sample_portfolio,
-    indicators = "precipitation_chirps",
-    scales_spi = 3,
-    spi_prev_years = 8,
-    engine = "extract"
+    indicators = "landcover"
   )
 })
 
