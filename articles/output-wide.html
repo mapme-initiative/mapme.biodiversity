@@ -203,10 +203,11 @@ to simulate a realistic portfolio consisting of multiple assets.</p>
 <span><span class="co">#&gt; 7 POLYGON ((-71.80933 18.6584...</span></span>
 <span><span class="co">#&gt; 8 POLYGON ((-71.65022 18.6584...</span></span>
 <span><span class="co">#&gt; 9 POLYGON ((-71.49111 18.6584...</span></span></code></pre></div>
-<p>As a simple example, suppose we interested in extracting the sum of
-population counts in our portfolio. As usual, we will have to make
-available the WorldPop resource as well as requesting the calculation of
-the respective indicator.</p>
+<p>As a simple example, suppose we interested in extracting the average
+traveltime to cities between 20,000 and 50,000 inhabitants in our
+portfolio. As usual, we will have to make available the Nelson et
+al. resource as well as requesting the calculation of the respective
+indicator.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">port</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init_portfolio.html">init_portfolio</a></span><span class="op">(</span></span>
 <span>  <span class="va">aoi</span>,</span>
@@ -219,7 +220,7 @@ the respective indicator.</p>
 <span><span class="va">port_w_nelson</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_resources.html">get_resources</a></span><span class="op">(</span><span class="va">port</span>, <span class="st">"nelson_et_al"</span>, range_traveltime <span class="op">=</span> <span class="st">"20k_50k"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Starting process to download resource 'nelson_et_al'........</span></span>
 <span><span class="co">#&gt; Skipping existing files in output directory.</span></span>
-<span><span class="va">port_w_traveltime</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_indicators.html">calc_indicators</a></span><span class="op">(</span><span class="va">port_w_nelson</span>, <span class="st">"traveltime"</span>, stats_accessibility <span class="op">=</span> <span class="st">"sum"</span><span class="op">)</span></span>
+<span><span class="va">port_w_traveltime</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_indicators.html">calc_indicators</a></span><span class="op">(</span><span class="va">port_w_nelson</span>, <span class="st">"traveltime"</span>, stats_accessibility <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Argument 'engine' for resource 'traveltime' was not specified. Setting to default value of 'extract'.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">port_w_traveltime</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Simple feature collection with 9 features and 2 fields</span></span>
@@ -251,9 +252,9 @@ instance:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">port_w_traveltime</span><span class="op">$</span><span class="va">traveltime</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 2</span></span></span>
-<span><span class="co">#&gt;   minutes_sum distance</span></span>
-<span><span class="co">#&gt;         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>        <span style="text-decoration: underline;">4</span>732 20k_50k</span></span></code></pre></div>
+<span><span class="co">#&gt;   minutes_mean distance</span></span>
+<span><span class="co">#&gt;          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>         49.8 20k_50k</span></span></code></pre></div>
 <p>From the syntax above, you can see how you can access a single object
 within the nested list column (e.g. by using the list accessor
 <code>[[</code>). In this case, the shape of the traveltime indicator is
@@ -270,25 +271,25 @@ output:</p>
 <span><span class="co">#&gt; Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span></span>
 <span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 4</span></span></span>
-<span><span class="co">#&gt;   assetid minutes_sum distance                                                 x</span></span>
-<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                        <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       1        <span style="text-decoration: underline;">4</span>732 20k_50k  ((-71.80933 18.57668, -71.65022 18.57668, -71.65…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       2        <span style="text-decoration: underline;">9</span>923 20k_50k  ((-71.65022 18.57668, -71.49111 18.57668, -71.49…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       3       <span style="text-decoration: underline;">10</span>645 20k_50k  ((-71.49111 18.57668, -71.33201 18.57668, -71.33…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       4        <span style="text-decoration: underline;">7</span>980 20k_50k  ((-71.80933 18.61756, -71.65022 18.61756, -71.65…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>       5       <span style="text-decoration: underline;">13</span>196 20k_50k  ((-71.65022 18.61756, -71.49111 18.61756, -71.49…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>       6        <span style="text-decoration: underline;">9</span>923 20k_50k  ((-71.49111 18.61756, -71.33201 18.61756, -71.33…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>       7       <span style="text-decoration: underline;">13</span>430 20k_50k  ((-71.80933 18.65844, -71.65022 18.65844, -71.65…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>       8       <span style="text-decoration: underline;">11</span>228 20k_50k  ((-71.65022 18.65844, -71.49111 18.65844, -71.49…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>       9        <span style="text-decoration: underline;">6</span>942 20k_50k  ((-71.49111 18.65844, -71.33201 18.65844, -71.33…</span></span></code></pre></div>
+<span><span class="co">#&gt;   assetid minutes_mean distance                                                x</span></span>
+<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                       <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       1         49.8 20k_50k  ((-71.80933 18.57668, -71.65022 18.57668, -71.6…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       2        104.  20k_50k  ((-71.65022 18.57668, -71.49111 18.57668, -71.4…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       3        112.  20k_50k  ((-71.49111 18.57668, -71.33201 18.57668, -71.3…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       4         84   20k_50k  ((-71.80933 18.61756, -71.65022 18.61756, -71.6…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>       5        139.  20k_50k  ((-71.65022 18.61756, -71.49111 18.61756, -71.4…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>       6        104.  20k_50k  ((-71.49111 18.61756, -71.33201 18.61756, -71.3…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>       7        141.  20k_50k  ((-71.80933 18.65844, -71.65022 18.65844, -71.6…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>       8        118.  20k_50k  ((-71.65022 18.65844, -71.49111 18.65844, -71.4…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>       9         73.1 20k_50k  ((-71.49111 18.65844, -71.33201 18.65844, -71.3…</span></span></code></pre></div>
 <p>In this case, the result has 9 rows just like the original data
 frame. We can now export our portfolio for example as a geopackage that
 can be read directly into e.g. QGIS or as a CSV without the geospatial
 information:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">st_write</a></span><span class="op">(</span><span class="va">port_wide_1</span>, dsn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".gpkg"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Writing layer `file25d731e29961' to data source </span></span>
-<span><span class="co">#&gt;   `/tmp/Rtmpad1Fom/file25d731e29961.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt; Writing layer `file26457242c730' to data source </span></span>
+<span><span class="co">#&gt;   `/tmp/RtmppwxZRg/file26457242c730.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">#&gt; Writing 9 features with 3 fields and geometry type Polygon.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="va">port_wide_1</span><span class="op">)</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".csv"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -321,7 +322,7 @@ i.e. precipitation statistics from <a href="https://www.worldclim.org/" class="e
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>       7 <span style="color: #949494;">&lt;tibble [12 × 2]&gt;</span> ((-71.80933 18.65844, -71.65022 18.65844, -71.65022…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>       8 <span style="color: #949494;">&lt;tibble [12 × 2]&gt;</span> ((-71.65022 18.65844, -71.49111 18.65844, -71.49111…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>       9 <span style="color: #949494;">&lt;tibble [12 × 2]&gt;</span> ((-71.49111 18.65844, -71.33201 18.65844, -71.33201…</span></span></code></pre></div>
-<p>We see that similar to the elevation indicator, the output consists
+<p>We see that similar to the traveltime indicator, the output consists
 of 9 rows with the precipitation indicator as a single nested-list
 column. Note, however, the differences when we take a look at the shape
 of a the indicator for a specific asset:</p>
@@ -428,8 +429,8 @@ object to a geospatial format of our choice or drop the geometry
 information altogether and dump the data into a csv.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">st_write</a></span><span class="op">(</span><span class="va">port_wide_3</span>, dsn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".gpkg"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Writing layer `file25d726bfffdd' to data source </span></span>
-<span><span class="co">#&gt;   `/tmp/Rtmpad1Fom/file25d726bfffdd.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt; Writing layer `file2645282b7971' to data source </span></span>
+<span><span class="co">#&gt;   `/tmp/RtmppwxZRg/file2645282b7971.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">#&gt; Writing 9 features with 13 fields and geometry type Polygon.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="va">port_wide_3</span><span class="op">)</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".csv"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
