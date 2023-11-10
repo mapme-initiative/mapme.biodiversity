@@ -1,5 +1,16 @@
 # mapme.biodiversity (development version)
 
+## General
+
+- Quickstart vignette now uses the ESA Landcover resource
+  as an example for how to use the package (#201).
+
+
+## New features
+
+- GFW resources and indicators now include latest GFC-2022-v1.10 version (#204).
+
+
 # mapme.biodiversity 0.4.0
 
 ## New features
@@ -85,7 +96,7 @@
   to return numerically equivalent results on any operating system (#131)
   
 - the online source for the `nasa_srtm` resource shows an expired SSL certificate
-  since November 2022. The get_resources()` function now includes an error and 
+  since November 2022. The `get_resources()` function now includes an error and 
   instructions how to disable SSL certification at a users own risk. The 
   websites maintainers have been contacted and asked to renew the certification. (#131)
 

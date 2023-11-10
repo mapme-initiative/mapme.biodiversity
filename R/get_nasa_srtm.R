@@ -40,13 +40,13 @@ NULL
     ))
   }
 
-  try(urls <- rstac::stac("https://planetarycomputer.microsoft.com/api/stac/v1/") %>%
+  urls <- try(rstac::stac("https://planetarycomputer.microsoft.com/api/stac/v1/") %>%
     rstac::stac_search(
       collection = "nasadem",
       bbox = as.numeric(st_bbox(x)),
       limit = NULL
     ) %>%
-    rstac::get_request() %>%
+    rstac::post_request() %>%
     rstac::items_fetch() %>%
     rstac::assets_url(asset_names = "elevation"))
 

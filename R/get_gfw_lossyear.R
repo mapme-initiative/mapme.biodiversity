@@ -15,7 +15,7 @@
 #' The following argument can be set:
 #' \describe{
 #'   \item{vers_lossyear}{The version of the dataset to download. Defaults to
-#'   "GFC-2021-v1.9". Check \code{mapme.biodiversity:::.available_gfw_versions()}
+#'   "GFC-2022-v1.10". Check \code{mapme.biodiversity:::.available_gfw_versions()}
 #'   to get a list of available versions}
 #' }
 #'
@@ -35,14 +35,14 @@ NULL
 #'
 #' @param x An sf object returned by init_portfolio
 #' @param vers_lossyear The version to download, defaults to
-#'   \code{"GFC-2021-v1.9"}.
+#'   \code{"GFC-2022-v1.10"}.
 #' @param rundir A directory where intermediate files are written to.
 #' @param verbose A directory where intermediate files are written to.
 #' @keywords internal
 #' @include register.R
 #' @noRd
 .get_gfw_lossyear <- function(x,
-                              vers_lossyear = "GFC-2021-v1.9",
+                              vers_lossyear = "GFC-2022-v1.10",
                               rundir = tempdir(),
                               verbose = TRUE) {
   # check that version is correct
@@ -91,5 +91,5 @@ register_resource(
   type = "raster",
   source = "https://data.globalforestwatch.org/documents/tree-cover-loss/explore",
   fun = .get_gfw_lossyear,
-  arguments <- list(vers_lossyear = "GFC-2021-v1.9")
+  arguments <- list(vers_lossyear = "GFC-2022-v1.10")
 )
