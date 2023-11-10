@@ -141,7 +141,11 @@ print(port_wide_1)
 ```
 
 In this case, the result has 9 rows just like the original data frame.
-We can now export our portfolio for example as a geopackage that can be
+In this particular scenario, where the only variable is `minutes_mean`, the 
+object `port_wide_1` contains just one value per polygon.
+This aligns well with the characteristics of the wide format, which can be 
+easily understood and processed by various (geospatial) software.
+So, we can now export our portfolio for example as a geopackage that can be
 read directly into e.g. QGIS or as a CSV without the geospatial
 information:
 
