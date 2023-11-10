@@ -4,11 +4,19 @@
 
 - Quickstart vignette now uses the ESA Landcover resource
   as an example for how to use the package (#201).
+  
+## Bug Fixes
 
+- `biome` and `ecoregions` now properly handle 0-length tibbles (#196)
 
 ## New features
 
 - GFW resources and indicators now include latest GFC-2022-v1.10 version (#204).
+
+
+## Internal
+
+- `calc_indicators()` now includes a check for 0-length tibbles (#199)
 
 
 # mapme.biodiversity 0.4.0

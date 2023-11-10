@@ -65,20 +65,27 @@ NULL
   new_area <- NULL
   ecoregions <- NULL
   area <- NULL
+
   if (nrow(teow[[1]]) == 0) {
     return(NA)
   }
+
   merged <- .comp_teow(
     x = x,
     teow = teow,
-    verbose = verbose
-  )
+    verbose = verbose)
+
+  if (nrow(merged) == 0) {
+    return(NA)
+  }
+
   out <- merged %>%
     dplyr::select(ECO_NAME, new_area)
+
   out_tibble <- tibble(
     ecoregions = out[[1]],
-    area = out[[2]]
-  )
+    area = out[[2]])
+
   out_tibble %>%
     dplyr::group_by(ecoregions) %>%
     dplyr::summarise(area = sum(as.numeric(area)))
