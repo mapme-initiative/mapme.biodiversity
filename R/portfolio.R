@@ -88,7 +88,7 @@ init_portfolio <- function(x,
     warning(
       "Argument cores is deprecated. To enable parallel processing\n",
       "use future-style parallelization by enabling e.g. future::plan(future::multisession, workers = n).\n",
-      "Learn more at https://mapme-initiative.github.io/mapme.biodiversity/#a-note-on-parallelization"
+      "Learn more at https://mapme-initiative.github.io/mapme.biodiversity/index.html#a-note-on-parallel-computing"
     )
   }
 
