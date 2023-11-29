@@ -18,6 +18,8 @@
 ## Internal
 
 - `calc_indicators()` now includes a check for 0-length tibbles (#199)
+- .read_raster_source now uses a single logic to cover all cases (e.g. single tiles,
+  tiled rasters with and without temporal dimension, single temporal rasters)
 
 
 # mapme.biodiversity 0.4.0

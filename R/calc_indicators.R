@@ -123,63 +123,31 @@ calc_indicators <- function(x, indicators, ...) {
 
 
 .read_raster_source <- function(x, tindex) {
-  #tindex <- st_read("location1/esalandcover/tileindex_esalandcover.gpkg")
-  #tindex <- tindex[1:2, ]
+
   geoms <- tindex[["geom"]]
   unique_geoms <- unique(geoms)
+  grouped_geoms <- match(geoms, unique_geoms)
+  names(grouped_geoms) <- tindex[["location"]]
+  grouped_geoms <- sort(grouped_geoms)
 
-  is_stacked <- length(unique_geoms) == 1
+  n_tiles <- length(unique(grouped_geoms))
+  n_timesteps <- unique(table(grouped_geoms))
 
-  if (is_stacked) { # current resource/extent all have the same bounding box
-
-    filenames <- tindex[["location"]]
-    out <- terra::rast(filenames)
-    names(out) <- basename(filenames)
-
-  } else {
-
-    is_unique <- length(unique_geoms) == nrow(tindex)
-
-    if (is_unique) { # all tiles have a different bounding box
-
-      filenames <- tindex[["location"]][unlist(st_intersects(x, tindex))]
-
-      if (length(filenames) == 0) {
-        warning("No intersection with resource.")
-        return(NULL)
-      } else if (length(filenames) == 1) {
-        out <- terra::rast(filenames)
-      } else {
-        # create a vrt for multiple targets
-        vrt_name <- tempfile("vrt", fileext = ".vrt")
-        out <- terra::vrt(filenames, filename = vrt_name)
-      }
-
-    } else { # tiled dataset with temporal dimension
-      grouped_geoms <- match(geoms, unique_geoms)
-      names(grouped_geoms) <- tindex[["location"]]
-      grouped_geoms <- sort(grouped_geoms)
-
-      n_tiles <- length(unique(grouped_geoms))
-      n_timesteps <- unique(table(grouped_geoms))
-
-      if (length(n_timesteps) > 1) {
-        stop("Did not find equal number of tiles per timestep.")
-      }
-
-      out <- lapply(1:n_timesteps, function(i){
-        index <- rep(FALSE, n_timesteps)
-        index[i] <- TRUE
-        filenames <- names(grouped_geoms[index])
-        layer_name <- tools::file_path_sans_ext(basename(filenames[1]))
-        vrt_name <- tempfile(pattern = sprintf("vrt_%s", layer_name), fileext = ".vrt")
-        tmp <- terra::vrt(filenames, filename = vrt_name)
-        names(tmp) <- layer_name
-        tmp
-      })
-      out <- do.call(c, out)
-    }
+  if (length(n_timesteps) > 1) {
+    stop("Did not find equal number of tiles per timestep.")
   }
+
+  out <- lapply(1:n_timesteps, function(i){
+    index <- rep(FALSE, n_timesteps)
+    index[i] <- TRUE
+    filenames <- names(grouped_geoms[index])
+    layer_name <- tools::file_path_sans_ext(basename(filenames[1]))
+    vrt_name <- tempfile(pattern = sprintf("vrt_%s", layer_name), fileext = ".vrt")
+    tmp <- terra::vrt(filenames, filename = vrt_name)
+    names(tmp) <- layer_name
+    tmp
+  })
+  out <- do.call(c, out)
 
   # crop the source to the extent of the current polygon
   cropped <- try(terra::crop(out, terra::vect(x)))
