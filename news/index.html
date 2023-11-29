@@ -74,6 +74,7 @@
 <h3 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
 <ul><li>
 <code>biome</code> and <code>ecoregions</code> now properly handle 0-length tibbles (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/196" class="external-link">#196</a>)</li>
+<li>logic for reading raster tiles with temporal dimensions improved</li>
 </ul></div>
 <div class="section level3">
 <h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
@@ -83,6 +84,7 @@
 <h3 id="internal-development-version">Internal<a class="anchor" aria-label="anchor" href="#internal-development-version"></a></h3>
 <ul><li>
 <code><a href="../reference/calc_indicators.html">calc_indicators()</a></code> now includes a check for 0-length tibbles (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/199" class="external-link">#199</a>)</li>
+<li>.read_raster_source now uses a single logic to cover all cases (e.g. single tiles, tiled rasters with and without temporal dimension, single temporal rasters)</li>
 </ul></div>
 </div>
     <div class="section level2">
