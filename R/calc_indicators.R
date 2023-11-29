@@ -150,7 +150,7 @@ calc_indicators <- function(x, indicators, ...) {
   out <- do.call(c, out)
 
   # crop the source to the extent of the current polygon
-  cropped <- try(terra::crop(out, terra::vect(x)))
+  cropped <- try(terra::crop(out, terra::vect(x), snap = "out"))
   if (inherits(cropped, "try-error")) {
     warning(as.character(cropped))
     return(NULL)
