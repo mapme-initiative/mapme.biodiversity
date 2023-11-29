@@ -8,6 +8,7 @@
 ## Bug Fixes
 
 - `biome` and `ecoregions` now properly handle 0-length tibbles (#196)
+- logic for reading raster tiles with temporal dimensions improved
 
 ## New features
 

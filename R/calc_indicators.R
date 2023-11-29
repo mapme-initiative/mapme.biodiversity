@@ -123,52 +123,58 @@ calc_indicators <- function(x, indicators, ...) {
 
 
 .read_raster_source <- function(x, tindex) {
-  all_bboxes <- lapply(1:nrow(tindex), function(i) paste(as.numeric(st_bbox(tindex[i, ])), collapse = " "))
-  is_stacked <- length(unique(unlist(all_bboxes))) == 1
+  #tindex <- st_read("location1/esalandcover/tileindex_esalandcover.gpkg")
+  #tindex <- tindex[1:2, ]
+  geoms <- tindex[["geom"]]
+  unique_geoms <- unique(geoms)
+
+  is_stacked <- length(unique_geoms) == 1
 
   if (is_stacked) { # current resource/extent all have the same bounding box
 
-    filenames <- basename(tindex$location)
-    out <- terra::rast(tindex$location)
-    names(out) <- filenames
+    filenames <- tindex[["location"]]
+    out <- terra::rast(filenames)
+    names(out) <- basename(filenames)
+
   } else {
-    is_unique <- length(unique(unlist(all_bboxes))) == nrow(tindex)
+
+    is_unique <- length(unique_geoms) == nrow(tindex)
 
     if (is_unique) { # all tiles have a different bounding box
-      target_files <- tindex$location[unlist(st_intersects(x, tindex))]
 
-      if (length(target_files) == 0) {
+      filenames <- tindex[["location"]][unlist(st_intersects(x, tindex))]
+
+      if (length(filenames) == 0) {
         warning("No intersection with resource.")
         return(NULL)
-      } else if (length(target_files) == 1) {
-        out <- terra::rast(target_files)
+      } else if (length(filenames) == 1) {
+        out <- terra::rast(filenames)
       } else {
         # create a vrt for multiple targets
         vrt_name <- tempfile("vrt", fileext = ".vrt")
-        out <- terra::vrt(target_files, filename = vrt_name)
+        out <- terra::vrt(filenames, filename = vrt_name)
       }
-    } else { # some tiles share the same bboxes, and others do not, needs proper merging
-      # We assume here that the tiles present in tileindex have a temporal dimension.
-      # Thus each timestep should end up in its own layer. Different tiles from
-      # the same timestep should be spatially merged. We want to avoid merging
-      # different tile from different timesteps. We thus assume some regularity
-      # in how the name of a raster file expresses its temporal dimension.
-      # With this assumption, we can expect the files in tindex to be ordered.
-      # Thus we retrive the index of all files sharing the same bbox and assume
-      # that they belong to different timesteps. The files in between these
-      # indices thus belong to the previous timestep and we can merge these
-      # as a vrt and later join the bands. We always assign the name of the
-      # first file as the layername.
-      unique_bboxes <- unique(unlist(all_bboxes))
-      layer_index <- which(all_bboxes == unique_bboxes[[1]])
-      temporal_gap <- layer_index[2] - layer_index[1] - 1
-      out <- lapply(layer_index, function(j) {
-        target_files <- tindex$location[j:(j + temporal_gap)]
-        org_filename <- basename(target_files[1])
-        filename <- tools::file_path_sans_ext(org_filename)
-        vrt_name <- tempfile(pattern = sprintf("vrt_%s.vrt", filename))
-        tmp <- terra::vrt(target_files, filename = vrt_name)
-        names(tmp) <- org_filename
+
+    } else { # tiled dataset with temporal dimension
+      grouped_geoms <- match(geoms, unique_geoms)
+      names(grouped_geoms) <- tindex[["location"]]
+      grouped_geoms <- sort(grouped_geoms)
+
+      n_tiles <- length(unique(grouped_geoms))
+      n_timesteps <- unique(table(grouped_geoms))
+
+      if (length(n_timesteps) > 1) {
+        stop("Did not find equal number of tiles per timestep.")
+      }
+
+      out <- lapply(1:n_timesteps, function(i){
+        index <- rep(FALSE, n_timesteps)
+        index[i] <- TRUE
+        filenames <- names(grouped_geoms[index])
+        layer_name <- tools::file_path_sans_ext(basename(filenames[1]))
+        vrt_name <- tempfile(pattern = sprintf("vrt_%s", layer_name), fileext = ".vrt")
+        tmp <- terra::vrt(filenames, filename = vrt_name)
+        names(tmp) <- layer_name
         tmp
       })
       out <- do.call(c, out)
@@ -211,7 +217,7 @@ calc_indicators <- function(x, indicators, ...) {
   n_rows <- sapply(results[index_tbl], nrow)
   if (any(n_rows == 0)) {
     stop(paste("0-length tibbles returned for some assets.\n",
-    "Make sure the indicator function returns NA if it cannot be calculated for an asset."))
+               "Make sure the indicator function returns NA if it cannot be calculated for an asset."))
   }
 
   # case all assets returned tibbles
