@@ -8,6 +8,7 @@
 ## Bug Fixes
 
 - `biome` and `ecoregions` now properly handle 0-length tibbles (#196)
+- logic for reading raster tiles with temporal dimensions improved
 
 ## New features
 
@@ -17,6 +18,8 @@
 ## Internal
 
 - `calc_indicators()` now includes a check for 0-length tibbles (#199)
+- .read_raster_source now uses a single logic to cover all cases (e.g. single tiles,
+  tiled rasters with and without temporal dimension, single temporal rasters)
 
 
 # mapme.biodiversity 0.4.0
