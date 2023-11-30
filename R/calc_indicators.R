@@ -124,6 +124,10 @@ calc_indicators <- function(x, indicators, ...) {
 
 .read_raster_source <- function(x, tindex) {
 
+  if (st_crs(x) != st_crs(tindex)) {
+    x <- st_transform(x, st_crs(tindex))
+  }
+
   geoms <- tindex[["geom"]]
   unique_geoms <- unique(geoms)
   grouped_geoms <- match(geoms, unique_geoms)
@@ -166,15 +170,16 @@ calc_indicators <- function(x, indicators, ...) {
   # call the indicator function with the associated parameters
   out <- try(do.call(fun, args = args))
 
-  if (length(out) == 1) {
-    if (is.na(out)) {
-      out <- list(NA)
-    }
-  }
   if (inherits(out, "try-error")) {
     warning(sprintf("Error occured at polygon %s with the following error message: %s. \n Returning NAs.", i, out))
     out <- list(NA)
   }
+
+  if (!inherits(out, "tbl_df")){
+    warning(sprintf("At polygon %s a non-tibble object was returned: %s \n Returning NAs.", i, out))
+    out <- list(NA)
+  }
+
   out # return
 }
 
