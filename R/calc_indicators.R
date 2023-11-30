@@ -65,19 +65,12 @@ calc_indicators <- function(x, indicators, ...) {
   available_resources <- atts$resources
   required_resources <- selected_indicator[[indicator]]$resources
 
-  if (processing_mode == "asset") {
-    p <- progressr::progressor(steps = nrow(x))
-    # apply function with parameters and add hidden id column
-    results <- furrr::future_map(1:nrow(x), function(i) {
-      p()
-      resources <- .prep(x[i, ], atts$resources, required_resources)
-      .compute(x[i, ], resources, fun, params, i)
-    }, .options = furrr::furrr_options(seed = TRUE))
-  } else {
-    resources <- .prep(x, atts$resources, required_resources)
-    results <- .compute(x, resources, fun, params, 1)
-  }
+  processor <- switch(processing_mode,
+                      asset = .asset_processor,
+                      portfolio = .portfolio_processor,
+                      stop(sprintf("Processing mode '%s' is not supported.", processing_mode)))
 
+  results <- processor(x, fun, available_resources, required_resources, params)
   # bind the asset results
   results <- .bind_assets(results)
   # nest the results
@@ -88,7 +81,6 @@ calc_indicators <- function(x, indicators, ...) {
   x <- relocate(x, !!attributes(x)[["sf_column"]], .after = last_col())
   x
 }
-
 
 
 .prep <- function(x, available_resources, required_resources) {
@@ -158,35 +150,68 @@ calc_indicators <- function(x, indicators, ...) {
   cropped
 }
 
+.asset_processor <- function(
+    x,
+    fun,
+    available_resources,
+    required_resources,
+    params){
 
-.compute <- function(x, resources, fun, args, i) {
+  p <- progressr::progressor(steps = nrow(x))
+  furrr::future_map(1:nrow(x), function(i) {
+    p()
+    resources <- .prep(x[i, ], available_resources, required_resources)
+    result <- .compute(x[i, ], resources, fun, params)
+    .check_single_asset(result, i)
+  }, .options = furrr::furrr_options(seed = TRUE))
+}
+
+#' @noRd
+#' @importFrom utils str
+.check_single_asset <- function(obj, i){
+
+  if (inherits(obj, "try-error")) {
+    warning(sprintf("At asset %s an error occured. Returning NA.\n", i), obj)
+    return(NA)
+  }
+
+  if (!inherits(obj, "tbl_df")) {
+    warning(sprintf("At asset %s a non-tibble object was returned. Returning NA.\n", i), str(obj))
+    return(NA)
+  }
+
+  if (nrow(obj) == 0) {
+    warning(sprintf("At asset %s a 0-length tibble was returned. Returning NA.", i))
+    return(NA)
+  }
+  obj
+}
+
+.portfolio_processor <- function(
+    x,
+    fun,
+    available_resources,
+    required_resources,
+    params ){
+
+  resources <- .prep(x, available_resources, required_resources)
+  results <- .compute(x, resources, fun, params)
+  if (!inherits(results, "list")) {
+    stop("Expected output for processing mode 'portfolio' is a list.")
+  }
+  results <- purrr::imap(results, function(r, i) .check_single_asset(r, i))
+  results
+}
+
+.compute <- function(x, resources, fun, args) {
   args <- append(args, resources)
-  args$x <- x
-
-  # call the indicator function with the associated parameters
-  out <- try(do.call(fun, args = args))
-
-  if (length(out) == 1) {
-    if (is.na(out)) {
-      out <- list(NA)
-    }
-  }
-  if (inherits(out, "try-error")) {
-    warning(sprintf("Error occured at polygon %s with the following error message: %s. \n Returning NAs.", i, out))
-    out <- list(NA)
-  }
-  out # return
+  args[["x"]] <- x
+  try(do.call(what = fun, args = args), silent = TRUE)
 }
 
 .bind_assets <- function(results) {
   # bind results to data.frame
   index_tbl <- purrr::map_lgl(results, function(x) inherits(x, c("tbl_df", "data.frame")))
-  # check for 0 length tibbles
-  n_rows <- sapply(results[index_tbl], nrow)
-  if (any(n_rows == 0)) {
-    stop(paste("0-length tibbles returned for some assets.\n",
-               "Make sure the indicator function returns NA if it cannot be calculated for an asset."))
-  }
 
   # case all assets returned tibbles
   if (all(index_tbl)) {

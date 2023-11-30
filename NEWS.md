@@ -17,7 +17,7 @@
 
 ## Internal
 
-- `calc_indicators()` now includes a check for 0-length tibbles (#199)
+- `calc_indicators()` now includes a check for 0-length tibbles (#199, #215)
 - .read_raster_source now uses a single logic to cover all cases (e.g. single tiles,
   tiled rasters with and without temporal dimension, single temporal rasters)
 
