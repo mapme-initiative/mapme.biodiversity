@@ -338,3 +338,15 @@ test_that(".read_raster_source works correctly", {
   expect_error(.read_raster_source(x, footprints[1:24, ]))
 
 })
+
+
+test_that(".check_single_asset works correctly", {
+  expect_warning(out <- .check_single_asset(NA, 1))
+  expect_equal(out, NA)
+  expect_warning(out <- .check_single_asset(try("a" + 1, silent = TRUE), 1))
+  expect_equal(out, NA)
+  expect_warning(out <- .check_single_asset(c(1:10), 1))
+  expect_equal(out, NA)
+  expect_warning(out <- .check_single_asset(tibble(), 1))
+  expect_equal(out, NA)
+})
