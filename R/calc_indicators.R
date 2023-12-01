@@ -116,6 +116,10 @@ calc_indicators <- function(x, indicators, ...) {
 
 .read_raster_source <- function(x, tindex) {
 
+  if (st_crs(x) != st_crs(tindex)) {
+    x <- st_transform(x, st_crs(tindex))
+  }
+
   geoms <- tindex[["geom"]]
   unique_geoms <- unique(geoms)
   grouped_geoms <- match(geoms, unique_geoms)
