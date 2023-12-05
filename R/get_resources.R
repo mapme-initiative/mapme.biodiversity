@@ -85,8 +85,8 @@ get_resources <- function(x, resources, ...) {
     message(sprintf("Starting process to download resource '%s'........", resource))
   }
 
-  downloaded_files <- try(do.call(fun, args = params))
-  if (inherits(downloaded_files, "try-error")) {
+  resource_to_add <- try(do.call(fun, args = params))
+  if (inherits(resource_to_add, "try-error")) {
     stop(sprintf(
       paste("Download for resource %s failed. ",
         "Returning unmodified portfolio object.",
@@ -97,26 +97,22 @@ get_resources <- function(x, resources, ...) {
   }
 
   if (attr(x, "testing")) {
-    return(downloaded_files)
+    return(resource_to_add)
   }
 
   # we included an error checker so that we can still return a valid object
   # even in cases that one or more downloads fail
-  if (is.na(downloaded_files[1])) {
+  if (is.na(resource_to_add[1])) {
     return(x)
   }
 
   # if the selected resource is a raster resource create tileindex
-  if (selected_resource[[resource]]$type == "raster") {
-    tindex_file <- file.path(rundir, paste0("tileindex_", resource, ".gpkg"))
-    if (file.exists(tindex_file)) file.remove(tindex_file)
-    footprints <- .make_footprints(downloaded_files)
-    write_sf(footprints, dsn = tindex_file)
-    downloaded_files <- tindex_file
+  if (selected_resource[[resource]][["type"]] == "raster") {
+    resource_to_add <- .make_footprints(resource_to_add)
   }
 
   # add the new resource to the attributes of the portfolio object
-  resource_to_add <- list(downloaded_files)
+  resource_to_add <- list(resource_to_add)
   names(resource_to_add) <- resource
   atts$resources <- append(atts$resources, resource_to_add)
   attributes(x) <- atts
@@ -126,10 +122,14 @@ get_resources <- function(x, resources, ...) {
 .make_footprints <- function(raster_files) {
   footprints <- lapply(unique(raster_files), function(file) {
     tmp <- rast(file)
-    footprint <- st_as_sf(st_as_sfc(st_bbox(tmp)))
-    st_geometry(footprint) <- "geom"
-    footprint$location <- sources(tmp)
-    footprint
+    footprint <- tmp %>%
+      st_bbox() %>%
+      st_as_sfc(precision = 1e5) %>%
+      st_as_binary() %>%
+      st_as_sfc(crs = st_crs(tmp)) %>%
+      st_as_sf() %>%
+      dplyr::mutate(location = sources(tmp)) %>%
+      dplyr::rename(geom = "x")
   })
   do.call(rbind, footprints)
 }

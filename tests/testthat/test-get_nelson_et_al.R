@@ -18,7 +18,6 @@ test_that(".get_nelson_et_al works", {
     years = 2000:2020,
     outdir = outdir,
     tmpdir = tmpdir,
-    add_resources = FALSE,
     verbose = TRUE
   )
   # Add testing attribute in order to skip downloads

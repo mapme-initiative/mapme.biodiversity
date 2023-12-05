@@ -18,7 +18,6 @@ test_that(".get_gmw works", {
     years = 2007:2008,
     outdir = outdir,
     tmpdir = tmpdir,
-    add_resources = FALSE,
     verbose = FALSE
   )
   # Add testing attribute in order to skip downloads

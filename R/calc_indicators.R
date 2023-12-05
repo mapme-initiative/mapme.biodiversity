@@ -84,11 +84,13 @@ calc_indicators <- function(x, indicators, ...) {
 
 
 .prep <- function(x, available_resources, required_resources) {
+  if (any(!names(required_resources) %in% names(available_resources))) {
+    stop("Some required resources are not available.")
+  }
   resources <- purrr::imap(
     required_resources, function(resource_type, resource_name) {
       if (resource_type == "raster") {
-        tindex <- read_sf(available_resources[resource_name], quiet = TRUE)
-        resource <- .read_raster_source(x, tindex)
+        resource <- .read_raster_source(x, available_resources[[resource_name]])
       } else if (resource_type == "vector") {
         resource <- .read_vector_source(x, available_resources[[resource_name]])
       } else {

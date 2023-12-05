@@ -58,15 +58,6 @@ test_that("calc_indicator works", {
     tolerance = 1e-3
   )
 
-  portfolio <- init_portfolio(
-    aoi,
-    years = 2000:2005,
-    outdir = outdir,
-    tmpdir = tmpdir,
-    add_resources = TRUE,
-    verbose = FALSE
-  )
-
   stat <- calc_indicators(
     portfolio,
     indicators = "treecover_area",
@@ -246,7 +237,7 @@ test_that(".prep works correctly", {
   )
 
   available_resources <- attr(x, "resources")
-  required_resources <- available_indicators("treecover_area")[[1]]$resources
+  required_resources <- available_indicators("treecover_area")[[1]][["resources"]]
   output <- .prep(x, available_resources, required_resources)
 
   expect_equal(
@@ -264,9 +255,14 @@ test_that(".prep works correctly", {
 
   x2 <- read_sf(list.files(
     system.file("extdata", package = "mapme.biodiversity"),
-    pattern = "shell_beach", full.names = TRUE
-  ))
-  required_resources <- available_indicators("mangroves_area")[[1]]$resources
+    pattern = "shell_beach", full.names = TRUE )) %>%
+    init_portfolio(years = 2016,
+                     outdir = outdir,
+                     tmpdir = tmpdir,
+                     verbose = FALSE) %>%
+    get_resources("gmw")
+  available_resources <- attr(x2, "resources")
+  required_resources <- available_indicators("mangroves_area")[[1]][["resources"]]
   output <- .prep(x2, available_resources, required_resources)
 
   expect_equal(

@@ -18,7 +18,6 @@ test_that(".get_worldpop works", {
     years = 2001,
     outdir = outdir,
     tmpdir = tmpdir,
-    add_resources = FALSE,
     verbose = TRUE
   )
   # Add testing attribute in order to skip downloads

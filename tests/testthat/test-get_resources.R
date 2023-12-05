@@ -18,7 +18,6 @@ test_that("get_resources works", {
     years = 2000:2020,
     outdir = outdir,
     tmpdir = tmpdir,
-    add_resources = FALSE,
     verbose = FALSE
   )
 
