@@ -10,7 +10,6 @@ init_portfolio(
   outdir = getwd(),
   tmpdir = tempdir(),
   cores = NULL,
-  add_resources = TRUE,
   aria_bin = NULL,
   verbose = TRUE
 )
@@ -35,10 +34,6 @@ package here. Please make sure that enough disk space is available because
 some intermediate calculations can become quite large.}
 
 \item{cores}{Deprecated. Use future-style parallelzation instead.}
-
-\item{add_resources}{Logical if existing resources in 'outdir' should be
-added to the portfolio. Defaults to TRUE. Setting it to FALSE can be of use
-e.g. if a previous download has terminated unexpectedly in order to resume.}
 
 \item{aria_bin}{A character vector to an aria2c executable for parallel
 downloads}
