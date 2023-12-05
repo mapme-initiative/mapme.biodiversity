@@ -106,8 +106,7 @@ port <- init_portfolio(
   aoi,
   years = 2018,
   outdir = system.file("res", package = "mapme.biodiversity"),
-  tmpdir = system.file("tmp", package = "mapme.biodiversity"),
-  add_resources = TRUE
+  tmpdir = system.file("tmp", package = "mapme.biodiversity")
 )
 
 port_w_nelson <- get_resources(port, "nelson_et_al", range_traveltime = "20k_50k")

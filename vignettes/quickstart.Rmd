@@ -110,7 +110,6 @@ sample_portfolio <- init_portfolio(
   years = 2015,
   outdir = file.path(outdir, "res"),
   tmpdir = outdir,
-  add_resources = FALSE,
   verbose = TRUE
 )
 plot(sample_portfolio["assetid"])
