@@ -5,6 +5,11 @@
 - Quickstart vignette now uses the ESA Landcover resource
   as an example for how to use the package (#201).
   
+## Breaking changes
+- The argument `add_resources` to `init_portfolio()` is now deprecated. This
+  means that `get_resources()` as to be run in every new R session to make 
+  resource available to the respective indicator functions.
+  
 ## Bug Fixes
 
 - `biome` and `ecoregions` now properly handle 0-length tibbles (#196)
@@ -21,6 +26,8 @@
 - .read_raster_source now uses a single logic to cover all cases (e.g. single tiles,
   tiled rasters with and without temporal dimension, single temporal rasters)
 - .read_raster_source now projects assets in case their CRS differs from the raster
+- tile indices for raster resources are now appended to the portfolio attributes
+  as `sf` objects instead of being written to disk
 
 
 # mapme.biodiversity 0.4.0
