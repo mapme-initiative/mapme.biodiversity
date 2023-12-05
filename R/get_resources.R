@@ -27,7 +27,7 @@ get_resources <- function(x, resources, ...) {
   # check if the requested resource is supported
   .check_requested_resources(resources)
   # check if any of the requested resources is already locally available
-  existing_resources <- attributes(x)$resources
+  existing_resources <- attributes(x)[["resources"]]
   resources <- .check_existing_resources(names(existing_resources), resources)
 
   if (length(resources) == 0) {
@@ -66,22 +66,22 @@ get_resources <- function(x, resources, ...) {
   args <- list(...)
   atts <- attributes(x)
 
-  rundir <- file.path(atts$outdir, resource)
+  rundir <- file.path(atts[["outdir"]], resource)
   dir.create(rundir, showWarnings = FALSE)
 
   selected_resource <- available_resources(resource)
   # match function
-  fun <- selected_resource[[resource]]$fun
+  fun <- selected_resource[[resource]][["fun"]]
   # matching the specified arguments to the required arguments
   params <- .check_resource_arguments(selected_resource, args)
-  params$x <- x
-  params$rundir <- rundir
-  params$verbose <- atts$verbose
+  params[["x"]] <- x
+  params[["rundir"]] <- rundir
+  params[["verbose"]] <- atts[["verbose"]]
 
   # conduct download function, TODO: we can think of an efficient way for
   # parallel downloads here or further upstream
   # if files to not exist use download function to download to tmpdir
-  if (atts$verbose) {
+  if (atts[["verbose"]]) {
     message(sprintf("Starting process to download resource '%s'........", resource))
   }
 
@@ -114,7 +114,7 @@ get_resources <- function(x, resources, ...) {
   # add the new resource to the attributes of the portfolio object
   resource_to_add <- list(resource_to_add)
   names(resource_to_add) <- resource
-  atts$resources <- append(atts$resources, resource_to_add)
+  atts[["resources"]] <- append(atts[["resources"]], resource_to_add)
   attributes(x) <- atts
   x
 }
