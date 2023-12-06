@@ -36,7 +36,6 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
     years = c(1996, 2016),
     outdir = outdir,
     tmpdir = tempdir(),
-    add_resources = FALSE,
     verbose = FALSE
   ) \%>\%
   get_resources("gmw") \%>\%

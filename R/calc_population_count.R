@@ -41,7 +41,6 @@
 #'     years = 2000:2010,
 #'     outdir = outdir,
 #'     tmpdir = tempdir(),
-#'     add_resources = FALSE,
 #'     verbose = FALSE
 #'   ) %>%
 #'   get_resources("worldpop") %>%

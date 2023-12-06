@@ -30,7 +30,6 @@
 #'     years = 2021,
 #'     outdir = outdir,
 #'     tmpdir = tempdir(),
-#'     add_resources = FALSE,
 #'     verbose = FALSE
 #'   ) %>%
 #'   get_resources("fritz_et_al", res_drivers = 100) %>%

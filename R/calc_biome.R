@@ -30,7 +30,6 @@
 #'     years = 2001,
 #'     outdir = outdir,
 #'     tmpdir = tempdir(),
-#'     add_resources = FALSE,
 #'     verbose = FALSE
 #'   ) %>%
 #'   get_resources("teow") %>%

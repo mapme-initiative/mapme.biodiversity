@@ -83,7 +83,6 @@
 #'     years = 1991:1992,
 #'     outdir = outdir,
 #'     tmpdir = tempdir(),
-#'     add_resources = FALSE,
 #'     verbose = FALSE
 #'   ) %>%
 #'   get_resources("ucdp_ged", version_ged = "22.1") %>%

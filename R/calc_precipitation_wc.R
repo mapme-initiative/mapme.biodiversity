@@ -39,7 +39,6 @@
 #'     years = 2018,
 #'     outdir = outdir,
 #'     tmpdir = tempdir(),
-#'     add_resources = FALSE,
 #'     verbose = FALSE
 #'   ) %>%
 #'   get_resources("worldclim_precipitation") %>%

@@ -45,7 +45,6 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
     years = 2000:2020,
     outdir = outdir,
     tmpdir = tempdir(),
-    add_resources = FALSE,
     verbose = FALSE
   ) \%>\%
   get_resources("nasa_srtm") \%>\%

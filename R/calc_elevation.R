@@ -38,7 +38,6 @@
 #'     years = 2000:2020,
 #'     outdir = outdir,
 #'     tmpdir = tempdir(),
-#'     add_resources = FALSE,
 #'     verbose = FALSE
 #'   ) %>%
 #'   get_resources("nasa_srtm") %>%
