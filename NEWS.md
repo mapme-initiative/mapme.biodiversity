@@ -7,7 +7,7 @@
   
 ## Breaking changes
 - The argument `add_resources` to `init_portfolio()` is now deprecated. This
-  means that `get_resources()` as to be run in every new R session to make 
+  means that `get_resources()` has to be run in every new R session to make 
   resource available to the respective indicator functions.
   
 ## Bug Fixes
