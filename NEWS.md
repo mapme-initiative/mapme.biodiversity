@@ -4,6 +4,7 @@
 
 - Quickstart vignette now uses the ESA Landcover resource
   as an example for how to use the package (#201).
+
   
 ## Bug Fixes
 
@@ -22,6 +23,8 @@
   tiled rasters with and without temporal dimension, single temporal rasters)
 - cropping rasters now uses `snap="out"` by default
 - .read_raster_source now projects assets in case their CRS differs from the raster
+- `register_resource()` and `register_indicator()` now issue warnings for 
+  resources/indicators with names already registered and overwrites them.
 
 
 # mapme.biodiversity 0.4.0
