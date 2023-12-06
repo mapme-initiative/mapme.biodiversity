@@ -87,6 +87,8 @@
 <li>.read_raster_source now uses a single logic to cover all cases (e.g. single tiles, tiled rasters with and without temporal dimension, single temporal rasters)</li>
 <li>cropping rasters now uses <code>snap="out"</code> by default</li>
 <li>.read_raster_source now projects assets in case their CRS differs from the raster</li>
+<li>
+<code><a href="../reference/register_resource.html">register_resource()</a></code> and <code><a href="../reference/register_indicator.html">register_indicator()</a></code> now issue warnings for resources/indicators with names already registered and overwrites them.</li>
 </ul></div>
 </div>
     <div class="section level2">
