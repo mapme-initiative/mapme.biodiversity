@@ -58,22 +58,6 @@ test_that("calc_indicator works", {
     tolerance = 1e-3
   )
 
-  portfolio <- init_portfolio(
-    aoi,
-    years = 2000:2005,
-    outdir = outdir,
-    tmpdir = tmpdir,
-    add_resources = TRUE,
-    verbose = FALSE
-  )
-
-  stat <- calc_indicators(
-    portfolio,
-    indicators = "treecover_area",
-    min_size = 5,
-    min_cover = 30
-  )$treecover_area[[1]]
-
   expect_equal(
     names(stat),
     c("years", "treecover")

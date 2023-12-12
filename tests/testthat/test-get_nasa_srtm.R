@@ -18,7 +18,6 @@ test_that(".get_nasa_srtm works", {
     years = 2000:2020,
     outdir = outdir,
     tmpdir = tmpdir,
-    add_resources = FALSE,
     verbose = TRUE
   )
 
@@ -36,7 +35,6 @@ test_that(".get_nasa_srtm works", {
     years = 2000:2020,
     outdir = outdir,
     tmpdir = tmpdir,
-    add_resources = FALSE,
     verbose = TRUE
   )
   attributes(portfolio)$testing <- TRUE

@@ -18,7 +18,6 @@ test_that(".get_droughtind works", {
     years = 2004:2010,
     outdir = outdir,
     tmpdir = tmpdir,
-    add_resources = FALSE,
     verbose = FALSE
   )
   # Add testing attribute in order to skip downloads

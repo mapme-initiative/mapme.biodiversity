@@ -121,7 +121,6 @@ get_resources <- function(x, resources, ...) {
 
 .make_footprints <- function(raster_files) {
   footprints <- lapply(unique(raster_files), function(file) {
-    # get BBOX and CRS
     tmp <- rast(file)
     footprint <- st_as_sf(st_as_sfc(st_bbox(tmp)))
     st_geometry(footprint) <- "geom"

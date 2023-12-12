@@ -20,7 +20,6 @@ test_that(".get_nasa_firms works", {
     years = 2010,
     outdir = outdir,
     tmpdir = tmpdir,
-    add_resources = FALSE,
     verbose = FALSE
   )
   # Add testing attribute in order to skip downloads
