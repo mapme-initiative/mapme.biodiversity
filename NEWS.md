@@ -27,7 +27,7 @@
   match rasters with slight changes in their spatial extent (#217)
 - `register_resource()` and `register_indicator()` now issue warnings for 
   resources/indicators with names already registered and overwrites them.
-- .read_raster_source now applies a precision round-trip of 5 decimal places to
+- .read_raster_source now applies a precision round-trip of 4 decimal places to
   match rasters with slight changes in their spatial extent (#217)
 
 
