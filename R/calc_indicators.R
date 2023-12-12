@@ -120,12 +120,7 @@ calc_indicators <- function(x, indicators, ...) {
     x <- st_transform(x, st_crs(tindex))
   }
 
-  # change precision to match rasters with slight differences in extent
-  geoms <- tindex[["geom"]] %>%
-    st_sfc(precision = 1e5) %>%
-    st_as_binary %>%
-    st_as_sfc
-
+  geoms <- tindex[["geom"]]
   unique_geoms <- unique(geoms)
   grouped_geoms <- match(geoms, unique_geoms)
   names(grouped_geoms) <- tindex[["location"]]
