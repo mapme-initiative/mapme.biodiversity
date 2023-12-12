@@ -19,6 +19,7 @@ test_that(".get_ucdp_ged works", {
     years = 2010,
     outdir = outdir,
     tmpdir = tmpdir,
+    add_resources = FALSE,
     verbose = FALSE
   )
   # Add testing attribute in order to skip downloads

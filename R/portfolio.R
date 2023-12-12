@@ -30,6 +30,9 @@
 #'  downloads
 #' @param verbose Logical, defaults to TRUE, indicating if progress information
 #'   is printed.
+#' @param add_resources Logical if existing resources in 'outdir' should be
+#'   added to the portfolio. Defaults to TRUE. Setting it to FALSE can be of use
+#'   e.g. if a previous download has terminated unexpectedly in order to resume.
 #' @return The sf portfolio object `x` with amended attributes controlling the
 #'   processing behaviour further down the processing chain.
 #' @keywords function
@@ -39,6 +42,7 @@ init_portfolio <- function(x,
                            outdir = getwd(),
                            tmpdir = tempdir(),
                            cores = NULL,
+                           add_resources = TRUE,
                            aria_bin = NULL,
                            verbose = TRUE) {
   if (outdir == tmpdir) {
@@ -88,10 +92,25 @@ init_portfolio <- function(x,
     )
   }
 
+  # check if resources already exist
+  resources <- list()
+  if (add_resources) {
+    present_dirs <- list.dirs(outdir, full.names = FALSE)
+    all_resources <- names(available_resources())
+    present_resources <- present_dirs[which(present_dirs %in% all_resources)]
+    resources <- lapply(present_resources, function(res) {
+      list.files(file.path(outdir, res), pattern = ".gpkg$", full.names = TRUE)
+    })
+    names(resources) <- present_resources
+    index <- unlist(lapply(resources, function(res) length(res) > 0))
+    resources <- resources[index]
+    if (length(resources) == 0) resources <- list()
+  }
+
   # setting portfolio level attributes
   attr(x, "nitems") <- nrow(x)
   attr(x, "bbox") <- st_bbox(x)
-  attr(x, "resources") <- list()
+  attr(x, "resources") <- resources
   attr(x, "years") <- years
   attr(x, "outdir") <- outdir
   attr(x, "tmpdir") <- tmpdir

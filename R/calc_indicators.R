@@ -83,6 +83,7 @@ calc_indicators <- function(x, indicators, ...) {
 }
 
 
+
 .prep_resources <- function(x, avail_resources, req_resources) {
   if (any(!names(req_resources) %in% names(avail_resources))) {
     stop("Some required resources are not available.")

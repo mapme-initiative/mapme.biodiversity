@@ -18,6 +18,7 @@ test_that(".get_gfw_emissions works", {
     years = 2000:2020,
     outdir = outdir,
     tmpdir = tmpdir,
+    add_resources = FALSE,
     verbose = FALSE
   )
 
@@ -35,6 +36,7 @@ test_that(".get_gfw_emissions works", {
     years = 2000:2020,
     outdir = outdir,
     tmpdir = tmpdir,
+    add_resources = FALSE,
     verbose = TRUE
   )
   attributes(portfolio)$testing <- TRUE
