@@ -121,11 +121,20 @@ get_resources <- function(x, resources, ...) {
 
 .make_footprints <- function(raster_files) {
   footprints <- lapply(unique(raster_files), function(file) {
+    # get BBOX and CRS
     tmp <- rast(file)
-    footprint <- st_as_sf(st_as_sfc(st_bbox(tmp)))
-    st_geometry(footprint) <- "geom"
-    footprint$location <- sources(tmp)
-    footprint
+    footprint <- st_bbox(tmp) %>% st_as_sfc()
+    crs <- crs(tmp)
+    # apply precision roundtrip
+    footprint <- footprint %>%
+      st_sfc(precision = 1e5) %>%
+      st_as_binary() %>%
+      st_as_sfc()
+    # to sf and add location info
+    footprint %>%
+      st_as_sf(crs = crs) %>%
+      dplyr::rename(geom = "x") %>%
+      dplyr::mutate(location = file)
   })
   do.call(rbind, footprints)
 }
