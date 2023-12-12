@@ -29,9 +29,7 @@
 - cropping rasters now uses `snap="out"` by default
 - .read_raster_source now projects assets in case their CRS differs from the raster
 - tile indices for raster resources are now appended to the portfolio attributes
-  as `sf` objects instead of being written to disk
-- raster tile indices geometries are rounded to the 5th decimal point to 
-  merge rasters with slightly different extents
+  as `sf` objects instead of being written to disk (#217)
 - `register_resource()` and `register_indicator()` now issue warnings for 
   resources/indicators with names already registered and overwrites them.
 
