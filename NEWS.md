@@ -23,6 +23,8 @@
   tiled rasters with and without temporal dimension, single temporal rasters)
 - cropping rasters now uses `snap="out"` by default
 - .read_raster_source now projects assets in case their CRS differs from the raster
+- .read_raster_source now applies a precision round-trip of 4 decimal places to
+  match rasters with slight changes in their spatial extent (#217)
 - `register_resource()` and `register_indicator()` now issue warnings for 
   resources/indicators with names already registered and overwrites them.
 
