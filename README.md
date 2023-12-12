@@ -66,7 +66,7 @@ library(mapme.biodiversity)
 library(sf)
 ```
 
-    ## Linking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE
+    ## Linking to GEOS 3.11.1, GDAL 3.8.1, PROJ 9.1.1; sf_use_s2() is TRUE
 
 ``` r
 resources <- names(available_resources())
@@ -138,7 +138,6 @@ object.
     years = 2016:2017,
     outdir = system.file("res", package = "mapme.biodiversity"),
     tmpdir = system.file("tmp", package = "mapme.biodiversity"),
-    add_resources = FALSE,
     verbose = FALSE
   ) %>%
   get_resources(

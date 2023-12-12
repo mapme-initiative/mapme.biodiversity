@@ -91,7 +91,6 @@ object.
     years = 2016:2017,
     outdir = system.file("res", package = "mapme.biodiversity"),
     tmpdir = system.file("tmp", package = "mapme.biodiversity"),
-    add_resources = FALSE,
     verbose = FALSE
   ) %>%
   get_resources(
