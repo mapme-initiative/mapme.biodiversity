@@ -71,6 +71,10 @@
 <ul><li>Quickstart vignette now uses the ESA Landcover resource as an example for how to use the package (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/201" class="external-link">#201</a>).</li>
 </ul></div>
 <div class="section level3">
+<h3 id="breaking-changes-development-version">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
+<ul><li>The argument <code>add_resources</code> to <code><a href="../reference/init_portfolio.html">init_portfolio()</a></code> is now deprecated. This means that <code><a href="../reference/get_resources.html">get_resources()</a></code> has to be run in every new R session to make resource available to the respective indicator functions.</li>
+</ul></div>
+<div class="section level3">
 <h3 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
 <ul><li>
 <code>biome</code> and <code>ecoregions</code> now properly handle 0-length tibbles (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/196" class="external-link">#196</a>)</li>
@@ -87,6 +91,7 @@
 <li>.read_raster_source now uses a single logic to cover all cases (e.g. single tiles, tiled rasters with and without temporal dimension, single temporal rasters)</li>
 <li>cropping rasters now uses <code>snap="out"</code> by default</li>
 <li>.read_raster_source now projects assets in case their CRS differs from the raster</li>
+<li>tile indices for raster resources are now appended to the portfolio attributes as <code>sf</code> objects instead of being written to disk (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/217" class="external-link">#217</a>)</li>
 <li>.read_raster_source now applies a precision round-trip of 4 decimal places to match rasters with slight changes in their spatial extent (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/217" class="external-link">#217</a>)</li>
 <li>
 <code><a href="../reference/register_resource.html">register_resource()</a></code> and <code><a href="../reference/register_indicator.html">register_indicator()</a></code> now issue warnings for resources/indicators with names already registered and overwrites them.</li>

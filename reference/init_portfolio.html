@@ -104,7 +104,6 @@ and thus can be omitted during portfolio initialization.</p>
 <span>  outdir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  tmpdir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  cores <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  add_resources <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  aria_bin <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -140,12 +139,6 @@ some intermediate calculations can become quite large.</p></dd>
 
 <dt>cores</dt>
 <dd><p>Deprecated. Use future-style parallelzation instead.</p></dd>
-
-
-<dt>add_resources</dt>
-<dd><p>Logical if existing resources in 'outdir' should be
-added to the portfolio. Defaults to TRUE. Setting it to FALSE can be of use
-e.g. if a previous download has terminated unexpectedly in order to resume.</p></dd>
 
 
 <dt>aria_bin</dt>
