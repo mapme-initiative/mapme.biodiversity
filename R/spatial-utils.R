@@ -1,3 +1,4 @@
+
 .vector_footprint <- function(src, opts = NULL) {
 
   info <- sf::gdal_utils("ogrinfo", src, options = c("-json", "-so", "-ro", "-nomd", "-nocount", opts), quiet = TRUE)
@@ -19,7 +20,7 @@
   bbox <- st_union(layers_bbox) %>%
     st_as_sf() %>%
     dplyr::rename(geometry = "x") %>%
-    dplyr::mutate(source = src)
+    dplyr::mutate(source = src)	
 
   st_crs(bbox) <- crs
   bbox[ , "source"]

@@ -12,6 +12,8 @@
 #'   specified resources must be supported by the package. You can use
 #'   \code{available_resources()} to get more information, e.g. additional
 #'   required arguments and their default values, about the supported resources.
+#' @param download Logical, indicating if resource files should be fetched
+#'   from the source location and written to the output directory.
 #' @param ... Additional arguments required for the requested resources. Check
 #'  \code{available_resources()} to learn more about the supported resources and
 #'  their arguments.
@@ -19,7 +21,7 @@
 #'   the sf portfolio object \code{x} with its attributes amended by the requested resources.
 #' @keywords function
 #' @export
-get_resources <- function(x, resources, ...) {
+get_resources <- function(x, resources, download = FALSE, ...) {
   connection_available <- curl::has_internet()
   if (!connection_available) {
     stop("There seems to be no internet connection. Cannot download resources.")
@@ -38,7 +40,7 @@ get_resources <- function(x, resources, ...) {
   ## TODO: check if we can go parallel here. Problem is when errors occur
   # for one resource and it terminates the complete process. We would have
   # to catch that so other processes can terminate successfully.
-  for (resource in resources) x <- .get_single_resource(x, resource, ...)
+  for (resource in resources) x <- .get_single_resource(x, resource, download, ...)
   x
 }
 
@@ -57,12 +59,14 @@ get_resources <- function(x, resources, ...) {
 #' @param x A portfolio object
 #' @param resource A character vector of length one indicating a supported
 #'   resource
+#' @param download Logical, indicating if resource files should be fetched
+#'   from the source location and written to the output directory.
 #' @param ... Any additional arguments. The relevant arguments for the indicator
 #'   function are matched. If there are missing arguments, the default value is
 #'   used.
 #' @keywords internal
 #' @noRd
-.get_single_resource <- function(x, resource, ...) {
+.get_single_resource <- function(x, resource, download = FALSE, ...) {
   args <- list(...)
   atts <- attributes(x)
 
@@ -85,6 +89,7 @@ get_resources <- function(x, resources, ...) {
   params <- .check_resource_arguments(selected_resource, args)
   params[["x"]] <- x
   params[["rundir"]] <- rundir
+  params[["outdir"]] <- outdir
   params[["verbose"]] <- atts[["verbose"]]
   gdal_config_global <- get_mapme_gdal_config()
   gdal_config_resource <- args[["gdal_config"]]

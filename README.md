@@ -108,6 +108,7 @@ cat(sprintf(
     ## Supported indicators:
     ## - active_fire_counts
     ## - active_fire_properties
+    ## - building_count
     ## - biome
     ## - building_count
     ## - cci_landcover
