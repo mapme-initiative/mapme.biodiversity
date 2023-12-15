@@ -79,47 +79,12 @@ cat(sprintf(
 ```
 
     ## Supported resources:
-    ## - chirps
-    ## - esalandcover
-    ## - fritz_et_al
-    ## - gfw_emissions
-    ## - gfw_lossyear
-    ## - gfw_treecover
-    ## - gmw
-    ## - nasa_firms
-    ## - nasa_grace
-    ## - nasa_srtm
-    ## - nelson_et_al
-    ## - soilgrids
-    ## - teow
-    ## - ucdp_ged
-    ## - worldclim_max_temperature
-    ## - worldclim_min_temperature
-    ## - worldclim_precipitation
-    ## - worldpop
+    ## - buildings
+    ## - cci_lcc
     ## 
     ## Supported indicators:
-    ## - active_fire_counts
-    ## - active_fire_properties
-    ## - biome
-    ## - deforestation_drivers
-    ## - drought_indicator
-    ## - ecoregion
-    ## - elevation
-    ## - fatalities
-    ## - landcover
-    ## - mangroves_area
-    ## - population_count
-    ## - precipitation_chirps
-    ## - precipitation_wc
-    ## - soilproperties
-    ## - temperature_max_wc
-    ## - temperature_min_wc
-    ## - traveltime
-    ## - treecover_area
-    ## - treecover_area_and_emissions
-    ## - treecoverloss_emissions
-    ## - tri
+    ## - building_count
+    ## - cci_landcover
 
 Once you have decided on an indicator you are interested in, you can
 initialize a biodiversity portfolio by using an sf-object that only
@@ -138,6 +103,7 @@ object.
     years = 2016:2017,
     outdir = system.file("res", package = "mapme.biodiversity"),
     tmpdir = system.file("tmp", package = "mapme.biodiversity"),
+    add_resources = FALSE,
     verbose = FALSE
   ) %>%
   get_resources(
@@ -147,18 +113,6 @@ object.
   calc_indicators("treecover_area_and_emissions", min_size = 1, min_cover = 30) %>%
   tidyr::unnest(treecover_area_and_emissions))
 ```
-
-    ## Simple feature collection with 2 features and 8 fields
-    ## Geometry type: POLYGON
-    ## Dimension:     XY
-    ## Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931
-    ## Geodetic CRS:  WGS 84
-    ## # A tibble: 2 × 9
-    ##   WDPAID NAME            DESIG_ENG     ISO3  assetid years emissions treecover
-    ##    <dbl> <chr>           <chr>         <chr>   <int> <int>     <dbl>     <dbl>
-    ## 1 478140 Sierra de Neiba National Park DOM         1  2016      2832     2357.
-    ## 2 478140 Sierra de Neiba National Park DOM         1  2017      3468     2345.
-    ## # ℹ 1 more variable: geom <POLYGON [°]>
 
 ## A note on parallel computing
 

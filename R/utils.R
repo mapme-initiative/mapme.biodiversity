@@ -126,59 +126,14 @@
 }
 
 
-#' Helper to create global grid
-#'
-#' @param xmin minimum longitude value (E/W)
-#' @param xmax maximum longitude value (E/W)
-#' @param ymin minimum latitude value (S/N)
-#' @param ymax maximum latitude value (E/W)
-#' @param dx difference in longitude value per grid
-#' @param dy difference in latitude value per grid
-#' @param proj projection system
-#' @keywords internal
-#' @noRd
-.make_global_grid <- function(xmin = -180, xmax = 170, dx = 10,
-                              ymin = -50, ymax = 80, dy = 10,
-                              proj = NULL) {
-  if (is.null(proj)) proj <- st_crs(4326)
-  ncells <- c(
-    (xmax - xmin) / dx,
-    (ymax - ymin) / dy
-  )
-
-  bbox <- st_bbox(c(xmin = xmin, xmax = xmax, ymax = ymax, ymin = ymin))
-  bbox <- st_as_sfc(bbox, crs = proj)
-  st_as_sf(st_make_grid(bbox, n = ncells, crs = proj, what = "polygons"))
-}
-
-.get_gfw_tile_id <- function(tile) {
-  min_x <- st_bbox(tile)[1]
-  max_y <- st_bbox(tile)[4]
-
-  # prepare tile names
-  if (min_x < 0) {
-    min_x <- paste0(sprintf("%03i", abs(min_x)), "W")
-  } else {
-    min_x <- paste0(sprintf("%03i", min_x), "E")
-  }
-  if (max_y < 0) {
-    max_y <- paste0(sprintf("%02i", abs(max_y)), "S")
-  } else {
-    max_y <- paste0(sprintf("%02i", max_y), "N")
-  }
-
-  paste0(max_y, "_", min_x)
-}
-
-
 #' Helper to unzip and remove zip files
 #'
 #' @param zip zip file to unzip
 #' @param rundir A directory where intermediate files are written to.
 #' @param remove if TRUE, removes the zip else keeps it
-#' @keywords internal
-#' @noRd
-.unzip_and_remove <- function(zip, rundir, remove = TRUE) {
+#' @importFrom utils unzip
+#' @export
+unzip_and_remove <- function(zip, rundir, remove = TRUE) {
   extension <- tools::file_ext(zip)
   if (extension == "zip") {
     filenames <- suppressWarnings(unzip(
@@ -207,9 +162,8 @@
 #' @param target_years Numeric/s indicating the target year/s
 #' @param available_years Numeric/s indicating the available year/s
 #' @param indicator A character vector with target indicator
-#' @keywords internal
-#' @noRd
-.check_available_years <- function(target_years, available_years, indicator) {
+#' @export
+check_available_years <- function(target_years, available_years, indicator) {
   if (any(!target_years %in% available_years)) {
     target_years <- target_years[target_years %in% available_years]
     if (length(target_years) > 0) {
@@ -233,9 +187,10 @@
 #' @param verbose Logical controlling verbosity.
 #' @param stubbornnes default value being 6
 #' @param check_existence default to TRUE
-#' @keywords internal
-#' @noRd
-.download_or_skip <- function(urls,
+#' @param aria_bin path to aria2c executable
+#' @export
+#' @importFrom httr http_error
+download_or_skip <- function(urls,
                               filenames,
                               verbose,
                               stubbornnes = 6,

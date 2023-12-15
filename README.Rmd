@@ -84,13 +84,14 @@ indicator has been calculated for individually for all assets in a
 portfolio, the data is returned as a nested list column to the original
 object.
 
-```{r calculation}
+```{r calculation, eval = FALSE}
 (system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
   sf::read_sf() %>%
   init_portfolio(
     years = 2016:2017,
     outdir = system.file("res", package = "mapme.biodiversity"),
     tmpdir = system.file("tmp", package = "mapme.biodiversity"),
+    add_resources = FALSE,
     verbose = FALSE
   ) %>%
   get_resources(

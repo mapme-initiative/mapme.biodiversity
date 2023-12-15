@@ -65,10 +65,11 @@ calc_indicators <- function(x, indicators, ...) {
   avail_resources <- atts[["resources"]]
   req_resources <- selected_indicator[[indicator]][["resources"]]
 
-  processor <- switch(processing_mode,
-                      asset = .asset_processor,
-                      portfolio = .portfolio_processor,
-                      stop(sprintf("Processing mode '%s' is not supported.", processing_mode)))
+  processor <- switch(
+    processing_mode,
+    asset = .asset_processor,
+    portfolio = .portfolio_processor,
+    stop(sprintf("Processing mode '%s' is not supported.", processing_mode)))
 
   results <- processor(x, fun, avail_resources, req_resources, params)
   # bind the asset results
@@ -82,69 +83,6 @@ calc_indicators <- function(x, indicators, ...) {
   x
 }
 
-
-
-.prep_resources <- function(x, avail_resources, req_resources) {
-  if (any(!names(req_resources) %in% names(avail_resources))) {
-    stop("Some required resources are not available.")
-  }
-  purrr::imap(req_resources, function(resource_type, resource_name) {
-    reader <- switch(resource_type,
-                     raster = .read_raster,
-                     vector = .read_vector,
-                     stop(sprintf("Resource type '%s' currently not supported", resource_type)))
-    reader(x, avail_resources[[resource_name]])})
-}
-
-.read_vector <- function(x, vector_sources) {
-  vectors <- purrr::map(vector_sources, function(source) {
-    tmp <- read_sf(source, wkt_filter = st_as_text(st_as_sfc(st_bbox(x))))
-    st_make_valid(tmp)
-  })
-  names(vectors) <- basename(vector_sources)
-  vectors
-}
-
-.read_raster <- function(x, tindex) {
-
-  if (st_crs(x) != st_crs(tindex)) {
-    x <- st_transform(x, st_crs(tindex))
-  }
-
-  geoms <- tindex[["geom"]]
-  unique_geoms <- unique(geoms)
-  grouped_geoms <- match(geoms, unique_geoms)
-  names(grouped_geoms) <- tindex[["location"]]
-  grouped_geoms <- sort(grouped_geoms)
-
-  n_tiles <- length(unique(grouped_geoms))
-  n_timesteps <- unique(table(grouped_geoms))
-
-  if (length(n_timesteps) > 1) {
-    stop("Did not find equal number of tiles per timestep.")
-  }
-
-  out <- lapply(1:n_timesteps, function(i){
-    index <- rep(FALSE, n_timesteps)
-    index[i] <- TRUE
-    filenames <- names(grouped_geoms[index])
-    layer_name <- tools::file_path_sans_ext(basename(filenames[1]))
-    vrt_name <- tempfile(pattern = sprintf("vrt_%s", layer_name), fileext = ".vrt")
-    tmp <- terra::vrt(filenames, filename = vrt_name)
-    names(tmp) <- layer_name
-    tmp
-  })
-  out <- do.call(c, out)
-
-  # crop the source to the extent of the current polygon
-  cropped <- try(terra::crop(out, terra::vect(x), snap = "out"))
-  if (inherits(cropped, "try-error")) {
-    warning(as.character(cropped))
-    return(NULL)
-  }
-  cropped
-}
-
 .asset_processor <- function(
     x,
     fun,
@@ -152,34 +90,16 @@ calc_indicators <- function(x, indicators, ...) {
     req_resources,
     params){
 
-  p <- progressr::progressor(steps = nrow(x))
-  furrr::future_map(1:nrow(x), function(i) {
+
+  n <- nrow(x)
+  p <- progressr::progressor(steps = n)
+
+  furrr::future_map(seq_len(n), function(i) {
     p()
     resources <- .prep_resources(x[i, ], avail_resources, req_resources)
     result <- .compute(x[i, ], resources, fun, params)
     .check_single_asset(result, i)
   }, .options = furrr::furrr_options(seed = TRUE))
-}
-
-#' @noRd
-#' @importFrom utils str
-.check_single_asset <- function(obj, i){
-
-  if (inherits(obj, "try-error")) {
-    warning(sprintf("At asset %s an error occured. Returning NA.\n", i), obj)
-    return(NA)
-  }
-
-  if (!inherits(obj, "tbl_df")) {
-    warning(sprintf("At asset %s a non-tibble object was returned. Returning NA.\n", i), str(obj))
-    return(NA)
-  }
-
-  if (nrow(obj) == 0) {
-    warning(sprintf("At asset %s a 0-length tibble was returned. Returning NA.", i))
-    return(NA)
-  }
-  obj
 }
 
 .portfolio_processor <- function(
@@ -202,6 +122,26 @@ calc_indicators <- function(x, indicators, ...) {
   args <- append(args, resources)
   args[["x"]] <- x
   try(do.call(what = fun, args = args), silent = TRUE)
+}
+
+#' @importFrom utils str
+.check_single_asset <- function(obj, i){
+
+  if (inherits(obj, "try-error")) {
+    warning(sprintf("At asset %s an error occured. Returning NA.\n", i), obj)
+    return(NA)
+  }
+
+  if (!inherits(obj, "tbl_df")) {
+    warning(sprintf("At asset %s a non-tibble object was returned. Returning NA.\n", i), str(obj))
+    return(NA)
+  }
+
+  if (nrow(obj) == 0) {
+    warning(sprintf("At asset %s a 0-length tibble was returned. Returning NA.", i))
+    return(NA)
+  }
+  obj
 }
 
 .bind_assets <- function(results) {
