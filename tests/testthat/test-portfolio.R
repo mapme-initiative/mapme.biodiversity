@@ -98,7 +98,6 @@ test_that("init_portfolio works", {
     outdir = outdir,
     tmpdir = tmpdir,
     verbose = FALSE,
-    add_resources = FALSE
   ) %>%
     get_resources(c("gfw_treecover", "gfw_lossyear"),
       vers_lossyear = "GFC-2020-v1.8", vers_treecover = "GFC-2020-v1.8"

@@ -18,7 +18,6 @@ test_that(".get_esalandcover works", {
     years = 2015,
     outdir = outdir,
     tmpdir = tmpdir,
-    add_resources = FALSE,
     verbose = FALSE
   )
   # Add testing attribute in order to skip downloads
@@ -34,7 +33,6 @@ test_that(".get_esalandcover works", {
     years = 2015,
     outdir = outdir,
     tmpdir = tmpdir,
-    add_resources = FALSE,
     verbose = TRUE
   )
   attributes(portfolio)$testing <- TRUE

@@ -58,22 +58,6 @@ test_that("calc_indicator works", {
     tolerance = 1e-3
   )
 
-  portfolio <- init_portfolio(
-    aoi,
-    years = 2000:2005,
-    outdir = outdir,
-    tmpdir = tmpdir,
-    add_resources = TRUE,
-    verbose = FALSE
-  )
-
-  stat <- calc_indicators(
-    portfolio,
-    indicators = "treecover_area",
-    min_size = 5,
-    min_cover = 30
-  )$treecover_area[[1]]
-
   expect_equal(
     names(stat),
     c("years", "treecover")
@@ -246,8 +230,8 @@ test_that(".prep works correctly", {
   )
 
   available_resources <- attr(x, "resources")
-  required_resources <- available_indicators("treecover_area")[[1]]$resources
-  output <- .prep(x, available_resources, required_resources)
+  required_resources <- available_indicators("treecover_area")[[1]][["resources"]]
+  output <- .prep_resources(x, available_resources, required_resources)
 
   expect_equal(
     length(output),
@@ -264,10 +248,15 @@ test_that(".prep works correctly", {
 
   x2 <- read_sf(list.files(
     system.file("extdata", package = "mapme.biodiversity"),
-    pattern = "shell_beach", full.names = TRUE
-  ))
-  required_resources <- available_indicators("mangroves_area")[[1]]$resources
-  output <- .prep(x2, available_resources, required_resources)
+    pattern = "shell_beach", full.names = TRUE )) %>%
+    init_portfolio(years = 2016,
+                     outdir = outdir,
+                     tmpdir = tmpdir,
+                     verbose = FALSE) %>%
+    get_resources("gmw")
+  available_resources <- attr(x2, "resources")
+  required_resources <- available_indicators("mangroves_area")[[1]][["resources"]]
+  output <- .prep_resources(x2, available_resources, required_resources)
 
   expect_equal(
     length(output),
@@ -291,13 +280,13 @@ test_that(".prep works correctly", {
   )
 
   expect_error(
-    .prep(x, available_resources, list(gmw = "sth")),
+    .prep_resources(x, available_resources, list(gmw = "sth")),
     "Resource type 'sth' currently not supported"
   )
 })
 
 
-test_that(".read_raster_source works correctly", {
+test_that(".read_raster works correctly", {
 
   dummy <- terra::rast()
   dummy_splitted <- aggregate(dummy, fact = c(ceiling(nrow(dummy) / 4), ceiling(ncol(dummy) / 4)))
@@ -317,25 +306,25 @@ test_that(".read_raster_source works correctly", {
   extent <- c(-180, 180, -90, 90)
   names(extent) <- c("xmin", "xmax", "ymin", "ymax")
 
-  tiled_temporal <- .read_raster_source(x, footprints)
+  tiled_temporal <- .read_raster(x, footprints)
   expect_equal(names(tiled_temporal), c("2000_tile_1", "2001_tile_1"))
   expect_equal(as.vector(ext(tiled_temporal)), extent)
 
-  tiled <- .read_raster_source(x, footprints[grep("2001", footprints$location), ])
+  tiled <- .read_raster(x, footprints[grep("2001", footprints$location), ])
   expect_equal(names(tiled), "2001_tile_1")
   expect_equal(as.vector(ext(tiled)), extent)
 
-  temporal <- .read_raster_source(x, footprints[grep("tile_12.tif", footprints$location), ])
+  temporal <- .read_raster(x, footprints[grep("tile_12.tif", footprints$location), ])
   extent[c(1:4)] <- c(90, 180, -45, 0)
   expect_equal(names(temporal), c("2000_tile_12", "2001_tile_12"))
   expect_equal(as.vector(ext(temporal)), extent)
 
-  single <- .read_raster_source(x, footprints[grep("2000_tile_10.tif", footprints$location), ])
+  single <- .read_raster(x, footprints[grep("2000_tile_10.tif", footprints$location), ])
   extent[c(1:4)] <- c(-90, 0, -45, 0)
   expect_equal(names(single), "2000_tile_10")
   expect_equal(as.vector(ext(single)), extent)
 
-  expect_error(.read_raster_source(x, footprints[1:24, ]))
+  expect_error(.read_raster(x, footprints[1:24, ]))
 
 })
 

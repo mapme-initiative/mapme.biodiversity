@@ -18,7 +18,6 @@ test_that(".get_teow works", {
     years = 2000:2010,
     outdir = outdir,
     tmpdir = tmpdir,
-    add_resources = FALSE,
     verbose = FALSE
   )
   # Add testing attribute in order to skip downloads

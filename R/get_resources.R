@@ -27,7 +27,7 @@ get_resources <- function(x, resources, ...) {
   # check if the requested resource is supported
   .check_requested_resources(resources)
   # check if any of the requested resources is already locally available
-  existing_resources <- attributes(x)$resources
+  existing_resources <- attributes(x)[["resources"]]
   resources <- .check_existing_resources(names(existing_resources), resources)
 
   if (length(resources) == 0) {
@@ -66,27 +66,27 @@ get_resources <- function(x, resources, ...) {
   args <- list(...)
   atts <- attributes(x)
 
-  rundir <- file.path(atts$outdir, resource)
+  rundir <- file.path(atts[["outdir"]], resource)
   dir.create(rundir, showWarnings = FALSE)
 
   selected_resource <- available_resources(resource)
   # match function
-  fun <- selected_resource[[resource]]$fun
+  fun <- selected_resource[[resource]][["fun"]]
   # matching the specified arguments to the required arguments
   params <- .check_resource_arguments(selected_resource, args)
-  params$x <- x
-  params$rundir <- rundir
-  params$verbose <- atts$verbose
+  params[["x"]] <- x
+  params[["rundir"]] <- rundir
+  params[["verbose"]] <- atts[["verbose"]]
 
   # conduct download function, TODO: we can think of an efficient way for
   # parallel downloads here or further upstream
   # if files to not exist use download function to download to tmpdir
-  if (atts$verbose) {
+  if (atts[["verbose"]]) {
     message(sprintf("Starting process to download resource '%s'........", resource))
   }
 
-  downloaded_files <- try(do.call(fun, args = params))
-  if (inherits(downloaded_files, "try-error")) {
+  resource_to_add <- try(do.call(fun, args = params))
+  if (inherits(resource_to_add, "try-error")) {
     stop(sprintf(
       paste("Download for resource %s failed. ",
         "Returning unmodified portfolio object.",
@@ -97,28 +97,24 @@ get_resources <- function(x, resources, ...) {
   }
 
   if (attr(x, "testing")) {
-    return(downloaded_files)
+    return(resource_to_add)
   }
 
   # we included an error checker so that we can still return a valid object
   # even in cases that one or more downloads fail
-  if (is.na(downloaded_files[1])) {
+  if (is.na(resource_to_add[1])) {
     return(x)
   }
 
   # if the selected resource is a raster resource create tileindex
   if (selected_resource[[resource]]$type == "raster") {
-    tindex_file <- file.path(rundir, paste0("tileindex_", resource, ".gpkg"))
-    if (file.exists(tindex_file)) file.remove(tindex_file)
-    footprints <- .make_footprints(downloaded_files)
-    write_sf(footprints, dsn = tindex_file)
-    downloaded_files <- tindex_file
+    resource_to_add <- .make_footprints(resource_to_add)
   }
 
   # add the new resource to the attributes of the portfolio object
-  resource_to_add <- list(downloaded_files)
+  resource_to_add <- list(resource_to_add)
   names(resource_to_add) <- resource
-  atts$resources <- append(atts$resources, resource_to_add)
+  atts[["resources"]] <- append(atts[["resources"]], resource_to_add)
   attributes(x) <- atts
   x
 }

@@ -30,7 +30,6 @@
 #'     years = c(1996, 2016),
 #'     outdir = outdir,
 #'     tmpdir = tempdir(),
-#'     add_resources = FALSE,
 #'     verbose = FALSE
 #'   ) %>%
 #'   get_resources("gmw") %>%

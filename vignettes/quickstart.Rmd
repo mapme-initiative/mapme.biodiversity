@@ -110,7 +110,6 @@ sample_portfolio <- init_portfolio(
   years = 2015,
   outdir = file.path(outdir, "res"),
   tmpdir = outdir,
-  add_resources = FALSE,
   verbose = TRUE
 )
 plot(sample_portfolio["assetid"])
@@ -130,18 +129,10 @@ to `tmpdir`. Thus, please ensure that you have write access to both directories
 and that there is sufficient free disk space to support the analysis of your 
 portfolio. 
 
-In case your share a common `outdir` across different portfolios, the 
-`add_resources` arguments controls the behavior of the portfolio initialization. 
-If set to `TRUE`, the function will automatically search for resources already
-available and add these as attributes to the portfolio. Note, this will be done
-without further checking if these resources actually match the spatio-temporal 
-extent of the supplied portfolio. Only use this if you are sure that for your 
-current portfolio, all resources have been downloaded previously. If set to 
-`FALSE`, no pre-existing resources will be added to the portfolio. Once you 
-request a specific portfolio for your resources, only those files will be 
+Once you request a specific resource for your portfolio, only those files will be 
 downloaded that are missing to match its spatio-temporal extent. This behavior 
-is beneficial if you share the `outdir` between different projects to ensure that 
-only matching resources are returned.
+is beneficial, e.g. in case you share the `outdir` between different projects to 
+ensure that only resources matching your current portfolio are returned.
 
 Finally, the `verbose` logical controls whether or not the package
 will print informative messages during the calculations. Note, 

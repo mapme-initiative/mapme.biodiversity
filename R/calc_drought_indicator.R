@@ -39,7 +39,6 @@
 #'     years = 2022,
 #'     outdir = outdir,
 #'     tmpdir = tempdir(),
-#'     add_resources = FALSE,
 #'     verbose = FALSE
 #'   ) %>%
 #'   get_resources("nasa_grace") %>%

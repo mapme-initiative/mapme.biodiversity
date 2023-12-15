@@ -18,7 +18,6 @@ test_that(".get_gfw_treecover works", {
     years = 2000:2020,
     outdir = outdir,
     tmpdir = tmpdir,
-    add_resources = FALSE,
     verbose = TRUE
   )
   # Add testing attribute in order to skip downloads
@@ -39,7 +38,6 @@ test_that(".get_gfw_treecover works", {
     years = 2000:2020,
     outdir = outdir,
     tmpdir = tmpdir,
-    add_resources = FALSE,
     verbose = TRUE
   )
   attributes(portfolio)$testing <- TRUE

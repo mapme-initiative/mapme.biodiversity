@@ -31,8 +31,7 @@
 #'   init_portfolio(
 #'     years = 2021,
 #'     outdir = outdir,
-#'     tmpdir = tempdir(),
-#'     add_resources = FALSE,
+#'     tmpdir = tempdir()
 #'     verbose = FALSE
 #'   ) %>%
 #'   get_resources("nasa_firms", instrument = "VIIRS") %>%
