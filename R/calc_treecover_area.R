@@ -96,7 +96,7 @@ NULL
     ))
     years <- years[years >= 2000]
     if (length(years) == 0) {
-      return(tibble(years = NA, treecover = NA, loss = NA))
+      return(tibble(years = NA, treecover = NA))
     }
   }
 
@@ -104,7 +104,7 @@ NULL
   minmax_gfw_treecover <- unique(as.vector(minmax(gfw_treecover)))
   if (length(minmax_gfw_treecover) == 1) {
     if (minmax_gfw_treecover == 0 | is.nan(minmax_gfw_treecover)) {
-      return(tibble(years = years, treecover = 0, loss = 0))
+      return(tibble(years = years, treecover = 0))
     }
   }
 
@@ -167,8 +167,7 @@ NULL
       if(all(losses[["loss"]] == 0)) {
         result <- data.frame(
           years = years,
-          treecover =  org_coverage,
-          loss = 0
+          treecover =  org_coverage
         )
         return(result)
       }

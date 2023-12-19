@@ -101,7 +101,7 @@ NULL
   minmax_gfw_treecover <- unique(as.vector(minmax(gfw_treecover)))
   if (length(minmax_gfw_treecover) == 1) {
     if (minmax_gfw_treecover == 0 | is.nan(minmax_gfw_treecover)) {
-      return(tibble(years = years, emissions = rep(0, length(years))))
+      return(tibble(years = years, emissions = 0))
     }
   }
 
