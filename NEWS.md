@@ -11,6 +11,11 @@
   means that `get_resources()` has to be run in every new R session to make 
   resource available to the respective indicator functions.
   
+- Speed improvements for GFW indicators (up to x10 for larger rasters) now
+  require R package `exactextractr` to be installed. Also, it is advised
+  to have the R package `landscapemetrics` installed to gain the full computation 
+  speed improvement.
+  
 ## Bug Fixes
 
 - `biome` and `ecoregions` now properly handle 0-length tibbles (#196)
