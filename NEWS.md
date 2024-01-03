@@ -2,8 +2,8 @@
 
 ## General
 
-- Quickstart vignette uses the ESA Landcover resource
-  instead of CHIRPS (#201).
+- Quickstart vignette uses the WorldPop resource instead of CHIRPS, not
+  relying on a working internet connection (#230).
   
 ## New features
 
