@@ -98,7 +98,7 @@ are important for the subsequent processing. The function will add a unique
 identifier column called 'assetid' that is used to uniquely identify each
 asset in the portfolio.
 
-```{r init_portfolio, dpi = 50, out.width="120%", out.height="120%"}
+```{r init_portfolio}
 # copying package internal resource to a temporary location
 outdir <- file.path(tempdir(), "mapme.biodiversity")
 dir.create(outdir)
@@ -239,14 +239,9 @@ sample_portfolio$population_count[10]
 
 For each asset, the result is a tibble in long format indicating the population
 sum per year (make sure to read the detailed indicator documentation via `?population_count`).
-Let's quickly visualize the results for a single asset. 
+Let's quickly visualize the results for a single asset:
 
-
-For readability of the
-plot, we will aggregate several different types of forest into a single
-class before:
-
-```{r plot_landcover, echo = FALSE, dpi = 50, out.width="120%", out.height="120%"}
+```{r plot_landcover, echo = FALSE}
 data <- sample_portfolio %>%
   filter(assetid == 10) %>%
   st_drop_geometry() %>%
