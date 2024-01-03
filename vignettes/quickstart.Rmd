@@ -19,9 +19,9 @@ knitr::opts_chunk$set(
 # Introduction
 
 In the following we will demonstrate an idealized workflow based on a subset
-of the ESA Landcover dataset that is delivered together with this package. You 
-can follow along the code snippets below to reproduce the results. Please note that
-to reduce the time it takes to process this vignette, we will not download
+of the WorldPop data set that is delivered together with this package. You 
+can follow along the code snippets below to reproduce the results. Please note 
+that to reduce the time it takes to process this vignette, we will not download
 any resources from the internet. In a real use case, thus processing time
 might substantially increase because resources have to be downloaded and real
 portfolios might be larger than the one created in this example. 
@@ -54,6 +54,10 @@ library(tidyr)
 
 aoi_path <- system.file("extdata", "sierra_de_neiba_478140.gpkg", package = "mapme.biodiversity")
 (aoi <- read_sf(aoi_path))
+```
+
+```{r simplify-aoi, echo = FALSE}
+aoi <- st_simplify(aoi, preserveTopology = TRUE, dTolerance = 500)
 ```
 
 The sf-object contains a single object of geometry type `MULTIPOLYGON`. The 
