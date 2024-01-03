@@ -66,7 +66,7 @@ library(mapme.biodiversity)
 library(sf)
 ```
 
-    ## Linking to GEOS 3.11.1, GDAL 3.8.1, PROJ 9.1.1; sf_use_s2() is TRUE
+    ## Linking to GEOS 3.11.1, GDAL 3.8.2, PROJ 9.1.1; sf_use_s2() is TRUE
 
 ``` r
 resources <- names(available_resources())

@@ -2,39 +2,42 @@
 
 ## General
 
-- Quickstart vignette now uses the ESA Landcover resource
-  as an example for how to use the package (#201).
-
+- Quickstart vignette uses the ESA Landcover resource
+  instead of CHIRPS (#201).
   
+## New features
+
+- GFW resources and indicators include latest GFC-2022-v1.10 version (#203).
+- Raster resources with a CRS different from WGS84 are now supported (#213).
+
 ## Breaking changes
-- The argument `add_resources` to `init_portfolio()` is now deprecated. This
+
+- The argument `add_resources` to `init_portfolio()` is deprecated. This
   means that `get_resources()` has to be run in every new R session to make 
-  resource available to the respective indicator functions.
+  resource available for further processing (#219).
+- Rasters are now cropped to the spatial extent of an asset with setting 
+  `snap="out"`, thus delivering a slightly bigger extent (#212).
   
 ## Bug Fixes
 
-- `biome` and `ecoregions` now properly handle 0-length tibbles (#196)
-- logic for reading raster tiles with temporal dimensions improved
-
-## New features
-
-- GFW resources and indicators now include latest GFC-2022-v1.10 version (#204).
-
+- `calc_indicators()` checks for 0-length tibbles (#196, #199, #215).
+- Fix bug with reading rasters with temporal dimensions (#209).
+- All raster cells touching a polygon are now returned (#208).
 
 ## Internal
 
-- `calc_indicators()` now includes a check for 0-length tibbles (#199, #216)
-- .read_raster_source now uses a single logic to cover all cases (e.g. single tiles,
-  tiled rasters with and without temporal dimension, single temporal rasters)
-- cropping rasters now uses `snap="out"` by default
-- .read_raster_source now projects assets in case their CRS differs from the raster
+- `.read_raster_source()` now uses a simplified logic to cover all cases 
+  (e.g. single tiles, tiled rasters with and without temporal dimension, 
+  single temporal rasters) (#211).
+- Rasters are cropped using `snap="out"` by default (#212).
+- `.read_raster_source()` now projects assets in case their CRS differs 
+  from the portfolio (#213).
 - tile indices for raster resources are now appended to the portfolio attributes
-  as `sf` objects instead of being written to disk (#217)
-- .read_raster_source now applies a precision round-trip of 4 decimal places to
-  match rasters with slight changes in their spatial extent (#217)
+  as `sf` objects instead of being written to disk (#219).
+- `.read_raster_source()` now applies a precision round-trip of 5 decimal point 
+  to match rasters with slight changes in their spatial extent (#217).
 - `register_resource()` and `register_indicator()` now issue warnings for 
-  resources/indicators with names already registered and overwrites them.
-
+  resources/indicators with names already registered and overwrites them (#220).
 
 
 # mapme.biodiversity 0.4.0
