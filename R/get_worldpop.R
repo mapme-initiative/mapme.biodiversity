@@ -12,63 +12,57 @@
 #' @keywords resource
 #' @format Global raster layers available for years 2000-2020.
 #' @source \url{https://www.worldpop.org/}
-NULL
+get_worldpop <- function(years = 2000:2020) {
+  function(
+    x,
+    name = "worldpop",
+    type = "raster",
+    rundir = tempdir(),
+    verbose = TRUE) {
 
+    available_years <- 2000:2020
+    target_years <- .check_available_years(
+      years, available_years, "popcount"
+    )
+    urls <- unlist(sapply(target_years, function(year) .get_worldpop_url(year)))
+    filenames <- file.path(rundir, basename(urls))
+    if (attr(x, "testing")) {
+      return(basename(filenames))
+    }
+    # start download in a temporal directory within tmpdir
+    aria_bin <- attributes(x)$aria_bin
+    .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin, check_existence = FALSE)
 
-#' Downloads Population Count layer
-#'
-#' @param x An sf object returned by init_portfolio
-#' @param rundir A directory where intermediate files are written to.
-#' @param verbose Logical controlling verbosity.
-#' @keywords internal
-#' @include register.R
-#' @noRd
-.get_worldpop <- function(x,
-                          rundir = tempdir(),
-                          verbose = TRUE) {
-  target_years <- attributes(x)$years
-  available_years <- 2000:2020
-  target_years <- .check_available_years(
-    target_years, available_years, "popcount"
-  )
-  urls <- unlist(sapply(target_years, function(year) .get_worldpop_url(year)))
-  filenames <- file.path(rundir, basename(urls))
-  if (attr(x, "testing")) {
-    return(basename(filenames))
-  }
-  # start download in a temporal directory within tmpdir
-  aria_bin <- attributes(x)$aria_bin
-  .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin, check_existence = FALSE)
+    footprints <- lapply(filenames, function(file) {
+      paste(as.character(st_bbox(rast(file))), collapse = " ")
+    })
+    all_equal <- length(unique(unlist(footprints))) == 1
 
-  footprints <- lapply(filenames, function(file) {
-    paste(as.character(st_bbox(rast(file))), collapse = " ")
-  })
-  all_equal <- length(unique(unlist(footprints))) == 1
-
-  if (!all_equal) {
-    footprints <- unlist(lapply(filenames, function(file) {
-      bbox <- round(as.numeric(st_bbox(rast(file))), 3)
-      identical(bbox, round(c(-180.00125, -72.00042, 179.99875, 83.99958), 3))
-    }))
-    if (any(!footprints)) {
-      index <- which(!footprints)
-      index_ok <- which(footprints)[1]
-      target <- rast(filenames[index_ok])
-      if (verbose) message("Resampling worldpop layers...")
-      for (i in index) {
-        tmpfile <- tempfile(tmpdir = rundir, fileext = ".tif")
-        file.copy(filenames[i], tmpfile)
-        tmp <- rast(tmpfile)
-        project(tmp, target,
-          filename = filenames[i],
-          overwrite = TRUE, method = "bilinear", progress = verbose
-        )
-        file.remove(tmpfile)
+    if (!all_equal) {
+      footprints <- unlist(lapply(filenames, function(file) {
+        bbox <- round(as.numeric(st_bbox(rast(file))), 3)
+        identical(bbox, round(c(-180.00125, -72.00042, 179.99875, 83.99958), 3))
+      }))
+      if (any(!footprints)) {
+        index <- which(!footprints)
+        index_ok <- which(footprints)[1]
+        target <- rast(filenames[index_ok])
+        if (verbose) message("Resampling worldpop layers...")
+        for (i in index) {
+          tmpfile <- tempfile(tmpdir = rundir, fileext = ".tif")
+          file.copy(filenames[i], tmpfile)
+          tmp <- rast(tmpfile)
+          project(tmp, target,
+                  filename = filenames[i],
+                  overwrite = TRUE, method = "bilinear", progress = verbose
+          )
+          file.remove(tmpfile)
+        }
       }
     }
+    # return paths to the raster
+    filenames
   }
-  # return paths to the raster
-  filenames
 }
 
 
@@ -96,10 +90,8 @@ NULL
   }
 }
 
-
 register_resource(
   name = "worldpop",
   type = "raster",
-  source = "https://www.worldpop.org/",
-  fun = .get_worldpop
-)
+  source = "WorldPop",
+  fun = get_worldpop)

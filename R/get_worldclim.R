@@ -35,10 +35,15 @@ NULL
 #' @keywords internal
 #' @include register.R
 #' @noRd
-.get_worldclim_min_temperature <- function(x,
-                                           rundir = tempdir(),
-                                           verbose = TRUE) {
-  .get_climatic_variables(x = x, layer = "tmin", rundir, verbose)
+get_worldclim_min_temperature <- function(years = 2000:2018){
+  function(
+    x,
+    name = "worldclim_min_temperature",
+    type = "raster",
+    rundir = tempdir(),
+    verbose = TRUE) {
+    .get_worldclim(x, "tmin", years, rundir, verbose)
+  }
 }
 
 
@@ -56,10 +61,15 @@ NULL
 #' @keywords internal
 #' @include register.R
 #' @noRd
-.get_worldclim_max_temperature <- function(x,
-                                           rundir = tempdir(),
-                                           verbose = TRUE) {
-  .get_climatic_variables(x = x, layer = "tmax", rundir, verbose)
+get_worldclim_max_temperature <- function(years = 2000:2018) {
+  function(
+    x,
+    name = "worldclim_max_temperature",
+    type = "raster",
+    rundir = tempdir(),
+    verbose = TRUE) {
+    .get_worldclim(x, "tmax", years, rundir, verbose)
+  }
 }
 
 
@@ -79,10 +89,15 @@ NULL
 #' @keywords internal
 #' @include register.R
 #' @noRd
-.get_worldclim_precipitation <- function(x,
-                                         rundir = tempdir(),
-                                         verbose = TRUE) {
-  .get_climatic_variables(x = x, layer = "prec", rundir, verbose)
+get_worldclim_precipitation <- function(years = 2000:2018) {
+  function(
+    x,
+    name = "worldclim_precipitation",
+    type = "raster",
+    rundir = tempdir(),
+    verbose = TRUE) {
+    .get_worldclim(x, "prec", years, rundir, verbose)
+  }
 }
 
 
@@ -93,21 +108,16 @@ NULL
 #' @return A character vector.
 #' @keywords internal
 #' @noRd
-.get_climatic_variables <- function(x,
-                                    layer,
-                                    rundir = tempdir(),
-                                    verbose = TRUE) {
-  if (missing(layer)) {
-    stop(paste("No target layer has been specified. ",
-      "Please select one of 'tmin', 'tmax', 'prec'.",
-      sep = ""
-    ))
-  }
+.get_worldclim <- function(
+    x,
+    layer,
+    years = 2000:2018,
+    rundir = tempdir(),
+    verbose = TRUE) {
 
-  target_years <- attributes(x)$years
-  available_years <- 2000:2018
+
   target_years <- .check_available_years(
-    target_years, available_years, layer
+    years, 2000:2018, layer
   )
 
   all_urls <- unlist(sapply(target_years, function(year) {
@@ -179,19 +189,19 @@ register_resource(
   name = "worldclim_min_temperature",
   type = "raster",
   source = "https://www.worldclim.org/data/index.html",
-  fun = .get_worldclim_min_temperature
+  fun = get_worldclim_min_temperature
 )
 
 register_resource(
   name = "worldclim_max_temperature",
   type = "raster",
   source = "https://www.worldclim.org/data/index.html",
-  fun = .get_worldclim_max_temperature
+  fun = get_worldclim_max_temperature
 )
 
 register_resource(
   name = "worldclim_precipitation",
   type = "raster",
   source = "https://www.worldclim.org/data/index.html",
-  fun = .get_worldclim_precipitation
+  fun = get_worldclim_precipitation
 )

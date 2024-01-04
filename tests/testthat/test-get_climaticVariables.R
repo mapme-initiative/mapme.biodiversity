@@ -22,16 +22,18 @@ test_that(".get_climaticVariables works", {
   )
   # Add testing attribute in order to skip downloads
   attributes(portfolio)$testing <- TRUE
+  get_resources(portfolio, get_worldclim_max_temperature(years = 2000))
+
   expect_equal(
-    .get_climatic_variables(portfolio, "tmin"),
+    get_resources(portfolio, get_worldclim_min_temperature(years  = 2000:2018)),
     c("wc2.1_2.5m_tmin_2000-2009.zip", "wc2.1_2.5m_tmin_2010-2018.zip")
   )
   expect_equal(
-    .get_climatic_variables(portfolio, "tmax"),
+    get_resources(portfolio, get_worldclim_max_temperature(years  = 2000:2018)),
     c("wc2.1_2.5m_tmax_2000-2009.zip", "wc2.1_2.5m_tmax_2010-2018.zip")
   )
   expect_equal(
-    .get_climatic_variables(portfolio, "prec"),
+    get_resources(portfolio, get_worldclim_precipitation(years  = 2000:2018)),
     c("wc2.1_2.5m_prec_2000-2009.zip", "wc2.1_2.5m_prec_2010-2018.zip")
   )
 })

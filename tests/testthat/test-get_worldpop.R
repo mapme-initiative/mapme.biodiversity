@@ -24,12 +24,12 @@ test_that(".get_worldpop works", {
   attributes(portfolio)$testing <- TRUE
 
   expect_equal(
-    .get_worldpop(portfolio),
-    "ppp_2001_1km_Aggregated.tif"
+  get_resources(portfolio, get_worldpop(years = 2001), rundir = outdir, verbose = TRUE),
+  "ppp_2001_1km_Aggregated.tif"
   )
 
-  expect_warning(
-    .get_worldpop_url(1999),
+  expect_error(
+    get_resources(portfolio, get_worldpop(years = 1999), rundir = outdir, verbose = TRUE),
     "Population count not available for target year 1999"
   )
 })

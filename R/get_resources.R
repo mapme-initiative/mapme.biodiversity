@@ -19,26 +19,13 @@
 #'   the sf portfolio object \code{x} with its attributes amended by the requested resources.
 #' @keywords function
 #' @export
-get_resources <- function(x, resources, ...) {
+get_resources <- function(x, ..., rundir = tempdir(), verbose = TRUE) {
   connection_available <- curl::has_internet()
   if (!connection_available) {
     stop("There seems to be no internet connection. Cannot download resources.")
   }
-  # check if the requested resource is supported
-  .check_requested_resources(resources)
-  # check if any of the requested resources is already locally available
-  existing_resources <- attributes(x)[["resources"]]
-  resources <- .check_existing_resources(names(existing_resources), resources)
-
-  if (length(resources) == 0) {
-    return(x)
-  }
-
-  # get the resources
-  ## TODO: check if we can go parallel here. Problem is when errors occur
-  # for one resource and it terminates the complete process. We would have
-  # to catch that so other processes can terminate successfully.
-  for (resource in resources) x <- .get_single_resource(x, resource, ...)
+  funs <- list(...)
+  for (fun in funs) x <- .get_single_resource(x, fun, rundir, verbose)
   x
 }
 
@@ -62,37 +49,20 @@ get_resources <- function(x, resources, ...) {
 #'   used.
 #' @keywords internal
 #' @noRd
-.get_single_resource <- function(x, resource, ...) {
-  args <- list(...)
+.get_single_resource <- function(x = NULL, fun = NULL, rundir = tempdir(), verbose = TRUE) {
   atts <- attributes(x)
-
-  rundir <- file.path(atts[["outdir"]], resource)
+  resource_name <- formals(fun)[["name"]]
+  rundir <- file.path(rundir, resource_name)
   dir.create(rundir, showWarnings = FALSE)
-
-  selected_resource <- available_resources(resource)
-  # match function
-  fun <- selected_resource[[resource]][["fun"]]
-  # matching the specified arguments to the required arguments
-  params <- .check_arguments(fun, args, resource, "resource")
-  params[["x"]] <- x
-  params[["rundir"]] <- rundir
-  params[["verbose"]] <- atts[["verbose"]]
-
-  # conduct download function, TODO: we can think of an efficient way for
-  # parallel downloads here or further upstream
-  # if files to not exist use download function to download to tmpdir
-  if (atts[["verbose"]]) {
-    message(sprintf("Starting process to download resource '%s'........", resource))
-  }
-
-  resource_to_add <- try(do.call(fun, args = params))
+  resource_to_add <- try(do.call(fun, args = list(x, resource_name, rundir, verbose)))
+  selected_resource <- available_resources(resource_name)
   if (inherits(resource_to_add, "try-error")) {
     stop(sprintf(
       paste("Download for resource %s failed. ",
         "Returning unmodified portfolio object.",
         sep = ""
       ),
-      resource
+      resource_name
     ))
   }
 
@@ -107,13 +77,13 @@ get_resources <- function(x, resources, ...) {
   }
 
   # if the selected resource is a raster resource create tileindex
-  if (selected_resource[[resource]]$type == "raster") {
+  if (selected_resource[[resource_name]]$type == "raster") {
     resource_to_add <- .make_footprints(resource_to_add)
   }
 
   # add the new resource to the attributes of the portfolio object
   resource_to_add <- list(resource_to_add)
-  names(resource_to_add) <- resource
+  names(resource_to_add) <- resource_name
   atts[["resources"]] <- append(atts[["resources"]], resource_to_add)
   attributes(x) <- atts
   x
