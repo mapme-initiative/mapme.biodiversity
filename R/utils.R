@@ -88,35 +88,33 @@
 #' @param args The arguments of requested resource
 #' @keywords internal
 #' @noRd
-.check_resource_arguments <- function(resource, args) {
+.check_arguments <- function(fun, args, fun_name, what) {
   # TODO: What about portfolio wide parameters?
-  resource_name <- names(resource)
-  required_args <- resource[[1]]$arguments
-  specified_args <- args[names(args) %in% names(required_args)]
+  default_args <- formals(fun)
+  default_args <- default_args[setdiff(names(default_args), c("x", "rundir", "verbose", "..."))]
+  if (any(sapply(default_args, is.null))) default_args <- default_args[-which(sapply(default_args, is.null))]
+  if(length(default_args) == 0) return(NULL)
+  specified_args <- args[names(args) %in% names(default_args)]
   # return early if all required arguments have been specified,
   # note that the correctness of the values have to be checked in the resource
   # function
-  if (length(specified_args) == length(required_args)) {
+  if (length(specified_args) == length(default_args)) {
     return(specified_args)
   }
-  if (length(specified_args) == 0) unspecified_args <- names(required_args)
+  if (length(specified_args) == 0) unspecified_args <- names(default_args)
   if (length(specified_args) > 0) {
-    req_args_names <- names(required_args)
-    unspecified_args <- req_args_names[!req_args_names %in% names(args)]
+    def_args_names <- names(default_args)
+    unspecified_args <- def_args_names[!def_args_names %in% names(specified_args)]
   }
-  base_msg <- paste("Argument '%s' for resource '%s' was not specified. ",
-    "Setting to default value of '%s'.",
-    sep = ""
-  )
-  default_args <- as.list(sapply(unspecified_args, function(arg_name) {
-    message(
-      sprintf(
-        base_msg, arg_name, resource_name,
-        paste0(required_args[[arg_name]], collapse = ", ")
-      )
-    )
-    required_args[[arg_name]]
-  }))
+
+  base_msg <- paste("Argument '%s' for %s '%s' was not specified. ",
+    "Setting to default value of '%s'.", sep = "")
+  for (arg_name in unspecified_args) {
+    message(sprintf(base_msg, arg_name, what, fun_name,
+                    paste0(default_args[[arg_name]], collapse = ", ")))
+  }
+
+  default_args <- default_args[unspecified_args]
 
   if (length(specified_args) > 0) {
     append(specified_args, default_args)

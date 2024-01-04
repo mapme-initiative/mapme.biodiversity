@@ -128,6 +128,5 @@ register_resource(
   name = "nelson_et_al",
   type = "raster",
   source = "https://figshare.com/articles/dataset/Travel_time_to_cities_and_ports_in_the_year_2015/7638134/3",
-  fun = .get_nelson_et_al,
-  arguments <- list(range_traveltime = "20k_50k")
+  fun = .get_nelson_et_al
 )

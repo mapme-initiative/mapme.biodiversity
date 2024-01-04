@@ -136,6 +136,5 @@ register_resource(
   name = "gmw",
   type = "vector",
   source = "https://data.unep-wcmc.org/datasets/45",
-  fun = .get_gmw,
-  arguments <- list()
+  fun = .get_gmw
 )

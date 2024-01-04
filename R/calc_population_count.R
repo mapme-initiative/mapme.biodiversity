@@ -72,7 +72,7 @@ NULL
 #' @include register.R
 #' @noRd
 .calc_population_count <- function(x,
-                                   worldpop,
+                                   worldpop = NULL,
                                    engine = "extract",
                                    stats_popcount = "sum",
                                    verbose = TRUE,
@@ -107,9 +107,5 @@ register_indicator(
   name = "population_count",
   resources = list(worldpop = "raster"),
   fun = .calc_population_count,
-  arguments = list(
-    engine = "extract",
-    stats_popcount = "sum"
-  ),
   processing_mode = "asset"
 )

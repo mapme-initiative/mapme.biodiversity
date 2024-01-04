@@ -1,5 +1,4 @@
 .pkgenv <- new.env(parent = emptyenv())
-
 .pkgenv$resources <- list()
 .pkgenv$indicators <- list()
 
@@ -20,8 +19,6 @@
 #'   'vector' or 'raster'.
 #' @param source Optional, preferably a URL where the data is found.
 #' @param fun The function you wish to register.
-#' @param arguments A list with named entries indicating the default values
-#'   for the arguments required by the function
 #'
 #' @return Nothing. Registers the function in the package environment.
 #' @export
@@ -33,12 +30,11 @@
 #'   type = "raster",
 #'   source = "https://data.globalforestwatch.org/documents/tree-cover-2000/explore",
 #'   fun = .get_gfw_treecover,
-#'   arguments = list(vears_treecover = "GFC-2021-v1.9")
 #' )
 #' }
-register_resource <- function(name = NULL, type = NULL, source = NULL, fun = NULL, arguments = list()) {
-  if (any(is.null(name), is.null(type), is.null(fun), is.null(arguments))) {
-    stop("neither name, type, fun or arguments can be NULL")
+register_resource <- function(name = NULL, type = NULL, source = NULL, fun = NULL) {
+  if (any(is.null(name), is.null(type), is.null(fun))) {
+    stop("neither name, type, nor fun can be NULL")
   }
 
   if (!inherits(name, "character") || length(name) > 1 || nchar(name) == 0) {
@@ -61,20 +57,11 @@ register_resource <- function(name = NULL, type = NULL, source = NULL, fun = NUL
     stop("fun needs to be a valid function signature")
   }
 
-  if (!inherits(arguments, "list")) {
-    stop(paste(
-      "arguments needs to be a list. Specify an empty list if your",
-      "function does not have any arguments"
-    ))
-  }
-
-
   resource <- list(
     list(
       type = type,
       source = source,
-      fun = match.fun(fun),
-      arguments = arguments
+      fun = match.fun(fun)
     )
   )
 
@@ -103,8 +90,6 @@ register_resource <- function(name = NULL, type = NULL, source = NULL, fun = NUL
 #'   to registered resources and a single character value indicates the
 #'   type of that resources
 #' @param fun The function you wish to register.
-#' @param arguments A list with named entries indicating the default values
-#'   for the arguments required by the function
 #' @param processing_mode A character vector indicating the preferred
 #'   processing mode of the indicator. Either 'asset' or 'portfolio'.
 #'
@@ -120,20 +105,16 @@ register_resource <- function(name = NULL, type = NULL, source = NULL, fun = NUL
 #'     gfw_lossyear = "raster"
 #'   ),
 #'   fun = .calc_treecover_area,
-#'   arguments = list(
-#'     min_size = 10,
-#'     min_cover = 30
-#'   ),
 #'   processing_mode = "asset"
 #' )
 #' }
 register_indicator <- function(name = NULL, resources = NULL, fun = NULL,
-                               arguments = NULL, processing_mode = NULL) {
+                              processing_mode = NULL) {
   if (any(
-    is.null(name), is.null(resources), is.null(fun), is.null(arguments),
+    is.null(name), is.null(resources), is.null(fun),
     is.null(processing_mode)
   )) {
-    stop("neither name, resources, fun, arguments, or processing_mode can be NULL")
+    stop("neither name, resources, fun, nor processing_mode can be NULL")
   }
 
   if (!inherits(name, "character") || length(name) > 1 || nchar(name) == 0) {
@@ -146,13 +127,6 @@ register_indicator <- function(name = NULL, resources = NULL, fun = NULL,
 
   if (!inherits(fun, "function")) {
     stop("fun needs to be a valid function signature")
-  }
-
-  if (!inherits(arguments, "list")) {
-    stop(paste(
-      "arguments needs to be a list. Specify an empty list if your",
-      "function does not have any arguments"
-    ))
   }
 
   if (!processing_mode %in% c("asset", "portfolio")) {
@@ -179,7 +153,6 @@ register_indicator <- function(name = NULL, resources = NULL, fun = NULL,
     list(
       resources = resources,
       fun = match.fun(fun),
-      arguments = arguments,
       processing_mode = processing_mode
     )
   )

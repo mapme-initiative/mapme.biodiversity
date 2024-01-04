@@ -73,7 +73,7 @@ NULL
 #' @include register.R
 #' @noRd
 .calc_precipitation_wc <- function(x,
-                                   worldclim_precipitation,
+                                   worldclim_precipitation = NULL,
                                    engine = "extract",
                                    stats_worldclim = "mean",
                                    ...) {
@@ -90,9 +90,5 @@ register_indicator(
   name = "precipitation_wc",
   resources = list(worldclim_precipitation = "raster"),
   fun = .calc_precipitation_wc,
-  arguments = list(
-    engine = "extract",
-    stats_worldclim = "mean"
-  ),
   processing_mode = "asset"
 )

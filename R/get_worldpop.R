@@ -101,6 +101,5 @@ register_resource(
   name = "worldpop",
   type = "raster",
   source = "https://www.worldpop.org/",
-  fun = .get_worldpop,
-  arguments <- list()
+  fun = .get_worldpop
 )

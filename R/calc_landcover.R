@@ -59,7 +59,7 @@ NULL
 #' @noRd
 
 .calc_landcover <- function(x,
-                            esalandcover,
+                            esalandcover = NULL,
                             verbose = TRUE,
                             ...) {
   percentage <- NULL
@@ -102,6 +102,5 @@ register_indicator(
   name = "landcover",
   resources = list(esalandcover = "raster"),
   fun = .calc_landcover,
-  arguments = list(),
   processing_mode = "asset"
 )

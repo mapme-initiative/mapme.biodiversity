@@ -44,7 +44,7 @@ NULL
 #' @include register.R
 #' @noRd
 .calc_deforestation_drivers <- function(x,
-                                        fritz_et_al,
+                                        fritz_et_al = NULL,
                                         verbose = TRUE,
                                         ...) {
   if (is.null(fritz_et_al)) {
@@ -77,6 +77,5 @@ register_indicator(
   name = "deforestation_drivers",
   resources = list(fritz_et_al = "raster"),
   fun = .calc_deforestation_drivers,
-  arguments = list(),
   processing_mode = "asset"
 )

@@ -135,6 +135,5 @@ register_resource(
   name = "esalandcover",
   type = "raster",
   source = "https://registry.opendata.aws/esa-worldcover-vito/",
-  fun = .get_esalandcover,
-  arguments <- list()
+  fun = .get_esalandcover
 )

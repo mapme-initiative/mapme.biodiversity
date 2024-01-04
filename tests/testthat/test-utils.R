@@ -30,12 +30,12 @@ test_that(".check_existing_resources works", {
   expect_error(.check_existing_resources(available_resource, c("gfw_treecover", "srtmelevation", "accessibility"), needed = TRUE), "required resources are not available")
 })
 
-test_that(".check_resource_arguments works", {
+test_that(".check_arguments works", {
   resource <- available_resources("gfw_treecover")
-  expect_message(out <- .check_resource_arguments(resource, args = list()), "Argument 'vers_treecover' for resource 'gfw_treecover' was not specified")
+  expect_message(out <- .check_arguments(resource$gfw_treecover$fun, args = list(), "gfw_treecover", "resource"), "Argument 'vers_treecover' for resource 'gfw_treecover' was not specified")
   expect_equal(out, list(vers_treecover = "GFC-2022-v1.10"))
-  expect_equal(.check_resource_arguments(resource, args = list(vers_treecover = "GFC-2021-v1.9")), list(vers_treecover = "GFC-2021-v1.9"))
-  expect_equal(.check_resource_arguments(resource, args = list(vers_treecover = "GFC-2021-v1.9", noarg = NA)), list(vers_treecover = "GFC-2021-v1.9"))
+  expect_equal(.check_arguments(resource$gfw_treecover$fun, args = list(vers_treecover = "GFC-2021-v1.9")), list(vers_treecover = "GFC-2021-v1.9"))
+  expect_equal(.check_arguments(resource$gfw_treecover$fun, args = list(vers_treecover = "GFC-2021-v1.9", noarg = NA)), list(vers_treecover = "GFC-2021-v1.9"))
 })
 
 test_that(".make_global_grid works", {

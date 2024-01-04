@@ -58,7 +58,7 @@ NULL
 
 #' @include register.R
 .calc_soilproperties <- function(x,
-                                 soilgrids,
+                                 soilgrids = NULL,
                                  engine = "extract",
                                  stats_soil = "mean",
                                  verbose = TRUE,
@@ -101,9 +101,5 @@ register_indicator(
   name = "soilproperties",
   resources = list(soilgrids = "raster"),
   fun = .calc_soilproperties,
-  arguments = list(
-    engine = "extract",
-    stats_soil = "mean"
-  ),
   processing_mode = "asset"
 )

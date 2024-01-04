@@ -55,7 +55,7 @@ NULL
 #' @include register.R
 #' @noRd
 .calc_mangroves_area <- function(x,
-                                 gmw,
+                                 gmw = NULL,
                                  verbose = TRUE,
                                  ...) {
   results <- lapply(1:length(gmw), function(j) {
@@ -77,6 +77,5 @@ register_indicator(
   name = "mangroves_area",
   resources = list(gmw = "vector"),
   fun = .calc_mangroves_area,
-  arguments = list(),
   processing_mode = "asset"
 )

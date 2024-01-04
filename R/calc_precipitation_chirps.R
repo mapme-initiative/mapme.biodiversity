@@ -71,7 +71,7 @@ NULL
 #' @include register.R
 #' @noRd
 .calc_precipitation_chirps <- function(x,
-                                       chirps,
+                                       chirps = NULL,
                                        scales_spi = 3,
                                        spi_prev_years = 8,
                                        engine = "extract",
@@ -221,10 +221,5 @@ register_indicator(
   name = "precipitation_chirps",
   resources = list(chirps = "raster"),
   fun = .calc_precipitation_chirps,
-  arguments = list(
-    scales_spi = 3,
-    spi_prev_years = 8,
-    engine = "extract"
-  ),
   processing_mode = "portfolio"
 )

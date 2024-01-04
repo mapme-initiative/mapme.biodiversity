@@ -72,7 +72,7 @@ NULL
 #' @include register.R
 #' @noRd
 .calc_traveltime <- function(x,
-                             nelson_et_al,
+                             nelson_et_al = NULL,
                              engine = "extract",
                              stats_accessibility = "mean",
                              verbose = TRUE,
@@ -98,9 +98,5 @@ register_indicator(
   name = "traveltime",
   resources = list(nelson_et_al = "raster"),
   fun = .calc_traveltime,
-  arguments = list(
-    engine = "extract",
-    stats_accessibility = "mean"
-  ),
   processing_mode = "asset"
 )

@@ -179,22 +179,19 @@ register_resource(
   name = "worldclim_min_temperature",
   type = "raster",
   source = "https://www.worldclim.org/data/index.html",
-  fun = .get_worldclim_min_temperature,
-  arguments <- list()
+  fun = .get_worldclim_min_temperature
 )
 
 register_resource(
   name = "worldclim_max_temperature",
   type = "raster",
   source = "https://www.worldclim.org/data/index.html",
-  fun = .get_worldclim_max_temperature,
-  arguments <- list()
+  fun = .get_worldclim_max_temperature
 )
 
 register_resource(
   name = "worldclim_precipitation",
   type = "raster",
   source = "https://www.worldclim.org/data/index.html",
-  fun = .get_worldclim_precipitation,
-  arguments <- list()
+  fun = .get_worldclim_precipitation
 )

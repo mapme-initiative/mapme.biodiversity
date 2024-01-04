@@ -72,7 +72,7 @@ NULL
 #' @include register.R
 #' @noRd
 .calc_drought_indicator <- function(x,
-                                    nasa_grace,
+                                    nasa_grace = NULL,
                                     engine = "extract",
                                     stats_drought = "mean",
                                     verbose = TRUE,
@@ -108,9 +108,5 @@ register_indicator(
   name = "drought_indicator",
   resources = list(nasa_grace = "raster"),
   fun = .calc_drought_indicator,
-  arguments = list(
-    engine = "extract",
-    stats_drought = "mean"
-  ),
   processing_mode = "portfolio"
 )

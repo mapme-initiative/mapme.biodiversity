@@ -55,7 +55,7 @@ NULL
 #' @include register.R
 #' @noRd
 .calc_active_fire_counts <- function(x,
-                                     nasa_firms,
+                                     nasa_firms = NULL,
                                      verbose = TRUE,
                                      ...) {
   acq_date <- NULL
@@ -85,6 +85,5 @@ register_indicator(
   name = "active_fire_counts",
   resources = list(nasa_firms = "vector"),
   fun = .calc_active_fire_counts,
-  arguments = list(),
   processing_mode = "asset"
 )

@@ -55,7 +55,7 @@ NULL
 #' @include register.R
 #' @noRd
 .calc_biome <- function(x,
-                        teow,
+                        teow = NULL,
                         verbose = TRUE,
                         ...) {
   BIOME_NAME <- NULL
@@ -94,6 +94,5 @@ register_indicator(
   name = "biome",
   resources = list(teow = "vector"),
   fun = .calc_biome,
-  arguments = list(),
   processing_mode = "asset"
 )

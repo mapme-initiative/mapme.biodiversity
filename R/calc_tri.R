@@ -81,7 +81,7 @@ NULL
 #' @include register.R
 #' @noRd
 .calc_tri <- function(x,
-                      nasa_srtm,
+                      nasa_srtm = NULL,
                       engine = "extract",
                       stats_tri = "mean",
                       verbose = TRUE,
@@ -112,9 +112,5 @@ register_indicator(
   name = "tri",
   resources = list(nasa_srtm = "raster"),
   fun = .calc_tri,
-  arguments = list(
-    engine = "extract",
-    stats_tri = "mean"
-  ),
   processing_mode = "asset"
 )

@@ -202,6 +202,5 @@ register_resource(
   name = "nasa_firms",
   type = "vector",
   source = "https://firms.modaps.eosdis.nasa.gov",
-  fun = .get_nasa_firms,
-  arguments <- list(instrument = "VIIRS")
+  fun = .get_nasa_firms
 )

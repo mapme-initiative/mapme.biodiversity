@@ -64,6 +64,5 @@ register_resource(
   name = "gfw_emissions",
   type = "raster",
   source = "https://data.globalforestwatch.org/datasets/gfw::forest-greenhouse-gas-emissions/about",
-  fun = .get_gfw_emissions,
-  arguments <- list()
+  fun = .get_gfw_emissions
 )

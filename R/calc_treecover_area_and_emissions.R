@@ -76,9 +76,9 @@ NULL
 #' @include register.R
 #' @noRd
 .calc_treecover_area_and_emissions <- function(x,
-                                               gfw_treecover,
-                                               gfw_lossyear,
-                                               gfw_emissions,
+                                               gfw_treecover = NULL,
+                                               gfw_lossyear = NULL,
+                                               gfw_emissions = NULL,
                                                min_size = 10,
                                                min_cover = 35,
                                                verbose = TRUE,
@@ -155,9 +155,5 @@ register_indicator(
     gfw_emissions = "raster"
   ),
   fun = .calc_treecover_area_and_emissions,
-  arguments = list(
-    min_size = 10,
-    min_cover = 35
-  ),
   processing_mode = "asset"
 )

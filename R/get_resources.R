@@ -73,7 +73,7 @@ get_resources <- function(x, resources, ...) {
   # match function
   fun <- selected_resource[[resource]][["fun"]]
   # matching the specified arguments to the required arguments
-  params <- .check_resource_arguments(selected_resource, args)
+  params <- .check_arguments(fun, args, resource, "resource")
   params[["x"]] <- x
   params[["rundir"]] <- rundir
   params[["verbose"]] <- atts[["verbose"]]

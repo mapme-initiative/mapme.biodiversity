@@ -116,7 +116,7 @@ NULL
 #' @include register.R
 #' @noRd
 .calc_fatalities <- function(x,
-                             ucdp_ged,
+                             ucdp_ged = NULL,
                              precision_location = 1,
                              precision_time = 1,
                              verbose = TRUE,
@@ -202,9 +202,5 @@ register_indicator(
   name = "fatalities",
   resources = list(ucdp_ged = "vector"),
   fun = .calc_fatalities,
-  arguments = list(
-    precision_location = 1,
-    precision_time = 1
-  ),
   processing_mode = "asset"
 )

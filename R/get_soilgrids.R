@@ -281,10 +281,5 @@ register_resource(
   name = "soilgrids",
   type = "raster",
   source = "https://www.isric.org/explore/soilgrids",
-  fun = .get_soilgrids,
-  arguments <- list(
-    layers = "clay",
-    depths = "0-5cm",
-    stats = "mean"
-  )
+  fun = .get_soilgrids
 )

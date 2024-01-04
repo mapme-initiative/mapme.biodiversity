@@ -55,13 +55,13 @@ calc_indicators <- function(x, indicators, ...) {
 
   # retrieve the selected indicator
   selected_indicator <- available_indicators(indicator)
-  # get processing mode
+  fun <- selected_indicator[[indicator]][["fun"]]
   processing_mode <- selected_indicator[[indicator]][["processing_mode"]]
   # matching the specified arguments to the required arguments
-  params <- .check_resource_arguments(selected_indicator, args)
+  params <- .check_arguments(fun, args, indicator, "indicator")
   # append parameters
   params[["verbose"]] <- atts[["verbose"]]
-  fun <- selected_indicator[[indicator]][["fun"]]
+
   avail_resources <- atts[["resources"]]
   req_resources <- selected_indicator[[indicator]][["resources"]]
 

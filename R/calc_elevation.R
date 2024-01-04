@@ -69,11 +69,11 @@ NULL
 #' @keywords internal
 #' @include register.R
 #' @noRd
-.calc_elevation <- function(x,
-                            nasa_srtm,
+.calc_elevation <- function(x = NULL,
+                            nasa_srtm = NULL,
                             engine = "extract",
                             stats_elevation = "mean",
-                            verbose,
+                            verbose = TRUE,
                             ...) {
   if (is.null(nasa_srtm)) {
     return(NA)
@@ -92,9 +92,5 @@ register_indicator(
   name = "elevation",
   resources = list(nasa_srtm = "raster"),
   fun = .calc_elevation,
-  arguments = list(
-    engine = "extract",
-    stats_elevation = "mean"
-  ),
   processing_mode = "asset"
 )

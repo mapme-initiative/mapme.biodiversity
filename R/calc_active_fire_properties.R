@@ -57,7 +57,7 @@ NULL
 #' @include register.R
 #' @noRd
 .calc_active_fire_properties <- function(x,
-                                         nasa_firms,
+                                         nasa_firms = NULL,
                                          verbose = TRUE,
                                          ...) {
   # change quality flag to charachter to allow binding MODIS and VIIRS
@@ -85,6 +85,5 @@ register_indicator(
   name = "active_fire_properties",
   resources = list(nasa_firms = "vector"),
   fun = .calc_active_fire_properties,
-  arguments = list(),
   processing_mode = "asset"
 )

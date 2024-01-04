@@ -73,7 +73,7 @@ NULL
 #' @include register.R
 #' @noRd
 .calc_temperature_max_wc <- function(x,
-                                     worldclim_max_temperature,
+                                     worldclim_max_temperature = NULL,
                                      engine = "extract",
                                      stats_worldclim = "mean",
                                      ...) {
@@ -90,9 +90,5 @@ register_indicator(
   name = "temperature_max_wc",
   resources = list(worldclim_max_temperature = "raster"),
   fun = .calc_temperature_max_wc,
-  arguments = list(
-    engine = "extract",
-    stats_worldclim = "mean"
-  ),
   processing_mode = "asset"
 )

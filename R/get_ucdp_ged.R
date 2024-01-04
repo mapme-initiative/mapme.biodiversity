@@ -116,8 +116,5 @@ register_resource(
   name = "ucdp_ged",
   type = "vector",
   source = "https://ucdp.uu.se/downloads/",
-  fun = .get_ucdp_ged,
-  arguments <- list(
-    version_ged = "latest"
-  )
+  fun = .get_ucdp_ged
 )

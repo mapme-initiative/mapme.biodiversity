@@ -57,7 +57,7 @@ NULL
 #' @include register.R
 #' @noRd
 .calc_ecoregion <- function(x,
-                            teow,
+                            teow = NULL,
                             verbose = TRUE,
                             ...) {
   ECO_NAME <- NULL
@@ -137,6 +137,5 @@ register_indicator(
   name = "ecoregion",
   resources = list(teow = "vector"),
   fun = .calc_ecoregion,
-  arguments = list(),
   processing_mode = "asset"
 )

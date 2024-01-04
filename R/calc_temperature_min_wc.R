@@ -102,7 +102,7 @@ NULL
 #' @include register.R
 #' @noRd
 .calc_worldclim <- function(x,
-                            worldclim,
+                            worldclim = NULL,
                             engine = "extract",
                             stats_worldclim = "mean") {
   if (is.null(worldclim)) {
@@ -137,9 +137,5 @@ register_indicator(
   name = "temperature_min_wc",
   resources = list(worldclim_min_temperature = "raster"),
   fun = .calc_temperature_min_wc,
-  arguments = list(
-    engine = "extract",
-    stats_worldclim = "mean"
-  ),
   processing_mode = "asset"
 )
