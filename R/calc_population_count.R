@@ -71,36 +71,39 @@ NULL
 #' @keywords internal
 #' @include register.R
 #' @noRd
-.calc_population_count <- function(x,
-                                   worldpop = NULL,
-                                   engine = "extract",
-                                   stats_popcount = "sum",
-                                   verbose = TRUE,
-                                   ...) {
-  if (is.null(worldpop)) {
-    return(NA)
+calc_population_count <- function(engine = "extract", stats = "sum") {
+  function(x,
+           worldpop = NULL,
+           name = "population_count",
+           mode = "asset",
+           rundir = mapme_options()$tempdir,
+           verbose = mapme_options()$verbose) {
+    if (is.null(worldpop)) {
+      return(NA)
+    }
+
+    # set max value of 65535 to NA
+    worldpop <- clamp(
+      worldpop,
+      lower = -Inf,
+      upper = 65534,
+      values = FALSE
+    )
+
+    results <- .select_engine(
+      x = x,
+      raster = worldpop,
+      stats = stats,
+      engine = engine,
+      name = "popcount",
+      mode = "asset"
+    )
+
+    years <- unlist(lapply(names(worldpop), function(x) strsplit(x, "_")[[1]][2]))
+    results$year <- years
+    results
   }
 
-  # set max value of 65535 to NA
-  worldpop <- clamp(
-    worldpop,
-    lower = -Inf,
-    upper = 65534,
-    values = FALSE
-  )
-
-  results <- .select_engine(
-    x = x,
-    raster = worldpop,
-    stats = stats_popcount,
-    engine = engine,
-    name = "popcount",
-    mode = "asset"
-  )
-
-  years <- unlist(lapply(names(worldpop), function(x) strsplit(x, "_")[[1]][2]))
-  results$year <- years
-  results
 }
 
 register_indicator(

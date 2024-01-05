@@ -17,7 +17,7 @@ get_worldpop <- function(years = 2000:2020) {
     x,
     name = "worldpop",
     type = "raster",
-    rundir = tempdir(),
+    outdir = mapme_options()$outdir,
     verbose = TRUE) {
 
     available_years <- 2000:2020
@@ -25,13 +25,12 @@ get_worldpop <- function(years = 2000:2020) {
       years, available_years, "popcount"
     )
     urls <- unlist(sapply(target_years, function(year) .get_worldpop_url(year)))
-    filenames <- file.path(rundir, basename(urls))
-    if (attr(x, "testing")) {
+    filenames <- file.path(outdir, basename(urls))
+    if (mapme_options()$testing) {
       return(basename(filenames))
     }
     # start download in a temporal directory within tmpdir
-    aria_bin <- attributes(x)$aria_bin
-    .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin, check_existence = FALSE)
+    .download_or_skip(urls, filenames, verbose, aria_bin = NULL, check_existence = FALSE)
 
     footprints <- lapply(filenames, function(file) {
       paste(as.character(st_bbox(rast(file))), collapse = " ")
@@ -49,7 +48,7 @@ get_worldpop <- function(years = 2000:2020) {
         target <- rast(filenames[index_ok])
         if (verbose) message("Resampling worldpop layers...")
         for (i in index) {
-          tmpfile <- tempfile(tmpdir = rundir, fileext = ".tif")
+          tmpfile <- tempfile(tmpdir = outdir, fileext = ".tif")
           file.copy(filenames[i], tmpfile)
           tmp <- rast(tmpfile)
           project(tmp, target,

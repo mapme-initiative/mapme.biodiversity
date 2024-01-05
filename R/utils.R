@@ -3,12 +3,12 @@
 #' @param resources A character vector with requested resources
 #' @keywords internal
 #' @noRd
-.check_requested_resources <- function(resources) {
-  names_resources <- names(available_resources())
+.check_available_resources <- function(resources) {
+  names_resources <- names(mapme_options()$resources)
   # check for unsupported resources
   if (any(!resources %in% names_resources)) {
     unsupported <- resources[which(!resources %in% names_resources)]
-    base_msg <- "The following requested %s not supported: %s."
+    base_msg <- "The following requested %s not available: %s."
     mid_msg <- ifelse(length(unsupported) == 1, "resource is", "resources are")
     end_msg <- paste(unsupported, collapse = ", ")
     stop(sprintf(base_msg, mid_msg, end_msg))
@@ -20,23 +20,12 @@
 #' @param indicators A character vector with requested indicators
 #' @keywords internal
 #' @noRd
-.check_requested_indicator <- function(indicators) {
-  names_indicators <- names(available_indicators())
-  # check for unsupported resources
-  if (any(!indicators %in% names_indicators)) {
-    unsupported <- indicators[which(!indicators %in% names_indicators)]
-    base_msg <- "The following requested %s not supported: %s."
-    mid_msg <- ifelse(length(unsupported) == 1,
-      "indicator is", "indicators are"
-    )
-    end_msg <- paste(unsupported, collapse = ", ")
-    stop(sprintf(base_msg, mid_msg, end_msg))
-  }
-  required_resources <- sapply(
-    available_indicators()[indicators],
-    function(x) names(x$resources)
-  )
-  required_resources <- unique(unlist(required_resources))
+.get_required_resources <- function(indicators) {
+  required_resources <- sapply(indicators, function(x) {
+    args <- formals(x)
+    setdiff(names(args), c("x", "name", "mode", "rundir", "verbose"))
+    })
+  required_resources <- unique(required_resources)
   as.vector(required_resources)
 }
 
@@ -68,8 +57,8 @@
       nonexisting <- req_resources[which(!req_resources %in% ex_resources)]
       base_msg <- "The following required %s not available: %s."
       mid_msg <- ifelse(length(nonexisting) == 1,
-        "resource is",
-        "resources are"
+                        "resource is",
+                        "resources are"
       )
       end_msg <- paste(nonexisting, collapse = ", ")
       stop(sprintf(base_msg, mid_msg, end_msg))
@@ -108,7 +97,7 @@
   }
 
   base_msg <- paste("Argument '%s' for %s '%s' was not specified. ",
-    "Setting to default value of '%s'.", sep = "")
+                    "Setting to default value of '%s'.", sep = "")
   for (arg_name in unspecified_args) {
     message(sprintf(base_msg, arg_name, what, fun_name,
                     paste0(default_args[[arg_name]], collapse = ", ")))
@@ -271,8 +260,8 @@
         }
 
         status <- download.file(missing_urls[i], missing_filenames[i],
-          quiet = TRUE,
-          mode = ifelse(Sys.info()["sysname"] == "Windows", "wb", "w")
+                                quiet = TRUE,
+                                mode = ifelse(Sys.info()["sysname"] == "Windows", "wb", "w")
         )
         if (status != 0) {
           return(list(urls = missing_urls[i], filenames = missing_filenames[i]))
@@ -284,8 +273,8 @@
       unsuccessful <- unsuccessful[which(sapply(unsuccessful, function(x) !is.null(x)))]
       if (length(unsuccessful) > 0 & counter <= stubbornnes) {
         warning(paste("Some target files have not been downloaded correctly. ",
-          "Download will be retried.",
-          sep = ""
+                      "Download will be retried.",
+                      sep = ""
         ))
         missing_urls <- sapply(unsuccessful, function(x) x$missing_urls)
         missing_filenames <- sapply(unsuccessful, function(x) x$missing_filenames)
@@ -338,4 +327,8 @@
     msg <- sprintf(msg, pkg, pkg)
     stop(msg, .call = FALSE)
   }
+}
+
+.check_error <- function(obj, msg) {
+  if (inherits(obj, "try-error")) stop(msg)
 }

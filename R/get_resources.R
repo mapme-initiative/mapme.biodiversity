@@ -19,13 +19,16 @@
 #'   the sf portfolio object \code{x} with its attributes amended by the requested resources.
 #' @keywords function
 #' @export
-get_resources <- function(x, ..., rundir = tempdir(), verbose = TRUE) {
+get_resources <- function(
+    x,
+    ...,
+    outdir = mapme_options()$outdir) {
   connection_available <- curl::has_internet()
   if (!connection_available) {
     stop("There seems to be no internet connection. Cannot download resources.")
   }
   funs <- list(...)
-  for (fun in funs) x <- .get_single_resource(x, fun, rundir, verbose)
+  for (fun in funs) x <- .get_single_resource(x, fun, outdir)
   x
 }
 
@@ -49,44 +52,38 @@ get_resources <- function(x, ..., rundir = tempdir(), verbose = TRUE) {
 #'   used.
 #' @keywords internal
 #' @noRd
-.get_single_resource <- function(x = NULL, fun = NULL, rundir = tempdir(), verbose = TRUE) {
-  atts <- attributes(x)
-  resource_name <- formals(fun)[["name"]]
-  rundir <- file.path(rundir, resource_name)
-  dir.create(rundir, showWarnings = FALSE)
-  resource_to_add <- try(do.call(fun, args = list(x, resource_name, rundir, verbose)))
-  selected_resource <- available_resources(resource_name)
-  if (inherits(resource_to_add, "try-error")) {
-    stop(sprintf(
-      paste("Download for resource %s failed. ",
-        "Returning unmodified portfolio object.",
-        sep = ""
-      ),
-      resource_name
-    ))
-  }
-
-  if (attr(x, "testing")) {
+.get_single_resource <- function(
+    x = NULL,
+    fun = NULL,
+    outdir = mapme_options()$outdir) {
+  # get resource name and create a temp directory
+  args <- formals(fun)
+  resource_name <- args[["name"]]
+  outdir <- file.path(outdir, resource_name)
+  dir.create(outdir, showWarnings = FALSE)
+  args$outdir <- outdir
+  # call the resource function
+  resource_to_add <- try(do.call(fun, args = as.list(args)))
+  # check for errors
+  msg <- sprintf(paste("Download for resource %s failed. ",
+                       "Returning unmodified portfolio object.",
+                       sep = ""), resource_name)
+  .check_error(resource_to_add, msg = msg)
+  # return early in testing mode
+  if (mapme_options()$testing) {
     return(resource_to_add)
   }
 
-  # we included an error checker so that we can still return a valid object
-  # even in cases that one or more downloads fail
-  if (is.na(resource_to_add[1])) {
+  if (is.null(resource_to_add[1])) {
     return(x)
   }
-
-  # if the selected resource is a raster resource create tileindex
-  if (selected_resource[[resource_name]]$type == "raster") {
+  # create tileindex for raster resources
+  if (args[["type"]] == "raster") {
     resource_to_add <- .make_footprints(resource_to_add)
   }
-
-  # add the new resource to the attributes of the portfolio object
-  resource_to_add <- list(resource_to_add)
-  names(resource_to_add) <- resource_name
-  atts[["resources"]] <- append(atts[["resources"]], resource_to_add)
-  attributes(x) <- atts
-  x
+  # add the new resource to the environment
+  .add_resource(resource_to_add, resource_name)
+  invisible(x)
 }
 
 .make_footprints <- function(raster_files) {
@@ -107,4 +104,10 @@ get_resources <- function(x, ..., rundir = tempdir(), verbose = TRUE) {
       dplyr::mutate(location = file)
   })
   do.call(rbind, footprints)
+}
+
+.add_resource <- function(res, name){
+  res <- list(res)
+  names(res) <- name
+  mapme_options(resources = res)
 }
