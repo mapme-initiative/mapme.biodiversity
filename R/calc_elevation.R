@@ -69,23 +69,27 @@ NULL
 #' @keywords internal
 #' @include register.R
 #' @noRd
-.calc_elevation <- function(x = NULL,
-                            nasa_srtm = NULL,
-                            engine = "extract",
-                            stats_elevation = "mean",
-                            verbose = TRUE,
-                            ...) {
-  if (is.null(nasa_srtm)) {
-    return(NA)
-  }
-  .select_engine(
-    x = x,
-    raster = nasa_srtm,
-    stats = stats_elevation,
-    engine = engine,
+calc_elevation <- function(engine = "extract", stats = "mean") {
+  function(
+    x = NULL,
+    nasa_srtm = NULL,
     name = "elevation",
-    mode = "asset"
-  )
+    mode = "asset",
+    rundir = mapme_options()$tempdir,
+    verbose = mapme_options()$verbose) {
+
+    if (is.null(nasa_srtm)) {
+      return(NA)
+    }
+    .select_engine(
+      x = x,
+      raster = nasa_srtm,
+      stats = stats,
+      engine = engine,
+      name = "elevation",
+      mode = "asset"
+    )
+  }
 }
 
 register_indicator(

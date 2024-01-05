@@ -62,6 +62,7 @@ get_resources <- function(
   outdir <- file.path(outdir, resource_name)
   dir.create(outdir, showWarnings = FALSE)
   args$outdir <- outdir
+  args$x <- x
   # call the resource function
   resource_to_add <- try(do.call(fun, args = as.list(args)))
   # check for errors

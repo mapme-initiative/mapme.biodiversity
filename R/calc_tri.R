@@ -80,32 +80,35 @@ NULL
 #' @keywords internal
 #' @include register.R
 #' @noRd
-.calc_tri <- function(x,
-                      nasa_srtm = NULL,
-                      engine = "extract",
-                      stats_tri = "mean",
-                      verbose = TRUE,
-                      ...) {
-  # check if input engines are correct
-  if (is.null(nasa_srtm)) {
-    return(NA)
-  }
-
-  tri <- terra::terrain(
-    nasa_srtm,
-    v = "TRI",
-    unit = "degrees",
-    neighbors = 8
-  )
-
-  .select_engine(
-    x = x,
-    raster = tri,
-    stats = stats_tri,
-    engine = engine,
+calc_tri <-  function(engine = "extract", stats = "mean") {
+  function(
+    x = NULL,
+    nasa_srtm = NULL,
     name = "tri",
-    mode = "asset"
-  )
+    mode = "asset",
+    rundir = mapme_options()$tempdir,
+    verbose = mapme_options()$verbose) {
+    # check if input engines are correct
+    if (is.null(nasa_srtm)) {
+      return(NA)
+    }
+
+    tri <- terra::terrain(
+      nasa_srtm,
+      v = "TRI",
+      unit = "degrees",
+      neighbors = 8
+    )
+
+    .select_engine(
+      x = x,
+      raster = tri,
+      stats = stats,
+      engine = engine,
+      name = "tri",
+      mode = "asset"
+    )
+  }
 }
 
 register_indicator(

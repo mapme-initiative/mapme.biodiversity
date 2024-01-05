@@ -72,6 +72,10 @@ calc_indicators <- function(
   # nest the results
   results <- nest(results, !!indicator_name := !.id)
   # attach results
+  if (indicator_name %in% names(x)) {
+    warning(sprintf("Indicator column '%s' is already present. Overwriting now.",
+                    indicator_name))
+  }
   x[indicator_name] <- results[indicator_name]
   # sent sf column to back and return
   x <- relocate(x, !!attributes(x)[["sf_column"]], .after = last_col())

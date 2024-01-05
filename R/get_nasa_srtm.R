@@ -30,49 +30,54 @@ NULL
 #' @keywords internal
 #' @include register.R
 #' @noRd
-.get_nasa_srtm <- function(x,
-                           rundir = tempdir(),
-                           verbose = TRUE) {
-  if (!requireNamespace("rstac", quietly = T)) {
-    stop(paste0(
-      "NASA SRTM resource requires rstac to be installed.\n",
-      'Please run install.packages("rstac").'
-    ))
+get_nasa_srtm <- function() {
+  function(
+    x,
+    name = "nasa_srtm",
+    type = "raster",
+    outdir = mapme_options()$outdir) {
+
+    if (!requireNamespace("rstac", quietly = T)) {
+      stop(paste0(
+        "NASA SRTM resource requires rstac to be installed.\n",
+        'Please run install.packages("rstac").'
+      ))
+    }
+
+    urls <- try(rstac::stac("https://planetarycomputer.microsoft.com/api/stac/v1/") %>%
+                  rstac::stac_search(
+                    collection = "nasadem",
+                    bbox = as.numeric(st_bbox(x)),
+                    limit = NULL
+                  ) %>%
+                  rstac::post_request() %>%
+                  rstac::items_fetch() %>%
+                  rstac::assets_url(asset_names = "elevation"))
+
+    if (inherits(urls, "try-error")) {
+      stop("Download for NASA SRTM resource was unsuccesfull")
+    }
+
+    if (length(urls) == 0) {
+      stop("The extent of the portfolio does not intersect with the SRTM grid.")
+    }
+
+    if (mapme_options()$testing) {
+      return(basename(urls))
+    }
+
+    filenames <- file.path(outdir, basename(urls))
+    # start download in a temporal directory within tmpdir
+    aria_bin <- attributes(x)$aria_bin
+    .download_or_skip(
+      urls = urls,
+      filenames = filenames,
+      verbose = mapme_options()$verbose,
+      aria_bin = aria_bin,
+      check_existence = FALSE
+    )
+    filenames
   }
-
-  urls <- try(rstac::stac("https://planetarycomputer.microsoft.com/api/stac/v1/") %>%
-    rstac::stac_search(
-      collection = "nasadem",
-      bbox = as.numeric(st_bbox(x)),
-      limit = NULL
-    ) %>%
-    rstac::post_request() %>%
-    rstac::items_fetch() %>%
-    rstac::assets_url(asset_names = "elevation"))
-
-  if (inherits(urls, "try-error")) {
-    stop("Download for NASA SRTM resource was unsuccesfull")
-  }
-
-  if (length(urls) == 0) {
-    stop("The extent of the portfolio does not intersect with the SRTM grid.")
-  }
-
-  if (attr(x, "testing")) {
-    return(basename(urls))
-  }
-
-  filenames <- file.path(rundir, basename(urls))
-  # start download in a temporal directory within tmpdir
-  aria_bin <- attributes(x)$aria_bin
-  .download_or_skip(
-    urls = urls,
-    filenames = filenames,
-    verbose = verbose,
-    aria_bin = aria_bin,
-    check_existence = FALSE
-  )
-  filenames
 }
 
 register_resource(
