@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -105,7 +105,7 @@
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>In the following we will demonstrate an idealized workflow based on a
-subset of the WorldPop data set that is delivered together with this
+subset of the ESA Landcover dataset that is delivered together with this
 package. You can follow along the code snippets below to reproduce the
 results. Please note that to reduce the time it takes to process this
 vignette, we will not download any resources from the internet. In a
@@ -171,12 +171,12 @@ only the largest polygon.</p>
 <span><span class="co">#&gt; Simple feature collection with 1 feature and 4 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POLYGON</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
-<span><span class="co">#&gt; Bounding box:  xmin: -71.80731 ymin: 18.58134 xmax: -71.33268 ymax: 18.69799</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span></span>
 <span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 5</span></span></span>
 <span><span class="co">#&gt;   WDPAID NAME            DESIG_ENG     ISO3                                 geom</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">478</span>140 Sierra de Neiba National Park DOM   ((-71.76202 18.66333, -71.74668 18…</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">478</span>140 Sierra de Neiba National Park DOM   ((-71.76134 18.66333, -71.76067 18…</span></span></code></pre></div>
 <p>In the following, we will simulate a portfolio consisting of several
 polygons (assets, in the jargon of this package). To this end, we create
 smaller polygons within the original extent of the main polygon. This
@@ -346,25 +346,34 @@ metadata and the output indicator column to get a clearer picture of
 what has happened.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">sample_portfolio</span> <span class="op">&lt;-</span> <span class="va">sample_portfolio</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">assetid</span>, <span class="va">WDPAID</span>, <span class="va">population_count</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Simple feature collection with 23 features and 3 fields</span></span>
+<span><span class="co">#&gt; Simple feature collection with 20 features and 3 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POLYGON</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
-<span><span class="co">#&gt; Bounding box:  xmin: -71.80731 ymin: 18.58134 xmax: -71.33268 ymax: 18.69799</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span></span>
 <span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 23 × 4</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 20 × 4</span></span></span>
 <span><span class="co">#&gt;    assetid WDPAID population_count                                          geom</span></span>
 <span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>                                           <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>       1 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.78358 18.65871, -71.78358 18.67725, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>       2 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.79993 18.6867, -71.78358 18.67725, -71…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>       3 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.76202 18.66333, -71.74668 18.64602, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>       4 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.71238 18.62893, -71.71238 18.63615, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>       5 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.75984 18.69367, -71.75984 18.69095, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>       6 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.71429 18.68985, -71.73611 18.67725, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>       7 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.66702 18.63736, -71.68865 18.64985, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>       8 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.70975 18.68944, -71.68865 18.67725, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>       9 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.67141 18.68721, -71.68865 18.67725, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>      10 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.64095 18.64971, -71.64119 18.64985, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 13 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>       1 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.78546 18.658, -71.78546 18.67313, -71.…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>       2 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.80292 18.68321, -71.78546 18.67313, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>       3 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.76134 18.66333, -71.76067 18.66267, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>       4 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.7616 18.69374, -71.7616 18.68691, -71.…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>       5 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.73417 18.64352, -71.71386 18.63179, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>       6 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.66801 18.63288, -71.69 18.64557, -71.7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>       7 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.71386 18.68865, -71.71386 18.68691, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>       8 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.65801 18.68222, -71.66613 18.68691, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>       9 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.66613 18.63079, -71.66613 18.62665, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>      10 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.63562 18.67697, -71.64227 18.67313, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span>      11 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.59453 18.66749, -71.59453 18.64815, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span>      12 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.52294 18.61972, -71.52294 18.63179, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span>      13 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.54943 18.67465, -71.5468 18.67313, -71…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span>      14 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.49535 18.64342, -71.49907 18.64557, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span>      15 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.46559 18.63735, -71.4752 18.63179, -71…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span>      16 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.43534 18.63634, -71.43264 18.63478, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span>      17 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.42747 18.62066, -71.42747 18.60424, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span>      18 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.35587 18.582, -71.35587 18.59046, -71.…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">19</span>      19 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.37974 18.61442, -71.37974 18.60424, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">20</span>      20 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.34017 18.59953, -71.35587 18.59046, -7…</span></span></code></pre></div>
 <p>We obtained a new listed column in our sf object that is called like
 the requested indicator. For each asset in our portfolio, this column
 contains a tibble with 6 rows and two columns. Let’s have a closer look
@@ -375,12 +384,12 @@ at one of these objects.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 2</span></span></span>
 <span><span class="co">#&gt;   popcount_sum year </span></span>
 <span><span class="co">#&gt;          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>         31.9 2010 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>         43.3 2011 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>         32.8 2012 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>         32.9 2013 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>         36.5 2014 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>         38.0 2015</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>         302. 2010 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>         326. 2011 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>         299. 2012 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>         282. 2013 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>         345. 2014 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>         398. 2015</span></span></code></pre></div>
 <p>For each asset, the result is a tibble in long format indicating the
 population sum per year (make sure to read the detailed indicator
 documentation via <code><a href="../reference/population_count.html">?population_count</a></code>). Let’s quickly
@@ -400,12 +409,12 @@ data object relatively small.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 4</span></span></span>
 <span><span class="co">#&gt;   assetid WDPAID popcount_sum year </span></span>
 <span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       3 <span style="text-decoration: underline;">478</span>140         255. 2010 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       3 <span style="text-decoration: underline;">478</span>140         292. 2011 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       3 <span style="text-decoration: underline;">478</span>140         297. 2012 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       3 <span style="text-decoration: underline;">478</span>140         291. 2013 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>       3 <span style="text-decoration: underline;">478</span>140         271. 2014 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>       3 <span style="text-decoration: underline;">478</span>140         265. 2015</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       3 <span style="text-decoration: underline;">478</span>140         153. 2010 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       3 <span style="text-decoration: underline;">478</span>140         186. 2011 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       3 <span style="text-decoration: underline;">478</span>140         187. 2012 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       3 <span style="text-decoration: underline;">478</span>140         184. 2013 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>       3 <span style="text-decoration: underline;">478</span>140         165. 2014 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>       3 <span style="text-decoration: underline;">478</span>140         161. 2015</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="enabling-parallel-computing">Enabling parallel computing<a class="anchor" aria-label="anchor" href="#enabling-parallel-computing"></a>
@@ -471,30 +480,39 @@ it.</p>
 <span>  dsn <span class="op">=</span> <span class="va">tmp_output</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Writing layer `metadata' to data source </span></span>
-<span><span class="co">#&gt;   `/tmp/Rtmpo4ys3S/file25743d54fe9e.gpkg' using driver `GPKG'</span></span>
-<span><span class="co">#&gt; Writing 23 features with 2 fields and geometry type Polygon.</span></span>
-<span><span class="co">#&gt; Updating layer `population_count' to data source `/tmp/Rtmpo4ys3S/file25743d54fe9e.gpkg' using driver `GPKG'</span></span>
-<span><span class="co">#&gt; Writing 138 features with 3 fields without geometries.</span></span>
+<span><span class="co">#&gt;   `/tmp/RtmpTCvjij/file2552479c6e95.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt; Writing 20 features with 2 fields and geometry type Polygon.</span></span>
+<span><span class="co">#&gt; Updating layer `population_count' to data source `/tmp/RtmpTCvjij/file2552479c6e95.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt; Writing 120 features with 3 fields without geometries.</span></span>
 <span><span class="op">(</span><span class="va">portfolio_from_disk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_portfolio.html">read_portfolio</a></span><span class="op">(</span><span class="va">tmp_output</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Simple feature collection with 23 features and 3 fields</span></span>
+<span><span class="co">#&gt; Simple feature collection with 20 features and 3 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POLYGON</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
-<span><span class="co">#&gt; Bounding box:  xmin: -71.80731 ymin: 18.58134 xmax: -71.33268 ymax: 18.69799</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span></span>
 <span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 23 × 4</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 20 × 4</span></span></span>
 <span><span class="co">#&gt;    assetid WDPAID population_count                                          geom</span></span>
 <span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>                                           <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>       1 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.78358 18.65871, -71.78358 18.67725, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>       2 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.79993 18.6867, -71.78358 18.67725, -71…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>       3 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.76202 18.66333, -71.74668 18.64602, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>       4 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.71238 18.62893, -71.71238 18.63615, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>       5 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.75984 18.69367, -71.75984 18.69095, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>       6 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.71429 18.68985, -71.73611 18.67725, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>       7 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.66702 18.63736, -71.68865 18.64985, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>       8 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.70975 18.68944, -71.68865 18.67725, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>       9 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.67141 18.68721, -71.68865 18.67725, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>      10 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.64095 18.64971, -71.64119 18.64985, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 13 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>       1 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.78546 18.658, -71.78546 18.67313, -71.…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>       2 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.80292 18.68321, -71.78546 18.67313, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>       3 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.76134 18.66333, -71.76067 18.66267, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>       4 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.7616 18.69374, -71.7616 18.68691, -71.…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>       5 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.73417 18.64352, -71.71386 18.63179, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>       6 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.66801 18.63288, -71.69 18.64557, -71.7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>       7 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.71386 18.68865, -71.71386 18.68691, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>       8 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.65801 18.68222, -71.66613 18.68691, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>       9 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.66613 18.63079, -71.66613 18.62665, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>      10 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.63562 18.67697, -71.64227 18.67313, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span>      11 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.59453 18.66749, -71.59453 18.64815, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span>      12 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.52294 18.61972, -71.52294 18.63179, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span>      13 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.54943 18.67465, -71.5468 18.67313, -71…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span>      14 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.49535 18.64342, -71.49907 18.64557, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span>      15 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.46559 18.63735, -71.4752 18.63179, -71…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span>      16 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.43534 18.63634, -71.43264 18.63478, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span>      17 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.42747 18.62066, -71.42747 18.60424, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span>      18 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.35587 18.582, -71.35587 18.59046, -71.…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">19</span>      19 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.37974 18.61442, -71.37974 18.60424, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">20</span>      20 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.34017 18.59953, -71.35587 18.59046, -7…</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
