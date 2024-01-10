@@ -291,8 +291,8 @@ as a geopackage that can be read directly into e.g. QGIS or as a CSV
 without the geospatial information:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">st_write</a></span><span class="op">(</span><span class="va">port_wide_1</span>, dsn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".gpkg"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Writing layer `file25361085ced2' to data source </span></span>
-<span><span class="co">#&gt;   `/tmp/RtmpV9beJp/file25361085ced2.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt; Writing layer `file259139343d84' to data source </span></span>
+<span><span class="co">#&gt;   `/tmp/RtmpJ4JABK/file259139343d84.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">#&gt; Writing 9 features with 3 fields and geometry type Polygon.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="va">port_wide_1</span><span class="op">)</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".csv"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -432,8 +432,8 @@ object to a geospatial format of our choice or drop the geometry
 information altogether and dump the data into a csv.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">st_write</a></span><span class="op">(</span><span class="va">port_wide_3</span>, dsn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".gpkg"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Writing layer `file25364a98023a' to data source </span></span>
-<span><span class="co">#&gt;   `/tmp/RtmpV9beJp/file25364a98023a.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt; Writing layer `file259150caa969' to data source </span></span>
+<span><span class="co">#&gt;   `/tmp/RtmpJ4JABK/file259150caa969.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">#&gt; Writing 9 features with 13 fields and geometry type Polygon.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="va">port_wide_3</span><span class="op">)</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".csv"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
