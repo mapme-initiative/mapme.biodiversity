@@ -86,6 +86,8 @@ get_resources <- function(x, resources, download = FALSE, ...) {
   params[["rundir"]] <- rundir
   params[["outdir"]] <- outdir
   params[["verbose"]] <- atts[["verbose"]]
+  gdal_config_global <- get_mapme_gdal_config()
+  gdal_config_resource <- args[["gdal_config"]]
 
   # conduct download function, TODO: we can think of an efficient way for
   # parallel downloads here or further upstream
@@ -94,13 +96,15 @@ get_resources <- function(x, resources, download = FALSE, ...) {
     message(sprintf("Starting process to download resource '%s'........", resource))
   }
 
-  resource_to_add <- .call_resource_fun(fun, params, resource)
+  resource_to_add <- .call_resource_fun(fun, params, resource, gdal_config_resource)
 
   if (attr(x, "testing")) {
     return(resource_to_add)
   }
 
-  resource_to_add <- .fetch_resource(resource_to_add, resource, type, download, atts[["verbose"]])
+  resource_to_add <- .fetch_resource(resource_to_add, resource, type,
+                                     download, atts[["verbose"]],
+                                     gdal_config_global, gdal_config_resource)
   resource_to_add <- .set_precision(resource_to_add, precision = 1e5)
 
   # add the new resource to the attributes of the portfolio object
@@ -113,8 +117,10 @@ get_resources <- function(x, resources, download = FALSE, ...) {
 
 
 
-.call_resource_fun <- function(fun, args, name){
-  resource <- try(do.call(fun, args = args))
+.call_resource_fun <- function(fun, args, name, gdal_config = list()){
+  withr::with_envvar(gdal_config, code = {
+    resource <- try(do.call(fun, args = args))
+  })
 
   if (inherits(resource, "try-error")) {
     stop(paste0("Download for resource ", name, " failed.\n",
@@ -137,20 +143,22 @@ get_resources <- function(x, resources, download = FALSE, ...) {
     name = NULL,
     type = NULL,
     download = FALSE,
-    verbose = TRUE) {
+    verbose = TRUE,
+    gdal_config_global = get_mapme_gdal_config(),
+    gdal_config_resource = NULL) {
 
   name <- paste0("Fetching resource ", name, "...")
-
   if (download){
     purrr::walk2(
       resource[["destination"]], resource[["source"]],
-      \(x,y) .get_spds(x,y,type),
+      \(x,y) .get_spds(x,y,type, gdal_config_global, gdal_config_resource),
       .progress = ifelse(verbose, name, NULL))
     resource[["location"]] <- resource[["destination"]]
+    attributes(resource)[["gdal_config"]]<- gdal_config_global
   } else {
     resource[["location"]] <- resource[["source"]]
+    attributes(resource)[["gdal_config"]]<- gdal_config_resource
   }
-
   resource["location"]
 }
 

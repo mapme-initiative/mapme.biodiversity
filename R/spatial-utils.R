@@ -55,29 +55,47 @@
 }
 
 
-.get_spds <- function(dest, src, what = c("vector", "raster")) {
+.get_spds <- function(
+    dest, src, what = c("vector", "raster"),
+    gdal_config_global = get_mapme_gdal_config(),
+    gdal_config_resource = list()) {
 
-  what <- match.arg(what)
-  if(spds_exists(dest)) return(TRUE)
+  withr::with_envvar(gdal_config_global, code = {
+    if(spds_exists(dest)) return(TRUE)}
+  )
 
-  out <- try(switch(
-    what,
-    vector =  sf::gdal_utils(
-      util = "vectortranslate",
-      source = src,
-      destination = dest),
-    raster = sf::gdal_utils(
-      util = "translate",
-      source = src,
-      destination = dest)))
+  util <- switch(what, vector = "vectortranslate", raster = "translate")
 
+  if (length(gdal_config_resource) == 0) { # no resource options
+    what <- match.arg(what)
+    withr::with_envvar(gdal_config_global, code = {
+      if(spds_exists(dest)) return(TRUE)
+      out <- try(sf::gdal_utils(
+        util = util,
+        source = src,
+        destination = dest))
+    })
+  } else { # roundtrip to tempfile if there is are resource options
+    tmp <- tempfile(fileext = tools::file_ext(src))
+    withr::with_envvar(gdal_config_resource, code = {
+      out <- try(sf::gdal_utils(
+        util = util,
+        source = src,
+        destination = tmp))
+    })
+    withr::with_envvar(gdal_config_global, code = {
+      out <- try(sf::gdal_utils(
+        util = util,
+        source = tmp,
+        destination = dest))
+    })
+  }
   if(inherits(out, "try-error")){
     warning(sprintf("Error with translating source file %s.\n", src), out)
     return(FALSE)
   }
   TRUE
 }
-
 
 .prep_resources <- function(x, avail_resources, req_resources) {
   if (any(!names(req_resources) %in% names(avail_resources))) {
@@ -89,7 +107,8 @@
       raster = .read_raster,
       vector = .read_vector,
       stop(sprintf("Resource type '%s' currently not supported", resource_type)))
-    reader(x, avail_resources[[resource_name]])
+    gdal_config <- attributes(avail_resources[[resource_name]])[["gdal_config"]]
+    withr::with_envvar(gdal_config, reader(x, avail_resources[[resource_name]]))
   })
 }
 

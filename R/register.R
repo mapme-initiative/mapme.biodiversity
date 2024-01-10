@@ -2,6 +2,7 @@
 
 .pkgenv$resources <- list()
 .pkgenv$indicators <- list()
+.pkgenv$gdal_config <- list()
 
 
 #' Register a new resource to the mapme.biodiversity
