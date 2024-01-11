@@ -149,9 +149,11 @@ get_resources <- function(x, resources, download = FALSE, ...) {
   name <- paste0("Fetching resource ", name, "...")
   if (!is.null(outdir)){
     resource[["destination"]] <- file.path(outdir, resource[["filename"]])
+    opts <- NULL
+    if(opts %in% names(resource)) opts <- strsplit(resource$opts, " ")[[1]]
     purrr::walk2(
       resource[["source"]], resource[["destination"]],
-      \(x,y) .get_spds(x,y, type, gdal_config_global, gdal_config_resource),
+      \(x,y) .get_spds(x,y, type, opts, gdal_config_global, gdal_config_resource),
       .progress = ifelse(verbose, name, NULL))
     resource[["location"]] <- resource[["destination"]]
     attributes(resource)[["gdal_config"]]<- gdal_config_global
