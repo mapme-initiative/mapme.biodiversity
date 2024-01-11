@@ -1,6 +1,6 @@
-.vector_footprint <- function(file) {
+.vector_footprint <- function(file, opts = NULL) {
 
-  info <- sf::gdal_utils("ogrinfo", file, options = c("-json"), quiet = TRUE)
+  info <- sf::gdal_utils("ogrinfo", file, options = c("-json", "-so", "-ro", "-nomd", opts), quiet = TRUE)
   if (length(info) == 0) return(NULL)
   info <- jsonlite::parse_json(info)
   layers <- info[["layers"]]
@@ -25,19 +25,31 @@
   bbox[ , "source"]
 }
 
-.raster_footprint <- function(file){
+.raster_footprint <- function(file, opts = NULL){
 
-  info <- sf::gdal_utils("gdalinfo", file, options = c("-json", "-norat", "-noct", "-nomd"), quiet = TRUE)
+  info <- sf::gdal_utils("gdalinfo", file, options = c("-json", "-norat", "-noct", "-nomd", opts), quiet = TRUE)
   info <- jsonlite::parse_json(info)
   crs <- info[["coordinateSystem"]][["wkt"]] %>% st_crs()
+
 
   bbox <- info[["wgs84Extent"]] %>%
     jsonlite::toJSON(auto_unbox = TRUE) %>%
     read_sf() %>%
     dplyr::mutate(source = file)
-
   st_crs(bbox) <- st_crs(4326)
   bbox <- st_transform(bbox, crs)
+
+  if(st_is_empty(bbox)) {
+    coords <- info$cornerCoordinates
+    bbox <- st_bbox(c(
+      xmin = coords$lowerLeft[[1]],
+      xmax = coords$upperRight[[1]],
+      ymin=coords$lowerLeft[[2]],
+      ymax=coords$upperLeft[[2]]), crs = crs) %>%
+      st_as_sfc() %>%
+      st_as_sf() %>%
+      dplyr::mutate(source = file)
+  }
   bbox[ , "source"]
 }
 
@@ -56,22 +68,23 @@
 
 
 .get_spds <- function(
-    src, dest, what = c("vector", "raster"),
+    src, dest, opts = NULL, what = c("vector", "raster"),
     gdal_config_global = get_mapme_gdal_config(),
     gdal_config_resource = list()) {
 
+  what <- match.arg(what)
   withr::with_envvar(gdal_config_global, code = if(spds_exists(dest)) return(TRUE))
 
   util <- switch(what, vector = "vectortranslate", raster = "translate")
 
   if (length(gdal_config_resource) == 0) { # no resource options
-    what <- match.arg(what)
     withr::with_envvar(gdal_config_global, code = {
       if(spds_exists(dest)) return(TRUE)
       try(sf::gdal_utils(
         util = util,
         source = src,
-        destination = dest))
+        destination = dest,
+        options = opts))
     })
   } else { # roundtrip to tempfile if there are resource options
     tmp <- tempfile(fileext = paste0(".", tools::file_ext(src)))
@@ -79,7 +92,8 @@
       try(sf::gdal_utils(
         util = util,
         source = src,
-        destination = tmp))
+        destination = tmp,
+        opts = opts))
     })
     withr::with_envvar(gdal_config_global, code = {
       try(sf::gdal_utils(
@@ -271,15 +285,16 @@ spds_exists <- function(
 #'
 make_footprints <- function(
     files,
-    what = c("vector", "raster")) {
+    what = c("vector", "raster"),
+    opts = NULL) {
 
   what <- match.arg(what)
   if(missing(what)) stop("Specify the resource type for making footprints")
 
   switch(
     what,
-    vector = purrr::map_dfr(files, .vector_footprint),
-    raster = purrr::map_dfr(files, .raster_footprint),
+    vector = purrr::map_dfr(files, .vector_footprint, opts = opts),
+    raster = purrr::map_dfr(files, .raster_footprint, opts = opts),
     stop("Can make footprints for vector and raster data only.")
   )
 }
