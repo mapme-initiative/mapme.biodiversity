@@ -1,0 +1,41 @@
+services:
+  azure:
+    image: mcr.microsoft.com/azure-storage/azurite
+    container_name: azure
+    hostname: azurite
+    ports:
+      - 10000:10000
+    healthcheck:
+            test: nc 127.0.0.1 10000 -z
+            interval: 1s
+            retries: 30
+  azure-init:
+    image: mcr.microsoft.com/azure-cli:latest
+    container_name: azure_init
+    command: az storage container create --debug --name mapme  
+    depends_on:
+        azure:
+           condition: service_healthy
+    environment:
+        AZURE_STORAGE_CONNECTION_STRING: DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
+  minio:
+    image: quay.io/minio/minio
+    container_name: minio
+    environment:
+      MINIO_ROOT_USER: miniouser
+      MINIO_ROOT_PASSWORD: miniopass
+    ports:
+      - 9000:9000
+      - 9090:9090
+    command: server --console-address ":9090" /data
+  minio-init:
+    image: minio/mc
+    container_name: minio_init
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set myminio http://minio:9000 miniouser miniopass;
+      /usr/bin/mc mb myminio/mapme;	
+      exit 0;
+      "

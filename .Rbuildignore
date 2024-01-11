@@ -34,3 +34,4 @@ vignettes/assets
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
 ^data-raw$
+^vsi-test$
