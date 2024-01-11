@@ -45,8 +45,8 @@ NULL
                              rundir = tempdir(),
                              verbose = TRUE) {
   urls <- c(
-    "https://zenodo.org/record/7997885/files/Deforestation%20Drivers%20100m%20IIASA.zip?download=1",
-    "https://zenodo.org/record/7997945/files/Deforestation%20drivers%201km%20IIASA%20.zip?download=1"
+    "/vsizip//vsicurl/https://zenodo.org/record/7997885/files/Deforestation%20Drivers%20100m%20IIASA.zip/dr_han_hei_pr1.tif",
+    "/vsizip//vsicurl/https://zenodo.org/record/7997945/files/Deforestation%20drivers%201km%20IIASA%20.zip/dr_heine_pr1.tif"
   )
 
   if (!res_drivers %in% c(100, 1000)) {
@@ -54,50 +54,10 @@ NULL
   }
 
   url <- ifelse(res_drivers == 100, urls[1], urls[2])
-  filename <- sub(".*/(.*\\..*)\\?.*", "\\1", utils::URLdecode(url))
-  filename <- file.path(rundir, gsub("\\s+", "_", filename))
-
-  if (attr(x, "testing")) {
-    return(basename(filename))
-  }
-
-  aria_bin <- attributes(x)$aria_bin
-  .download_or_skip(url,
-    filename,
-    verbose,
-    check_existence = FALSE,
-    aria_bin = aria_bin
-  )
-
-  .unzip_and_remove(filename, rundir, remove = FALSE)
-  files <- list.files(rundir, full.names = TRUE)
-  identifier <- paste0("geo_fritz_et_al_", res_drivers, "m.tif")
-  geo_file <- grep(identifier, files, value = TRUE)
-  if (length(geo_file) > 0) {
-    return(geo_file)
-  }
-  tif_file <- grep("*.tif$", files, value = TRUE)
-  if (length(tif_file) > 1) {
-    tif_file <- grep("geo", tif_file, value = TRUE, invert = TRUE)
-  }
-  geo_file <- file.path(rundir, identifier)
-  sf::gdal_utils("warp", tif_file, geo_file,
-    options = c(
-      "-t_srs", "EPSG:4326",
-      "-r", "near",
-      "-ot", "Byte",
-      "-co", "COMPRESS=LZW"
-    )
-  )
-
-  # delete all files accept with geo component in name
-  del_files <- grep("geo_", list.files(rundir, full.names = TRUE),
-    value = TRUE, invert = TRUE
-  )
-  # exclude zip from files to delete
-  del_files <- grep("zip", del_files, value = TRUE, invert = TRUE)
-  file.remove(del_files)
-  return(geo_file)
+  fp <- make_footprints(url, "raster")
+  st_geometry(fp) <- "geometry"
+  fp[["filename"]] <- paste0("geo_fritz_et_al_", res_drivers, "m.tif")
+  fp
 }
 
 register_resource(

@@ -40,39 +40,35 @@ NULL
     ))
   }
 
-  urls <- try(rstac::stac("https://planetarycomputer.microsoft.com/api/stac/v1/") %>%
-    rstac::stac_search(
-      collection = "nasadem",
-      bbox = as.numeric(st_bbox(x)),
-      limit = NULL
-    ) %>%
-    rstac::post_request() %>%
-    rstac::items_fetch() %>%
-    rstac::assets_url(asset_names = "elevation"))
+  items <- try(rstac::stac("https://planetarycomputer.microsoft.com/api/stac/v1/") %>%
+                 rstac::stac_search(
+                   collection = "nasadem",
+                   bbox = as.numeric(st_bbox(x)),
+                   limit = NULL
+                 ) %>%
+                 rstac::post_request() %>%
+                 rstac::items_fetch())
 
-  if (inherits(urls, "try-error")) {
+
+  if (inherits(items, "try-error")) {
     stop("Download for NASA SRTM resource was unsuccesfull")
   }
 
+  urls <- rstac::assets_url(items, asset_names = "elevation")
   if (length(urls) == 0) {
     stop("The extent of the portfolio does not intersect with the SRTM grid.")
   }
 
-  if (attr(x, "testing")) {
-    return(basename(urls))
-  }
-
-  filenames <- file.path(rundir, basename(urls))
-  # start download in a temporal directory within tmpdir
-  aria_bin <- attributes(x)$aria_bin
-  .download_or_skip(
-    urls = urls,
-    filenames = filenames,
-    verbose = verbose,
-    aria_bin = aria_bin,
-    check_existence = FALSE
-  )
-  filenames
+  bboxs <- rstac::items_bbox(items)
+  fps <- purrr::map_dfr(bboxs, function(x){
+    names(x) <- c("xmin", "ymin", "xmax", "ymax")
+    st_bbox(x, crs = "EPSG:4326") %>%
+      st_as_sfc() %>%
+      st_as_sf()
+  })
+  fps[["source"]] <- urls
+  fps[["filename"]] <- basename(urls)
+  fps
 }
 
 register_resource(

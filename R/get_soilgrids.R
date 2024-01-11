@@ -87,8 +87,8 @@ NULL
   if (any(missing(layers), missing(depths), missing(stats))) {
     stop(
       paste("For downloading data from soilgrid a valid layer, a valid ",
-        "depth range and a valid statistic have to be specified.",
-        sep = ""
+            "depth range and a valid statistic have to be specified.",
+            sep = ""
       ),
       call. = FALSE
     )
@@ -98,8 +98,8 @@ NULL
     na_layers <- layers[which(!layers %in% .sg_layers)]
     stop(sprintf(
       paste("The selected layer(s) '%s' is/are not available. ",
-        "Please choose one of: %s.",
-        sep = ""
+            "Please choose one of: %s.",
+            sep = ""
       ),
       paste(na_layers, sep = ", "), paste(names(.sg_layers), collapse = ", ")
     ), call. = FALSE)
@@ -110,8 +110,8 @@ NULL
     stop(
       sprintf(
         paste("The selected depth range(s) '%s' is/are not available. ",
-          "Please choose one of: %s.",
-          sep = ""
+              "Please choose one of: %s.",
+              sep = ""
         ),
         na_depths, paste(.sg_depths, collapse = ", ")
       ),
@@ -131,65 +131,27 @@ NULL
     )
   }
 
-
-  filenames <- list()
-  for (layer in layers) {
-    for (depth in depths) {
-      for (stat in stats) {
-        if (layer != "ocs" & depth == "0-30cm") {
-          message("Depth '0-30cm' is only available of layer 'ocs'.")
-          next
-        }
-
-        if (layer == "ocs" & depth != "0-30cm") {
-          message("Layer 'ocs' is only available at depth '0-30cm'.")
-          next
-        }
-
-        baseurl <- "/vsicurl/https://files.isric.org/soilgrids/latest/data/"
-        datalayer <- sprintf("%s/%s_%s_%s.vrt", layer, layer, depth, stat)
-        filename <- file.path(rundir, str_replace(basename(datalayer), "vrt", "tif"))
-        if (attr(x, "testing")) {
-          filenames <- append(filenames, basename(filename))
-          next
-        }
-
-        if (!file.exists(filename)) {
-          if (verbose) {
-            message(
-              sprintf(
-                paste("Starting to download data for layer '%s', depth '%s', and stat '%s'.",
-                  " This may take a while...",
-                  sep = ""
-                ),
-                layer, depth, stat
-              )
-            )
-          }
-          soilgrid_source <- rast(file.path(baseurl, datalayer))
-          x_bbox <- st_as_sf(st_as_sfc(st_bbox(x)))
-          x_proj <- st_transform(x_bbox, crs(soilgrid_source))
-          soilgrid_cropped <- crop(soilgrid_source, x_proj,
-            filename = file.path(rundir, "soillayer_cropped.tif"),
-            datatype = "INT2U", overwrite = TRUE
-          )
-          suppressWarnings(
-            project(soilgrid_cropped, "EPSG:4326",
-              filename = filename,
-              datatype = "INT2U", overwrite = TRUE
-            )
-          )
-          file.remove(file.path(rundir, "soillayer_cropped.tif"))
-        } else {
-          if (verbose) {
-            message(sprintf("Output file %s exists. Skipping re-download. Please delete if spatial extent has changed.", basename(filename)))
-          }
-        }
-        filenames <- append(filenames, filename)
-      }
+  grid <- expand.grid(layers, depths, stats)
+  names(grid) <- c("layer", "depth", "stat")
+  urls <- purrr::pmap(grid, function(layer, depth, stat){
+    if (layer != "ocs" & depth == "0-30cm") {
+      message("Depth '0-30cm' is only available of layer 'ocs'.")
+      return(NULL)
     }
-  }
-  unlist(filenames)
+
+    if (layer == "ocs" & depth != "0-30cm") {
+      message("Layer 'ocs' is only available at depth '0-30cm'.")
+      return(NULL)
+    }
+    baseurl <- "/vsicurl/https://files.isric.org/soilgrids/latest/data/"
+    datalayer <- sprintf("%s/%s_%s_%s.vrt", layer, layer, depth, stat)
+    paste0(baseurl, datalayer)
+  })
+
+  urls <- unlist(urls)
+  fps <- make_footprints(urls, "raster")
+  fps[["filename"]] <- gsub("vrt", "tif", fps[["source"]])
+  fps
 }
 
 
@@ -214,8 +176,8 @@ NULL
   ),
   clay = list(
     description = paste("Proportion of clay particles (< 0.002 mm) ",
-      "in the fine earth fraction",
-      sep = ""
+                        "in the fine earth fraction",
+                        sep = ""
     ),
     mapped_units = "g/kg",
     conversion_factor = 10,
@@ -235,8 +197,8 @@ NULL
   ),
   sand = list(
     description = paste("Proportion of sand particles (> 0.05 mm) ",
-      "in the fine earth fraction",
-      sep = ""
+                        "in the fine earth fraction",
+                        sep = ""
     ),
     mapped_units = "g/kg",
     conversion_factor = 10,
@@ -244,8 +206,8 @@ NULL
   ),
   silt = list(
     description = paste("Proportion of silt particles (>= 0.002 mm ",
-      "and <= 0.05 mm) in the fine earth fraction",
-      sep = ""
+                        "and <= 0.05 mm) in the fine earth fraction",
+                        sep = ""
     ),
     mapped_units = "g/kg",
     conversion_factor = 10,

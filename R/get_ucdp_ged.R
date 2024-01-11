@@ -66,36 +66,18 @@ NULL
   }
 
   version <- paste0("ged", stringr::str_remove_all(version_ged, "\\."), "-csv.zip")
-
   base_url <- "/vsizip/vsicurl/https://ucdp.uu.se/downloads/ged/"
   url <- paste0(base_url, version)
-  if (version_ged == "19.1") {
-    url <- paste0(url, "/ged191.csv")
-  } else if (version_ged == "5.0") {
-    url <- paste0(url, "/ged50.csv")
-  }
-  filename <- file.path(rundir, str_replace(version, "zip", "gpkg"))
+  switch(version_ged,
+         "19.1" = url <- paste0(url, "/ged191.csv"),
+         "5.0" = url <- paste0(url, "/ged50.csv"))
 
-  # return early if testing
-  if (attr(x, "testing")) {
-    return(basename(filename))
+  opts = c("-oo", "GEOM_POSSIBLE_NAMES=geom_wkt")
+  fp <- make_footprints(url, "vector", opts = opts)
+  fp[["filename"]] <- gsub("zip", "gpkg", version)
+  fp[["opts"]] <- paste(opts, collapse = " ")
+  fp
   }
-
-  if (file.exists(filename)) {
-    return(filename)
-  }
-
-  gdal_utils(
-    util = "vectortranslate",
-    source = url,
-    destination = filename,
-    options = c(
-      "-a_srs", "EPSG:4326",
-      "-oo", "GEOM_POSSIBLE_NAMES=geom_wkt"
-    )
-  )
-  filename
-}
 
 
 .ucdp_versions <- function() {

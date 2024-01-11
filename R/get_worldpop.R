@@ -27,48 +27,21 @@ NULL
                           rundir = tempdir(),
                           verbose = TRUE) {
   target_years <- attributes(x)$years
-  available_years <- 2000:2020
+  available_years <- 2001:2020
   target_years <- .check_available_years(
     target_years, available_years, "popcount"
   )
+
   urls <- unlist(sapply(target_years, function(year) .get_worldpop_url(year)))
-  filenames <- file.path(rundir, basename(urls))
-  if (attr(x, "testing")) {
-    return(basename(filenames))
-  }
-  # start download in a temporal directory within tmpdir
-  aria_bin <- attributes(x)$aria_bin
-  .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin, check_existence = FALSE)
-
-  footprints <- lapply(filenames, function(file) {
-    paste(as.character(st_bbox(rast(file))), collapse = " ")
+  fps <- purrr::map_dfr(urls, function(url){
+    st_bbox(c(xmin=-180.00125, ymin=-71.99208, xmax=179.99875, ymax=83.99958), crs = "EPSG:4326") %>%
+      st_as_sfc() %>%
+      st_as_sf() %>%
+      dplyr::mutate(source = url)
   })
-  all_equal <- length(unique(unlist(footprints))) == 1
-
-  if (!all_equal) {
-    footprints <- unlist(lapply(filenames, function(file) {
-      bbox <- round(as.numeric(st_bbox(rast(file))), 3)
-      identical(bbox, round(c(-180.00125, -72.00042, 179.99875, 83.99958), 3))
-    }))
-    if (any(!footprints)) {
-      index <- which(!footprints)
-      index_ok <- which(footprints)[1]
-      target <- rast(filenames[index_ok])
-      if (verbose) message("Resampling worldpop layers...")
-      for (i in index) {
-        tmpfile <- tempfile(tmpdir = rundir, fileext = ".tif")
-        file.copy(filenames[i], tmpfile)
-        tmp <- rast(tmpfile)
-        project(tmp, target,
-          filename = filenames[i],
-          overwrite = TRUE, method = "bilinear", progress = verbose
-        )
-        file.remove(tmpfile)
-      }
-    }
-  }
-  # return paths to the raster
-  filenames
+  fps$filename <- basename(urls)
+  fps$opts <- c("-a_ullr", "-180.00125 -71.99208 179.99875 83.99958", "-co", "COMPRESS=LZW")
+  fps
 }
 
 

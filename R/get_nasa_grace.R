@@ -32,14 +32,15 @@ NULL
   )
 
   urls <- unlist(sapply(target_years, function(year) .get_nasagrace_url(year)))
-  filenames <- file.path(rundir, basename(urls))
-  if (attr(x, "testing")) {
-    return(basename(filenames))
-  }
-  # start download in a temporal directory within rundir
-  aria_bin <- attributes(x)$aria_bin
-  .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin, check_existence = FALSE)
-  filenames
+  fps <- purrr::map_dfr(urls, function(url){
+    st_bbox(c(xmin=-180.0, ymin=-60, xmax=180, ymax=90), crs = "EPSG:4326") %>%
+      st_as_sfc() %>%
+      st_as_sf() %>%
+      dplyr::mutate(source = url)
+  })
+
+  fps[["filename"]] <- basename(urls)
+  fps
 }
 
 
@@ -59,7 +60,7 @@ NULL
       available_dates, substr(available_dates, 1, 4) == target_year
     )
     paste0(
-      "https://nasagrace.unl.edu/globaldata/", target_dates,
+      "/vsicurl/https://nasagrace.unl.edu/globaldata/", target_dates,
       "/gws_perc_025deg_GL_", target_dates, ".tif"
     )
   } else {

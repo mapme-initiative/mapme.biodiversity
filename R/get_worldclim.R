@@ -99,53 +99,22 @@ NULL
                                     verbose = TRUE) {
   if (missing(layer)) {
     stop(paste("No target layer has been specified. ",
-      "Please select one of 'tmin', 'tmax', 'prec'.",
-      sep = ""
+               "Please select one of 'tmin', 'tmax', 'prec'.",
+               sep = ""
     ))
   }
 
   target_years <- attributes(x)$years
   available_years <- 2000:2018
-  target_years <- .check_available_years(
+  target_years <- check_available_years(
     target_years, available_years, layer
   )
 
-  all_urls <- unlist(sapply(target_years, function(year) {
-    .get_climate_url(layer, year)
-  }))
-  urls <- unique(all_urls)
-  filenames <- file.path(rundir, basename(urls))
-  if (attr(x, "testing")) {
-    return(basename(filenames))
-  }
-  # start download in a temporal directory within tmpdir
-  # TODO: Parallel downloads
-  aria_bin <- attributes(x)$aria_bin
-  .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin, check_existence = FALSE)
-
-  # unzip the downloaded file
-  sapply(filenames, function(zip) {
-    .unzip_and_remove(zip, rundir, remove = FALSE)
-  })
-
-  # remove all except desired layers
-  nontarget_years <- available_years[!available_years %in% target_years]
-
-  for (i in seq_along(nontarget_years)) {
-    unlink(
-      file.path(
-        rundir,
-        paste0(
-          "wc2.1_2.5m_", layer, "_",
-          nontarget_years[i], "*.tif"
-        )
-      ),
-      recursive = T, force = T
-    )
-  }
-
-  # return paths to the raster
-  list.files(rundir, full.names = T, pattern = ".tif")
+  urls <- purrr::map(target_years, function(year) .get_climate_url(layer, year))
+  urls <- unlist(urls)
+  fps <- make_footprints(urls, "raster")
+  fps[["filename"]] <- basename(urls)
+  fps
 }
 
 
@@ -159,19 +128,20 @@ NULL
 #' @noRd
 .get_climate_url <- function(layer, year) {
   if (year %in% c(2000:2009)) {
-    paste0(
+    baseurl <- paste0(
       "https://biogeo.ucdavis.edu/data/worldclim/v2.1/hist/wc2.1_2.5m_",
       layer, "_2000-2009.zip"
     )
   } else if (year %in% c(2010:2018)) {
-    paste0(
+    baseurl <- paste0(
       "https://biogeo.ucdavis.edu/data/worldclim/v2.1/hist/wc2.1_2.5m_",
       layer, "_2010-2018.zip"
     )
-  } else {
-    warning(sprintf("Climate raster not available for target year %s", year))
-    NULL
   }
+  months <- sprintf('%02d',1:12)
+  dates <- sprintf("%s-%s", year, months)
+  filenames <- sprintf("wc2.1_2.5m_%s_%s.tif", layer, dates)
+  file.path("/vsizip//vsicurl", baseurl, filenames)
 }
 
 

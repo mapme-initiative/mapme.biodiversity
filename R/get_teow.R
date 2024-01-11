@@ -34,42 +34,13 @@ NULL
                       rundir = tempdir(),
                       verbose = TRUE) {
 
-  filename <- file.path(rundir, "wwf_terr_ecos.gpkg")
-  # check if output file exists
-  if (file.exists(filename)) {
-    return(filename)
-  }
-
-  # get url
-  url <- paste("https://files.worldwildlife.org/wwfcmsprod/files/",
-    "Publication/file/6kcchn7e3u_official_teow.zip",
+  url <- paste("/vsizip//vsicurl/https://files.worldwildlife.org/wwfcmsprod/files/",
+    "Publication/file/6kcchn7e3u_official_teow.zip/official/wwf_terr_ecos.shp",
     sep = ""
   )
-  # start download in a temporal directory within rundir
-  downloads <- tryCatch(
-    {
-      download.file(url,
-        file.path(rundir, basename(paste0("TEOW_global.zip"))),
-        quiet = TRUE
-      )
-    },
-    error = function(e) e,
-    warning = function(e) e
-  )
-  if (inherits(downloads, "error")) stop(downloads)
-  # unzip
-  .unzip_and_remove(file.path(rundir, "TEOW_global.zip"), rundir)
-  # load shp
-  shp <- read_sf(file.path(rundir, "official/wwf_terr_ecos.shp"))
-  # write as gpkg
-  write_sf(shp, file.path(rundir, "wwf_terr_ecos.gpkg"))
-  # remove all except desired layers
-  all_files <- list.files(rundir, full.names = T)
-  unlink(grep(paste0("wwf_terr_ecos.gpkg"), all_files, value = T, invert = T),
-    recursive = T, force = T
-  )
-  # return paths to the gpkg
-  filename
+  fp <- make_footprints(url, "vector")
+  fp[["filename"]] <- "wwf_terr_ecos.gpkg"
+  fp
 }
 
 register_resource(

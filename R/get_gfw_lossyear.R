@@ -59,7 +59,7 @@ NULL
   }
   # make the GFW grid and construct urls for intersecting tiles
   baseurl <- sprintf(
-    "https://storage.googleapis.com/earthenginepartners-hansen/%s/",
+    "/vsicurl/https://storage.googleapis.com/earthenginepartners-hansen/%s/",
     vers_lossyear
   )
   grid_gfc <- .make_global_grid(
@@ -74,15 +74,10 @@ NULL
   }
   ids <- sapply(tile_ids, function(n) .get_gfw_tile_id(grid_gfc[n, ]))
   urls <- sprintf("%sHansen_%s_lossyear_%s.tif", baseurl, vers_lossyear, ids)
-  filenames <- file.path(rundir, basename(urls))
-  if (attr(x, "testing")) {
-    return(basename(filenames))
-  }
-  # start download in a temporal directory within tmpdir
-  aria_bin <- attributes(x)$aria_bin
-  .download_or_skip(urls, filenames, verbose, check_existence = FALSE, aria_bin = aria_bin)
-  # return all paths to the downloaded files
-  filenames
+  fps <- grid_gfc[tile_ids, ]
+  fps[["source"]] <- urls
+  fps[["filename"]] <- basename(urls)
+  fps
 }
 
 

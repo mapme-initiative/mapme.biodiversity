@@ -42,21 +42,14 @@ NULL
   index_file <- system.file("extdata", "greenhouse_index.geosjon", package = "mapme.biodiversity")
   spatialindex <- st_read(index_file, quiet = TRUE)
   tile_ids <- unique(unlist(st_intersects(x, spatialindex)))
-  tile_ids <- spatialindex$tile_id[tile_ids]
-  urls <- as.character(
-    spatialindex$Mg_CO2e_px_download[spatialindex$tile_id %in% tile_ids]
-  )
-  filenames <- file.path(
-    rundir,
-    sprintf("gfw_forest_carbon_gross_emissions_Mg_CO2e_px_%s.tif", tile_ids)
-  )
-  if (attr(x, "testing")) {
-    return(basename(filenames))
-  }
-  aria_bin <- attributes(x)$aria_bin
-  .download_or_skip(urls, filenames, verbose, check_existence = FALSE, aria_bin = aria_bin)
-  # return all paths to the downloaded files
-  filenames
+  tile_str <- spatialindex$tile_id[tile_ids]
+  urls <- as.character(spatialindex$Mg_CO2e_px_download[spatialindex$tile_id %in% tile_str])
+  urls <- paste0("/vsicurl/", urls)
+  filenames <- sprintf("gfw_forest_carbon_gross_emissions_Mg_CO2e_px_%s.tif", tile_str)
+  fps <- spatialindex[tile_ids, "geometry"]
+  fps[["source"]] <- urls
+  fps[["filename"]] <- filenames
+  fps
 }
 
 
