@@ -125,6 +125,51 @@
   }
 }
 
+#' Helper to create global grid
+#'
+#' @param xmin minimum longitude value (E/W)
+#' @param xmax maximum longitude value (E/W)
+#' @param ymin minimum latitude value (S/N)
+#' @param ymax maximum latitude value (E/W)
+#' @param dx difference in longitude value per grid
+#' @param dy difference in latitude value per grid
+#' @param proj projection system
+#' @keywords internal
+#' @noRd
+.make_global_grid <- function(xmin = -180, xmax = 170, dx = 10,
+                              ymin = -50, ymax = 80, dy = 10,
+                              proj = NULL) {
+  if (is.null(proj)) proj <- st_crs(4326)
+  ncells <- c(
+    (xmax - xmin) / dx,
+    (ymax - ymin) / dy
+  )
+
+  bbox <- st_bbox(c(xmin = xmin, xmax = xmax, ymax = ymax, ymin = ymin))
+  bbox <- st_as_sfc(bbox, crs = proj)
+  x <- st_as_sf(st_make_grid(bbox, n = ncells, crs = proj, what = "polygons"))
+  st_geometry(x) <- "geometry"
+  x
+}
+
+.get_gfw_tile_id <- function(tile) {
+  min_x <- st_bbox(tile)[1]
+  max_y <- st_bbox(tile)[4]
+
+  # prepare tile names
+  if (min_x < 0) {
+    min_x <- paste0(sprintf("%03i", abs(min_x)), "W")
+  } else {
+    min_x <- paste0(sprintf("%03i", min_x), "E")
+  }
+  if (max_y < 0) {
+    max_y <- paste0(sprintf("%02i", abs(max_y)), "S")
+  } else {
+    max_y <- paste0(sprintf("%02i", max_y), "N")
+  }
+
+  paste0(max_y, "_", min_x)
+}
 
 #' Helper to unzip and remove zip files
 #'
