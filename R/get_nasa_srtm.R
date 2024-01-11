@@ -39,7 +39,7 @@ NULL
       'Please run install.packages("rstac").'
     ))
   }
-
+ 
   items <- try(rstac::stac("https://planetarycomputer.microsoft.com/api/stac/v1/") %>%
                  rstac::stac_search(
                    collection = "nasadem",

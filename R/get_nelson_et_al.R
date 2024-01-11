@@ -90,7 +90,6 @@ NULL
   make_footprints(filenames, what = "raster")
 }
 
-
 register_resource(
   name = "nelson_et_al",
   type = "raster",

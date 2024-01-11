@@ -81,6 +81,7 @@ NULL
   # check additional arguments
   .gfw_check_min_cover(min_cover, "treecover_area")
   .gfw_check_min_size(min_size, "treecover_area")
+
   # handling of return value if resources are missing, e.g. no overlap
   if (any(is.null(gfw_treecover), is.null(gfw_lossyear), is.null(gfw_emissions))) {
     return(NA)
