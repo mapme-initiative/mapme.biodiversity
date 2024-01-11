@@ -13,10 +13,10 @@ key <- "Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOt
 endpoint <- "http://127.0.0.1:10000/"
 
 # dont set env vars globally, rather we run functions unsing withr
-gdal_config_az <- c(
-  AZURE_STORAGE_CONNECTION_STRING = sprintf("DefaultEndpointsProtocol=http;AccountName=%s;AccountKey=%s;BlobEndpoint=%s%s;", account, key, endpoint, account),
-  CPL_VSIL_USE_TEMP_FILE_FOR_RANDOM_WRITE = "YES",
-  GDAL_HTTP_MULTIPLEX = "YES")
+gdal_config_az <- gdal_az_opts(c(
+  gdal_cloud_opts(),
+  AZURE_STORAGE_CONNECTION_STRING = sprintf("DefaultEndpointsProtocol=http;AccountName=%s;AccountKey=%s;BlobEndpoint=%s%s;", account, key, endpoint, account)
+))
 
 # resource function mock-up, returns a footprint with source and destination
 gfw <- function(dst) {
@@ -61,13 +61,13 @@ v
 
 # the same examples but using the minio S3 storage
 # CPL_CURL_VERBOSE="YES"
-gdal_config_s3 <- c(AWS_ACCESS_KEY_ID = "miniouser",
-                    AWS_SECRET_ACCESS_KEY = "miniopass",
-                    AWS_S3_ENDPOINT = "127.0.0.1:9000",
-                    AWS_VIRTUAL_HOSTING = "FALSE",
-                    AWS_HTTPS = "FALSE",
-                    CPL_VSIL_USE_TEMP_FILE_FOR_RANDOM_WRITE = "YES",
-                    GDAL_HTTP_MULTIPLEX = "YES")
+gdal_config_s3 <- gdal_s3_opts(c(
+  gdal_cloud_opts(),
+  AWS_ACCESS_KEY_ID = "miniouser",
+  AWS_SECRET_ACCESS_KEY = "miniopass",
+  AWS_S3_ENDPOINT = "127.0.0.1:9000",
+  AWS_VIRTUAL_HOSTING = "FALSE",
+  AWS_HTTPS = "FALSE"))
 
 # fetching a raster resource, note we changed the driver to /vsis3/
 fp <- .call_resource_fun(gfw, list(dst = "/vsis3/mapme/gfw/Hansen_GFC-2022-v1.10_treecover2000_20N_080W.tif"), name = "gfw")
