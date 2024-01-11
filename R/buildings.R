@@ -16,6 +16,7 @@
   base <- "/vsicurl/https://data.source.coop/vida/google-microsoft-open-buildings/flageobuf/by_country/country_iso=%s/%s.fgb"
   urls <- sprintf(base, codes, codes)
   fps <- make_footprints(urls, what = "vector")
+  fps[["filename"]] <- basename(urls)
   fps
 }
 

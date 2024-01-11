@@ -36,15 +36,20 @@
 #' @export
 init_portfolio <- function(x,
                            years,
-                           outdir = getwd(),
+                           outdir = NULL,
                            tmpdir = tempdir(),
                            cores = NULL,
                            aria_bin = NULL,
                            verbose = TRUE) {
-  if (outdir == tmpdir) {
-    stop("Parameters outdir and tmpdir need to point to different directories.")
+  if(!is.null(outdir)){
+    if(!startsWith(outdir, "/vsi")) {
+      if (outdir == tmpdir) {
+        stop("Parameters outdir and tmpdir need to point to different directories.")
+      }
+      if (!dir.exists(outdir)) dir.create(outdir, recursive = TRUE)
+    }
   }
-  if (!dir.exists(outdir)) dir.create(outdir, recursive = TRUE)
+
   if (!dir.exists(tmpdir)) dir.create(tmpdir, recursive = TRUE)
 
   if (!is.null(aria_bin)) {
@@ -73,8 +78,8 @@ init_portfolio <- function(x,
   if ("assetid" %in% names(x)) {
     message(
       paste("Found a column named 'assetid'.",
-        " Overwritting its values with a unique identifier.",
-        sep = ""
+            " Overwritting its values with a unique identifier.",
+            sep = ""
       )
     )
   }

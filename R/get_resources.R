@@ -102,7 +102,7 @@ get_resources <- function(x, resources, download = FALSE, ...) {
     return(resource_to_add)
   }
 
-  resource_to_add <- .fetch_resource(resource_to_add, resource, type,
+  resource_to_add <- .fetch_resource(resource_to_add, outdir, resource, type,
                                      download, atts[["verbose"]],
                                      gdal_config_global, gdal_config_resource)
   resource_to_add <- .set_precision(resource_to_add, precision = 1e5)
@@ -114,7 +114,6 @@ get_resources <- function(x, resources, download = FALSE, ...) {
   attributes(x) <- atts
   x
 }
-
 
 
 .call_resource_fun <- function(fun, args, name, gdal_config = list()){
@@ -131,8 +130,8 @@ get_resources <- function(x, resources, download = FALSE, ...) {
     stop("resource functions are expected to return sf objects with data footprints.")
   }
 
-  if (any(!names(resource) %in% c("source", "destination", "geometry"))){
-    stop("resource functions are expected to return sf object with columns 'source', 'destination' and 'geometry'.")
+  if (any(!names(resource) %in% c("source", "filename", "geometry"))){
+    stop("resource functions are expected to return sf object with columns 'source', 'filename' and 'geometry'.")
   }
   resource
 }
@@ -142,16 +141,17 @@ get_resources <- function(x, resources, download = FALSE, ...) {
     resource,
     name = NULL,
     type = NULL,
-    download = FALSE,
+    outdir = NULL,
     verbose = TRUE,
     gdal_config_global = get_mapme_gdal_config(),
     gdal_config_resource = NULL) {
 
   name <- paste0("Fetching resource ", name, "...")
-  if (download){
+  if (!is.null(outdir)){
+    resource[["destination"]] <- file.path(outdir, resource[["filename"]])
     purrr::walk2(
       resource[["source"]], resource[["destination"]],
-      \(x,y) .get_spds(x,y,type, gdal_config_global, gdal_config_resource),
+      \(x,y) .get_spds(x,y, type, gdal_config_global, gdal_config_resource),
       .progress = ifelse(verbose, name, NULL))
     resource[["location"]] <- resource[["destination"]]
     attributes(resource)[["gdal_config"]]<- gdal_config_global

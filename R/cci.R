@@ -3,7 +3,6 @@
 #' @noRd
 .get_cci <- function(x,
                      rundir = tempdir(),
-                     outdir = tempdir(),
                      verbose = TRUE) {
 
 
@@ -36,13 +35,11 @@
     rstac::items_sign(rstac::sign_planetary_computer()) %>%
     rstac::assets_url(asset_names = "lccs_class")
 
-  destinations <- file.path(outdir, basename(bare_urls))
-
   fps[["source"]] <-  paste0("/vsicurl/", signed_urls)
-  fps[["destination"]] <- destinations
+  fps[["filename"]] <- basename(bare_urls)
   fps <- fps[grep("v2.0.7", fps[["source"]]), ]
   fps <- fps[grep(paste(target_years, collapse = "|"), fps[["source"]]), ]
-  fps[ ,c("source", "destination")]
+  fps[ ,c("source", "filename")]
 
 }
 
