@@ -150,7 +150,7 @@ get_resources <- function(x, resources, download = FALSE, ...) {
   name <- paste0("Fetching resource ", name, "...")
   if (download){
     purrr::walk2(
-      resource[["destination"]], resource[["source"]],
+      resource[["source"]], resource[["destination"]],
       \(x,y) .get_spds(x,y,type, gdal_config_global, gdal_config_resource),
       .progress = ifelse(verbose, name, NULL))
     resource[["location"]] <- resource[["destination"]]

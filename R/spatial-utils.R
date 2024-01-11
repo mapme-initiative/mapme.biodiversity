@@ -56,13 +56,11 @@
 
 
 .get_spds <- function(
-    dest, src, what = c("vector", "raster"),
+    src, dest, what = c("vector", "raster"),
     gdal_config_global = get_mapme_gdal_config(),
     gdal_config_resource = list()) {
 
-  withr::with_envvar(gdal_config_global, code = {
-    if(spds_exists(dest)) return(TRUE)}
-  )
+  withr::with_envvar(gdal_config_global, code = if(spds_exists(dest)) return(TRUE))
 
   util <- switch(what, vector = "vectortranslate", raster = "translate")
 
@@ -70,31 +68,27 @@
     what <- match.arg(what)
     withr::with_envvar(gdal_config_global, code = {
       if(spds_exists(dest)) return(TRUE)
-      out <- try(sf::gdal_utils(
+      try(sf::gdal_utils(
         util = util,
         source = src,
         destination = dest))
     })
-  } else { # roundtrip to tempfile if there is are resource options
-    tmp <- tempfile(fileext = tools::file_ext(src))
+  } else { # roundtrip to tempfile if there are resource options
+    tmp <- tempfile(fileext = paste0(".", tools::file_ext(src)))
     withr::with_envvar(gdal_config_resource, code = {
-      out <- try(sf::gdal_utils(
+      try(sf::gdal_utils(
         util = util,
         source = src,
         destination = tmp))
     })
     withr::with_envvar(gdal_config_global, code = {
-      out <- try(sf::gdal_utils(
+      try(sf::gdal_utils(
         util = util,
         source = tmp,
         destination = dest))
     })
   }
-  if(inherits(out, "try-error")){
-    warning(sprintf("Error with translating source file %s.\n", src), out)
-    return(FALSE)
-  }
-  TRUE
+  withr::with_envvar(gdal_config_global, code = return(spds_exists(dest)))
 }
 
 .prep_resources <- function(x, avail_resources, req_resources) {
