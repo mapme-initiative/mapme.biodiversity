@@ -1,0 +1,51 @@
+---
+author: "Darius A. Görgen"
+title: "Workflow"
+date: "Last modified: `r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Workflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 5,
+  fig.height = 5
+)
+```
+
+The most important steps of the processing workflow of `{mapme.biodiversity}` 
+are described here. A typical workflow consists of the following steps:
+
+-  initialization of a portfolio object from an `{sf}` object together with portfolio-wide parameters
+-  identify the required resources needed for the indicators you want to calculate
+-  download one or more resources that are required for your desired indicators
+-  automated calculation of the indicators for all assets within a portfolio
+-  then, you are free to conduct your statistical analysis within R, or,
+-  you can export the portfolio as a GeoPackage to share with others or use it with other Geo-spatial software (e.g. QGIS)
+
+```{r wflow, echo = FALSE}
+library(DiagrammeR)
+
+mermaid("
+  graph TB
+
+    classDef default fill:#c2dddd,stroke-width:2px,stroke:#034858;
+
+    A(Portfolio initialization)
+    B(Get resources)
+    C(Calculate indicators)
+    D(Statistical analysis within R)
+    E(Export to GeoPackage)
+    A-->B
+    B-->C
+    C-->D
+    C-->E
+
+")
+```
+
