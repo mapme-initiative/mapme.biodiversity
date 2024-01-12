@@ -1,4 +1,5 @@
-.get_gsw <- function(x, statistic = "occurrence", vers_gsw = "v1_4_2021", rundir = tempdir(), verbose = TRUE) {
+.get_gsw <- function(x, statistic = "occurrence", vers_gsw = "v1_4_2021",
+                     rundir = tempdir(), verbose = TRUE) {
   # make the gsw grid and construct urls for intersecting tiles
   baseurl <- sprintf(
     "https://storage.googleapis.com/global-surface-water/downloads2021/%s/%s",
@@ -23,12 +24,13 @@
   # start download and skip files that exist
   # TODO: parallel downloads
   aria_bin <- attributes(x)$aria_bin
-  mapme.biodiversity:::.download_or_skip(urls, filenames, verbose, check_existence = FALSE, aria_bin = aria_bin)
+  .download_or_skip(urls, filenames, verbose, check_existence = FALSE,
+                    aria_bin = aria_bin)
   # return all paths to the downloaded files
   filenames
 }
 
-.get_gsw_tile_id <- function (tile) {
+.get_gsw_tile_id <- function(tile) {
   min_x <- st_bbox(tile)[1]
   max_y <- st_bbox(tile)[4]
   ndigits_x <- nchar(abs(min_x))
@@ -37,14 +39,12 @@
   formatstr_y <- paste0("%0", ndigits_y, "i")
   if (min_x < 0) {
     min_x <- paste0(sprintf(formatstr_x, abs(min_x)), "W")
-  }
-  else {
+  } else {
     min_x <- paste0(sprintf(formatstr_x, abs(min_x)), "E")
   }
   if (max_y < 0) {
     max_y <- paste0(sprintf(formatstr_y, abs(max_y)), "S")
-  }
-  else {
+  } else {
     max_y <- paste0(sprintf(formatstr_y, abs(max_y)), "N")
   }
   paste0(min_x, "_", max_y)
@@ -64,7 +64,7 @@ for (gsw_statistic in gsw_statistics) {
     type = "raster",
     source = "https://global-surface-water.appspot.com/download",
     fun = .get_gsw,
-    arguments = list (
+    arguments = list(
       statistic = gsw_statistic,
       vers_gsw = "v1_4_2021"
     )
