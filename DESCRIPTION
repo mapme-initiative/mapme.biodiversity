@@ -1,6 +1,6 @@
 Package: mapme.biodiversity
 Title: Efficient Monitoring of Global Biodiversity Portfolios
-Version: 0.5.0.9000
+Version: 0.5.0.9001
 Authors@R: c(
     person("Darius A.", "Görgen", , "darius2402@web.de", role = c("aut", "cre")),
     person("Om Prakash", "Bhandari", role = "aut")
@@ -50,7 +50,7 @@ Collate:
     'calc_gsw_occurrence.R'
     'calc_gsw_recurrence.R'
     'calc_gsw_seasonality.R'
-    'calc_gsw_transition_areas.R'
+    'calc_gsw_transitios.R'
     'calc_indicators.R'
     'calc_landcover.R'
     'calc_mangroves_area.R'
