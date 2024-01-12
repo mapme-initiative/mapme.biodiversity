@@ -68,12 +68,14 @@
 
 
 .get_spds <- function(
-    src, dest, opts = NULL, what = c("vector", "raster"),
-    gdal_config_global = get_mapme_gdal_config(),
-    gdal_config_resource = list()) {
+    src, dest, opts = character(0),
+    what = c("vector", "raster"),
+    gdal_config_global = NULL,
+    gdal_config_resource = NULL) {
 
   what <- match.arg(what)
   withr::with_envvar(gdal_config_global, code = if(spds_exists(dest)) return(TRUE))
+  if(is.null(opts)) opts <- character(0)
 
   util <- switch(what, vector = "vectortranslate", raster = "translate")
 

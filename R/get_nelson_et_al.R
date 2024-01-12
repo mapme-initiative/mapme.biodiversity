@@ -38,47 +38,10 @@
 NULL
 
 
-#' Downloads Accessibility to Cities layer
-#'
-#' @param x An sf object returned by init_portfolio
-#' @param range_traveltime The city within the defined range of population
-#'   to download, defaults to \code{"20k_50k"}.
-#' @param rundir A directory where intermediate files are written to.
-#' @param verbose Logical controlling verbosity.
 #' @keywords internal
 #' @include register.R
 #' @noRd
-.get_nelson_et_al <- function(x,
-                              range_traveltime = "20k_50k",
-                              rundir = tempdir(),
-                              verbose = TRUE) {
-  filenames <- file.path(
-    rundir,
-    paste0("traveltime-", range_traveltime, ".tif")
-  )
-  # get url for accessibility layer
-  check <- .get_traveltime_url(range_traveltime, filenames, verbose = verbose)
-  urls <- check$urls
-  filenames <- check$filenames
-  if (attr(x, "testing")) {
-    return(basename(filenames))
-  }
-  # start download in a temporal directory within tmpdir
-  aria_bin <- attributes(x)$aria_bin
-  if (!is.null(attr(x, "testing"))) .download_or_skip(urls, filenames, verbose, check_existence = FALSE, aria_bin = aria_bin)
-  # return paths to the raster
-  filenames
-}
-
-
-#' Helper for traveltime urls generation
-#'
-#' @param range A valid range that is translated to an url
-#'
-#' @return A character string
-#' @keywords internal
-#' @noRd
-.get_traveltime_url <- function(range, filenames, verbose = TRUE) {
+.get_nelson_et_al <- function(x, range_traveltime, rundir = tempdir(), verbose = TRUE) {
   df_index <- data.frame(
     range = c(
       "5mio_50mio", "1mio_5mio", "500k_1mio", "200k_500k", "100k_200k",
@@ -94,40 +57,38 @@ NULL
   data <- data[grep("to_cities", data[["filename"]]), ]
   data <- data[grep("tif", data[["filename"]]), ]
 
-  if (any(!range %in% df_index$range)) {
-    index <- which(!range %in% df_index$range)
+  if (any(!range_traveltime %in% df_index$range)) {
+    index <- which(!range_traveltime %in% df_index$range)
     basemsg <- paste("The selected %s not available ranges ",
       "for traveltime Available ranges are %s.",
       sep = ""
     )
     if (length(index) == 1) {
-      body <- sprintf("range '%s' is", range[index])
+      body <- sprintf("range '%s' is", range_traveltime[index])
     } else {
-      body <- sprintf("ranges '%s' are", paste(range[index], collapse = "', '"))
+      body <- sprintf("ranges '%s' are", paste(range_traveltime[index], collapse = "', '"))
     }
     if (verbose) message(sprintf(basemsg, body, paste(df_index$range, collapse = ", ")))
-    range <- range[-index]
-    filenames <- filenames[-index]
-    if (length(range) == 0) {
+    range_traveltime <- range_traveltime[-index]
+    if (length(range_traveltime) == 0) {
       stop("No supoorted ranges have been specified.")
     } else {
       basemsg <- "Reduced to the available %s"
-      if (length(range) == 1) {
-        body <- sprintf("range of %s.", range)
+      if (length(range_traveltime) == 1) {
+        body <- sprintf("range of %s.", range_traveltime)
       } else {
-        body <- sprintf("ranges of %s.", paste(range, collapse = ", "))
+        body <- sprintf("ranges of %s.", paste(range_traveltime, collapse = ", "))
       }
       if (verbose) message(sprintf(basemsg, body))
     }
   }
 
-  index <- df_index$index[which(df_index$range %in% range)]
+  index <- df_index$index[which(df_index$range %in% range_traveltime)]
   urls <- data$url[index]
   filenames <- file.path(rundir, paste0("travel_time_to_cities_", df_index$range[index], ".tif"))
   filenames <- download_or_skip(urls, filenames, verbose = verbose, check_existence = FALSE)
   make_footprints(filenames, what = "raster")
 }
-
 
 
 register_resource(

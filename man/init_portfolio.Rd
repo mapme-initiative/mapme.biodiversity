@@ -7,7 +7,7 @@
 init_portfolio(
   x,
   years,
-  outdir = getwd(),
+  outdir = NULL,
   tmpdir = tempdir(),
   cores = NULL,
   aria_bin = NULL,

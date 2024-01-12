@@ -76,7 +76,7 @@ NULL
   urls <- sprintf("%sHansen_%s_lossyear_%s.tif", baseurl, vers_lossyear, ids)
   fps <- grid_gfc[tile_ids, ]
   fps[["source"]] <- urls
-  make_footprints(fps)
+  make_footprints(fps, opts = c("-co", "INTERLEAVE=BAND", "-co", "COMPRESS=LZW", "-ot", "Byte"))
 }
 
 

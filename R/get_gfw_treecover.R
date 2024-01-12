@@ -75,7 +75,7 @@ NULL
   )
   fps <- grid_gfc[tile_ids, ]
   fps[["source"]] <- urls
-  make_footprints(fps)
+  make_footprints(fps, opts = c("-co", "INTERLEAVE=BAND", "-co", "COMPRESS=LZW", "-ot", "Byte"))
 }
 
 .available_gfw_versions <- function() {

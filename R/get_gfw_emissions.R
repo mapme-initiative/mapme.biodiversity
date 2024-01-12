@@ -48,7 +48,7 @@ NULL
   filenames <- sprintf("gfw_forest_carbon_gross_emissions_Mg_CO2e_px_%s.tif", tile_str)
   fps <- spatialindex[tile_ids, "geometry"]
   fps[["source"]] <- urls
-  make_footprints(fps, filenames)
+  make_footprints(fps, filenames, opts = c("-co", "INTERLEAVE=BAND", "-co", "COMPRESS=LZW"))
 }
 
 

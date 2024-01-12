@@ -112,8 +112,14 @@ NULL
 
   urls <- purrr::map(target_years, function(year) .get_climate_url(layer, year))
   urls <- unlist(urls)
-  fps <- make_footprints(urls[1], what = "raster")
-  fps
+  fps <- purrr::map(urls, function(url){
+    st_bbox(c(xmin=-180., ymin=-90., xmax=180., ymax=90.), crs = "EPSG:4326") %>%
+      st_as_sfc() %>%
+      st_as_sf() %>%
+      dplyr::mutate(source = url)
+  })
+  fps <- st_as_sf(purrr::list_rbind(fps))
+  make_footprints(fps, what = "raster")
 }
 
 

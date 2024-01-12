@@ -30,7 +30,7 @@ NULL
                               verbose = TRUE) {
   target_years <- attributes(x)$years
   available_years <- c(2015:2019)
-  target_years <- .check_available_years(
+  target_years <- check_available_years(
     target_years, available_years, "esalandcover"
   )
 

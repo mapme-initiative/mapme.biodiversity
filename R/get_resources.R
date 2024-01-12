@@ -12,8 +12,6 @@
 #'   specified resources must be supported by the package. You can use
 #'   \code{available_resources()} to get more information, e.g. additional
 #'   required arguments and their default values, about the supported resources.
-#' @param download Logical, indicating if resource files should be fetched
-#'   from the source location and written to the output directory.
 #' @param ... Additional arguments required for the requested resources. Check
 #'  \code{available_resources()} to learn more about the supported resources and
 #'  their arguments.
@@ -21,7 +19,7 @@
 #'   the sf portfolio object \code{x} with its attributes amended by the requested resources.
 #' @keywords function
 #' @export
-get_resources <- function(x, resources, download = FALSE, ...) {
+get_resources <- function(x, resources, ...) {
   connection_available <- curl::has_internet()
   if (!connection_available) {
     stop("There seems to be no internet connection. Cannot download resources.")
@@ -40,7 +38,7 @@ get_resources <- function(x, resources, download = FALSE, ...) {
   ## TODO: check if we can go parallel here. Problem is when errors occur
   # for one resource and it terminates the complete process. We would have
   # to catch that so other processes can terminate successfully.
-  for (resource in resources) x <- .get_single_resource(x, resource, download, ...)
+  for (resource in resources) x <- .get_single_resource(x, resource, ...)
   x
 }
 
@@ -59,22 +57,25 @@ get_resources <- function(x, resources, download = FALSE, ...) {
 #' @param x A portfolio object
 #' @param resource A character vector of length one indicating a supported
 #'   resource
-#' @param download Logical, indicating if resource files should be fetched
-#'   from the source location and written to the output directory.
 #' @param ... Any additional arguments. The relevant arguments for the indicator
 #'   function are matched. If there are missing arguments, the default value is
 #'   used.
 #' @keywords internal
 #' @noRd
-.get_single_resource <- function(x, resource, download = FALSE, ...) {
+.get_single_resource <- function(x, resource, ...) {
   args <- list(...)
   atts <- attributes(x)
 
   rundir <- tempfile()
   dir.create(rundir)
   # TODO: we have to evaluate how to create directories on remote locations
-  outdir <- file.path(atts[["outdir"]], resource)
-  dir.create(outdir, showWarnings = FALSE)
+
+  if(!is.null(atts[["outdir"]])){
+    outdir <- file.path(atts[["outdir"]], resource)
+    dir.create(outdir, showWarnings = FALSE)
+  } else {
+    outdir <- NULL
+  }
 
   selected_resource <- available_resources(resource)
   type <- selected_resource[[resource]][["type"]]
@@ -84,7 +85,6 @@ get_resources <- function(x, resources, download = FALSE, ...) {
   params <- .check_resource_arguments(selected_resource, args)
   params[["x"]] <- x
   params[["rundir"]] <- rundir
-  params[["outdir"]] <- outdir
   params[["verbose"]] <- atts[["verbose"]]
   gdal_config_global <- get_mapme_gdal_config()
   gdal_config_resource <- args[["gdal_config"]]
@@ -102,9 +102,15 @@ get_resources <- function(x, resources, download = FALSE, ...) {
     return(resource_to_add)
   }
 
-  resource_to_add <- .fetch_resource(resource_to_add, outdir, resource, type,
-                                     download, atts[["verbose"]],
-                                     gdal_config_global, gdal_config_resource)
+  resource_to_add <- .fetch_resource(
+    resource = resource_to_add,
+    name = resource,
+    outdir = outdir,
+    type = type,
+    verbose = atts[["verbose"]],
+    gdal_config_global = gdal_config_global,
+    gdal_config_resource = gdal_config_resource)
+
   resource_to_add <- .set_precision(resource_to_add, precision = 1e5)
 
   # add the new resource to the attributes of the portfolio object
@@ -117,6 +123,7 @@ get_resources <- function(x, resources, download = FALSE, ...) {
 
 
 .call_resource_fun <- function(fun, args, name, gdal_config = list()){
+
   withr::with_envvar(gdal_config, code = {
     resource <- try(do.call(fun, args = args))
   })
@@ -130,8 +137,8 @@ get_resources <- function(x, resources, download = FALSE, ...) {
     stop("resource functions are expected to return sf objects with data footprints.")
   }
 
-  if (any(!names(resource) %in% c("source", "filename", "geometry"))){
-    stop("resource functions are expected to return sf object with columns 'source', 'filename' and 'geometry'.")
+  if (any(!names(resource) %in% c("source", "filename", "opts", "geometry"))){
+    stop("resource functions are expected to return sf object with columns 'source', 'filename', 'opts', and 'geometry'.")
   }
   resource
 }
@@ -149,11 +156,10 @@ get_resources <- function(x, resources, download = FALSE, ...) {
   name <- paste0("Fetching resource ", name, "...")
   if (!is.null(outdir)){
     resource[["destination"]] <- file.path(outdir, resource[["filename"]])
-    opts <- NULL
-    if(opts %in% names(resource)) opts <- resource[["opts"]]
-    purrr::walk2(
-      resource[["source"]], resource[["destination"]],
-      \(x,y) .get_spds(x,y, type, opts, gdal_config_global, gdal_config_resource),
+    suceeded <- purrr::pwalk(list(resource[["source"]], resource[["destination"]], resource[["opts"]]),
+      function(src, dest, opt) {
+        .get_spds(src=src, dest=dest, opts=opt, what=type,gdal_config_global,gdal_config_resource)
+      },
       .progress = ifelse(verbose, name, NULL))
     resource[["location"]] <- resource[["destination"]]
     attributes(resource)[["gdal_config"]]<- gdal_config_global
@@ -161,7 +167,7 @@ get_resources <- function(x, resources, download = FALSE, ...) {
     resource[["location"]] <- resource[["source"]]
     attributes(resource)[["gdal_config"]]<- gdal_config_resource
   }
-  resource["location"]
+  resource[c("location", "opts")]
 }
 
 

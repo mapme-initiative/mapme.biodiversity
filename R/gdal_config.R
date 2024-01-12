@@ -1,3 +1,4 @@
+#' @include register.R
 .match_opts <- function(user_opts, defaults) {
   if(length(user_opts) != 0){
     override_i <- which(names(defaults) %in% names(user_opts))
@@ -17,13 +18,13 @@ get_mapme_gdal_config <- function() {
   .pkgenv$gdal_config
 }
 
-
+#' @include register.R
 gdal_cloud_opts <- function(...) {
   user_opts <- unlist(list(...))
   defaults <- c("VSI_CACHE" = "TRUE",
-                "GDAL_CACHEMAX" = "5%",
-                "VSI_CACHE_SIZE" = "25000",
-                "GDAL_INGESTED_BYTES_AT_OPEN" = "3200",
+                "GDAL_CACHEMAX" = "30%",
+                "VSI_CACHE_SIZE" = "10000000",
+                "GDAL_INGESTED_BYTES_AT_OPEN" = "32000",
                 "GDAL_DISABLE_READDIR_ON_OPEN" = "FALSE",
                 "GDAL_READDIR_LIMIT_ON_OPEN" = "1000",
                 "GDAL_NUM_THREADS" = "ALL_CPUS",
@@ -34,7 +35,7 @@ gdal_cloud_opts <- function(...) {
   .match_opts(user_opts, defaults)
 }
 
-
+#' @include register.R
 gdal_http_opts <- function(...) {
   user_opts <- list(...)
   defaults <- list("GDAL_HTTP_HEADER_FILE" = NULL,
@@ -63,6 +64,7 @@ gdal_http_opts <- function(...) {
                 )
   .match_opts(user_opts, defaults)
 }
+#' @include register.R
 gdal_s3_opts <- function(...) {
   user_opts <- unlist(list(...))
   defaults <- list("AWS_NO_SIGN_REQUEST" = NULL,
@@ -89,6 +91,7 @@ gdal_s3_opts <- function(...) {
   .match_opts(user_opts, defaults)
 }
 
+#' @include register.R
 gdal_gcs_opts <- function(...){
   user_opts <- list(...)
   defaults <- list("GS_NO_SIGN_REQUEST" = NULL,
@@ -106,7 +109,7 @@ gdal_gcs_opts <- function(...){
   .match_opts(user_opts, defaults)
 }
 
-
+#' @include register.R
 gdal_az_opts <- function(...){
   user_opts <- list(...)
   defaults <- list("AZURE_NO_SIGN_REQUEST" = NULL,
@@ -121,7 +124,7 @@ gdal_az_opts <- function(...){
   .match_opts(user_opts, defaults)
 }
 
-
+#' @include register.R
 gdal_swift_opts <- function(...){
   user_opts <- list(...)
   defaults <- list("SWIFT_STORAGE_URL" = NULL,

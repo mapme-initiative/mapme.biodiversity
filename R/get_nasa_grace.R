@@ -27,7 +27,7 @@ NULL
                             verbose = TRUE) {
   target_years <- attributes(x)$years
   available_years <- 2003:2022
-  target_years <- .check_available_years(
+  target_years <- check_available_years(
     target_years, available_years, "droughtindicators"
   )
 
