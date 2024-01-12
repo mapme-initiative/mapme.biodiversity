@@ -4,7 +4,7 @@
 \alias{get_resources}
 \title{Download specific biodiversity resources}
 \usage{
-get_resources(x, resources, download = FALSE, ...)
+get_resources(x, resources, ...)
 }
 \arguments{
 \item{x}{A biodiversity portfolio object constructed via
@@ -14,9 +14,6 @@ get_resources(x, resources, download = FALSE, ...)
 specified resources must be supported by the package. You can use
 \code{available_resources()} to get more information, e.g. additional
 required arguments and their default values, about the supported resources.}
-
-\item{download}{Logical, indicating if resource files should be fetched
-from the source location and written to the output directory.}
 
 \item{...}{Additional arguments required for the requested resources. Check
 \code{available_resources()} to learn more about the supported resources and
