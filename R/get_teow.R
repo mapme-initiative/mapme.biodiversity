@@ -33,14 +33,11 @@ NULL
 .get_teow <- function(x,
                       rundir = tempdir(),
                       verbose = TRUE) {
-
   url <- paste("/vsizip//vsicurl/https://files.worldwildlife.org/wwfcmsprod/files/",
     "Publication/file/6kcchn7e3u_official_teow.zip/official/wwf_terr_ecos.shp",
     sep = ""
   )
-  fp <- make_footprints(url, "vector")
-  fp[["filename"]] <- "wwf_terr_ecos.gpkg"
-  fp
+  make_footprints(url,  "wwf_terr_ecos.gpkg", "vector")
 }
 
 register_resource(

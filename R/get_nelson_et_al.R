@@ -125,9 +125,7 @@ NULL
   urls <- data$url[index]
   filenames <- file.path(rundir, paste0("travel_time_to_cities_", df_index$range[index], ".tif"))
   filenames <- download_or_skip(urls, filenames, verbose = verbose, check_existence = FALSE)
-  fps <- make_footprints(filenames, what = "raster")
-  fps[["filename"]] <- basename(filenames)
-  fps
+  make_footprints(filenames, what = "raster")
 }
 
 

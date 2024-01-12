@@ -47,9 +47,12 @@ NULL
     ))
   }
   # create all urls for target years and per tile
-  fps <- purrr::map_dfr(tile_ids, function(id){
+  fps <- purrr::map(tile_ids, function(id){
     urls <- purrr::map_chr(target_years, .get_esa_url, tile = grid_esa[id, ])
-    fp <- purrr::map_dfr(1:length(urls), function(i) fp)
+    fp <- grid_esa[id, ]
+    fp <- purrr::map(seq_along(urls), function(i) fp) %>%
+      purrr::list_rbind() %>%
+      st_as_sf()
     fp[["source"]] <- urls
     filenames <-  purrr::map_chr(basename(urls), function(x) {
       x <- strsplit(x, "-|_")[[1]]
@@ -58,6 +61,8 @@ NULL
     fp[["filename"]] <- filenames
     fp
   })
+  fps <- purrr::list_rbind(fps) %>% st_as_sf()
+  fps <- make_footprints(fps, fps[["filename"]], "raster")
   index <- purrr::map_lgl(fps[["source"]], spds_exists, what = "raster")
   fps[index, ]
 }

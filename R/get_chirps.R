@@ -36,25 +36,15 @@ NULL
   }
 
   chirps_list <- grep("*.tif.gz$", chirps_list, value = TRUE)
-  urls <- paste(chirps_url, chirps_list, sep = "")
-  filenames <- file.path(rundir, basename(urls))
-  if (attr(x, "testing")) {
-    return(basename(filenames))
-  }
-
-  aria_bin <- attributes(x)$aria_bin
-  filenames <- .download_or_skip(
-    urls,
-    filenames,
-    verbose = verbose,
-    check_existence = FALSE,
-    aria_bin = aria_bin
-  )
-
-  filenames <- purrr::walk(filenames, .unzip_and_remove,
-    rundir = rundir, remove = FALSE
-  )
-  gsub(".gz", "", filenames)
+  urls <- paste("/vsigzip//vsicurl/", chirps_url, chirps_list, sep = "")
+  fps <- purrr::map(urls, function(url){
+    st_bbox(c(xmin=-180., ymin=-50., xmax=180., ymax=50.), crs = "EPSG:4326") %>%
+      st_as_sfc() %>%
+      st_as_sf() %>%
+      dplyr::mutate(source = url)
+  })
+  fps <- purrr::list_rbind(fps) %>% st_as_sf()
+  make_footprints(fps, what = "raster")
 }
 
 register_resource(

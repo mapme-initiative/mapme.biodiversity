@@ -54,10 +54,7 @@ NULL
   }
 
   url <- ifelse(res_drivers == 100, urls[1], urls[2])
-  fp <- make_footprints(url, "raster")
-  st_geometry(fp) <- "geometry"
-  fp[["filename"]] <- paste0("geo_fritz_et_al_", res_drivers, "m.tif")
-  fp
+  make_footprints(url, paste0("geo_fritz_et_al_", res_drivers, "m.tif"), "raster")
 }
 
 register_resource(

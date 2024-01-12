@@ -150,7 +150,7 @@ get_resources <- function(x, resources, download = FALSE, ...) {
   if (!is.null(outdir)){
     resource[["destination"]] <- file.path(outdir, resource[["filename"]])
     opts <- NULL
-    if(opts %in% names(resource)) opts <- strsplit(resource$opts, " ")[[1]]
+    if(opts %in% names(resource)) opts <- resource[["opts"]]
     purrr::walk2(
       resource[["source"]], resource[["destination"]],
       \(x,y) .get_spds(x,y, type, opts, gdal_config_global, gdal_config_resource),

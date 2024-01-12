@@ -38,9 +38,7 @@ NULL
       st_as_sf() %>%
       dplyr::mutate(source = url)
   })
-
-  fps[["filename"]] <- basename(urls)
-  fps
+  make_footprints(fps)
 }
 
 

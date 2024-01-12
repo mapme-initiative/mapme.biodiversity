@@ -67,8 +67,7 @@ NULL
       st_as_sf()
   })
   fps[["source"]] <- urls
-  fps[["filename"]] <- basename(urls)
-  fps
+  make_footprints(fps)
 }
 
 register_resource(

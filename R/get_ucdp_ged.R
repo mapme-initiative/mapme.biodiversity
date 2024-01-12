@@ -65,19 +65,20 @@ NULL
     stop(paste0("Valid versions for UCDP GED: ", msg, "."))
   }
 
-  version <- paste0("ged", stringr::str_remove_all(version_ged, "\\."), "-csv.zip")
+  version <- paste0("ged", gsub("\\.", "", version_ged), "-csv.zip")
   base_url <- "/vsizip/vsicurl/https://ucdp.uu.se/downloads/ged/"
   url <- paste0(base_url, version)
+
   switch(version_ged,
          "19.1" = url <- paste0(url, "/ged191.csv"),
          "5.0" = url <- paste0(url, "/ged50.csv"))
 
-  opts = c("-oo", "GEOM_POSSIBLE_NAMES=geom_wkt")
-  fp <- make_footprints(url, "vector", opts = opts)
-  fp[["filename"]] <- gsub("zip", "gpkg", version)
-  fp[["opts"]] <- paste(opts, collapse = " ")
+  fp <- make_footprints(
+    url, filenames = gsub("zip", "gpkg", version),
+    what = "vector", opts = c("-oo", "GEOM_POSSIBLE_NAMES=geom_wkt"))
+  st_crs(fp) <- st_crs("EPSG:4326")
   fp
-  }
+}
 
 
 .ucdp_versions <- function() {

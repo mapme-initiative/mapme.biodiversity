@@ -75,8 +75,7 @@ NULL
   )
   fps <- grid_gfc[tile_ids, ]
   fps[["source"]] <- urls
-  fps[["filename"]] <- basename(urls)
-  fps
+  make_footprints(fps)
 }
 
 .available_gfw_versions <- function() {

@@ -112,8 +112,7 @@ NULL
 
   urls <- purrr::map(target_years, function(year) .get_climate_url(layer, year))
   urls <- unlist(urls)
-  fps <- make_footprints(urls, "raster")
-  fps[["filename"]] <- basename(urls)
+  fps <- make_footprints(urls[1], what = "raster")
   fps
 }
 

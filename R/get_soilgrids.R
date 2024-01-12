@@ -133,25 +133,23 @@ NULL
 
   grid <- expand.grid(layers, depths, stats)
   names(grid) <- c("layer", "depth", "stat")
-  urls <- purrr::pmap(grid, function(layer, depth, stat){
+  urls <- purrr::pmap_chr(grid, function(layer, depth, stat){
     if (layer != "ocs" & depth == "0-30cm") {
       message("Depth '0-30cm' is only available of layer 'ocs'.")
-      return(NULL)
+      return(NA_character_)
     }
 
     if (layer == "ocs" & depth != "0-30cm") {
       message("Layer 'ocs' is only available at depth '0-30cm'.")
-      return(NULL)
+      return(NA_character_)
     }
     baseurl <- "/vsicurl/https://files.isric.org/soilgrids/latest/data/"
     datalayer <- sprintf("%s/%s_%s_%s.vrt", layer, layer, depth, stat)
     paste0(baseurl, datalayer)
   })
 
-  urls <- unlist(urls)
-  fps <- make_footprints(urls, "raster")
-  fps[["filename"]] <- gsub("vrt", "tif", fps[["source"]])
-  fps
+  urls <- na.omit(urls)
+  make_footprints(urls, gsub("vrt", "tif", urls), "raster")
 }
 
 

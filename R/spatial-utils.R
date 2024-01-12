@@ -1,6 +1,6 @@
-.vector_footprint <- function(file, opts = NULL) {
+.vector_footprint <- function(src, opts = NULL) {
 
-  info <- sf::gdal_utils("ogrinfo", file, options = c("-json", "-so", "-ro", "-nomd", opts), quiet = TRUE)
+  info <- sf::gdal_utils("ogrinfo", src, options = c("-json", "-so", "-ro", "-nomd", "-nocount", opts), quiet = TRUE)
   if (length(info) == 0) return(NULL)
   info <- jsonlite::parse_json(info)
   layers <- info[["layers"]]
@@ -19,15 +19,15 @@
   bbox <- st_union(layers_bbox) %>%
     st_as_sf() %>%
     dplyr::rename(geometry = "x") %>%
-    dplyr::mutate(source = file)
+    dplyr::mutate(source = src)
 
   st_crs(bbox) <- crs
   bbox[ , "source"]
 }
 
-.raster_footprint <- function(file, opts = NULL){
+.raster_footprint <- function(src, opts = NULL){
 
-  info <- sf::gdal_utils("gdalinfo", file, options = c("-json", "-norat", "-noct", "-nomd", opts), quiet = TRUE)
+  info <- sf::gdal_utils("gdalinfo", src, options = c("-json", "-norat", "-noct", "-nomd", opts), quiet = TRUE)
   info <- jsonlite::parse_json(info)
   crs <- info[["coordinateSystem"]][["wkt"]] %>% st_crs()
 
@@ -35,7 +35,7 @@
   bbox <- info[["wgs84Extent"]] %>%
     jsonlite::toJSON(auto_unbox = TRUE) %>%
     read_sf() %>%
-    dplyr::mutate(source = file)
+    dplyr::mutate(source = src)
   st_crs(bbox) <- st_crs(4326)
   bbox <- st_transform(bbox, crs)
 
@@ -48,7 +48,7 @@
       ymax=coords$upperLeft[[2]]), crs = crs) %>%
       st_as_sfc() %>%
       st_as_sf() %>%
-      dplyr::mutate(source = file)
+      dplyr::mutate(source = src)
   }
   bbox[ , "source"]
 }
@@ -255,19 +255,27 @@ spds_exists <- function(
 #' Create footprints for vector or raster data sets
 #'
 #' With this function you can create footprints for vector or raster datasets.
-#' Specify a character vector of GDAL readable files of either vector
+#' Specify a character vector of GDAL readable sources of either vector
 #' or raster type. Internally, GDAL will be used to create an sf object
 #' with a single column indicating the source and the geometry indicating
-#' the bounding box of the respective file.
-#' Note, the performance for remote files is dependent on your connection to
+#' the bounding box of the respective source.
+#' Note, the performance for remote sources is dependent on your connection to
 #' the server. If you have other means to create footprints in your resource
 #' function (e.g. by using the output `{rstac::items_bbox()}`) you should prefer
 #' those means over this function for remote files.
 #'
-#' @param files A character vector with GDAL readable paths to either vector
-#'  or raster sources.
+#' @param srcs A character vector with GDAL readable paths to either vector
+#'  or raster sources, then internal footprint functions are called, or an
+#'  sf object which will be appended for filenames and potential options.
+#' @param filenames A charcter vector indicating the filenames of the source
+#'   data sets if they were written to a destionation. Defaults to `basename(srcs)`
+#'   in case of character type or `basename(srcs[["source"]])` in case of
+#'   an sf object.
 #' @param what A character vector indicating if the files are vector or raster
 #'   files.
+#' @param opts Either a list or a character vector with opening options (-oo)
+#'   of the respective GDAL driver. A list must have equal length of the
+#'   input sources, a vector will be recycled.
 #'
 #' @return An sf object with a the files sources and the geometry indicating
 #'   their spatial footprint.
@@ -282,19 +290,46 @@ spds_exists <- function(
 #' # a raster resource
 #' ras <- system.file("ex/elev.tif", package="terra")
 #' make_footprints(ras, what = "raster")
-#'
 make_footprints <- function(
-    files,
+    srcs,
+    filenames = if(inherits(srcs, "sf")) basename(srcs[["source"]]) else basename(srcs),
     what = c("vector", "raster"),
     opts = NULL) {
 
-  what <- match.arg(what)
-  if(missing(what)) stop("Specify the resource type for making footprints")
 
-  switch(
-    what,
-    vector = purrr::map_dfr(files, .vector_footprint, opts = opts),
-    raster = purrr::map_dfr(files, .raster_footprint, opts = opts),
-    stop("Can make footprints for vector and raster data only.")
-  )
+  stopifnot(is.null(opts) || (inherits(opts, "list") | inherits(opts, "character")))
+  stopifnot(inherits(srcs, "sf") | inherits(srcs, "character"))
+  stopifnot(inherits(filenames,  "character") | is.null(filenames))
+
+  n <- ifelse(inherits(srcs, "sf"), nrow(srcs), length(srcs))
+  if(length(filenames) != n) stop("filenames required to be of equal length of sources.")
+
+  if(inherits(opts, "list") && length(opts) != n) {
+    stop("Opening option list required to be equal length of sources.")
+  }
+
+  if(inherits(opts, "character")) {
+    opts <- lapply(seq_len(n), function(i) opts)
+  }
+
+  if(is.null(opts)){
+    opts <- rep(list(opts), n )
+  }
+
+  if(inherits(srcs, "character")) {
+    what <- match.arg(what)
+    srcs <- switch(
+      what,
+      vector = purrr::map2(srcs, opts,   function(src, opt) .vector_footprint(src, opt)),
+      raster = purrr::map2(srcs, opts, function(src, opt) .raster_footprint(src, opt)),
+      stop("Can make footprints for vector and raster data only.")
+    )
+    srcs <- purrr::list_rbind(srcs)
+  }
+
+  srcs <- st_as_sf(tibble::as_tibble(srcs))
+  srcs[["filename"]] <- filenames
+  srcs[["opts"]] <- opts
+  st_geometry(srcs) <- "geometry"
+  relocate(srcs, !!"geometry", .after = last_col())
 }

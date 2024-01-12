@@ -27,8 +27,8 @@ NULL
                           rundir = tempdir(),
                           verbose = TRUE) {
   target_years <- attributes(x)$years
-  available_years <- 2001:2020
-  target_years <- .check_available_years(
+  available_years <- 2000:2020
+  target_years <- check_available_years(
     target_years, available_years, "popcount"
   )
 
@@ -39,8 +39,10 @@ NULL
       st_as_sf() %>%
       dplyr::mutate(source = url)
   })
-  fps$filename <- basename(urls)
-  fps$opts <- c("-a_ullr", "-180.00125 -71.99208 179.99875 83.99958", "-co", "COMPRESS=LZW")
+  fps <- make_footprints(
+    fps, what = "vector",
+    opts = c("-a_ullr", "-180.00125 -71.99208 179.99875 83.99958",
+             "-co", "COMPRESS=LZW"))
   fps
 }
 

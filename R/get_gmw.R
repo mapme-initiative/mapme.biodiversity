@@ -40,9 +40,7 @@ NULL
   )
   # 2018 is in pseudo-mercator
   urls <- unlist(sapply(target_years, function(year) .get_mangrove_url(year)))
-  fps <- make_footprints(urls, "vector")
-  fps[["filename"]] <- purrr::map_chr(urls, function(x) strsplit(x, "/")[[1]][8])
-  fps
+  make_footprints(urls, gsub(".shp", ".gpkg", basename(urls)), what = "vector")
 }
 
 
