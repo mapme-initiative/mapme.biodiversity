@@ -23,7 +23,7 @@
 #' @param global_surface_water_transitions The GSW Transitions data source.
 #' @return A tibble with two columns
 #' \itemize{
-#'   \item class: Surface water transition class
+#'   \item class: Surface water transition class.
 #'   \item area: Area in ha.
 #' }
 #' @keywords internal
@@ -69,8 +69,7 @@ register_indicator(
   resources = list(global_surface_water_transitions = "raster"),
   fun = .calc_gsw_transitions,
   arguments = list(
-    engine = "extract",
-    stats_gsw = "mean"
+    engine = "extract"
   ),
   processing_mode = "asset"
 )

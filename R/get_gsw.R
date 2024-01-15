@@ -1,13 +1,7 @@
 .get_gsw <- function(x, statistic = "occurrence", vers_gsw = "v1_4_2021",
                      rundir = tempdir(), verbose = TRUE) {
-  available_gsw_statistics <- c(
-    "change",
-    "occurrence",
-    "recurrence",
-    "seasonality",
-    "transitions"
-  )
-  stopifnot(statistic %in% available_gsw_statistics)
+  stopifnot(statistic %in% .gsw_statistics,
+            vers_gsw %in% .gsv_versions)
 
   # make the gsw grid and construct urls for intersecting tiles
   baseurl <- sprintf(
@@ -59,14 +53,19 @@
   paste0(min_x, "_", max_y)
 }
 
-gsw_statistics <- c(
+.gsw_statistics <- c(
   "change",
   "occurrence",
   "recurrence",
   "seasonality",
   "transitions"
 )
-for (gsw_statistic in gsw_statistics) {
+
+.gsv_versions <- c(
+  "v1_4_2021"
+)
+
+for (gsw_statistic in .gsw_statistics) {
   resource_name <- paste0("global_surface_water_", gsw_statistic)
   register_resource(
     name = resource_name,
