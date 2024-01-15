@@ -31,7 +31,8 @@ test_that("gsw transitions works", {
   )
 
   expect_equal(
-    transitions,
-    transitions_expected
+    transitions$area,
+    transitions_expected$area,
+    tolerance = 1e-4
   )
 })

@@ -1,5 +1,14 @@
 .get_gsw <- function(x, statistic = "occurrence", vers_gsw = "v1_4_2021",
                      rundir = tempdir(), verbose = TRUE) {
+  available_gsw_statistics <- c(
+    "change",
+    "occurrence",
+    "recurrence",
+    "seasonality",
+    "transitions"
+  )
+  stopifnot(statistic %in% available_gsw_statistics)
+
   # make the gsw grid and construct urls for intersecting tiles
   baseurl <- sprintf(
     "https://storage.googleapis.com/global-surface-water/downloads2021/%s/%s",

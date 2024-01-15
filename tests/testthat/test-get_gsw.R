@@ -23,17 +23,6 @@ test_that(".get_gsw works", {
   # Add testing attribute in order to skip downloads
   attributes(portfolio)$testing <- TRUE
 
-  gsw_statistics <- c(
-    "change",
-    "occurrence",
-    "recurrence",
-    "seasonality",
-    "transitions"
-  )
-  for (gsw_statistic in gsw_statistics) {
-    resource_name <- paste0("global_surface_water_", gsw_statistic)
-  }
-
   expect_error(
     .get_gsw(portfolio, statistic = "not-available")
   )
