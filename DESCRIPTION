@@ -50,7 +50,7 @@ Collate:
     'calc_gsw_occurrence.R'
     'calc_gsw_recurrence.R'
     'calc_gsw_seasonality.R'
-    'calc_gsw_transitios.R'
+    'calc_gsw_transitions.R'
     'calc_indicators.R'
     'calc_landcover.R'
     'calc_mangroves_area.R'

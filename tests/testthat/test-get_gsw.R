@@ -27,6 +27,10 @@ test_that(".get_gsw works", {
     .get_gsw(portfolio, statistic = "not-available")
   )
 
+  expect_error(
+    .get_gsw(portfolio, vers_gsw = "not-available")
+  )
+
   expect_equal(
     basename(.get_gsw(portfolio, statistic = "occurrence")),
     "occurrence_80W_20Nv1_4_2021.tif"

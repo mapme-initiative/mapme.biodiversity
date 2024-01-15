@@ -6,10 +6,11 @@ test_that("gsw transitions works", {
   )
 
   shp <- suppressWarnings(st_cast(shp, to = "POLYGON")[1, ])
+  tmpdir <- tempdir()
   portfolio <- init_portfolio(
     shp,
     years = 2024,
-    tmpdir =  "~/R/mapme.biodiversity/inst/res/gsw_transitions",
+    tmpdir =  tmpdir,
     verbose = TRUE
   )
 
