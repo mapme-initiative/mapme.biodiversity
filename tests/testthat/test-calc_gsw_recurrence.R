@@ -14,6 +14,11 @@ test_that("gsw recurrence works", {
     verbose = TRUE
   )
 
+  expect_equal(
+    .calc_gsw_recurrence(portfolio, NULL),
+    NA
+  )
+
   gsw_recurrence <- list.files(system.file("res", "gsw_recurrence",
     package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)
