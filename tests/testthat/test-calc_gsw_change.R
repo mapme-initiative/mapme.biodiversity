@@ -14,6 +14,11 @@ test_that("gsw change works", {
     verbose = TRUE
   )
 
+  expect_equal(
+    .calc_gsw_change(portfolio, NULL),
+    NA
+  )
+
   gsw_change <- list.files(system.file("res", "gsw_change",
     package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)

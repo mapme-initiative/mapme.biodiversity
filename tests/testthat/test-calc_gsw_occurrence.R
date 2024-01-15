@@ -14,6 +14,11 @@ test_that("gsw occurrence works", {
     verbose = TRUE
   )
 
+  expect_equal(
+    .calc_gsw_occurrence(portfolio, NULL),
+    NA
+  )
+
   gsw_occurrence <- list.files(system.file("res", "gsw_occurrence",
     package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)

@@ -14,6 +14,11 @@ test_that("gsw seasonality works", {
     verbose = TRUE
   )
 
+  expect_equal(
+    .calc_gsw_seasonality(portfolio, NULL),
+    NA
+  )
+
   gsw_seasonality <- list.files(system.file("res", "gsw_seasonality",
     package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)
