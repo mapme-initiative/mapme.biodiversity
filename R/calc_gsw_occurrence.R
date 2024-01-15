@@ -15,7 +15,9 @@
 #' "extract" or "exactextract". Default: "extract".
 #' @param stats_gsw Aggregation function with which the data are combined.
 #' Default: "mean".
-#' @return A tibble
+#' @return A tibble containing the aggregated occurrence indicator. The column
+#' name is a concatenation of "global_surface_water_occurrence_" +
+#' \code{stats_gsw}.
 #' @keywords internal
 #' @include register.R
 #' @noRd
