@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0.9001</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -262,13 +262,15 @@ names of the returned object:</p>
 <span><span class="co">#&gt;  [3] "biome"                        "deforestation_drivers"       </span></span>
 <span><span class="co">#&gt;  [5] "drought_indicator"            "ecoregion"                   </span></span>
 <span><span class="co">#&gt;  [7] "elevation"                    "fatalities"                  </span></span>
-<span><span class="co">#&gt;  [9] "landcover"                    "mangroves_area"              </span></span>
-<span><span class="co">#&gt; [11] "population_count"             "precipitation_chirps"        </span></span>
-<span><span class="co">#&gt; [13] "precipitation_wc"             "soilproperties"              </span></span>
-<span><span class="co">#&gt; [15] "temperature_max_wc"           "temperature_min_wc"          </span></span>
-<span><span class="co">#&gt; [17] "traveltime"                   "treecover_area"              </span></span>
-<span><span class="co">#&gt; [19] "treecover_area_and_emissions" "treecoverloss_emissions"     </span></span>
-<span><span class="co">#&gt; [21] "tri"</span></span></code></pre></div>
+<span><span class="co">#&gt;  [9] "gsw_change"                   "gsw_occurrence"              </span></span>
+<span><span class="co">#&gt; [11] "gsw_recurrence"               "gsw_seasonality"             </span></span>
+<span><span class="co">#&gt; [13] "gsw_transitions"              "landcover"                   </span></span>
+<span><span class="co">#&gt; [15] "mangroves_area"               "population_count"            </span></span>
+<span><span class="co">#&gt; [17] "precipitation_chirps"         "precipitation_wc"            </span></span>
+<span><span class="co">#&gt; [19] "soilproperties"               "temperature_max_wc"          </span></span>
+<span><span class="co">#&gt; [21] "temperature_min_wc"           "traveltime"                  </span></span>
+<span><span class="co">#&gt; [23] "treecover_area"               "treecover_area_and_emissions"</span></span>
+<span><span class="co">#&gt; [25] "treecoverloss_emissions"      "tri"</span></span></code></pre></div>
 <p>Say, we are interested in the <code>population_count</code>
 indicator. We can learn more about this indicator and its required
 resources by using either of the commands below or, if you are viewing
@@ -286,15 +288,18 @@ resource. We can learn about all available resources using the
 <code><a href="../reference/available_resources.html">available_resources()</a></code> function:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="../reference/available_resources.html">available_resources</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] "chirps"                    "esalandcover"             </span></span>
-<span><span class="co">#&gt;  [3] "fritz_et_al"               "gfw_emissions"            </span></span>
-<span><span class="co">#&gt;  [5] "gfw_lossyear"              "gfw_treecover"            </span></span>
-<span><span class="co">#&gt;  [7] "gmw"                       "nasa_firms"               </span></span>
-<span><span class="co">#&gt;  [9] "nasa_grace"                "nasa_srtm"                </span></span>
-<span><span class="co">#&gt; [11] "nelson_et_al"              "soilgrids"                </span></span>
-<span><span class="co">#&gt; [13] "teow"                      "ucdp_ged"                 </span></span>
-<span><span class="co">#&gt; [15] "worldclim_max_temperature" "worldclim_min_temperature"</span></span>
-<span><span class="co">#&gt; [17] "worldclim_precipitation"   "worldpop"</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] "chirps"                           "esalandcover"                    </span></span>
+<span><span class="co">#&gt;  [3] "fritz_et_al"                      "gfw_emissions"                   </span></span>
+<span><span class="co">#&gt;  [5] "gfw_lossyear"                     "gfw_treecover"                   </span></span>
+<span><span class="co">#&gt;  [7] "global_surface_water_change"      "global_surface_water_occurrence" </span></span>
+<span><span class="co">#&gt;  [9] "global_surface_water_recurrence"  "global_surface_water_seasonality"</span></span>
+<span><span class="co">#&gt; [11] "global_surface_water_transitions" "gmw"                             </span></span>
+<span><span class="co">#&gt; [13] "nasa_firms"                       "nasa_grace"                      </span></span>
+<span><span class="co">#&gt; [15] "nasa_srtm"                        "nelson_et_al"                    </span></span>
+<span><span class="co">#&gt; [17] "soilgrids"                        "teow"                            </span></span>
+<span><span class="co">#&gt; [19] "ucdp_ged"                         "worldclim_max_temperature"       </span></span>
+<span><span class="co">#&gt; [21] "worldclim_min_temperature"        "worldclim_precipitation"         </span></span>
+<span><span class="co">#&gt; [23] "worldpop"</span></span></code></pre></div>
 <p>For the purpose of this vignette, we are going to download the
 <code>worldpop</code> resource. We can get more detailed information
 about a given resource, by using either of the commands below to open up
@@ -471,9 +476,9 @@ it.</p>
 <span>  dsn <span class="op">=</span> <span class="va">tmp_output</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Writing layer `metadata' to data source </span></span>
-<span><span class="co">#&gt;   `/tmp/RtmpKM3Zhr/file253a5e3200a9.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt;   `/tmp/RtmpkaRzkH/file25726be20e20.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">#&gt; Writing 23 features with 2 fields and geometry type Polygon.</span></span>
-<span><span class="co">#&gt; Updating layer `population_count' to data source `/tmp/RtmpKM3Zhr/file253a5e3200a9.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt; Updating layer `population_count' to data source `/tmp/RtmpkaRzkH/file25726be20e20.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">#&gt; Writing 138 features with 3 fields without geometries.</span></span>
 <span><span class="op">(</span><span class="va">portfolio_from_disk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_portfolio.html">read_portfolio</a></span><span class="op">(</span><span class="va">tmp_output</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Simple feature collection with 23 features and 3 fields</span></span>
