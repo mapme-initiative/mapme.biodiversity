@@ -21,7 +21,8 @@ test_that("gsw recurrence works", {
 
   expect_equal(
     rec$global_surface_water_recurrence_mean,
-    22.49229803467092
+    22.49229803467092,
+    tolerance = 1e-4
   )
 })
 

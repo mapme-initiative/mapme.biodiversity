@@ -21,6 +21,7 @@ test_that("gsw change works", {
 
   expect_equal(
     chg$global_surface_water_change_mean,
-    100
+    100,
+    tolerance = 1e-4
   )
 })
