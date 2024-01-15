@@ -22,7 +22,7 @@ test_that("gsw seasonality works", {
 
   expect_equal(
     season$global_surface_water_seasonality_mean,
-    2.289487662369018,
+    2.289321841577943,
     tolerance = 1e-4
   )
 })

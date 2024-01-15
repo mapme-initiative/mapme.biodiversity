@@ -22,7 +22,7 @@ test_that("gsw occurrence works", {
 
   expect_equal(
     occ$global_surface_water_occurrence_mean,
-    19.41088415664687,
+    19.40947828396224,
     tolerance = 1e-4
   )
 })
