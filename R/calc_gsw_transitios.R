@@ -21,7 +21,11 @@
 #'
 #' @param x A single polygon for which to calculate the GSW statistics.
 #' @param global_surface_water_transitions The GSW Transitions data source.
-#' @return A tibble
+#' @return A tibble with two columns
+#' \itemize{
+#'   \item class: Surface water transition class
+#'   \item area: Area in ha.
+#' }
 #' @keywords internal
 #' @include register.R
 #' @noRd
