@@ -19,9 +19,9 @@ knitr::opts_chunk$set(
 # Introduction
 
 In the following we will demonstrate an idealized workflow based on a subset
-of the ESA Landcover dataset that is delivered together with this package. You 
-can follow along the code snippets below to reproduce the results. Please note that
-to reduce the time it takes to process this vignette, we will not download
+of the WorldPop data set that is delivered together with this package. You 
+can follow along the code snippets below to reproduce the results. Please note 
+that to reduce the time it takes to process this vignette, we will not download
 any resources from the internet. In a real use case, thus processing time
 might substantially increase because resources have to be downloaded and real
 portfolios might be larger than the one created in this example. 
@@ -54,6 +54,10 @@ library(tidyr)
 
 aoi_path <- system.file("extdata", "sierra_de_neiba_478140.gpkg", package = "mapme.biodiversity")
 (aoi <- read_sf(aoi_path))
+```
+
+```{r simplify-aoi, echo = FALSE}
+aoi <- st_simplify(aoi, preserveTopology = TRUE, dTolerance = 500)
 ```
 
 The sf-object contains a single object of geometry type `MULTIPOLYGON`. The 
@@ -98,7 +102,7 @@ are important for the subsequent processing. The function will add a unique
 identifier column called 'assetid' that is used to uniquely identify each
 asset in the portfolio.
 
-```{r init_portfolio, dpi = 50, out.width="120%", out.height="120%"}
+```{r init_portfolio}
 # copying package internal resource to a temporary location
 outdir <- file.path(tempdir(), "mapme.biodiversity")
 dir.create(outdir)
@@ -107,7 +111,7 @@ file.copy(resource_dir, outdir, recursive = TRUE)
 
 sample_portfolio <- init_portfolio(
   x = aoi_gridded,
-  years = 2015,
+  years = 2010:2015,
   outdir = file.path(outdir, "res"),
   tmpdir = outdir,
   verbose = TRUE
@@ -148,19 +152,20 @@ function. For this, we inspect the names of the returned object:
 names(available_indicators())
 ```
 
-Say, we are interested in the landcover indicator.
+Say, we are interested in the `population_count` indicator.
 We can learn more about this indicator and its required resources by using
 either of the commands below or, if you are viewing the online version, head
-over to the [landcover](https://mapme-initiative.github.io/mapme.biodiversity/reference/landcover.html) documentation.
+over to the [population_count](https://mapme-initiative.github.io/mapme.biodiversity/reference/population_count.html) documentation.
 
 ```{r helppage_indicator, eval = FALSE}
-?landcover
-help(landcover)
+?population_count
+help(population_count)
 ```
 
 By inspecting the help page we learned that this indicator requires the 
-`esalandcover` resource and it does not require to specify and further
-arguments.
+`worldpop` resource and it requires to specify two extra arguments: the population
+statistic to calculate and the eninge to be used for the calculation (learn
+more about engines [here](https://mapme-initiative.github.io/mapme.biodiversity/articles/terminology.html)).
 
 With that information at hand, we can start to retrieve the required resource. 
 We can learn about all available resources using the <code>available_resources()</code> 
@@ -170,19 +175,19 @@ function:
 names(available_resources())
 ```
 
-For the purpose of this vignette, we are going to download the `esalandcover` 
+For the purpose of this vignette, we are going to download the `worldpop` 
 resource. We can get more detailed information about a given resource, by using 
 either of  the commands below to open up the help page. If you are viewing the 
 online version of this documentation, you can simply head over to the
-[esalandcover](https://mapme-initiative.github.io/mapme.biodiversity/reference/esalandcover.html)
+[worldpop](https://mapme-initiative.github.io/mapme.biodiversity/reference/worldpop.html)
 resource documentation.
 
 ```{r helppage_resource, eval = FALSE}
-?esalandcover
-help(esalandcover)
+?worldpop
+help(worldpop)
 ```
 
-We can now make the `esalandcover` resource available for our portfolio. We will
+We can now make the `worldpop` resource available for our portfolio. We will
 use a common interface that is used for all resources, called <code>get_resources()</code>.
 We have to specify our portfolio object and the names of the resource(s) we wish
 to download. Additional arguments for the specific resource can be specified.
@@ -190,7 +195,7 @@ The output of the function is the portfolio object with its attributes appended
 for the new resource, thus we simply can overwrite the `sample_portfolio` variable.
 
 ```{r get_esalandcover}
-sample_portfolio <- get_resources(x = sample_portfolio, resources = "esalandcover")
+sample_portfolio <- get_resources(x = sample_portfolio, resources = "worldpop")
 ```
 
 In case you want to download more than one resource, you can use the same interface
@@ -200,7 +205,7 @@ for a resource are simply added as usual:
 ```{r get_multi_resources, eval = FALSE}
 sample_portfolio <- get_resources(
   x = sample_portfolio,
-  resources = c("esalandcover", "gfw_treecover"),
+  resources = c("worldpop", "gfw_treecover"),
   vers_treecover = "GFC-2021-v1.9"
 )
 ```
@@ -210,55 +215,47 @@ sample_portfolio <- get_resources(
 The next step consists of calculating specific indicators. Note that each 
 indicator requires one or more resources that were made available via the 
 <code>get_resources()</code> function explained above. Here, we are going
-to calculate the `landcover` indicator which is based on the `esalandcover` 
+to calculate the `population_count` indicator which is based on the `worldpop` 
 resource. Since the resource has been made available in the previous step, we 
 can continue requesting the calculation of our desired indicator. Note the 
 command below would issue an error in case a required resource has not been made
 available via <code>get_resources()</code> beforehand.
 
 ```{r calc_indicator}
-sample_portfolio <- calc_indicators(sample_portfolio, indicators = "landcover")
+sample_portfolio <- calc_indicators(sample_portfolio, indicators = "population_count",
+                                    stats_popcount = "sum", engine = "zonal")
 ```
 
 Now let's take a look at the results. We will select only some of the metadata
 and the output indicator column to get a clearer picture of what has happened.
 
 ```{r select_cols}
-(sample_portfolio <- sample_portfolio %>% select(assetid, WDPAID, landcover))
+(sample_portfolio <- sample_portfolio %>% select(assetid, WDPAID, population_count))
 ```
 
 We obtained a new listed column in our sf object that is called like the requested
 indicator. For each asset in our portfolio, this column contains a tibble with 
-variable rows and 4 columns. Let's have a closer look at one of these objects.
+6 rows and two columns. Let's have a closer look at one of these objects.
 
 ```{r investigate_indicator}
-sample_portfolio$landcover[10]
+sample_portfolio$population_count[10]
 ```
 
-For each asset, the result is a tibble in long format indicating the absolute 
-area (in ha) and percentage of different landcover types for the year 2015
-(make sure to read the detailed indicator documentation via `?landcover`).
-Let's quickly visualize the results for a single asset. For readability of the
-plot, we will aggregate several different types of forest into a single
-class before:
+For each asset, the result is a tibble in long format indicating the population
+sum per year (make sure to read the detailed indicator documentation via `?population_count`).
+Let's quickly visualize the results for a single asset:
 
-```{r plot_landcover, echo = FALSE, dpi = 50, out.width="120%", out.height="120%"}
+```{r plot_landcover, echo = FALSE}
 data <- sample_portfolio %>%
   filter(assetid == 10) %>%
   st_drop_geometry() %>%
-  unnest(landcover)
+  unnest(population_count)
 
-perc <- data$percentage
-names(perc) <- data$classes
-perc <- sort(perc, decreasing = TRUE) 
-index_forest <- grep("forest", names(perc))
-perc <- c(sum(perc[index_forest]), perc[-index_forest])
-names(perc)[1] = "forest"
-
-barplot(perc, main = "Distribution of landcover in 2015",
-        xlab = "Landcover class", ylab = "Percentage  / 100", 
-        col = c("forestgreen", "orange", "lightgreen"))
-
+pop <- data$popcount_sum
+names(pop) <- data$year
+barplot(pop, main = "Population totals over time", 
+        xlab = "Year", ylab = "Persons", 
+        col = "steelblue")
 ```
 
 If you wish to conduct your statistical analysis in R, you can use `{tidyr}` functionality
@@ -270,7 +267,7 @@ to keep the size of the data object relatively small.
 geometries <- select(sample_portfolio, assetid)
 sample_portfolio %>%
   st_drop_geometry() %>%
-  tidyr::unnest(landcover) %>%
+  tidyr::unnest(population_count) %>%
   filter(assetid == 3)
 ```
 
@@ -298,7 +295,9 @@ plan(multisession, workers = 6) # set up parallel plan with 6 concurrent threads
 with_progress({
   portfolio <- calc_indicators(
     sample_portfolio,
-    indicators = "landcover"
+    indicators = "population_count",
+    stats_popcount = "sum", 
+    engine = "zonal"
   )
 })
 
