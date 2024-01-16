@@ -83,8 +83,7 @@ NULL
                                                min_cover = 35,
                                                verbose = TRUE,
                                                ...) {
-
-  if (!requireNamespace("exactextractr", quietly = TRUE)){
+  if (!requireNamespace("exactextractr", quietly = TRUE)) {
     stop("R package 'exactextractr' required. Please install via 'install.packages('exactextractr')'")
   }
   # initial argument checks
@@ -97,8 +96,8 @@ NULL
 
   if (any(years < 2000)) {
     warning(paste("Cannot calculate treeloss statistics ",
-                  "for years smaller than 2000.",
-                  sep = ""
+      "for years smaller than 2000.",
+      sep = ""
     ))
     years <- years[years >= 2000]
     if (length(years) == 0) {
@@ -128,8 +127,8 @@ NULL
 
   # check additional arguments
   min_cover_msg <- paste("Argument 'min_cover' for indicator 'treeloss' ",
-                         "must be a numeric value between 0 and 100.",
-                         sep = ""
+    "must be a numeric value between 0 and 100.",
+    sep = ""
   )
   if (is.numeric(min_cover)) {
     min_cover <- as.integer(round(min_cover))
@@ -141,8 +140,8 @@ NULL
   }
 
   min_size_msg <- paste("Argument 'min_size' for indicator 'treeloss' ",
-                        "must be a numeric value greater 0.",
-                        sep = ""
+    "must be a numeric value greater 0.",
+    sep = ""
   )
   if (!is.numeric(min_size) | min_size <= 0) stop(min_size_msg, call. = FALSE)
 
@@ -153,10 +152,13 @@ NULL
 
   # binarize the gfw_treecover layer based on min_cover argument
   binary_gfw_treecover <- classify(gfw_treecover,
-                                   rcl = matrix(c(NA, NA, 0,
-                                                  0, min_cover, 0,
-                                                  min_cover, 100, 1), ncol = 3, byrow = TRUE),
-                                   include.lowest = TRUE)
+    rcl = matrix(c(
+      NA, NA, 0,
+      0, min_cover, 0,
+      min_cover, 100, 1
+    ), ncol = 3, byrow = TRUE),
+    include.lowest = TRUE
+  )
 
   # resample greenhouse if extent doesnt match
   if (ncell(gfw_emissions) != ncell(gfw_treecover)) {
@@ -169,9 +171,9 @@ NULL
   gfw_emissions <- mask(gfw_emissions, binary_gfw_treecover)
 
   # create patches
-  if(!requireNamespace("landscapemetrics", quietly = TRUE)){
+  if (!requireNamespace("landscapemetrics", quietly = TRUE)) {
     message("Consider running `install.packages('landscapemetrics') to improve performance of GFW routines.")
-    patched <-  patches(binary_gfw_treecover, directions = 4, zeroAsNA = TRUE)
+    patched <- patches(binary_gfw_treecover, directions = 4, zeroAsNA = TRUE)
   } else {
     patched <- landscapemetrics::get_patches(binary_gfw_treecover, class = 1, direction = 4)[[1]][[1]]
   }
@@ -185,8 +187,7 @@ NULL
   names(gfw) <- c("treecover", "lossyear", "patches", "emissions")
 
   gfw_stats <- exactextractr::exact_extract(
-    gfw, x, function(data, min_size){
-
+    gfw, x, function(data, min_size) {
       # retain only forest pixels and set area to ha
       data <- .prep_gfw_data(data, min_size)
       losses <- .sum_gfw(data, "coverage_area")
@@ -195,18 +196,18 @@ NULL
 
       org_coverage <- sum(data[["coverage_area"]])
 
-      if(all(losses[["loss"]] == 0)) {
+      if (all(losses[["loss"]] == 0)) {
         result <- tibble::tibble(
           years = years,
           emissions = 0,
-          treecover =  org_coverage,
+          treecover = org_coverage,
         )
         return(result)
       }
 
       previous_losses <- sum(losses[["loss"]][losses[["years"]] < years[1]])
 
-      if (previous_losses != 0){
+      if (previous_losses != 0) {
         org_coverage <- org_coverage - previous_losses
       }
 
@@ -215,15 +216,15 @@ NULL
       losses[["treecover"]] <- org_coverage
       losses[["treecover"]] <- losses[["treecover"]] - cumsum(losses[["loss"]])
       losses[["emissions"]] <- emissions[["emissions"]]
-      losses[ ,c("years", "emissions", "treecover")]
-
-    }, min_size = min_size, coverage_area = TRUE, summarize_df = TRUE)
+      losses[, c("years", "emissions", "treecover")]
+    },
+    min_size = min_size, coverage_area = TRUE, summarize_df = TRUE
+  )
 
   rm(gfw, binary_gfw_treecover, gfw_lossyear, patched, gfw_emissions)
   gc()
 
   tibble::as_tibble(gfw_stats)
-
 }
 
 
