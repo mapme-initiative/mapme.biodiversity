@@ -96,15 +96,15 @@ NULL
     ))
     years <- years[years >= 2000]
     if (length(years) == 0) {
-      return(tibble(years = NA, treecover = NA))
+      return(tibble::tibble(years = NA, treecover = NA))
     }
   }
 
   # check if gfw_treecover only contains 0s, e.g. on the ocean
-  minmax_gfw_treecover <- unique(as.vector(minmax(gfw_treecover)))
+  minmax_gfw_treecover <- unique(as.vector(terra::minmax(gfw_treecover)))
   if (length(minmax_gfw_treecover) == 1) {
-    if (minmax_gfw_treecover == 0 | is.nan(minmax_gfw_treecover)) {
-      return(tibble(years = years, treecover = 0))
+    if (minmax_gfw_treecover == 0 || is.nan(minmax_gfw_treecover)) {
+      return(tibble::tibble(years = years, treecover = 0))
     }
   }
 
@@ -127,13 +127,13 @@ NULL
     "anumeric value greater 0.",
     sep = ""
   )
-  if (!is.numeric(min_size) | min_size <= 0) stop(min_size_msg, call. = FALSE)
+  if (!is.numeric(min_size) || min_size <= 0) stop(min_size_msg, call. = FALSE)
 
   # mask gfw_treecover
-  gfw_treecover <- mask(gfw_treecover, x)
+  gfw_treecover <- terra::mask(gfw_treecover, x)
 
   # binarize the gfw_treecover layer based on min_cover argument
-  binary_gfw_treecover <- classify(gfw_treecover,
+  binary_gfw_treecover <- terra::classify(gfw_treecover,
     rcl = matrix(c(
       NA, NA, 0,
       0, min_cover, 0,
@@ -145,14 +145,14 @@ NULL
   # create patches
   if (!requireNamespace("landscapemetrics", quietly = TRUE)) {
     message("Consider running `install.packages('landscapemetrics') to improve performance of GFW routines.")
-    patched <- patches(binary_gfw_treecover, directions = 4, zeroAsNA = TRUE)
+    patched <- terra::patches(binary_gfw_treecover, directions = 4, zeroAsNA = TRUE)
   } else {
     patched <- landscapemetrics::get_patches(binary_gfw_treecover, class = 1, direction = 4)[[1]][[1]]
   }
 
   # mask lossyear
-  gfw_lossyear <- mask(gfw_lossyear, binary_gfw_treecover)
-  gfw_lossyear <- ifel(gfw_lossyear == 0, NA, gfw_lossyear)
+  gfw_lossyear <- terra::mask(gfw_lossyear, binary_gfw_treecover)
+  gfw_lossyear <- terra::ifel(gfw_lossyear == 0, NA, gfw_lossyear)
 
 
   gfw <- c(binary_gfw_treecover, gfw_lossyear, patched)
