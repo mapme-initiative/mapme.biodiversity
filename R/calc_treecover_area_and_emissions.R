@@ -83,107 +83,37 @@ NULL
                                                min_cover = 35,
                                                verbose = TRUE,
                                                ...) {
-  if (!requireNamespace("exactextractr", quietly = TRUE)) {
-    stop("R package 'exactextractr' required. Please install via 'install.packages('exactextractr')'")
-  }
   # initial argument checks
+  .check_namespace("exactextractr")
+  # check additional arguments
+  .gfw_check_min_cover(min_cover, "treecover_area")
+  .gfw_check_min_size(min_size, "treecover_area")
   # handling of return value if resources are missing, e.g. no overlap
   if (any(is.null(gfw_treecover), is.null(gfw_lossyear), is.null(gfw_emissions))) {
     return(NA)
   }
   # retrieve years from portfolio
   years <- attributes(x)$years
-
-  if (any(years < 2000)) {
-    warning(paste("Cannot calculate treeloss statistics ",
-      "for years smaller than 2000.",
-      sep = ""
-    ))
-    years <- years[years >= 2000]
-    if (length(years) == 0) {
-      return(
-        tibble::tibble(
-          years = NA,
-          treecover = NA,
-          emissions = NA
-        )
-      )
-    }
+  years <- .gfw_check_years(years, "treecover_area")
+  if (length(years) == 0) {
+    return(tibble::tibble(years = NA, treecover = NA))
   }
-
   # check if gfw_treecover only contains 0s, e.g. on the ocean
-  minmax_gfw_treecover <- unique(as.vector(terra::minmax(gfw_treecover)))
-  if (length(minmax_gfw_treecover) == 1) {
-    if (minmax_gfw_treecover == 0 || is.nan(minmax_gfw_treecover)) {
-      return(
-        tibble::tibble(
-          years = years,
-          treecover = rep(0, length(years)),
-          emissions = rep(0, length(years))
-        )
-      )
-    }
+  if (.gfw_empty_raster(gfw_treecover)) {
+    return(tibble::tibble(years = years, treecover = 0))
   }
-
-  # check additional arguments
-  min_cover_msg <- paste("Argument 'min_cover' for indicator 'treeloss' ",
-    "must be a numeric value between 0 and 100.",
-    sep = ""
-  )
-  if (is.numeric(min_cover)) {
-    min_cover <- as.integer(round(min_cover))
-  } else {
-    stop(min_cover_msg, call. = FALSE)
-  }
-  if (min_cover < 0 || min_cover > 100) {
-    stop(min_cover_msg, call. = FALSE)
-  }
-
-  min_size_msg <- paste("Argument 'min_size' for indicator 'treeloss' ",
-    "must be a numeric value greater 0.",
-    sep = ""
-  )
-  if (!is.numeric(min_size) || min_size <= 0) stop(min_size_msg, call. = FALSE)
-
-  #------------------------------------------------------------------------------
-  # start calculation if everything is set up correctly
-  # mask gfw_treecover
-  gfw_treecover <- terra::mask(gfw_treecover, x)
-
-  # binarize the gfw_treecover layer based on min_cover argument
-  binary_gfw_treecover <- terra::classify(gfw_treecover,
-    rcl = matrix(c(
-      NA, NA, 0,
-      0, min_cover, 0,
-      min_cover, 100, 1
-    ), ncol = 3, byrow = TRUE),
-    include.lowest = TRUE
-  )
-
+  # prepare gfw rasters
+  gfw <- .gfw_prep_rasters(x, gfw_treecover, gfw_lossyear, min_cover)
   # resample greenhouse if extent doesnt match
-  if (terra::ncell(gfw_emissions) != terra::ncell(gfw_treecover)) {
+  if (terra::ncell(gfw_emissions) != terra::ncell(gfw)) {
     gfw_emissions <- terra::resample(
-      gfw_emissions, gfw_treecover,
+      gfw_emissions, gfw,
       method = "bilinear"
     )
   }
 
-  gfw_emissions <- terra::mask(gfw_emissions, binary_gfw_treecover)
-
-  # create patches
-  if (!requireNamespace("landscapemetrics", quietly = TRUE)) {
-    message("Consider running `install.packages('landscapemetrics') to improve performance of GFW routines.")
-    patched <- terra::patches(binary_gfw_treecover, directions = 4, zeroAsNA = TRUE)
-  } else {
-    patched <- landscapemetrics::get_patches(binary_gfw_treecover, class = 1, direction = 4)[[1]][[1]]
-  }
-
-  # mask lossyear
-  gfw_lossyear <- terra::mask(gfw_lossyear, binary_gfw_treecover)
-  gfw_lossyear <- terra::ifel(gfw_lossyear == 0, NA, gfw_lossyear)
-
-
-  gfw <- c(binary_gfw_treecover, gfw_lossyear, patched, gfw_emissions)
+  gfw_emissions <- terra::mask(gfw_emissions, gfw[["lossyear"]])
+  gfw <- c(gfw, gfw_emissions)
   names(gfw) <- c("treecover", "lossyear", "patches", "emissions")
 
   gfw_stats <- exactextractr::exact_extract(
@@ -221,9 +151,8 @@ NULL
     min_size = min_size, coverage_area = TRUE, summarize_df = TRUE
   )
 
-  rm(gfw, binary_gfw_treecover, gfw_lossyear, patched, gfw_emissions)
+  rm(gfw)
   gc()
-
   tibble::as_tibble(gfw_stats)
 }
 

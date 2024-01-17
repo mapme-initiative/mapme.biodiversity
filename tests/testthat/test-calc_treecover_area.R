@@ -25,7 +25,7 @@ test_that("treecover works", {
 
   expect_warning(
     .calc_treecover_area(shp, gfw_treecover, gfw_lossyear),
-    "Cannot calculate treecover statistics for years smaller than 2000"
+    "Cannot calculate treecover_area statistics for years smaller than 2000"
   )
   attributes(shp)$years <- 2000:2005
   expect_equal(
@@ -35,29 +35,28 @@ test_that("treecover works", {
 
   expect_error(
     .calc_treecover_area(shp, gfw_treecover, gfw_lossyear, min_size = "a"),
-    "Argument 'min_size' for indicator 'treecover' must be anumeric value greater 0."
+    "Argument 'min_size' for indicator 'treecover_area' must be a numeric value greater 0."
   )
 
   expect_error(
     .calc_treecover_area(shp, gfw_treecover, gfw_lossyear, min_size = -10),
-    "Argument 'min_size' for indicator 'treecover' must be anumeric value greater 0."
+    "Argument 'min_size' for indicator 'treecover_area' must be a numeric value greater 0."
   )
 
   expect_error(
     .calc_treecover_area(shp, gfw_treecover, gfw_lossyear, min_cover = "a"),
-    "Argument 'min_cover' for indicator 'treecover' must be a numeric value between 0 and 100."
+    "Argument 'min_cover' for indicator 'treecover_area' must be a numeric value between 0 and 100."
   )
 
   expect_error(
     .calc_treecover_area(shp, gfw_treecover, gfw_lossyear, min_cover = -10),
-    "Argument 'min_cover' for indicator 'treecover' must be a numeric value between 0 and 100."
+    "Argument 'min_cover' for indicator 'treecover_area' must be a numeric value between 0 and 100."
   )
 
   expect_error(
     .calc_treecover_area(shp, gfw_treecover, gfw_lossyear, min_cover = 110),
-    "Argument 'min_cover' for indicator 'treecover' must be a numeric value between 0 and 100."
+    "Argument 'min_cover' for indicator 'treecover_area' must be a numeric value between 0 and 100."
   )
-
 
   result <- .calc_treecover_area(shp, gfw_treecover, gfw_lossyear, min_size = 1, min_cover = 10)
   expect_equal(
@@ -75,7 +74,7 @@ test_that("treecover works", {
   attributes(shp)$years <- 1999:2005
   expect_warning(
     stat <- .calc_treecover_area(shp, gfw_treecover, gfw_lossyear, min_size = 1, min_cover = 10),
-    "Cannot calculate treecover statistics for years smaller than 2000."
+    "Cannot calculate treecover_area statistics for years smaller than 2000."
   )
 
   attributes(shp)$years <- 2000:2005
