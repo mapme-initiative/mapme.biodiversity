@@ -96,18 +96,7 @@ NULL
     return(tibble::tibble(years = years, treecover = 0))
   }
   # prepare gfw rasters
-  gfw <- .gfw_prep_rasters(x, gfw_treecover, gfw_lossyear, min_cover)
-  # resample greenhouse if extent doesnt match
-  if (terra::ncell(gfw_emissions) != terra::ncell(gfw)) {
-    gfw_emissions <- terra::resample(
-      gfw_emissions, gfw,
-      method = "bilinear"
-    )
-  }
-
-  gfw_emissions <- terra::mask(gfw_emissions, gfw[["lossyear"]])
-  gfw <- c(gfw, gfw_emissions)
-  names(gfw) <- c("treecover", "lossyear", "patches", "emissions")
+  gfw <- .gfw_prep_rasters(x, gfw_treecover, gfw_lossyear, gfw_emissions, min_cover)
 
   gfw_stats <- exactextractr::exact_extract(
     gfw, x, function(data, min_size) {

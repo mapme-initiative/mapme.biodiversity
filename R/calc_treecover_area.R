@@ -100,7 +100,7 @@ NULL
   }
 
   # prepare gfw rasters
-  gfw <- .gfw_prep_rasters(x, gfw_treecover, gfw_lossyear, min_cover)
+  gfw <- .gfw_prep_rasters(x, gfw_treecover, gfw_lossyear, cover = min_cover)
 
   # apply extraction routine
   gfw_stats <- exactextractr::exact_extract(
@@ -149,7 +149,7 @@ NULL
   keep_patches <- names(patch_sizes)[which(patch_sizes > min_size)]
   keep_patches <- as.numeric(keep_patches)
 
-  data <- data[data[["patches"]] %in% keep_patches, ]
+  data[data[["patches"]] %in% keep_patches, ]
 }
 
 
@@ -209,6 +209,7 @@ NULL
     sep = ""
   )
   msg <- sprintf(msg, indicator)
+  if (length(min_size) != 1) stop(msg, call. = FALSE)
   if (!is.numeric(min_size) || min_size <= 0) stop(msg, call. = FALSE)
 }
 
@@ -228,7 +229,7 @@ NULL
 }
 
 
-.gfw_prep_rasters <- function(x, treecover, lossyear, cover) {
+.gfw_prep_rasters <- function(x, treecover, lossyear, emissions, cover) {
   # mask gfw_treecover
   treecover <- terra::mask(treecover, x)
   # binarize the treecover layer based on mcover argument
@@ -247,9 +248,21 @@ NULL
   # create patches
   patched <- .gfw_calc_patches(binary_treecover)
 
-  # prepare return raster
-  gfw <- c(binary_treecover, lossyear, patched)
-  names(gfw) <- c("treecover", "lossyear", "patches")
+  if (!missing(emissions)) {
+    if (terra::ncell(emissions) != terra::ncell(treecover)) {
+      emissions <- terra::resample(
+        emissions, treecover,
+        method = "bilinear"
+      )
+    }
+    emissions <- terra::mask(emissions, lossyear)
+    gfw <- c(binary_treecover, lossyear, patched, emissions)
+    names(gfw) <- c("treecover", "lossyear", "patches", "emissions")
+  } else {
+    # prepare return raster
+    gfw <- c(binary_treecover, lossyear, patched)
+    names(gfw) <- c("treecover", "lossyear", "patches")
+  }
   gfw
 }
 
