@@ -84,191 +84,67 @@ NULL
                                                verbose = TRUE,
                                                ...) {
   # initial argument checks
+  .check_namespace("exactextractr")
+  # check additional arguments
+  .gfw_check_min_cover(min_cover, "treecover_area")
+  .gfw_check_min_size(min_size, "treecover_area")
   # handling of return value if resources are missing, e.g. no overlap
   if (any(is.null(gfw_treecover), is.null(gfw_lossyear), is.null(gfw_emissions))) {
     return(NA)
   }
   # retrieve years from portfolio
   years <- attributes(x)$years
-
-  if (any(years < 2000)) {
-    warning(paste("Cannot calculate treeloss statistics ",
-      "for years smaller than 2000.",
-      sep = ""
-    ))
-    years <- years[years >= 2000]
-    if (length(years) == 0) {
-      return(
-        tibble(
-          years = NA,
-          treecover = NA,
-          emissions = NA
-        )
-      )
-    }
+  years <- .gfw_check_years(years, "treecover_area")
+  if (length(years) == 0) {
+    return(tibble::tibble(years = NA, treecover = NA))
   }
-
   # check if gfw_treecover only contains 0s, e.g. on the ocean
-  minmax_gfw_treecover <- unique(as.vector(minmax(gfw_treecover)))
-  if (length(minmax_gfw_treecover) == 1) {
-    if (minmax_gfw_treecover == 0 | is.nan(minmax_gfw_treecover)) {
-      return(
-        tibble(
+  if (.gfw_empty_raster(gfw_treecover)) {
+    return(tibble::tibble(years = years, treecover = 0))
+  }
+  # prepare gfw rasters
+  gfw <- .gfw_prep_rasters(x, gfw_treecover, gfw_lossyear, gfw_emissions, min_cover)
+
+  gfw_stats <- exactextractr::exact_extract(
+    gfw, x, function(data, min_size) {
+      # retain only forest pixels and set area to ha
+      data <- .prep_gfw_data(data, min_size)
+      losses <- .sum_gfw(data, "coverage_area")
+      names(losses)[2] <- "loss"
+      emissions <- .sum_gfw(data, "emissions")
+
+      org_coverage <- sum(data[["coverage_area"]])
+
+      if (all(losses[["loss"]] == 0)) {
+        result <- tibble::tibble(
           years = years,
-          treecover = rep(0, length(years)),
-          emissions = rep(0, length(years))
+          emissions = 0,
+          treecover = org_coverage,
         )
-      )
-    }
-  }
+        return(result)
+      }
 
-  # check additional arguments
-  min_cover_msg <- paste("Argument 'min_cover' for indicator 'treeloss' ",
-    "must be a numeric value between 0 and 100.",
-    sep = ""
-  )
-  if (is.numeric(min_cover)) {
-    min_cover <- as.integer(round(min_cover))
-  } else {
-    stop(min_cover_msg, call. = FALSE)
-  }
-  if (min_cover < 0 || min_cover > 100) {
-    stop(min_cover_msg, call. = FALSE)
-  }
+      previous_losses <- sum(losses[["loss"]][losses[["years"]] < years[1]])
 
-  min_size_msg <- paste("Argument 'min_size' for indicator 'treeloss' ",
-    "must be a numeric value greater 0.",
-    sep = ""
-  )
-  if (!is.numeric(min_size) | min_size <= 0) stop(min_size_msg, call. = FALSE)
+      if (previous_losses != 0) {
+        org_coverage <- org_coverage - previous_losses
+      }
 
-  #------------------------------------------------------------------------------
-  # start calculation if everything is set up correctly
-  # retrieve an area raster
-  arearaster <- cellSize(
-    gfw_treecover,
-    unit = "ha"
-  )
-  # rasterize the polygon
-  polyraster <- rasterize(
-    vect(x), gfw_treecover,
-    field = 1, touches = TRUE
+      losses <- losses[losses[["years"]] %in% years, ]
+      emissions <- emissions[emissions[["years"]] %in% years, ]
+      losses[["treecover"]] <- org_coverage
+      losses[["treecover"]] <- losses[["treecover"]] - cumsum(losses[["loss"]])
+      losses[["emissions"]] <- emissions[["emissions"]]
+      losses[, c("years", "emissions", "treecover")]
+    },
+    min_size = min_size, coverage_area = TRUE, summarize_df = TRUE
   )
 
-  # mask gfw_treecover
-  gfw_treecover <- mask(
-    gfw_treecover, polyraster
-  )
-
-  # mask lossyear
-  gfw_lossyear <- mask(
-    gfw_lossyear, polyraster
-  )
-
-  # resample greenhouse if extent doesnt match
-  if (ncell(gfw_emissions) != ncell(gfw_treecover)) {
-    gfw_emissions <- resample(
-      gfw_emissions, gfw_treecover,
-      method = "bilinear"
-    )
-  }
-  # mask greenhouse
-  gfw_emissions <- mask(
-    gfw_emissions, polyraster
-  )
-
-  # binarize the gfw_treecover layer based on min_cover argument
-  binary_gfw_treecover <- classify(
-    gfw_treecover,
-    rcl = matrix(c(0, min_cover, 0, min_cover, 100, 1), ncol = 3, byrow = TRUE),
-    include.lowest = TRUE
-  )
-  # retrieve patches of comprehensive forest areas
-  patched <- patches(
-    binary_gfw_treecover,
-    directions = 4, zeroAsNA = TRUE
-  )
-
-  unique_vals <- unique(as.vector(minmax(patched)))
-  if (length(unique_vals) == 1) {
-    if (is.nan(unique_vals)) {
-      return(
-        tibble(
-          years = years,
-          treecover = rep(0, length(years)),
-          emissions = rep(0, length(years))
-        )
-      )
-    }
-  }
-  # get the sizes of the patches
-  patchsizes <- zonal(
-    arearaster, patched, sum,
-    as.raster = TRUE
-  )
-  # remove patches smaller than threshold
-  binary_gfw_treecover <- ifel(
-    patchsizes < min_size, 0, binary_gfw_treecover
-  )
-
-  # return 0 if binary gfw_treecover only consits of 0 or nan
-  minmax_gfw_treecover <- unique(as.vector(minmax(binary_gfw_treecover)))
-  if (length(minmax_gfw_treecover) == 1) {
-    if (minmax_gfw_treecover == 0 | is.nan(minmax_gfw_treecover)) {
-      return(
-        tibble(
-          years = years,
-          treecover = rep(0, length(years)),
-          emissions = rep(0, length(years))
-        )
-      )
-    }
-  }
-
-  # set no loss occurrences to NA
-  gfw_lossyear <- ifel(
-    gfw_lossyear == 0, NA, gfw_lossyear
-  )
-
-  # exclude non-tree pixels from lossyear layer
-  gfw_lossyear <- mask(
-    gfw_lossyear, binary_gfw_treecover
-  )
-
-  # get forest cover statistics for each year
-  yearly_loss_values <- lapply(years, function(y) {
-    y <- y - 2000
-    current_gfw_treecover <- ifel(
-      gfw_lossyear <= y, 0, binary_gfw_treecover
-    )
-    current_arearaster <- mask(
-      arearaster, current_gfw_treecover,
-      maskvalues = c(NA, 0)
-    )
-    ha_sum_gfw_treecover <- zonal(
-      current_arearaster,
-      polyraster, sum,
-      na.rm = TRUE
-    )[2]
-    ha_sum_gfw_treecover <- as.numeric(ha_sum_gfw_treecover)
-
-    current_gfw_emissions <- ifel(
-      gfw_lossyear == y, gfw_emissions, 0
-    )
-    # terra
-    # terra engine
-    emissions_sum <- zonal(current_gfw_emissions, polyraster, sum, na.rm = TRUE)[2]
-    emissions_sum <- as.numeric(emissions_sum)
-    tibble(treecover = ha_sum_gfw_treecover, emissions = emissions_sum)
-  })
-
-  # memory clean up
-  rm(arearaster, binary_gfw_treecover, patchsizes, patched, polyraster)
-  # return a data-frame
-  out <- do.call(rbind, yearly_loss_values)
-  out$years <- years
-  out[, c(3, 2, 1)]
+  rm(gfw)
+  gc()
+  tibble::as_tibble(gfw_stats)
 }
+
 
 
 register_indicator(

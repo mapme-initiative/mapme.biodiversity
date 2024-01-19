@@ -330,3 +330,14 @@ download_or_skip <- function(urls,
     }
   }
 }
+
+.check_namespace <- function(pkg) {
+  if (!requireNamespace(pkg, quietly = TRUE)) {
+    msg <- paste("R package '%s' required.\n",
+      "Please intsall via `install.packages('%s')`",
+      sep = ""
+    )
+    msg <- sprintf(msg, pkg, pkg)
+    stop(msg, .call = FALSE)
+  }
+}
