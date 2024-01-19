@@ -42,13 +42,13 @@ by the German Development Bank KfW.
 The package and its dependencies can be installed from CRAN via:
 
 ``` r
-install.packages("mapme.biodiversity")
+install.packages("mapme.biodiversity", dependencies = TRUE)
 ```
 
 To install the development version, use the following command:
 
 ``` r
-remotes::install_github("https://github.com/mapme-initiative/mapme.biodiversity")
+remotes::install_github("https://github.com/mapme-initiative/mapme.biodiversity", dependencies = TRUE)
 ```
 
 ## Usage example
@@ -85,6 +85,11 @@ cat(sprintf(
     ## - gfw_emissions
     ## - gfw_lossyear
     ## - gfw_treecover
+    ## - global_surface_water_change
+    ## - global_surface_water_occurrence
+    ## - global_surface_water_recurrence
+    ## - global_surface_water_seasonality
+    ## - global_surface_water_transitions
     ## - gmw
     ## - nasa_firms
     ## - nasa_grace
@@ -107,6 +112,11 @@ cat(sprintf(
     ## - ecoregion
     ## - elevation
     ## - fatalities
+    ## - gsw_change
+    ## - gsw_occurrence
+    ## - gsw_recurrence
+    ## - gsw_seasonality
+    ## - gsw_transitions
     ## - landcover
     ## - mangroves_area
     ## - population_count
@@ -156,8 +166,8 @@ object.
     ## # A tibble: 2 × 9
     ##   WDPAID NAME            DESIG_ENG     ISO3  assetid years emissions treecover
     ##    <dbl> <chr>           <chr>         <chr>   <int> <int>     <dbl>     <dbl>
-    ## 1 478140 Sierra de Neiba National Park DOM         1  2016      2832     2357.
-    ## 2 478140 Sierra de Neiba National Park DOM         1  2017      3468     2345.
+    ## 1 478140 Sierra de Neiba National Park DOM         1  2016      2400     2360.
+    ## 2 478140 Sierra de Neiba National Park DOM         1  2017      2839     2348.
     ## # ℹ 1 more variable: geom <POLYGON [°]>
 
 ## A note on parallel computing

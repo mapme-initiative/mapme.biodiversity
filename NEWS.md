@@ -20,6 +20,11 @@
 - Rasters are now cropped to the spatial extent of an asset with setting 
   `snap="out"`, thus delivering a slightly bigger extent (#212).
   
+- Speed improvements for GFW indicators (up to x10 for larger rasters) now
+  require R package `exactextractr` to be installed. Also, it is advised
+  to have the R package `landscapemetrics` installed to gain the full computation 
+  speed improvement.
+  
 ## Bug Fixes
 
 - `calc_indicators()` checks for 0-length tibbles (#196, #199, #215).
