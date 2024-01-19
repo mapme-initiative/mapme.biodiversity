@@ -80,8 +80,9 @@
 </ul></div>
 <div class="section level3">
 <h3 id="breaking-changes-0-5-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-5-0"></a></h3>
-<ul><li>The argument <code>add_resources</code> to <code><a href="../reference/init_portfolio.html">init_portfolio()</a></code> is deprecated. This means that <code><a href="../reference/get_resources.html">get_resources()</a></code> has to be run in every new R session to make resource available for further processing (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/219" class="external-link">#219</a>).</li>
-<li>Rasters are now cropped to the spatial extent of an asset with setting <code>snap="out"</code>, thus delivering a slightly bigger extent (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/212" class="external-link">#212</a>).</li>
+<ul><li><p>The argument <code>add_resources</code> to <code><a href="../reference/init_portfolio.html">init_portfolio()</a></code> is deprecated. This means that <code><a href="../reference/get_resources.html">get_resources()</a></code> has to be run in every new R session to make resource available for further processing (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/219" class="external-link">#219</a>).</p></li>
+<li><p>Rasters are now cropped to the spatial extent of an asset with setting <code>snap="out"</code>, thus delivering a slightly bigger extent (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/212" class="external-link">#212</a>).</p></li>
+<li><p>Speed improvements for GFW indicators (up to x10 for larger rasters) now require R package <code>exactextractr</code> to be installed. Also, it is advised to have the R package <code>landscapemetrics</code> installed to gain the full computation speed improvement.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-5-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-5-0"></a></h3>
