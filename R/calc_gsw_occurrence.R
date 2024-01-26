@@ -24,7 +24,9 @@
 .calc_gsw_occurrence <- function(x,
                                  global_surface_water_occurrence,
                                  engine = "extract",
-                                 stats_gsw = "mean") {
+                                 stats_gsw = "mean",
+                                 verbose = TRUE,
+                                 ...) {
   if (is.null(global_surface_water_occurrence)) {
     return(NA)
   }

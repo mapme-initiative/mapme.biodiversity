@@ -29,7 +29,10 @@
 #' @keywords internal
 #' @include register.R
 #' @noRd
-.calc_gsw_transitions <- function(x, global_surface_water_transitions) {
+.calc_gsw_transitions <- function(x,
+                                  global_surface_water_transitions,
+                                  verbose = TRUE,
+                                  ...) {
   if (is.null(global_surface_water_transitions)) {
     return(NA)
   }
@@ -51,16 +54,17 @@
       dplyr::left_join(.gsw_transition_classes, by = "code") %>%
       dplyr::select(class, area)
   }) %>%
-  tibble::tibble()
+    tibble::tibble()
 
   return(result)
 }
 
 .gsw_transition_classes <- data.frame(
   code = 1:10,
-  class = c("Permanent", "New Permanent", "Lost Permanent", "Seasonal",
-            "New Seasonal", "Lost Seasonal", "Seasonal to Permanent",
-            "Permanent to Seasonal", "Ephemeral Permanent", "Ephemeral Seasonal"
+  class = c(
+    "Permanent", "New Permanent", "Lost Permanent", "Seasonal",
+    "New Seasonal", "Lost Seasonal", "Seasonal to Permanent",
+    "Permanent to Seasonal", "Ephemeral Permanent", "Ephemeral Seasonal"
   )
 )
 
