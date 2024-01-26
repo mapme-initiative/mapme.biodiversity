@@ -19,7 +19,7 @@ get_res(ged)
 teow <- get_resources(aoi, "teow")
 get_res(teow)
 
-sg <- get_resources(aoi, "soilgrids", layers = c("clay", "sand", "silt"), stats= "mean", depth = "0-5cm")
+sg <- get_resources(aoi, "soilgrids", layers = c("clay", "sand", "silt"), stats = "mean", depth = "0-5cm")
 get_res(sg)
 
 tt <- get_resources(aoi, "nelson_et_al")
@@ -42,3 +42,10 @@ get_res(esa)
 
 chirps <- get_resources(aoi, "chirps")
 get_res(chirps)
+
+gsw <- get_resources(aoi, c(
+  "global_surface_water_change", "global_surface_water_occurrence",
+  "global_surface_water_recurrence", "global_surface_water_seasonality",
+  "global_surface_water_transitions"
+))
+get_res(gsw)
