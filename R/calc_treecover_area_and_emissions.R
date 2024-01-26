@@ -145,11 +145,6 @@ NULL
   tibble::as_tibble(gfw_stats)
 }
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> main
 register_indicator(
   name = "treecover_area_and_emissions",
   resources = list(
