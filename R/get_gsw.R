@@ -1,11 +1,13 @@
 .get_gsw <- function(x, statistic = "occurrence", vers_gsw = "v1_4_2021",
                      rundir = tempdir(), verbose = TRUE) {
-  stopifnot(statistic %in% .gsw_statistics,
-            vers_gsw %in% .gsv_versions)
+  stopifnot(
+    statistic %in% .gsw_statistics,
+    vers_gsw %in% .gsv_versions
+  )
 
   # make the gsw grid and construct urls for intersecting tiles
   baseurl <- sprintf(
-    "https://storage.googleapis.com/global-surface-water/downloads2021/%s/%s",
+    "/vsicurl/https://storage.googleapis.com/global-surface-water/downloads2021/%s/%s",
     statistic, statistic
   )
   grid_gfc <- .make_global_grid(
@@ -15,7 +17,7 @@
   tile_ids <- unique(unlist(st_intersects(x, grid_gfc)))
   if (length(tile_ids) == 0) {
     stop("The extent of the portfolio does not intersect with the GSW grid.",
-         call. = FALSE
+      call. = FALSE
     )
   }
   ids <- sapply(tile_ids, function(n) .get_gsw_tile_id(grid_gfc[n, ]))
@@ -23,14 +25,9 @@
     "%s_%s%s.tif",
     baseurl, ids, vers_gsw
   )
-  filenames <- file.path(rundir, basename(urls))
-  # start download and skip files that exist
-  # TODO: parallel downloads
-  aria_bin <- attributes(x)$aria_bin
-  .download_or_skip(urls, filenames, verbose, check_existence = FALSE,
-                    aria_bin = aria_bin)
-  # return all paths to the downloaded files
-  filenames
+  fps <- grid_gfc[tile_ids, ]
+  fps[["source"]] <- urls
+  make_footprints(fps, opts = c("-co", "INTERLEAVE=BAND", "-co", "COMPRESS=LZW", "-ot", "Byte"))
 }
 
 .get_gsw_tile_id <- function(tile) {
