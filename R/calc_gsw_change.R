@@ -25,7 +25,9 @@
 .calc_gsw_change <- function(x,
                              global_surface_water_change,
                              engine = "extract",
-                             stats_gsw = "mean") {
+                             stats_gsw = "mean",
+                             verbose = TRUE,
+                             ...) {
   if (is.null(global_surface_water_change)) {
     return(NA)
   }

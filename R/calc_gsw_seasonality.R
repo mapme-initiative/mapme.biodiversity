@@ -20,9 +20,11 @@
 #' @include register.R
 #' @noRd
 .calc_gsw_seasonality <- function(x,
-    global_surface_water_seasonality,
-    engine = "extract",
-    stats_gsw = "mean") {
+                                  global_surface_water_seasonality,
+                                  engine = "extract",
+                                  stats_gsw = "mean",
+                                  verbose = TRUE,
+                                  ...) {
   if (is.null(global_surface_water_seasonality)) {
     return(NA)
   }
