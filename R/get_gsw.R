@@ -1,4 +1,4 @@
-#' Global Surface Water Occurrence
+#' Global Surface Water Change
 #'
 #' The change in water occurrence intensity between the two periods is derived
 #' from homologous pairs of months (i.e. same months containing valid

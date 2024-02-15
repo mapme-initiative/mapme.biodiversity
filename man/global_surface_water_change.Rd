@@ -3,7 +3,7 @@
 \docType{data}
 \name{global_surface_water_change}
 \alias{global_surface_water_change}
-\title{Global Surface Water Occurrence}
+\title{Global Surface Water Change}
 \format{
 Global raster layers
 }
