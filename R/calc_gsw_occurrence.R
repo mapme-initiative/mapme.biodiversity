@@ -1,10 +1,62 @@
 #' Calculate Global Surface Water (GSW) Occurrence
 #'
 #' GSW occurrence raw data comes in raster files with integer cell values
-#' between [0, 100]. This value gives the percentage of the time that a given
-#' pixel was classified as water during the entire observation period. So a 0
-#' denotes a pixel that was never classified as water, 100 denotes a pixel with
-#' permanent water.
+#' between \code{[0, 100]}. This value gives the percentage of the time that a
+#' given pixel was classified as water during the entire observation period. So
+#' a 0 denotes a pixel that was never classified as water, 100 denotes a pixel
+#' with permanent water.
+#'
+#' The pixel values are aggregated using method provided via the
+#' \code{stats_gsw} parameter.
+#'
+#' The required resources for this indicator are:
+#'  - [global_surface_water_occurrence]
+#'
+#' The following arguments can be set:
+#' \describe{
+#'   \item{stats_gsw}{The aggregation function applied to the input raster
+#'   values. Defaults to \code{mean}.}
+#' }
+#'
+#' @name gsw_occurrence
+#' @docType data
+#' @keywords indicator
+#' @format A tibble with a column for the aggregated GSW occurrence indicator.
+#' @examples
+#' \dontshow{
+#' mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
+#' }
+#' \dontrun{
+#' library(sf)
+#' library(mapme.biodiversity)
+#'
+#' outdir <- file.path(tempdir(), "mapme-data")
+#' dir.create(outdir, showWarnings = FALSE)
+#'
+#' aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
+#'   package = "mapme.biodiversity"
+#' ) %>%
+#'   read_sf() %>%
+#'   init_portfolio(
+#'     years = 2001,
+#'     outdir = outdir,
+#'     tmpdir = tempdir(),
+#'     verbose = FALSE
+#'   ) %>%
+#'   get_resources("global_surface_water_occurrence") %>%
+#'   calc_indicators("gsw_occurrence")
+#'
+#' aoi
+#' }
+NULL
+
+#' Calculate Global Surface Water (GSW) Occurrence
+#'
+#' GSW occurrence raw data comes in raster files with integer cell values
+#' between \code{[0, 100]}. This value gives the percentage of the time that a
+#' given pixel was classified as water during the entire observation period. So
+#' a 0 denotes a pixel that was never classified as water, 100 denotes a pixel
+#' with permanent water.
 #'
 #' The pixel values are aggregated using method provided via the
 #' \code{stats_gsw} parameter.
