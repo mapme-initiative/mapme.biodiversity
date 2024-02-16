@@ -17,8 +17,7 @@ version](https://www.r-pkg.org/badges/version/mapme.biodiversity)](https://CRAN.
 > \[!IMPORTANT\]  
 > `{mapme.biodiversity}` is currently experiencing major changes to its
 > user-interface and overall functionality. Please visit the
-> [announcement
-> issue](https://github.com/mapme-initiative/mapme.biodiversity/issues/240)
+> [announcement issue](https://github.com/mapme-initiative/mapme.biodiversity/issues/240)
 > to learn more about these changes.
 
 ## About
