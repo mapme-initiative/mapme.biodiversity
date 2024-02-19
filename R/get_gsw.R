@@ -1,3 +1,135 @@
+#' Global Surface Water Change
+#'
+#' The Global Surface Water dataset was developed by the European Commission's
+#' Joint Research Centre in the framework of the Copernicus Programme. It maps
+#' the location and temporal distribution of water surfaces at the global scale
+#' over the past 3.8 decades and provides statistics on their extent and change.
+#'
+#' The change in water occurrence intensity between the two periods is derived
+#' from homologous pairs of months (i.e. same months containing valid
+#' observations in both periods). The difference in the occurrence of surface
+#' water was calculated for each homologous pair of months. The average of all
+#' of these differences constitutes the Surface Water Occurrence change
+#' intensity. The raster files have integer cell values between \code{[0, 200]}
+#' where 0 represents surface water loss and 200 represents surface water gain.
+#'
+#' @name global_surface_water_change
+#' @docType data
+#' @keywords resource
+#' @format A global tiled raster resource available for all land areas. The
+#' reported data represent aggregated observations between 1984 -- 2021.
+#' @references Pekel, JF., Cottam, A., Gorelick, N. et al. High-resolution
+#' mapping of global surface water and its long-term changes. Nature 540,
+#' 418–422 (2016). https://doi.org/10.1038/nature20584
+#' @source \url{https://global-surface-water.appspot.com/}
+NULL
+
+#' Global Surface Water Transitions
+#'
+#' The Global Surface Water dataset was developed by the European Commission's
+#' Joint Research Centre in the framework of the Copernicus Programme. It maps
+#' the location and temporal distribution of water surfaces at the global scale
+#' over the past 3.8 decades and provides statistics on their extent and change.
+#'
+#' GSW transition data contains information about the type of surface water
+#' change for each pixel. The raster files have integer cell values between
+#' \code{[0, 10]} that code for different transition classes:
+#'
+#' | Value | Transition Class      |
+#' |-------|-----------------------|
+#' | 1     | Permanent             |
+#' | 2     | New Permanent         |
+#' | 3     | Lost Permanent        |
+#' | 4     | Seasonal              |
+#' | 5     | New Seasonal          |
+#' | 6     | Lost Seasonal         |
+#' | 7     | Seasonal to Permanent |
+#' | 8     | Permanent to Seasonal |
+#' | 9     | Ephemeral Permanent   |
+#' | 10    | Ephemeral Seasonal    |
+#'
+#' @name global_surface_water_transitions
+#' @docType data
+#' @keywords resource
+#' @format A global tiled raster resource available for all land areas. The
+#' reported data represent aggregated observations between 1984 -- 2021.
+#' @references Pekel, JF., Cottam, A., Gorelick, N. et al. High-resolution
+#' mapping of global surface water and its long-term changes. Nature 540,
+#' 418–422 (2016). https://doi.org/10.1038/nature20584
+#' @source \url{https://global-surface-water.appspot.com/}
+NULL
+
+#' Global Surface Water Seasonality
+#'
+#' The Global Surface Water dataset was developed by the European Commission's
+#' Joint Research Centre in the framework of the Copernicus Programme. It maps
+#' the location and temporal distribution of water surfaces at the global scale
+#' over the past 3.8 decades and provides statistics on their extent and change.
+#'
+#' GSW seasonality describes the intra-annual distribution of surface water for
+#' each pixel. The raster files have integer cell values between \code{[0, 12]},
+#' indicating how many months per year the pixel was classified as water.
+#'
+#' @name global_surface_water_seasonality
+#' @docType data
+#' @keywords resource
+#' @format A global tiled raster resource available for all land areas. The
+#' reported data represent aggregated observations between 1984 -- 2021.
+#' @references Pekel, JF., Cottam, A., Gorelick, N. et al. High-resolution
+#' mapping of global surface water and its long-term changes. Nature 540,
+#' 418–422 (2016). https://doi.org/10.1038/nature20584
+#' @source \url{https://global-surface-water.appspot.com/}
+NULL
+
+#' Global Surface Water Recurrence
+#'
+#' The Global Surface Water dataset was developed by the European Commission's
+#' Joint Research Centre in the framework of the Copernicus Programme. It maps
+#' the location and temporal distribution of water surfaces at the global scale
+#' over the past 3.8 decades and provides statistics on their extent and change.
+#'
+#' Water Recurrence is a measurement of the degree of variability in the
+#' presence of water from year to year. It describes the frequency with which
+#' water returned to a particular location from one year to another, and is
+#' expressed as a percentage. The raster files have integer cell values between
+#' \code{[0, 100]}, where 100 represents that water reoccurs predictably every
+#' year, whereas lower values indicate that water only occurs episodically.
+#'
+#' @name global_surface_water_recurrence
+#' @docType data
+#' @keywords resource
+#' @format A global tiled raster resource available for all land areas. The
+#' reported data represent aggregated observations between 1984 -- 2021.
+#' @references Pekel, JF., Cottam, A., Gorelick, N. et al. High-resolution
+#' mapping of global surface water and its long-term changes. Nature 540,
+#' 418–422 (2016). https://doi.org/10.1038/nature20584
+#' @source \url{https://global-surface-water.appspot.com/}
+NULL
+
+#' Global Surface Water Occurrence
+#'
+#' The Global Surface Water dataset was developed by the European Commission's
+#' Joint Research Centre in the framework of the Copernicus Programme. It maps
+#' the location and temporal distribution of water surfaces at the global scale
+#' over the past 3.8 decades and provides statistics on their extent and change.
+#'
+#' GSW occurrence raw data comes in raster files with integer cell values
+#' between \code{[0, 100]}. This value gives the percentage of the time that a
+#' given pixel was classified as water during the entire observation period. So
+#' a 0 denotes a pixel that was never classified as water, 100 denotes a pixel
+#' with permanent water.
+#'
+#' @name global_surface_water_occurrence
+#' @docType data
+#' @keywords resource
+#' @format A global tiled raster resource available for all land areas. The
+#' reported data represent aggregated observations between 1984 -- 2021.
+#' @references Pekel, JF., Cottam, A., Gorelick, N. et al. High-resolution
+#' mapping of global surface water and its long-term changes. Nature 540,
+#' 418–422 (2016). https://doi.org/10.1038/nature20584
+#' @source \url{https://global-surface-water.appspot.com/}
+NULL
+
 .get_gsw <- function(x, statistic = "occurrence", vers_gsw = "v1_4_2021",
                      rundir = tempdir(), verbose = TRUE) {
   stopifnot(statistic %in% .gsw_statistics,

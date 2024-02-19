@@ -1,6 +1,56 @@
 #' Calculate Global Surface Water (GSW) Seasonality
 #'
 #' GSW seasonality describes the intra-annual distribution of surface water for
+#' each pixel. The raster files have integer cell values between \code{[0, 12]},
+#' indicating how many months per year the pixel was classified as water.
+#'
+#' The pixel values are aggregated using method provided via the
+#' \code{stats_gsw} parameter.
+#'
+#' The required resources for this indicator are:
+#'  - [global_surface_water_seasonality]
+#'
+#' The following arguments can be set:
+#' \describe{
+#'   \item{stats_gsw}{The aggregation function applied to the input raster
+#'   values. Defaults to \code{mean}.}
+#' }
+#'
+#' @name gsw_seasonality
+#' @docType data
+#' @keywords indicator
+#' @format A tibble with a column for the aggregated GSW seasonality indicator.
+#' @examples
+#' \dontshow{
+#' mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
+#' }
+#' \dontrun{
+#' library(sf)
+#' library(mapme.biodiversity)
+#'
+#' outdir <- file.path(tempdir(), "mapme-data")
+#' dir.create(outdir, showWarnings = FALSE)
+#'
+#' aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
+#'   package = "mapme.biodiversity"
+#' ) %>%
+#'   read_sf() %>%
+#'   init_portfolio(
+#'     years = 2001,
+#'     outdir = outdir,
+#'     tmpdir = tempdir(),
+#'     verbose = FALSE
+#'   ) %>%
+#'   get_resources("global_surface_water_seasonality") %>%
+#'   calc_indicators("gsw_seasonality")
+#'
+#' aoi
+#' }
+NULL
+
+#' Calculate Global Surface Water (GSW) Seasonality
+#'
+#' GSW seasonality describes the intra-annual distribution of surface water for
 #' each pixel. The raster files have integer cell values between [0, 12],
 #' indicating how many months per year the pixel was classified as water.
 #'
