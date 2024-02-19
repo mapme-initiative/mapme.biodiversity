@@ -13,7 +13,7 @@
 #'
 #' The required resources for this indicator are:
 #'  - [global_surface_water_change]
-
+#'
 #' The following arguments can be set:
 #' \describe{
 #'   \item{stats_gsw}{The aggregation function applied to the input raster

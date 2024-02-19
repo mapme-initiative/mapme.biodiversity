@@ -23,11 +23,12 @@ The pixel values are aggregated using method provided via the
 The required resources for this indicator are:
 \itemize{
 \item \link{global_surface_water_change}
+}
+
 The following arguments can be set:
 \describe{
 \item{stats_gsw}{The aggregation function applied to the input raster
 values. Defaults to \code{mean}.}
-}
 }
 }
 \examples{
