@@ -14,6 +14,12 @@ version](https://www.r-pkg.org/badges/version/mapme.biodiversity)](https://CRAN.
 
 # mapme.biodiversity <img src="man/figures/logo.png" align="right" height="110"/>
 
+> \[!IMPORTANT\]  
+> `{mapme.biodiversity}` is currently experiencing major changes to its
+> user-interface and overall functionality. Please visit the
+> [announcement issue](https://github.com/mapme-initiative/mapme.biodiversity/issues/240)
+> to learn more about these changes.
+
 ## About
 
 Biodiversity areas, especially primary forests, provide multiple
@@ -66,7 +72,7 @@ library(mapme.biodiversity)
 library(sf)
 ```
 
-    ## Linking to GEOS 3.11.1, GDAL 3.8.2, PROJ 9.1.1; sf_use_s2() is TRUE
+    ## Linking to GEOS 3.12.1, GDAL 3.8.2, PROJ 9.3.1; sf_use_s2() is TRUE
 
 ``` r
 resources <- names(available_resources())
