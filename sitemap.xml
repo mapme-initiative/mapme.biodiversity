@@ -97,7 +97,37 @@
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/gfw_treecover.html</loc>
   </url>
   <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/global_surface_water_change.html</loc>
+  </url>
+  <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/global_surface_water_occurrence.html</loc>
+  </url>
+  <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/global_surface_water_recurrence.html</loc>
+  </url>
+  <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/global_surface_water_seasonality.html</loc>
+  </url>
+  <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/global_surface_water_transitions.html</loc>
+  </url>
+  <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/gmw.html</loc>
+  </url>
+  <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/gsw_change.html</loc>
+  </url>
+  <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/gsw_occurrence.html</loc>
+  </url>
+  <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/gsw_recurrence.html</loc>
+  </url>
+  <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/gsw_seasonality.html</loc>
+  </url>
+  <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/gsw_transitions.html</loc>
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/index.html</loc>
