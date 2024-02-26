@@ -1,5 +1,9 @@
 # mapme.biodiversity (development version)
 
+## Internal
+
+- removed `st_make_valid()` from `.read_vector()`.
+
 # mapme.biodiversity 0.5.0
 
 ## General

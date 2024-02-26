@@ -66,9 +66,10 @@ calc_indicators <- function(x, indicators, ...) {
   req_resources <- selected_indicator[[indicator]][["resources"]]
 
   processor <- switch(processing_mode,
-                      asset = .asset_processor,
-                      portfolio = .portfolio_processor,
-                      stop(sprintf("Processing mode '%s' is not supported.", processing_mode)))
+    asset = .asset_processor,
+    portfolio = .portfolio_processor,
+    stop(sprintf("Processing mode '%s' is not supported.", processing_mode))
+  )
 
   results <- processor(x, fun, avail_resources, req_resources, params)
   # bind the asset results
@@ -90,23 +91,23 @@ calc_indicators <- function(x, indicators, ...) {
   }
   purrr::imap(req_resources, function(resource_type, resource_name) {
     reader <- switch(resource_type,
-                     raster = .read_raster,
-                     vector = .read_vector,
-                     stop(sprintf("Resource type '%s' currently not supported", resource_type)))
-    reader(x, avail_resources[[resource_name]])})
+      raster = .read_raster,
+      vector = .read_vector,
+      stop(sprintf("Resource type '%s' currently not supported", resource_type))
+    )
+    reader(x, avail_resources[[resource_name]])
+  })
 }
 
 .read_vector <- function(x, vector_sources) {
   vectors <- purrr::map(vector_sources, function(source) {
-    tmp <- read_sf(source, wkt_filter = st_as_text(st_as_sfc(st_bbox(x))))
-    st_make_valid(tmp)
+    read_sf(source, wkt_filter = st_as_text(st_as_sfc(st_bbox(x))))
   })
   names(vectors) <- basename(vector_sources)
   vectors
 }
 
 .read_raster <- function(x, tindex) {
-
   if (st_crs(x) != st_crs(tindex)) {
     x <- st_transform(x, st_crs(tindex))
   }
@@ -124,7 +125,7 @@ calc_indicators <- function(x, indicators, ...) {
     stop("Did not find equal number of tiles per timestep.")
   }
 
-  out <- lapply(1:n_timesteps, function(i){
+  out <- lapply(1:n_timesteps, function(i) {
     index <- rep(FALSE, n_timesteps)
     index[i] <- TRUE
     filenames <- names(grouped_geoms[index])
@@ -145,13 +146,11 @@ calc_indicators <- function(x, indicators, ...) {
   cropped
 }
 
-.asset_processor <- function(
-    x,
-    fun,
-    avail_resources,
-    req_resources,
-    params){
-
+.asset_processor <- function(x,
+                             fun,
+                             avail_resources,
+                             req_resources,
+                             params) {
   p <- progressr::progressor(steps = nrow(x))
   furrr::future_map(1:nrow(x), function(i) {
     p()
@@ -163,8 +162,7 @@ calc_indicators <- function(x, indicators, ...) {
 
 #' @noRd
 #' @importFrom utils str
-.check_single_asset <- function(obj, i){
-
+.check_single_asset <- function(obj, i) {
   if (inherits(obj, "try-error")) {
     warning(sprintf("At asset %s an error occured. Returning NA.\n", i), obj)
     return(NA)
@@ -182,13 +180,11 @@ calc_indicators <- function(x, indicators, ...) {
   obj
 }
 
-.portfolio_processor <- function(
-    x,
-    fun,
-    avail_resources,
-    req_resources,
-    params ){
-
+.portfolio_processor <- function(x,
+                                 fun,
+                                 avail_resources,
+                                 req_resources,
+                                 params) {
   resources <- .prep_resources(x, avail_resources, req_resources)
   results <- .compute(x, resources, fun, params)
   if (!inherits(results, "list")) {
