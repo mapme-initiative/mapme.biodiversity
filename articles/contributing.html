@@ -131,15 +131,15 @@ style without further notice before accepting the PR.</p>
 <p>Ideally, you clone the GitHub repository via the git command in a
 command line on Linux and MacOS systems or via the GitHub Desktop
 application on Windows. On Linux, the command would look like this:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/mapme-initiative/mapme.biodiversity</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/mapme-initiative/mapme.biodiversity</span></code></pre></div>
 <p>We do not accept pushes to main, thus the first step would be to
 create a specific branch for your extension. In this tutorial, we will
 pretend to reimplement the <code>soilgrids</code> resources and the
 associated <code>soilproperties</code> indicator, so that we create a
 branch reflecting this. Don’t forget to check out to the newly created
 branch!</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> branch add-soilgrid-indicators</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout add-soilgrid-indicators</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">git</span> branch add-soilgrid-indicators</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">git</span> checkout add-soilgrid-indicators</span></code></pre></div>
 <p>Below, we will assume that you develop your extension to the package
 in R Studio. The general guidelines to follow also apply if you choose
 different tooling for your development process, however, it will not be
@@ -157,48 +157,34 @@ when in the package’s directory:</p>
 <h3 id="checklist">Checklist<a class="anchor" aria-label="anchor" href="#checklist"></a>
 </h3>
 <ul class="task-list">
-<li>
-<input type="checkbox" disabled>Add the new resource to
+<li><label><input type="checkbox">Add the new resource to
 <code>R/resources_backlog.R</code> following the standardized
-template</li>
-<li>
-<input type="checkbox" disabled>Create a file for all necessary
-code to download your resource (<code>R/get_resource_name.R</code>)</li>
-<li>
-<input type="checkbox" disabled>Include roxygen documentation
-for your resource following the provided template</li>
-<li>
-<input type="checkbox" disabled>Check user-specified arguments
-(if any) for correctness</li>
-<li>
-<input type="checkbox" disabled>Retrieve portfolio-wide
-parameters of interest for your resource from the portfolio</li>
-<li>
-<input type="checkbox" disabled>Match the spatio-temporal
-extent of the portfolio with your resource</li>
-<li>
-<input type="checkbox" disabled>Provide your own download
-functionality or use <code>.download_or_skip()</code>
-</li>
-<li>
-<input type="checkbox" disabled>Delete any intermediate files
-that are no longer required</li>
-<li>
-<input type="checkbox" disabled>Return the absolute file paths
-for all matching resource files</li>
-<li>
-<input type="checkbox" disabled>Write a testthat script testing
-all the newly added functionality (except the actual download) and write
-it to <code>test/testthat/test-get_resource_name.R</code>
-</li>
-<li>
-<input type="checkbox" disabled>Add a small example data set of
-your resource to <code>inst/res/resource_name/</code>
-</li>
-<li>
-<input type="checkbox" disabled>Added a new dependency? Make
-sure to include a supporting statement for that dependency in your
-PR!</li>
+template</label></li>
+<li><label><input type="checkbox">Create a file for all necessary code
+to download your resource
+(<code>R/get_resource_name.R</code>)</label></li>
+<li><label><input type="checkbox">Include roxygen documentation for
+your resource following the provided template</label></li>
+<li><label><input type="checkbox">Check user-specified arguments (if
+any) for correctness</label></li>
+<li><label><input type="checkbox">Retrieve portfolio-wide parameters
+of interest for your resource from the portfolio</label></li>
+<li><label><input type="checkbox">Match the spatio-temporal extent of
+the portfolio with your resource</label></li>
+<li><label><input type="checkbox">Provide your own download
+functionality or use <code>.download_or_skip()</code></label></li>
+<li><label><input type="checkbox">Delete any intermediate files that
+are no longer required</label></li>
+<li><label><input type="checkbox">Return the absolute file paths for
+all matching resource files</label></li>
+<li><label><input type="checkbox">Write a testthat script testing all
+the newly added functionality (except the actual download) and write it
+to <code>test/testthat/test-get_resource_name.R</code></label></li>
+<li><label><input type="checkbox">Add a small example data set of your
+resource to <code>inst/res/resource_name/</code></label></li>
+<li><label><input type="checkbox">Added a new dependency? Make sure to
+include a supporting statement for that dependency in your
+PR!</label></li>
 </ul>
 </div>
 <div class="section level3">
@@ -444,41 +430,32 @@ these two terms.</p>
 <h3 id="checklist-1">Checklist<a class="anchor" aria-label="anchor" href="#checklist-1"></a>
 </h3>
 <ul class="task-list">
-<li>
-<input type="checkbox" disabled>Add the new indicator to
+<li><label><input type="checkbox">Add the new indicator to
 <code>R/indicators_backlog.R</code> following the standardized
-template</li>
-<li>
-<input type="checkbox" disabled>Create a file for all necessary
-code compute your indicator (<code>R/calc_indicator_name.R</code>)</li>
-<li>
-<input type="checkbox" disabled>Include roxygen documentation
-for your indicator following the provided template</li>
-<li>
-<input type="checkbox" disabled>Check user-specified arguments
-(if any) for correctness</li>
-<li>
-<input type="checkbox" disabled>Retrieve portfolio-wide
-parameters of interest for your indicator from the asset/portfolio</li>
-<li>
-<input type="checkbox" disabled>Implement different computation
-engines for your indicator</li>
-<li>
-<input type="checkbox" disabled>If applicable, implement both,
-asset and portfolio based processing modes</li>
-<li>
-<input type="checkbox" disabled>Return a tibble in long format
-(no variables “hidden” in column names)</li>
-<li>
-<input type="checkbox" disabled>Write a testthat script testing
-all the newly added functionality write it to
+template</label></li>
+<li><label><input type="checkbox">Create a file for all necessary code
+compute your indicator
+(<code>R/calc_indicator_name.R</code>)</label></li>
+<li><label><input type="checkbox">Include roxygen documentation for
+your indicator following the provided template</label></li>
+<li><label><input type="checkbox">Check user-specified arguments (if
+any) for correctness</label></li>
+<li><label><input type="checkbox">Retrieve portfolio-wide parameters
+of interest for your indicator from the asset/portfolio</label></li>
+<li><label><input type="checkbox">Implement different computation
+engines for your indicator</label></li>
+<li><label><input type="checkbox">If applicable, implement both, asset
+and portfolio based processing modes</label></li>
+<li><label><input type="checkbox">Return a tibble in long format (no
+variables “hidden” in column names)</label></li>
+<li><label><input type="checkbox">Write a testthat script testing all
+the newly added functionality write it to
 <code>test/testthat/test-calc_indicator_name.R</code>, use snapshots to
-check for the correctness of numeric outputs</li>
-<li>
-<input type="checkbox" disabled>Added a new dependency? Make
-sure to include a supporting statement for that dependency in your PR,
-check if the dependency is installed, and add it to the Suggests field
-in the DESCRIPTION file</li>
+check for the correctness of numeric outputs</label></li>
+<li><label><input type="checkbox">Added a new dependency? Make sure to
+include a supporting statement for that dependency in your PR, check if
+the dependency is installed, and add it to the Suggests field in the
+DESCRIPTION file</label></li>
 </ul>
 </div>
 <div class="section level3">
