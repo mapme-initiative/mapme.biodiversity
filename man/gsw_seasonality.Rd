@@ -45,13 +45,16 @@ dir.create(outdir, showWarnings = FALSE)
 mapme_options(
   outdir = outdir,
   tmpdir = tempdir(),
-  verbose = FALSE)
+  verbose = FALSE
+)
 
 aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
-  package = "mapme.biodiversity") \%>\%
+  package = "mapme.biodiversity"
+) \%>\%
   get_resources(get_global_surface_water_seasonality()) \%>\%
   calc_indicators(
-    calc_gsw_seasonality(engine = "extract", stats = "mean")) \%>\%
+    calc_gsw_seasonality(engine = "extract", stats = "mean")
+  ) \%>\%
   tidyr::unnest(gsw_seasonality)
 
 aoi

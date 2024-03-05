@@ -35,9 +35,9 @@ outdir <- file.path(tempdir(), "mapme-data")
 dir.create(outdir, showWarnings = FALSE)
 
 mapme_options(
-    outdir = outdir,
-    tmpdir = tempdir(),
-    verbose = FALSE
+  outdir = outdir,
+  tmpdir = tempdir(),
+  verbose = FALSE
 )
 
 aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",

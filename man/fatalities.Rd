@@ -91,18 +91,23 @@ outdir <- file.path(tempdir(), "mapme-data")
 dir.create(outdir, showWarnings = FALSE)
 
 mapme_options(
-    outdir = outdir,
-    tmpdir = tempdir(),
-    verbose = FALSE)
+  outdir = outdir,
+  tmpdir = tempdir(),
+  verbose = FALSE
+)
 
 aoi <- system.file("extdata", "burundi.gpkg",
-  package = "mapme.biodiversity") \%>\%
+  package = "mapme.biodiversity"
+) \%>\%
   read_sf() \%>\%
   get_resources(get_ucdp_ged(version = "22.1")) \%>\%
   calc_indicators(
-    calc_fatalities(years = 1991:1992,
+    calc_fatalities(
+      years = 1991:1992,
       precision_location = 1,
-      precision_time = 1) \%>\%
+      precision_time = 1
+    )
+  ) \%>\%
   tidyr::unnest(fatalities)
 
 aoi

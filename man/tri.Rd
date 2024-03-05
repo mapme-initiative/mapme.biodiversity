@@ -52,16 +52,19 @@ outdir <- file.path(tempdir(), "mapme-data")
 dir.create(outdir, showWarnings = FALSE)
 
 mapme_options(
- outdir = outdir,
- tmpdir = tempdir(),
- verbose = FALSE)
+  outdir = outdir,
+  tmpdir = tempdir(),
+  verbose = FALSE
+)
 
 aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-  package = "mapme.biodiversity") \%>\%
+  package = "mapme.biodiversity"
+) \%>\%
   read_sf() \%>\%
   get_resources(get_nasa_srtm()) \%>\%
   calc_indicators(
-    calc_tri(stats = c("mean", "median", "sd", "var"), engine = "extract")) \%>\%
+    calc_tri(stats = c("mean", "median", "sd", "var"), engine = "extract")
+  ) \%>\%
   tidyr::unnest(tri)
 
 aoi

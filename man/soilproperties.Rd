@@ -45,20 +45,25 @@ outdir <- file.path(tempdir(), "mapme-data")
 dir.create(outdir, showWarnings = FALSE)
 
 mapme_options(
- outdir = outdir,
- tmpdir = tempdir(),
- verbose = FALSE)
+  outdir = outdir,
+  tmpdir = tempdir(),
+  verbose = FALSE
+)
 
 aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-  package = "mapme.biodiversity") \%>\%
+  package = "mapme.biodiversity"
+) \%>\%
   read_sf() \%>\%
   get_resources(
     get_soilgrids(
-    layers = c("clay", "silt"),
-    depths = c("0-5cm", "5-15cm"),
-    stats = "mean")) \%>\%
+      layers = c("clay", "silt"),
+      depths = c("0-5cm", "5-15cm"),
+      stats = "mean"
+    )
+  ) \%>\%
   calc_indicators(
-    calc_soilproperties(engine = "extract", stast = c("mean", "median"))) \%>\%
+    calc_soilproperties(engine = "extract", stast = c("mean", "median"))
+  ) \%>\%
   tidyr::unnest(soilproperties)
 
 aoi

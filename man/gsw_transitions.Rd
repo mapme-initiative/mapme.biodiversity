@@ -50,12 +50,14 @@ outdir <- file.path(tempdir(), "mapme-data")
 dir.create(outdir, showWarnings = FALSE)
 
 mapme_options(
- outdir = outdir,
- tmpdir = tempdir(),
- verbose = FALSE)
+  outdir = outdir,
+  tmpdir = tempdir(),
+  verbose = FALSE
+)
 
 aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
-  package = "mapme.biodiversity") \%>\%
+  package = "mapme.biodiversity"
+) \%>\%
   get_resources(get_global_surface_water_transitions()) \%>\%
   calc_indicators(calc_gsw_transitions()) \%>\%
   tidyr::unnest(gsw_transitions)

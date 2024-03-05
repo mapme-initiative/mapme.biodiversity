@@ -42,17 +42,21 @@ outdir <- file.path(tempdir(), "mapme-data")
 dir.create(outdir, showWarnings = FALSE)
 
 mapme_options(
- outdir = outdir,
- tmpdir = tempdir(),
- verbose = FALSE)
+  outdir = outdir,
+  tmpdir = tempdir(),
+  verbose = FALSE
+)
 
 aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-  package = "mapme.biodiversity") \%>\%
+  package = "mapme.biodiversity"
+) \%>\%
   read_sf() \%>\%
   get_resources(get_nelson_et_al(
-    ranges = c("5k_10k", "100k_200k", "500k_1mio", "1mio_5mio"))) \%>\%
+    ranges = c("5k_10k", "100k_200k", "500k_1mio", "1mio_5mio")
+  )) \%>\%
   calc_indicators(
-    calc_traveltime(engine = "extract", stats = c("min", "max"))) \%>\%
+    calc_traveltime(engine = "extract", stats = c("min", "max"))
+  ) \%>\%
   tidyr::unnest(traveltime)
 
 aoi

@@ -43,9 +43,10 @@ outdir <- file.path(tempdir(), "mapme-data")
 dir.create(outdir, showWarnings = FALSE)
 
 mapme_options(
- outdir = outdir,
- tempdir = tempdir(),
- verbose = FALSE)
+  outdir = outdir,
+  tempdir = tempdir(),
+  verbose = FALSE
+)
 
 aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   package = "mapme.biodiversity"

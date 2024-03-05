@@ -55,19 +55,23 @@ outdir <- file.path(tempdir(), "mapme-data")
 dir.create(outdir, showWarnings = FALSE)
 
 mapme_options(
- outdir = outdir,
- tmpdir = tempdir(),
- verbose = FALSE)
+  outdir = outdir,
+  tmpdir = tempdir(),
+  verbose = FALSE
+)
 
 aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-  package = "mapme.biodiversity") \%>\%
+  package = "mapme.biodiversity"
+) \%>\%
   get_resources(get_chirps()) \%>\%
   calc_indicators(
     calc_precipitation_chirps(
       years = 2010,
       engine = "extract",
       scales_spi = 3,
-      spi_prev_years = 8)) \%>\%
+      spi_prev_years = 8
+    )
+  ) \%>\%
   tidyr::unnest(precipitation_chirps)
 
 aoi
