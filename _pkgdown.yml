@@ -21,7 +21,7 @@ reference:
   - title: Functions
     desc: User-facing functions
   - contents:
-    - init_portfolio
+    - mapme_options
     - get_resources
     - calc_indicators
     - write_portfolio
@@ -38,6 +38,10 @@ reference:
   - contents:
     - available_indicators
     - has_keyword("indicator")
+  - title: Utilities
+    desc: Development utilities
+  - contents:
+    - has_keyword("utils")
 
 navbar:
   bg: primary

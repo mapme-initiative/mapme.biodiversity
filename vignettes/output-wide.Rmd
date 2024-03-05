@@ -102,15 +102,13 @@ we will have to make available the Nelson et al. resource as well as requesting
 the calculation of the respective indicator.
 
 ```{r calc-elev}
-port <- init_portfolio(
-  aoi,
-  years = 2018,
+mapme_options(
   outdir = system.file("res", package = "mapme.biodiversity"),
-  tmpdir = system.file("tmp", package = "mapme.biodiversity")
+  tmpdir = system.file("tmp", package = "mapme.biodiversity"),
 )
 
-port_w_nelson <- get_resources(port, "nelson_et_al", range_traveltime = "20k_50k")
-port_w_traveltime <- calc_indicators(port_w_nelson, "traveltime", stats_accessibility = "mean")
+port_w_nelson <- get_resources(aoi, get_nelson_et_al(ranges = "20k_50k"))
+port_w_traveltime <- calc_indicators(port_w_nelson, calc_traveltime(stats = "mean"))
 print(port_w_traveltime)
 ```
 
@@ -159,8 +157,8 @@ Let's continue to query an indicator which has a multi-row output, i.e.
 precipitation statistics from [WorldClim](https://www.worldclim.org/).
 
 ```{r calc-prec}
-port_w_chirps <- get_resources(port, "worldclim_precipitation")
-port_w_prec <- calc_indicators(port_w_chirps, "precipitation_wc", stats_worldclim = "mean")
+port_w_wc <- get_resources(aoi, get_worldclim_precipitation(years = 2010:2018))
+port_w_prec <- calc_indicators(port_w_wc, calc_precipitation_wc(stats = "mean"))
 print(port_w_prec)
 ```
 
@@ -209,7 +207,7 @@ unnest to get the output in a wide format.
 
 ```{r prec-to-wide}
 port_w_prec$precipitation_wc2 <- purrr::map(port_w_prec$precipitation_wc, prec2wide)
-port_w_prec <- select(port_w_prec, assetid, precipitation_wc2)
+port_w_prec <- select(port_w_prec, precipitation_wc2)
 port_wide_3 <- unnest(port_w_prec, precipitation_wc2)
 
 print(port_wide_3)
