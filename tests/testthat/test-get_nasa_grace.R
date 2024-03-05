@@ -14,15 +14,16 @@ test_that(".get_droughtind works", {
   outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
   tmpdir <- tempdir()
 
-  portfolio <- init_portfolio(aoi,
-    years = 2004:2010,
+  mapme_options(
     outdir = outdir,
     tmpdir = tmpdir,
-    verbose = FALSE
+    verbose = FALSE,
+    testing = TRUE
   )
-  # Add testing attribute in order to skip downloads
-  attributes(portfolio)$testing <- TRUE
+
+  gng <- get_nasa_grace(years = 2004:2010)
+
   expect_snapshot(
-    .get_nasa_grace(portfolio)
+    gng(aoi)
   )
 })
