@@ -9,21 +9,17 @@ test_that("worldclim minimum temperature works", {
     package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)
   worldclim_min_temperature <- rast(worldclim_min_temperature)
-  attributes(shp)$years <- 2000:2022
-  expect_error(
-    .calc_temperature_min_wc(shp, worldclim_min_temperature, engine = "not-available"),
-    "Engine 'not-available' is not an available engine. Please choose one of:"
-  )
-  expect_error(
-    .calc_temperature_min_wc(shp, worldclim_min_temperature, stats_worldclim = "not-available"),
-    "Statistic 'not-available' is not supported. Please choose one of:"
-  )
 
-  result <- .calc_temperature_min_wc(shp, worldclim_min_temperature)
-  result_multi_stat <- .calc_temperature_min_wc(shp, worldclim_min_temperature, stats_worldclim = c("mean", "median", "sd"))
-  result_zonal <- .calc_temperature_min_wc(shp, worldclim_min_temperature, engine = "zonal")
-  result_extract <- .calc_temperature_min_wc(shp, worldclim_min_temperature, engine = "extract")
-  result_exact <- .calc_temperature_min_wc(shp, worldclim_min_temperature, engine = "exactextract")
+  cmin <- calc_temperature_min_wc()
+  result <- cmin(shp, worldclim_min_temperature)
+  cmin <- calc_temperature_min_wc(stats = c("mean", "median", "sd"))
+  result_multi_stat <- cmin(shp, worldclim_min_temperature)
+  cmin <- calc_temperature_min_wc(engine = "zonal")
+  result_zonal <- cmin(shp, worldclim_min_temperature)
+  cmin <- calc_temperature_min_wc(engine = "extract")
+  result_extract <- cmin(shp, worldclim_min_temperature)
+  cmin <- calc_temperature_min_wc(engine = "exactextract")
+  result_exact <- cmin(shp, worldclim_min_temperature)
 
   expect_equal(
     names(result),
