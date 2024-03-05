@@ -14,26 +14,27 @@ test_that(".get_fritz_et_al works", {
   outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
   tmpdir <- tempdir()
 
-  portfolio <- init_portfolio(aoi,
-    years = 2000:2020,
+  mapme_options(
     outdir = outdir,
     tmpdir = tmpdir,
-    verbose = TRUE
+    verbose = FALSE,
+    testing = TRUE
   )
-  # Add testing attribute in order to skip downloads
-  attributes(portfolio)$testing <- TRUE
+
+  gf <- get_fritz_et_al(resolution = 100)
   expect_equal(
-    .get_fritz_et_al(portfolio, res_drivers = 100, rundir = file.path(outdir, "fritz_et_al")),
+    gf(aoi),
     "Deforestation_Drivers_100m_IIASA.zip"
   )
 
+  gf <- get_fritz_et_al(resolution = 1000)
   expect_equal(
-    .get_fritz_et_al(portfolio, res_drivers = 1000, rundir = file.path(outdir, "fritz_et_al")),
+    gf(aoi),
     "Deforestation_drivers_1km_IIASA_.zip"
   )
 
   expect_error(
-    .get_fritz_et_al(portfolio, res_drivers = 200, rundir = file.path(outdir, "fritz_et_al")),
+    get_fritz_et_al(resolution = 200),
     "Fritz et al. resource is available only at resolutions 100 and 1.000"
   )
 })
