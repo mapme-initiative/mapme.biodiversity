@@ -9,57 +9,41 @@
 #'
 #'
 #' @name gmw
+#' @param years A numeric vector of the years for which to make GMW available.
 #' @docType data
 #' @keywords resource
-#' @format Global mangrove extent polygon available for years 1996, 2007-2010,
-#'   and 2015-2020.
+#' @returns A character of file paths.
 #' @references Bunting P., Rosenqvist A., Lucas R., Rebelo L-M., Hilarides L.,
 #' Thomas N., Hardy A., Itoh T., Shimada M. and Finlayson C.M. (2018). The Global
 #' Mangrove Watch – a New 2010 Global Baseline of Mangrove Extent. Remote Sensing
 #' 10(10): 1669. doi:10.3390/rs10101669.
 #' @source \url{https://data.unep-wcmc.org/datasets/45}
-NULL
-
-
-#' Downloads Global Mangrove Extent Polygon
-#'
-#' @param x An sf object returned by init_portfolio
-#' @param rundir A directory where intermediate files are written to.
-#' @param verbose Logical controlling verbosity.
-#' @importFrom utils unzip
-#' @keywords internal
 #' @include register.R
-#' @noRd
-.get_gmw <- function(x,
-                     rundir = tempdir(),
-                     verbose = TRUE) {
-  target_years <- attributes(x)$years
-  available_years <- c(1996, 2007:2010, 2015:2020)
-  target_years <- .check_available_years(
-    target_years, available_years, "mangroveextent"
-  )
-  urls <- unlist(sapply(target_years, function(year) .get_mangrove_url(year)))
-  filenames <- file.path(
-    rundir,
-    basename(paste0("gmw-extent_", target_years, ".zip"))
-  )
-  if (attr(x, "testing")) {
-    return(basename(filenames))
+#' @export
+get_gmw <- function(years = c(1996, 2007:2010, 2015:2020)) {
+  avail_years <- c(1996, 2007:2010, 2015:2020)
+  years <- check_available_years(years, avail_years, "gmw")
+
+  function(x,
+           name = "gmw",
+           type = "vector",
+           rundir = mapme_options()[["tmpdir"]],
+           outdir = mapme_options()[["outdir"]],
+           verbose = mapme_options()[["verbose"]],
+           testing = mapme_options()[["testing"]]) {
+    urls <- unlist(sapply(years, function(year) .get_mangrove_url(year)))
+    filenames <- file.path(outdir, basename(paste0("gmw-extent_", years, ".zip")))
+    if (testing) {
+      return(basename(filenames))
+    }
+    filenames <- download_or_skip(urls, filenames, check_existence = FALSE)
+    if (verbose) {
+      message("Translating shapefiles to GeoPackages. This may take a while....")
+    }
+    sapply(filenames, function(zip) .unzip_mangrove(zip, outdir))
+    out <- list.files(outdir, full.names = T, pattern = ".gpkg")
+    grep(paste(years, collapse = "|"), out, value = TRUE)
   }
-
-  if (any(file.exists(filenames))) {
-    message("Skipping existing files in output directory.")
-  }
-  # start download in a temporal directory within tmpdir
-  aria_bin <- attributes(x)$aria_bin
-  .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin)
-
-  # unzip and convert shp to gpkg
-  message("Translating shapefiles to GeoPackages. This may take a while....")
-  sapply(filenames, function(zip) .unzip_mangrove(zip, rundir))
-
-  # return paths to the gpkg
-  list.files(rundir, full.names = T, pattern = ".gpkg")
 }
 
 
@@ -135,7 +119,5 @@ NULL
 register_resource(
   name = "gmw",
   type = "vector",
-  source = "https://data.unep-wcmc.org/datasets/45",
-  fun = .get_gmw,
-  arguments <- list()
+  source = "https://data.unep-wcmc.org/datasets/45"
 )

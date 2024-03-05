@@ -3,8 +3,12 @@
 \docType{data}
 \name{mangroves_area}
 \alias{mangroves_area}
+\alias{calc_mangroves_area}
 \title{Calculate mangrove extent based on Global Mangrove Watch (GMW)}
-\format{
+\usage{
+calc_mangroves_area()
+}
+\value{
 A tibble with a column for area of mangrove (in ha) and corresponding year.
 }
 \description{
@@ -12,6 +16,8 @@ This function allows to efficiently calculate area of mangrove from
 Global Mangrove Watch - World Conservation Monitoring Centre (WCMC)
 for polygons. For each polygon, the area of the mangrove (in hectare)
 for desired year is returned.
+}
+\details{
 The required resources for this indicator are:
 \itemize{
 \item \link{gmw}
@@ -28,18 +34,18 @@ library(mapme.biodiversity)
 outdir <- file.path(tempdir(), "mapme-data")
 dir.create(outdir, showWarnings = FALSE)
 
-aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-  package = "mapme.biodiversity"
-) \%>\%
-  read_sf() \%>\%
-  init_portfolio(
-    years = c(1996, 2016),
+mapme_options(
     outdir = outdir,
     tmpdir = tempdir(),
     verbose = FALSE
-  ) \%>\%
-  get_resources("gmw") \%>\%
-  calc_indicators("mangroves_area") \%>\%
+)
+
+aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
+  package = "mapme.biodiversity"
+) \%>\%
+  read_sf() \%>\%
+  get_resources(get_gmw(years = c(1996, 2016))) \%>\%
+  calc_indicators(calc_mangroves_area()) \%>\%
   tidyr::unnest(mangroves_area)
 
 aoi

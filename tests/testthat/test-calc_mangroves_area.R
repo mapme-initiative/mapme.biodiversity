@@ -1,10 +1,10 @@
 test_that("mangrove extent works", {
-  shp <- read_sf(
+  aoi <- read_sf(
     system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
       package = "mapme.biodiversity"
     )
   )
-  shp <- st_make_valid(shp)
+  aoi <- st_make_valid(aoi)
   source <- list.files(system.file("res", "gmw",
     package = "mapme.biodiversity"
   ), pattern = ".gpkg$", full.names = TRUE)
@@ -13,7 +13,8 @@ test_that("mangrove extent works", {
     out <- st_make_valid(out)
   })
   names(gmw) <- basename(source)
-  result <- .calc_mangroves_area(shp, gmw)
+  ma <- calc_mangroves_area()
+  result <- ma(aoi, gmw)
   expect_equal(
     names(result),
     c("mangrove_extent", "year")
