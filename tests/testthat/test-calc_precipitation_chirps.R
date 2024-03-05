@@ -10,35 +10,27 @@ test_that("precipitation indicator works", {
     package = "mapme.biodiversity"
   ), pattern = "tif$", full.names = TRUE)
   chirps <- rast(chirps)
-  attributes(shp)$years <- 1970:1980
-  expect_warning(
-    .calc_precipitation_chirps(shp, chirps),
-    "Cannot calculate precipitation statistics for years smaller than 1981"
-  )
-  attributes(shp)$years <- 1980:1982
+  expect_warning(cpc <- calc_precipitation_chirps(1980:1982))
   expect_equal(
-    .calc_precipitation_chirps(shp, NULL),
+    cpc(shp, NULL),
     NA
   )
-  attributes(shp)$years <- 1981:1982
-  expect_error(
-    .calc_precipitation_chirps(shp, chirps, scales_spi = c(1, 12, 48, 60)),
-    "Values of 'scales_spi' for SPI calculation must be integers between 0 and 48"
-  )
-  expect_error(
-    .calc_precipitation_chirps(shp, chirps, engine = "not-available"),
-    "Engine 'not-available' is not an available engine. Please choose one of:"
-  )
-  attributes(shp)$years <- 2000:2010
-  result <- .calc_precipitation_chirps(shp, chirps)
-  result_zonal <- .calc_precipitation_chirps(shp, chirps, engine = "zonal")
-  result_extract <- .calc_precipitation_chirps(shp, chirps, engine = "extract")
-  result_exact <- .calc_precipitation_chirps(shp, chirps, engine = "exactextract")
+  expect_error(calc_precipitation_chirps(years = 1981:1982, scales_spi = c(1, 12, 48, 60)))
+  expect_error(calc_precipitation_chirps(years = 1981:1982, engine = "not-av"))
+  cpc <- calc_precipitation_chirps(years = 2000:2010)
+  result <- cpc(shp, chirps)
+  cpc <- calc_precipitation_chirps(years = 2000:2010, engine = "zonal")
+  result_zonal <- cpc(shp, chirps)
+  cpc <- calc_precipitation_chirps(years = 2000:2010, engine = "extract")
+  result_extract <- cpc(shp, chirps)
+  cpc <- calc_precipitation_chirps(years = 2000:2010, engine = "exactextract")
+  result_exact <- cpc(shp, chirps)
 
   expect_equal(
     names(result_zonal[[1]]),
     names(result_extract[[1]])
   )
+
   expect_equal(
     names(result_zonal[[1]]),
     names(result_exact[[1]])
@@ -48,7 +40,8 @@ test_that("precipitation indicator works", {
     c("dates", "absolute", "anomaly", "spi_3")
   )
 
-  result2 <- .calc_precipitation_chirps(shp, chirps, scales_spi = c(12, 24), spi_prev_years = 12)
+  cpc <- calc_precipitation_chirps(years = 2000:2010, scales_spi = c(12, 24), spi_prev_years = 12)
+  result2 <- cpc(shp, chirps)
   expect_equal(
     names(result2[[1]]),
     c("dates", "absolute", "anomaly", "spi_12", "spi_24")
