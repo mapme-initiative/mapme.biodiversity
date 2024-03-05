@@ -14,27 +14,20 @@ test_that("get_soilgrids works", {
   outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
   tmpdir <- tempdir()
 
-  portfolio <- init_portfolio(aoi,
-    years = 2000:2020,
+  mapme_options(
     outdir = outdir,
     tmpdir = tmpdir,
-    verbose = FALSE
+    verbose = FALSE,
+    testing = TRUE
   )
-  # Add testing attribute in order to skip downloads
-  attributes(portfolio)$testing <- TRUE
 
+  gsg <- get_soilgrids(layers = names(.sg_layers), depths = .sg_depths, stats = .sg_stats)
   expect_snapshot(
-    .get_soilgrids(portfolio,
-      resources = "soilgrids",
-      layers = names(.sg_layers),
-      depths = .sg_depths,
-      stats = .sg_stats
-    )
+    gsg(aoi)
   )
-
 
   expect_error(
-    .get_soilgrids(portfolio,
+    get_soilgrids(
       layers = "not-available",
       depths = .sg_depths,
       stats = .sg_stats
@@ -42,7 +35,7 @@ test_that("get_soilgrids works", {
   )
 
   expect_error(
-    .get_soilgrids(portfolio,
+    get_soilgrids(
       layers = names(.sg_layers),
       depths = "not-available",
       stats = .sg_stats
@@ -50,7 +43,7 @@ test_that("get_soilgrids works", {
   )
 
   expect_error(
-    .get_soilgrids(portfolio,
+    get_soilgrids(
       layers = names(.sg_layers),
       depths = .sg_depths,
       stats = "not-available"
@@ -58,7 +51,7 @@ test_that("get_soilgrids works", {
   )
 
   expect_error(
-    .get_soilgrids(portfolio),
+    get_soilgrids(),
     "For downloading data from soilgrid a valid layer, a valid depth range and a valid statistic have to be specified"
   )
 })
