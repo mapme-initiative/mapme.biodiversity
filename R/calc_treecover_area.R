@@ -4,20 +4,20 @@
 #' polygons. For each year in the analysis timeframe, the forest losses in
 #' preceding and the current years are subtracted from the treecover in the
 #' year 2000 and actual treecover figures within the polygon are returned.
+#'
 #' The required resources for this indicator are:
 #'  - [gfw_treecover]
 #'  - [gfw_lossyear]
 #'
-#' The following arguments can be set:
-#' \describe{
-#'   \item{min_size}{The minimum size of a forest patch to be considered as forest in ha.}
-#'   \item{min_cover}{The minimum cover percentage per pixel to be considered as forest.}
-#' }
-#'
 #' @name treecover_area
-#' @docType data
+#' @param years A numeric vector with the years for which to calculate treecover
+#'   area.
+#' @param min_size The minimum size of a forest patch to be considered as forest in ha.
+#' @param min_cover The minimum cover percentage per pixel to be considered as forest.
 #' @keywords indicator
-#' @format A tibble with a column for years and treecover (in ha)
+#' @returns A tibble with a column for years and treecover (in ha).
+#' @include register.R
+#' @export
 #' @examples
 #' \dontshow{
 #' mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
@@ -29,113 +29,86 @@
 #' outdir <- file.path(tempdir(), "mapme-data")
 #' dir.create(outdir, showWarnings = FALSE)
 #'
+#' mapme_options(
+#'   outdir = outdir,
+#'   tempdir = tempdir(),
+#'   verbose = FALSE
+#' )
+#'
 #' aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
 #'   package = "mapme.biodiversity"
 #' ) %>%
 #'   read_sf() %>%
-#'   init_portfolio(
-#'     years = 2016:2017,
-#'     outdir = outdir,
-#'     tmpdir = tempdir(),
-#'     verbose = FALSE
-#'   ) %>%
 #'   get_resources(
-#'     resources = c("gfw_treecover", "gfw_lossyear"),
-#'     vers_treecover = "GFC-2022-v1.10", vers_lossyear = "GFC-2022-v1.10"
+#'     get_gfw_treecover(version = "GFC-2022-v1.10"),
+#'     get_gfw_lossyear(version = "GFC-2022-v1.10")
 #'   ) %>%
-#'   calc_indicators("treecover_area", min_size = 1, min_cover = 30) %>%
+#'   calc_indicators(calc_treecover_area(years = 2016:2017, min_size = 1, min_cover = 30)) %>%
 #'   tidyr::unnest(treecover_area)
 #'
 #' aoi
 #' }
-NULL
-
-#' Calculate tree cover per year based on GFW data sets
-#'
-#' Considering the 2000 GFW forest cover density layer users can specify
-#' a cover threshold above which a pixel is considered to be covered by forest.
-#' Additionally, users can specify a minimum size of a comprehensive patch of
-#' forest pixels. Patches below this threshold will not be considered as forest
-#' area.
-#'
-#' @param x A single polygon for which to calculate the tree cover statistic
-#' @param gfw_treecover The treecover 2000 resource from GFW
-#' @param gfw_lossyear The lossyear resource from GFW
-#' @param min_size The minimum size of a forest patch in ha.
-#' @param min_cover The minimum threshold of stand density for a pixel to be
-#'   considered forest in the year 2000.
-#' @param verbose A directory where intermediate files are written to.
-#' @param ... additional arguments
-#' @return A tibble
-#' @importFrom stringr str_sub
-#' @keywords internal
-#' @include register.R
-#' @noRd
-.calc_treecover_area <- function(x,
-                                 gfw_treecover,
-                                 gfw_lossyear,
-                                 min_size = 10,
-                                 min_cover = 35,
-                                 verbose = TRUE,
-                                 ...) {
-  # initial argument checks
-  .check_namespace("exactextractr")
-  # check additional arguments
+calc_treecover_area <- function(years = 2000:2020,
+                                min_size = 10,
+                                min_cover = 35) {
+  check_namespace("exactextractr")
   .gfw_check_min_cover(min_cover, "treecover_area")
   .gfw_check_min_size(min_size, "treecover_area")
-
-  # handling of return value if resources are missing, e.g. no overlap
-  if (any(is.null(gfw_treecover), is.null(gfw_lossyear))) {
-    return(NA)
-  }
-  # retrieve years from portfolio
-  years <- attributes(x)$years
   years <- .gfw_check_years(years, "treecover_area")
-  if (length(years) == 0) {
-    return(tibble::tibble(years = NA, treecover = NA))
+
+  function(x = NULL,
+           gfw_treecover = NULL,
+           gfw_lossyear = NULL,
+           name = "treecover_area",
+           mode = "asset",
+           rundir = mapme_options()[["tempdir"]],
+           verbose = mapme_options()[["verbose"]]) {
+    # handling of return value if resources are missing, e.g. no overlap
+    if (any(is.null(gfw_treecover), is.null(gfw_lossyear))) {
+      return(NA)
+    }
+    # check if gfw_treecover only contains 0s, e.g. on the ocean
+    if (.gfw_empty_raster(gfw_treecover)) {
+      return(tibble::tibble(years = years, treecover = 0))
+    }
+    # prepare gfw rasters
+    gfw <- .gfw_prep_rasters(x, gfw_treecover, gfw_lossyear, cover = min_cover)
+
+    # apply extraction routine
+    gfw_stats <- exactextractr::exact_extract(
+      gfw, x, function(data, min_size) {
+        # retain only forest pixels and set area to ha
+        data <- .prep_gfw_data(data, min_size)
+        losses <- .sum_gfw(data, "coverage_area")
+        names(losses)[2] <- "loss"
+        org_coverage <- sum(data[["coverage_area"]])
+
+        if (all(losses[["loss"]] == 0)) {
+          result <- data.frame(
+            years = years,
+            treecover = org_coverage
+          )
+          return(result)
+        }
+
+        previous_losses <- sum(losses[["loss"]][losses[["years"]] < years[1]])
+
+        if (previous_losses != 0) {
+          org_coverage <- org_coverage - previous_losses
+        }
+
+        losses <- losses[losses[["years"]] %in% years, ]
+        losses[["treecover"]] <- org_coverage
+        losses[["treecover"]] <- losses[["treecover"]] - cumsum(losses[["loss"]])
+        losses[, c("years", "treecover")]
+      },
+      min_size = min_size, coverage_area = TRUE, summarize_df = TRUE
+    )
+
+    rm(gfw)
+    gc()
+    tibble::as_tibble(gfw_stats)
   }
-  # check if gfw_treecover only contains 0s, e.g. on the ocean
-  if (.gfw_empty_raster(gfw_treecover)) {
-    return(tibble::tibble(years = years, treecover = 0))
-  }
-
-  # prepare gfw rasters
-  gfw <- .gfw_prep_rasters(x, gfw_treecover, gfw_lossyear, cover = min_cover)
-
-  # apply extraction routine
-  gfw_stats <- exactextractr::exact_extract(
-    gfw, x, function(data, min_size) {
-      # retain only forest pixels and set area to ha
-      data <- .prep_gfw_data(data, min_size)
-      losses <- .sum_gfw(data, "coverage_area")
-      names(losses)[2] <- "loss"
-      org_coverage <- sum(data[["coverage_area"]])
-
-      if (all(losses[["loss"]] == 0)) {
-        result <- data.frame(
-          years = years,
-          treecover = org_coverage
-        )
-        return(result)
-      }
-
-      previous_losses <- sum(losses[["loss"]][losses[["years"]] < years[1]])
-
-      if (previous_losses != 0) {
-        org_coverage <- org_coverage - previous_losses
-      }
-
-      losses <- losses[losses[["years"]] %in% years, ]
-      losses[["treecover"]] <- org_coverage
-      losses[["treecover"]] <- losses[["treecover"]] - cumsum(losses[["loss"]])
-      losses[, c("years", "treecover")]
-    },
-    min_size = min_size, coverage_area = TRUE, summarize_df = TRUE
-  )
-
-  rm(gfw)
-  gc()
-  tibble::as_tibble(gfw_stats)
 }
 
 
@@ -176,7 +149,11 @@ NULL
     msg <- sprintf(msg, indicator)
     warning(msg)
   }
-  years[years >= 2000]
+  years <- years[years >= 2000]
+  if (length(years) == 0) {
+    stop("GFW not available for the selected time range.")
+  }
+  return(years)
 }
 
 .gfw_empty_raster <- function(gfw) {
@@ -272,11 +249,5 @@ register_indicator(
   resources = list(
     gfw_treecover = "raster",
     gfw_lossyear = "raster"
-  ),
-  fun = .calc_treecover_area,
-  arguments = list(
-    min_size = 10,
-    min_cover = 35
-  ),
-  processing_mode = "asset"
+  )
 )
