@@ -17,6 +17,7 @@ test_that("gsw occurrence works", {
   ), pattern = ".tif$", full.names = TRUE)
   gsw_occurrence <- rast(gsw_occurrence)
   occ <- gswo(shp, gsw_occurrence)
+
   expect_equal(
     occ$gsw_occurrence_area_sum,
     694.159,

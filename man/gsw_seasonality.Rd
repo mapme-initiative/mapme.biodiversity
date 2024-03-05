@@ -18,9 +18,8 @@ each pixel. The raster files have integer cell values between \code{[0, 12]},
 indicating how many months per year the pixel was classified as water.
 }
 \details{
-The pixel values are aggregated by summing up the area covered by each GSW
-seasonality class. The resulting \code{tibble} always contains 13 rows, one
-for each seasonality class.
+The pixel values are aggregated using method provided via the
+\code{stats} parameter.
 
 The required resources for this indicator are:
 \itemize{

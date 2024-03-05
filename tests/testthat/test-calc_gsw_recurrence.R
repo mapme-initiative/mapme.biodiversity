@@ -17,6 +17,7 @@ test_that("gsw recurrence works", {
   ), pattern = ".tif$", full.names = TRUE)
   gsw_recurrence <- rast(gsw_recurrence)
   rec <- gswr(shp, gsw_recurrence)
+
   expect_equal(
     rec$gsw_recurrence_area_sum,
     719.590,
