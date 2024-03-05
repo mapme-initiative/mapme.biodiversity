@@ -42,6 +42,7 @@
 #' aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
 #'   package = "mapme.biodiversity"
 #' ) %>%
+#'   read_sf() %>%
 #'   get_resources(get_global_surface_water_recurrence()) %>%
 #'   calc_indicators(
 #'     calc_gsw_recurrence(engine = "extract", stats = "mean")

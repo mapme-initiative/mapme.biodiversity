@@ -46,7 +46,7 @@
 #'   calc_indicators(
 #'     calc_gsw_occurrence(engine = "extract", stats = "mean")
 #'   ) %>%
-#'   tidyr::unnest(gsw_occurrence)
+#'   tidyr::unnest(gsw_occurence)
 #'
 #' aoi
 #' }

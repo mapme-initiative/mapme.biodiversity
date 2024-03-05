@@ -43,8 +43,8 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   package = "mapme.biodiversity"
 ) \%>\%
   read_sf() \%>\%
-  get_resources(get_nasa_firms(instrument = "VIIRS")) \%>\%
-  calc_indicators(get_active_fire_properties()) \%>\%
+  get_resources(get_nasa_firms(years = 2021, instrument = "VIIRS")) \%>\%
+  calc_indicators(calc_active_fire_properties()) \%>\%
   tidyr::unnest(active_fire_properties)
 
 aoi

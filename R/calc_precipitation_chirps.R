@@ -44,6 +44,7 @@
 #' aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
 #'   package = "mapme.biodiversity"
 #' ) %>%
+#'   read_sf() %>%
 #'   get_resources(get_chirps()) %>%
 #'   calc_indicators(
 #'     calc_precipitation_chirps(

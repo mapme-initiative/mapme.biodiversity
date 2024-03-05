@@ -91,7 +91,9 @@ calc_ecoregion <- function() {
                        teow,
                        verbose = TRUE,
                        ...) {
-  intersected <- suppressWarnings(st_intersection(x, teow[[1]]))
+  teow <- teow[[1]]
+  teow <- st_make_valid(teow)
+  intersected <- suppressWarnings(st_intersection(x, teow))
   biome_and_name <- data.frame(
     BIOME = c(1:14, 98, 99),
     BIOME_NAME = c(

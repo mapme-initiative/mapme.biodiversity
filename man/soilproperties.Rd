@@ -62,7 +62,7 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
     )
   ) \%>\%
   calc_indicators(
-    calc_soilproperties(engine = "extract", stast = c("mean", "median"))
+    calc_soilproperties(engine = "extract", stats = c("mean", "median"))
   ) \%>\%
   tidyr::unnest(soilproperties)
 

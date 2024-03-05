@@ -39,6 +39,7 @@
 #' aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
 #'   package = "mapme.biodiversity"
 #' ) %>%
+#'   read_sf() %>%
 #'   get_resources(get_global_surface_water_seasonality()) %>%
 #'   calc_indicators(
 #'     calc_gsw_seasonality(engine = "extract", stats = "mean")

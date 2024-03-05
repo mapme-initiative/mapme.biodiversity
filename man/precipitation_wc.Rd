@@ -51,7 +51,7 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   package = "mapme.biodiversity"
 ) \%>\%
   read_sf() \%>\%
-  get_resources(get_worldclim_precipitation()) \%>\%
+  get_resources(get_worldclim_precipitation(years = 2018)) \%>\%
   calc_indicators(
     calc_precipitation_wc(
       engine = "extract",

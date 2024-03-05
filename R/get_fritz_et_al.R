@@ -57,7 +57,8 @@ get_fritz_et_al <- function(resolution = 100) {
     }
 
     download_or_skip(url, filename, check_existence = FALSE)
-    files <- unzip_and_remove(filename, outdir, remove = FALSE)
+    unzip_and_remove(filename, outdir, remove = FALSE)
+    files <- list.files(outdir, full.names = TRUE)
     identifier <- paste0("geo_fritz_et_al_", resolution, "m.tif")
     files_outdir <- list.files(outdir, full.names = TRUE)
     geo_file <- grep(identifier, files, value = TRUE)

@@ -50,14 +50,14 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   package = "mapme.biodiversity"
 ) \%>\%
   read_sf() \%>\%
-  get_resources(get_worldclim_mmin_temperature()) \%>\%
+  get_resources(get_worldclim_min_temperature(years = 2018)) \%>\%
   calc_indicators(
     calc_temperature_min_wc(
       engine = "extract",
       stats = c("mean", "median")
     )
   ) \%>\%
-  tidyr::unnest(temperature_max_wc)
+  tidyr::unnest(temperature_min_wc)
 
 aoi
 }

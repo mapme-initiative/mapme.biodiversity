@@ -58,6 +58,7 @@ mapme_options(
 aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
   package = "mapme.biodiversity"
 ) \%>\%
+  read_sf() \%>\%
   get_resources(get_global_surface_water_transitions()) \%>\%
   calc_indicators(calc_gsw_transitions()) \%>\%
   tidyr::unnest(gsw_transitions)

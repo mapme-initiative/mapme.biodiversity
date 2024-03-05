@@ -52,7 +52,7 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   package = "mapme.biodiversity"
 ) \%>\%
   read_sf() \%>\%
-  get_resources(get_nasa_grace()) \%>\%
+  get_resources(get_nasa_grace(years = 2022)) \%>\%
   calc_indicators(
     calc_drought_indicator(
       engine = "extract",
