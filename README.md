@@ -17,7 +17,8 @@ version](https://www.r-pkg.org/badges/version/mapme.biodiversity)](https://CRAN.
 > \[!IMPORTANT\]  
 > `{mapme.biodiversity}` is currently experiencing major changes to its
 > user-interface and overall functionality. Please visit the
-> [announcement issue](https://github.com/mapme-initiative/mapme.biodiversity/issues/240)
+> [announcement
+> issue](https://github.com/mapme-initiative/mapme.biodiversity/issues/240)
 > to learn more about these changes.
 
 ## About
@@ -125,7 +126,7 @@ cat(sprintf(
     ## - gsw_transitions
     ## - landcover
     ## - mangroves_area
-    ## - population_count
+    ## - popcount
     ## - precipitation_chirps
     ## - precipitation_wc
     ## - soilproperties
@@ -148,32 +149,33 @@ portfolio, the data is returned as a nested list column to the original
 object.
 
 ``` r
+mapme_options(
+  outdir = system.file("res", package = "mapme.biodiversity"),
+  tmpdir = system.file("tmp", package = "mapme.biodiversity"),
+  verbose = FALSE
+)
+
 (system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
   sf::read_sf() %>%
-  init_portfolio(
-    years = 2016:2017,
-    outdir = system.file("res", package = "mapme.biodiversity"),
-    tmpdir = system.file("tmp", package = "mapme.biodiversity"),
-    verbose = FALSE
-  ) %>%
   get_resources(
-    resources = c("gfw_treecover", "gfw_lossyear", "gfw_emissions"),
-    vers_treecover = "GFC-2020-v1.8", vers_lossyear = "GFC-2020-v1.8"
+    get_gfw_treecover(version = "GFC-2020-v1.8"),
+    get_gfw_lossyear(version = "GFC-2020-v1.8"),
+    get_gfw_emissions()
   ) %>%
-  calc_indicators("treecover_area_and_emissions", min_size = 1, min_cover = 30) %>%
+  calc_indicators(calc_treecover_area_and_emissions(years = 2016:2017, min_size = 1, min_cover = 30)) %>%
   tidyr::unnest(treecover_area_and_emissions))
 ```
 
-    ## Simple feature collection with 2 features and 8 fields
+    ## Simple feature collection with 2 features and 7 fields
     ## Geometry type: POLYGON
     ## Dimension:     XY
     ## Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931
     ## Geodetic CRS:  WGS 84
-    ## # A tibble: 2 × 9
-    ##   WDPAID NAME            DESIG_ENG     ISO3  assetid years emissions treecover
-    ##    <dbl> <chr>           <chr>         <chr>   <int> <int>     <dbl>     <dbl>
-    ## 1 478140 Sierra de Neiba National Park DOM         1  2016      2400     2360.
-    ## 2 478140 Sierra de Neiba National Park DOM         1  2017      2839     2348.
+    ## # A tibble: 2 × 8
+    ##   WDPAID NAME            DESIG_ENG     ISO3  years emissions treecover
+    ##    <dbl> <chr>           <chr>         <chr> <int>     <dbl>     <dbl>
+    ## 1 478140 Sierra de Neiba National Park DOM    2016      2400     2360.
+    ## 2 478140 Sierra de Neiba National Park DOM    2017      2839     2348.
     ## # ℹ 1 more variable: geom <POLYGON [°]>
 
 ## A note on parallel computing
@@ -200,11 +202,12 @@ library(progressr)
 plan(multisession, workers = 6) # set up parallel plan
 
 with_progress({
-  portfolio <- calc_indicators(
-    portfolio,
-    "treecover_area_and_emissions",
-    min_size = 1,
-    min_cover = 30
+  aoi <- calc_indicators(
+    aoi,
+    calc_treecover_area_and_emissions(
+      min_size = 1,
+      min_cover = 30
+    )
   )
 })
 

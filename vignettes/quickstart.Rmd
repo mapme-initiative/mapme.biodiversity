@@ -82,7 +82,8 @@ the original boundary of the protected area.
 aoi_gridded <- st_make_grid(
   x = st_bbox(aoi),
   n = c(10, 10),
-  square = FALSE) %>%
+  square = FALSE
+) %>%
   st_intersection(aoi) %>%
   st_as_sf() %>%
   mutate(geom_type = st_geometry_type(x)) %>%
@@ -109,14 +110,12 @@ dir.create(outdir)
 resource_dir <- system.file("res", package = "mapme.biodiversity")
 file.copy(resource_dir, outdir, recursive = TRUE)
 
-sample_portfolio <- init_portfolio(
-  x = aoi_gridded,
-  years = 2010:2015,
+mapme_options(
   outdir = file.path(outdir, "res"),
   tmpdir = outdir,
   verbose = TRUE
 )
-plot(sample_portfolio["assetid"])
+plot(aoi_gridded)
 ```
 
 The first argument, `x`, is the sf-object that we want to turn into a portfolio.
@@ -195,7 +194,7 @@ The output of the function is the portfolio object with its attributes appended
 for the new resource, thus we simply can overwrite the `sample_portfolio` variable.
 
 ```{r get_esalandcover}
-sample_portfolio <- get_resources(x = sample_portfolio, resources = "worldpop")
+aoi_gridded <- get_resources(x = aoi_gridded, get_worldpop(years = 2010:2015))
 ```
 
 In case you want to download more than one resource, you can use the same interface
@@ -203,10 +202,10 @@ and the resources will be made available sequentially. Required arguments
 for a resource are simply added as usual:
 
 ```{r get_multi_resources, eval = FALSE}
-sample_portfolio <- get_resources(
-  x = sample_portfolio,
-  resources = c("worldpop", "gfw_treecover"),
-  vers_treecover = "GFC-2021-v1.9"
+aoi_gridded <- get_resources(
+  x = aoi_gridded,
+  get_worldpop(years = 2010:2015),
+  get_gfw_treecover(version = "GFC-2021-v1.8")
 )
 ```
 
@@ -222,15 +221,17 @@ command below would issue an error in case a required resource has not been made
 available via <code>get_resources()</code> beforehand.
 
 ```{r calc_indicator}
-sample_portfolio <- calc_indicators(sample_portfolio, indicators = "population_count",
-                                    stats_popcount = "sum", engine = "zonal")
+aoi_gridded <- calc_indicators(
+  aoi_gridded,
+  calc_popcount(engine = "zonal", stats = "sum")
+)
 ```
 
 Now let's take a look at the results. We will select only some of the metadata
 and the output indicator column to get a clearer picture of what has happened.
 
 ```{r select_cols}
-(sample_portfolio <- sample_portfolio %>% select(assetid, WDPAID, population_count))
+(aoi_gridded <- aoi_gridded %>% select(WDPAID, popcount))
 ```
 
 We obtained a new listed column in our sf object that is called like the requested
@@ -238,7 +239,7 @@ indicator. For each asset in our portfolio, this column contains a tibble with
 6 rows and two columns. Let's have a closer look at one of these objects.
 
 ```{r investigate_indicator}
-sample_portfolio$population_count[10]
+aoi_gridded$popcount[10]
 ```
 
 For each asset, the result is a tibble in long format indicating the population
@@ -246,16 +247,18 @@ sum per year (make sure to read the detailed indicator documentation via `?popul
 Let's quickly visualize the results for a single asset:
 
 ```{r plot_landcover, echo = FALSE}
-data <- sample_portfolio %>%
-  filter(assetid == 10) %>%
+data <- aoi_gridded %>%
+  filter(WDPAID == 478140) %>%
   st_drop_geometry() %>%
-  unnest(population_count)
+  unnest(popcount)
 
 pop <- data$popcount_sum
 names(pop) <- data$year
-barplot(pop, main = "Population totals over time", 
-        xlab = "Year", ylab = "Persons", 
-        col = "steelblue")
+barplot(pop,
+  main = "Population totals over time",
+  xlab = "Year", ylab = "Persons",
+  col = "steelblue"
+)
 ```
 
 If you wish to conduct your statistical analysis in R, you can use `{tidyr}` functionality
@@ -264,11 +267,10 @@ a good idea to keep the geometry information in a separated variable
 to keep the size of the data object relatively small.
 
 ```{r unnest}
-geometries <- select(sample_portfolio, assetid)
-sample_portfolio %>%
+geometries <- select(aoi_gridded, WDPAID)
+aoi_gridded %>%
   st_drop_geometry() %>%
-  tidyr::unnest(population_count) %>%
-  filter(assetid == 3)
+  tidyr::unnest(popcount)
 ```
 
 # Enabling parallel computing
@@ -293,11 +295,12 @@ library(progressr)
 plan(multisession, workers = 6) # set up parallel plan with 6 concurrent threads
 
 with_progress({
-  portfolio <- calc_indicators(
-    sample_portfolio,
-    indicators = "population_count",
-    stats_popcount = "sum", 
-    engine = "zonal"
+  aoi_gridded <- calc_indicators(
+    aoi_gridded,
+    calc_popcount(
+      engine = "zonal",
+      stats = "sum"
+    )
   )
 })
 
@@ -326,16 +329,16 @@ Thus if you wish to continue to use `{mapme.biodiversity}` functionality on
 such a portfolio object, make sure to re-run <code>init_portfolio()</code> 
 on it.
 
-```{r portfolio_io}
+```{r portfolio_io, eval=FALSE}
 tmp_output <- tempfile(fileext = ".gpkg")
 write_portfolio(
-  x = sample_portfolio,
+  x = aoi_gridded,
   dsn = tmp_output
 )
 (portfolio_from_disk <- read_portfolio(tmp_output))
 ```
 
-```{r delete_tmp, echo=FALSE, include=FALSE}
+```{r delete_tmp, echo=FALSE, include=FALSE, eval=FALSE}
 file.remove(tmp_output)
 ```
 
