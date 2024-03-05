@@ -15,27 +15,27 @@ test_that(".get_ucdp_ged works", {
   outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
   tmpdir <- tempdir()
 
-  portfolio <- init_portfolio(aoi,
-    years = 2010,
+  mapme_options(
     outdir = outdir,
     tmpdir = tmpdir,
-    verbose = FALSE
+    verbose = FALSE,
+    testing = TRUE
   )
-  # Add testing attribute in order to skip downloads
-  attributes(portfolio)$testing <- TRUE
 
   expect_error(
-    .get_ucdp_ged(portfolio, version = "not-available"),
+    get_ucdp_ged(version = "not-available"),
     "Valid versions for UCDP GED: "
   )
 
+  guc <- get_ucdp_ged(version = "latest")
   expect_equal(
-    .get_ucdp_ged(portfolio, version = "latest"),
+    guc(aoi),
     "ged231-csv.gpkg"
   )
 
+  guc <- get_ucdp_ged(version = "21.1")
   expect_equal(
-    .get_ucdp_ged(portfolio, version = "21.1"),
+    guc(),
     "ged211-csv.gpkg"
   )
 
