@@ -16,33 +16,33 @@ test_that(".get_nasa_firms works", {
   outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
   tmpdir <- tempdir()
 
-  portfolio <- init_portfolio(aoi,
-    years = 2010,
+  mapme_options(
     outdir = outdir,
     tmpdir = tmpdir,
-    verbose = FALSE
-  )
-  # Add testing attribute in order to skip downloads
-  attributes(portfolio)$testing <- TRUE
-
-  expect_error(
-    .get_nasa_firms(portfolio, instrument = "VIIRS_NOAA"),
-    "The selected instrument VIIRS_NOAA is not available."
+    verbose = FALSE,
+    testing = TRUE
   )
 
   expect_error(
-    .get_nasa_firms(portfolio),
+    get_nasa_firms(years = 2010, instrument = "not-avl"),
+    "The selected instrument not-avl is not available."
+  )
+
+  gnf <- get_nasa_firms(years = 2010)
+  expect_error(
+    gnf(),
     "The target years do not intersect with the availability of nasa_firms"
   )
 
-  attributes(portfolio)$years <- 2012
+  gnf <- get_nasa_firms(years = 2012)
   expect_equal(
-    .get_nasa_firms(portfolio),
+    gnf(aoi),
     "VIIRS_2012.zip"
   )
 
+  gnf <- get_nasa_firms(years = 2012, instrument = "MODIS")
   expect_equal(
-    .get_nasa_firms(portfolio, instrument = "MODIS"),
+    gnf(aoi),
     "MODIS_2012.zip"
   )
 })

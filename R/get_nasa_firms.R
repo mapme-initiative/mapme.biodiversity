@@ -12,15 +12,11 @@
 #' - "MODIS"
 #' - "VIIRS"
 #'
-#' The following argument should be specified by users:
-#'
-#' \describe{
-#'   \item{instrument}{A character vector specifying
-#'   the data collection instrument.}
-#'   }
-#'
 #' @name nasa_firms
-#' @docType data
+#' @param years A numeric vector indicating the years for which to make the
+#'   resource available.
+#' @param instrument A character vector specifying the
+#'   data collection instrument.
 #' @keywords resource
 #' @format Active fire polygon available for years 2000 to 2021 (MODIS)
 #' and 2012-2021 (VIIRS)
@@ -28,26 +24,10 @@
 #' from NASA FIRMS. Available on-line https://earthdata.nasa.gov/firms.
 #' doi:10.5067/FIRMS/VIIRS/VNP14IMGT_NRT.002.
 #' @source \url{https://firms.modaps.eosdis.nasa.gov/download/}
-NULL
-
-
-#' Downloads FIRMS active fire Polygon
-#'
-#' @param x An sf object returned by init_portfolio
-#' @param instrument A character vector specifying the
-#'   data collection instrument.
-#' @param rundir A directory where intermediate files are written to.
-#' @param verbose Logical controlling verbosity.
-#' @importFrom utils unzip
-#' @keywords internal
 #' @include register.R
-#' @noRd
-.get_nasa_firms <- function(x,
-                            instrument = "VIIRS",
-                            rundir = tempdir(),
-                            verbose = TRUE) {
-  org_target_years <- attributes(x)$years
-
+#' @export
+get_nasa_firms <- function(years = 2012:2021,
+                           instrument = "VIIRS") {
   if (!any(instrument %in% c("MODIS", "VIIRS"))) {
     stop(
       paste(
@@ -58,58 +38,70 @@ NULL
     )
   }
 
-  filenames <- c()
-  for (sensor in instrument) {
-    if (sensor == "VIIRS") {
-      available_years <- c(2012:2021)
-      target_years <- .check_available_years(
-        org_target_years, available_years, "nasa_firms"
+  if (any(!years %in% 2000:2021)) {
+    warning("NASA FIRMS is only available for years between 2000 and 2021.")
+  }
+
+  function(x,
+           name = "nasa_firms",
+           type = "vector",
+           rundir = mapme_options()[["tmpdir"]],
+           outdir = mapme_options()[["outdir"]],
+           verbose = mapme_options()[["verbose"]],
+           testing = mapme_options()[["testing"]]) {
+    org_target_years <- years
+
+    filenames <- c()
+    for (sensor in instrument) {
+      if (sensor == "VIIRS") {
+        available_years <- c(2012:2021)
+        target_years <- check_available_years(
+          org_target_years, available_years, "nasa_firms"
+        )
+      } else {
+        available_years <- c(2000:2021)
+        target_years <- check_available_years(
+          org_target_years, available_years, "nasa_firms"
+        )
+      }
+
+      urls <- unlist(sapply(
+        target_years,
+        function(year) .get_firms_url(year, sensor)
+      ))
+      filename <- file.path(
+        outdir,
+        basename(paste0(sensor, "_", target_years, ".zip"))
       )
-    } else {
-      available_years <- c(2000:2021)
-      target_years <- .check_available_years(
-        org_target_years, available_years, "nasa_firms"
+      filenames <- c(filenames, filename)
+
+      if (testing) {
+        next()
+      }
+
+      # start download in a temporal directory within tmpdir
+      download_or_skip(urls, filename)
+      # unzip zip files
+      sapply(filename, function(zip) .unzip_firms(zip, outdir, sensor))
+      # remove unneeded files
+      unlink(
+        grep("*.gpkg$|*.zip$",
+          list.files(outdir, full.names = T),
+          value = T, invert = T
+        ),
+        recursive = T, force = T
       )
     }
-
-    urls <- unlist(sapply(
-      target_years,
-      function(year) .get_firms_url(year, sensor)
-    ))
-    filename <- file.path(
-      rundir,
-      basename(paste0(sensor, "_", target_years, ".zip"))
-    )
-    filenames <- c(filenames, filename)
-
-    if (attr(x, "testing")) {
-      next()
+    # return filenames if testing is activated
+    if (testing) {
+      return(basename(filenames))
     }
-
-    # start download in a temporal directory within tmpdir
-    aria_bin <- attributes(x)$aria_bin
-    .download_or_skip(urls, filename, verbose, aria_bin = aria_bin)
-
-    # unzip zip files
-    sapply(filename, function(zip) .unzip_firms(zip, rundir, sensor))
-    # remove unneeded files
-    unlink(
-      grep("*.gpkg$|*.zip$",
-        list.files(rundir, full.names = T),
-        value = T, invert = T
-      ),
-      recursive = T, force = T
+    # return paths to the gpkg for target years
+    grep(paste(org_target_years, collapse = "|"),
+      list.files(outdir, full.names = T, pattern = ".gpkg$"),
+      value = TRUE
     )
   }
-  # return filenames if testing is activated
-  if (attr(x, "testing")) {
-    return(basename(filenames))
-  }
-  # return paths to the gpkg for target years
-  grep(paste(org_target_years, collapse = "|"),
-    list.files(rundir, full.names = T, pattern = ".gpkg$"),
-    value = TRUE
-  )
 }
 
 
@@ -201,7 +193,5 @@ NULL
 register_resource(
   name = "nasa_firms",
   type = "vector",
-  source = "https://firms.modaps.eosdis.nasa.gov",
-  fun = .get_nasa_firms,
-  arguments <- list(instrument = "VIIRS")
+  source = "https://firms.modaps.eosdis.nasa.gov"
 )
