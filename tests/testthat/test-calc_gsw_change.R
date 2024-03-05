@@ -6,16 +6,9 @@ test_that("gsw change works", {
   )
 
   shp <- suppressWarnings(st_cast(shp, to = "POLYGON")[1, ])
-  tmpdir <- tempdir()
-  portfolio <- init_portfolio(
-    shp,
-    years = 2024,
-    tmpdir = tmpdir,
-    verbose = TRUE
-  )
-
+  gswc <- calc_gsw_change()
   expect_equal(
-    .calc_gsw_change(portfolio, NULL),
+    gswc(shp, NULL),
     NA
   )
 
@@ -23,7 +16,7 @@ test_that("gsw change works", {
     package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)
   gsw_change <- rast(gsw_change)
-  chg <- .calc_gsw_change(portfolio, gsw_change)
+  chg <- gswc(shp, gsw_change)
 
   expect_equal(
     chg$global_surface_water_change_mean,

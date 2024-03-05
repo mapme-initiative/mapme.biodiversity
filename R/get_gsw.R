@@ -4,6 +4,8 @@
 #' Joint Research Centre in the framework of the Copernicus Programme. It maps
 #' the location and temporal distribution of water surfaces at the global scale
 #' over the past 3.8 decades and provides statistics on their extent and change.
+#' It is provisioned as a global tiled raster resource available for all land
+#' areas. The reported data represent aggregated observations between 1984 - 2021.
 #'
 #' The change in water occurrence intensity between the two periods is derived
 #' from homologous pairs of months (i.e. same months containing valid
@@ -14,22 +16,40 @@
 #' where 0 represents surface water loss and 200 represents surface water gain.
 #'
 #' @name global_surface_water_change
-#' @docType data
+#' @param version A character vector indicating the version of the GSW data set
+#'   to make available.
 #' @keywords resource
-#' @format A global tiled raster resource available for all land areas. The
-#' reported data represent aggregated observations between 1984 -- 2021.
+#' @returns  A character of file paths.
 #' @references Pekel, JF., Cottam, A., Gorelick, N. et al. High-resolution
 #' mapping of global surface water and its long-term changes. Nature 540,
 #' 418–422 (2016). https://doi.org/10.1038/nature20584
 #' @source \url{https://global-surface-water.appspot.com/}
-NULL
+#' @include register.R
+#' @export
+get_global_surface_water_change <- function(version = "v1_4_2021") {
+  stopifnot(version %in% .gsv_versions)
 
+  function(x,
+           name = "global_surface_water_change",
+           type = "raster",
+           rundir = mapme_options()[["tmpdir"]],
+           outdir = mapme_options()[["outdir"]],
+           verbose = mapme_options()[["verbose"]],
+           testing = mapme_options()[["testing"]]) {
+    .get_gsw(x,
+      statistic = "change", version = version,
+      rundir = outdir, verbose = verbose
+    )
+  }
+}
 #' Global Surface Water Transitions
 #'
 #' The Global Surface Water dataset was developed by the European Commission's
 #' Joint Research Centre in the framework of the Copernicus Programme. It maps
 #' the location and temporal distribution of water surfaces at the global scale
 #' over the past 3.8 decades and provides statistics on their extent and change.
+#' It is provisioned as a global tiled raster resource available for all land
+#' areas. The reported data represent aggregated observations between 1984 - 2021.
 #'
 #' GSW transition data contains information about the type of surface water
 #' change for each pixel. The raster files have integer cell values between
@@ -49,15 +69,32 @@ NULL
 #' | 10    | Ephemeral Seasonal    |
 #'
 #' @name global_surface_water_transitions
-#' @docType data
+#' @param version A character vector indicating the version of the GSW data set
+#'   to make available.
 #' @keywords resource
-#' @format A global tiled raster resource available for all land areas. The
-#' reported data represent aggregated observations between 1984 -- 2021.
+#' @returns  A character of file paths.
 #' @references Pekel, JF., Cottam, A., Gorelick, N. et al. High-resolution
 #' mapping of global surface water and its long-term changes. Nature 540,
 #' 418–422 (2016). https://doi.org/10.1038/nature20584
 #' @source \url{https://global-surface-water.appspot.com/}
-NULL
+#' @include register.R
+#' @export
+get_global_surface_water_transitions <- function(version = "v1_4_2021") {
+  stopifnot(version %in% .gsv_versions)
+
+  function(x,
+           name = "global_surface_water_transitions",
+           type = "raster",
+           rundir = mapme_options()[["tmpdir"]],
+           outdir = mapme_options()[["outdir"]],
+           verbose = mapme_options()[["verbose"]],
+           testing = mapme_options()[["testing"]]) {
+    .get_gsw(x,
+      statistic = "transitions", version = version,
+      rundir = outdir, verbose = verbose
+    )
+  }
+}
 
 #' Global Surface Water Seasonality
 #'
@@ -65,21 +102,40 @@ NULL
 #' Joint Research Centre in the framework of the Copernicus Programme. It maps
 #' the location and temporal distribution of water surfaces at the global scale
 #' over the past 3.8 decades and provides statistics on their extent and change.
+#' It is provisioned as a global tiled raster resource available for all land
+#' areas. The reported data represent aggregated observations between 1984 - 2021.
 #'
 #' GSW seasonality describes the intra-annual distribution of surface water for
 #' each pixel. The raster files have integer cell values between \code{[0, 12]},
 #' indicating how many months per year the pixel was classified as water.
 #'
 #' @name global_surface_water_seasonality
-#' @docType data
+#' @param version A character vector indicating the version of the GSW data set
+#'   to make available.
 #' @keywords resource
-#' @format A global tiled raster resource available for all land areas. The
-#' reported data represent aggregated observations between 1984 -- 2021.
+#' @returns  A character of file paths.
 #' @references Pekel, JF., Cottam, A., Gorelick, N. et al. High-resolution
 #' mapping of global surface water and its long-term changes. Nature 540,
 #' 418–422 (2016). https://doi.org/10.1038/nature20584
 #' @source \url{https://global-surface-water.appspot.com/}
-NULL
+#' @include register.R
+#' @export
+get_global_surface_water_seasonality <- function(version = "v1_4_2021") {
+  stopifnot(version %in% .gsv_versions)
+
+  function(x,
+           name = "global_surface_water_seasonality",
+           type = "raster",
+           rundir = mapme_options()[["tmpdir"]],
+           outdir = mapme_options()[["outdir"]],
+           verbose = mapme_options()[["verbose"]],
+           testing = mapme_options()[["testing"]]) {
+    .get_gsw(x,
+      statistic = "seasonality", version = version,
+      rundir = outdir, verbose = verbose
+    )
+  }
+}
 
 #' Global Surface Water Recurrence
 #'
@@ -87,6 +143,8 @@ NULL
 #' Joint Research Centre in the framework of the Copernicus Programme. It maps
 #' the location and temporal distribution of water surfaces at the global scale
 #' over the past 3.8 decades and provides statistics on their extent and change.
+#' It is provisioned as a global tiled raster resource available for all land
+#' areas. The reported data represent aggregated observations between 1984 - 2021.
 #'
 #' Water Recurrence is a measurement of the degree of variability in the
 #' presence of water from year to year. It describes the frequency with which
@@ -96,15 +154,32 @@ NULL
 #' year, whereas lower values indicate that water only occurs episodically.
 #'
 #' @name global_surface_water_recurrence
-#' @docType data
+#' @param version A character vector indicating the version of the GSW data set
+#'   to make available.
 #' @keywords resource
-#' @format A global tiled raster resource available for all land areas. The
-#' reported data represent aggregated observations between 1984 -- 2021.
+#' @returns  A character of file paths.
 #' @references Pekel, JF., Cottam, A., Gorelick, N. et al. High-resolution
 #' mapping of global surface water and its long-term changes. Nature 540,
 #' 418–422 (2016). https://doi.org/10.1038/nature20584
 #' @source \url{https://global-surface-water.appspot.com/}
-NULL
+#' @include register.R
+#' @export
+get_global_surface_water_recurrence <- function(version = "v1_4_2021") {
+  stopifnot(version %in% .gsv_versions)
+
+  function(x,
+           name = "global_surface_water_recurrence",
+           type = "raster",
+           rundir = mapme_options()[["tmpdir"]],
+           outdir = mapme_options()[["outdir"]],
+           verbose = mapme_options()[["verbose"]],
+           testing = mapme_options()[["testing"]]) {
+    .get_gsw(x,
+      statistic = "recurrence", version = version,
+      rundir = outdir, verbose = verbose
+    )
+  }
+}
 
 #' Global Surface Water Occurrence
 #'
@@ -112,6 +187,8 @@ NULL
 #' Joint Research Centre in the framework of the Copernicus Programme. It maps
 #' the location and temporal distribution of water surfaces at the global scale
 #' over the past 3.8 decades and provides statistics on their extent and change.
+#' It is provisioned as a global tiled raster resource available for all land
+#' areas. The reported data represent aggregated observations between 1984 - 2021.
 #'
 #' GSW occurrence raw data comes in raster files with integer cell values
 #' between \code{[0, 100]}. This value gives the percentage of the time that a
@@ -120,47 +197,63 @@ NULL
 #' with permanent water.
 #'
 #' @name global_surface_water_occurrence
-#' @docType data
+#' @param version A character vector indicating the version of the GSW data set
+#'   to make available.
 #' @keywords resource
-#' @format A global tiled raster resource available for all land areas. The
-#' reported data represent aggregated observations between 1984 -- 2021.
+#' @returns  A character of file paths.
 #' @references Pekel, JF., Cottam, A., Gorelick, N. et al. High-resolution
 #' mapping of global surface water and its long-term changes. Nature 540,
 #' 418–422 (2016). https://doi.org/10.1038/nature20584
 #' @source \url{https://global-surface-water.appspot.com/}
-NULL
+#' @include register.R
+#' @export
+get_global_surface_water_occurrence <- function(version = "v1_4_2021") {
+  stopifnot(version %in% .gsv_versions)
 
-.get_gsw <- function(x, statistic = "occurrence", vers_gsw = "v1_4_2021",
+  function(x,
+           name = "global_surface_water_occurrence",
+           type = "raster",
+           rundir = mapme_options()[["tmpdir"]],
+           outdir = mapme_options()[["outdir"]],
+           verbose = mapme_options()[["verbose"]],
+           testing = mapme_options()[["testing"]]) {
+    .get_gsw(x,
+      statistic = "occurrence", version = version,
+      rundir = outdir, verbose = verbose
+    )
+  }
+}
+
+.get_gsw <- function(x, statistic = "occurrence", version = "v1_4_2021",
                      rundir = tempdir(), verbose = TRUE) {
-  stopifnot(statistic %in% .gsw_statistics,
-            vers_gsw %in% .gsv_versions)
+  stopifnot(
+    statistic %in% .gsw_statistics,
+    version %in% .gsv_versions
+  )
 
   # make the gsw grid and construct urls for intersecting tiles
   baseurl <- sprintf(
     "https://storage.googleapis.com/global-surface-water/downloads2021/%s/%s",
     statistic, statistic
   )
-  grid_gfc <- .make_global_grid(
+  grid_gfc <- make_global_grid(
     xmin = -180, xmax = 170, dx = 10,
     ymin = -50, ymax = 80, dy = 10
   )
   tile_ids <- unique(unlist(st_intersects(x, grid_gfc)))
   if (length(tile_ids) == 0) {
     stop("The extent of the portfolio does not intersect with the GSW grid.",
-         call. = FALSE
+      call. = FALSE
     )
   }
   ids <- sapply(tile_ids, function(n) .get_gsw_tile_id(grid_gfc[n, ]))
   urls <- sprintf(
     "%s_%s%s.tif",
-    baseurl, ids, vers_gsw
+    baseurl, ids, version
   )
   filenames <- file.path(rundir, basename(urls))
   # start download and skip files that exist
-  # TODO: parallel downloads
-  aria_bin <- attributes(x)$aria_bin
-  .download_or_skip(urls, filenames, verbose, check_existence = FALSE,
-                    aria_bin = aria_bin)
+  download_or_skip(urls, filenames, check_existence = FALSE)
   # return all paths to the downloaded files
   filenames
 }
@@ -202,11 +295,6 @@ for (gsw_statistic in .gsw_statistics) {
   register_resource(
     name = resource_name,
     type = "raster",
-    source = "https://global-surface-water.appspot.com/download",
-    fun = .get_gsw,
-    arguments = list(
-      statistic = gsw_statistic,
-      vers_gsw = "v1_4_2021"
-    )
+    source = "https://global-surface-water.appspot.com/download"
   )
 }

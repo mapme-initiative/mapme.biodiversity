@@ -6,16 +6,9 @@ test_that("gsw seasonality works", {
   )
 
   shp <- suppressWarnings(st_cast(shp, to = "POLYGON")[1, ])
-  tmpdir <- tempdir()
-  portfolio <- init_portfolio(
-    shp,
-    years = 2024,
-    tmpdir =  tmpdir,
-    verbose = TRUE
-  )
-
+  gsws <- calc_gsw_seasonality()
   expect_equal(
-    .calc_gsw_seasonality(portfolio, NULL),
+    gsws(shp, NULL),
     NA
   )
 
@@ -23,7 +16,7 @@ test_that("gsw seasonality works", {
     package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)
   gsw_seasonality <- rast(gsw_seasonality)
-  season <- .calc_gsw_seasonality(portfolio, gsw_seasonality)
+  season <- gsws(shp, gsw_seasonality)
 
   expect_equal(
     season$global_surface_water_seasonality_mean,

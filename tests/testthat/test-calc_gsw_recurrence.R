@@ -6,16 +6,9 @@ test_that("gsw recurrence works", {
   )
 
   shp <- suppressWarnings(st_cast(shp, to = "POLYGON")[1, ])
-  tmpdir <- tempdir()
-  portfolio <- init_portfolio(
-    shp,
-    years = 2024,
-    tmpdir = tmpdir,
-    verbose = TRUE
-  )
-
+  gswr <- calc_gsw_recurrence()
   expect_equal(
-    .calc_gsw_recurrence(portfolio, NULL),
+    gswr(shp, NULL),
     NA
   )
 
@@ -23,7 +16,7 @@ test_that("gsw recurrence works", {
     package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)
   gsw_recurrence <- rast(gsw_recurrence)
-  rec <- .calc_gsw_recurrence(portfolio, gsw_recurrence)
+  rec <- gswr(shp, gsw_recurrence)
 
   expect_equal(
     rec$global_surface_water_recurrence_mean,
@@ -31,4 +24,3 @@ test_that("gsw recurrence works", {
     tolerance = 1e-4
   )
 })
-
