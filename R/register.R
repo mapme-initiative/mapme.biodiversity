@@ -13,6 +13,81 @@
   invisible()
 }
 
+#' Options for mapme.biodiversity
+#'
+#' Sets default options for mapme.biodiversity to control the behavior of
+#' downstream functions.
+#' Mainly, the output path as well as the temporal directory for intermediate
+#' files can be set. Additionally, the verbosity can be set. The testing options
+#' should not be set by users, as it controls the behavior of the package during
+#' automated test pipelines. Might be extended by other options in the future.
+#'
+#' @param ... ignored
+#' @param outdir A length one character indicating the output path.
+#' @param tempdir A length one character indicating the path to be used
+#'   for temporary files.
+#' @param aria_bin A character vector to an aria2c executable for parallel
+#'  downloads.
+#' @param verbose A logical, indicating if informative messages should be printed.
+#' @param testing A logical. Not to be set by users. Controls the behavior
+#'   during automated test pipelines.
+#' @return A list of options if no arguments are specified. Otherwise sets
+#'   matching arguments to new values in the package's internal environment.
+#' @export
+#'
+#' @examples
+#' library(mapme.biodiversity)
+#' mapme_options()
+mapme_options <- function(..., outdir, tempdir, verbose, aria_bin, testing) {
+  if (!missing(outdir)) {
+    stopifnot(is.character(outdir) && length(outdir) == 1)
+    .pkgenv$outdir <- outdir
+  }
+
+  if (!missing(tempdir)) {
+    stopifnot(is.character(tempdir) && length(tempdir) == 1)
+    if (!dir.exists(tempdir)) {
+      stop("tempdir must point to an existing directory")
+    }
+    .pkgenv$tempdir <- tempdir
+  }
+
+  if (!missing(verbose)) {
+    stopifnot(is.logical(verbose))
+    .pkgenv$verbose <- verbose
+  }
+
+  if (!missing(aria_bin)) {
+    .pkgenv$aria_bin <- .check_aria2(aria_bin)
+  }
+
+  if (!missing(testing)) {
+    stopifnot(is.logical(testing))
+    .pkgenv$testing <- testing
+  }
+
+  if (nargs() == 0) {
+    return(list(
+      outdir = .pkgenv$outdir,
+      tempdir = .pkgenv$tempdir,
+      verbose = .pkgenv$verbose,
+      aria_bin = .pkgenv$aria_bin,
+      testing = .pkgenv$testing
+    ))
+  }
+}
+
+.check_aria2 <- function(aria_bin) {
+  aria_output <- try(system2(aria_bin, args = "--version", stdout = TRUE, stderr = FALSE), silent = TRUE)
+  if (inherits(aria_output, "try-error") | !grepl("aria2 version", aria_output[1])) {
+    warning(paste(
+      "Argument 'aria_bin' does not point to a executable aria2 installation.",
+      "The package will use R internal download utility."
+    ))
+    aria_bin <- NULL
+  }
+  return(aria_bin)
+}
 
 #' Portfolio methods for mapme.biodiversity
 #'
@@ -103,7 +178,7 @@ mapme_options <- function(..., outdir, verbose, aria_bin, testing) {
 #' @param source Optional, preferably a URL where the data is found.
 #' @param type A character vector indicating the type of the resource. Either
 #'   'vector' or 'raster'.
-
+#' @param source Optional, preferably a URL where the data is found.
 #'
 #' @return `register_resource()` is called for the side-effect of registering a resource.
 #' @name resources

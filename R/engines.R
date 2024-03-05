@@ -113,6 +113,9 @@ select_engine <- function(x,
   result
 }
 
+available_stats <- c("mean", "median", "sd", "min", "max", "sum", "var")
+available_engines <- c("zonal", "extract", "exactextract")
+
 .engine_zonal <- function(x, raster, stats, name = NULL) {
   results <- purrr::map_dfc(stats, function(stat) {
     out <- terra::zonal(

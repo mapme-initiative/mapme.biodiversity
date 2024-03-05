@@ -22,6 +22,7 @@
   x$assetid <- 1:nrow(x)
   x
 }
+
 #' Writing a portfolio to disk
 #'
 #' `write_portfolio()` writes a processed biodiversity portfolio to disk.
