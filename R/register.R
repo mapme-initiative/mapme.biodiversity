@@ -2,7 +2,94 @@
 
 .pkgenv$resources <- list()
 .pkgenv$indicators <- list()
+.pkgenv$avail_resources <- list()
 
+.onLoad <- function(libname, pkgname) {
+  .pkgenv$tempdir <- tempdir()
+  .pkgenv$outdir <- tempfile()
+  dir.create(.pkgenv$outdir, showWarnings = FALSE)
+  .pkgenv$verbose <- TRUE
+  .pkgenv$aria_bin <- NULL
+  .pkgenv$testing <- FALSE
+  invisible()
+}
+
+
+#' Options for mapme.biodiversity
+#'
+#' Sets default options for mapme.biodiversity to control the behavior of
+#' downstream functions.
+#' Mainly, the output path as well as the temporal directory for intermediate
+#' files can be set. Additionally, the verbosity can be set. The testing options
+#' should not be set by users, as it controls the behavior of the package during
+#' automated test pipelines. Might be extended by other options in the future.
+#'
+#' @param ... ignored
+#' @param outdir A length one character indicating the output path.
+#' @param tempdir A length one character indicating the path to be used
+#'   for temporary files.
+#' @param aria_bin A character vector to an aria2c executable for parallel
+#'  downloads.
+#' @param verbose A logical, indicating if informative messages should be printed.
+#' @param testing A logical. Not to be set by users. Controls the behavior
+#'   during automated test pipelines.
+#' @return A list of options if no arguments are specified. Otherwise sets
+#'   matching arguments to new values in the package's internal environment.
+#' @export
+#'
+#' @examples
+#' library(mapme.biodiversity)
+#' mapme_options()
+mapme_options <- function(..., outdir, tempdir, verbose, aria_bin, testing) {
+  if (!missing(outdir)) {
+    stopifnot(is.character(outdir) && length(outdir) == 1)
+    .pkgenv$outdir <- outdir
+  }
+
+  if (!missing(tempdir)) {
+    stopifnot(is.character(tempdir) && length(tempdir) == 1)
+    if (!dir.exists(tempdir)) {
+      stop("tempdir must point to an existing directory")
+    }
+    .pkgenv$tempdir <- tempdir
+  }
+
+  if (!missing(verbose)) {
+    stopifnot(is.logical(verbose))
+    .pkgenv$verbose <- verbose
+  }
+
+  if (!missing(aria_bin)) {
+    .pkgenv$aria_bin <- .check_aria2(aria_bin)
+  }
+
+  if (!missing(testing)) {
+    stopifnot(is.logical(testing))
+    .pkgenv$testing <- testing
+  }
+
+  if (nargs() == 0) {
+    return(list(
+      outdir = .pkgenv$outdir,
+      tempdir = .pkgenv$tempdir,
+      verbose = .pkgenv$verbose,
+      aria_bin = .pkgenv$aria_bin,
+      testing = .pkgenv$testing
+    ))
+  }
+}
+
+.check_aria2 <- function(aria_bin) {
+  aria_output <- try(system2(aria_bin, args = "--version", stdout = TRUE, stderr = FALSE), silent = TRUE)
+  if (inherits(aria_output, "try-error") | !grepl("aria2 version", aria_output[1])) {
+    warning(paste(
+      "Argument 'aria_bin' does not point to a executable aria2 installation.",
+      "The package will use R internal download utility."
+    ))
+    aria_bin <- NULL
+  }
+  return(aria_bin)
+}
 
 #' Register a new resource to the mapme.biodiversity
 #'
@@ -19,9 +106,6 @@
 #' @param type A character vector indicating the type of the resource. Either
 #'   'vector' or 'raster'.
 #' @param source Optional, preferably a URL where the data is found.
-#' @param fun The function you wish to register.
-#' @param arguments A list with named entries indicating the default values
-#'   for the arguments required by the function
 #'
 #' @return Nothing. Registers the function in the package environment.
 #' @export
@@ -31,14 +115,12 @@
 #' register_resource(
 #'   name = "gfw_treecover",
 #'   type = "raster",
-#'   source = "https://data.globalforestwatch.org/documents/tree-cover-2000/explore",
-#'   fun = .get_gfw_treecover,
-#'   arguments = list(vears_treecover = "GFC-2021-v1.9")
+#'   source = "https://data.globalforestwatch.org/documents/tree-cover-2000/explore"
 #' )
 #' }
-register_resource <- function(name = NULL, type = NULL, source = NULL, fun = NULL, arguments = list()) {
-  if (any(is.null(name), is.null(type), is.null(fun), is.null(arguments))) {
-    stop("neither name, type, fun or arguments can be NULL")
+register_resource <- function(name = NULL, type = NULL, source = NULL) {
+  if (any(is.null(name), is.null(type), is.null(source))) {
+    stop("neither name, type, or source can be NULL")
   }
 
   if (!inherits(name, "character") || length(name) > 1 || nchar(name) == 0) {
@@ -57,30 +139,8 @@ register_resource <- function(name = NULL, type = NULL, source = NULL, fun = NUL
     stop("source needs to be a single charachter string")
   }
 
-  if (!inherits(fun, "function")) {
-    stop("fun needs to be a valid function signature")
-  }
-
-  if (!inherits(arguments, "list")) {
-    stop(paste(
-      "arguments needs to be a list. Specify an empty list if your",
-      "function does not have any arguments"
-    ))
-  }
-
-
-  resource <- list(
-    list(
-      type = type,
-      source = source,
-      fun = match.fun(fun),
-      arguments = arguments
-    )
-  )
-
-
+  resource <- list(list(type = type, source = source))
   names(resource) <- name
-
   .pkgenv$resources <- append(.pkgenv$resources, resource)
 }
 
@@ -102,11 +162,6 @@ register_resource <- function(name = NULL, type = NULL, source = NULL, fun = NUL
 #'   that need to be available to calculate the indicator. The names correspond
 #'   to registered resources and a single character value indicates the
 #'   type of that resources
-#' @param fun The function you wish to register.
-#' @param arguments A list with named entries indicating the default values
-#'   for the arguments required by the function
-#' @param processing_mode A character vector indicating the preferred
-#'   processing mode of the indicator. Either 'asset' or 'portfolio'.
 #'
 #' @return Nothing. Registers the function in the package environment.
 #' @export
@@ -115,48 +170,21 @@ register_resource <- function(name = NULL, type = NULL, source = NULL, fun = NUL
 #' \dontrun{
 #' register_indicator(
 #'   name = "treecover_area",
-#'   inputs = list(
+#'   resources = list(
 #'     gfw_treecover = "raster",
 #'     gfw_lossyear = "raster"
-#'   ),
-#'   fun = .calc_treecover_area,
-#'   arguments = list(
-#'     min_size = 10,
-#'     min_cover = 30
-#'   ),
-#'   processing_mode = "asset"
+#'   )
 #' )
 #' }
-register_indicator <- function(name = NULL, resources = NULL, fun = NULL,
-                               arguments = NULL, processing_mode = NULL) {
-  if (any(
-    is.null(name), is.null(resources), is.null(fun), is.null(arguments),
-    is.null(processing_mode)
-  )) {
-    stop("neither name, resources, fun, arguments, or processing_mode can be NULL")
+register_indicator <- function(name = NULL, resources = NULL) {
+  if (any(is.null(name), is.null(resources))) {
+    stop("neither name nor resources can be NULL")
   }
-
   if (!inherits(name, "character") || length(name) > 1 || nchar(name) == 0) {
     stop("name needs to be a single charachter string")
   }
-
   if (name %in% names(.pkgenv$indicators)) {
     warning(paste("indicator with name", name, "already registered"))
-  }
-
-  if (!inherits(fun, "function")) {
-    stop("fun needs to be a valid function signature")
-  }
-
-  if (!inherits(arguments, "list")) {
-    stop(paste(
-      "arguments needs to be a list. Specify an empty list if your",
-      "function does not have any arguments"
-    ))
-  }
-
-  if (!processing_mode %in% c("asset", "portfolio")) {
-    stop("processing_mode needs to be one of 'asset' or 'portfolio'")
   }
 
   if (!inherits(resources, "list")) {
@@ -165,8 +193,8 @@ register_indicator <- function(name = NULL, resources = NULL, fun = NULL,
       "and their types"
     ))
   }
-
   check_resources <- sapply(resources, function(x) x %in% c("vector", "raster"))
+
   if (any(!check_resources)) {
     wrong_types <- names(check_resources)[!check_resources]
     stop(paste(
@@ -175,17 +203,8 @@ register_indicator <- function(name = NULL, resources = NULL, fun = NULL,
     ))
   }
 
-  indicator <- list(
-    list(
-      resources = resources,
-      fun = match.fun(fun),
-      arguments = arguments,
-      processing_mode = processing_mode
-    )
-  )
-
+  indicator <- list(list(resources = resources))
   names(indicator) <- name
-
   .pkgenv$indicators <- append(.pkgenv$indicators, indicator)
 }
 
@@ -214,7 +233,15 @@ available_resources <- function(resources = NULL) {
   if (is.null(resources)) {
     return(all_resources[order(names(all_resources))])
   } else {
-    .check_requested_resources(resources)
+    if (any(!resources %in% names(all_resources))) {
+      not_avail <- which(!resources %in% names(all_resources))
+      not_avail <- resources[not_avail]
+      msg <- sprintf(
+        "The following resources are not available:\n%s",
+        paste(not_avail, collpase = ", ")
+      )
+      stop(msg)
+    }
     all_resources[resources]
   }
 }
@@ -244,7 +271,35 @@ available_indicators <- function(indicators = NULL) {
   if (is.null(indicators)) {
     return(all_indicators[order(names(all_indicators))])
   } else {
-    .check_requested_indicator(indicators)
+    if (any(!indicators %in% names(all_indicators))) {
+      not_avail <- which(!indicators %in% names(all_indicators))
+      not_avail <- indicators[not_avail]
+      msg <- sprintf(
+        "The following indicators are not available:\n%s",
+        paste(not_avail, collpase = ", ")
+      )
+      stop(msg)
+    }
     all_indicators[indicators]
   }
+}
+
+
+.add_resource <- function(resource) {
+  stopifnot(inherits(resource, "list"))
+  stopifnot(!is.null(names(resource)))
+  if (length(.pkgenv$avail_resources) == 0) {
+    .pkgenv$avail_resources <- resource
+  } else {
+    name <- names(resource)
+    .pkgenv$avail_resources[name] <- resource
+  }
+}
+
+.avail_resources <- function(name) {
+  return(.pkgenv$avail_resources)
+}
+
+.clear_resources <- function() {
+  .pkgenv$avail_resources <- list()
 }

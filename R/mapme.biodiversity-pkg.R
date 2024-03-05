@@ -11,3 +11,14 @@
 #' @keywords internal
 globalVariables(c(":=", "!!", ".id", "."))
 NULL
+
+
+.copy_resource_dir <- function(target) {
+  if (!dir.exists(target)) {
+    dir.create(target, showWarnings = FALSE)
+    resource_dir <- system.file("res", package = "mapme.biodiversity")
+    for (dir in list.dirs(resource_dir)) {
+      file.copy(dir, target, recursive = TRUE)
+    }
+  }
+}

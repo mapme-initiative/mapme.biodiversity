@@ -4,20 +4,13 @@
 \alias{calc_indicators}
 \title{Compute specific indicators}
 \usage{
-calc_indicators(x, indicators, ...)
+calc_indicators(x, ...)
 }
 \arguments{
-\item{x}{A biodiversity portfolio object constructed via
-\code{init_portfolio()}}
+\item{x}{An sf portfolio object.}
 
-\item{indicators}{A character vector indicating the requested indicators. All
-specified indicators must be supported by the package. You can use
-\code{available_indicators()} to get more information, e.g. additional
-required arguments and their default values, about the supported indicators}
-
-\item{...}{Additional arguments required for the requested indicators. Check
-\code{available_indicators()} to learn more about the supported indicators
-and their arguments.}
+\item{...}{One or more \verb{calc_*()} functions to calculate indicators for which
+the required resources were previously made available via \code{get_resources()}.}
 }
 \value{
 The sf portfolio object \code{x} with additional nested list column per

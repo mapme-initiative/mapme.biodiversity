@@ -4,13 +4,7 @@
 \alias{register_indicator}
 \title{Register a new indicator to mapme.biodiversity}
 \usage{
-register_indicator(
-  name = NULL,
-  resources = NULL,
-  fun = NULL,
-  arguments = NULL,
-  processing_mode = NULL
-)
+register_indicator(name = NULL, resources = NULL)
 }
 \arguments{
 \item{name}{A character vector indicating the name of the indicator.}
@@ -19,14 +13,6 @@ register_indicator(
 that need to be available to calculate the indicator. The names correspond
 to registered resources and a single character value indicates the
 type of that resources}
-
-\item{fun}{The function you wish to register.}
-
-\item{arguments}{A list with named entries indicating the default values
-for the arguments required by the function}
-
-\item{processing_mode}{A character vector indicating the preferred
-processing mode of the indicator. Either 'asset' or 'portfolio'.}
 }
 \value{
 Nothing. Registers the function in the package environment.
@@ -46,16 +32,10 @@ will have to re-register your custom indicator.
 \dontrun{
 register_indicator(
   name = "treecover_area",
-  inputs = list(
+  resources = list(
     gfw_treecover = "raster",
     gfw_lossyear = "raster"
-  ),
-  fun = .calc_treecover_area,
-  arguments = list(
-    min_size = 10,
-    min_cover = 30
-  ),
-  processing_mode = "asset"
+  )
 )
 }
 }

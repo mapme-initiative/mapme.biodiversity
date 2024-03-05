@@ -1,3 +1,4 @@
+.ind_defaults <- c("x", "name", "mode", "rundir", "verbose")
 #' Compute specific indicators
 #'
 #' With \code{calc_indicators()} specific biodiversity indicators
@@ -7,96 +8,126 @@
 #' arguments can be supplied. You can check available indicators and
 #' their requirement via \code{available_indicators()}, but
 #' the function will also gracefully inform you about any misspecifications.
-#' @param x A biodiversity portfolio object constructed via
-#'   \code{init_portfolio()}
-#' @param indicators A character vector indicating the requested indicators. All
-#'   specified indicators must be supported by the package. You can use
-#'   \code{available_indicators()} to get more information, e.g. additional
-#'   required arguments and their default values, about the supported indicators
-#' @param ... Additional arguments required for the requested indicators. Check
-#'  \code{available_indicators()} to learn more about the supported indicators
-#'  and their arguments.
+#' @param x An sf portfolio object.
+#' @param ... One or more `calc_*()` functions to calculate indicators for which
+#'   the required resources were previously made available via `get_resources()`.
 #' @return The sf portfolio object \code{x} with additional nested list column per
 #'   requested indicator.
 #' @keywords function
 #' @export
-calc_indicators <- function(x, indicators, ...) {
-  # check if the requested resource is supported
-  req_resources <- .check_requested_indicator(indicators)
-  # check if any of the requested resources is already locally available
-  existing_resources <- names(attributes(x)[["resources"]])
-  .check_existing_resources(
-    existing_resources, req_resources,
-    needed = TRUE
-  )
-  for (indicator in indicators) x <- .get_single_indicator(x, indicator, ...)
+calc_indicators <- function(x, ...) {
+  force(x)
+  funs <- list(...)
+  funs <- purrr::map(funs, function(fun) .check_indicator_fun(fun))
+  req_resources <- purrr::map(funs, function(fun) .get_req_resources(fun))
+  .check_avail_resources(names(.avail_resources()), unique(unlist(req_resources)))
+  for (fun in funs) x <- .get_single_indicator(x, fun)
   x
 }
 
+.check_indicator_fun <- function(fun) {
+  if (!inherits(fun, "function")) {
+    stop("calc_indicators() expects you to supply one or more indicator functions.")
+  }
+  args <- names(formals(fun))
+  if (any(!.ind_defaults %in% args)) {
+    msg <- paste(
+      "Indicator functions are required to have the following default arguments:\n",
+      paste(.ind_defaults, sep = "", collapse = ", ")
+    )
+    stop(msg)
+  }
+  invisible(fun)
+}
 
-#' Calculation of an indicator
-#'
-#' This functions let's users calculate on or more biodiversity indicators for
-#'   a portfolio.
-#' @param x A sf object returned by init_portfolio().
-#' @param indicator A variable length character vector with the indicators to
-#'   calculate.
-#' @param ... Additional arguments required by the requested indicators.
-#'
-#' @keywords internal
-#' @noRd
-#' @importFrom dplyr relocate last_col
-#' @importFrom tidyr nest
-.get_single_indicator <- function(x, indicator, ...) {
-  i <- NULL
-  # get arguments from function call and portfolio object
-  args <- list(...)
-  atts <- attributes(x)
+.get_req_resources <- function(fun) {
+  if (!inherits(fun, "function")) {
+    stop("calc_indicators() expects you to supply one or more indicator functions.")
+  }
+  args <- names(formals(fun))
+  req_resources <- setdiff(args, .ind_defaults)
+  if (length(req_resources) == 0) {
+    stop("The indicator functions lacks required resources.")
+  }
+  req_resources
+}
 
-  # retrieve the selected indicator
-  selected_indicator <- available_indicators(indicator)
-  # get processing mode
-  processing_mode <- selected_indicator[[indicator]][["processing_mode"]]
-  # matching the specified arguments to the required arguments
-  params <- .check_resource_arguments(selected_indicator, args)
-  # append parameters
-  params[["verbose"]] <- atts[["verbose"]]
-  fun <- selected_indicator[[indicator]][["fun"]]
-  avail_resources <- atts[["resources"]]
-  req_resources <- selected_indicator[[indicator]][["resources"]]
+.check_avail_resources <- function(avail_resources, req_resources) {
+  if (any(!req_resources %in% avail_resources)) {
+    not_avail <- req_resources[which(!req_resources %in% avail_resources)]
+    msg <- sprintf(
+      "The following requested %s not available: %s.",
+      ifelse(length(not_avail) == 1, "resource is", "resources are"),
+      paste(not_avail, collapse = ", ")
+    )
+    stop(msg)
+  }
+}
 
-  processor <- switch(processing_mode,
+.get_single_indicator <- function(x = NULL,
+                                  fun = NULL,
+                                  opts = mapme_options()) {
+  args <- formals(fun)
+  indicator_name <- args[["name"]]
+  processor <- switch(args[["mode"]],
     asset = .asset_processor,
     portfolio = .portfolio_processor,
-    stop(sprintf("Processing mode '%s' is not supported.", processing_mode))
+    stop("Processing mode not supported.")
   )
-
-  results <- processor(x, fun, avail_resources, req_resources, params)
-  # bind the asset results
-  results <- .bind_assets(results)
-  # nest the results
-  results <- nest(results, !!indicator := !.id)
-  # attach results
-  x[indicator] <- results[indicator]
-  # sent sf column to back and return
-  x <- relocate(x, !!attributes(x)[["sf_column"]], .after = last_col())
+  results <- processor(
+    x, fun, .avail_resources(), .get_req_resources(fun),
+    opts[["tempdir"]], opts[["verbose"]]
+  )
+  x <- .merge_results(x, results, indicator_name)
   x
 }
 
+.asset_processor <- function(x,
+                             fun,
+                             avail_resources,
+                             req_resources,
+                             rundir,
+                             verbose) {
+  p <- progressr::progressor(steps = nrow(x))
+  furrr::future_map(1:nrow(x), function(i) {
+    p()
+    resources <- .prep_resources(x[i, ], avail_resources, req_resources)
+    result <- .compute(x[i, ], resources, fun, rundir, verbose)
+    .check_single_asset(result, i)
+  }, .options = furrr::furrr_options(seed = TRUE))
+}
 
+.portfolio_processor <- function(x,
+                                 fun,
+                                 avail_resources,
+                                 req_resources,
+                                 rundir,
+                                 verbose) {
+  resources <- .prep_resources(x, avail_resources, req_resources)
+  results <- .compute(x, resources, fun, rundir, verbose)
+  if (!inherits(results, "list")) {
+    stop("Expected output for processing mode 'portfolio' is a list.")
+  }
+  results <- purrr::imap(results, function(r, i) .check_single_asset(r, i))
+  results
+}
 
 .prep_resources <- function(x, avail_resources, req_resources) {
-  if (any(!names(req_resources) %in% names(avail_resources))) {
+  if (any(!req_resources %in% names(avail_resources))) {
     stop("Some required resources are not available.")
   }
-  purrr::imap(req_resources, function(resource_type, resource_name) {
+  out <- purrr::map(req_resources, function(resource_name) {
+    resource <- avail_resources[[resource_name]]
+    resource_type <- ifelse(inherits(resource, "sf"), "raster", "vector")
     reader <- switch(resource_type,
       raster = .read_raster,
       vector = .read_vector,
       stop(sprintf("Resource type '%s' currently not supported", resource_type))
     )
-    reader(x, avail_resources[[resource_name]])
+    reader(x, resource)
   })
+  names(out) <- req_resources
+  out
 }
 
 .read_vector <- function(x, vector_sources) {
@@ -146,22 +177,13 @@ calc_indicators <- function(x, indicators, ...) {
   cropped
 }
 
-.asset_processor <- function(x,
-                             fun,
-                             avail_resources,
-                             req_resources,
-                             params) {
-  p <- progressr::progressor(steps = nrow(x))
-  furrr::future_map(1:nrow(x), function(i) {
-    p()
-    resources <- .prep_resources(x[i, ], avail_resources, req_resources)
-    result <- .compute(x[i, ], resources, fun, params)
-    .check_single_asset(result, i)
-  }, .options = furrr::furrr_options(seed = TRUE))
+.compute <- function(x, resources, fun, rundir, verbose) {
+  args <- list(rundir = rundir, verbose = verbose)
+  args <- append(args, resources)
+  args[["x"]] <- x
+  try(do.call(what = fun, args = args), silent = TRUE)
 }
 
-#' @noRd
-#' @importFrom utils str
 .check_single_asset <- function(obj, i) {
   if (inherits(obj, "try-error")) {
     warning(sprintf("At asset %s an error occured. Returning NA.\n", i), obj)
@@ -169,7 +191,7 @@ calc_indicators <- function(x, indicators, ...) {
   }
 
   if (!inherits(obj, "tbl_df")) {
-    warning(sprintf("At asset %s a non-tibble object was returned. Returning NA.\n", i), str(obj))
+    warning(sprintf("At asset %s a non-tibble object was returned. Returning NA.\n", i), obj)
     return(NA)
   }
 
@@ -180,25 +202,19 @@ calc_indicators <- function(x, indicators, ...) {
   obj
 }
 
-.portfolio_processor <- function(x,
-                                 fun,
-                                 avail_resources,
-                                 req_resources,
-                                 params) {
-  resources <- .prep_resources(x, avail_resources, req_resources)
-  results <- .compute(x, resources, fun, params)
-  if (!inherits(results, "list")) {
-    stop("Expected output for processing mode 'portfolio' is a list.")
+.merge_results <- function(x, results, name) {
+  results <- .bind_assets(results)
+  results <- tidyr::nest(results, !!name := !.id)
+  if (name %in% names(x)) {
+    warning(sprintf(
+      "Indicator column '%s' is already present. Overwriting now.",
+      name
+    ))
   }
-  results <- purrr::imap(results, function(r, i) .check_single_asset(r, i))
-  results
+  x[name] <- results[name]
+  dplyr::relocate(x, !!attributes(x)[["sf_column"]], .after = dplyr::last_col())
 }
 
-.compute <- function(x, resources, fun, args) {
-  args <- append(args, resources)
-  args[["x"]] <- x
-  try(do.call(what = fun, args = args), silent = TRUE)
-}
 
 .bind_assets <- function(results) {
   # bind results to data.frame

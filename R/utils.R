@@ -1,132 +1,8 @@
-#' Helper to check for supported resources
+#' Helper to create a grid of regular resolution and CRS
 #'
-#' @param resources A character vector with requested resources
-#' @keywords internal
-#' @noRd
-.check_requested_resources <- function(resources) {
-  names_resources <- names(available_resources())
-  # check for unsupported resources
-  if (any(!resources %in% names_resources)) {
-    unsupported <- resources[which(!resources %in% names_resources)]
-    base_msg <- "The following requested %s not supported: %s."
-    mid_msg <- ifelse(length(unsupported) == 1, "resource is", "resources are")
-    end_msg <- paste(unsupported, collapse = ", ")
-    stop(sprintf(base_msg, mid_msg, end_msg))
-  }
-}
-
-#' Helper to check for supported indicators
-#'
-#' @param indicators A character vector with requested indicators
-#' @keywords internal
-#' @noRd
-.check_requested_indicator <- function(indicators) {
-  names_indicators <- names(available_indicators())
-  # check for unsupported resources
-  if (any(!indicators %in% names_indicators)) {
-    unsupported <- indicators[which(!indicators %in% names_indicators)]
-    base_msg <- "The following requested %s not supported: %s."
-    mid_msg <- ifelse(length(unsupported) == 1,
-      "indicator is", "indicators are"
-    )
-    end_msg <- paste(unsupported, collapse = ", ")
-    stop(sprintf(base_msg, mid_msg, end_msg))
-  }
-  required_resources <- sapply(
-    available_indicators()[indicators],
-    function(x) names(x$resources)
-  )
-  required_resources <- unique(unlist(required_resources))
-  as.vector(required_resources)
-}
-
-#' Helper to check for existing resources
-#'
-#' @param ex_resources A character vector with existing resources
-#' @param req_resources A character vector with requested resources
-#' @param needed default value being FALSE
-#' @keywords internal
-#' @noRd
-.check_existing_resources <- function(ex_resources,
-                                      req_resources,
-                                      needed = FALSE) {
-  if (needed == FALSE) {
-    if (any(req_resources %in% ex_resources)) {
-      existing <- req_resources[which(req_resources %in% ex_resources)]
-      nonexisting <- req_resources[which(!req_resources %in% ex_resources)]
-      base_msg <- "The following requested %s already available: %s."
-      mid_msg <- ifelse(length(existing) == 1, "resource is", "resources are")
-      end_msg <- paste(existing, collapse = ", ")
-      message(sprintf(base_msg, mid_msg, end_msg))
-      nonexisting
-    } else {
-      req_resources
-    }
-  } else {
-    if (any(!req_resources %in% ex_resources)) {
-      existing <- req_resources[which(req_resources %in% ex_resources)]
-      nonexisting <- req_resources[which(!req_resources %in% ex_resources)]
-      base_msg <- "The following required %s not available: %s."
-      mid_msg <- ifelse(length(nonexisting) == 1,
-        "resource is",
-        "resources are"
-      )
-      end_msg <- paste(nonexisting, collapse = ", ")
-      stop(sprintf(base_msg, mid_msg, end_msg))
-      nonexisting
-    } else {
-      NULL
-    }
-  }
-}
-
-
-
-#' Helper to check for resource arguments
-#'
-#' @param resource A character vector with requested resource
-#' @param args The arguments of requested resource
-#' @keywords internal
-#' @noRd
-.check_resource_arguments <- function(resource, args) {
-  # TODO: What about portfolio wide parameters?
-  resource_name <- names(resource)
-  required_args <- resource[[1]]$arguments
-  specified_args <- args[names(args) %in% names(required_args)]
-  # return early if all required arguments have been specified,
-  # note that the correctness of the values have to be checked in the resource
-  # function
-  if (length(specified_args) == length(required_args)) {
-    return(specified_args)
-  }
-  if (length(specified_args) == 0) unspecified_args <- names(required_args)
-  if (length(specified_args) > 0) {
-    req_args_names <- names(required_args)
-    unspecified_args <- req_args_names[!req_args_names %in% names(args)]
-  }
-  base_msg <- paste("Argument '%s' for resource '%s' was not specified. ",
-    "Setting to default value of '%s'.",
-    sep = ""
-  )
-  default_args <- as.list(sapply(unspecified_args, function(arg_name) {
-    message(
-      sprintf(
-        base_msg, arg_name, resource_name,
-        paste0(required_args[[arg_name]], collapse = ", ")
-      )
-    )
-    required_args[[arg_name]]
-  }))
-
-  if (length(specified_args) > 0) {
-    append(specified_args, default_args)
-  } else {
-    default_args
-  }
-}
-
-
-#' Helper to create global grid
+#' Use this function to create a regular grid in a custom CRS. This is used
+#' e.g. to create the tile grid for Global Forest Watch in order to retrieve
+#' the intersecting tiles with a given portfolio.
 #'
 #' @param xmin minimum longitude value (E/W)
 #' @param xmax maximum longitude value (E/W)
@@ -135,11 +11,12 @@
 #' @param dx difference in longitude value per grid
 #' @param dy difference in latitude value per grid
 #' @param proj projection system
-#' @keywords internal
-#' @noRd
-.make_global_grid <- function(xmin = -180, xmax = 170, dx = 10,
-                              ymin = -50, ymax = 80, dy = 10,
-                              proj = NULL) {
+#' @returns An sf object with a defined grid.
+#' @keywords utils
+#' @export
+make_global_grid <- function(xmin = -180, xmax = 170, dx = 10,
+                             ymin = -50, ymax = 80, dy = 10,
+                             proj = NULL) {
   if (is.null(proj)) proj <- st_crs(4326)
   ncells <- c(
     (xmax - xmin) / dx,
@@ -151,34 +28,19 @@
   st_as_sf(st_make_grid(bbox, n = ncells, crs = proj, what = "polygons"))
 }
 
-.get_gfw_tile_id <- function(tile) {
-  min_x <- st_bbox(tile)[1]
-  max_y <- st_bbox(tile)[4]
-
-  # prepare tile names
-  if (min_x < 0) {
-    min_x <- paste0(sprintf("%03i", abs(min_x)), "W")
-  } else {
-    min_x <- paste0(sprintf("%03i", min_x), "E")
-  }
-  if (max_y < 0) {
-    max_y <- paste0(sprintf("%02i", abs(max_y)), "S")
-  } else {
-    max_y <- paste0(sprintf("%02i", max_y), "N")
-  }
-
-  paste0(max_y, "_", min_x)
-}
-
-
-#' Helper to unzip and remove zip files
+#' Helper to unzip and remove zip/gzip files
+#'
+#' Use this function to unzip a zip/gzip file and remove the original
+#' archive, if required.
 #'
 #' @param zip zip file to unzip
 #' @param rundir A directory where intermediate files are written to.
 #' @param remove if TRUE, removes the zip else keeps it
-#' @keywords internal
-#' @noRd
-.unzip_and_remove <- function(zip, rundir, remove = TRUE) {
+#' @keywords utils
+#' @export
+unzip_and_remove <- function(zip = NULL,
+                             rundir = mapme_options()[["tempdir"]],
+                             remove = TRUE) {
   extension <- tools::file_ext(zip)
   if (extension == "zip") {
     filenames <- suppressWarnings(unzip(
@@ -202,14 +64,19 @@
 }
 
 
-#' Helper to check year availability
+#' Helper to check yearly availability
 #'
-#' @param target_years Numeric/s indicating the target year/s
-#' @param available_years Numeric/s indicating the available year/s
-#' @param indicator A character vector with target indicator
-#' @keywords internal
-#' @noRd
-.check_available_years <- function(target_years, available_years, indicator) {
+#' Use this function to check if a specifed vector of years intersects
+#' with the yearly availablity of a resource.
+#'
+#' @param target_years Numeric indicating the target year.
+#' @param available_years Numeric indicating the available years.
+#' @param indicator A character vector with target resource/indicator name.
+#' @keywords utils
+#' @export
+check_available_years <- function(target_years,
+                                  available_years,
+                                  indicator) {
   if (any(!target_years %in% available_years)) {
     target_years <- target_years[target_years %in% available_years]
     if (length(target_years) > 0) {
@@ -226,21 +93,31 @@
   target_years
 }
 
-#' Helper to check valid urls
+#' Helper to check and download urls
 #'
-#' @param urls address to the datasource
-#' @param filenames name of the files in the url
-#' @param verbose Logical controlling verbosity.
-#' @param stubbornnes default value being 6
-#' @param check_existence default to TRUE
-#' @keywords internal
-#' @noRd
-.download_or_skip <- function(urls,
-                              filenames,
-                              verbose,
-                              stubbornnes = 6,
-                              check_existence = TRUE,
-                              aria_bin = NULL) {
+#' Use this function to fetch a number of remote URLs to local files.
+#' In case of unreliable source servers, failed downlaods are retried up to
+#' the number of times specified with `stubbornness`. A path to an aria2c
+#' executable can be specified to use it instead of the default R download
+#' function.
+#'
+#' @param urls A character vector with URLs to be downloaded.
+#' @param filenames A character vector with local file paths the same length
+#'   as `urls`
+#' @param verbose A logical controlling the verbosity.
+#' @param stubbornness A numeric indicating the number of retries for failed
+#'   downloads.
+#' @param check_existence A logical indicating if `urls` are to be checked
+#'   before trying to download. Defaults to TRUE.
+#' @param aria_bin A character vector pointing towards an aria2c executable.
+#' @keywords utils
+#' @export
+download_or_skip <- function(urls = NULL,
+                             filenames = NULL,
+                             verbose = mapme_options()[["verbose"]],
+                             stubbornness = 6,
+                             check_existence = TRUE,
+                             aria_bin = mapme_options()[["aria_bin"]]) {
   if (check_existence) {
     if (verbose) message("Checking URLs for existence. This may take a while...")
     url_exists <- unlist(lapply(urls, function(url) !httr::http_error(url)))
@@ -284,7 +161,7 @@
       counter <- counter + 1
 
       unsuccessful <- unsuccessful[which(sapply(unsuccessful, function(x) !is.null(x)))]
-      if (length(unsuccessful) > 0 & counter <= stubbornnes) {
+      if (length(unsuccessful) > 0 & counter <= stubbornness) {
         warning(paste("Some target files have not been downloaded correctly. ",
           "Download will be retried.",
           sep = ""
@@ -292,7 +169,7 @@
         missing_urls <- sapply(unsuccessful, function(x) x$missing_urls)
         missing_filenames <- sapply(unsuccessful, function(x) x$missing_filenames)
       }
-      if (counter > stubbornnes | length(unsuccessful) == 0) retry <- FALSE
+      if (counter > stubbornness | length(unsuccessful) == 0) retry <- FALSE
     }
   } else { # use aria_bin
 
@@ -321,17 +198,21 @@
   return(filenames)
 }
 
-.copy_resource_dir <- function(target) {
-  if (!dir.exists(target)) {
-    dir.create(target, showWarnings = FALSE)
-    resource_dir <- system.file("res", package = "mapme.biodiversity")
-    for (dir in list.dirs(resource_dir)) {
-      file.copy(dir, target, recursive = TRUE)
-    }
-  }
-}
 
-.check_namespace <- function(pkg) {
+#' Checks if namespace is available
+#'
+#' Use this function if your resource/indicator function requires the
+#' namespace of a certain package to be available. An informative error
+#' message is printed if that is not the case.
+#'
+#' @param pkg A character vector of length one indicating a package name
+#'   for which the namespace is tested
+#'
+#' @return TRUE, invisible, if the namespace is available. An error message
+#'   otherwise.
+#' @keywords utils
+#' @export
+check_namespace <- function(pkg) {
   if (!requireNamespace(pkg, quietly = TRUE)) {
     msg <- paste("R package '%s' required.\n",
       "Please intsall via `install.packages('%s')`",
@@ -340,4 +221,5 @@
     msg <- sprintf(msg, pkg, pkg)
     stop(msg, .call = FALSE)
   }
+  invisible(TRUE)
 }

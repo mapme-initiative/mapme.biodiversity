@@ -4,13 +4,7 @@
 \alias{register_resource}
 \title{Register a new resource to the mapme.biodiversity}
 \usage{
-register_resource(
-  name = NULL,
-  type = NULL,
-  source = NULL,
-  fun = NULL,
-  arguments = list()
-)
+register_resource(name = NULL, type = NULL, source = NULL)
 }
 \arguments{
 \item{name}{A character vector indicating the name of the resource.}
@@ -19,11 +13,6 @@ register_resource(
 'vector' or 'raster'.}
 
 \item{source}{Optional, preferably a URL where the data is found.}
-
-\item{fun}{The function you wish to register.}
-
-\item{arguments}{A list with named entries indicating the default values
-for the arguments required by the function}
 }
 \value{
 Nothing. Registers the function in the package environment.
@@ -44,9 +33,7 @@ will have to re-register your custom resource.
 register_resource(
   name = "gfw_treecover",
   type = "raster",
-  source = "https://data.globalforestwatch.org/documents/tree-cover-2000/explore",
-  fun = .get_gfw_treecover,
-  arguments = list(vears_treecover = "GFC-2021-v1.9")
+  source = "https://data.globalforestwatch.org/documents/tree-cover-2000/explore"
 )
 }
 }

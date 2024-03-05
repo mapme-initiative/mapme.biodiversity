@@ -2,33 +2,24 @@
 % Please edit documentation in R/get_resources.R
 \name{get_resources}
 \alias{get_resources}
-\title{Download specific biodiversity resources}
+\title{Download biodiversity resources}
 \usage{
-get_resources(x, resources, ...)
+get_resources(x, ...)
 }
 \arguments{
 \item{x}{A biodiversity portfolio object constructed via
 \code{init_portfolio()}}
 
-\item{resources}{A character vector indicating the requested resources. All
-specified resources must be supported by the package. You can use
-\code{available_resources()} to get more information, e.g. additional
-required arguments and their default values, about the supported resources.}
-
-\item{...}{Additional arguments required for the requested resources. Check
-\code{available_resources()} to learn more about the supported resources and
-their arguments.}
+\item{...}{One or more \verb{get_*()} functions to make a resource available.}
 }
 \value{
-Primarily called for the side effect of downloading resources. Returns
-the sf portfolio object \code{x} with its attributes amended by the requested resources.
+Called for its side effect of making resources available in the
+package environment. Returns x, invisibly.
 }
 \description{
-With \code{get_resources()} specific biodiversity data sets required for the
-calculation of indicators can be downloaded. The function supports the
-specification of several indicators and their respective additional
-arguments. You can check the required arguments via
-\code{available_resources()}, but the function will gracefully inform you
-about any misspecifications.
+With \code{get_resources()} data sets required for the
+calculation of indicators can be made available. The function supports the
+specification of several resource functions. To determine the output path,
+temporary directory and verbosity, the output of \code{mapme_options()} is used.
 }
 \keyword{function}
