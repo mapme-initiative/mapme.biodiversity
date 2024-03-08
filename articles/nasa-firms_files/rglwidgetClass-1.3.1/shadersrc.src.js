@@ -102,7 +102,7 @@ return  "#line 2 1\n"+
 "#endif // IS_TWOSIDED\n"+
 "  \n"+
 "#ifdef NEEDS_VNORMAL\n"+
-"  vNormal = vec4(normalize(vNormal.xyz/vNormal.w), 1);\n"+
+"  vNormal = vec4(normalize(vNormal.xyz), 1);\n"+
 "#endif\n"+
 "  \n"+
 "#if defined(HAS_TEXTURE) || defined(IS_TEXT)\n"+
@@ -259,11 +259,19 @@ return  "#line 2 2\n"+
 "#endif\n"+
 "    \n"+
 "#if NLIGHTS > 0\n"+
+"    // Simulate two-sided lighting\n"+
+"    if (n.z < 0.0)\n"+
+"      n = -n;\n"+
 "    for (int i=0;i<NLIGHTS;i++) {\n"+
 "      colDiff = vec4(vCol.rgb * diffuse[i], vCol.a);\n"+
 "      lightdir = lightDir[i];\n"+
-"      if (!viewpoint[i])\n"+
-"        lightdir = (mvMatrix * vec4(lightdir, 1.)).xyz;\n"+
+"      if (!viewpoint[i]) {\n"+
+"        if (finite[i]) {\n"+
+"          lightdir = (mvMatrix * vec4(lightdir, 1.)).xyz;\n"+
+"        } else {\n"+
+"          lightdir = (mvMatrix * vec4(lightdir, 0.)).xyz;\n"+
+"        }\n"+
+"      }\n"+
 "      if (!finite[i]) {\n"+
 "        halfVec = normalize(lightdir + eye);\n"+
 "      } else {\n"+
@@ -348,15 +356,17 @@ return  "#line 2 2\n"+
 "#endif //TEXTURE_rgba\n"+
 "    \n"+
 "#ifdef TEXTURE_alpha\n"+
+"    float luminance = dot(vec3(1.,1.,1.),textureColor.rgb)/3.;\n"+
+"\n"+
 "#if defined(TEXMODE_replace) || defined(TEXMODE_decal)\n"+
-"    textureColor = vec4(lighteffect.rgb, textureColor.a);\n"+
+"    textureColor = vec4(lighteffect.rgb, luminance);\n"+
 "#endif \n"+
 "\n"+
 "#if defined(TEXMODE_modulate) || defined(TEXMODE_blend) || defined(TEXMODE_add)\n"+
-"    textureColor = vec4(lighteffect.rgb, lighteffect.a*textureColor.a);\n"+
+"    textureColor = vec4(lighteffect.rgb, lighteffect.a*luminance);\n"+
 "#endif\n"+
 " \n"+
-"#endif\n"+
+"#endif // TEXTURE_alpha\n"+
 "    \n"+
 "// The TEXTURE_luminance values are not from that reference    \n"+
 "#ifdef TEXTURE_luminance\n"+
