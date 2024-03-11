@@ -52,8 +52,8 @@ calc_treecover_area <- function(years = 2000:2020,
                                 min_size = 10,
                                 min_cover = 35) {
   check_namespace("exactextractr")
-  .gfw_check_min_cover(min_cover, "treecover_area")
-  .gfw_check_min_size(min_size, "treecover_area")
+  min_cover <- .gfw_check_min_cover(min_cover, "treecover_area")
+  min_size <- .gfw_check_min_size(min_size, "treecover_area")
   years <- .gfw_check_years(years, "treecover_area")
 
   function(x = NULL,
@@ -177,6 +177,7 @@ calc_treecover_area <- function(years = 2000:2020,
   if (min_cover < 0 || min_cover > 100) {
     stop(msg, call. = FALSE)
   }
+  min_cover
 }
 
 .gfw_check_min_size <- function(min_size, indicator) {
@@ -188,6 +189,7 @@ calc_treecover_area <- function(years = 2000:2020,
   msg <- sprintf(msg, indicator)
   if (length(min_size) != 1) stop(msg, call. = FALSE)
   if (!is.numeric(min_size) || min_size <= 0) stop(msg, call. = FALSE)
+  min_size
 }
 
 .gfw_calc_patches <- function(gfw) {

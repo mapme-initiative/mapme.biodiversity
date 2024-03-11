@@ -50,8 +50,8 @@
 #' aoi
 #' }
 calc_popcount <- function(engine = "extract", stats = "sum") {
-  check_engine(engine)
-  check_stats(stats)
+  engine <- check_engine(engine)
+  stats <- check_stats(stats)
 
   function(x,
            worldpop = NULL,

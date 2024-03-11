@@ -51,8 +51,8 @@
 #' aoi
 #' }
 calc_precipitation_wc <- function(engine = "extract", stats = "mean") {
-  check_engine(engine)
-  check_stats(stats)
+  engine <- check_engine(engine)
+  stats <- check_stats(stats)
 
   function(x,
            worldclim_precipitation = NULL,

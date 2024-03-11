@@ -52,8 +52,8 @@
 #' aoi
 #' }
 calc_drought_indicator <- function(engine = "extract", stats = "mean") {
-  check_engine(engine)
-  check_stats(stats)
+  engine <- check_engine(engine)
+  stats <- check_stats(stats)
 
   function(x,
            nasa_grace = NULL,

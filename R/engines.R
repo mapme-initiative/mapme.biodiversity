@@ -1,3 +1,6 @@
+available_stats <- c("mean", "median", "sd", "min", "max", "sum", "var")
+available_engines <- c("zonal", "extract", "exactextract")
+
 #' Check if engine is supported
 #'
 #' Use this functions to check if an extraction engine for zonal vector-raster
@@ -6,7 +9,7 @@
 #' @param queried_engine A character vector of length one indicating the engine
 #'   to check for.
 #'
-#' @return TRUE, invisibly, if the engine is supported. Throws an error otherwise.
+#' @return The character vector of the queried engine, if supported. Throws an error otherwise.
 #' @keywords utils
 #' @export
 check_engine <- function(queried_engine) {
@@ -25,7 +28,7 @@ check_engine <- function(queried_engine) {
       queried_engine, paste(available_engines, collapse = ", ")
     ))
   }
-  invisible(TRUE)
+  queried_engine
 }
 
 #' Check if statistics are supported
@@ -36,7 +39,7 @@ check_engine <- function(queried_engine) {
 #' @param queried_stats A character vector with statistic names to be checked
 #'   if they are supported by the backend
 #'
-#' @return A character vector of supported statistics, invisibly. Throws an error
+#' @return A character vector of supported statistics Throws an error
 #'   if any of the queried statistics is not supported.
 #' @keywords utils
 #' @export
@@ -59,7 +62,7 @@ check_stats <- function(queried_stats) {
     )
     stop(msg)
   }
-  invisible(queried_stats)
+  queried_stats
 }
 
 
@@ -107,9 +110,6 @@ select_engine <- function(x,
   }
   result
 }
-
-available_stats <- c("mean", "median", "sd", "min", "max", "sum", "var")
-available_engines <- c("zonal", "extract", "exactextract")
 
 .engine_zonal <- function(x, raster, stats, name = NULL) {
   results <- purrr::map_dfc(stats, function(stat) {

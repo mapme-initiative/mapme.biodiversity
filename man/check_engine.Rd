@@ -11,7 +11,7 @@ check_engine(queried_engine)
 to check for.}
 }
 \value{
-TRUE, invisibly, if the engine is supported. Throws an error otherwise.
+The character vector of the queried engine, if supported. Throws an error otherwise.
 }
 \description{
 Use this functions to check if an extraction engine for zonal vector-raster

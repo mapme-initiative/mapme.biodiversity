@@ -63,7 +63,7 @@ calc_precipitation_chirps <- function(years = 1981:2020,
                                       scales_spi = 3,
                                       spi_prev_years = 8) {
   check_namespace("SPEI")
-  check_engine(engine)
+  engine <- check_engine(engine)
 
   if (!is.null(scales_spi)) {
     if (any(scales_spi < 0) | any(scales_spi > 48)) {

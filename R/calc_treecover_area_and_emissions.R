@@ -58,8 +58,8 @@ calc_treecover_area_and_emissions <- function(years = 2000:2020,
                                               min_size = 10,
                                               min_cover = 35) {
   check_namespace("exactextractr")
-  .gfw_check_min_cover(min_cover, "treecover_area_and_emissions")
-  .gfw_check_min_size(min_size, "treecover_area_and_emissions")
+  min_cover <- .gfw_check_min_cover(min_cover, "treecover_area_and_emissions")
+  min_size <- .gfw_check_min_size(min_size, "treecover_area_and_emissions")
   years <- .gfw_check_years(years, "treecover_area_and_emissions")
 
   function(x,

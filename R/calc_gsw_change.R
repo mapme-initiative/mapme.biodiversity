@@ -53,8 +53,8 @@
 #' aoi
 #' }
 calc_gsw_change <- function(engine = "extract", stats = "mean") {
-  check_engine(engine)
-  check_stats(stats)
+  engine <- check_engine(engine)
+  stats <- check_stats(stats)
 
   function(x,
            global_surface_water_change = NULL,

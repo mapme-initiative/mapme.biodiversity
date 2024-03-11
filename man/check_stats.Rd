@@ -11,7 +11,7 @@ check_stats(queried_stats)
 if they are supported by the backend}
 }
 \value{
-A character vector of supported statistics, invisibly. Throws an error
+A character vector of supported statistics Throws an error
 if any of the queried statistics is not supported.
 }
 \description{
