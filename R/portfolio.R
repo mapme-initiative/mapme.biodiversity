@@ -1,3 +1,14 @@
+.check_portfolio <- function(x) {
+  stopifnot(inherits(x, "sf"))
+  if (st_crs(x) != st_crs(4326)) {
+    message("CRS of x is not EPSG:4326. Attempting to transform.")
+    x <- st_transform(x, 4326)
+  }
+  if (any(!unique(st_geometry_type(x)) %in% c("POLYGON"))) {
+    stop("Some assests are not of type POLYGON. Please use sf::st_cast() to cast to POLYGON.")
+  }
+  x
+}
 #' Writing a portfolio to disk
 #'
 #' The function is used to save a processes biodiversity portfolio to disk.

@@ -13,7 +13,7 @@
 #' @keywords function
 #' @export
 get_resources <- function(x, ...) {
-  force(x)
+  x <- .check_portfolio(x)
   connection_available <- curl::has_internet()
   if (!connection_available) {
     stop("There seems to be no internet connection. Cannot download resources.")

@@ -16,7 +16,7 @@
 #' @keywords function
 #' @export
 calc_indicators <- function(x, ...) {
-  force(x)
+  x <- .check_portfolio(x)
   funs <- list(...)
   funs <- purrr::map(funs, function(fun) .check_indicator_fun(fun))
   req_resources <- purrr::map(funs, function(fun) .get_req_resources(fun))
