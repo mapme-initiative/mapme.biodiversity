@@ -42,22 +42,19 @@ test_that("get_resources works", {
 
 test_that("test .check_resource_fun works", {
   expect_error(.check_resource_fun("a"))
-  fun <- function(x, name, type, rundir, outdir, verbose) {}
+  fun <- function(x, name, type, outdir, verbose) {}
   expect_error(.check_resource_fun(fun))
-  fun <- function(x, name = "new_res", type, rundir, outdir, verbose, testing) {}
+  fun <- function(x, name = "new_res", type, outdir, verbose, testing) {}
   expect_silent(f <- .check_resource_fun(fun))
   expect_true(class(f) == "function")
 })
 
-test_that("test .make_paths works", {
-  rundir <- tempfile()
-  dir.create(rundir)
+test_that("test .make_path works", {
   outdir <- tempfile()
   dir.create(outdir)
-  out <- .make_paths(rundir, outdir, "test")
-  expect_true(file.exists(file.path(rundir, "test")))
+  out <- .make_path(outdir, "test")
   expect_true(file.exists(file.path(outdir, "test")))
-  expect_equal(names(out), c("outdir", "rundir"))
+  expect_equal(basename(out), "test")
 })
 
 test_that("test .make_footprints works", {

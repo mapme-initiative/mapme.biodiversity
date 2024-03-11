@@ -44,7 +44,6 @@ calc_biome <- function() {
            teow = NULL,
            name = "biome",
            mode = "asset",
-           rundir = mapme_options()[["tempdir"]],
            verbose = mapme_options()[["verbose"]]) {
     BIOME_NAME <- NULL
     biomes <- NULL

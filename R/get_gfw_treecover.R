@@ -29,7 +29,6 @@ get_gfw_treecover <- function(version = "GFC-2022-v1.10") {
   function(x,
            name = "gfw_treecover",
            type = "raster",
-           rundir = mapme_options()[["tmpdir"]],
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {

@@ -68,7 +68,6 @@ calc_treecoverloss_emissions <- function(years = 2000:2020,
            gfw_emissions,
            name = "treecoverloss_emissions",
            mode = "asset",
-           rundir = mapme_options()[["tempdir"]],
            verbose = mapme_options()[["verbose"]]) {
     if (any(is.null(gfw_treecover), is.null(gfw_lossyear), is.null(gfw_emissions))) {
       return(NA)

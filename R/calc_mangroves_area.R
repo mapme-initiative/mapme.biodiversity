@@ -46,7 +46,6 @@ calc_mangroves_area <- function() {
            gmw = NULL,
            name = "mangroves_area",
            mode = "asset",
-           rundir = mapme_options()[["tempdir"]],
            verbose = mapme_options()[["verbose"]]) {
     results <- lapply(1:length(gmw), function(j) {
       intersected <- suppressWarnings(st_intersection(gmw[[j]], x))

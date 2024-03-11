@@ -54,7 +54,6 @@ calc_elevation <- function(engine = "extract",
            nasa_srtm,
            name = "elevation",
            mode = "asset",
-           rundir = mapme_options()[["tempdir"]],
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(nasa_srtm)) {
       return(NA)

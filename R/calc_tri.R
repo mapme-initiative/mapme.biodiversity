@@ -67,7 +67,6 @@ calc_tri <- function(engine = "extract", stats = "mean") {
            nasa_srtm = NULL,
            name = "tri",
            mode = "asset",
-           rundir = mapme_options()[["tempdir"]],
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(nasa_srtm)) {
       return(NA)

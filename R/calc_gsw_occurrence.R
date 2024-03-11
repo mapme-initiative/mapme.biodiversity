@@ -58,7 +58,6 @@ calc_gsw_occurrence <- function(engine = "extract", stats = "mean") {
            global_surface_water_occurrence = NULL,
            name = "gsw_occurence",
            mode = "asset",
-           rundir = mapme_options()[["tempdir"]],
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(global_surface_water_occurrence)) {
       return(NA)

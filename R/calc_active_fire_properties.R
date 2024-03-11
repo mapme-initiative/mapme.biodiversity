@@ -46,7 +46,6 @@ calc_active_fire_properties <- function() {
            nasa_firms = NULL,
            name = "active_fire_properties",
            mode = "asset",
-           rundir = mapme_options()[["tempdir"]],
            verbose = mapme_options()[["verbose"]]) {
     # change quality flag to charachter to allow binding MODIS and VIIRS
     nasa_firms <- lapply(nasa_firms, function(x) {

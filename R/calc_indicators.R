@@ -1,4 +1,4 @@
-.ind_defaults <- c("x", "name", "mode", "rundir", "verbose")
+.ind_defaults <- c("x", "name", "mode", "verbose")
 #' Compute specific indicators
 #'
 #' With \code{calc_indicators()} specific biodiversity indicators
@@ -76,7 +76,7 @@ calc_indicators <- function(x, ...) {
   )
   results <- processor(
     x, fun, .avail_resources(), .get_req_resources(fun),
-    opts[["tempdir"]], opts[["verbose"]]
+    opts[["verbose"]]
   )
   x <- .merge_results(x, results, indicator_name)
   x
@@ -86,13 +86,12 @@ calc_indicators <- function(x, ...) {
                              fun,
                              avail_resources,
                              req_resources,
-                             rundir,
                              verbose) {
   p <- progressr::progressor(steps = nrow(x))
   furrr::future_map(1:nrow(x), function(i) {
     p()
     resources <- .prep_resources(x[i, ], avail_resources, req_resources)
-    result <- .compute(x[i, ], resources, fun, rundir, verbose)
+    result <- .compute(x[i, ], resources, fun, verbose)
     .check_single_asset(result, i)
   }, .options = furrr::furrr_options(seed = TRUE))
 }
@@ -101,10 +100,9 @@ calc_indicators <- function(x, ...) {
                                  fun,
                                  avail_resources,
                                  req_resources,
-                                 rundir,
                                  verbose) {
   resources <- .prep_resources(x, avail_resources, req_resources)
-  results <- .compute(x, resources, fun, rundir, verbose)
+  results <- .compute(x, resources, fun, verbose)
   if (!inherits(results, "list")) {
     stop("Expected output for processing mode 'portfolio' is a list.")
   }
@@ -177,8 +175,8 @@ calc_indicators <- function(x, ...) {
   cropped
 }
 
-.compute <- function(x, resources, fun, rundir, verbose) {
-  args <- list(rundir = rundir, verbose = verbose)
+.compute <- function(x, resources, fun, verbose) {
+  args <- list(verbose = verbose)
   args <- append(args, resources)
   args[["x"]] <- x
   try(do.call(what = fun, args = args), silent = TRUE)

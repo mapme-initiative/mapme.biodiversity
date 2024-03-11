@@ -1,10 +1,8 @@
 test_that("mapme_options works", {
   opts <- mapme_options()
-  expect_equal(names(opts), c("outdir", "tempdir", "verbose", "aria_bin", "testing"))
+  expect_equal(names(opts), c("outdir", "verbose", "aria_bin", "testing"))
 
   expect_error(mapme_options(outdir = 1))
-  expect_error(mapme_options(tempdir = 1))
-  expect_error(mapme_options(tempdir = "/does-not-exists"))
   expect_error(mapme_options(verbose = 1))
   expect_error(mapme_options(testing = 1))
 })

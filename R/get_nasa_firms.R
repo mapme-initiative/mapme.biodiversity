@@ -45,7 +45,6 @@ get_nasa_firms <- function(years = 2012:2021,
   function(x,
            name = "nasa_firms",
            type = "vector",
-           rundir = mapme_options()[["tmpdir"]],
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {
@@ -126,17 +125,17 @@ get_nasa_firms <- function(years = 2012:2021,
 #' A helper function to unzip firms global zip files
 #'
 #' @param zip A character vector with potentially multiple zip files
-#' @param rundir The directory to where the files are unzipped
+#' @param dir The directory to where the files are unzipped
 #' @param instrument A character vector specifying the
 #'   data collection instrument.
 #' @return Nothing, its called for the side effect of unzipping.
 #' @keywords internal
 #' @noRd
-.unzip_firms <- function(zip, rundir, instrument) {
+.unzip_firms <- function(zip, dir, instrument) {
   bn <- basename(zip)
   year <- gsub(".*?([0-9]+).*", "\\1", bn)
 
-  gpkg <- file.path(rundir, paste0("active_fire_", tolower(instrument), "_", year, ".gpkg"))
+  gpkg <- file.path(dir, paste0("active_fire_", tolower(instrument), "_", year, ".gpkg"))
 
   if (file.exists(gpkg)) {
     return()
@@ -144,16 +143,16 @@ get_nasa_firms <- function(years = 2012:2021,
 
   utils::unzip(
     zipfile = file.path(
-      rundir,
+      dir,
       basename(paste0(instrument, "_", year, ".zip"))
     ),
-    exdir = rundir
+    exdir = dir
   )
 
   # bind all the CSVs and convert to gpkg
   .convert_csv_to_gpkg(
     gpkg = gpkg,
-    rundir = rundir,
+    dir = dir,
     instrument = instrument,
     year = year
   )
@@ -162,11 +161,11 @@ get_nasa_firms <- function(years = 2012:2021,
 
 #' Helper function to convert CSVs to geopackage
 #'
-#' @param rundir A directory where intermediate files are written to.
+#' @param gpkg A character vector indicating the filename for the geopackage
+#' @param dir A directory where intermediate files are written to.
 #' @param instrument A character vector specifying the
 #'   data collection instrument.
 #' @param year An integer indicating the year of observation
-#' @param gpkg A character vector indicating the filename for the geopackage
 #'
 #' @importFrom utils read.csv
 #' @importFrom purrr walk
@@ -174,11 +173,11 @@ get_nasa_firms <- function(years = 2012:2021,
 #' @keywords internal
 #' @noRd
 #'
-.convert_csv_to_gpkg <- function(gpkg, rundir, instrument, year) {
+.convert_csv_to_gpkg <- function(gpkg, dir, instrument, year) {
   if (instrument == "VIIRS") {
-    loc <- file.path(rundir, "viirs-snpp", year)
+    loc <- file.path(dir, "viirs-snpp", year)
   } else {
-    loc <- file.path(rundir, "modis", year)
+    loc <- file.path(dir, "modis", year)
   }
 
   csv_files <- list.files(loc, pattern = "*.csv", full.names = TRUE)

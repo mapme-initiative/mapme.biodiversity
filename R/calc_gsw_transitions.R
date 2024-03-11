@@ -59,7 +59,6 @@ calc_gsw_transitions <- function() {
            global_surface_water_transitions = NULL,
            name = "gsw_transitions",
            mode = "asset",
-           rundir = mapme_options()[["tempdir"]],
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(global_surface_water_transitions)) {
       return(NA)

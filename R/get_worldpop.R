@@ -22,7 +22,6 @@ get_worldpop <- function(years = 2000) {
   function(x,
            name = "worldpop",
            type = "raster",
-           rundir = mapme_options()[["tmpdir"]],
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {
@@ -50,7 +49,7 @@ get_worldpop <- function(years = 2000) {
         target <- rast(filenames[index_ok])
         if (verbose) message("Resampling worldpop layers...")
         for (i in index) {
-          tmpfile <- tempfile(tmpdir = rundir, fileext = ".tif")
+          tmpfile <- tempfile(fileext = ".tif")
           file.copy(filenames[i], tmpfile)
           tmp <- rast(tmpfile)
           project(tmp, target,

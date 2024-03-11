@@ -44,7 +44,6 @@ calc_ecoregion <- function() {
            teow = NULL,
            name = "ecoregion",
            mode = "asset",
-           rundir = mapme_options()[["tempdir"]],
            verbose = mapme_options()[["verbose"]]) {
     ECO_NAME <- NULL
     new_area <- NULL

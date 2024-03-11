@@ -20,7 +20,6 @@ get_nasa_grace <- function(years = 2003:2022) {
   function(x,
            name = "nasa_grace",
            type = "raster",
-           rundir = mapme_options()[["tmpdir"]],
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {

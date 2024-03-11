@@ -59,7 +59,6 @@ calc_drought_indicator <- function(engine = "extract", stats = "mean") {
            nasa_grace = NULL,
            name = "drought_indicator",
            mode = "portfolio",
-           rundir = mapme_options()[["tempdir"]],
            verbose = mapme_options()[["verbose"]]) {
     # check if input engines are correct
     if (is.null(nasa_grace)) {

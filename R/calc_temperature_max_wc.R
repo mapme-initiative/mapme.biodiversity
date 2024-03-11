@@ -57,7 +57,6 @@ calc_temperature_max_wc <- function(engine = "extract", stats = "mean") {
            worldclim_max_temperature = NULL,
            name = "temperature_max_wc",
            mode = "asset",
-           rundir = mapme_options()[["tempdir"]],
            verbose = mapme_options()[["verbose"]]) {
     results <- .calc_worldclim(
       x = x,

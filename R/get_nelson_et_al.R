@@ -43,7 +43,6 @@ get_nelson_et_al <- function(ranges = "20k_50k") {
   function(x,
            name = "nelson_et_al",
            type = "raster",
-           rundir = mapme_options()[["tmpdir"]],
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {

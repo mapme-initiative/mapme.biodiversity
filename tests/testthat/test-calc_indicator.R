@@ -123,20 +123,20 @@ test_that("Parallelization works", {
 
 test_that(".check_indicator_fun works correctly", {
   expect_error(.check_indicator_fun("a"))
-  fun <- function(x, name, mode, rundir) {}
+  fun <- function(x, name, mode) {}
   expect_error(.check_indicator_fun(fun))
-  fun <- function(x, name, mode, rundir, verbose) {}
+  fun <- function(x, name, mode, verbose) {}
   expect_silent(.check_indicator_fun(fun))
-  fun <- function(x, some_resource, name, mode, rundir, verbose) {}
+  fun <- function(x, some_resource, name, mode, verbose) {}
   expect_silent(f <- .check_indicator_fun(fun))
   expect_true(inherits(f, "function"))
 })
 
 test_that(".get_req_resources works", {
   expect_error(.get_req_resources("a"))
-  fun <- function(x, name, mode, rundir) {}
+  fun <- function(x, name, mode) {}
   expect_error(.get_req_resources(fun))
-  fun <- function(x, some_resource, other_resource, name, mode, rundir, verbose) {}
+  fun <- function(x, some_resource, other_resource, name, mode, verbose) {}
   expect_silent(f <- .get_req_resources(fun))
   expect_equal(f, c("some_resource", "other_resource"))
 })

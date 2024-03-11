@@ -56,7 +56,6 @@ calc_gsw_seasonality <- function(engine = "extract", stats = "mean") {
            global_surface_water_seasonality = NULL,
            name = "gsw_seasonality",
            mode = "asset",
-           rundir = mapme_options()[["tempdir"]],
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(global_surface_water_seasonality)) {
       return(NA)

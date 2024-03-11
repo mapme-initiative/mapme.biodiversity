@@ -23,7 +23,6 @@ get_esalandcover <- function(years = 2015:2019) {
   function(x,
            name = "esalandcover",
            type = "raster",
-           rundir = mapme_options()[["tmpdir"]],
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {

@@ -59,7 +59,6 @@ calc_gsw_recurrence <- function(engine = "extract", stats = "mean") {
            global_surface_water_recurrence = NULL,
            name = "gsw_recurrence",
            mode = "asset",
-           rundir = mapme_options()[["tempdir"]],
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(global_surface_water_recurrence)) {
       return(NA)

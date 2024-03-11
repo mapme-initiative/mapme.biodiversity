@@ -1,4 +1,4 @@
-.res_defaults <- c("x", "name", "type", "rundir", "outdir", "verbose", "testing")
+.res_defaults <- c("x", "name", "type", "outdir", "verbose", "testing")
 #' Download biodiversity resources
 #'
 #' With \code{get_resources()} data sets required for the
@@ -56,12 +56,10 @@ get_resources <- function(x, ...) {
   force(x)
   args <- formals(fun)
   resource_name <- args[["name"]]
-  paths <- .make_paths(opts[["tempdir"]], opts[["outdir"]], resource_name)
-  on.exit(unlink(paths[["rundir"]], recursive = TRUE, force = TRUE))
+  outdir <- .make_path(opts[["outdir"]], resource_name)
   # attach required objects to args list
   args[["x"]] <- x
-  args[["outdir"]] <- paths[["outdir"]]
-  args[["rundir"]] <- paths[["rundir"]]
+  args[["outdir"]] <- outdir
 
   resource_to_add <- try(do.call(fun, args = as.list(args)))
 
@@ -85,13 +83,10 @@ get_resources <- function(x, ...) {
   x
 }
 
-.make_paths <- function(rundir, outdir, name) {
-  f <- function(p, name) {
-    p <- file.path(p, name)
-    dir.create(p, showWarnings = FALSE)
-    return(p)
-  }
-  return(list(outdir = f(outdir, name), rundir = f(rundir, name)))
+.make_path <- function(outdir, name) {
+  path <- file.path(outdir, name)
+  dir.create(path, showWarnings = FALSE)
+  path
 }
 
 .make_footprints <- function(raster_files) {

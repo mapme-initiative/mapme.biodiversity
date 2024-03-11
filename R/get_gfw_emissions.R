@@ -30,7 +30,6 @@ get_gfw_emissions <- function() {
   function(x,
            name = "gfw_emissions",
            type = "raster",
-           rundir = mapme_options()[["tmpdir"]],
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {

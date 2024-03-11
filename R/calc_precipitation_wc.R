@@ -58,7 +58,6 @@ calc_precipitation_wc <- function(engine = "extract", stats = "mean") {
            worldclim_precipitation = NULL,
            name = "precipitation_wc",
            mode = "asset",
-           rundir = mapme_options()[["tempdir"]],
            verbose = mapme_options()[["verbose"]]) {
     results <- .calc_worldclim(
       x = x,

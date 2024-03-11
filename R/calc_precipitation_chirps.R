@@ -83,7 +83,6 @@ calc_precipitation_chirps <- function(years = 1981:2020,
            chirps,
            name = "precipitation_chirps",
            mode = "portfolio",
-           rundir = mapme_options()[["tempdir"]],
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(chirps)) {
       return(NA)

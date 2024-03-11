@@ -5,7 +5,6 @@
 .pkgenv$avail_resources <- list()
 
 .onLoad <- function(libname, pkgname) {
-  .pkgenv$tempdir <- tempdir()
   .pkgenv$outdir <- tempfile()
   dir.create(.pkgenv$outdir, showWarnings = FALSE)
   .pkgenv$verbose <- TRUE
@@ -26,8 +25,6 @@
 #'
 #' @param ... ignored
 #' @param outdir A length one character indicating the output path.
-#' @param tempdir A length one character indicating the path to be used
-#'   for temporary files.
 #' @param aria_bin A character vector to an aria2c executable for parallel
 #'  downloads.
 #' @param verbose A logical, indicating if informative messages should be printed.
@@ -40,18 +37,10 @@
 #' @examples
 #' library(mapme.biodiversity)
 #' mapme_options()
-mapme_options <- function(..., outdir, tempdir, verbose, aria_bin, testing) {
+mapme_options <- function(..., outdir, verbose, aria_bin, testing) {
   if (!missing(outdir)) {
     stopifnot(is.character(outdir) && length(outdir) == 1)
     .pkgenv$outdir <- outdir
-  }
-
-  if (!missing(tempdir)) {
-    stopifnot(is.character(tempdir) && length(tempdir) == 1)
-    if (!dir.exists(tempdir)) {
-      stop("tempdir must point to an existing directory")
-    }
-    .pkgenv$tempdir <- tempdir
   }
 
   if (!missing(verbose)) {
@@ -71,7 +60,6 @@ mapme_options <- function(..., outdir, tempdir, verbose, aria_bin, testing) {
   if (nargs() == 0) {
     return(list(
       outdir = .pkgenv$outdir,
-      tempdir = .pkgenv$tempdir,
       verbose = .pkgenv$verbose,
       aria_bin = .pkgenv$aria_bin,
       testing = .pkgenv$testing

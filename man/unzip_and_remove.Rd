@@ -4,16 +4,12 @@
 \alias{unzip_and_remove}
 \title{Helper to unzip and remove zip/gzip files}
 \usage{
-unzip_and_remove(
-  zip = NULL,
-  rundir = mapme_options()[["tempdir"]],
-  remove = TRUE
-)
+unzip_and_remove(zip = NULL, dir = tempdir(), remove = TRUE)
 }
 \arguments{
 \item{zip}{zip file to unzip}
 
-\item{rundir}{A directory where intermediate files are written to.}
+\item{dir}{A directory where the extracted files are written to.}
 
 \item{remove}{if TRUE, removes the zip else keeps it}
 }

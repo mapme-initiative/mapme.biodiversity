@@ -24,7 +24,6 @@ get_chirps <- function() {
   function(x,
            name = "chirps",
            type = "raster",
-           rundir = mapme_options()[["tmpdir"]],
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {
@@ -48,7 +47,7 @@ get_chirps <- function() {
 
     filenames <- download_or_skip(urls, filenames, check_existence = FALSE)
     filenames <- purrr::walk(filenames, unzip_and_remove,
-      rundir = outdir, remove = FALSE
+      dir = outdir, remove = FALSE
     )
     gsub(".gz", "", filenames)
   }

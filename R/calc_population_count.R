@@ -57,7 +57,6 @@ calc_popcount <- function(engine = "extract", stats = "sum") {
            worldpop = NULL,
            name = "popcount",
            mode = "asset",
-           rundir = mapme_options()[["tempdir"]],
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(worldpop)) {
       return(NA)

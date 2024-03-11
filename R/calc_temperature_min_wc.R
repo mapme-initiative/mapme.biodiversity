@@ -57,7 +57,6 @@ calc_temperature_min_wc <- function(engine = "extract", stats = "mean") {
            worldclim_min_temperature = NULL,
            name = "temperature_min_wc",
            mode = "asset",
-           rundir = mapme_options()[["tempdir"]],
            verbose = mapme_options()[["verbose"]]) {
     results <- .calc_worldclim(
       x = x,

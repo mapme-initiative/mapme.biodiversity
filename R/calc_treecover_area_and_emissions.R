@@ -68,7 +68,6 @@ calc_treecover_area_and_emissions <- function(years = 2000:2020,
            gfw_emissions,
            name = "treecover_area_and_emissions",
            mode = "asset",
-           rundir = mapme_options()[["tempdir"]],
            verbose = mapme_options()[["verbose"]]) {
     # handling of return value if resources are missing, e.g. no overlap
     if (any(is.null(gfw_treecover), is.null(gfw_lossyear), is.null(gfw_emissions))) {

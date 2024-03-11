@@ -27,7 +27,6 @@ get_gmw <- function(years = c(1996, 2007:2010, 2015:2020)) {
   function(x,
            name = "gmw",
            type = "vector",
-           rundir = mapme_options()[["tmpdir"]],
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {
@@ -51,35 +50,35 @@ get_gmw <- function(years = c(1996, 2007:2010, 2015:2020)) {
 #'
 #'
 #' @param zip_files A character vector with potentially multiple zip files
-#' @param rundir The directory to where the files are unzipped
+#' @param dir The directory to where the files are unzipped
 #'
 #' @return Nothing.
 #' @keywords internal
 #' @noRd
-.unzip_mangrove <- function(zip, rundir) {
+.unzip_mangrove <- function(zip, dir) {
   bn <- basename(zip)
   year <- gsub(".*?([0-9]+).*", "\\1", bn)
-  gpkg <- file.path(rundir, paste0("gmw-extent_", year, ".gpkg"))
+  gpkg <- file.path(dir, paste0("gmw-extent_", year, ".gpkg"))
   if (file.exists(gpkg)) {
     return(gpkg)
   }
   utils::unzip(
     zipfile = file.path(
-      rundir,
+      dir,
       basename(paste0("gmw-extent_", year, ".zip"))
     ),
-    exdir = rundir
+    exdir = dir
   )
 
   # Source data from 2018 doesn't correspond to the pattern for other years.
   # We need to create an exception for it.
   if (year == 2018) {
     shp <- file.path(
-      rundir,
+      dir,
       paste0("GMW_v3_2018/00_Data/gmw_v3_", year, ".shp")
     )
   } else {
-    shp <- file.path(rundir, paste0("gmw_v3_", year, "_vec.shp"))
+    shp <- file.path(dir, paste0("gmw_v3_", year, "_vec.shp"))
   }
 
   gdal_utils(
@@ -87,7 +86,7 @@ get_gmw <- function(years = c(1996, 2007:2010, 2015:2020)) {
     options = c("-t_srs", "EPSG:4326")
   )
 
-  d_files <- list.files(rundir, full.names = T)
+  d_files <- list.files(dir, full.names = T)
   unlink(grep("gmw-extent*", d_files, value = T, invert = T),
     recursive = T, force = T
   )

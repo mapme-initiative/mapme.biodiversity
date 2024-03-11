@@ -48,7 +48,6 @@ calc_landcover <- function() {
            esalandcover = NULL,
            name = "landcover",
            mode = "asset",
-           rundir = mapme_options()[["tempdir"]],
            verbose = mapme_options()[["verbose"]]) {
     percentage <- NULL
     year <- NULL

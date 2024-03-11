@@ -57,7 +57,6 @@ calc_traveltime <- function(engine = "extract", stats = "mean") {
            nelson_et_al = NULL,
            name = "traveltime",
            mode = "asset",
-           rundir = mapme_options()[["tempdir"]],
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(nelson_et_al)) {
       return(NA)

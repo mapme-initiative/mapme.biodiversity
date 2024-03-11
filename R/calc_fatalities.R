@@ -113,7 +113,6 @@ calc_fatalities <- function(years = 1989:2023,
            ucdp_ged = NULL,
            name = "fatalities",
            mode = "asset",
-           rundir = mapme_options()[["tempdir"]],
            verbose = mapme_options()[["verbose"]]) {
     date_prec <- where_prec <- date_start <- type_of_violence <- NULL
     year <- month <- deaths_a <- deaths_b <- event_count <- NULL

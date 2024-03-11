@@ -25,7 +25,6 @@ get_worldclim_min_temperature <- function(years = 2000:2018) {
   function(x,
            name = "worldclim_min_temperature",
            type = "raster",
-           rundir = mapme_options()[["tmpdir"]],
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {
@@ -60,7 +59,6 @@ get_worldclim_max_temperature <- function(years = 2000:2018) {
   function(x,
            name = "worldclim_max_temperature",
            type = "raster",
-           rundir = mapme_options()[["tmpdir"]],
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {
@@ -95,7 +93,6 @@ get_worldclim_precipitation <- function(years = 2000:2018) {
   function(x,
            name = "worldclim_precipitation",
            type = "raster",
-           rundir = mapme_options()[["tmpdir"]],
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {
@@ -107,7 +104,7 @@ get_worldclim_precipitation <- function(years = 2000:2018) {
 .get_climatic_variables <- function(x,
                                     years = 2000:2018,
                                     layer,
-                                    rundir = tempdir(),
+                                    dir = tempdir(),
                                     verbose = TRUE,
                                     testing = FALSE) {
   available_years <- 2000:2018
@@ -122,7 +119,7 @@ get_worldclim_precipitation <- function(years = 2000:2018) {
     .get_climate_url(layer, year)
   }))
   urls <- unique(all_urls)
-  filenames <- file.path(rundir, basename(urls))
+  filenames <- file.path(dir, basename(urls))
   if (testing) {
     return(basename(filenames))
   }
@@ -130,7 +127,7 @@ get_worldclim_precipitation <- function(years = 2000:2018) {
 
   # unzip the downloaded file
   sapply(filenames, function(zip) {
-    unzip_and_remove(zip, rundir, remove = FALSE)
+    unzip_and_remove(zip, dir, remove = FALSE)
   })
 
   # remove all except desired layers
@@ -139,7 +136,7 @@ get_worldclim_precipitation <- function(years = 2000:2018) {
   for (i in seq_along(nontarget_years)) {
     unlink(
       file.path(
-        rundir,
+        dir,
         paste0(
           "wc2.1_2.5m_", layer, "_",
           nontarget_years[i], "*.tif"
@@ -150,7 +147,7 @@ get_worldclim_precipitation <- function(years = 2000:2018) {
   }
 
   # return paths to the raster
-  list.files(rundir, full.names = T, pattern = ".tif")
+  list.files(dir, full.names = T, pattern = ".tif")
 }
 
 

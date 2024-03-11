@@ -45,7 +45,6 @@ get_ucdp_ged <- function(version = "latest") {
   function(x,
            name = "ucdp_ged",
            type = "vector",
-           rundir = mapme_options()[["tmpdir"]],
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {

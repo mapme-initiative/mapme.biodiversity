@@ -34,18 +34,18 @@ make_global_grid <- function(xmin = -180, xmax = 170, dx = 10,
 #' archive, if required.
 #'
 #' @param zip zip file to unzip
-#' @param rundir A directory where intermediate files are written to.
+#' @param dir A directory where the extracted files are written to.
 #' @param remove if TRUE, removes the zip else keeps it
 #' @keywords utils
 #' @export
 unzip_and_remove <- function(zip = NULL,
-                             rundir = mapme_options()[["tempdir"]],
+                             dir = tempdir(),
                              remove = TRUE) {
   extension <- tools::file_ext(zip)
   if (extension == "zip") {
     filenames <- suppressWarnings(unzip(
       zipfile = zip,
-      exdir = rundir,
+      exdir = dir,
       overwrite = FALSE
     ))
   } else if (extension == "gz") {
@@ -58,7 +58,7 @@ unzip_and_remove <- function(zip = NULL,
     stop(paste0("decompression for ", extension, " files not implemented"))
   }
   if (remove) {
-    unlink(file.path(rundir, basename(zip)))
+    unlink(file.path(dir, basename(zip)))
   }
   return(filenames)
 }

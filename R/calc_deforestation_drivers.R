@@ -45,7 +45,6 @@ calc_deforestation_drivers <- function() {
            fritz_et_al = NULL,
            name = "deforestation_drivers",
            mode = "asset",
-           rundir = mapme_options()[["tempdir"]],
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(fritz_et_al)) {
       return(NA)

@@ -64,7 +64,6 @@ calc_soilproperties <- function(engine = "extract", stats = "mean") {
            soilgrids = NULL,
            name = "soilproperties",
            mode = "asset",
-           rundir = mapme_options()[["tempdir"]],
            verbose = mapme_options()[["verbose"]]) {
     # check if input engines are correct
     if (is.null(soilgrids)) {

@@ -60,7 +60,6 @@ calc_gsw_change <- function(engine = "extract", stats = "mean") {
            global_surface_water_change = NULL,
            name = "gsw_change",
            mode = "asset",
-           rundir = mapme_options()[["tempdir"]],
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(global_surface_water_change)) {
       return(NA)

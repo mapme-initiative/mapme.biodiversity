@@ -24,7 +24,6 @@ get_teow <- function() {
   function(x,
            name = "teow",
            type = "vector",
-           rundir = mapme_options()[["tmpdir"]],
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {
