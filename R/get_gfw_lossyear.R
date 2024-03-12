@@ -37,7 +37,7 @@ NULL
 #' @param vers_lossyear The version to download, defaults to
 #'   \code{"GFC-2022-v1.10"}.
 #' @param rundir A directory where intermediate files are written to.
-#' @param verbose A directory where intermediate files are written to.
+#' @param verbose A logical controlling the verbosity.
 #' @keywords internal
 #' @include register.R
 #' @noRd
