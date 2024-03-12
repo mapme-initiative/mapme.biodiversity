@@ -40,6 +40,9 @@
 mapme_options <- function(..., outdir, verbose, aria_bin, testing) {
   if (!missing(outdir)) {
     stopifnot(is.character(outdir) && length(outdir) == 1)
+    if (!dir.exists(outdir)) {
+      stop("outdir must point to an existing directory")
+    }
     .pkgenv$outdir <- outdir
   }
 
