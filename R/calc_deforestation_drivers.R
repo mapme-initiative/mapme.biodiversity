@@ -26,7 +26,6 @@
 #'
 #' mapme_options(
 #'   outdir = outdir,
-#'   tmpdir = tempdir(),
 #'   verbose = FALSE
 #' )
 #'

@@ -43,7 +43,6 @@ dir.create(outdir, showWarnings = FALSE)
 
 mapme_options(
   outdir = outdir,
-  tmpdir = tempdir(),
   verbose = FALSE
 )
 
