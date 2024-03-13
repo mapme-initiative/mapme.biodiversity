@@ -102,23 +102,19 @@ we will have to make available the Nelson et al. resource as well as requesting
 the calculation of the respective indicator.
 
 ```{r calc-elev}
-mapme_options(
-  outdir = system.file("res", package = "mapme.biodiversity"),
-  tmpdir = system.file("tmp", package = "mapme.biodiversity"),
-)
+mapme_options(outdir = system.file("res", package = "mapme.biodiversity"))
 
 port_w_nelson <- get_resources(aoi, get_nelson_et_al(ranges = "20k_50k"))
 port_w_traveltime <- calc_indicators(port_w_nelson, calc_traveltime(stats = "mean"))
 print(port_w_traveltime)
 ```
 
-As we can observe from the output, two new columns were added to the sf
-object. The first is called `assetid` and simply is a unique identifier
-of the respective asset. The second column is called `traveltime` and is
-of type `list` indicating that it represents a nested-list column. What
-that means is that we are able to maintain the rectangular shape of our
-original data (e.g. one polygon per row), while supporting arbitrarily
-shaped outputs for indicators. Let's observe how the traveltime indicator
+As we can observe from the output, a new column was added to the `sf`
+object. It is called `traveltime` and is of type `list` indicating 
+that it represents a nested-list column. What that means is that we 
+are able to maintain the rectangular shape of our original data 
+(e.g. one polygon per row), while supporting arbitrarily shaped 
+outputs for indicators. Let's observe how the traveltime indicator
 looks like in this instance:
 
 ```{r investigate-elev}
@@ -164,7 +160,7 @@ print(port_w_prec)
 
 We see that similar to the traveltime indicator, the output consists of 9
 rows with the precipitation indicator as a single nested-list column.
-Note, however, the differences when we take a look at the shape of a the
+Note, however, the differences when we take a look at the shape of the
 indicator for a specific asset:
 
 ```{r investigate-precip}

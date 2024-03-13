@@ -81,19 +81,23 @@ cat(sprintf(
 ```
 
 Once you have decided on an indicator you are interested in, you can
-initialize a biodiversity portfolio by using an sf-object that only
-contains geometries of type `POLYGON` via the `init_portfolio()`
-function call. This will set some important information that is needed
-further down the processing chain. We can then request the download of a
-resource that is required to calculate specific indicators. Once the
-indicator has been calculated for individually for all assets in a
-portfolio, the data is returned as a nested list column to the original
-object.
+start by making the required resource available for your portfolio. 
+Using `mapme_options()` you can set an output directory and control the verbosity
+of the package. 
+
+A portfolio is represented by an sf-object. It is required for the object to only
+contain geometries of type `POLYGON` as assets. We can request the download of a
+resource for the spatial extent of our portfolio by using the `get_resources()`
+function. We simply supply our portfolio and one or more resource functions. 
+Once the resources were made available, we can query the calculation of an 
+indicator by using the `calc_indicators()` function. This function also expects
+the portfolio as input and one or more indicator functions. Once the indicator 
+has been calculated for all assets in a portfolio, the data is returned as a 
+nested list column to the original portfolio object.
 
 ```{r calculation}
 mapme_options(
   outdir = system.file("res", package = "mapme.biodiversity"),
-  tmpdir = system.file("tmp", package = "mapme.biodiversity"),
   verbose = FALSE
 )
 
@@ -111,10 +115,10 @@ mapme_options(
 
 ## A note on parallel computing
 
-{mapme.biodiversity} follows the parallel computing paradigm of the
-{[future](https://cran.r-project.org/package=future)} 
+`{mapme.biodiversity}` follows the parallel computing paradigm of the
+[`{future}`](https://cran.r-project.org/package=future) 
 package. That means that you as a user are in the control if and how you would 
-like to set up parallel processing. Currently, {mapme.biodiversity} supports 
+like to set up parallel processing. Currently, `{mapme.biodiversity}` supports 
 parallel processing on the asset level of the `calc_indicators()` function only. We
 also currently assume that parallel processing is done on the cores of a single 
 machine. In future developments, we would like to support distributed processing.
