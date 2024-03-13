@@ -7,6 +7,9 @@
   if (any(!unique(st_geometry_type(x)) %in% c("POLYGON"))) {
     stop("Some assests are not of type POLYGON. Please use sf::st_cast() to cast to POLYGON.")
   }
+  if (!inherits(x, "tibble")) {
+    x <- st_as_sf(tibble::as_tibble(x))
+  }
   x
 }
 #' Writing a portfolio to disk
