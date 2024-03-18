@@ -23,11 +23,15 @@ test_that("gsw recurrence works", {
     package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)
   gsw_recurrence <- rast(gsw_recurrence)
-  rec <- .calc_gsw_recurrence(portfolio, gsw_recurrence)
+  rec <- .calc_gsw_recurrence(portfolio, gsw_recurrence, min_recurrence = 10)
+
+  expect_error(
+    .calc_gsw_recurrence(portfolio, gsw_recurrence, min_occurrence = NULL)
+  )
 
   expect_equal(
-    rec$global_surface_water_recurrence_mean,
-    22.49066898433162,
+    rec$gsw_recurrence_area_sum,
+    719.590,
     tolerance = 1e-4
   )
 })
