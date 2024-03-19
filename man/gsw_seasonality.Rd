@@ -5,7 +5,7 @@
 \alias{gsw_seasonality}
 \title{Calculate Global Surface Water (GSW) Seasonality}
 \format{
-A tibble with one column \code{month} and one column \code{area},
+A tibble with one column \code{months} and one column \code{area},
 representing the area covered by each class in ha.
 }
 \description{
@@ -15,8 +15,8 @@ indicating how many months per year the pixel was classified as water.
 }
 \details{
 The pixel values are aggregated by summing up the area covered by each GSW
-seasonality class. The resulting \code{tibble} always contains 12 rows, one
-for each month.
+seasonality class. The resulting \code{tibble} always contains 13 rows, one
+for each seasonality class.
 
 The required resources for this indicator are:
 \itemize{

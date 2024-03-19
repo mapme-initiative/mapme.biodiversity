@@ -27,12 +27,12 @@ test_that("gsw seasonality works", {
 
   expect_equal(
     season$month,
-    seq_len(12)
+    seq(0, 12)
   )
 
   expect_equal(
     season$area,
-    c(22.461, 17.968, 23.070, 19.872, 2.284, 0.152, 0, 0, 0, 0, 0, 583.375),
+    c(2514.759, 22.461, 18.045, 23.831, 19.872, 2.512, 0.152, 0, 0, 0, 0, 0, 617.104),
     tolerance = 1e-3
   )
 })
