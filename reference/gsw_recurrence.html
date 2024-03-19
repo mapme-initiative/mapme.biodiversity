@@ -91,12 +91,13 @@ year, whereas lower values indicate that water only occurs episodically.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The pixel values are aggregated using method provided via the
-<code>stats_gsw</code> parameter.</p>
+    <p>The raw data values are aggregated based on a provided threshold parameter
+<code>min_recurrence</code>, the function returns the area covered by values
+greater or equal than this threshold.</p>
 <p>The required resources for this indicator are:</p><ul><li><p><a href="global_surface_water_recurrence.html">global_surface_water_recurrence</a></p></li>
-</ul><p>The following arguments can be set:</p><dl><dt>stats_gsw</dt>
-<dd><p>The aggregation function applied to the input raster
-values. Defaults to <code>mean</code>.</p></dd>
+</ul><p>The following arguments can be set:</p><dl><dt>min_recurrence</dt>
+<dd><p>Threshold value in percentage for pixels values to
+contribute to the calculated GSW recurrence area.</p></dd>
 
 
 </dl></div>
@@ -124,11 +125,10 @@ values. Defaults to <code>mean</code>.</p></dd>
 <span class="r-in"><span>    verbose <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="get_resources.html">get_resources</a></span><span class="op">(</span><span class="st">"global_surface_water_recurrence"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="calc_indicators.html">calc_indicators</a></span><span class="op">(</span><span class="st">"gsw_recurrence"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="calc_indicators.html">calc_indicators</a></span><span class="op">(</span><span class="st">"gsw_recurrence"</span>, min_recurrence <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Argument 'statistic' for resource 'global_surface_water_recurrence' was not specified. Setting to default value of 'recurrence'.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Argument 'vers_gsw' for resource 'global_surface_water_recurrence' was not specified. Setting to default value of 'v1_4_2021'.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Argument 'engine' for resource 'gsw_recurrence' was not specified. Setting to default value of 'extract'.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Argument 'stats_gsw' for resource 'gsw_recurrence' was not specified. Setting to default value of 'mean'.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">aoi</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 6 fields</span>

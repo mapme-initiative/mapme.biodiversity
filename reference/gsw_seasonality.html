@@ -78,19 +78,16 @@ indicating how many months per year the pixel was classified as water.</p>
 
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
-    <p>A tibble with a column for the aggregated GSW seasonality indicator.</p>
+    <p>A tibble with one column <code>months</code> and one column <code>area</code>,
+representing the area covered by each class in ha.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The pixel values are aggregated using method provided via the
-<code>stats_gsw</code> parameter.</p>
+    <p>The pixel values are aggregated by summing up the area covered by each GSW
+seasonality class. The resulting <code>tibble</code> always contains 13 rows, one
+for each seasonality class.</p>
 <p>The required resources for this indicator are:</p><ul><li><p><a href="global_surface_water_seasonality.html">global_surface_water_seasonality</a></p></li>
-</ul><p>The following arguments can be set:</p><dl><dt>stats_gsw</dt>
-<dd><p>The aggregation function applied to the input raster
-values. Defaults to <code>mean</code>.</p></dd>
-
-
-</dl></div>
+</ul></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -118,8 +115,8 @@ values. Defaults to <code>mean</code>.</p></dd>
 <span class="r-in"><span>  <span class="fu"><a href="calc_indicators.html">calc_indicators</a></span><span class="op">(</span><span class="st">"gsw_seasonality"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Argument 'statistic' for resource 'global_surface_water_seasonality' was not specified. Setting to default value of 'seasonality'.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Argument 'vers_gsw' for resource 'global_surface_water_seasonality' was not specified. Setting to default value of 'v1_4_2021'.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Argument 'engine' for resource 'gsw_seasonality' was not specified. Setting to default value of 'extract'.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Argument 'stats_gsw' for resource 'gsw_seasonality' was not specified. Setting to default value of 'mean'.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>At asset 1 an error occured. Returning NA.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> Error in fix.by(by.y, y) : 'by' must specify a uniquely valid column</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">aoi</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 6 fields</span>
