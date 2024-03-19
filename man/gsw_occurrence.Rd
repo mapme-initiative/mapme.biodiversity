@@ -5,7 +5,7 @@
 \alias{gsw_occurrence}
 \title{Calculate Global Surface Water (GSW) Occurrence}
 \format{
-A tibble with a column for the aggregated GSW occurrence indicator.
+A numeric representing the GSW occurrence area.
 }
 \description{
 GSW occurrence raw data comes in raster files with integer cell values
@@ -15,8 +15,9 @@ a 0 denotes a pixel that was never classified as water, 100 denotes a pixel
 with permanent water.
 }
 \details{
-The pixel values are aggregated using method provided via the
-\code{stats_gsw} parameter.
+The raw data values are aggregated based on a provided threshold parameter
+\code{min_occurrence}, the function returns the area covered by values
+greater or equal than this threshold.
 
 The required resources for this indicator are:
 \itemize{
@@ -25,8 +26,8 @@ The required resources for this indicator are:
 
 The following arguments can be set:
 \describe{
-\item{stats_gsw}{The aggregation function applied to the input raster
-values. Defaults to \code{mean}.}
+\item{min_occurrence}{Threshold value in percentage for pixels values to
+contribute to the calculated GSW occurrence area.}
 }
 }
 \examples{
@@ -51,7 +52,7 @@ aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
     verbose = FALSE
   ) \%>\%
   get_resources("global_surface_water_occurrence") \%>\%
-  calc_indicators("gsw_occurrence")
+  calc_indicators("gsw_occurrence", min_occurrence = 10)
 
 aoi
 }

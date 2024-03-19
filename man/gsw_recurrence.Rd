@@ -16,8 +16,9 @@ expressed as a percentage. The raster files have integer cell values between
 year, whereas lower values indicate that water only occurs episodically.
 }
 \details{
-The pixel values are aggregated using method provided via the
-\code{stats_gsw} parameter.
+The raw data values are aggregated based on a provided threshold parameter
+\code{min_recurrence}, the function returns the area covered by values
+greater or equal than this threshold.
 
 The required resources for this indicator are:
 \itemize{
@@ -26,8 +27,8 @@ The required resources for this indicator are:
 
 The following arguments can be set:
 \describe{
-\item{stats_gsw}{The aggregation function applied to the input raster
-values. Defaults to \code{mean}.}
+\item{min_recurrence}{Threshold value in percentage for pixels values to
+contribute to the calculated GSW recurrence area.}
 }
 }
 \examples{
@@ -52,7 +53,7 @@ aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
     verbose = FALSE
   ) \%>\%
   get_resources("global_surface_water_recurrence") \%>\%
-  calc_indicators("gsw_recurrence")
+  calc_indicators("gsw_recurrence", min_recurrence = 10)
 
 aoi
 }

@@ -23,11 +23,15 @@ test_that("gsw occurrence works", {
     package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)
   gsw_occurrence <- rast(gsw_occurrence)
-  occ <- .calc_gsw_occurrence(portfolio, gsw_occurrence)
+  occ <- .calc_gsw_occurrence(portfolio, gsw_occurrence, min_occurrence = 10)
+
+  expect_error(
+    .calc_gsw_occurrence(portfolio, gsw_occurrence, min_occurrence = NULL)
+  )
 
   expect_equal(
-    occ$global_surface_water_occurrence_mean,
-    19.40947828396224,
+    occ$gsw_occurrence_area_sum,
+    694.159,
     tolerance = 1e-4
   )
 })

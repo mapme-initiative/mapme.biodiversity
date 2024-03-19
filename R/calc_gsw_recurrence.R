@@ -7,16 +7,17 @@
 #' \code{[0, 100]}, where 100 represents that water reoccurs predictably every
 #' year, whereas lower values indicate that water only occurs episodically.
 #'
-#' The pixel values are aggregated using method provided via the
-#' \code{stats_gsw} parameter.
+#' The raw data values are aggregated based on a provided threshold parameter
+#' \code{min_recurrence}, the function returns the area covered by values
+#' greater or equal than this threshold.
 #'
 #' The required resources for this indicator are:
 #'  - [global_surface_water_recurrence]
 #'
 #' The following arguments can be set:
 #' \describe{
-#'   \item{stats_gsw}{The aggregation function applied to the input raster
-#'   values. Defaults to \code{mean}.}
+#'   \item{min_recurrence}{Threshold value in percentage for pixels values to
+#'   contribute to the calculated GSW recurrence area.}
 #' }
 #'
 #' @name gsw_recurrence
@@ -45,7 +46,7 @@
 #'     verbose = FALSE
 #'   ) %>%
 #'   get_resources("global_surface_water_recurrence") %>%
-#'   calc_indicators("gsw_recurrence")
+#'   calc_indicators("gsw_recurrence", min_recurrence = 10)
 #'
 #' aoi
 #' }
@@ -60,44 +61,62 @@ NULL
 #' [0, 100], where 100 represents that water reoccurs predictably every year,
 #' whereas lower values indicate that water only occurs episodically.
 #'
-#' The pixel values are aggregated using method provided via the
-#' \code{stats_gsw} parameter.
+#' The raw data values are aggregated based on a provided threshold parameter
+#' \code{min_recurrence}, the function returns the area covered by values
+#' greater or equal than this threshold.
+#'
 #'
 #' @param x A single polygon for which to calculate the GSW statistics.
 #' @param global_surface_water_recurrence The GSW Recurrence data source.
 #' @param engine The preferred processing functions from either one of "zonal",
 #' "extract" or "exactextract". Default: "extract".
-#' @param stats_gsw Aggregation function with which the data are combined.
-#' Default: "mean".
-#' @return A tibble containing the aggregated recurrence indicator. The column
-#' name is a concatenation of "global_surface_water_recurrence_" +
-#' \code{stats_gsw}.
+#' @param min_recurrence Threshold to define which pixels count towards the GSW
+#' recurrence area [0, 100].
+#' @return A numeric representing the GSW recurrence area.
 #' @keywords internal
 #' @include register.R
 #' @noRd
 .calc_gsw_recurrence <- function(x,
                                  global_surface_water_recurrence,
                                  engine = "extract",
-                                 stats_gsw = "mean",
+                                 min_recurrence = NULL,
                                  verbose = TRUE,
                                  ...) {
   if (is.null(global_surface_water_recurrence)) {
     return(NA)
   }
+  stopifnot(
+    !is.null(min_recurrence),
+    !is.na(min_recurrence),
+    is.numeric(min_recurrence),
+    min_recurrence >= 0 & min_recurrence <= 100
+  )
 
-  global_surface_water_recurrence <- terra::clamp(
+  rcl <- matrix(
+    c(min_recurrence, 100, 1),
+    ncol = 3
+  )
+
+  global_surface_water_recurrence <- terra::classify(
+    x = global_surface_water_recurrence,
+    rcl = rcl,
+    include.lowest = TRUE,
+    right = NA,
+    others = NA
+  )
+
+  global_surface_water_recurrence <- terra::cellSize(
     global_surface_water_recurrence,
-    lower = 0,
-    upper = 100,
-    values = FALSE
+    mask = TRUE,
+    unit = "ha"
   )
 
   results <- .select_engine(
     x = x,
     raster = global_surface_water_recurrence,
-    stats = stats_gsw,
+    stats = "sum",
     engine = engine,
-    name = "global_surface_water_recurrence",
+    name = "gsw_recurrence_area",
     mode = "asset"
   )
 
@@ -110,7 +129,7 @@ register_indicator(
   fun = .calc_gsw_recurrence,
   arguments = list(
     engine = "extract",
-    stats_gsw = "mean"
+    min_recurrence = NULL
   ),
   processing_mode = "asset"
 )
