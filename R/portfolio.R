@@ -1,7 +1,7 @@
 #' Initialization of a biodiversity portfolio object
 #'
 #' This function expects an \code{sf} object as its first argument that contains
-#' only geometry of type \code{POLYGON} or \code{MULTIPOLYGON}. Each row of the
+#' only geometry of type \code{POLYGON}. Each row of the
 #' object is considered a single asset in the portfolio for which biodiversity
 #' indicators will be calculated further down the processing chain. Some
 #' preliminary checks are conducted, e.g. that the CRS of the object is
