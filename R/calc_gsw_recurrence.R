@@ -96,6 +96,7 @@ NULL
     c(min_recurrence, 100, 1),
     ncol = 3
   )
+
   global_surface_water_recurrence <- terra::classify(
     x = global_surface_water_recurrence,
     rcl = rcl,

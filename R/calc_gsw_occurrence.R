@@ -93,6 +93,7 @@ NULL
     c(min_occurrence, 100, 1),
     ncol = 3
   )
+
   global_surface_water_occurrence <- terra::classify(
     x = global_surface_water_occurrence,
     rcl = rcl,

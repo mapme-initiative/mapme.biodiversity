@@ -5,7 +5,8 @@
 \alias{gsw_seasonality}
 \title{Calculate Global Surface Water (GSW) Seasonality}
 \format{
-A tibble with a column for the aggregated GSW seasonality indicator.
+A tibble with one column \code{month} and one column \code{area},
+representing the area covered by each class in ha.
 }
 \description{
 GSW seasonality describes the intra-annual distribution of surface water for
@@ -13,18 +14,13 @@ each pixel. The raster files have integer cell values between \code{[0, 12]},
 indicating how many months per year the pixel was classified as water.
 }
 \details{
-The pixel values are aggregated using method provided via the
-\code{stats_gsw} parameter.
+The pixel values are aggregated by summing up the area covered by each GSW
+seasonality class. The resulting \code{tibble} always contains 12 rows, one
+for each month.
 
 The required resources for this indicator are:
 \itemize{
 \item \link{global_surface_water_seasonality}
-}
-
-The following arguments can be set:
-\describe{
-\item{stats_gsw}{The aggregation function applied to the input raster
-values. Defaults to \code{mean}.}
 }
 }
 \examples{

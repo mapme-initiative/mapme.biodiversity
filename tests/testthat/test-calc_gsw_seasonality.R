@@ -26,8 +26,13 @@ test_that("gsw seasonality works", {
   season <- .calc_gsw_seasonality(portfolio, gsw_seasonality)
 
   expect_equal(
-    season$global_surface_water_seasonality_mean,
-    2.289321841577943,
-    tolerance = 1e-4
+    season$month,
+    seq_len(12)
+  )
+
+  expect_equal(
+    season$area,
+    c(22.461, 17.968, 23.070, 19.872, 2.284, 0.152, 0, 0, 0, 0, 0, 583.375),
+    tolerance = 1e-3
   )
 })
