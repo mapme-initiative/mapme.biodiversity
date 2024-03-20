@@ -1,13 +1,14 @@
 #' Calculate Global Surface Water (GSW) Occurrence
 #'
 #' GSW occurrence raw data comes in raster files with integer cell values
-#' between \code{[0, 100]}. This value gives the percentage of the time that a
+#' between `[0, 100]`. This value gives the percentage of the time that a
 #' given pixel was classified as water during the entire observation period. So
 #' a 0 denotes a pixel that was never classified as water, 100 denotes a pixel
 #' with permanent water.
 #'
-#' The pixel values are aggregated using method provided via the
-#' \code{stats} parameter.
+#' The raw data values are aggregated based on a provided threshold parameter
+#' `min_occurrence`, the function returns the area covered by values
+#' greater or equal than this threshold.
 #'
 #' The required resources for this indicator are:
 #'  - [global_surface_water_occurrence]
@@ -15,8 +16,8 @@
 #' @name gsw_occurrence
 #' @param engine The preferred processing functions from either one of "zonal",
 #' "extract" or "exactextract". Default: "extract".
-#' @param stats Aggregation function with which the data are combined.
-#' Default: "mean".
+#' @param min_occurrence Threshold to define which pixels count towards the GSW
+#' occurrence area `[0, 100]`.
 #' @keywords indicator
 #' @returns A tibble with a column for the aggregated GSW occurrence indicator.
 #' @include register.R
@@ -49,9 +50,14 @@
 #'
 #' aoi
 #' }
-calc_gsw_occurrence <- function(engine = "extract", stats = "mean") {
+calc_gsw_occurrence <- function(engine = "extract", min_occurrence = NULL) {
   engine <- check_engine(engine)
-  stats <- check_stats(stats)
+  stopifnot(
+    !is.null(min_occurrence),
+    !is.na(min_occurrence),
+    is.numeric(min_occurrence),
+    min_occurrence >= 0 & min_occurrence <= 100
+  )
 
   function(x,
            global_surface_water_occurrence = NULL,
@@ -62,23 +68,35 @@ calc_gsw_occurrence <- function(engine = "extract", stats = "mean") {
       return(NA)
     }
 
-    global_surface_water_occurrence <- terra::clamp(
+    rcl <- matrix(
+      c(min_occurrence, 100, 1),
+      ncol = 3
+    )
+
+    global_surface_water_occurrence <- terra::classify(
+      x = global_surface_water_occurrence,
+      rcl = rcl,
+      include.lowest = TRUE,
+      right = NA,
+      others = NA
+    )
+
+    global_surface_water_occurrence <- terra::cellSize(
       global_surface_water_occurrence,
-      lower = 0,
-      upper = 100,
-      values = FALSE
+      mask = TRUE,
+      unit = "ha"
     )
 
     results <- select_engine(
       x = x,
       raster = global_surface_water_occurrence,
-      stats = stats,
+      stats = "sum",
       engine = engine,
-      name = "global_surface_water_occurrence",
+      name = "gsw_occurrence_area",
       mode = "asset"
     )
 
-    results
+    return(results)
   }
 }
 

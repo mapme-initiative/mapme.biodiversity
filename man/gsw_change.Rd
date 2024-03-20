@@ -23,12 +23,12 @@ from homologous pairs of months (i.e. same months containing valid
 observations in both periods). The difference in the occurrence of surface
 water was calculated for each homologous pair of months. The average of all
 of these differences constitutes the Surface Water Occurrence change
-intensity. The raster files have integer cell values between \code{[0, 200]}
+intensity. The raster files have integer cell values between \verb{[0, 200]}
 where 0 represents surface water loss and 200 represents surface water gain.
 }
 \details{
 The pixel values are aggregated using method provided via the
-\code{stats} parameter.
+\code{stats} parameter using the specified \code{engine}.
 
 The required resources for this indicator are:
 \itemize{

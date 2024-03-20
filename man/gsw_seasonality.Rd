@@ -5,17 +5,11 @@
 \alias{calc_gsw_seasonality}
 \title{Calculate Global Surface Water (GSW) Seasonality}
 \usage{
-calc_gsw_seasonality(engine = "extract", stats = "mean")
-}
-\arguments{
-\item{engine}{The preferred processing functions from either one of "zonal",
-"extract" or "exactextract". Default: "extract".}
-
-\item{stats}{Aggregation function with which the data are combined.
-Default: "mean".}
+calc_gsw_seasonality()
 }
 \value{
-A tibble with a column for the aggregated GSW seasonality indicator.
+A tibble with one column \code{months} and one column \code{area},
+representing the area covered by each class in ha.
 }
 \description{
 GSW seasonality describes the intra-annual distribution of surface water for
@@ -23,8 +17,9 @@ each pixel. The raster files have integer cell values between \code{[0, 12]},
 indicating how many months per year the pixel was classified as water.
 }
 \details{
-The pixel values are aggregated using method provided via the
-\code{stats} parameter.
+The pixel values are aggregated by summing up the area covered by each GSW
+seasonality class. The resulting \code{tibble} always contains 13 rows, one
+for each seasonality class.
 
 The required resources for this indicator are:
 \itemize{
@@ -52,9 +47,7 @@ aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
 ) \%>\%
   read_sf() \%>\%
   get_resources(get_global_surface_water_seasonality()) \%>\%
-  calc_indicators(
-    calc_gsw_seasonality(engine = "extract", stats = "mean")
-  ) \%>\%
+  calc_indicators(calc_gsw_seasonality()) \%>\%
   tidyr::unnest(gsw_seasonality)
 
 aoi

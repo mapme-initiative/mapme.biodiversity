@@ -5,28 +5,29 @@
 \alias{calc_gsw_occurrence}
 \title{Calculate Global Surface Water (GSW) Occurrence}
 \usage{
-calc_gsw_occurrence(engine = "extract", stats = "mean")
+calc_gsw_occurrence(engine = "extract", min_occurrence = NULL)
 }
 \arguments{
 \item{engine}{The preferred processing functions from either one of "zonal",
 "extract" or "exactextract". Default: "extract".}
 
-\item{stats}{Aggregation function with which the data are combined.
-Default: "mean".}
+\item{min_occurrence}{Threshold to define which pixels count towards the GSW
+occurrence area \verb{[0, 100]}.}
 }
 \value{
 A tibble with a column for the aggregated GSW occurrence indicator.
 }
 \description{
 GSW occurrence raw data comes in raster files with integer cell values
-between \code{[0, 100]}. This value gives the percentage of the time that a
+between \verb{[0, 100]}. This value gives the percentage of the time that a
 given pixel was classified as water during the entire observation period. So
 a 0 denotes a pixel that was never classified as water, 100 denotes a pixel
 with permanent water.
 }
 \details{
-The pixel values are aggregated using method provided via the
-\code{stats} parameter.
+The raw data values are aggregated based on a provided threshold parameter
+\code{min_occurrence}, the function returns the area covered by values
+greater or equal than this threshold.
 
 The required resources for this indicator are:
 \itemize{

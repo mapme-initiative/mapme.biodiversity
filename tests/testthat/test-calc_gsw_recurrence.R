@@ -6,7 +6,7 @@ test_that("gsw recurrence works", {
   )
 
   shp <- suppressWarnings(st_cast(shp, to = "POLYGON")[1, ])
-  gswr <- calc_gsw_recurrence()
+  gswr <- calc_gsw_recurrence(min_recurrence = 10)
   expect_equal(
     gswr(shp, NULL),
     NA
@@ -17,10 +17,9 @@ test_that("gsw recurrence works", {
   ), pattern = ".tif$", full.names = TRUE)
   gsw_recurrence <- rast(gsw_recurrence)
   rec <- gswr(shp, gsw_recurrence)
-
   expect_equal(
-    rec$global_surface_water_recurrence_mean,
-    22.49066898433162,
+    rec$gsw_recurrence_area_sum,
+    719.590,
     tolerance = 1e-4
   )
 })

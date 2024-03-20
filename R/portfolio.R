@@ -1,5 +1,6 @@
 .check_portfolio <- function(x) {
   stopifnot(inherits(x, "sf"))
+
   if (st_crs(x) != st_crs(4326)) {
     message("CRS of x is not EPSG:4326. Attempting to transform.")
     x <- st_transform(x, 4326)

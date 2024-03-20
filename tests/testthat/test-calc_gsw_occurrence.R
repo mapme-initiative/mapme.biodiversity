@@ -6,7 +6,7 @@ test_that("gsw occurrence works", {
   )
 
   shp <- suppressWarnings(st_cast(shp, to = "POLYGON")[1, ])
-  gswo <- calc_gsw_occurrence()
+  gswo <- calc_gsw_occurrence(min_occurrence = 10)
   expect_equal(
     gswo(shp, NULL),
     NA
@@ -17,10 +17,9 @@ test_that("gsw occurrence works", {
   ), pattern = ".tif$", full.names = TRUE)
   gsw_occurrence <- rast(gsw_occurrence)
   occ <- gswo(shp, gsw_occurrence)
-
   expect_equal(
-    occ$global_surface_water_occurrence_mean,
-    19.40947828396224,
+    occ$gsw_occurrence_area_sum,
+    694.159,
     tolerance = 1e-4
   )
 })

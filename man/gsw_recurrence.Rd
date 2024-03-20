@@ -5,14 +5,14 @@
 \alias{calc_gsw_recurrence}
 \title{Calculate Global Surface Water (GSW) Recurrence}
 \usage{
-calc_gsw_recurrence(engine = "extract", stats = "mean")
+calc_gsw_recurrence(engine = "extract", min_recurrence = NULL)
 }
 \arguments{
 \item{engine}{The preferred processing functions from either one of "zonal",
 "extract" or "exactextract". Default: "extract".}
 
-\item{stats}{Aggregation function with which the data are combined.
-Default: "mean".}
+\item{min_recurrence}{Threshold to define which pixels count towards the GSW
+recurrence area \verb{[0, 100]}.}
 }
 \value{
 A tibble with a column for the aggregated GSW recurrence indicator.
@@ -22,12 +22,13 @@ Water Recurrence is a measurement of the degree of variability in the
 presence of water from year to year. It describes the frequency with which
 water returned to a particular location from one year to another, and is
 expressed as a percentage. The raster files have integer cell values between
-\code{[0, 100]}, where 100 represents that water reoccurs predictably every
-year, whereas lower values indicate that water only occurs episodically.
+\verb{[0, 100]}, where 100 represents that water reoccurs predictably every year,
+whereas lower values indicate that water only occurs episodically.
 }
 \details{
-The pixel values are aggregated using method provided via the
-\code{stats} parameter.
+The raw data values are aggregated based on a provided threshold parameter
+\code{min_recurrence}, the function returns the area covered by values
+greater or equal than this threshold.
 
 The required resources for this indicator are:
 \itemize{
@@ -56,7 +57,7 @@ aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
   read_sf() \%>\%
   get_resources(get_global_surface_water_recurrence()) \%>\%
   calc_indicators(
-    calc_gsw_recurrence(engine = "extract", stats = "mean")
+    calc_gsw_recurrence(engine = "extract", min_recurrence = 10)
   ) \%>\%
   tidyr::unnest(gsw_recurrence)
 
