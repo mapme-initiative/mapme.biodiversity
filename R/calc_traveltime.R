@@ -77,5 +77,6 @@ calc_traveltime <- function(engine = "extract", stats = "mean") {
 
 register_indicator(
   name = "traveltime",
-  resources = list(nelson_et_al = "raster")
+  description = "Statistics of traveltime to the clostes city grouped by city category",
+  resources = "nelson_et_al"
 )

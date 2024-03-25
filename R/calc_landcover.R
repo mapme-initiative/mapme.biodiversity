@@ -87,5 +87,6 @@ calc_landcover <- function() {
 
 register_indicator(
   name = "landcover",
-  resources = list(esalandcover = "raster")
+  description = "Areal statistics grouped by landcover class",
+  resources = "esalandcover"
 )

@@ -102,5 +102,6 @@ calc_gsw_occurrence <- function(engine = "extract", min_occurrence = NULL) {
 
 register_indicator(
   name = "gsw_occurrence",
-  resources = list(global_surface_water_occurrence = "raster")
+  description = "Areal statistic of surface water based on occurrence threshold",
+  resources = "global_surface_water_occurrence"
 )

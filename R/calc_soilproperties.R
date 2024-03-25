@@ -101,5 +101,6 @@ calc_soilproperties <- function(engine = "extract", stats = "mean") {
 
 register_indicator(
   name = "soilproperties",
-  resources = list(soilgrids = "raster")
+  description = "Statistics of SoilGrids layers",
+  resources = "soilgrids"
 )

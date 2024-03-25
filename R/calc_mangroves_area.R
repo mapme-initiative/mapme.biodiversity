@@ -64,5 +64,6 @@ calc_mangroves_area <- function() {
 
 register_indicator(
   name = "mangroves_area",
-  resources = list(gmw = "vector")
+  description = "Area covered by mangroves",
+  resources = "gmw"
 )

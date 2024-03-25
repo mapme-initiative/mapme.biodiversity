@@ -246,8 +246,9 @@ calc_treecover_area <- function(years = 2000:2020,
 
 register_indicator(
   name = "treecover_area",
-  resources = list(
-    gfw_treecover = "raster",
-    gfw_lossyear = "raster"
+  description = "Area of forest cover by year",
+  resources = c(
+    "gfw_treecover",
+    "gfw_lossyear"
   )
 )

@@ -91,5 +91,6 @@ calc_tri <- function(engine = "extract", stats = "mean") {
 
 register_indicator(
   name = "tri",
-  resources = list(nasa_srtm = "raster")
+  description = "Statistics of terrain rudgedness index based on NASA SRTM DEM",
+  resources = "nasa_srtm"
 )

@@ -86,5 +86,6 @@ calc_popcount <- function(engine = "extract", stats = "sum") {
 
 register_indicator(
   name = "popcount",
-  resources = list(worldpop = "raster")
+  description = "Statistic of population counts",
+  resources = "worldpop"
 )

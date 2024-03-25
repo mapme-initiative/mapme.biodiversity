@@ -81,5 +81,6 @@ calc_biome <- function() {
 
 register_indicator(
   name = "biome",
-  resources = list(teow = "vector")
+  description = "Areal statistics of biomes from TEOW",
+  resources = "teow"
 )

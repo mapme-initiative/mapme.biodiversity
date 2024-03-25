@@ -70,5 +70,6 @@ calc_precipitation_wc <- function(engine = "extract", stats = "mean") {
 
 register_indicator(
   name = "precipitation_wc",
-  resources = list(worldclim_precipitation = "raster")
+  description = "Statistics of WorldClim precipitation layer",
+  resources = "worldclim_precipitation"
 )

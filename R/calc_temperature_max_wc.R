@@ -69,5 +69,6 @@ calc_temperature_max_wc <- function(engine = "extract", stats = "mean") {
 
 register_indicator(
   name = "temperature_max_wc",
-  resources = list(worldclim_max_temperature = "raster")
+  description = "Statistics of WorldClim maximum temperature layer",
+  resources = "worldclim_max_temperature"
 )

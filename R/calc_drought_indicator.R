@@ -88,5 +88,6 @@ calc_drought_indicator <- function(engine = "extract", stats = "mean") {
 
 register_indicator(
   name = "drought_indicator",
-  resources = list(nasa_grace = "raster")
+  description = "Relative wetness statistics based on NASA GRACE",
+  resources = "nasa_grace"
 )

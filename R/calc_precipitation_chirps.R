@@ -205,5 +205,6 @@ calc_precipitation_chirps <- function(years = 1981:2020,
 
 register_indicator(
   name = "precipitation_chirps",
-  resources = list(chirps = "raster")
+  description = "Statistics of CHIRPS precipitation layer",
+  resources = "chirps"
 )

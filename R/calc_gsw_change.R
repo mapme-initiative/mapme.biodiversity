@@ -86,5 +86,6 @@ calc_gsw_change <- function(engine = "extract", stats = "mean") {
 
 register_indicator(
   name = "gsw_change",
-  resources = list(global_surface_water_change = "raster")
+  description = "Statistics of the surface water change layer by JRC",
+  resources = "global_surface_water_change"
 )

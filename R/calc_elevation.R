@@ -71,5 +71,6 @@ calc_elevation <- function(engine = "extract",
 
 register_indicator(
   name = "elevation",
-  resources = list(nasa_srtm = "raster")
+  description = "Statistics of elevation based on NASA SRTM",
+  resources = "nasa_srtm"
 )

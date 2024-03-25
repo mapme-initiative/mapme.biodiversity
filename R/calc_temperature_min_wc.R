@@ -115,5 +115,6 @@ calc_temperature_min_wc <- function(engine = "extract", stats = "mean") {
 
 register_indicator(
   name = "temperature_min_wc",
-  resources = list(worldclim_min_temperature = "raster")
+  description = "Statistics of WorldClim minimum temperature layer",
+  resources = "worldclim_min_temperature"
 )

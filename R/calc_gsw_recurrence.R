@@ -104,5 +104,6 @@ calc_gsw_recurrence <- function(engine = "extract", min_recurrence = NULL) {
 
 register_indicator(
   name = "gsw_recurrence",
-  resources = list(global_surface_water_recurrence = "raster")
+  description = "Areal statistic of surface water based on reccurence threshold",
+  resources = "global_surface_water_recurrence"
 )

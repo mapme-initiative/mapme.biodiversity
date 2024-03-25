@@ -240,8 +240,8 @@ test_that(".prep works correctly", {
   )
 
   available_resources <- .avail_resources()
-  required_resources <- available_indicators("treecover_area")[[1]][["resources"]]
-  output <- .prep_resources(x, available_resources, names(required_resources))
+  required_resources <- available_indicators("treecover_area")[["resources"]][[1]][["name"]]
+  output <- .prep_resources(x, available_resources, required_resources)
 
   expect_equal(
     length(output),
@@ -249,7 +249,7 @@ test_that(".prep works correctly", {
   )
   expect_equal(
     names(output),
-    c("gfw_treecover", "gfw_lossyear")
+    c("gfw_lossyear", "gfw_treecover")
   )
   expect_true(
     inherits(output[[1]], "SpatRaster"),

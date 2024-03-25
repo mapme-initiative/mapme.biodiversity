@@ -71,5 +71,6 @@ calc_active_fire_counts <- function() {
 
 register_indicator(
   name = "active_fire_counts",
-  resources = list(nasa_firms = "vector")
+  description = "Number of detected fires by NASA FIRMS",
+  resources = "nasa_firms"
 )

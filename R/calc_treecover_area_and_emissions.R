@@ -123,9 +123,10 @@ calc_treecover_area_and_emissions <- function(years = 2000:2020,
 
 register_indicator(
   name = "treecover_area_and_emissions",
-  resources = list(
-    gfw_treecover = "raster",
-    gfw_lossyear = "raster",
-    gfw_emissions = "raster"
+  description = "Area of forest cover and greenhouse gas emssions caused by forest loss by year",
+  resources = c(
+    "gfw_treecover",
+    "gfw_lossyear",
+    "gfw_emissions"
   )
 )

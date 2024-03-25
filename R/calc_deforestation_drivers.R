@@ -74,5 +74,6 @@ calc_deforestation_drivers <- function() {
 
 register_indicator(
   name = "deforestation_drivers",
-  resources = list(fritz_et_al = "raster")
+  description = "Areal statistics of deforestation drivers",
+  resources = "fritz_et_al"
 )

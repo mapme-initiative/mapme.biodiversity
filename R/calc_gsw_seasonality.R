@@ -96,5 +96,6 @@ calc_gsw_seasonality <- function() {
 
 register_indicator(
   name = "gsw_seasonality",
-  resources = list(global_surface_water_seasonality = "raster")
+  description = "Areal statistic of surface water by seasonality",
+  resources = "global_surface_water_seasonality"
 )

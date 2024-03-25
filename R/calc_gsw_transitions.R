@@ -97,5 +97,6 @@ calc_gsw_transitions <- function() {
 
 register_indicator(
   name = "gsw_transitions",
-  resources = list(global_surface_water_transitions = "raster")
+  description = "Areal statistics of surface water grouped by transition class",
+  resources = "global_surface_water_transitions"
 )

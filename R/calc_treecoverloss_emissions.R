@@ -107,9 +107,10 @@ calc_treecoverloss_emissions <- function(years = 2000:2020,
 
 register_indicator(
   name = "treecoverloss_emissions",
-  resources = list(
-    gfw_treecover = "raster",
-    gfw_lossyear = "raster",
-    gfw_emissions = "raster"
+  description = "Greenouse gas emissions cause by forest loss by year",
+  resources = c(
+    "gfw_treecover",
+    "gfw_lossyear",
+    "gfw_emissions"
   )
 )

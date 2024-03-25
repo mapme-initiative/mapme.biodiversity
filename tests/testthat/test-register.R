@@ -56,37 +56,46 @@ test_that("test register_resource works", {
 
 test_that("test register_indicator works", {
   name <- "sample"
-  resources <- list(gfw_treecover = "raster", gmw = "vector")
+  description <- "sample desc"
+  resources <- c("gfw_treecover", "gmw")
 
   expect_error(
     register_indicator(),
-    "neither name nor resources can be NULL"
+    "neither name, description nor resources can be NULL"
   )
 
   expect_error(
     register_indicator(
-      name = 1, resources = resources
+      name = 1, description = description, resources = resources
     ),
     "name needs to be a single charachter string"
   )
 
   expect_error(
     register_indicator(
-      name = name,
-      resources = append(resources, list(gfw_lossyear = "unknown"))
+      name = name, description = 1, resources = resources
     ),
-    "the following resources have an unknown type specified"
+    "description needs to be a single charachter string"
   )
 
-  expect_silent(register_indicator(name, resources))
-  ind <- .pkgenv$indicators[name]
-  expect_equal(names(ind), name)
-  ind <- ind[[name]]
-  expect_equal(names(ind), "resources")
-  ind <- ind[["resources"]]
-  expect_equal(names(ind), c("gfw_treecover", "gmw"))
-  expect_equal(ind[["gfw_treecover"]], "raster")
-  expect_equal(ind[["gmw"]], "vector")
+  expect_error(
+    register_indicator(
+      name = name,
+      description = description,
+      resources = 1
+    ),
+    "resources needs to be a charachter vector"
+  )
+
+  expect_silent(register_indicator(name, description, resources))
+  ind <- available_indicators(name)
+  expect_equal(names(ind), c("name", "description", "resources"))
+  res <- ind[["resources"]]
+  expect_true(inherits(res, "list"))
+  res <- res[[1]]
+  expect_true(inherits(res, "tbl_df"))
+  expect_equal(nrow(res), 2)
+  expect_equal(res[["name"]], resources)
 })
 
 test_that("test available_resources works", {
@@ -98,8 +107,8 @@ test_that("test available_resources works", {
 
 test_that("test available_indicators works", {
   ind <- available_indicators()
-  expect_equal(class(ind), "list")
-  expect_true(length(ind) > 1)
+  expect_true(inherits(ind, "tbl_df"))
+  expect_true(nrow(ind) > 1)
   expect_error(available_indicators("not-available"))
 })
 

@@ -179,5 +179,6 @@ calc_fatalities <- function(years = 1989:2023,
 
 register_indicator(
   name = "fatalities",
-  resources = list(ucdp_ged = "vector")
+  description = "Number of fatalities by group of conflict based on UCDP GED",
+  resources = "ucdp_ged"
 )

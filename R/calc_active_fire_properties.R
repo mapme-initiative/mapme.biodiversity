@@ -70,5 +70,6 @@ calc_active_fire_properties <- function() {
 
 register_indicator(
   name = "active_fire_properties",
-  resources = list(nasa_firms = "vector")
+  description = "Extraction of properties of fires detected by NASA FIRMS",
+  resources = "nasa_firms"
 )

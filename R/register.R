@@ -155,10 +155,11 @@ register_resource <- function(name = NULL, type = NULL, source = NULL, licence =
 #' will have to re-register your custom indicator.
 #'
 #' @param name A character vector indicating the name of the indicator.
-#' @param resources A list with named objects indicating the resources
-#'   that need to be available to calculate the indicator. The names correspond
-#'   to registered resources and a single character value indicates the
-#'   type of that resources
+#' @param description A character vector with a basic description of
+#'   the indicator
+#' @param resources A character vector of the required resources
+#'   that need to be available to calculate the indicator. The names must
+#'   correspond with already registered resources.
 #'
 #' @return Nothing. Registers the function in the package environment.
 #' @keywords utils
@@ -168,15 +169,16 @@ register_resource <- function(name = NULL, type = NULL, source = NULL, licence =
 #' \dontrun{
 #' register_indicator(
 #'   name = "treecover_area",
-#'   resources = list(
-#'     gfw_treecover = "raster",
-#'     gfw_lossyear = "raster"
+#'   description = "Area of forest cover by year",
+#'   resources = c(
+#'     "gfw_treecover",
+#'     "gfw_lossyear"
 #'   )
 #' )
 #' }
-register_indicator <- function(name = NULL, resources = NULL) {
-  if (any(is.null(name), is.null(resources))) {
-    stop("neither name nor resources can be NULL")
+register_indicator <- function(name = NULL, description = NULL, resources = NULL) {
+  if (any(is.null(name), is.null(description), is.null(resources))) {
+    stop("neither name, description nor resources can be NULL")
   }
   if (!inherits(name, "character") || length(name) > 1 || nchar(name) == 0) {
     stop("name needs to be a single charachter string")
@@ -184,26 +186,15 @@ register_indicator <- function(name = NULL, resources = NULL) {
   if (name %in% names(.pkgenv$indicators)) {
     warning(paste("indicator with name", name, "already registered"))
   }
-
-  if (!inherits(resources, "list")) {
-    stop(paste(
-      "resources needs to be a list indicating the required resources",
-      "and their types"
-    ))
+  if (!inherits(description, "character") || length(description) > 1 || nchar(description) == 0) {
+    stop("description needs to be a single charachter string")
   }
-  check_resources <- sapply(resources, function(x) x %in% c("vector", "raster"))
-
-  if (any(!check_resources)) {
-    wrong_types <- names(check_resources)[!check_resources]
-    stop(paste(
-      "the following resources have an unknown type specified: ",
-      paste(wrong_types, sep = "", collapse = ", ")
-    ))
+  if (!inherits(resources, "character")) {
+    stop("resources needs to be a charachter vector")
   }
 
-  indicator <- list(list(resources = resources))
-  names(indicator) <- name
-  .pkgenv$indicators <- append(.pkgenv$indicators, indicator)
+  indicator <- tibble(name = name, description = description, resources = list(resources))
+  .pkgenv$indicators <- rbind(.pkgenv$indicators, indicator)
 }
 
 
@@ -235,7 +226,7 @@ available_resources <- function(resources = NULL) {
       not_avail <- resources[not_avail]
       msg <- sprintf(
         "The following resources are not available:\n%s",
-        paste(not_avail, collpase = ", ")
+        paste(not_avail, collpase = " ")
       )
       stop(msg)
     }
@@ -263,20 +254,22 @@ available_resources <- function(resources = NULL) {
 #' names(available_indicators())
 available_indicators <- function(indicators = NULL) {
   all_indicators <- .pkgenv$indicators
+  resources <- lapply(all_indicators[["resources"]], function(x) available_resources(x))
+  all_indicators[["resources"]] <- resources
 
   if (is.null(indicators)) {
-    return(all_indicators[order(names(all_indicators))])
+    return(all_indicators[order(all_indicators[["name"]]), ])
   } else {
-    if (any(!indicators %in% names(all_indicators))) {
+    if (any(!indicators %in% all_indicators[["name"]])) {
       not_avail <- which(!indicators %in% names(all_indicators))
       not_avail <- indicators[not_avail]
       msg <- sprintf(
         "The following indicators are not available:\n%s",
-        paste(not_avail, collpase = ", ")
+        paste(not_avail, collpase = " ")
       )
       stop(msg)
     }
-    all_indicators[indicators]
+    all_indicators[all_indicators[["name"]] %in% indicators, ]
   }
 }
 
