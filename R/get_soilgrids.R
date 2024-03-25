@@ -253,5 +253,6 @@ get_soilgrids <- function(layers, depths, stats) {
 register_resource(
   name = "soilgrids",
   type = "raster",
-  source = "https://www.isric.org/explore/soilgrids"
+  source = "https://www.isric.org/explore/soilgrids",
+  licence = "CC-BY 4.0"
 )

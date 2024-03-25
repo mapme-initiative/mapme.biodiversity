@@ -65,5 +65,6 @@ get_nasa_grace <- function(years = 2003:2022) {
 register_resource(
   name = "nasa_grace",
   type = "raster",
-  source = "https://nasagrace.unl.edu/globaldata/"
+  source = "https://nasagrace.unl.edu/globaldata/",
+  licence = "https://nasagrace.unl.edu/About.aspx"
 )

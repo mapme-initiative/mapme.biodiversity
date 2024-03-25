@@ -180,17 +180,20 @@ get_worldclim_precipitation <- function(years = 2000:2018) {
 register_resource(
   name = "worldclim_min_temperature",
   type = "raster",
-  source = "https://www.worldclim.org/data/index.html"
+  source = "https://www.worldclim.org/data/index.html",
+  licence = "https://www.worldclim.org/about.html"
 )
 
 register_resource(
   name = "worldclim_max_temperature",
   type = "raster",
-  source = "https://www.worldclim.org/data/index.html"
+  source = "https://www.worldclim.org/data/index.html",
+  licence = "https://www.worldclim.org/about.html"
 )
 
 register_resource(
   name = "worldclim_precipitation",
   type = "raster",
-  source = "https://www.worldclim.org/data/index.html"
+  source = "https://www.worldclim.org/data/index.html",
+  licence = "https://www.worldclim.org/about.html"
 )

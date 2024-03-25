@@ -64,5 +64,6 @@ get_gfw_lossyear <- function(version = "GFC-2022-v1.10") {
 register_resource(
   name = "gfw_lossyear",
   type = "raster",
-  source = "https://data.globalforestwatch.org/documents/tree-cover-loss/explore"
+  source = "https://data.globalforestwatch.org/documents/tree-cover-loss/explore",
+  licence = "CC-BY 4.0"
 )

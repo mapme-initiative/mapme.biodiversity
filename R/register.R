@@ -97,6 +97,8 @@ mapme_options <- function(..., outdir, verbose, aria_bin, testing) {
 #' @param type A character vector indicating the type of the resource. Either
 #'   'vector' or 'raster'.
 #' @param source Optional, preferably a URL where the data is found.
+#' @param licence A A character vector indicating the licence of the resource.
+#'   In case it is a custom licence, put a link to the licence text.
 #'
 #' @return Nothing. Registers the function in the package environment.
 #' @keywords utils
@@ -110,9 +112,9 @@ mapme_options <- function(..., outdir, verbose, aria_bin, testing) {
 #'   source = "https://data.globalforestwatch.org/documents/tree-cover-2000/explore"
 #' )
 #' }
-register_resource <- function(name = NULL, type = NULL, source = NULL) {
-  if (any(is.null(name), is.null(type), is.null(source))) {
-    stop("neither name, type, or source can be NULL")
+register_resource <- function(name = NULL, type = NULL, source = NULL, licence = NULL) {
+  if (any(is.null(name), is.null(type), is.null(source), is.null(licence))) {
+    stop("neither name, type, source or licence can be NULL")
   }
 
   if (!inherits(name, "character") || length(name) > 1 || nchar(name) == 0) {
@@ -131,9 +133,12 @@ register_resource <- function(name = NULL, type = NULL, source = NULL) {
     stop("source needs to be a single charachter string")
   }
 
-  resource <- list(list(type = type, source = source))
-  names(resource) <- name
-  .pkgenv$resources <- append(.pkgenv$resources, resource)
+  if ((!inherits(licence, "character") || length(licence) > 1) & !is.null(licence)) {
+    stop("licence needs to be a single charachter string")
+  }
+
+  resource <- tibble(name = name, type = type, source = source, licence = licence)
+  .pkgenv$resources <- rbind(.pkgenv$resources, resource)
 }
 
 
@@ -223,9 +228,9 @@ available_resources <- function(resources = NULL) {
   all_resources <- .pkgenv$resources
 
   if (is.null(resources)) {
-    return(all_resources[order(names(all_resources))])
+    return(all_resources[order(all_resources[["name"]]), ])
   } else {
-    if (any(!resources %in% names(all_resources))) {
+    if (any(!resources %in% all_resources[["name"]])) {
       not_avail <- which(!resources %in% names(all_resources))
       not_avail <- resources[not_avail]
       msg <- sprintf(
@@ -234,7 +239,7 @@ available_resources <- function(resources = NULL) {
       )
       stop(msg)
     }
-    all_resources[resources]
+    all_resources[all_resources[["name"]] %in% resources, ]
   }
 }
 

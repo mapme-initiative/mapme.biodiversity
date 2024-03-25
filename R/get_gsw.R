@@ -290,6 +290,7 @@ for (gsw_statistic in .gsw_statistics) {
   register_resource(
     name = resource_name,
     type = "raster",
-    source = "https://global-surface-water.appspot.com/download"
+    source = "https://global-surface-water.appspot.com/download",
+    licence = "https://www.copernicus.eu/main/data-access/"
   )
 }

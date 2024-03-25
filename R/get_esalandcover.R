@@ -121,5 +121,6 @@ get_esalandcover <- function(years = 2015:2019) {
 register_resource(
   name = "esalandcover",
   type = "raster",
-  source = "https://registry.opendata.aws/esa-worldcover-vito/"
+  source = "https://registry.opendata.aws/esa-worldcover-vito/",
+  licence = "CC-BY 4.0"
 )

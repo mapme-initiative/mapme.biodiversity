@@ -11,40 +11,47 @@ test_that("test register_resource works", {
   name <- "sample"
   type <- "raster"
   source <- "sample_source"
+  licence <- "CC-BY"
 
   expect_error(
     register_resource(),
-    "neither name, type, or source can be NULL"
+    "neither name, type, source or licence can be NULL"
   )
 
   expect_error(
     register_resource(
-      name = 1, type = type, source = source
+      name = 1, type = type, source = source, licence = licence
     ),
     "name needs to be a single charachter string"
   )
 
   expect_error(
     register_resource(
-      name = name, type = "unknown", source = source
+      name = name, type = "unknown", source = source, licence = licence
     ),
     "type needs to be one of 'vector' or 'raster'"
   )
 
   expect_error(
     register_resource(
-      name = name, type = type, source = 1
+      name = name, type = type, source = 1, licence = licence
     ),
     "source needs to be a single charachter string"
   )
 
-  expect_silent(register_resource(name, type, source))
-  res <- .pkgenv$resources[name]
-  expect_equal(names(res), name)
-  res <- res[[name]]
-  expect_equal(names(res), c("type", "source"))
+  expect_error(
+    register_resource(
+      name = name, type = type, source = source, licence = 1
+    ),
+    "licence needs to be a single charachter string"
+  )
+
+  expect_silent(register_resource(name, type, source, licence))
+  res <- available_resources(name)
+  expect_equal(names(res), c("name", "type", "source", "licence"))
   expect_equal(res[["type"]], type)
   expect_equal(res[["source"]], source)
+  expect_equal(res[["licence"]], licence)
 })
 
 test_that("test register_indicator works", {
@@ -84,7 +91,7 @@ test_that("test register_indicator works", {
 
 test_that("test available_resources works", {
   res <- available_resources()
-  expect_equal(class(res), "list")
+  expect_true(inherits(res, "tbl_df"))
   expect_true(length(res) > 1)
   expect_error(available_resources("not-available"))
 })

@@ -99,5 +99,6 @@ get_ucdp_ged <- function(version = "latest") {
 register_resource(
   name = "ucdp_ged",
   type = "vector",
-  source = "https://ucdp.uu.se/downloads/"
+  source = "https://ucdp.uu.se/downloads/",
+  licence = "CC-BY 4.0"
 )

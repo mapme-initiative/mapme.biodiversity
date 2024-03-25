@@ -118,5 +118,6 @@ get_gmw <- function(years = c(1996, 2007:2010, 2015:2020)) {
 register_resource(
   name = "gmw",
   type = "vector",
-  source = "https://data.unep-wcmc.org/datasets/45"
+  source = "https://data.unep-wcmc.org/datasets/45",
+  licence = "CC BY 4.0"
 )

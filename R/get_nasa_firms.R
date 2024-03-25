@@ -192,5 +192,6 @@ get_nasa_firms <- function(years = 2012:2021,
 register_resource(
   name = "nasa_firms",
   type = "vector",
-  source = "https://firms.modaps.eosdis.nasa.gov"
+  source = "https://firms.modaps.eosdis.nasa.gov",
+  licence = "https://www.earthdata.nasa.gov/learn/find-data/near-real-time/citation"
 )

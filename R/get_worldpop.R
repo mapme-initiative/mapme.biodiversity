@@ -94,5 +94,6 @@ get_worldpop <- function(years = 2000) {
 register_resource(
   name = "worldpop",
   type = "raster",
-  source = "https://www.worldpop.org/"
+  source = "https://www.worldpop.org/",
+  licence = "CC-BY 4.0"
 )

@@ -4,7 +4,7 @@
 \alias{register_resource}
 \title{Register a new resource to the mapme.biodiversity}
 \usage{
-register_resource(name = NULL, type = NULL, source = NULL)
+register_resource(name = NULL, type = NULL, source = NULL, licence = NULL)
 }
 \arguments{
 \item{name}{A character vector indicating the name of the resource.}
@@ -13,6 +13,9 @@ register_resource(name = NULL, type = NULL, source = NULL)
 'vector' or 'raster'.}
 
 \item{source}{Optional, preferably a URL where the data is found.}
+
+\item{licence}{A A character vector indicating the licence of the resource.
+In case it is a custom licence, put a link to the licence text.}
 }
 \value{
 Nothing. Registers the function in the package environment.

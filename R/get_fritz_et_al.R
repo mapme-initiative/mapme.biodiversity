@@ -92,5 +92,6 @@ get_fritz_et_al <- function(resolution = 100) {
 register_resource(
   name = "fritz_et_al",
   type = "raster",
-  source = "https://zenodo.org/record/7997885/"
+  source = "https://zenodo.org/record/7997885/",
+  licence = "CC-BY 4.0"
 )

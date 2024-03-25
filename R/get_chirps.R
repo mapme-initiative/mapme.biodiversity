@@ -56,5 +56,6 @@ get_chirps <- function() {
 register_resource(
   name = "chirps",
   type = "raster",
-  source = "https://www.chc.ucsb.edu/data/chirps"
+  source = "https://www.chc.ucsb.edu/data/chirps",
+  licence = "CC - unknown"
 )

@@ -55,5 +55,6 @@ get_nasa_srtm <- function() {
 register_resource(
   name = "nasa_srtm",
   type = "raster",
-  source = "https://planetarycomputer.microsoft.com/dataset/nasadem"
+  source = "https://planetarycomputer.microsoft.com/dataset/nasadem",
+  licence = "https://lpdaac.usgs.gov/data/data-citation-and-policies/"
 )
