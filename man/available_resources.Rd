@@ -23,4 +23,3 @@ when requesting a resource.
 \examples{
 names(available_resources())
 }
-\keyword{resource}

@@ -99,6 +99,7 @@ mapme_options <- function(..., outdir, verbose, aria_bin, testing) {
 #' @param source Optional, preferably a URL where the data is found.
 #'
 #' @return Nothing. Registers the function in the package environment.
+#' @keywords utils
 #' @export
 #'
 #' @examples
@@ -155,6 +156,7 @@ register_resource <- function(name = NULL, type = NULL, source = NULL) {
 #'   type of that resources
 #'
 #' @return Nothing. Registers the function in the package environment.
+#' @keywords utils
 #' @export
 #'
 #' @examples
@@ -214,7 +216,6 @@ register_indicator <- function(name = NULL, resources = NULL) {
 #'
 #' @return A list object.
 #' @export
-#' @keywords resource
 #' @include register.R
 #' @examples
 #' names(available_resources())
@@ -252,7 +253,6 @@ available_resources <- function(resources = NULL) {
 #'
 #' @return A list object.
 #' @export
-#' @keywords indicator
 #' @include register.R
 #' @examples
 #' names(available_indicators())

@@ -2,9 +2,9 @@
 title: "Contributing"
 output: rmarkdown::html_vignette
 vignette: >
-%\VignetteIndexEntry{Contributing}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+ %\VignetteIndexEntry{Contributing}
+ %\VignetteEngine{knitr::rmarkdown}
+ %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
@@ -54,6 +54,7 @@ to the newly created branch!
 git branch add-elevation
 git checkout add-elevation
 ```
+
 Below, we will assume that you develop your extension to the package in R Studio.
 The general guidelines to follow also apply if you choose different tooling 
 for your development process, however, it will not be covered in this vignette.
@@ -439,5 +440,3 @@ expect_equal(
   c("elevation_mean", "elevation_median", "elevation_sd")
 )
 ```
-
-

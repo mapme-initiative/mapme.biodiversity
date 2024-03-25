@@ -23,4 +23,3 @@ when requesting an indicator.
 \examples{
 names(available_indicators())
 }
-\keyword{indicator}
