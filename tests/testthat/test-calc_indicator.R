@@ -270,8 +270,8 @@ test_that(".prep works correctly", {
   x2 <- get_resources(x2, get_gmw(years = 2016))
 
   available_resources <- .avail_resources()
-  required_resources <- available_indicators("mangroves_area")[[1]][["resources"]]
-  output <- .prep_resources(x2, available_resources, names(required_resources))
+  required_resources <- available_indicators("mangroves_area")[["resources"]][[1]][["name"]]
+  output <- .prep_resources(x2, available_resources, required_resources)
 
   expect_equal(
     length(output),
