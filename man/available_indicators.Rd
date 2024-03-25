@@ -21,5 +21,5 @@ Use it to learn about possible additional arguments that can be specified
 when requesting an indicator.
 }
 \examples{
-names(available_indicators())
+available_indicators()
 }

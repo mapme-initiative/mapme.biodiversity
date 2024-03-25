@@ -214,7 +214,7 @@ register_indicator <- function(name = NULL, description = NULL, resources = NULL
 #' @export
 #' @include register.R
 #' @examples
-#' names(available_resources())
+#' available_resources()
 available_resources <- function(resources = NULL) {
   all_resources <- .pkgenv$resources
 
@@ -251,7 +251,7 @@ available_resources <- function(resources = NULL) {
 #' @export
 #' @include register.R
 #' @examples
-#' names(available_indicators())
+#' available_indicators()
 available_indicators <- function(indicators = NULL) {
   all_indicators <- .pkgenv$indicators
   resources <- lapply(all_indicators[["resources"]], function(x) available_resources(x))

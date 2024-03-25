@@ -21,5 +21,5 @@ Use it to learn about possible additional arguments that can be specified
 when requesting a resource.
 }
 \examples{
-names(available_resources())
+available_resources()
 }
