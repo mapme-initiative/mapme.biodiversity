@@ -132,10 +132,11 @@ errors or warnings.
 # Getting the right resources
 
 You can check which indicators are available via the `available_indicators()`
-function. For this, we inspect the names of the returned object:
+function:
 
 ```{r query_indicator}
-names(available_indicators())
+available_indicators()
+available_indicators("population_count")
 ```
 
 Say, we are interested in the `population_count` indicator.
@@ -158,7 +159,8 @@ We can learn about all available resources using the `available_resources()`
 function:
 
 ```{r query_resources}
-names(available_resources())
+available_resources()
+available_resources("worldpop")
 ```
 
 For the purpose of this vignette, we are going to download the `worldpop` 
@@ -212,7 +214,7 @@ been made available via `get_resources()` beforehand.
 ```{r calc_indicator}
 aoi_gridded <- calc_indicators(
   aoi_gridded,
-  calc_popcount(engine = "zonal", stats = "sum")
+  calc_population_count(engine = "zonal", stats = "sum")
 )
 ```
 
@@ -220,7 +222,7 @@ Now let's take a look at the results. We will select only some of the metadata
 and the output indicator column to get a clearer picture of what has happened.
 
 ```{r select_cols}
-(aoi_gridded <- aoi_gridded %>% select(WDPAID, popcount))
+(aoi_gridded <- aoi_gridded %>% select(WDPAID, population_count))
 ```
 
 We obtained a new listed column in our `sf`-object that is named like the requested
@@ -228,7 +230,7 @@ indicator. For each asset in our portfolio, this column contains a tibble with
 6 rows and two columns. Let's have a closer look at one of these objects.
 
 ```{r investigate_indicator}
-aoi_gridded$popcount[10]
+aoi_gridded$population_count[10]
 ```
 
 For each asset, the result is a tibble in long format indicating the population
@@ -239,9 +241,9 @@ Let's quickly visualize the results for a single asset:
 data <- aoi_gridded %>%
   filter(WDPAID == 478140) %>%
   st_drop_geometry() %>%
-  unnest(popcount)
+  unnest(population_count)
 
-pop <- data$popcount_sum
+pop <- data$population_count_sum
 names(pop) <- data$year
 barplot(pop,
   main = "Population totals over time",
@@ -259,7 +261,7 @@ to keep the size of the data object relatively small.
 geometries <- select(aoi_gridded, WDPAID)
 aoi_gridded %>%
   st_drop_geometry() %>%
-  tidyr::unnest(popcount)
+  tidyr::unnest(population_count)
 ```
 
 # Enabling parallel computing
@@ -286,7 +288,7 @@ plan(multisession, workers = 6) # set up parallel plan with 6 concurrent threads
 with_progress({
   aoi_gridded <- calc_indicators(
     aoi_gridded,
-    calc_popcount(
+    calc_population_count(
       engine = "zonal",
       stats = "sum"
     )

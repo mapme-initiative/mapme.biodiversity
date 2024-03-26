@@ -71,13 +71,8 @@ To list all available resources and indicators run:
 library(mapme.biodiversity)
 library(sf)
 
-resources <- names(available_resources())
-indicators <- names(available_indicators())
-cat(sprintf(
-  "Supported resources:\n- %s\n\nSupported indicators:\n- %s",
-  paste(resources, collapse = "\n- "),
-  paste(indicators, collapse = "\n- ")
-))
+available_resources()
+available_indicators()
 ```
 
 Once you have decided on an indicator you are interested in, you can

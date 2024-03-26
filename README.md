@@ -76,67 +76,42 @@ library(sf)
     ## Linking to GEOS 3.12.1, GDAL 3.8.2, PROJ 9.3.1; sf_use_s2() is TRUE
 
 ``` r
-resources <- names(available_resources())
-indicators <- names(available_indicators())
-cat(sprintf(
-  "Supported resources:\n- %s\n\nSupported indicators:\n- %s",
-  paste(resources, collapse = "\n- "),
-  paste(indicators, collapse = "\n- ")
-))
+available_resources()
 ```
 
-    ## Supported resources:
-    ## - chirps
-    ## - esalandcover
-    ## - fritz_et_al
-    ## - gfw_emissions
-    ## - gfw_lossyear
-    ## - gfw_treecover
-    ## - global_surface_water_change
-    ## - global_surface_water_occurrence
-    ## - global_surface_water_recurrence
-    ## - global_surface_water_seasonality
-    ## - global_surface_water_transitions
-    ## - gmw
-    ## - nasa_firms
-    ## - nasa_grace
-    ## - nasa_srtm
-    ## - nelson_et_al
-    ## - soilgrids
-    ## - teow
-    ## - ucdp_ged
-    ## - worldclim_max_temperature
-    ## - worldclim_min_temperature
-    ## - worldclim_precipitation
-    ## - worldpop
-    ## 
-    ## Supported indicators:
-    ## - active_fire_counts
-    ## - active_fire_properties
-    ## - biome
-    ## - deforestation_drivers
-    ## - drought_indicator
-    ## - ecoregion
-    ## - elevation
-    ## - fatalities
-    ## - gsw_change
-    ## - gsw_occurrence
-    ## - gsw_recurrence
-    ## - gsw_seasonality
-    ## - gsw_transitions
-    ## - landcover
-    ## - mangroves_area
-    ## - popcount
-    ## - precipitation_chirps
-    ## - precipitation_wc
-    ## - soilproperties
-    ## - temperature_max_wc
-    ## - temperature_min_wc
-    ## - traveltime
-    ## - treecover_area
-    ## - treecover_area_and_emissions
-    ## - treecoverloss_emissions
-    ## - tri
+    ## # A tibble: 23 × 4
+    ##    name                             type   source                        licence
+    ##    <chr>                            <chr>  <chr>                         <chr>  
+    ##  1 chirps                           raster https://www.chc.ucsb.edu/dat… CC - u…
+    ##  2 esalandcover                     raster https://registry.opendata.aw… CC-BY …
+    ##  3 fritz_et_al                      raster https://zenodo.org/record/79… CC-BY …
+    ##  4 gfw_emissions                    raster https://data.globalforestwat… CC-BY …
+    ##  5 gfw_lossyear                     raster https://data.globalforestwat… CC-BY …
+    ##  6 gfw_treecover                    raster https://data.globalforestwat… CC-BY …
+    ##  7 global_surface_water_change      raster https://global-surface-water… https:…
+    ##  8 global_surface_water_occurrence  raster https://global-surface-water… https:…
+    ##  9 global_surface_water_recurrence  raster https://global-surface-water… https:…
+    ## 10 global_surface_water_seasonality raster https://global-surface-water… https:…
+    ## # ℹ 13 more rows
+
+``` r
+available_indicators()
+```
+
+    ## # A tibble: 26 × 3
+    ##    name                   description                                  resources
+    ##    <chr>                  <chr>                                        <list>   
+    ##  1 active_fire_counts     Number of detected fires by NASA FIRMS       <tibble> 
+    ##  2 active_fire_properties Extraction of properties of fires detected … <tibble> 
+    ##  3 biome                  Areal statistics of biomes from TEOW         <tibble> 
+    ##  4 deforestation_drivers  Areal statistics of deforestation drivers    <tibble> 
+    ##  5 drought_indicator      Relative wetness statistics based on NASA G… <tibble> 
+    ##  6 ecoregion              Areal statstics of ecoregions based on TEOW  <tibble> 
+    ##  7 elevation              Statistics of elevation based on NASA SRTM   <tibble> 
+    ##  8 fatalities             Number of fatalities by group of conflict b… <tibble> 
+    ##  9 gsw_change             Statistics of the surface water change laye… <tibble> 
+    ## 10 gsw_occurrence         Areal statistic of surface water based on o… <tibble> 
+    ## # ℹ 16 more rows
 
 Once you have decided on an indicator you are interested in, you can
 start by making the required resource available for your portfolio.
