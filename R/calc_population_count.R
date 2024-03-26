@@ -42,19 +42,19 @@
 #'   read_sf() %>%
 #'   get_resources(get_worldpop(years = 2000:2010)) %>%
 #'   calc_indicators(
-#'     calc_popcount(engine = "extract", stats = c("sum", "median"))
+#'     calc_population_count(engine = "extract", stats = c("sum", "median"))
 #'   ) %>%
-#'   tidyr::unnest(popcount)
+#'   tidyr::unnest(population_count)
 #'
 #' aoi
 #' }
-calc_popcount <- function(engine = "extract", stats = "sum") {
+calc_population_count <- function(engine = "extract", stats = "sum") {
   engine <- check_engine(engine)
   stats <- check_stats(stats)
 
   function(x,
            worldpop = NULL,
-           name = "popcount",
+           name = "population_count",
            mode = "asset",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(worldpop)) {
@@ -74,7 +74,7 @@ calc_popcount <- function(engine = "extract", stats = "sum") {
       raster = worldpop,
       stats = stats,
       engine = engine,
-      name = "popcount",
+      name = "population_count",
       mode = "asset"
     )
 
@@ -85,7 +85,7 @@ calc_popcount <- function(engine = "extract", stats = "sum") {
 }
 
 register_indicator(
-  name = "popcount",
+  name = "population_count",
   description = "Statistic of population counts",
   resources = "worldpop"
 )

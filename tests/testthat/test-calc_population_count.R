@@ -9,24 +9,24 @@ test_that(".calc_population_count works", {
   ), pattern = ".tif$", full.names = TRUE)
   worldpop <- rast(worldpop)
 
-  cpc <- calc_popcount()
+  cpc <- calc_population_count()
   result <- cpc(shp, worldpop)
-  cpc <- calc_popcount(stats = c("mean", "median", "sd"))
+  cpc <- calc_population_count(stats = c("mean", "median", "sd"))
   result_multi_stat <- cpc(shp, worldpop)
-  cpc <- calc_popcount(engine = "zonal")
+  cpc <- calc_population_count(engine = "zonal")
   result_zonal <- cpc(shp, worldpop)
-  cpc <- calc_popcount(engine = "extract")
+  cpc <- calc_population_count(engine = "extract")
   result_extract <- cpc(shp, worldpop)
-  cpc <- calc_popcount(engine = "exactextract")
+  cpc <- calc_population_count(engine = "exactextract")
   result_exact <- cpc(shp, worldpop)
 
   expect_equal(
     names(result),
-    c("popcount_sum", "year")
+    c("population_count_sum", "year")
   )
   expect_equal(
     names(result_multi_stat),
-    c("popcount_mean", "popcount_median", "popcount_sd", "year")
+    c("population_count_mean", "population_count_median", "population_count_sd", "year")
   )
   expect_equal(
     names(result_zonal),
@@ -37,11 +37,11 @@ test_that(".calc_population_count works", {
     names(result_exact)
   )
   expect_equal(
-    result_zonal$popcount_sum,
-    result_extract$popcount_sum,
+    result_zonal$population_count_sum,
+    result_extract$population_count_sum,
     tolerance = 1e-4
   )
   expect_snapshot(
-    result_exact$popcount_sum
+    result_exact$population_count_sum
   )
 })

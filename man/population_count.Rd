@@ -2,10 +2,10 @@
 % Please edit documentation in R/calc_population_count.R
 \name{population_count}
 \alias{population_count}
-\alias{calc_popcount}
+\alias{calc_population_count}
 \title{Calculate population count statistics}
 \usage{
-calc_popcount(engine = "extract", stats = "sum")
+calc_population_count(engine = "extract", stats = "sum")
 }
 \arguments{
 \item{engine}{The preferred processing functions from either one of "zonal",
@@ -54,9 +54,9 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   read_sf() \%>\%
   get_resources(get_worldpop(years = 2000:2010)) \%>\%
   calc_indicators(
-    calc_popcount(engine = "extract", stats = c("sum", "median"))
+    calc_population_count(engine = "extract", stats = c("sum", "median"))
   ) \%>\%
-  tidyr::unnest(popcount)
+  tidyr::unnest(population_count)
 
 aoi
 }
