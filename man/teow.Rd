@@ -11,7 +11,7 @@
 get_teow()
 }
 \value{
-A character of file paths.
+A function that returns a character of file paths.
 }
 \description{
 This resource is part of the publication by Olson et al. (2004)

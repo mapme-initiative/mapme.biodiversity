@@ -8,7 +8,8 @@
 calc_active_fire_counts()
 }
 \value{
-A tibble with a column for number of fire events per year and instrument.
+A function that returns a tibble with a column for number of
+fire events per year and instrument.
 }
 \description{
 This function allows to efficiently calculate the number of fire

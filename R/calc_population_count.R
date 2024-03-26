@@ -17,7 +17,8 @@
 #'    either one or multiple inputs as character "min", "max", "sum", "mean", "median"
 #'    "sd" or "var".
 #' @keywords indicator
-#' @returns A tibble with a column for population count statistics
+#' @returns A function that returns tibble with a column for population count
+#'   statistics.
 #' @include register.R
 #' @export
 #' @examples

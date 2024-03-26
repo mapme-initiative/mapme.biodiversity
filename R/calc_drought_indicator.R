@@ -16,7 +16,8 @@
 #' @param engine The preferred processing functions from either one of "zonal",
 #'   "extract" or "exactextract" as character.
 #' @keywords indicator
-#' @returns A tibble with a column for each specified stats and a column with the respective date.
+#' @returns A function that returns a tibble with a column for each specified
+#'   stats and a column with the respective date.
 #' @include register.R
 #' @export
 #' @examples

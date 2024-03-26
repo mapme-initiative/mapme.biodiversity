@@ -15,7 +15,7 @@ get_worldclim_min_temperature(years = 2000:2018)
 resource available.}
 }
 \value{
-A character of file paths.
+A function that returns a character of file paths.
 }
 \description{
 This resource is published by Fick et al. (2017) "WorldClim 2: new 1-km

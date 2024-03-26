@@ -19,7 +19,7 @@
 #'
 #' @name gfw_emissions
 #' @keywords resource
-#' @returns A character of file paths.
+#' @returns A function that returns a character of file paths.
 #' @references Harris, N.L., Gibbs, D.A., Baccini, A. et al. Global maps of
 #' twenty-first century forest carbon fluxes. Nat. Clim. Chang. 11, 234–240
 #' (2021). https://doi.org/10.1038/s41558-020-00976-6

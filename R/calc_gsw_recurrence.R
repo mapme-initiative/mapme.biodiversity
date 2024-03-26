@@ -20,7 +20,8 @@
 #' @param min_recurrence Threshold to define which pixels count towards the GSW
 #' recurrence area `[0, 100]`.
 #' @keywords indicator
-#' @returns A tibble with a column for the aggregated GSW recurrence indicator.
+#' @returns A function that returns a tibble with a column for the aggregated
+#'   GSW recurrence indicator.
 #' @include register.R
 #' @export
 #' @examples

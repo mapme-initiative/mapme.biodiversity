@@ -16,7 +16,7 @@ get_worldpop(years = 2000)
 resource available.}
 }
 \value{
-A character of file paths.
+A function that returns a character of file paths.
 }
 \description{
 This resource is published by open spatial demographic data and research

@@ -15,7 +15,7 @@ calc_elevation(engine = "extract", stats = "mean")
 one or multiple inputs as character "mean", "median" or "sd".}
 }
 \value{
-A tibble with a column for each statistics.
+A function that returns a tibble with a column for each statistics.
 }
 \description{
 This function allows to calculate elevation statistics for

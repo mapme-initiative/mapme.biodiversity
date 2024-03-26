@@ -8,7 +8,8 @@
 calc_gsw_transitions()
 }
 \value{
-A tibble with a column for name of the transition classes and corresponding area (in ha).
+A function that returns a tibble with a column for name of the
+transition classes and corresponding area (in ha).
 }
 \description{
 GSW transition data contains information about the type of surface water

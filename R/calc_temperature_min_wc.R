@@ -14,7 +14,8 @@
 #'   single or multiple inputs as character. Supported statistics are: "mean",
 #'   "median", "sd", "min", "max", "sum" "var".
 #' @keywords indicator
-#' @returns A tibble with a column for minimum temperature statistics (in °C)
+#' @returns A function that returns a tibble with a column for minimum
+#'   temperature statistics (in °C).
 #' @include register.R
 #' @export
 #' @examples

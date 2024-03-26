@@ -9,7 +9,8 @@
 calc_mangroves_area()
 }
 \value{
-A tibble with a column for area of mangrove (in ha) and corresponding year.
+A function that returns a tibble with a column for area of mangrove
+(in ha) and corresponding year.
 }
 \description{
 This function allows to efficiently calculate area of mangrove from

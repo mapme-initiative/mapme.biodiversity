@@ -17,7 +17,7 @@
 #'   "GFC-2022-v1.10". Check \code{mapme.biodiversity:::.available_gfw_versions()}
 #'   to get a list of available versions
 #' @keywords resource
-#' @returns A character of file paths.
+#' @returns A function that returns a character of file paths.
 #' @references Hansen, M. C., P. V. Potapov, R. Moore, M. Hancher, S. A.
 #' Turubanova, A. Tyukavina, D. Thau, S. V. Stehman, S. J. Goetz, T. R.
 #' Loveland, A. Kommareddy, A. Egorov, L. Chini, C. O. Justice, and J. R. G.

@@ -8,9 +8,10 @@
 #'
 #' @name deforestation_drivers
 #' @keywords indicator
-#' @returns A tibble with 3 columns indicating the class of a deforestation driver,
-#'   the absolute area in ha, and the percentage in relation to the total
-#'   area of forest loss as indicated by the Fritz et al. (2022) resource.
+#' @returns A function that returns a tibble with 3 columns indicating the
+#'   class of a deforestation driver, the absolute area in ha, and the
+#'   percentage in relation to the total area of forest loss as indicated by
+#'   the Fritz et al. (2022) resource.
 #' @include register.R
 #' @export
 #' @examples

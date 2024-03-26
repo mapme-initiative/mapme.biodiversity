@@ -22,7 +22,7 @@
 #' @param resolution An integer indicating the resolution
 #'   to download. Defaults to 100.
 #' @keywords resource
-#' @returns A character of file paths.
+#' @returns A function that returns a character of file paths.
 #' @references Steffen, F., Carlos, J.C.L., See. L., Schepaschenko D.,
 #' Hofhansl F., Jung M., Dürauer M., Georgieva I., Danylo O., Lesiv M.,
 #' McCallum I. (2022) A Continental Assessment of the Drivers of Tropical

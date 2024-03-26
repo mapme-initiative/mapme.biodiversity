@@ -19,7 +19,7 @@
 #' @param version A character vector indicating the version of the GSW data set
 #'   to make available.
 #' @keywords resource
-#' @returns  A character of file paths.
+#' @returns A function that returns a character of file paths.
 #' @references Pekel, JF., Cottam, A., Gorelick, N. et al. High-resolution
 #' mapping of global surface water and its long-term changes. Nature 540,
 #' 418–422 (2016). https://doi.org/10.1038/nature20584

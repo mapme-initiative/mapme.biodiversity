@@ -25,8 +25,9 @@ precipitation statistics.}
 order to fit the SPI. Defaults to 8.}
 }
 \value{
-A tibble with a column for years, months, absolute rainfall (in mm), rainfall
-anomaly (in mm) and one or more columns per selected time-scale for SPI (dimensionless).
+A function that returns a tibble with a column for years, months,
+absolute rainfall (in mm), rainfall anomaly (in mm) and one or more columns
+per selected time-scale for SPI (dimensionless).
 }
 \description{
 This functions allows to calculate precipitation statistics based on the

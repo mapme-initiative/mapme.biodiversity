@@ -10,7 +10,8 @@
 #'
 #' @name active_fire_counts
 #' @keywords indicator
-#' @returns A tibble with a column for number of fire events per year and instrument.
+#' @returns A function that returns a tibble with a column for number of
+#'   fire events per year and instrument.
 #' @include register.R
 #' @export
 #' @examples

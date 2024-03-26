@@ -12,7 +12,7 @@
 #'
 #' @name chirps
 #' @keywords resource
-#' @returns A character of file paths.
+#' @returns A function that returns a character of file paths.
 #' @source \url{https://data.chc.ucsb.edu/products/CHIRPS-2.0/global_monthly/cogs/}
 #' @references Funk, C., Peterson, P., Landsfeld, M. et al. The climate hazards
 #' infrared precipitation with stations—a new environmental record for

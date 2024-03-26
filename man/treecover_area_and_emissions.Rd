@@ -21,7 +21,8 @@ area and emissions.}
 considered forest in the year 2000.}
 }
 \value{
-A tibble with a column for years, treecover (in ha), and emissions (in Mg CO2)
+A function that returns tibble with a column for years, treecover
+(in ha), and emissions (in Mg CO2).
 }
 \description{
 This functions allows to efficiently calculate the treecover and emissions

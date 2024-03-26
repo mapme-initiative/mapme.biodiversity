@@ -11,7 +11,7 @@
 get_gfw_emissions()
 }
 \value{
-A character of file paths.
+A function that returns a character of file paths.
 }
 \description{
 This resource is part of the publication by Harris et al. (2021)

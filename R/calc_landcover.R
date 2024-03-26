@@ -12,8 +12,8 @@
 #'
 #' @name landcover
 #' @keywords indicator
-#' @returns A tibble with a column for area (in ha) and the percentage covered per
-#'   landcover class
+#' @returns A function that returns tibble with a column for area (in ha) and
+#'   the percentage covered per landcover class.
 #' @include register.R
 #' @export
 #' @examples

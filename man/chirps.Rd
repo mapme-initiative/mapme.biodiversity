@@ -11,7 +11,7 @@
 get_chirps()
 }
 \value{
-A character of file paths.
+A function that returns a character of file paths.
 }
 \description{
 This resource is published by Funk et al. (2015) and represents a quasi-global

@@ -10,8 +10,8 @@
 #'
 #' @name active_fire_properties
 #' @keywords indicator
-#' @returns A tibble with a column for the 15 different fire events variables
-#'   including lon/lat coordinates.
+#' @returns A function that returns a tibble with a column for the 15 different
+#'   fire events variables including lon/lat coordinates.
 #' @include register.R
 #' @export
 #' @examples

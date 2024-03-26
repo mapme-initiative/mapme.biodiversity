@@ -11,7 +11,7 @@ https://planetarycomputer.microsoft.com/dataset/nasadem
 get_nasa_srtm()
 }
 \value{
-A character of file paths.
+A function that returns a character of file paths.
 }
 \description{
 This resource is processed by the Land Processes Distributed Active Archive

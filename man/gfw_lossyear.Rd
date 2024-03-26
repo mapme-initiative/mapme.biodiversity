@@ -16,7 +16,7 @@ get_gfw_lossyear(version = "GFC-2022-v1.10")
 to get a list of available versions}
 }
 \value{
-A character of file paths.
+A function that returns a character of file paths.
 }
 \description{
 This resource is part of the publication by Hansen et al. (2013)

@@ -16,7 +16,8 @@ single or multiple inputs as character. Supported statistics are: "mean",
 "median", "sd", "min", "max", "sum" "var".}
 }
 \value{
-A tibble with a column for terrain ruggedness index statistics (in meters).
+A function that returns a tibble with a column for terrain
+ruggedness index statistics (in meters).
 The range of index values and corresponding meaning:
 (1) 0 - 80 m  :- level surface
 (2) 81-116 m  :- nearly level surface

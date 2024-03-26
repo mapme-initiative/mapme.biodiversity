@@ -14,7 +14,7 @@
 #' @param years A numeric vector indicating for which years to make the
 #'   resource available.
 #' @keywords resource
-#' @returns  A character of file paths.
+#' @returns A function that returns a character of file paths.
 #' @source \url{https://www.worldclim.org/data/index.html}
 #' @importFrom utils unzip
 #' @include register.R

@@ -8,8 +8,9 @@
 calc_gsw_seasonality()
 }
 \value{
-A tibble with one column \code{months} and one column \code{area},
-representing the area covered by each class in ha.
+A function that returns a tibble with one column \code{months}
+and one column \code{area}, representing the area covered by each class in
+ha.
 }
 \description{
 GSW seasonality describes the intra-annual distribution of surface water for

@@ -15,7 +15,8 @@ calc_gsw_change(engine = "extract", stats = "mean")
 Default: "mean".}
 }
 \value{
-A tibble with a column for the aggregated GSW change indicator.
+A function that returns a tibble with a column for the aggregated
+GSW change indicator.
 }
 \description{
 The change in water occurrence intensity between the two periods is derived

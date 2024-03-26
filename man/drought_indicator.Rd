@@ -15,7 +15,8 @@ calc_drought_indicator(engine = "extract", stats = "mean")
 either one or multiple inputs as character "mean", "median" or "sd".}
 }
 \value{
-A tibble with a column for each specified stats and a column with the respective date.
+A function that returns a tibble with a column for each specified
+stats and a column with the respective date.
 }
 \description{
 This function allows to efficiently calculate the relative wetness in the

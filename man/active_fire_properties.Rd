@@ -8,8 +8,8 @@
 calc_active_fire_properties()
 }
 \value{
-A tibble with a column for the 15 different fire events variables
-including lon/lat coordinates.
+A function that returns a tibble with a column for the 15 different
+fire events variables including lon/lat coordinates.
 }
 \description{
 This function allows to efficiently extract the properties of fire

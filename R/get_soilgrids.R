@@ -41,7 +41,7 @@
 #' @param depths A character vector indicating the depths to download
 #' @param stats A character vector indicating the statistics to download.
 #' @keywords resource
-#' @returns A character of file paths.
+#' @returns A function that returns a character of file paths.
 #' @references Hengl T, Mendes de Jesus J, Heuvelink GBM, Ruiperez Gonzalez M,
 #' Kilibarda M, et al. (2017) SoilGrids250m: Global gridded soil information
 #' based on machine learning. PLOS ONE 12(2): e0169748.

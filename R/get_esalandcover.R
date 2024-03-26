@@ -10,7 +10,7 @@
 #' @param years A numeric vector indicating the years for which to make the
 #'   resource available.
 #' @keywords resource
-#' @returns  A character of file paths.
+#' @returns  A function that returns a character of file paths.
 #' @references © European Union, Copernicus Land Monitoring Service (year),
 #' European Environment Agency (EEA)", f.ex. in 2018: “© European Union,
 #' Copernicus Land Monitoring Service 2018, European Environment Agency (EEA)

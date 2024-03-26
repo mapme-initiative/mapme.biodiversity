@@ -13,7 +13,7 @@
 #' @param stats Function to be applied to compute statistics for polygons either
 #'   one or multiple inputs as character "mean", "median" or "sd".
 #' @keywords indicator
-#' @returns A tibble with a column for each statistics.
+#' @returns A function that returns a tibble with a column for each statistics.
 #' @include register.R
 #' @export
 #' @examples

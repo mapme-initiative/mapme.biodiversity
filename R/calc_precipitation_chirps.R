@@ -20,8 +20,9 @@
 #' @param spi_prev_years Integer specifying how many previous years to include in
 #'   order to fit the SPI. Defaults to 8.
 #' @keywords indicator
-#' @returns A tibble with a column for years, months, absolute rainfall (in mm), rainfall
-#'   anomaly (in mm) and one or more columns per selected time-scale for SPI (dimensionless).
+#' @returns A function that returns a tibble with a column for years, months,
+#'   absolute rainfall (in mm), rainfall anomaly (in mm) and one or more columns
+#'   per selected time-scale for SPI (dimensionless).
 #' @include register.R
 #' @export
 #' @examples

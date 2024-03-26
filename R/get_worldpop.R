@@ -12,7 +12,7 @@
 #'   resource available.
 #' @docType data
 #' @keywords resource
-#' @returns  A character of file paths.
+#' @returns A function that returns a character of file paths.
 #' @source \url{https://www.worldpop.org/}
 #' @include register.R
 #' @export

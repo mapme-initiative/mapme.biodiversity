@@ -15,7 +15,7 @@ get_nelson_et_al(ranges = "20k_50k")
 to download.}
 }
 \value{
-A character of file paths.
+A function that returns a character of file paths.
 }
 \description{
 This resource is published by Weiss et al. (2018) "A global map of travel

@@ -18,8 +18,7 @@
 #' @param instrument A character vector specifying the
 #'   data collection instrument.
 #' @keywords resource
-#' @format Active fire polygon available for years 2000 to 2021 (MODIS)
-#' and 2012-2021 (VIIRS)
+#' @returns A function that returns a character of file paths.
 #' @references NRT VIIRS 375 m Active Fire product VNP14IMGT distributed
 #' from NASA FIRMS. Available on-line https://earthdata.nasa.gov/firms.
 #' doi:10.5067/FIRMS/VIIRS/VNP14IMGT_NRT.002.

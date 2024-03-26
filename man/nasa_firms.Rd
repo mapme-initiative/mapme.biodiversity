@@ -4,10 +4,6 @@
 \alias{nasa_firms}
 \alias{get_nasa_firms}
 \title{Active Fire Polygon}
-\format{
-Active fire polygon available for years 2000 to 2021 (MODIS)
-and 2012-2021 (VIIRS)
-}
 \source{
 \url{https://firms.modaps.eosdis.nasa.gov/download/}
 }
@@ -20,6 +16,9 @@ resource available.}
 
 \item{instrument}{A character vector specifying the
 data collection instrument.}
+}
+\value{
+A function that returns a character of file paths.
 }
 \description{
 This resource is published by Fire Information for Resource Management System

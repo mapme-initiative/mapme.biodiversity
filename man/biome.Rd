@@ -8,7 +8,8 @@
 calc_biome()
 }
 \value{
-A tibble with a column for name of the biomes and corresponding area (in ha).
+A function that returns a tibble with a column for name of the
+biomes and corresponding area (in ha).
 }
 \description{
 This function allows to efficiently retrieve the name of the biomes

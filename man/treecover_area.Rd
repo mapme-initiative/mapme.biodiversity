@@ -16,7 +16,8 @@ area.}
 \item{min_cover}{The minimum cover percentage per pixel to be considered as forest.}
 }
 \value{
-A tibble with a column for years and treecover (in ha).
+A function that returns a tibble with a column for years and
+treecover (in ha).
 }
 \description{
 This functions allows to efficiently calculate treecover statistics for

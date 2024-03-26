@@ -17,7 +17,8 @@ caused by treecover loss.}
 considered forest in the year 2000.}
 }
 \value{
-A tibble with a column for years and emissions (in Mg)
+A function that returns a tibble with a column for years and
+emissions (in Mg).
 }
 \description{
 This functions allows to efficiently calculate emission statistics for

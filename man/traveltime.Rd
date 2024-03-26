@@ -16,7 +16,8 @@ single or multiple inputs as character. Supported statistics are: "mean",
 "median", "sd", "min", "max", "sum" "var".}
 }
 \value{
-A tibble with a column for accessibility statistics (in minutes)
+A function that returns a tibble with a column for accessibility
+statistics (in minutes).
 }
 \description{
 Accessibility is the ease with which larger cities can be reached from a

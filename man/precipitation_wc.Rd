@@ -17,7 +17,8 @@ single or multiple inputs as character. Supported statistics are: "mean",
 "median", "sd", "min", "max", "sum" "var".}
 }
 \value{
-A tibble with a column for precipitation statistics (in mm)
+A function that returns a tibble with a column for precipitation
+statistics (in mm).
 }
 \description{
 This function allows to efficiently calculate precipitation statistics

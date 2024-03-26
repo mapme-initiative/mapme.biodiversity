@@ -18,9 +18,9 @@ geolocation up to which events are included. Defaults to 1.}
 temporal coding up to which events are included. Defaults to 1.}
 }
 \value{
-A tibble with a column for the date (year and month), the type
-of violence an counts of civilian fatalities, unknown fatalities and the
-total sum of fatalities.
+A function that returns a tibble with a column for the date
+(year and month), the type of violence an counts of civilian fatalities,
+unknown fatalities and the total sum of fatalities.
 }
 \description{
 The indicator aggregated the number of fatalities within a given asset

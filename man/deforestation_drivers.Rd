@@ -8,9 +8,10 @@
 calc_deforestation_drivers()
 }
 \value{
-A tibble with 3 columns indicating the class of a deforestation driver,
-the absolute area in ha, and the percentage in relation to the total
-area of forest loss as indicated by the Fritz et al. (2022) resource.
+A function that returns a tibble with 3 columns indicating the
+class of a deforestation driver, the absolute area in ha, and the
+percentage in relation to the total area of forest loss as indicated by
+the Fritz et al. (2022) resource.
 }
 \description{
 This function extracts areal statistics for the drivers of deforestation

@@ -10,7 +10,7 @@
 #'
 #' @name teow
 #' @keywords resource
-#' @returns  A character of file paths.
+#' @returns  A function that returns a character of file paths.
 #' @references Olson, D. M., Dinerstein, E., Wikramanayake, E. D., Burgess, N. D.,
 #' Powell, G. V. N., Underwood, E. C., D’Amico, J. A., Itoua, I., Strand, H. E.,
 #' Morrison, J. C., Loucks, C. J., Allnutt, T. F., Ricketts, T. H., Kura, Y., Lamoreux,

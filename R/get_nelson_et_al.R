@@ -24,7 +24,7 @@
 #' @param ranges A character vector indicating one or more ranges
 #'   to download.
 #' @keywords resource
-#' @returns A character of file paths.
+#' @returns A function that returns a character of file paths.
 #' @references Weiss, D. J., Nelson, A., Gibson, H. S., Temperley, W., Peedell,
 #' S., Lieber, A., … & Gething, P. W. (2018). A global map of travel time to cities
 #' to assess inequalities in accessibility in 2015. Nature, 553(7688), 333-336.

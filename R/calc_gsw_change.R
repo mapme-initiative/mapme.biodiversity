@@ -20,7 +20,8 @@
 #' @param stats Aggregation function with which the data are combined.
 #' Default: "mean".
 #' @keywords indicator
-#' @returns A tibble with a column for the aggregated GSW change indicator.
+#' @returns A function that returns a tibble with a column for the aggregated
+#'   GSW change indicator.
 #' @include register.R
 #' @export
 #' @examples

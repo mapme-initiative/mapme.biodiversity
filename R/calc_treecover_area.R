@@ -15,7 +15,8 @@
 #' @param min_size The minimum size of a forest patch to be considered as forest in ha.
 #' @param min_cover The minimum cover percentage per pixel to be considered as forest.
 #' @keywords indicator
-#' @returns A tibble with a column for years and treecover (in ha).
+#' @returns A function that returns a tibble with a column for years and
+#'   treecover (in ha).
 #' @include register.R
 #' @export
 #' @examples

@@ -13,8 +13,9 @@
 #'
 #' @name gsw_seasonality
 #' @keywords indicator
-#' @returns A tibble with one column \code{months} and one column \code{area},
-#' representing the area covered by each class in ha.
+#' @returns A function that returns a tibble with one column \code{months}
+#'   and one column \code{area}, representing the area covered by each class in
+#'   ha.
 #' @include register.R
 #' @export
 #' @examples

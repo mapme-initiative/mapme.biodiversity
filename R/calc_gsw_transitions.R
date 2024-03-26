@@ -24,7 +24,8 @@
 #'
 #' @name gsw_transitions
 #' @keywords indicator
-#' @returns A tibble with a column for name of the transition classes and corresponding area (in ha).
+#' @returns A function that returns a tibble with a column for name of the
+#'   transition classes and corresponding area (in ha).
 #' @include register.R
 #' @export
 #' @examples
