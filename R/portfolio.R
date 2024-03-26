@@ -1,4 +1,4 @@
-.check_portfolio <- function(x) {
+.check_portfolio <- function(x, verbose = mapme_options()[["verbose"]]) {
   stopifnot(inherits(x, "sf"))
 
   if (st_crs(x) != st_crs(4326)) {
@@ -11,7 +11,7 @@
   if (!inherits(x, "tibble")) {
     x <- st_as_sf(tibble::as_tibble(x))
   }
-  if ("assetid" %in% names(x)) {
+  if ("assetid" %in% names(x) && verbose) {
     message(
       paste("Found a column named 'assetid'.",
         " Overwritting its values with a unique identifier.",
