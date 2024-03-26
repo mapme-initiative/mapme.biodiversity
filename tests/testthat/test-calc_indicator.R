@@ -103,7 +103,7 @@ test_that("Parallelization works", {
 
   expect_equal(
     names(stat),
-    c("treecover_area", "x")
+    c("assetid", "treecover_area", "x")
   )
   expect_equal(
     nrow(stat),

@@ -1,16 +1,18 @@
 available_stats <- c("mean", "median", "sd", "min", "max", "sum", "var")
 available_engines <- c("zonal", "extract", "exactextract")
 
-#' Check if engine is supported
+#' Function to select processing engines
 #'
-#' Use this functions to check if an extraction engine for zonal vector-raster
+#' `check_engine()` checks if an extraction engine for zonal vector-raster
 #' operations is supported by the backend.
 #'
 #' @param queried_engine A character vector of length one indicating the engine
 #'   to check for.
 #'
-#' @return The character vector of the queried engine, if supported. Throws an error otherwise.
+#' @return `check_engine()` returns the character of the queried engine,
+#'  if supported. Throws an error otherwise.
 #' @keywords utils
+#' @name engine
 #' @export
 check_engine <- function(queried_engine) {
   if (length(queried_engine) > 1) {
@@ -31,17 +33,18 @@ check_engine <- function(queried_engine) {
   queried_engine
 }
 
-#' Check if statistics are supported
+#' Checks if queried statistcs are available
 #'
-#' Use this function to check if one or multiple statistics are supported
+#' `check_stats` checks if one or multiple statistics are supported
 #' for zonal vector-raster extraction by the backend.
 #'
 #' @param queried_stats A character vector with statistic names to be checked
 #'   if they are supported by the backend
 #'
-#' @return A character vector of supported statistics Throws an error
-#'   if any of the queried statistics is not supported.
+#' @return `check_stats` returns a character vector of supported statistics.
+#'  Throws an error if any of the queried statistics is not supported.
 #' @keywords utils
+#' @name engine
 #' @export
 check_stats <- function(queried_stats) {
   if (any(!queried_stats %in% available_stats)) {
@@ -65,13 +68,11 @@ check_stats <- function(queried_stats) {
   queried_stats
 }
 
-
-#' Extract values with an engine and statistics
+#' Processes statistics with an engine
 #'
-#' Use this function for zonal vector-raster value extractions based on
-#' a supported engine and for one or more statistics. Columns are named
-#' according to the argument `name` plus the respective stat. Both `portfolio`
-#' and `asset` mode are supported.
+#' `select_engine` extracts zonal vector-raster statistics for supported engine
+#' and for one or more statistics. Columns are named according to the argument
+#' `name` plus the respective stat. Both `portfolio` and `asset` modes are supported.
 #'
 #' @param x An sf object representing a portfolio.
 #' @param raster An terra SpatRaster from which values are to be extracted.
@@ -83,8 +84,9 @@ check_stats <- function(queried_stats) {
 #'   names.
 #' @param mode A character vector indicating in which mode to conduct the
 #'   extraction (e.g. `asset`-wise or for the whole `portfolio` at once).
-#' @return A tibble.
+#' @return `select_engine` returns a tibble.
 #' @keywords utils
+#' @name engine
 #' @export
 select_engine <- function(x,
                           raster,

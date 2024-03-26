@@ -1,16 +1,16 @@
 .res_defaults <- c("x", "name", "type", "outdir", "verbose", "testing")
 #' Download biodiversity resources
 #'
-#' With \code{get_resources()} data sets required for the
+#' `get_resources()` data sets required for the
 #' calculation of indicators can be made available. The function supports the
 #' specification of several resource functions. To determine the output path,
 #' temporary directory and verbosity, the output of `mapme_options()` is used.
-#' @param x A biodiversity portfolio object constructed via
-#'   \code{init_portfolio()}
-#' @param ... One or more `get_*()` functions to make a resource available.
-#' @return Called for its side effect of making resources available in the
-#'   package environment. Returns x, invisibly.
-#' @keywords function
+#'
+#' @param x An `sf` object with features of type `"POLYGON"`
+#' @param ... One or more functions for resources/indicators
+#' @return `get_resources()` is called for its side effect of making resources
+#'  available in the package environment. Returns `x`, invisibly.
+#' @name mapme
 #' @export
 get_resources <- function(x, ...) {
   x <- .check_portfolio(x)
@@ -21,7 +21,7 @@ get_resources <- function(x, ...) {
   funs <- list(...)
   funs <- purrr::map(funs, function(fun) .check_resource_fun(fun))
   for (fun in funs) .get_single_resource(x, fun)
-  x
+  invisible(x)
 }
 
 .check_resource_fun <- function(fun) {

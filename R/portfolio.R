@@ -11,30 +11,38 @@
   if (!inherits(x, "tibble")) {
     x <- st_as_sf(tibble::as_tibble(x))
   }
+  if ("assetid" %in% names(x)) {
+    message(
+      paste("Found a column named 'assetid'.",
+        " Overwritting its values with a unique identifier.",
+        sep = ""
+      )
+    )
+  }
+  x$assetid <- 1:nrow(x)
   x
 }
 #' Writing a portfolio to disk
 #'
-#' The function is used to save a processes biodiversity portfolio to disk.
+#' `write_portfolio()` writes a processed biodiversity portfolio to disk.
 #' In order to ensure interoperability with other geospatial software the only
-#' supported format is the GeoPackage. If any other format is chosen, the
-#' function will automatically replace the supplied file extension with '.gpkg'.
+#' supported format is the GeoPackage.
 #' The metadata of a portfolio together with the geometry will be written
-#' to a table called 'metadata'. All available and supported indicators, which
-#' are expected to be present as a nested list columns will be written to their
+#' to a table called `'metadata'`. All calculated indicators, which
+#' are expected to be present as nested list columns, will be written to their
 #' own respective tables. In order to allow re-joining the metadata with the
-#' indicators, it is expected that a column called 'assetid' which uniquely
+#' indicators, it is expected that a column called `'assetid'` which uniquely
 #' identifies all assets is present. Usually, users do not have to take care of
-#' this since the usual \code{{mapme.biodiversity}} workflow will ensure that this
-#' columns is present. Additional arguments to \code{st_write()} can be supplied.
+#' this since the usual `mapme.biodiversity` workflow will ensure that this
+#' columns is present. Additional arguments to `st_write()` can be supplied.
 #'
-#' @param x A portfolio object processed with \code{{mapme.biodiversity}}
-#' @param dsn A file path for the output file. Should end with \code{'.gpkg'}
+#' @param x A portfolio object processed with `mapme.biodiversity`
+#' @param dsn A file path for the output file. Should end with `'.gpkg'`
 #' @param overwrite A logical indicating if the output file should be overwritten
 #'   if it exists
-#' @param ... Additional arguments supplied to \code{st_write()}
-#' @return \code{x}, invisibly
-#' @keywords function
+#' @param ... Additional arguments supplied to `st_write()`
+#' @return `write_portfolio()` returns `x`, invisibly.
+#' @name portfolio
 #' @export
 write_portfolio <- function(x,
                             dsn,
@@ -93,47 +101,39 @@ write_portfolio <- function(x,
 
 #' Reading a portfolio object from disk
 #'
-#' This function can be used to read a portfolio object that was previously
-#' written to disk via \code{write_portfolio()} back into R as an \code{sf} object.
-#' It should specifically be directed against a GeoPackage which was the output
-#' of \code{write_portfolio()}, otherwise the function is very likely to fail.
+#' `read_portfolio()` is used to read a portfolio object that was previously
+#' written to disk via `write_portfolio()` back into R as an `sf` object.
+#' It should be directed against a GeoPackage which was the output
+#' of `write_portfolio()`, otherwise the function is very likely to fail.
 #' All available indicators will be read back into R as nested list columns
-#' reflecting the output once \code{calc_indicators()} has been called.
+#' reflecting the output once `calc_indicators()` has been called.
 #'
-#' **Important Note**
-#' Portfolio-wide attributes that were specified via \code{init_portfolio()} will
-#' not be reconstructed. The reason is that users most likely exported to a
-#' GeoPackage in order to share their data, thus the file is very likely to be
-#' opened on a different machine / in a different working directory. Users can
-#' simply apply \code{init_portfolio()} on the object to re-set these attributes.
-#'
-#'
-#' @param file A character vector pointing to a GeoPackage that has been
-#'   previously written to disk via \code{write_portfolio()}
-#' @param ... Additional arguments supplied to \code{st_read()}
-#' @return An sf object object with nested list columns for every indicator
-#'   table found in the GeoPackage source file.
-#' @keywords function
+#' @param src A character vector pointing to a GeoPackage that has been
+#'   previously written to disk via `write_portfolio()`
+#' @param ... Additional arguments supplied to `st_read()`
+#' @return `read_portfolio()` reutnrs an `sf` object object with nested list
+#'   columns for every indicator table found in the GeoPackage source file.
+#' @name portfolio
 #' @export
 #'
-read_portfolio <- function(file, ...) {
+read_portfolio <- function(src, ...) {
   assetid <- NULL
-  all_layers <- st_layers(file)
+  all_layers <- st_layers(src)
   if (!"metadata" %in% all_layers$name | all_layers$geomtype[[which(all_layers$name == "metadata")]] != "Polygon") {
     stop(sprintf(
       "Input file at '%s' does not seem to be a proper mapme.biodiversity portfolio file written with 'write_portfolio()'",
-      file
+      src
     ))
   }
 
-  metadata <- read_sf(file, layer = "metadata", ...)
+  metadata <- read_sf(src, layer = "metadata", ...)
   present_indicators <- all_layers$name[which(all_layers$name %in% names(available_indicators()))]
   if (length(present_indicators) == 0) {
     stop("Could not find any mapme.biodiversity indicator tables in the input file.")
   }
 
   for (ind in present_indicators) {
-    tmp <- read_sf(file, layer = ind, ...)
+    tmp <- read_sf(src, layer = ind, ...)
     tmp <- tidyr::nest(tmp, data = !assetid)
     names(tmp)[2] <- ind
     metadata <- dplyr::left_join(metadata, tmp, by = "assetid")

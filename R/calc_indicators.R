@@ -1,20 +1,18 @@
 .ind_defaults <- c("x", "name", "mode", "verbose")
 #' Compute specific indicators
 #'
-#' With \code{calc_indicators()} specific biodiversity indicators
-#' can be calculated. A requirement is that the resources that
-#' are mandatory inputs for the requested indicators are available
-#' locally. Multiple indicators and their respective additional
-#' arguments can be supplied. You can check available indicators and
-#' their requirement via \code{available_indicators()}, but
-#' the function will also gracefully inform you about any misspecifications.
-#' @param x An sf portfolio object.
-#' @param ... One or more `calc_*()` functions to calculate indicators for which
-#'   the required resources were previously made available via `get_resources()`.
-#' @return The sf portfolio object \code{x} with additional nested list column per
-#'   requested indicator.
-#' @keywords function
+#' `calc_indicators()` calculates specific biodiversity indicators. A
+#' requirement is that the resources that are mandatory inputs for the requested
+#' indicators are available locally. Multiple indicators and their respective
+#' additional arguments can be supplied.
+#'
+#' @param  x An `sf` object with features of type `"POLYGON"`
+#' @param ... One or more functions for resources/indicators
+#' @return `calc_indicators()` returns `x`, invisibly, with an additional nested
+#'   list column per requested indicator.
+#' @name mapme
 #' @export
+#' @include get_resources.R
 calc_indicators <- function(x, ...) {
   x <- .check_portfolio(x)
   funs <- list(...)
