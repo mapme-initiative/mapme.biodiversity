@@ -13,8 +13,7 @@ available_indicators(indicators = NULL)
 \arguments{
 \item{name}{A character vector indicating the name of the indicator.}
 
-\item{description}{A character vector with a basic description of
-the indicator}
+\item{description}{A character vector with a basic description}
 
 \item{resources}{A character vector of the required resources
 that need to be available to calculate the indicator. The names must

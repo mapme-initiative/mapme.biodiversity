@@ -91,7 +91,8 @@ get_fritz_et_al <- function(resolution = 100) {
 
 register_resource(
   name = "fritz_et_al",
-  type = "raster",
+  licence = "CC-BY 4.0",
+  description = "Drivers of deforestation in the tropics",
   source = "https://zenodo.org/record/7997885/",
-  licence = "CC-BY 4.0"
+  type = "raster"
 )

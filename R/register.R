@@ -83,6 +83,12 @@ mapme_options <- function(..., outdir, verbose, aria_bin, testing) {
   return(aria_bin)
 }
 
+
+.check_char <- function(obj, name) {
+  if (!inherits(obj, "character") || length(obj) > 1 || nchar(obj) == 0) {
+    stop(paste0(name, " needs to be a single charachter string"))
+  }
+}
 #' Register or list resources in mapme.biodiversity
 #'
 #' `register_resource()` is used to register a new resource function with base
@@ -91,11 +97,13 @@ mapme_options <- function(..., outdir, verbose, aria_bin, testing) {
 #' only have effect for the current R session.
 #'
 #' @param name A character vector indicating the name of the resource.
-#' @param type A character vector indicating the type of the resource. Either
-#'   'vector' or 'raster'.
-#' @param source Optional, preferably a URL where the data is found.
+#' @param description A character vector with a basic description
 #' @param licence A character vector indicating the licence of the resource.
 #'   In case it is a custom licence, put a link to the licence text.
+#' @param source Optional, preferably a URL where the data is found.
+#' @param type A character vector indicating the type of the resource. Either
+#'   'vector' or 'raster'.
+
 #'
 #' @return `register_resource()` is called for the side-effect of registering a resource.
 #' @name resources
@@ -109,14 +117,20 @@ mapme_options <- function(..., outdir, verbose, aria_bin, testing) {
 #'   source = "https://data.globalforestwatch.org/documents/tree-cover-2000/explore"
 #' )
 #' }
-register_resource <- function(name = NULL, type = NULL, source = NULL, licence = NULL) {
-  if (any(is.null(name), is.null(type), is.null(source), is.null(licence))) {
-    stop("neither name, type, source or licence can be NULL")
+register_resource <- function(name = NULL,
+                              description = NULL,
+                              licence = NULL,
+                              source = NULL,
+                              type = NULL) {
+  if (any(is.null(name), is.null(description), is.null(licence), is.null(source), is.null(type))) {
+    stop("neither name, description, licence, source, nor type can be NULL")
   }
 
-  if (!inherits(name, "character") || length(name) > 1 || nchar(name) == 0) {
-    stop("name needs to be a single charachter string")
-  }
+  .check_char(name, "name")
+  .check_char(description, "description")
+  .check_char(licence, "licence")
+  .check_char(source, "source")
+  .check_char(type)
 
   if (name %in% names(.pkgenv$resources)) {
     warning(paste("resource with name", name, "already registered"))
@@ -126,15 +140,10 @@ register_resource <- function(name = NULL, type = NULL, source = NULL, licence =
     stop("type needs to be one of 'vector' or 'raster'")
   }
 
-  if ((!inherits(source, "character") || length(source) > 1) & !is.null(source)) {
-    stop("source needs to be a single charachter string")
-  }
-
-  if ((!inherits(licence, "character") || length(licence) > 1) & !is.null(licence)) {
-    stop("licence needs to be a single charachter string")
-  }
-
-  resource <- tibble(name = name, type = type, source = source, licence = licence)
+  resource <- tibble(
+    name = name, description = description, licence = licence,
+    source = source, type = type
+  )
   .pkgenv$resources <- rbind(.pkgenv$resources, resource)
 }
 
@@ -147,8 +156,7 @@ register_resource <- function(name = NULL, type = NULL, source = NULL, licence =
 #' available indicators. Note, registering a custom indicator will
 #' only have effect for the current R session.
 #' @param name A character vector indicating the name of the indicator.
-#' @param description A character vector with a basic description of
-#'   the indicator
+#' @param description A character vector with a basic description
 #' @param resources A character vector of the required resources
 #'   that need to be available to calculate the indicator. The names must
 #'   correspond with already registered resources.
@@ -173,15 +181,14 @@ register_indicator <- function(name = NULL, description = NULL, resources = NULL
   if (any(is.null(name), is.null(description), is.null(resources))) {
     stop("neither name, description nor resources can be NULL")
   }
-  if (!inherits(name, "character") || length(name) > 1 || nchar(name) == 0) {
-    stop("name needs to be a single charachter string")
-  }
+
+  .check_char(name, "name")
+  .check_char(description, "description")
+
   if (name %in% names(.pkgenv$indicators)) {
     warning(paste("indicator with name", name, "already registered"))
   }
-  if (!inherits(description, "character") || length(description) > 1 || nchar(description) == 0) {
-    stop("description needs to be a single charachter string")
-  }
+
   if (!inherits(resources, "character")) {
     stop("resources needs to be a charachter vector")
   }

@@ -93,7 +93,8 @@ get_worldpop <- function(years = 2000) {
 
 register_resource(
   name = "worldpop",
-  type = "raster",
+  description = "WorldPop - Unconstrained Global Mosaics 2000 - 2020",
+  licence = "CC-BY 4.0",
   source = "https://www.worldpop.org/",
-  licence = "CC-BY 4.0"
+  type = "raster"
 )

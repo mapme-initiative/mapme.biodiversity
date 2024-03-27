@@ -98,7 +98,8 @@ get_ucdp_ged <- function(version = "latest") {
 
 register_resource(
   name = "ucdp_ged",
-  type = "vector",
+  description = "UCDP Georeferenced Event Dataset (UCDP GED)",
+  licence = "CC-BY 4.0",
   source = "https://ucdp.uu.se/downloads/",
-  licence = "CC-BY 4.0"
+  type = "vector"
 )

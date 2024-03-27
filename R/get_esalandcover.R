@@ -120,7 +120,8 @@ get_esalandcover <- function(years = 2015:2019) {
 
 register_resource(
   name = "esalandcover",
-  type = "raster",
+  licence = "CC-BY 4.0",
+  description = "Copernicus Land Monitoring Service (CLMS) 100 meter land cover product",
   source = "https://registry.opendata.aws/esa-worldcover-vito/",
-  licence = "CC-BY 4.0"
+  type = "raster"
 )

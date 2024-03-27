@@ -55,7 +55,8 @@ get_chirps <- function() {
 
 register_resource(
   name = "chirps",
-  type = "raster",
+  description = "Climate Hazards Group InfraRed Precipitation with Station data (CHIRPS)",
+  licence = "CC - unknown",
   source = "https://www.chc.ucsb.edu/data/chirps",
-  licence = "CC - unknown"
+  type = "raster"
 )

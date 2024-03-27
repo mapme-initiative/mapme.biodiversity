@@ -68,7 +68,8 @@ get_teow <- function() {
 
 register_resource(
   name = "teow",
-  type = "vector",
+  description = "Terrestrial Ecosystems of the World (TEOW) from WWF-US",
+  licence = "unknown",
   source = "https://www.worldwildlife.org/publications/terrestrial-ecoregions-of-the-world",
-  licence = "unknown"
+  type = "vector"
 )

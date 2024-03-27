@@ -54,7 +54,8 @@ get_gfw_emissions <- function() {
 
 register_resource(
   name = "gfw_emissions",
-  type = "raster",
+  description = "Global Forest Watch - CO2 Emssions caused by forest cover loss",
+  licence = "CC-BY 4.0",
   source = "https://data.globalforestwatch.org/datasets/gfw::forest-greenhouse-gas-emissions/about",
-  licence = "CC-BY 4.0"
+  type = "raster"
 )

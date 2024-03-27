@@ -104,7 +104,8 @@ get_gfw_treecover <- function(version = "GFC-2022-v1.10") {
 
 register_resource(
   name = "gfw_treecover",
-  type = "raster",
+  description = "Global Forest Watch - Percentage of canopy closure in 2000",
+  licence = "CC-BY 4.0",
   source = "https://data.globalforestwatch.org/documents/tree-cover-2000/explore",
-  licence = "CC-BY 4.0"
+  type = "raster"
 )

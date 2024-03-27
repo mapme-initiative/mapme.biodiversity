@@ -204,7 +204,7 @@ get_global_surface_water_recurrence <- function(version = "v1_4_2021") {
 #' @include register.R
 #' @export
 get_global_surface_water_occurrence <- function(version = "v1_4_2021") {
-  stopifnot(version %in% .gsv_versions)
+  stopifnot(version %in% .gsw_versions)
 
   function(x,
            name = "global_surface_water_occurrence",
@@ -223,7 +223,7 @@ get_global_surface_water_occurrence <- function(version = "v1_4_2021") {
                      dir = tempdir(), verbose = TRUE) {
   stopifnot(
     statistic %in% .gsw_statistics,
-    version %in% .gsv_versions
+    version %in% .gsw_versions
   )
 
   # make the gsw grid and construct urls for intersecting tiles
@@ -281,16 +281,28 @@ get_global_surface_water_occurrence <- function(version = "v1_4_2021") {
   "transitions"
 )
 
-.gsv_versions <- c(
+.gsw_versions <- c(
   "v1_4_2021"
+)
+
+.gsw_descr <- data.frame(
+  name = .gsw_statistics,
+  desc = c(
+    "Global Surface Water - Change of water occurrence intensity",
+    "Global Surface Water - Percentage of water occurrence",
+    "Global Surface Water - Percentage of water recurrence",
+    "Global Surface Water - Seasonality of water occurrrence",
+    "Global Surface Water - Transition classes"
+  )
 )
 
 for (gsw_statistic in .gsw_statistics) {
   resource_name <- paste0("global_surface_water_", gsw_statistic)
   register_resource(
     name = resource_name,
-    type = "raster",
+    description = .gsw_descr$desc[which(.gsw_descr$name == gsw_statistic)],
+    licence = "https://www.copernicus.eu/main/data-access/",
     source = "https://global-surface-water.appspot.com/download",
-    licence = "https://www.copernicus.eu/main/data-access/"
+    type = "raster"
   )
 }

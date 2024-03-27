@@ -54,7 +54,8 @@ get_nasa_srtm <- function() {
 
 register_resource(
   name = "nasa_srtm",
-  type = "raster",
+  description = "NASA Shuttle Radar Topography Mission (SRTM) Digital Elevation Model (DEM)",
+  licence = "https://lpdaac.usgs.gov/data/data-citation-and-policies/",
   source = "https://planetarycomputer.microsoft.com/dataset/nasadem",
-  licence = "https://lpdaac.usgs.gov/data/data-citation-and-policies/"
+  type = "raster"
 )

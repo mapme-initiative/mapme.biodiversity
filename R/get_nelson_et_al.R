@@ -86,7 +86,8 @@ get_nelson_et_al <- function(ranges = "20k_50k") {
 
 register_resource(
   name = "nelson_et_al",
-  type = "raster",
+  description = "Global maps of traveltime to cities",
+  licence = "CC-BY 4.0",
   source = "https://figshare.com/articles/dataset/Travel_time_to_cities_and_ports_in_the_year_2015/7638134/3",
-  licence = "CC-BY 4.0"
+  type = "raster"
 )

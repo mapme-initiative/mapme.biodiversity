@@ -117,7 +117,8 @@ get_gmw <- function(years = c(1996, 2007:2010, 2015:2020)) {
 
 register_resource(
   name = "gmw",
-  type = "vector",
+  description = "Global Mangrove Watch - Vector data of mangrove extent",
+  licence = "CC BY 4.0",
   source = "https://data.unep-wcmc.org/datasets/45",
-  licence = "CC BY 4.0"
+  type = "vector"
 )

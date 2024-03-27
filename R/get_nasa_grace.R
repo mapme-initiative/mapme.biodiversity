@@ -64,7 +64,8 @@ get_nasa_grace <- function(years = 2003:2022) {
 
 register_resource(
   name = "nasa_grace",
-  type = "raster",
+  description = "NASA Gravity Recovery And Climate Experiment (GRACE) - Measurments of Earth's mass and water changes",
+  licence = "https://nasagrace.unl.edu/About.aspx",
   source = "https://nasagrace.unl.edu/globaldata/",
-  licence = "https://nasagrace.unl.edu/About.aspx"
+  type = "raster"
 )

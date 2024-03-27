@@ -6,20 +6,28 @@
 \alias{available_resources}
 \title{Register or list resources in mapme.biodiversity}
 \usage{
-register_resource(name = NULL, type = NULL, source = NULL, licence = NULL)
+register_resource(
+  name = NULL,
+  description = NULL,
+  licence = NULL,
+  source = NULL,
+  type = NULL
+)
 
 available_resources(resources = NULL)
 }
 \arguments{
 \item{name}{A character vector indicating the name of the resource.}
 
-\item{type}{A character vector indicating the type of the resource. Either
-'vector' or 'raster'.}
-
-\item{source}{Optional, preferably a URL where the data is found.}
+\item{description}{A character vector with a basic description}
 
 \item{licence}{A character vector indicating the licence of the resource.
 In case it is a custom licence, put a link to the licence text.}
+
+\item{source}{Optional, preferably a URL where the data is found.}
+
+\item{type}{A character vector indicating the type of the resource. Either
+'vector' or 'raster'.}
 
 \item{resources}{If \code{NULL} returns a list of all resources (default).
 Otherwise only the ones specified.}
