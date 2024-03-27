@@ -113,8 +113,10 @@ mapme_options <- function(..., outdir, verbose, aria_bin, testing) {
 #' \dontrun{
 #' register_resource(
 #'   name = "gfw_treecover",
-#'   type = "raster",
-#'   source = "https://data.globalforestwatch.org/documents/tree-cover-2000/explore"
+#'   description = "Global Forest Watch - Percentage of canopy closure in 2000",
+#'   licence = "CC-BY 4.0",
+#'   source = "https://data.globalforestwatch.org/documents/tree-cover-2000/explore",
+#'   type = "raster"
 #' )
 #' }
 register_resource <- function(name = NULL,
