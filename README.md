@@ -58,6 +58,68 @@ To install the development version, use the following command:
 remotes::install_github("https://github.com/mapme-initiative/mapme.biodiversity", dependencies = TRUE)
 ```
 
+## Available resources and indicators
+
+Below is a list of the resources currently supported by
+`mapme.biodiversity`.
+
+| name                             | description                                                                                          | licence                                                                  |
+|:---------------------------------|:-----------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------|
+| chirps                           | Climate Hazards Group InfraRed Precipitation with Station data (CHIRPS)                              | CC - unknown                                                             |
+| esalandcover                     | Copernicus Land Monitoring Service (CLMS) 100 meter land cover product                               | CC-BY 4.0                                                                |
+| fritz_et_al                      | Drivers of deforestation in the tropics                                                              | CC-BY 4.0                                                                |
+| gfw_emissions                    | Global Forest Watch - CO2 Emssions caused by forest cover loss                                       | CC-BY 4.0                                                                |
+| gfw_lossyear                     | Global Forest Watch - Year of forest cover loss occurence                                            | CC-BY 4.0                                                                |
+| gfw_treecover                    | Global Forest Watch - Percentage of canopy closure in 2000                                           | CC-BY 4.0                                                                |
+| global_surface_water_change      | Global Surface Water - Change of water occurrence intensity                                          | <https://www.copernicus.eu/main/data-access/>                            |
+| global_surface_water_occurrence  | Global Surface Water - Percentage of water occurrence                                                | <https://www.copernicus.eu/main/data-access/>                            |
+| global_surface_water_recurrence  | Global Surface Water - Percentage of water recurrence                                                | <https://www.copernicus.eu/main/data-access/>                            |
+| global_surface_water_seasonality | Global Surface Water - Seasonality of water occurrrence                                              | <https://www.copernicus.eu/main/data-access/>                            |
+| global_surface_water_transitions | Global Surface Water - Transition classes                                                            | <https://www.copernicus.eu/main/data-access/>                            |
+| gmw                              | Global Mangrove Watch - Vector data of mangrove extent                                               | CC BY 4.0                                                                |
+| nasa_firms                       | NASA Fire Information for Resource Management System (FIRMS) - Global fire map data archive          | <https://www.earthdata.nasa.gov/learn/find-data/near-real-time/citation> |
+| nasa_grace                       | NASA Gravity Recovery And Climate Experiment (GRACE) - Measurments of Earth’s mass and water changes | <https://nasagrace.unl.edu/About.aspx>                                   |
+| nasa_srtm                        | NASA Shuttle Radar Topography Mission (SRTM) Digital Elevation Model (DEM)                           | <https://lpdaac.usgs.gov/data/data-citation-and-policies/>               |
+| nelson_et_al                     | Global maps of traveltime to cities                                                                  | CC-BY 4.0                                                                |
+| soilgrids                        | ISRIC - Modelled global soil property layers                                                         | CC-BY 4.0                                                                |
+| teow                             | Terrestrial Ecosystems of the World (TEOW) from WWF-US                                               | unknown                                                                  |
+| ucdp_ged                         | UCDP Georeferenced Event Dataset (UCDP GED)                                                          | CC-BY 4.0                                                                |
+| worldclim_max_temperature        | WorldClim - Monthly maximum temperature 2000 - 2018                                                  | <https://www.worldclim.org/about.html>                                   |
+| worldclim_min_temperature        | WorldClim - Monthly minimum temperature 2000 - 2018                                                  | <https://www.worldclim.org/about.html>                                   |
+| worldclim_precipitation          | WorldClim - Monthly precipitation 2000 - 2018                                                        | <https://www.worldclim.org/about.html>                                   |
+| worldpop                         | WorldPop - Unconstrained Global Mosaics 2000 - 2020                                                  | CC-BY 4.0                                                                |
+
+Next, is a list of supported indicators.
+
+| name                         | description                                                                    |
+|:-----------------------------|:-------------------------------------------------------------------------------|
+| active_fire_counts           | Number of detected fires by NASA FIRMS                                         |
+| active_fire_properties       | Extraction of properties of fires detected by NASA FIRMS                       |
+| biome                        | Areal statistics of biomes from TEOW                                           |
+| deforestation_drivers        | Areal statistics of deforestation drivers                                      |
+| drought_indicator            | Relative wetness statistics based on NASA GRACE                                |
+| ecoregion                    | Areal statstics of ecoregions based on TEOW                                    |
+| elevation                    | Statistics of elevation based on NASA SRTM                                     |
+| fatalities                   | Number of fatalities by group of conflict based on UCDP GED                    |
+| gsw_change                   | Statistics of the surface water change layer by JRC                            |
+| gsw_occurrence               | Areal statistic of surface water based on occurrence threshold                 |
+| gsw_recurrence               | Areal statistic of surface water based on reccurence threshold                 |
+| gsw_seasonality              | Areal statistic of surface water by seasonality                                |
+| gsw_transitions              | Areal statistics of surface water grouped by transition class                  |
+| landcover                    | Areal statistics grouped by landcover class                                    |
+| mangroves_area               | Area covered by mangroves                                                      |
+| population_count             | Statistic of population counts                                                 |
+| precipitation_chirps         | Statistics of CHIRPS precipitation layer                                       |
+| precipitation_wc             | Statistics of WorldClim precipitation layer                                    |
+| soilproperties               | Statistics of SoilGrids layers                                                 |
+| temperature_max_wc           | Statistics of WorldClim maximum temperature layer                              |
+| temperature_min_wc           | Statistics of WorldClim minimum temperature layer                              |
+| traveltime                   | Statistics of traveltime to the clostes city grouped by city category          |
+| treecover_area               | Area of forest cover by year                                                   |
+| treecover_area_and_emissions | Area of forest cover and greenhouse gas emssions caused by forest loss by year |
+| treecoverloss_emissions      | Greenouse gas emissions cause by forest loss by year                           |
+| tri                          | Statistics of terrain rudgedness index based on NASA SRTM DEM                  |
+
 ## Usage example
 
 `{mapme.biodiversity}` works by constructing a portfolio from an sf
@@ -66,52 +128,12 @@ extent of the portfolio are made available locally. Once all required
 resources are available, indicators can be calculated individually for
 each asset in the portfolio.
 
-To list all available resources and indicators run:
-
 ``` r
 library(mapme.biodiversity)
 library(sf)
 ```
 
     ## Linking to GEOS 3.12.1, GDAL 3.8.2, PROJ 9.3.1; sf_use_s2() is TRUE
-
-``` r
-available_resources()
-```
-
-    ## # A tibble: 23 × 4
-    ##    name                             type   source                        licence
-    ##    <chr>                            <chr>  <chr>                         <chr>  
-    ##  1 chirps                           raster https://www.chc.ucsb.edu/dat… CC - u…
-    ##  2 esalandcover                     raster https://registry.opendata.aw… CC-BY …
-    ##  3 fritz_et_al                      raster https://zenodo.org/record/79… CC-BY …
-    ##  4 gfw_emissions                    raster https://data.globalforestwat… CC-BY …
-    ##  5 gfw_lossyear                     raster https://data.globalforestwat… CC-BY …
-    ##  6 gfw_treecover                    raster https://data.globalforestwat… CC-BY …
-    ##  7 global_surface_water_change      raster https://global-surface-water… https:…
-    ##  8 global_surface_water_occurrence  raster https://global-surface-water… https:…
-    ##  9 global_surface_water_recurrence  raster https://global-surface-water… https:…
-    ## 10 global_surface_water_seasonality raster https://global-surface-water… https:…
-    ## # ℹ 13 more rows
-
-``` r
-available_indicators()
-```
-
-    ## # A tibble: 26 × 3
-    ##    name                   description                                  resources
-    ##    <chr>                  <chr>                                        <list>   
-    ##  1 active_fire_counts     Number of detected fires by NASA FIRMS       <tibble> 
-    ##  2 active_fire_properties Extraction of properties of fires detected … <tibble> 
-    ##  3 biome                  Areal statistics of biomes from TEOW         <tibble> 
-    ##  4 deforestation_drivers  Areal statistics of deforestation drivers    <tibble> 
-    ##  5 drought_indicator      Relative wetness statistics based on NASA G… <tibble> 
-    ##  6 ecoregion              Areal statstics of ecoregions based on TEOW  <tibble> 
-    ##  7 elevation              Statistics of elevation based on NASA SRTM   <tibble> 
-    ##  8 fatalities             Number of fatalities by group of conflict b… <tibble> 
-    ##  9 gsw_change             Statistics of the surface water change laye… <tibble> 
-    ## 10 gsw_occurrence         Areal statistic of surface water based on o… <tibble> 
-    ## # ℹ 16 more rows
 
 Once you have decided on an indicator you are interested in, you can
 start by making the required resource available for your portfolio.
@@ -146,16 +168,16 @@ mapme_options(
   tidyr::unnest(treecover_area_and_emissions))
 ```
 
-    ## Simple feature collection with 2 features and 7 fields
+    ## Simple feature collection with 2 features and 8 fields
     ## Geometry type: POLYGON
     ## Dimension:     XY
     ## Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931
     ## Geodetic CRS:  WGS 84
-    ## # A tibble: 2 × 8
-    ##   WDPAID NAME            DESIG_ENG     ISO3  years emissions treecover
-    ##    <dbl> <chr>           <chr>         <chr> <int>     <dbl>     <dbl>
-    ## 1 478140 Sierra de Neiba National Park DOM    2016      2400     2360.
-    ## 2 478140 Sierra de Neiba National Park DOM    2017      2839     2348.
+    ## # A tibble: 2 × 9
+    ##   WDPAID NAME            DESIG_ENG     ISO3  assetid years emissions treecover
+    ##    <dbl> <chr>           <chr>         <chr>   <int> <int>     <dbl>     <dbl>
+    ## 1 478140 Sierra de Neiba National Park DOM         1  2016      2400     2360.
+    ## 2 478140 Sierra de Neiba National Park DOM         1  2017      2839     2348.
     ## # ℹ 1 more variable: geom <POLYGON [°]>
 
 ## A note on parallel computing

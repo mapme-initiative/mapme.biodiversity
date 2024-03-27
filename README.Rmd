@@ -57,6 +57,23 @@ To install the development version, use the following command:
 remotes::install_github("https://github.com/mapme-initiative/mapme.biodiversity", dependencies = TRUE)
 ```
 
+## Available resources and indicators
+
+Below is a list of the resources currently supported by `mapme.biodiversity`.
+
+```{r available_resources, echo = FALSE}
+knitr::kable(mapme.biodiversity::available_resources()[, c("name", "description", "licence")])
+```
+
+
+Next, is a list of supported indicators.
+
+```{r available_indicators, echo = FALSE}
+knitr::kable(mapme.biodiversity::available_indicators()[, c("name", "description")])
+```
+
+
+
 ## Usage example
 
 `{mapme.biodiversity}` works by constructing a portfolio from an sf
@@ -65,14 +82,9 @@ extent of the portfolio are made available locally. Once all required
 resources are available, indicators can be calculated individually for
 each asset in the portfolio.
 
-To list all available resources and indicators run:
-
 ```{r resources}
 library(mapme.biodiversity)
 library(sf)
-
-available_resources()
-available_indicators()
 ```
 
 Once you have decided on an indicator you are interested in, you can
