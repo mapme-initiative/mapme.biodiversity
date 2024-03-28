@@ -77,21 +77,22 @@ calc_gsw_seasonality <- function() {
       global_surface_water_seasonality,
       fun = "sum"
     )
+    names(res_zonal) <- c("value", "area")
 
     result <- tibble::tibble(
-      months = 0:12
+      month = 0:12
     )
 
     result <- merge(
       result,
       res_zonal,
-      by.x = "months",
+      by.x = "month",
       by.y = "value",
       all.x = TRUE
     )
     result$area[is.na(result$area)] <- 0
 
-    return(result)
+    return(tibble::tibble(result))
   }
 }
 
