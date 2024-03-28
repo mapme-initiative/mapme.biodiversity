@@ -27,7 +27,7 @@
 #' @include register.R
 #' @export
 get_global_surface_water_change <- function(version = "v1_4_2021") {
-  stopifnot(version %in% .gsv_versions)
+  stopifnot(version %in% .gsw_versions)
 
   function(x,
            name = "global_surface_water_change",
@@ -79,7 +79,7 @@ get_global_surface_water_change <- function(version = "v1_4_2021") {
 #' @include register.R
 #' @export
 get_global_surface_water_transitions <- function(version = "v1_4_2021") {
-  stopifnot(version %in% .gsv_versions)
+  stopifnot(version %in% .gsw_versions)
 
   function(x,
            name = "global_surface_water_transitions",
@@ -119,7 +119,7 @@ get_global_surface_water_transitions <- function(version = "v1_4_2021") {
 #' @include register.R
 #' @export
 get_global_surface_water_seasonality <- function(version = "v1_4_2021") {
-  stopifnot(version %in% .gsv_versions)
+  stopifnot(version %in% .gsw_versions)
 
   function(x,
            name = "global_surface_water_seasonality",
@@ -162,7 +162,7 @@ get_global_surface_water_seasonality <- function(version = "v1_4_2021") {
 #' @include register.R
 #' @export
 get_global_surface_water_recurrence <- function(version = "v1_4_2021") {
-  stopifnot(version %in% .gsv_versions)
+  stopifnot(version %in% .gsw_versions)
 
   function(x,
            name = "global_surface_water_recurrence",
@@ -219,11 +219,11 @@ get_global_surface_water_occurrence <- function(version = "v1_4_2021") {
   }
 }
 
-.get_gsw <- function(x, statistic = "occurrence", vers_gsw = "v1_4_2021",
+.get_gsw <- function(x, statistic = "occurrence", version = "v1_4_2021",
                      dir = tempdir(), verbose = TRUE) {
   stopifnot(
     statistic %in% .gsw_statistics,
-    vers_gsw %in% .gsw_versions
+    version %in% .gsw_versions
   )
 
   # make the gsw grid and construct urls for intersecting tiles
@@ -244,7 +244,7 @@ get_global_surface_water_occurrence <- function(version = "v1_4_2021") {
   ids <- sapply(tile_ids, function(n) .get_gsw_tile_id(grid_gfc[n, ]))
   urls <- sprintf(
     "%s_%s%s.tif",
-    baseurl, ids, vers_gsw
+    baseurl, ids, version
   )
   filenames <- file.path(dir, basename(urls))
   # start download and skip files that exist
