@@ -132,8 +132,10 @@ NULL
 
 .get_gsw <- function(x, statistic = "occurrence", vers_gsw = "v1_4_2021",
                      rundir = tempdir(), verbose = TRUE) {
-  stopifnot(statistic %in% .gsw_statistics,
-            vers_gsw %in% .gsv_versions)
+  stopifnot(
+    statistic %in% .gsw_statistics,
+    vers_gsw %in% .gsw_versions
+  )
 
   # make the gsw grid and construct urls for intersecting tiles
   baseurl <- sprintf(
@@ -147,7 +149,7 @@ NULL
   tile_ids <- unique(unlist(st_intersects(x, grid_gfc)))
   if (length(tile_ids) == 0) {
     stop("The extent of the portfolio does not intersect with the GSW grid.",
-         call. = FALSE
+      call. = FALSE
     )
   }
   ids <- sapply(tile_ids, function(n) .get_gsw_tile_id(grid_gfc[n, ]))
@@ -159,8 +161,10 @@ NULL
   # start download and skip files that exist
   # TODO: parallel downloads
   aria_bin <- attributes(x)$aria_bin
-  .download_or_skip(urls, filenames, verbose, check_existence = FALSE,
-                    aria_bin = aria_bin)
+  .download_or_skip(urls, filenames, verbose,
+    check_existence = FALSE,
+    aria_bin = aria_bin
+  )
   # return all paths to the downloaded files
   filenames
 }
@@ -193,7 +197,7 @@ NULL
   "transitions"
 )
 
-.gsv_versions <- c(
+.gsw_versions <- c(
   "v1_4_2021"
 )
 
