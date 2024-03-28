@@ -1,5 +1,30 @@
 # mapme.biodiversity (development version)
 
+## Breaking changes
+
+- introduces a new UI based on closures for resources and indicators, see #240 for
+  more information
+
+## General
+
+- improves output of `available_resources()` and `available_indicators()`
+- introduces `mapme_options()` to add fine-control of the packages behaviour
+- deprecates `init_portfolio()` in favor of `mapme_options()`
+- exports helper functions for third parties to extend the package for custom
+  resources and indicators:
+  - `check_available_years()`
+  - `check_namespace()`
+  - `download_or_skip()`
+  - `check_engine()`
+  - `check_stats()`
+  - `select_engine()`
+  - `make_global_grid()`
+  - `unzip_and_remove()`
+  
+## New features
+
+- added Global Surface Water resources and respective indicators (#235, @karpfen)
+
 ## Internal
 
 - removed `st_make_valid()` from `.read_vector()`.
