@@ -3,12 +3,20 @@
 \docType{data}
 \name{worldpop}
 \alias{worldpop}
+\alias{get_worldpop}
 \title{Population Count layer for year 2000-2020}
-\format{
-Global raster layers available for years 2000-2020.
-}
 \source{
 \url{https://www.worldpop.org/}
+}
+\usage{
+get_worldpop(years = 2000)
+}
+\arguments{
+\item{years}{A numeric vector indicating the years for which to make the
+resource available.}
+}
+\value{
+A function that returns a character of file paths.
 }
 \description{
 This resource is published by open spatial demographic data and research

@@ -14,16 +14,16 @@ test_that(".get_nelson_et_al works", {
   outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
   tmpdir <- tempdir()
 
-  portfolio <- init_portfolio(aoi,
-    years = 2000:2020,
+  mapme_options(
     outdir = outdir,
     tmpdir = tmpdir,
-    verbose = TRUE
+    verbose = FALSE,
+    testing = TRUE
   )
-  # Add testing attribute in order to skip downloads
-  attributes(portfolio)$testing <- TRUE
+
+  gne <- get_nelson_et_al(ranges = "20k_50k")
   expect_equal(
-    .get_nelson_et_al(portfolio, range_traveltime = "20k_50k"),
+    gne(),
     "traveltime-20k_50k.tif"
   )
 })

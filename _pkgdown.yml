@@ -21,23 +21,25 @@ reference:
   - title: Functions
     desc: User-facing functions
   - contents:
-    - init_portfolio
+    - mapme_options
+    - available_resources
     - get_resources
+    - available_indicators
     - calc_indicators
     - write_portfolio
     - read_portfolio
-    - register_resource
-    - register_indicator
   - title: Resources
     desc: Supported resources.
   - contents:
-    - available_resources
     - has_keyword("resource")
   - title: Indicators
     desc: Supported indicators.
   - contents:
-    - available_indicators
     - has_keyword("indicator")
+  - title: Utilities
+    desc: Development utilities
+  - contents:
+    - has_keyword("utils")
 
 navbar:
   bg: primary

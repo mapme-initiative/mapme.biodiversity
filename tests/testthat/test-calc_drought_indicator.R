@@ -8,21 +8,17 @@ test_that("drought indicator works", {
     package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)
   nasa_grace <- rast(nasa_grace)
-  attributes(shp)$years <- 2003:2022
-  expect_error(
-    .calc_drought_indicator(shp, nasa_grace, engine = "not-available"),
-    "Engine 'not-available' is not an available engine. Please choose one of:"
-  )
-  expect_error(
-    .calc_drought_indicator(shp, nasa_grace, stats_drought = "not-available"),
-    "Statistic 'not-available' is not supported. Please choose one of:"
-  )
 
-  result <- .calc_drought_indicator(shp, nasa_grace)
-  result_multi_stats <- .calc_drought_indicator(shp, nasa_grace, stats = c("mean", "median", "sd"))
-  result_zonal <- .calc_drought_indicator(shp, nasa_grace, engine = "zonal")
-  result_extract <- .calc_drought_indicator(shp, nasa_grace, engine = "extract")
-  result_exact <- .calc_drought_indicator(shp, nasa_grace, engine = "exactextract")
+  cdi <- calc_drought_indicator()
+  result <- cdi(shp, nasa_grace)
+  cdi <- calc_drought_indicator(stats = c("mean", "median", "sd"))
+  result_multi_stats <- cdi(shp, nasa_grace)
+  cdi <- calc_drought_indicator(engine = "zonal")
+  result_zonal <- cdi(shp, nasa_grace)
+  cdi <- calc_drought_indicator(engine = "extract")
+  result_extract <- cdi(shp, nasa_grace)
+  cdi <- calc_drought_indicator(engine = "exactextract")
+  result_exact <- cdi(shp, nasa_grace)
 
   expect_equal(
     names(result[[1]]),

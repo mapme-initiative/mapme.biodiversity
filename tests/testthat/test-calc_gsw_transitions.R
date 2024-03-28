@@ -6,16 +6,10 @@ test_that("gsw transitions works", {
   )
 
   shp <- suppressWarnings(st_cast(shp, to = "POLYGON")[1, ])
-  tmpdir <- tempdir()
-  portfolio <- init_portfolio(
-    shp,
-    years = 2024,
-    tmpdir =  tmpdir,
-    verbose = TRUE
-  )
+  gswt <- calc_gsw_transitions()
 
   expect_equal(
-    .calc_gsw_transitions(portfolio, NULL),
+    gswt(shp, NULL),
     NA
   )
 
@@ -23,12 +17,14 @@ test_that("gsw transitions works", {
     package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)
   gsw_transitions <- rast(gsw_transitions)
-  transitions <- .calc_gsw_transitions(portfolio, gsw_transitions)
+  transitions <- gswt(shp, gsw_transitions)
 
   transitions_expected <- tibble(
-    class = c("Permanent", "New Permanent", "Lost Permanent", "Seasonal",
-              "New Seasonal", "Seasonal to Permanent", "Permanent to Seasonal",
-              "Ephemeral Permanent", "Ephemeral Seasonal"),
+    class = c(
+      "Permanent", "New Permanent", "Lost Permanent", "Seasonal",
+      "New Seasonal", "Seasonal to Permanent", "Permanent to Seasonal",
+      "Ephemeral Permanent", "Ephemeral Seasonal"
+    ),
     area = c(
       199.4017921627606142, 388.8460738439933948, 0.3806794781267643,
       1.9034698475368319, 83.9057809752881099, 28.8569105465255689,

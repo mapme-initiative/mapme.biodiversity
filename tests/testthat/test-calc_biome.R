@@ -13,7 +13,8 @@ test_that("biome computation works", {
     out <- st_make_valid(out)
   })
   names(teow) <- basename(source)
-  result <- .calc_biome(shp, teow)
+  cb <- calc_biome()
+  result <- cb(shp, teow)
   expect_equal(
     names(result),
     c("biomes", "area")
@@ -31,6 +32,7 @@ test_that("biome computation works", {
   st_geometry(shp) <- st_geometry(shp) + 5
   st_crs(shp) <- st_crs(4326)
   expect_equal(
-    .calc_biome(shp, teow),
-    NA)
+    cb(shp, teow),
+    NA
+  )
 })

@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 The most important steps of the processing workflow of `{mapme.biodiversity}` 
 are described here. A typical workflow consists of the following steps:
 
--  initialization of a portfolio object from an `{sf}` object together with portfolio-wide parameters
+-  initialization of a portfolio object from an `{sf}` object together with portfolio-wide parameters set by `mapme_options()`
 -  identify the required resources needed for the indicators you want to calculate
 -  download one or more resources that are required for your desired indicators
 -  automated calculation of the indicators for all assets within a portfolio

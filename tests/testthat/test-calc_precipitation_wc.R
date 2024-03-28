@@ -9,21 +9,17 @@ test_that("worldclim precipitation works", {
     package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)
   worldclim_precipitation <- rast(worldclim_precipitation)
-  attributes(shp)$years <- 2000:2022
-  expect_error(
-    .calc_precipitation_wc(shp, worldclim_precipitation, engine = "not-available"),
-    "Engine 'not-available' is not an available engine. Please choose one of:"
-  )
-  expect_error(
-    .calc_precipitation_wc(shp, worldclim_precipitation, stats_worldclim = "not-available"),
-    "Statistic 'not-available' is not supported. Please choose one of:"
-  )
 
-  result <- .calc_precipitation_wc(shp, worldclim_precipitation)
-  result_multi_stat <- .calc_precipitation_wc(shp, worldclim_precipitation, stats_worldclim = c("mean", "median", "sd"))
-  result_zonal <- .calc_precipitation_wc(shp, worldclim_precipitation, engine = "zonal")
-  result_extract <- .calc_precipitation_wc(shp, worldclim_precipitation, engine = "extract")
-  result_exact <- .calc_precipitation_wc(shp, worldclim_precipitation, engine = "exactextract")
+  cpwc <- calc_precipitation_wc()
+  result <- cpwc(shp, worldclim_precipitation)
+  cpwc <- calc_precipitation_wc(stats = c("mean", "median", "sd"))
+  result_multi_stat <- cpwc(shp, worldclim_precipitation, )
+  cpwc <- calc_precipitation_wc(engine = "zonal")
+  result_zonal <- cpwc(shp, worldclim_precipitation)
+  cpwc <- calc_precipitation_wc(engine = "extract")
+  result_extract <- cpwc(shp, worldclim_precipitation)
+  cpwc <- calc_precipitation_wc(engine = "exactextract")
+  result_exact <- cpwc(shp, worldclim_precipitation)
 
   expect_equal(
     names(result),

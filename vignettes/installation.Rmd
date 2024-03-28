@@ -18,15 +18,12 @@ knitr::opts_chunk$set(
 This section describes how to install the `{mapme.biodiversity}` package. 
 Since the package handles spatial data, we assume that you have
 a working installation of [GDAL](https://gdal.org/index.html) and [PROJ](https://proj.org/) 
-on your system. The GDAL installation needs to be found on your PATH variable, 
-because several system calls will be issued when the package is used. Please 
-refer to the respective installation guides to learn about how to install these 
-programs on your OS.
+on your system. Our recommendation is to follow the `{sf}` installation instructions.
+
 While the package supports sequentially downloading all supported resources,
 we include the option to provide a path to an [aria2](https://aria2.github.io/) executable 
-to speed up the download based on parallel processing. We expect that 
-the path to the executable binary is known to the user and we test it if 
-provided during portfolio initialization.
+to speed up downloads based on parallel processing. We expect that 
+the path to the executable binary is known to the user and we test if it is acually executable.
 
 Given that the above requirements are met, installing the `{mapme.biodiversity}` 
 current CRAN release is then achieved through the following function call: 

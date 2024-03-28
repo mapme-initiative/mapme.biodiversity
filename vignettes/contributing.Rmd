@@ -2,9 +2,9 @@
 title: "Contributing"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Contributing}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+ %\VignetteIndexEntry{Contributing}
+ %\VignetteEngine{knitr::rmarkdown}
+ %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
@@ -18,13 +18,13 @@ knitr::opts_chunk$set(
 
 If you are reading this vignette you are most probably to contribute to the `{mapme.biodiversity}`
 package. This is great news and we are very happy to receive Pull-Requests
-extending the package's functionality! Below you will receive important in-depth
+extending the package's functionality! Below you will find important in-depth
 information about how to add resources and indicators to make the process
 as seamless as possible for both you and the package's maintainers. Please make
 sure to read and understand this guide before opening a PR. If in doubt, especially
-if you feel that the framework does not support your specific use case, always
+if you feel that the framework does not support your use case, always
 feel free to raise an issue and we will happily discuss how we can support your
-ideas. If you have not already done so, make sure to read [Terminology](terminology.html)
+ideas. If you have not already done so, make sure to read the [Terminology](terminology.html)
 vignette to get familiar with the most important concepts of this package.
 
 Note that we use the [tidyverse style guide](https://style.tidyverse.org/) 
@@ -46,22 +46,22 @@ git clone https://github.com/mapme-initiative/mapme.biodiversity
 
 We do not accept pushes to main, thus the first step would be to create
 a specific branch for your extension. In this tutorial, we will pretend to 
-reimplement the `soilgrids` resources and the associated `soilproperties` 
-indicator, so that we create a branch reflecting this. Don't forget to check out
+re-implement the `nasa_srtm` resource and the associated `elevation` 
+indicator, so we will create a branch reflecting this. Don't forget to check out
 to the newly created branch!
 
 ```bash
-git branch add-soilgrid-indicators
-git checkout add-soilgrid-indicators
+git branch add-elevation
+git checkout add-elevation
 ```
+
 Below, we will assume that you develop your extension to the package in R Studio.
 The general guidelines to follow also apply if you choose different tooling 
 for your development process, however, it will not be covered in this vignette.
-We assume that all R development dependencies for the state of the package when 
-you used the `git clone` command are installed. The easiest way to ensure this
-is using devtools when in the package's directory:
+We assume that all R development dependencies are installed. The easiest way to 
+ensure this is using `{devtools}`:
 
-```r
+```{r, eval=FALSE}
 devtools::install_dev_deps()
 ```
 
@@ -69,225 +69,169 @@ devtools::install_dev_deps()
 
 ## Checklist
 
-- [ ] Add the new resource to `R/resources_backlog.R` following the standardized template
-- [ ] Create a file for all necessary code to download your resource (`R/get_resource_name.R`)
+- [ ] Create a file for all necessary code to download your resource (`R/get_<resource_name>.R`)
 - [ ] Include roxygen documentation for your resource following the provided template
+- [ ] Create outer-level function for user facing arguments
 - [ ] Check user-specified arguments (if any) for correctness
-- [ ] Retrieve portfolio-wide parameters of interest for your resource from the portfolio
+- [ ] Create inner-level function with standard arguments
 - [ ] Match the spatio-temporal extent of the portfolio with your resource
-- [ ] Provide your own download functionality or use `.download_or_skip()`
+- [ ] Provide your own download functionality or use `download_or_skip()`
 - [ ] Delete any intermediate files that are no longer required
 - [ ] Return the absolute file paths for all matching resource files
-- [ ] Write a testthat script testing all the newly added functionality (except the actual download) and write it to `test/testthat/test-get_resource_name.R`
-- [ ] Add a small example data set of your resource to `inst/res/resource_name/`
+- [ ] Write a testthat script testing all the newly added functionality (except the actual download) and write it to `test/testthat/test-get_<resource_name>.R`
+- [ ] Add a small example data set of your resource to `inst/res/<resource_name>`
+- [ ] Add the script producing the sample resources to `data-raw`
+- [ ] Add useful information about the resource to the register via `register_resource()`
 - [ ] Added a new dependency? Make sure to include a supporting statement for that dependency in your PR!
 
-## Introducing a new resource to the backlog
+## Overview of adding a resource
 
-A resource is a supported dataset that can be downloaded from a user's perspective  
-via the <code>get_resources()</code> function. Currently, the package supports
-only raster and vector resources. If you wish to submit the support of a new
-resource, please be aware that we will only accept new resources if they are
+A resource is a supported dataset that can be downloaded from a user's perspective
+by specifying one or more functions to `get_resources()`. Currently, the package 
+supports only raster and vector resources. If you wish to submit the support of 
+a new resource, please be aware that we will only accept new resources if they are
 associated with at least one indicator calculation. The very first step to
-adding a resource is to add it into the internal resource backlog function so
-that the package is aware of its existence. Once checkout to the new
-branch and having the project opened in R Studio, issue the following
-command to open the resource backlog file:
+adding a resource is to create a new file that will be holding the required code.  
+Once you checked out to the new branch and having the project opened in R Studio, 
+adapt the following command to open the a new resource file:
 
-```{r open_resource_backlog, eval = FALSE}
-file.edit("R/resources_backlog.R")
+```{r open_resource_file, eval = FALSE}
+file.edit("R/get_<your-new-resource>.R")
+# e.g. file.edit("R/get_soildgrids.R")
 ```
-
-This file keeps track of all supported resources in a list object. You will
-see that each resource shares a common structure and how it is specified. The name
-of the list object will be the name the package uses to identify a specific resource.
-Most importantly, the type argument specifies whether a resource is of type 'raster'
-or 'vector'. If applicable, the source argument shall contain an URL pointing
-to a webpage documenting the resource. The downloader argument is the package
-internal function name that is used to download the resource. This function 
-is the most important code file for a new resource. Then, arguments and their
-default value to govern the download process can be specified. If no additional
-arguments are needed just enter an empty list. For the `soilgrids` resource,
-the internal backlog looks like this (don't spend too much effort in understanding
-the arguments just yet. These will become clearer when we "write" the downloader.
-When contributing a new resource, it is usually an iterative process between
-the backlog and the downloader to 
-
-
-y those arguments that need to be specified
-by users):
-
-```{r soilgrid_backlog, eval = FALSE}
-soilgrids <- list(
-  type = "raster",
-  source = "https://www.isric.org/explore/soilgrids",
-  downloader = ".get_soilgrids",
-  arguments = list(
-    layers = "clay",
-    depths = "0-5cm",
-    stats = "mean"
-  )
-)
-```
-
-With the resource being backlogged, the package now can find a 
-resource called `soilgrids` of type `raster` and it can also identify the 
-downloader function In this specific case, the package can also
-determine the default values of three arguments in case users did not specify
-anything. This is important information that will determine how the `get_resources()`
-function works when called by users. 
 
 ## Documenting the new resource
 
-By convention, the filename of a downloader **MUST** start with `get_<resource_name>.R` 
-appended by the name of the resource. In the case of the soilgrids resource that
-translates to `get_soilgrids.R`. In the first part of such a downloader, make
-sure to include detailed documentation. This documentation should explain
-what this resource represents, where it comes from (including a citation), 
-and the arguments users should specify to control what is downloaded.
-Importantly, this documentation **MUST** receive the roxygen tag `@docType data` as
-well as the `@keywords resource` tag, so that the documentation can be 
-identified as a resource. The `NULL` value below the documentation **MUST** be 
-included. Below is a template that should be used for documenting a resource.
+In the first part of a resource function, make sure to include detailed 
+documentation. This documentation should explain what this resource represents, 
+where it comes from (including a citation), and the user-facging arguments that 
+should be specified during runtime. 
 
-```r
+Importantly, this documentation **MUST** receive the roxygen tag 
+`@keywords resource`, so that the documentation will be identified as a resource. 
+Also, add the bare name of the resource as the `@name` tag (e.g. in the case
+of our example that translates to `@name nasa_srtm`).
+
+```{r, eval=FALSE}
 #' Short title
 #'
 #' One or more description paragraphs might follow here. Please describe
-#' required user arguments here, ideally as itemized lists.
+#' the spatio-temporal structure of your resource here briefly.
 #'
-#' @name <the short name of your resource, same as in the backlog>
-#' @docType data <we document resources as a dataset>
+#' @name <the short name of your resource>
+#' @param <any user-facing arguments>
 #' @keywords resource <identifies the documentation as a resource>
-#' @format <one sentence on data format and spatial extent>
 #' @references <ideally a citable scientific publication>
 #' @source <a link in the \url{} tag linking to an online documentation>
-NULL
+#' @returns A function that makes a resource available for a portfolio
+#' @include register.R
+#' @export
 ```
 
-## Function inputs for resources
+The last two tags are important to add as well. The include statement is 
+mandatory for the register functionality (more on that below) to be loaded
+before your resource function. The export tag is important so that the resource
+is actually exposed to the users of the package.
 
-After documenting the resource, you can get started with implementing the 
-actual downloader. The downloader is a package's internal function that users do not
-directly interact with. By convention, we append package internal function names
-with a dot. Similar to the filename itself, resource downloaders should start
-with `.get_<resource_name>`. The first argument is always `x`, which corresponds
-to the portfolio object. Important attributes (e.g. the spatial-temporal extent)
-can be derived from this object. Then additional user-facing arguments might follow.
-After these arguments, each resource downloader receives the argument `rundir` which
-by default should point to the output of `tempdir()`, but will be pointing to 
-an output directory on disk where the output shall be written to when used by users.
-Additionally, a logical called `verbose`, by default set to TRUE, controls 
-the verbosity of the downloader as well as the dots argument. For the `soilgrids` 
-resource, the function header thus looks like this:
+## Constructing a resource function - Outer level
 
-```r
-.get_soilgrids <- function(x, layers, depths, stats,
-                           rundir = tempdir(),
-                           verbose = TRUE,
-                           ...) {
-                           # downloader coder goes here
-                           }
+Resource functions are constructed as closures, i.e. functions that return a function.
+The outer level exposes arguments to be set by users of the function to fine-control
+the flow of the function. Note, it is important to check the user input in this
+outer level for correctness so that warning/error messages in case of any
+miss specifications are thrown immediately.
+
+For `nasa_srtm`, this outer level does not look really exciting becuase there
+are no user-facing arguments to be checked (we will see how to check
+user-facing arguments when constructing the indicator below):
+
+```{r, eval=FALSE}
+get_nasa_srtm <- function() {
+  # .... inner function level
+}
 ```
 
-## Check arguments and retrieval of portfolio-wide parameters
+Note, that there are some exported helper functions for re-occurring argument 
+checks that you are free to use (e.g. `check_available_years()` in case
+you query the user for a temporal time frame).
+The arguments defined in the outer level of the resource function are then 
+ready to be used in the inner level, that we will have a look at next.
 
-Before actually conducting any downloads, it is important that you as the provider
-of the new resource check extensively that all required arguments were correctly
-specified. That specifically applies to the user-defined variables that your
-downloader requires. The package framework cannot check
-for the correctness of these arguments. That is something that each downloader
-has to take care of. If some arguments are wrongly specified, the function
-should fail (via `stop()`) and gracefully inform users which arguments where
-misspecified and which values represent valid values. You can head
-over to the soilgrids downloader (use `file.edit("R/get_soilgrids.R")`) and 
-analyse the first few lines of the file (up to line ~130) to see how the
-inputs are checked for the soilgrids resource.
+## Constructing a resource function - Inner level
 
-Some portfolio-wide parameters that might be important to your specific downloader
-can be determined by analysing the `x` portfolio attributes. Currently, the following
-attributes with regard to a resource download are set, when users initialize their portfolio:
+The inner level of a resource function has a mandatory function signature that
+will be checked during run-time. Your function is required to exactly specify 
+the below signature. For the `nasa_srtm` resource, this looks like this:
 
-```r
-  attr(x, "nitems") <- nrow(x)
-  attr(x, "bbox") <- st_bbox(x)
-  attr(x, "years") <- years
-  attr(x, "aria_bin") <- aria_bin
+```{r, eval=FALSE}
+function(x,
+         name = "nasa_srtm",
+         type = "raster",
+         outdir = mapme_options()[["outdir"]],
+         verbose = mapme_options()[["verbose"]],
+         testing = mapme_options()[["testing"]]) {
+  # ... function body
+}
 ```
 
-Your resource downloader should take care that with these user-specified arguments
-and the portfolio-wide parameters the files matching the spatio-temporal 
-extent of the portfolio are downloaded.
-These can be queried with the following syntax with the temporal extent of
-the portfolio as an example:
+The `x` argument here represents the portfolio object handed over by the user 
+when calling `get_resources()` which is an `sf`-object and can thus be used 
+to derive the spatial extent of the portfolio. Next, comes the name and the 
+type of the resource which is required for the backend to correctly handle the 
+output and log the resource once it has been made available. 
 
-```r
-attributes(x)$years
-```
+The other arguments should default to the their respective output values of 
+`mapme_options()` and represent a character vector for the output directory, 
+a logical to control the verbosity and another logical indicating if the code 
+is currently executed in a testing mode. We will look into how these things come 
+together now as we peak into constructing the actual body of a resource function.
 
+## Constructing a resource function - Body
 
-## Using helper functions
+The expected output of a resource function is a character vector of file paths
+to either raster or vector sources that represent GDAL readable spatial data sets
+on the local file system. In case you require to download or write intermediate
+files, you can create files in the output of `tempdir()`. 
 
-If you construct several URLs and associated local filenames that you wish
-to iterate over, the package provides a helper function to download these files
-and skip already existing ones. The following code snippet shows how
-to use that function:
+The output files should match the spatial extent of the portfolio and respect
+the arguments specified by the user. Output files should be constructed based on the
+`outdir` argument. The function should not re-download already existing
+files in the output directory. For flat files you can use the `download_or_skip()`
+helper function to make sure that existing files are not re-downloaded.
 
-```r
-aria_bin <- attributes(x)$aria_bin
-verbose <- attributes(x)$verbose
+Use the `verbose` argument to decide if informative messages should be printed,
+e.g. to inform users about download progress. Errors or warnings should be emitted
+in either case. 
 
-.download_or_skip(urls = source_urls, filenames = target_filenames,
-                  verbose = verbose, stubbornnes = 6, check_existencs = TRUE,
-                  aria_bin = aria_bin)
+Please include a check if `testing = TRUE` that returns example filenames early
+without actually downloading anything. This is mandatory for automated test checks
+of the package on CI platforms where it is not possible to conduct lengthy downloads.
 
-```
-This function will attempt to download the specified URLs to the corresponding 
-local filenames. URLs for which a corresponding filename already exists will be
-skipped and information about this will be issued as a message if verbose is set 
-to TRUE. The stubbornness controls the number of retries of failed downloads.
-If check_existence is set to TRUE, `RCurl::url.exists(url)` will be used
-to check if a given URL exists online. This check takes some time to
-run, but for some resources, it can be useful if you cannot be sure if the constructed
-URL exists on the remote location. Users are enabled to specify
-an executable aria2c installation to support parallel downloads. The value of
-the aria_bin variable will be `NULL` if no valid executable has been specified.
-Otherwise, the downloader will use the aria2c program to download the specified URLs.
-
-You are free and also encouraged to develop helper functions for your resource to 
-increase the understandability and ease maintenance of your downloader. Any helper
-functions associated with your resource should be located in the same file. If 
-you feel a helper function might serve a purpose across different resources,
-feel free to raise this in a comment and we can consider moving it to `R/utils.R`.
-Since helper functions are internal to the package, they **MUST** start with a dot.
-Package internal functions do not require a roxygen documentation. If you wish
-to include documentation to make your code easier to understand, make sure to
-add the `@keywords internal` and `@noRd` tags to your functions.
-
-## Defining the output and handling intermediate files
-
-You can create and delete intermediate files and directories within `rundir`.
-The expected output of a resource downloader is a character vector
-including the local file paths to all target files matching the spatio-temporal
-extent of the portfolio `x`. For raster resources, a tile index indicating the
-location on earth for each raster file and its file path will be constructed and
-added as a resource to the portfolio. Vector resources are expected to be translated
-to GeoPackages (`.gpkg`) and will be appended to the portfolio as is.
+If there is no intersection between the `x` object and your resource, make sure
+to return `NA` as early as possible. 
 
 ## Adding sample resource for package internal testing
 
 We ask you to provide a small subset of your resource to `inst/res/resource_name`
 so that indicators that depend on the resource can be tested without the need
-to actual download the resource. Because there are some restrictions to the final
-size of the package, we ask you to put substantial effort in reducing the size of
-the files to a minimum. This includes cropping all resource samples to the spatial
-extent of the polygon provided in `inst/extdata/sierra_de_neibe_478140.gpkg` or
-a polygon of similar size supplied by you in case it the spatial extent does
-not intersect with your resource. For raster resources, if the original raster
-is encoded as float, consider changing the data type to integer by introducing a
-scale factor. Also, please use a compression algorithm to further reduce the file 
-size. For vector resources, consider reducing the number of vertices in case
-the geometries are very complex.
+to actual download the resource. 
+
+Because there are some restrictions to the final size of the package, we ask you 
+to put substantial effort in reducing the size of the files to a minimum. 
+This includes cropping all resource samples to the spatial extent of the polygon 
+provided in `inst/extdata/sierra_de_neibe_478140.gpkg` or a polygon of similar 
+size supplied by you in case it the spatial extent does not intersect with your 
+resource. 
+
+For raster resources, if the original raster is encoded as float, consider 
+changing the data type to integer by introducing a scale factor. Also, please 
+use a compression algorithm to further reduce the file size. For vector resources, 
+consider reducing the number of vertices in case the geometries are very complex. 
+
+Finally, put your processing script of the resource into `data-raw` to 
+ensure reproducibility. Then, you are required to write a unit-test for
+your resource function, which should execute as much of your code as possible
+without actually conducting a download. 
 
 ## A note on dependencies for resources
 
@@ -300,9 +244,10 @@ these dependencies, if it is feasible to achieve the same functionality without.
 # Adding an indicator
 
 The process of adding an indicator is very similar to the one for resources.
-However, some input-output requirements are actually different. Note, that in case
+However, some input-output requirements are different. Note, that in case
 that you added a new resource we also expect a new indicator taking advantage of
 that resource in your PR. 
+
 As you will see, there are two new important concepts to have in mind when
 adding an indicator. These are the processing mode and computational engines.
 We will briefly explain these concepts below, however, you can also head over
@@ -311,241 +256,187 @@ comprehensive definition of these two terms.
 
 ## Checklist
 
-- [ ] Add the new indicator to `R/indicators_backlog.R` following the standardized template
-- [ ] Create a file for all necessary code compute your indicator (`R/calc_indicator_name.R`)
-- [ ] Include roxygen documentation for your indicator following the provided template
+- [ ] Create a file for all necessary code compute your indicator (`R/calc_<indicator_name>.R`)
+- [ ] Create outer-level function for user facing arguments
 - [ ] Check user-specified arguments (if any) for correctness
-- [ ] Retrieve portfolio-wide parameters of interest for your indicator from the asset/portfolio
-- [ ] Implement different computation engines for your indicator
+- [ ] Create inner-level function with standard arguments
 - [ ] If applicable, implement both, asset and portfolio based processing modes
 - [ ] Return a tibble in long format (no variables "hidden" in column names)
-- [ ] Write a testthat script testing all the newly added functionality write it to `test/testthat/test-calc_indicator_name.R`, use snapshots to check for the correctness of numeric outputs
-- [ ] Added a new dependency? Make sure to include a supporting statement for that dependency in your PR,
-check if the dependency is installed, and add it to the Suggests field in the DESCRIPTION file
+- [ ] Write a testthat script testing all the newly added functionality write it to `test/testthat/test-calc_<indicator_name>.R`
+- [ ] Added a new dependency? Make sure to include a supporting statement for that dependency in your PR!
 
-
-## Introducing a new indicator to the backlog
+## Overview of adding a new indicator
 
 An indicator is a logical routine depending on one or more resources that
-extracts numeric outputs for all assets in a portfolio. From a user's perspective,  
-indicators are processed via the <code>calc_indicators()</code> function. 
+extracts numeric outputs for all assets in a portfolio. From a user's 
+perspective, indicators are processed via the `calc_indicators()` function.
+You as a developer will have to construct an indicator function as a 
+closure, e.g. a function that returns another function. The outer level
+exposes user-facing arguments and checks that they are correctly specified,
+while the inner level is required to follow a specified signature and returns
+a tibble.
+
+Once you checked out to the new branch and having the project opened in R Studio, 
+adapt the following command to open the a new indicator file:
+
+```{r open_indicator_file, eval = FALSE}
+file.edit("R/calc_<your-new-indicator>.R")
+# e.g. file.edit("R/calc_precipitation")
+```
+
+## Documenting the new indicator
+
+In the first part of an indicator function, make sure to include detailed 
+documentation. This documentation should explain which resources are required
+to calculate the indicator, the user-facing arguments that 
+should be specified during runtime and the structure of the output tibble. 
+Importantly, this documentation **MUST** receive the roxygen tag 
+`@keywords indicator`, so that the documentation will be identified as an indicator. 
+Also, add the bare name of the indicator as the `@name` tag (e.g. `@name elevation`).
+
+```{r, eval=FALSE}
+#' Short title
+#'
+#' One or more description paragraphs might follow here. Please describe
+#' required resource and user arguments here.
+#' Please document which processing engines are available for your indicator
+#' and briefly describe how the indicator is derived from its inputs.
+#'
+#' @name <the short name of your indicator, same as in the backlog>
+#' @param <any user-facing arguments>
+#' @keywords indicator <identifies the documentation as an indicator>
+#' @returns A function that calculates an indicator for a portfolio
+#' @include register.R
+#' @export
+```
+
+The last two tags are important to add as well. The include statement is 
+mandatory for the register functionality (more on that below) to be loaded
+before your indicator function. The export tag is important so that the resource
+is actually exposed to the users of the package.
+
+
+## Constructing an indicator function - Outer level
+
+Indicator functions are constructed as closures, i.e. functions that return a function.
+The outer level exposes arguments to be set by users of the function to fine-control
+the flow of the function. Note, it is important to check the user input in this
+outer level for correctness so that warning/error messages in case of any
+miss specifications are thrown immediately.
+
+For `elevation`, this outer level could look something like this:
+
+```{r, eval=FALSE}
+calc_elevation <- function(engine = "extract",
+                           stats = "mean") {
+  engine <- check_engine(engine)
+  stats <- check_stats(stats)
+
+  # ... inner function level
+}
+```
+
+There are some exported helper functions for re-occurring argument checks that
+you are free to use (e.g. `check_engine()`). Note, that the arguments defined 
+this way in the outer level of the indicator function are then ready to be used 
+in the inner level that we will have a look at next.
+
+## Constructing an indicator function - Inner level
+
+The inner level of an indicator function has a mandatory function signature that
+will be checked during run-time. Your function is required to exactly specify 
+the below signature. For the `elevation` indicator, this looks like this:
+
+```{r, eval=FALSE}
+function(x,
+         nasa_srtm = NULL,
+         name = "elevation",
+         mode = "asset",
+         verbose = mapme_options()[["verbose"]]) {
+  # ... function body
+}
+```
+
+The `x` argument here represents the portfolio object handed over by the user 
+when calling `get_resources()` which is an `sf`-object with `'POLYGON'` as features.
+Next, comes the name(s) of the required resource(s) and the name of the indicator.
+What follows is the computation mode, that must be one of `"asset"` or `"portfolio"`.
+
 We realized, that for large (potentially global) portfolios, depending on the
 spatial resolution of a resource, different processing modes substantially
-decrease the time needed for a computation. For high to medium resolution raster
+impact the time needed for a computation. For high to medium resolution raster
 resources, processing on the asset level benefits computation time. However,
-spatially cropping coarse resolution datasets for a high number of assets introduces
-significant overhead, thus processing these resources on a portfolio level
-makes more sense.
-
-You are asked to provide the most sensible approach to your indicator when you 
-submit it to the internal backlog. When adding an indicator there, the package 
-is aware made aware of its existence. You can issue the following
-command to open the resource backlog file (or open it manually):
-
-```{r open_indicator_backlog, eval = FALSE}
-file.edit("R/indicator_backlog.R")
-```
-
-This file keeps track of all supported indicators in a list object. You will
-see that each indicator shares a common structure. The name of the list object 
-will be the name the package uses to identify a specific indicator. Note, 
-that the name of an indicator **MUST NOT** be equal to any other indicator or resource.
-The `processor` argument specifies the name of the function that you will
-provide for the indicator calculation. The `inputs` argument refers to the 
-supported resources that are required inputs for your indicator. As a requirement,
-at least one resource needs to be specified, but your indicator can also depend
-on more resources. We also ask you to provide the type of the resource (e.g. `raster` or `vector`).
-In the `arguments` list object, you can specify any additional arguments that
-users need to specify if they want to call your indicator function. If there
-are no additional arguments, simply add an empty list. Please put sensible
-default values in case your indicator function requires some arguments. Finally,
-the `processing_mode` governs what your indicator functions will receive as inputs.
-In case you set it to `asset`, each call to your indicator function will receive 
-a single asset and the required resources crop to the spatial extent of that 
-asset. If you set it to `portfolio` the function will receive the whole 
-portfolio object and all required resource at the spatial extent of the portfolio.
-Below, you will find an example for the `precipitation` indicator:
-
-
-```{r precipitation_backlog, eval = FALSE}
-precipitation <- list(
-  processor = ".calc_precipitation",
-  inputs = list(chirps = "raster"),
-  arguments = list(
-    scales_spi = NULL,
-    engine = "extract"
-  ),
-  processing_mode = "portfolio"
-)
-```
+spatially cropping coarse resolution datasets for a high number of assets
+introduces significant overhead, thus processing these resources on a 
+portfolio level is more efficient.
 
 If neither of the two processing modes lead to satisfactory processing times for 
 your indicator, please leave an issue/comment to discuss the addition of 
 another processing mode with the maintainers of the package. 
 
-## Documenting the new indicator
+The argument `verbose` defaults to the corresponding package-wide option and 
+should control the verbosity of you indicator function.
 
-By convention, the filename of a indicator processor **MUST** start with `calc_indicator_name.R` 
-appended by the name of the resource. In the case of the precipitation indicator that
-translates to `calc_precipitation.R`. In the first part of such a indicator processor, 
-make sure to include detailed documentation. This documentation should explain
-how it derives its numeric output, which resources are required for its calculation, 
-and the arguments users should specify to control its functioning.
-Importantly, this documentation **MUST** receive the roxygen tag `@docType data` as
-well as the `@keywords indicator` tag, so that the documentation can be 
-identified as an indicator The `NULL` value below the documentation **MUST** be 
-included. Below is a template that should be used for documenting an indicator
+## Constructing an indicator function - Body
 
-```r
-#' Short title
-#'
-#' One or more description paragraphs might follow here. Please describe
-#' required resource and user arguments here, ideally as itemized lists.
-#' Please document which processing engines are available for your indicator
-#' and briefly describe how the indicator is derived from its inputs.
-#'
-#' @name <the short name of your indicator, same as in the backlog>
-#' @docType data <we document indicators as a dataset>
-#' @keywords indicator <identifies the documentation as an indicator>
-#' @format <one sentence on number of columns, columns names of ouput tibble>
-NULL
-```
+The expected output of an indicator function is a tibble. Depending on the 
+`mode` specified for processing, it is a single tibble for `mode = "asset"`,
+or a list of tibbles equal to the rows of `x` in case `mode = "portfolio"`.
 
-
-## Function inputs for indicators
-
-After documenting the indicator, you can get started with implementing the 
-actual processor. An indicator processor is a package's internal function that 
-users do not directly interact with. By convention, we append package internal 
-function names with a dot. Similar to the filename itself, indicator processors 
-should start with `.calc_indicator_name>`. 
-The first argument and indicator processor receives is always `shp`, which corresponds
-to a single asset of the portfolio if you specified `processing_mode` as `"asset"` 
-or the entire portfolio object if you specified `"portfolio"`. Important 
-attributes (e.g. the spatial-temporal extent) can be derived from this object,
-irrespective if it represents a single asset or the whole portfolio. Then,
-one or more of the required resource are to be specified with the exact
-names as they are included in the resource backlog. Again, in case the
-`processing_mode` is set to `"asset"`, these resource will be spatial cropped
-to the extent of the single asset, in case it is set to `"portfolio"` the
-complete spatial extent of the portfolio is included.
-After the resource, any user-defined additional arguments will follow. You
-can assume that if users did not specify an argument, the default values
-from the indicator backlog will be inserted instead. Note, that 
-we define `engine` as an argument which is set by the users in order to give
-them more fine-control how the output is computed. We will have a close look 
-at engines in below.
-
-All indicator functions also receive the argument `rundir`, where intermediate
-files can be written to. You do not have to take care of cleaning that directory,
-since the framework will clean up after the processing is done. Also, a logical
-controlling the verbosity is handed over that you should use to decide
-whether or not to print additional informative messages. For raster resources,
-we included a logical `todisk` governing if intermediate raster files shall
-be kept in memory or written to disk. Currently, the decision has to be 
-handled by your indicator processor, however, we are evaluating possibilities
-to determine the behaviour within the package itself. Last, the processing
-mode is specified. This can be helpful if you wish to supply your processor
-with the possibility to support either of the two modes. For the `precipitation`
-indicator, the function header will look like this:
-
-```r
-.calc_precipitation <- function(shp,
-                                chirps,
-                                scales_spi = NULL,
-                                engine = "extract",
-                                rundir = tempdir(),
-                                verbose = TRUE,
-                                todisk = FALSE,
-                                processing_mode = "portfolio",
-                                ...) {
-                                # processor logic goes here
-                                }
-```
-
-## Check arguments and retrieval of portfolio-wide parameters
-
-Before actually conducting any computation, it is important that you as the provider
-of the new indicator check extensively that all required arguments were correctly
-specified. That specifically applies to the user-defined variables that your
-processor requires. The package framework cannot check
-for the correctness of these arguments. If some arguments are wrongly specified, 
-the function should fail (via `stop()`) and gracefully inform users which 
-arguments where misspecified and which values represent valid values. 
-You can head over to the precipitation processor (use `file.edit("R/calc_precipitation.R")`) and 
-analyse the first few lines of the file (up to line ~76) to see how the
-inputs are checked. Also note, that in case the required resource are `NULL` 
-(that is the default value if an asset does not intersect with a resource), or
-if any other configurations (e.g. years only smaller 1981 for the case of the
-precipitation indicator) prevent a sensible processing of an indicator, we simply
-return `NA`. The package will then fill in the tibble values for that asset 
-with `NA`, so users now that the given indicator could not be calculated there. 
-
-Some portfolio-wide parameters that might be important to your specific indicator
-routine, and they can be derived via the `attributes()` function, e.g. for 
-the years attribute:
-
-```r
-years = attributes(shp)$years
-```
-
-## Using helper functions
-
-There are some package internal helper function that we found to be of use 
-for multiple indicators that you are free to use in your indicator processor.
-You will find them in `R/utils.R`. These helpers currently are:
-
-- .check_available_years(): Checks if a given target year vector is available 
-for a given indicator
-- .check_engine(): Checks if a user-specified engine is available
-- .check_stats(): Stats if a user-specified zonal statistic is available
+You may use helper functions provided by the package for a common interface e.g.
+for vector-raster zonal statistics (e.g. by using `select_engine()`).
 
 You are encouraged to write your own helper function that are needed for your
 indicator processor. These should be located in the same file as the main 
-processor, start with a dot and should not be exported. If you wish to
-include roxygen documentation for your helpers, make sure to
+processor, start with a dot and should not be exported. 
+
+If you wish to include roxygen documentation for your helpers, make sure to
 add the `@keywords internal` and `@noRd` tags to your functions. If you feel
 that one or more of your helper functions would be of benefit to more that just 
 one indicator, please comment in and issue/pull-request to discuss with the 
 package maintainers if your helper function could be moved to `R/utils.R`.
 
-## Adding engines to your indicator processor
+Use the `verbose` argument to decide if informative messages should be printed,
+e.g. to inform users about processing progress. Errors or warnings should be emitted
+in either case. 
 
-In writing this package we realized that depending on the structure of a portfolio
-(i.e. the number of assets, their size and geometric complexity), different engines
-might lead to better processing times. We thus included three different engines for
-most of our indicators, and we would invite you to do the same for your contribution.
-Engines are mostly used in the very last step of an indicator calculation, that
-is when some kind of zonal statistics are calculated for a specific asset.
-The currently used engines are:
-
-- terra::extract(): Takes a SpatRaster and a SpatVector as input and computes a
-zonal statistic for all pixels within the SpatVector
-- terra::zonal(): Takes two SpatRasters as input, one the with the target variable(s)
-the other representing the rasterized input polygon. Then a zonal statistic
-for the pixels that correspond to the asset extent is calculated
-- exactextractr::exact_extract(): Takes a SpatRaster and an sf-object as input and
-calculates a zonal statistic. It is implemented in C, thus promising fast processing
-even for very large extents. 
-
-If you wish to include another processing engine for your indicator, please indicate
-this in a comment so that it can be discussed with the packages maintainers. 
-Note, that indicators ideally should not add new dependencies if possible. If
-they do, please add a supporting statement why this dependency is necessary for your
-indicator. We also ask you to add dependencies to the `Suggests` field of the
-`DESCRIPTION` file and that you check whether or not this dependency is installed
-at the beginning of your indicator routine.
+If there is no intersection between the `x` object and the required resources,
+or for any other reason why your indicator might not be calculated with the
+given configuration, make sure to return `NA` as early as possible. 
 
 
-## Defining the output of indicator functions
+## Adding units tests for an indicator
 
-Indicator functions, should return a tibble in long format as their output without
-"hiding" any variables in column names. Beside from that requirement, the output
-of your indicator does not need to follow any specific shape, except that columns
-shall be equal across all assets. In case that you cannot calculate the indicator
-for a specific indicator (e.g. because the extents do not overlap), simply
-return `NA`. The package will handle these values internally and fill in `NA` 
-a single row for that asset with the same column names as any other assets, its
-values set to `NA`.
+You are required to add unit tests for your indicator using the package internal
+example data sets for resources. Make sure to properly test for missspecification
+of user-facing arguments and also check for the correctness of numerical results
+of your indicator.
 
+You might not need to construct a portfolio from scratch to test you indicator
+function. Instead, you can directly call the returned function on an appropriate
+polygon with the respective required resource. For the `elevation` indicator,
+this looks like this:
 
+```{r, eval=FALSE}
+x <- read_sf(system.file(
+  "extdata", "sierra_de_neiba_478140.gpkg",
+  package = "mapme.biodiversity"
+))
+
+nasa_srtm <- list.files(
+  system.file(
+    "res", "nasa_srtm",
+    package = "mapme.biodiversity"
+  ),
+  pattern = ".tif$", full.names = TRUE
+)
+
+nasa_srtm <- rast(nasa_srtm)
+ce <- calc_elevation(stats = c("mean", "median", "sd"))
+result_multi_stat <- ce(shp, nasa_srtm)
+
+expect_equal(
+  names(result_multi_stat),
+  c("elevation_mean", "elevation_median", "elevation_sd")
+)
+```

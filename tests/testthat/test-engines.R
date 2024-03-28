@@ -1,27 +1,27 @@
-test_that(".check_engine works", {
+test_that("check_engine works", {
   expect_error(
-    .check_engine(c("not_implemented", "not_implemented2")),
+    check_engine(c("not_implemented", "not_implemented2")),
     "Please specify only one engine of:"
   )
   expect_error(
-    .check_engine("not_implemented"),
+    check_engine("not_implemented"),
     "Engine 'not_implemented' is not an available engine. Please choose one of:"
   )
 })
 
-test_that(".check_stats works", {
+test_that("check_stats works", {
   expect_error(
-    .check_stats(c("mean", "min", "other")),
+    check_stats(c("mean", "min", "other")),
     "Statistic 'other' is not supported. Please choose one of: "
   )
   expect_error(
-    .check_stats(c("mean", "other", "other2")),
+    check_stats(c("mean", "other", "other2")),
     "Statistics 'other', 'other2' are not supported. Please choose one of"
   )
 })
 
 
-test_that(".select_engine works", {
+test_that("select_engine works", {
   shp <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
       package = "mapme.biodiversity"
@@ -34,7 +34,7 @@ test_that(".select_engine works", {
   attributes(shp)$years <- 2003:2022
 
   expect_error(
-    .select_engine(
+    select_engine(
       shp,
       nasa_grace,
       stats = c("mean", "sd"),
@@ -45,7 +45,7 @@ test_that(".select_engine works", {
   )
 
   expect_error(
-    .select_engine(
+    select_engine(
       shp,
       nasa_grace,
       stats = "not_implemented",
@@ -55,17 +55,17 @@ test_that(".select_engine works", {
     )
   )
 
-  result_asset <- .select_engine(
+  result_asset <- select_engine(
     shp, nasa_grace,
     stats = c("mean", "sd"), engine = "zonal",
     name = NULL, mode = "asset"
   )
-  result_portfolio <- .select_engine(
+  result_portfolio <- select_engine(
     shp, nasa_grace,
     stats = c("mean", "sd"), engine = "zonal",
     name = NULL, mode = "portfolio"
   )
-  result_name <- .select_engine(
+  result_name <- select_engine(
     shp, nasa_grace,
     stats = c("mean", "sd"), engine = "zonal",
     name = "drought", mode = "asset"

@@ -8,67 +8,61 @@
 #' grid cell.
 #'
 #' @name worldpop
+#' @param years A numeric vector indicating the years for which to make the
+#'   resource available.
 #' @docType data
 #' @keywords resource
-#' @format Global raster layers available for years 2000-2020.
+#' @returns A function that returns a character of file paths.
 #' @source \url{https://www.worldpop.org/}
-NULL
-
-
-#' Downloads Population Count layer
-#'
-#' @param x An sf object returned by init_portfolio
-#' @param rundir A directory where intermediate files are written to.
-#' @param verbose Logical controlling verbosity.
-#' @keywords internal
 #' @include register.R
-#' @noRd
-.get_worldpop <- function(x,
-                          rundir = tempdir(),
-                          verbose = TRUE) {
-  target_years <- attributes(x)$years
-  available_years <- 2000:2020
-  target_years <- .check_available_years(
-    target_years, available_years, "popcount"
-  )
-  urls <- unlist(sapply(target_years, function(year) .get_worldpop_url(year)))
-  filenames <- file.path(rundir, basename(urls))
-  if (attr(x, "testing")) {
-    return(basename(filenames))
-  }
-  # start download in a temporal directory within tmpdir
-  aria_bin <- attributes(x)$aria_bin
-  .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin, check_existence = FALSE)
+#' @export
+get_worldpop <- function(years = 2000) {
+  years <- check_available_years(years, c(2000:2020), "worldpop")
 
-  footprints <- lapply(filenames, function(file) {
-    paste(as.character(st_bbox(rast(file))), collapse = " ")
-  })
-  all_equal <- length(unique(unlist(footprints))) == 1
+  function(x,
+           name = "worldpop",
+           type = "raster",
+           outdir = mapme_options()[["outdir"]],
+           verbose = mapme_options()[["verbose"]],
+           testing = mapme_options()[["testing"]]) {
+    urls <- unlist(sapply(years, function(year) .get_worldpop_url(year)))
+    filenames <- file.path(outdir, basename(urls))
+    if (testing) {
+      return(basename(filenames))
+    }
+    # start download in a temporal directory within tmpdir
+    download_or_skip(urls, filenames, check_existence = FALSE)
 
-  if (!all_equal) {
-    footprints <- unlist(lapply(filenames, function(file) {
-      bbox <- round(as.numeric(st_bbox(rast(file))), 3)
-      identical(bbox, round(c(-180.00125, -72.00042, 179.99875, 83.99958), 3))
-    }))
-    if (any(!footprints)) {
-      index <- which(!footprints)
-      index_ok <- which(footprints)[1]
-      target <- rast(filenames[index_ok])
-      if (verbose) message("Resampling worldpop layers...")
-      for (i in index) {
-        tmpfile <- tempfile(tmpdir = rundir, fileext = ".tif")
-        file.copy(filenames[i], tmpfile)
-        tmp <- rast(tmpfile)
-        project(tmp, target,
-          filename = filenames[i],
-          overwrite = TRUE, method = "bilinear", progress = verbose
-        )
-        file.remove(tmpfile)
+    footprints <- lapply(filenames, function(file) {
+      paste(as.character(st_bbox(rast(file))), collapse = " ")
+    })
+    all_equal <- length(unique(unlist(footprints))) == 1
+
+    if (!all_equal) {
+      footprints <- unlist(lapply(filenames, function(file) {
+        bbox <- round(as.numeric(st_bbox(rast(file))), 3)
+        identical(bbox, round(c(-180.00125, -72.00042, 179.99875, 83.99958), 3))
+      }))
+      if (any(!footprints)) {
+        index <- which(!footprints)
+        index_ok <- which(footprints)[1]
+        target <- rast(filenames[index_ok])
+        if (verbose) message("Resampling worldpop layers...")
+        for (i in index) {
+          tmpfile <- tempfile(fileext = ".tif")
+          file.copy(filenames[i], tmpfile)
+          tmp <- rast(tmpfile)
+          project(tmp, target,
+            filename = filenames[i],
+            overwrite = TRUE, method = "bilinear", progress = verbose
+          )
+          file.remove(tmpfile)
+        }
       }
     }
+    # return paths to the raster
+    filenames
   }
-  # return paths to the raster
-  filenames
 }
 
 
@@ -99,8 +93,8 @@ NULL
 
 register_resource(
   name = "worldpop",
-  type = "raster",
+  description = "WorldPop - Unconstrained Global Mosaics 2000 - 2020",
+  licence = "CC-BY 4.0",
   source = "https://www.worldpop.org/",
-  fun = .get_worldpop,
-  arguments <- list()
+  type = "raster"
 )

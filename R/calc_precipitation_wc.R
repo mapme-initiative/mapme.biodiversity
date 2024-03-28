@@ -3,22 +3,22 @@
 #' This function allows to efficiently calculate precipitation statistics
 #' from Worldclim for polygons. For each polygon, the desired statistic/s (min,
 #' max, sum, mean, median, sd or var) is/are returned.
-#' The required resources for this indicator are:
-#'  - precipitation layer from [worldclim]
 #'
-#' The following arguments can be set:
-#' \describe{
-#'   \item{stats_worldclim}{Function to be applied to compute statistics for polygons either
-#'   one or multiple inputs as character. Supported statistics are: "mean",
-#'   "median", "sd", "min", "max", "sum" "var".}
-#'   \item{engine}{The preferred processing functions from either one of "zonal",
-#'   "extract" or "exactextract" as character.}
-#' }
+#' The required resources for this indicator are:
+#'  - precipitation layer from [worldclim_precipitation]
 #'
 #' @name precipitation_wc
+#' @param engine The preferred processing functions from either one of "zonal",
+#'   "extract" or "exactextract" as character.
+#' @param stats Function to be applied to compute statistics for polygons either
+#'   single or multiple inputs as character. Supported statistics are: "mean",
+#'   "median", "sd", "min", "max", "sum" "var".
 #' @docType data
 #' @keywords indicator
-#' @format A tibble with a column for precipitation statistics (in mm)
+#' @returns A function that returns a tibble with a column for precipitation
+#'   statistics (in mm).
+#' @include register.R
+#' @export
 #' @examples
 #' \dontshow{
 #' mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
@@ -30,69 +30,47 @@
 #' outdir <- file.path(tempdir(), "mapme-data")
 #' dir.create(outdir, showWarnings = FALSE)
 #'
+#' mapme_options(
+#'   outdir = outdir,
+#'   verbose = FALSE
+#' )
 #'
 #' aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
 #'   package = "mapme.biodiversity"
 #' ) %>%
 #'   read_sf() %>%
-#'   init_portfolio(
-#'     years = 2018,
-#'     outdir = outdir,
-#'     tmpdir = tempdir(),
-#'     verbose = FALSE
-#'   ) %>%
-#'   get_resources("worldclim_precipitation") %>%
-#'   calc_indicators("precipitation_wc",
-#'     stats_worldclim = c("mean", "median"),
-#'     engine = "extract"
+#'   get_resources(get_worldclim_precipitation(years = 2018)) %>%
+#'   calc_indicators(
+#'     calc_precipitation_wc(
+#'       engine = "extract",
+#'       stats = c("mean", "median")
+#'     )
 #'   ) %>%
 #'   tidyr::unnest(precipitation_wc)
 #'
 #' aoi
 #' }
-NULL
+calc_precipitation_wc <- function(engine = "extract", stats = "mean") {
+  engine <- check_engine(engine)
+  stats <- check_stats(stats)
 
-#' Calculate worldclim precipitation statistics
-#'
-#' Considering the 1km precipitation raster datasets from worldclim users
-#' can specify which statistics among min, max, sum, mean, median, variance or
-#' standard deviation to compute. Also, users can specify the functions i.e. zonal
-#' from package terra, extract from package terra, or exactextract from exactextractr
-#' as desired.
-#'
-#' @param x A single polygon for which to calculate the precipitation statistic
-#' @param worldclim_precipitation precipitation raster from which to compute statistics
-#' @param stats_worldclim Function to be applied to compute statistics for polygons
-#'    either one or multiple inputs as character "min", "max", "sum", "mean", "median"
-#'    "sd" or "var".
-#' @param engine The preferred processing functions from either one of "zonal",
-#'   "extract" or "exactextract" as character.
-#' @param ... additional arguments
-#' @return A tibble
-#' @keywords internal
-#' @include register.R
-#' @noRd
-.calc_precipitation_wc <- function(x,
-                                   worldclim_precipitation,
-                                   engine = "extract",
-                                   stats_worldclim = "mean",
-                                   ...) {
-  results <- .calc_worldclim(
-    x = x,
-    worldclim = worldclim_precipitation,
-    engine = engine,
-    stats_worldclim = stats_worldclim
-  )
-  results
+  function(x,
+           worldclim_precipitation = NULL,
+           name = "precipitation_wc",
+           mode = "asset",
+           verbose = mapme_options()[["verbose"]]) {
+    results <- .calc_worldclim(
+      x = x,
+      worldclim = worldclim_precipitation,
+      engine = engine,
+      stats = stats
+    )
+    results
+  }
 }
 
 register_indicator(
   name = "precipitation_wc",
-  resources = list(worldclim_precipitation = "raster"),
-  fun = .calc_precipitation_wc,
-  arguments = list(
-    engine = "extract",
-    stats_worldclim = "mean"
-  ),
-  processing_mode = "asset"
+  description = "Statistics of WorldClim precipitation layer",
+  resources = "worldclim_precipitation"
 )

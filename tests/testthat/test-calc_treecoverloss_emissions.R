@@ -18,33 +18,21 @@ test_that("emissions works", {
     pattern = ".tif$", full.names = TRUE
   ))
 
-  attributes(x)$years <- 2000:2005
-  expect_equal(
-    .calc_treecoverloss_emissions(
-      x, gfw_treecover, gfw_lossyear, NULL
-    ), NA
-  )
-
-  result <- .calc_treecoverloss_emissions(
-    x, gfw_treecover, gfw_lossyear,
-    gfw_emissions,
-    min_size = 1, min_cover = 10
-  )
-
+  years <- 2000:2005
+  min_size <- 1
+  min_cover <- 10
+  te <- calc_treecoverloss_emissions(years, min_size, min_cover)
+  expect_equal(te(x, gfw_treecover, gfw_lossyear, NULL), NA)
+  result <- te(x, gfw_treecover, gfw_lossyear, gfw_emissions)
   expect_equal(names(result), c("years", "emissions"))
   expect_snapshot(result$emissions)
 
-  stats_treeloss <- .calc_treecover_area_and_emissions(
-    x, gfw_treecover, gfw_lossyear, gfw_emissions,
-    min_size = 1, min_cover = 10
-  )[, c(1, 2)]
-  expect_equal(result$emissions, stats_treeloss$emissions, tolerance = 1e-4)
+  tea <- calc_treecover_area_and_emissions(years, min_size, min_cover)
+  stats_treeloss <- tea(x, gfw_treecover, gfw_lossyear, gfw_emissions)
+  expect_equal(result$emissions, stats_treeloss[, c(1, 2)]$emissions, tolerance = 1e-4)
 
   # test that emissions and forest loss are returned as 0 if now loss occurs
   gfw_lossyear[gfw_lossyear == 3] <- 1
-  stats_treeloss <- .calc_treecoverloss_emissions(
-    x, gfw_treecover, gfw_lossyear, gfw_emissions,
-    min_size = 1, min_cover = 10
-  )
+  stats_treeloss <- te(x, gfw_treecover, gfw_lossyear, gfw_emissions)
   expect_equal(stats_treeloss$emissions[stats_treeloss$years == 2003], 0)
 })

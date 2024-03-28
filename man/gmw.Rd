@@ -3,13 +3,19 @@
 \docType{data}
 \name{gmw}
 \alias{gmw}
+\alias{get_gmw}
 \title{Global Mangrove Extent Polygon}
-\format{
-Global mangrove extent polygon available for years 1996, 2007-2010,
-and 2015-2020.
-}
 \source{
 \url{https://data.unep-wcmc.org/datasets/45}
+}
+\usage{
+get_gmw(years = c(1996, 2007:2010, 2015:2020))
+}
+\arguments{
+\item{years}{A numeric vector of the years for which to make GMW available.}
+}
+\value{
+A function that returns a character of file paths.
 }
 \description{
 This resource is part of the publication by Bunting et al. (2018)

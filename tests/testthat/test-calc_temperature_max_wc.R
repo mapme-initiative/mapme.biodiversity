@@ -9,21 +9,17 @@ test_that("worldclim maximum temperature works", {
     package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)
   worldclim_max_temperature <- rast(worldclim_max_temperature)
-  attributes(shp)$years <- 2000:2022
-  expect_error(
-    .calc_temperature_max_wc(shp, worldclim_max_temperature, engine = "not-available"),
-    "Engine 'not-available' is not an available engine. Please choose one of:"
-  )
-  expect_error(
-    .calc_temperature_max_wc(shp, worldclim_max_temperature, stats_worldclim = "not-available"),
-    "Statistic 'not-available' is not supported. Please choose one of:"
-  )
 
-  result <- .calc_temperature_max_wc(shp, worldclim_max_temperature)
-  result_multi_stat <- .calc_temperature_max_wc(shp, worldclim_max_temperature, stats_worldclim = c("mean", "median", "sd"))
-  result_zonal <- .calc_temperature_max_wc(shp, worldclim_max_temperature, engine = "zonal")
-  result_extract <- .calc_temperature_max_wc(shp, worldclim_max_temperature, engine = "extract")
-  result_exact <- .calc_temperature_max_wc(shp, worldclim_max_temperature, engine = "exactextract")
+  cmx <- calc_temperature_max_wc()
+  result <- cmx(shp, worldclim_max_temperature)
+  cmx <- calc_temperature_max_wc(stats = c("mean", "median", "sd"))
+  result_multi_stat <- cmx(shp, worldclim_max_temperature)
+  cmx <- calc_temperature_max_wc(engine = "zonal")
+  result_zonal <- cmx(shp, worldclim_max_temperature)
+  cmx <- calc_temperature_max_wc(engine = "extract")
+  result_extract <- cmx(shp, worldclim_max_temperature)
+  cmx <- calc_temperature_max_wc(engine = "exactextract")
+  result_exact <- cmx(shp, worldclim_max_temperature)
 
   expect_equal(
     names(result),

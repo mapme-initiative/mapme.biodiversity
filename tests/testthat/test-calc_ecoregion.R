@@ -13,7 +13,8 @@ test_that("ecoregion computation works", {
     out <- st_make_valid(out)
   })
   names(teow) <- basename(source)
-  result <- .calc_ecoregion(shp, teow)
+  ce <- calc_ecoregion()
+  result <- ce(shp, teow)
   expect_equal(
     names(result),
     c("ecoregions", "area")
@@ -24,10 +25,12 @@ test_that("ecoregion computation works", {
     tolerance = 1e-4
   )
 
+  cb <- calc_biome()
   # check NA is returned for 0-length tibbles
   st_geometry(shp) <- st_geometry(shp) + 5
   st_crs(shp) <- st_crs(4326)
   expect_equal(
-    .calc_biome(shp, teow),
-    NA)
+    cb(shp, teow),
+    NA
+  )
 })

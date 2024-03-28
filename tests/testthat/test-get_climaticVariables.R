@@ -14,24 +14,28 @@ test_that(".get_climaticVariables works", {
   outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
   tmpdir <- tempdir()
 
-  portfolio <- init_portfolio(aoi,
-    years = 2000:2018,
+  mapme_options(
     outdir = outdir,
     tmpdir = tmpdir,
-    verbose = FALSE
+    verbose = FALSE,
+    testing = TRUE
   )
-  # Add testing attribute in order to skip downloads
-  attributes(portfolio)$testing <- TRUE
+
+  gcv <- get_worldclim_min_temperature(years = 2000:2018)
   expect_equal(
-    .get_climatic_variables(portfolio, "tmin"),
+    gcv(aoi),
     c("wc2.1_2.5m_tmin_2000-2009.zip", "wc2.1_2.5m_tmin_2010-2018.zip")
   )
+
+  gcv <- get_worldclim_max_temperature(years = 2000:2018)
   expect_equal(
-    .get_climatic_variables(portfolio, "tmax"),
+    gcv(aoi),
     c("wc2.1_2.5m_tmax_2000-2009.zip", "wc2.1_2.5m_tmax_2010-2018.zip")
   )
+
+  gcv <- get_worldclim_precipitation(years = 2000:2018)
   expect_equal(
-    .get_climatic_variables(portfolio, "prec"),
+    gcv(aoi),
     c("wc2.1_2.5m_prec_2000-2009.zip", "wc2.1_2.5m_prec_2010-2018.zip")
   )
 })

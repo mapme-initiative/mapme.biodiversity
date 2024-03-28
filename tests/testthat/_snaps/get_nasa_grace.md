@@ -1,7 +1,7 @@
 # .get_droughtind works
 
     Code
-      .get_nasa_grace(portfolio)
+      gng(aoi)
     Output
         [1] "gws_perc_025deg_GL_20040105.tif" "gws_perc_025deg_GL_20040112.tif"
         [3] "gws_perc_025deg_GL_20040119.tif" "gws_perc_025deg_GL_20040126.tif"

@@ -8,21 +8,17 @@ test_that("terrain ruggedness index works", {
     package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)
   nasa_srtm <- rast(nasa_srtm)
-  attributes(shp)$years <- 2022
-  expect_error(
-    .calc_tri(shp, nasa_srtm, engine = "not-available"),
-    "Engine 'not-available' is not an available engine. Please choose one of:"
-  )
-  expect_error(
-    .calc_tri(shp, nasa_srtm, stats_tri = "not-available"),
-    "Statistic 'not-available' is not supported. Please choose one of:"
-  )
 
-  result <- .calc_tri(shp, nasa_srtm)
-  result_multi_stat <- .calc_tri(shp, nasa_srtm, stats = c("mean", "median", "sd"))
-  result_zonal <- .calc_tri(shp, nasa_srtm, engine = "zonal")
-  result_extract <- .calc_tri(shp, nasa_srtm, engine = "extract")
-  result_exact <- .calc_tri(shp, nasa_srtm, engine = "exactextract")
+  ctri <- calc_tri()
+  result <- ctri(shp, nasa_srtm)
+  ctri <- calc_tri(stats = c("mean", "median", "sd"))
+  result_multi_stat <- ctri(shp, nasa_srtm)
+  ctri <- calc_tri(engine = "zonal")
+  result_zonal <- ctri(shp, nasa_srtm)
+  ctri <- calc_tri(engine = "extract")
+  result_extract <- ctri(shp, nasa_srtm)
+  ctri <- calc_tri(engine = "exactextract")
+  result_exact <- ctri(shp, nasa_srtm)
 
   expect_equal(
     names(result),

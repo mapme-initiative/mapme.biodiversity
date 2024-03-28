@@ -8,9 +8,11 @@
 #'  - [teow]
 #'
 #' @name biome
-#' @docType data
 #' @keywords indicator
-#' @format A tibble with a column for name of the biomes and corresponding area (in ha).
+#' @returns A function that returns a tibble with a column for name of the
+#'   biomes and corresponding area (in ha).
+#' @include register.R
+#' @export
 #' @examples
 #' \dontshow{
 #' mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
@@ -22,78 +24,64 @@
 #' outdir <- file.path(tempdir(), "mapme-data")
 #' dir.create(outdir, showWarnings = FALSE)
 #'
+#' mapme_options(
+#'   outdir = outdir,
+#'   verbose = FALSE
+#' )
+#'
 #' aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
 #'   package = "mapme.biodiversity"
 #' ) %>%
 #'   read_sf() %>%
-#'   init_portfolio(
-#'     years = 2001,
-#'     outdir = outdir,
-#'     tmpdir = tempdir(),
-#'     verbose = FALSE
-#'   ) %>%
-#'   get_resources("teow") %>%
-#'   calc_indicators("biome") %>%
+#'   get_resources(get_teow()) %>%
+#'   calc_indicators(calc_biome()) %>%
 #'   tidyr::unnest(biome)
 #'
 #' aoi
 #' }
-NULL
+calc_biome <- function() {
+  function(x,
+           teow = NULL,
+           name = "biome",
+           mode = "asset",
+           verbose = mapme_options()[["verbose"]]) {
+    BIOME_NAME <- NULL
+    biomes <- NULL
+    new_area <- NULL
+    area <- NULL
 
-#' Calculate biomes statistics (TEOW) based on WWF
-#'
-#' Considering global TEOW polygons from WWF for the year 2001 users can
-#' retrieve the name of the biomes and compute the corresponding area
-#' of the particular biomes for their polygons.
-#'
-#' @param x A single polygon for which to calculate the biomes statistic
-#' @param teow The teow vector resource (TEOW - WWF)
-#' @param verbose A directory where intermediate files are written to.
-#' @param ... additional arguments
-#' @return A tibble
-#' @keywords internal
-#' @include register.R
-#' @noRd
-.calc_biome <- function(x,
-                        teow,
-                        verbose = TRUE,
-                        ...) {
-  BIOME_NAME <- NULL
-  biomes <- NULL
-  new_area <- NULL
-  area <- NULL
+    if (nrow(teow[[1]]) == 0) {
+      return(NA)
+    }
 
-  if (nrow(teow[[1]]) == 0) {
-    return(NA)
+    merged <- .comp_teow(
+      x = x,
+      teow = teow,
+      verbose = verbose
+    )
+
+    if (nrow(merged) == 0) {
+      return(NA)
+    }
+
+    out <- merged %>%
+      dplyr::select(BIOME_NAME, new_area)
+
+    out_tibble <- tibble(
+      biomes = out[[1]],
+      area = out[[2]]
+    )
+
+    results_biome <- out_tibble %>%
+      dplyr::group_by(biomes) %>%
+      dplyr::summarise(area = sum(as.numeric(area)))
+
+    results_biome
   }
-
-  merged <- .comp_teow(
-    x = x,
-    teow = teow,
-    verbose = verbose)
-
-  if (nrow(merged) == 0) {
-    return(NA)
-  }
-
-  out <- merged %>%
-    dplyr::select(BIOME_NAME, new_area)
-
-  out_tibble <- tibble(
-    biomes = out[[1]],
-    area = out[[2]])
-
-  results_biome <- out_tibble %>%
-    dplyr::group_by(biomes) %>%
-    dplyr::summarise(area = sum(as.numeric(area)))
-
-  results_biome
 }
 
 register_indicator(
   name = "biome",
-  resources = list(teow = "vector"),
-  fun = .calc_biome,
-  arguments = list(),
-  processing_mode = "asset"
+  description = "Areal statistics of biomes from TEOW",
+  resources = "teow"
 )

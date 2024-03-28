@@ -8,8 +8,8 @@ test_that("esa global landcover works", {
     package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)
   esalandcover <- rast(esalandcover)
-  attributes(shp)$years <- 2015:2020
-  result <- .calc_landcover(shp, esalandcover)
+  cl <- calc_landcover()
+  result <- cl(shp, esalandcover)
   expect_equal(
     names(result),
     c("classes", "year", "area", "percentage")
@@ -18,7 +18,4 @@ test_that("esa global landcover works", {
     unique(result$year),
     c("2015", "2016", "2017", "2018", "2019")
   )
-  # expect_snapshot(
-  #   result$area
-  # )
 })

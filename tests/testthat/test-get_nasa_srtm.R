@@ -14,32 +14,15 @@ test_that(".get_nasa_srtm works", {
   outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
   tmpdir <- tempdir()
 
-  portfolio <- init_portfolio(aoi,
-    years = 2000:2020,
+  mapme_options(
     outdir = outdir,
     tmpdir = tmpdir,
-    verbose = TRUE
+    verbose = TRUE,
+    testing = TRUE
   )
 
-  # Add testing attribute in order to skip downloads
-  attributes(portfolio)$testing <- TRUE
-
-  expect_equal(
-    .get_nasa_srtm(portfolio),
-    "NASADEM_HGT_n18w072.tif"
-  )
-
-  # adds test to check for multiple polygons in the same tile
+  gns <- get_nasa_srtm()
+  expect_equal(gns(aoi), "NASADEM_HGT_n18w072.tif")
   splitted_aoi <- st_as_sf(st_make_grid(aoi, n = 2))
-  portfolio <- init_portfolio(splitted_aoi,
-    years = 2000:2020,
-    outdir = outdir,
-    tmpdir = tmpdir,
-    verbose = TRUE
-  )
-  attributes(portfolio)$testing <- TRUE
-  expect_equal(
-    .get_nasa_srtm(portfolio),
-    "NASADEM_HGT_n18w072.tif"
-  )
+  expect_equal(gns(splitted_aoi), "NASADEM_HGT_n18w072.tif")
 })

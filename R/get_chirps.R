@@ -11,56 +11,52 @@
 #'
 #'
 #' @name chirps
-#' @docType data
 #' @keywords resource
-#' @format Global raster layers available for years 1981 to near-present.
+#' @returns A function that returns a character of file paths.
 #' @source \url{https://data.chc.ucsb.edu/products/CHIRPS-2.0/global_monthly/cogs/}
 #' @references Funk, C., Peterson, P., Landsfeld, M. et al. The climate hazards
 #' infrared precipitation with stations—a new environmental record for
 #' monitoring extremes. Sci Data 2, 150066 (2015).
 #' \doi{10.1038/sdata.2015.66}
-NULL
-
 #' @include register.R
-.get_chirps <- function(x,
-                        rundir = tempdir(),
-                        verbose = TRUE) {
-  chirps_url <- "https://data.chc.ucsb.edu/products/CHIRPS-2.0/global_monthly/tifs/"
+#' @export
+get_chirps <- function() {
+  function(x,
+           name = "chirps",
+           type = "raster",
+           outdir = mapme_options()[["outdir"]],
+           verbose = mapme_options()[["verbose"]],
+           testing = mapme_options()[["testing"]]) {
+    chirps_url <- "https://data.chc.ucsb.edu/products/CHIRPS-2.0/global_monthly/tifs/"
 
-  try(chirps_list <- rvest::read_html(chirps_url) %>%
-    rvest::html_elements("a") %>%
-    rvest::html_text2())
+    try(chirps_list <- rvest::read_html(chirps_url) %>%
+      rvest::html_elements("a") %>%
+      rvest::html_text2())
 
-  if (inherits(chirps_list, "try-error")) {
-    stop("Download for CHIRPS resource was unsuccesfull")
+    if (inherits(chirps_list, "try-error")) {
+      stop("Download for CHIRPS resource was unsuccesfull")
+    }
+
+    chirps_list <- grep("*.tif.gz$", chirps_list, value = TRUE)
+    urls <- paste(chirps_url, chirps_list, sep = "")
+    filenames <- file.path(outdir, basename(urls))
+
+    if (testing) {
+      return(basename(filenames))
+    }
+
+    filenames <- download_or_skip(urls, filenames, check_existence = FALSE)
+    filenames <- purrr::walk(filenames, unzip_and_remove,
+      dir = outdir, remove = FALSE
+    )
+    gsub(".gz", "", filenames)
   }
-
-  chirps_list <- grep("*.tif.gz$", chirps_list, value = TRUE)
-  urls <- paste(chirps_url, chirps_list, sep = "")
-  filenames <- file.path(rundir, basename(urls))
-  if (attr(x, "testing")) {
-    return(basename(filenames))
-  }
-
-  aria_bin <- attributes(x)$aria_bin
-  filenames <- .download_or_skip(
-    urls,
-    filenames,
-    verbose = verbose,
-    check_existence = FALSE,
-    aria_bin = aria_bin
-  )
-
-  filenames <- purrr::walk(filenames, .unzip_and_remove,
-    rundir = rundir, remove = FALSE
-  )
-  gsub(".gz", "", filenames)
 }
 
 register_resource(
   name = "chirps",
-  type = "raster",
+  description = "Climate Hazards Group InfraRed Precipitation with Station data (CHIRPS)",
+  licence = "CC - unknown",
   source = "https://www.chc.ucsb.edu/data/chirps",
-  fun = .get_chirps,
-  arguments <- list()
+  type = "raster"
 )

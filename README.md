@@ -17,7 +17,8 @@ version](https://www.r-pkg.org/badges/version/mapme.biodiversity)](https://CRAN.
 > \[!IMPORTANT\]  
 > `{mapme.biodiversity}` is currently experiencing major changes to its
 > user-interface and overall functionality. Please visit the
-> [announcement issue](https://github.com/mapme-initiative/mapme.biodiversity/issues/240)
+> [announcement
+> issue](https://github.com/mapme-initiative/mapme.biodiversity/issues/240)
 > to learn more about these changes.
 
 ## About
@@ -57,6 +58,68 @@ To install the development version, use the following command:
 remotes::install_github("https://github.com/mapme-initiative/mapme.biodiversity", dependencies = TRUE)
 ```
 
+## Available resources and indicators
+
+Below is a list of the resources currently supported by
+`mapme.biodiversity`.
+
+| name                             | description                                                                                          | licence                                                                  |
+|:---------------------------------|:-----------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------|
+| chirps                           | Climate Hazards Group InfraRed Precipitation with Station data (CHIRPS)                              | CC - unknown                                                             |
+| esalandcover                     | Copernicus Land Monitoring Service (CLMS) 100 meter land cover product                               | CC-BY 4.0                                                                |
+| fritz_et_al                      | Drivers of deforestation in the tropics                                                              | CC-BY 4.0                                                                |
+| gfw_emissions                    | Global Forest Watch - CO2 Emssions caused by forest cover loss                                       | CC-BY 4.0                                                                |
+| gfw_lossyear                     | Global Forest Watch - Year of forest cover loss occurence                                            | CC-BY 4.0                                                                |
+| gfw_treecover                    | Global Forest Watch - Percentage of canopy closure in 2000                                           | CC-BY 4.0                                                                |
+| global_surface_water_change      | Global Surface Water - Change of water occurrence intensity                                          | <https://www.copernicus.eu/main/data-access/>                            |
+| global_surface_water_occurrence  | Global Surface Water - Percentage of water occurrence                                                | <https://www.copernicus.eu/main/data-access/>                            |
+| global_surface_water_recurrence  | Global Surface Water - Percentage of water recurrence                                                | <https://www.copernicus.eu/main/data-access/>                            |
+| global_surface_water_seasonality | Global Surface Water - Seasonality of water occurrrence                                              | <https://www.copernicus.eu/main/data-access/>                            |
+| global_surface_water_transitions | Global Surface Water - Transition classes                                                            | <https://www.copernicus.eu/main/data-access/>                            |
+| gmw                              | Global Mangrove Watch - Vector data of mangrove extent                                               | CC BY 4.0                                                                |
+| nasa_firms                       | NASA Fire Information for Resource Management System (FIRMS) - Global fire map data archive          | <https://www.earthdata.nasa.gov/learn/find-data/near-real-time/citation> |
+| nasa_grace                       | NASA Gravity Recovery And Climate Experiment (GRACE) - Measurments of Earth’s mass and water changes | <https://nasagrace.unl.edu/About.aspx>                                   |
+| nasa_srtm                        | NASA Shuttle Radar Topography Mission (SRTM) Digital Elevation Model (DEM)                           | <https://lpdaac.usgs.gov/data/data-citation-and-policies/>               |
+| nelson_et_al                     | Global maps of traveltime to cities                                                                  | CC-BY 4.0                                                                |
+| soilgrids                        | ISRIC - Modelled global soil property layers                                                         | CC-BY 4.0                                                                |
+| teow                             | Terrestrial Ecosystems of the World (TEOW) from WWF-US                                               | unknown                                                                  |
+| ucdp_ged                         | UCDP Georeferenced Event Dataset (UCDP GED)                                                          | CC-BY 4.0                                                                |
+| worldclim_max_temperature        | WorldClim - Monthly maximum temperature 2000 - 2018                                                  | <https://www.worldclim.org/about.html>                                   |
+| worldclim_min_temperature        | WorldClim - Monthly minimum temperature 2000 - 2018                                                  | <https://www.worldclim.org/about.html>                                   |
+| worldclim_precipitation          | WorldClim - Monthly precipitation 2000 - 2018                                                        | <https://www.worldclim.org/about.html>                                   |
+| worldpop                         | WorldPop - Unconstrained Global Mosaics 2000 - 2020                                                  | CC-BY 4.0                                                                |
+
+Next, is a list of supported indicators.
+
+| name                         | description                                                                    |
+|:-----------------------------|:-------------------------------------------------------------------------------|
+| active_fire_counts           | Number of detected fires by NASA FIRMS                                         |
+| active_fire_properties       | Extraction of properties of fires detected by NASA FIRMS                       |
+| biome                        | Areal statistics of biomes from TEOW                                           |
+| deforestation_drivers        | Areal statistics of deforestation drivers                                      |
+| drought_indicator            | Relative wetness statistics based on NASA GRACE                                |
+| ecoregion                    | Areal statstics of ecoregions based on TEOW                                    |
+| elevation                    | Statistics of elevation based on NASA SRTM                                     |
+| fatalities                   | Number of fatalities by group of conflict based on UCDP GED                    |
+| gsw_change                   | Statistics of the surface water change layer by JRC                            |
+| gsw_occurrence               | Areal statistic of surface water based on occurrence threshold                 |
+| gsw_recurrence               | Areal statistic of surface water based on reccurence threshold                 |
+| gsw_seasonality              | Areal statistic of surface water by seasonality                                |
+| gsw_transitions              | Areal statistics of surface water grouped by transition class                  |
+| landcover                    | Areal statistics grouped by landcover class                                    |
+| mangroves_area               | Area covered by mangroves                                                      |
+| population_count             | Statistic of population counts                                                 |
+| precipitation_chirps         | Statistics of CHIRPS precipitation layer                                       |
+| precipitation_wc             | Statistics of WorldClim precipitation layer                                    |
+| soilproperties               | Statistics of SoilGrids layers                                                 |
+| temperature_max_wc           | Statistics of WorldClim maximum temperature layer                              |
+| temperature_min_wc           | Statistics of WorldClim minimum temperature layer                              |
+| traveltime                   | Statistics of traveltime to the clostes city grouped by city category          |
+| treecover_area               | Area of forest cover by year                                                   |
+| treecover_area_and_emissions | Area of forest cover and greenhouse gas emssions caused by forest loss by year |
+| treecoverloss_emissions      | Greenouse gas emissions cause by forest loss by year                           |
+| tri                          | Statistics of terrain rudgedness index based on NASA SRTM DEM                  |
+
 ## Usage example
 
 `{mapme.biodiversity}` works by constructing a portfolio from an sf
@@ -65,8 +128,6 @@ extent of the portfolio are made available locally. Once all required
 resources are available, indicators can be calculated individually for
 each asset in the portfolio.
 
-To list all available resources and indicators run:
-
 ``` r
 library(mapme.biodiversity)
 library(sf)
@@ -74,93 +135,36 @@ library(sf)
 
     ## Linking to GEOS 3.12.1, GDAL 3.8.2, PROJ 9.3.1; sf_use_s2() is TRUE
 
-``` r
-resources <- names(available_resources())
-indicators <- names(available_indicators())
-cat(sprintf(
-  "Supported resources:\n- %s\n\nSupported indicators:\n- %s",
-  paste(resources, collapse = "\n- "),
-  paste(indicators, collapse = "\n- ")
-))
-```
-
-    ## Supported resources:
-    ## - chirps
-    ## - esalandcover
-    ## - fritz_et_al
-    ## - gfw_emissions
-    ## - gfw_lossyear
-    ## - gfw_treecover
-    ## - global_surface_water_change
-    ## - global_surface_water_occurrence
-    ## - global_surface_water_recurrence
-    ## - global_surface_water_seasonality
-    ## - global_surface_water_transitions
-    ## - gmw
-    ## - nasa_firms
-    ## - nasa_grace
-    ## - nasa_srtm
-    ## - nelson_et_al
-    ## - soilgrids
-    ## - teow
-    ## - ucdp_ged
-    ## - worldclim_max_temperature
-    ## - worldclim_min_temperature
-    ## - worldclim_precipitation
-    ## - worldpop
-    ## 
-    ## Supported indicators:
-    ## - active_fire_counts
-    ## - active_fire_properties
-    ## - biome
-    ## - deforestation_drivers
-    ## - drought_indicator
-    ## - ecoregion
-    ## - elevation
-    ## - fatalities
-    ## - gsw_change
-    ## - gsw_occurrence
-    ## - gsw_recurrence
-    ## - gsw_seasonality
-    ## - gsw_transitions
-    ## - landcover
-    ## - mangroves_area
-    ## - population_count
-    ## - precipitation_chirps
-    ## - precipitation_wc
-    ## - soilproperties
-    ## - temperature_max_wc
-    ## - temperature_min_wc
-    ## - traveltime
-    ## - treecover_area
-    ## - treecover_area_and_emissions
-    ## - treecoverloss_emissions
-    ## - tri
-
 Once you have decided on an indicator you are interested in, you can
-initialize a biodiversity portfolio by using an sf-object that only
-contains geometries of type `POLYGON` via the `init_portfolio()`
-function call. This will set some important information that is needed
-further down the processing chain. We can then request the download of a
-resource that is required to calculate specific indicators. Once the
-indicator has been calculated for individually for all assets in a
-portfolio, the data is returned as a nested list column to the original
-object.
+start by making the required resource available for your portfolio.
+Using `mapme_options()` you can set an output directory and control the
+verbosity of the package.
+
+A portfolio is represented by an sf-object. It is required for the
+object to only contain geometries of type `POLYGON` as assets. We can
+request the download of a resource for the spatial extent of our
+portfolio by using the `get_resources()` function. We simply supply our
+portfolio and one or more resource functions. Once the resources were
+made available, we can query the calculation of an indicator by using
+the `calc_indicators()` function. This function also expects the
+portfolio as input and one or more indicator functions. Once the
+indicator has been calculated for all assets in a portfolio, the data is
+returned as a nested list column to the original portfolio object.
 
 ``` r
+mapme_options(
+  outdir = system.file("res", package = "mapme.biodiversity"),
+  verbose = FALSE
+)
+
 (system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
   sf::read_sf() %>%
-  init_portfolio(
-    years = 2016:2017,
-    outdir = system.file("res", package = "mapme.biodiversity"),
-    tmpdir = system.file("tmp", package = "mapme.biodiversity"),
-    verbose = FALSE
-  ) %>%
   get_resources(
-    resources = c("gfw_treecover", "gfw_lossyear", "gfw_emissions"),
-    vers_treecover = "GFC-2020-v1.8", vers_lossyear = "GFC-2020-v1.8"
+    get_gfw_treecover(version = "GFC-2020-v1.8"),
+    get_gfw_lossyear(version = "GFC-2020-v1.8"),
+    get_gfw_emissions()
   ) %>%
-  calc_indicators("treecover_area_and_emissions", min_size = 1, min_cover = 30) %>%
+  calc_indicators(calc_treecover_area_and_emissions(years = 2016:2017, min_size = 1, min_cover = 30)) %>%
   tidyr::unnest(treecover_area_and_emissions))
 ```
 
@@ -178,10 +182,10 @@ object.
 
 ## A note on parallel computing
 
-{mapme.biodiversity} follows the parallel computing paradigm of the
-{[future](https://cran.r-project.org/package=future)} package. That
+`{mapme.biodiversity}` follows the parallel computing paradigm of the
+[`{future}`](https://cran.r-project.org/package=future) package. That
 means that you as a user are in the control if and how you would like to
-set up parallel processing. Currently, {mapme.biodiversity} supports
+set up parallel processing. Currently, `{mapme.biodiversity}` supports
 parallel processing on the asset level of the `calc_indicators()`
 function only. We also currently assume that parallel processing is done
 on the cores of a single machine. In future developments, we would like
@@ -200,11 +204,12 @@ library(progressr)
 plan(multisession, workers = 6) # set up parallel plan
 
 with_progress({
-  portfolio <- calc_indicators(
-    portfolio,
-    "treecover_area_and_emissions",
-    min_size = 1,
-    min_cover = 30
+  aoi <- calc_indicators(
+    aoi,
+    calc_treecover_area_and_emissions(
+      min_size = 1,
+      min_cover = 30
+    )
   )
 })
 

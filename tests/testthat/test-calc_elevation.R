@@ -8,20 +8,16 @@ test_that("srtm elevation works", {
     package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)
   nasa_srtm <- rast(nasa_srtm)
-  attributes(shp)$years <- 2022
-  expect_error(
-    .calc_elevation(shp, nasa_srtm, engine = "not-available"),
-    "Engine 'not-available' is not an available engine. Please choose one of:"
-  )
-  expect_error(
-    .calc_elevation(shp, nasa_srtm, stats_elevation = "not-available"),
-    "Statistic 'not-available' is not supported. Please choose one of:"
-  )
-  result <- .calc_elevation(shp, nasa_srtm)
-  result_multi_stat <- .calc_elevation(shp, nasa_srtm, stats = c("mean", "median", "sd"))
-  result_zonal <- .calc_elevation(shp, nasa_srtm, engine = "zonal")
-  result_extract <- .calc_elevation(shp, nasa_srtm, engine = "extract")
-  result_exact <- .calc_elevation(shp, nasa_srtm, engine = "exactextract")
+  ce <- calc_elevation()
+  result <- ce(shp, nasa_srtm)
+  ce <- calc_elevation(stats = c("mean", "median", "sd"))
+  result_multi_stat <- ce(shp, nasa_srtm)
+  ce <- calc_elevation(engine = "zonal")
+  result_zonal <- ce(shp, nasa_srtm)
+  ce <- calc_elevation(engine = "extract")
+  result_extract <- ce(shp, nasa_srtm)
+  ce <- calc_elevation(engine = "exactextract")
+  result_exact <- ce(shp, nasa_srtm)
 
   expect_equal(
     names(result),

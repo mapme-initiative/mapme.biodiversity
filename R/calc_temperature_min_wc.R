@@ -3,22 +3,21 @@
 #' This function allows to efficiently calculate minimum temperature statistics
 #' from Worldclim for polygons. For each polygon, the desired statistic/s (min,
 #' max, sum, mean, median, sd or var) is/are returned.
-#' The required resources for this indicator are:
-#'  - minimum temperature layer from [worldclim]
 #'
-#' The following arguments can be set:
-#' \describe{
-#'   \item{stats_worldclim}{Function to be applied to compute statistics for polygons either
-#'   one or multiple inputs as character. Supported statistics are: "mean",
-#'   "median", "sd", "min", "max", "sum" "var".}
-#'   \item{engine}{The preferred processing functions from either one of "zonal",
-#'   "extract" or "exactextract" as character.}
-#' }
+#' The required resources for this indicator are:
+#'  - minimum temperature layer from [worldclim_min_temperature]
 #'
 #' @name temperature_min_wc
-#' @docType data
+#' @param engine The preferred processing functions from either one of "zonal",
+#'   "extract" or "exactextract" as character.
+#' @param stats Function to be applied to compute statistics for polygons either
+#'   single or multiple inputs as character. Supported statistics are: "mean",
+#'   "median", "sd", "min", "max", "sum" "var".
 #' @keywords indicator
-#' @format A tibble with a column for minimum temperature statistics (in °C)
+#' @returns A function that returns a tibble with a column for minimum
+#'   temperature statistics (in °C).
+#' @include register.R
+#' @export
 #' @examples
 #' \dontshow{
 #' mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
@@ -30,68 +29,50 @@
 #' outdir <- file.path(tempdir(), "mapme-data")
 #' dir.create(outdir, showWarnings = FALSE)
 #'
+#' mapme_options(
+#'   outdir = outdir,
+#'   verbose = FALSE
+#' )
 #'
 #' aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
 #'   package = "mapme.biodiversity"
 #' ) %>%
 #'   read_sf() %>%
-#'   init_portfolio(
-#'     years = 2018,
-#'     outdir = outdir,
-#'     tmpdir = tempdir(),
-#'     verbose = FALSE
-#'   ) %>%
-#'   get_resources("worldclim_min_temperature") %>%
-#'   calc_indicators("temperature_min_wc",
-#'     stats_worldclim = c("mean", "median"),
-#'     engine = "extract"
+#'   get_resources(get_worldclim_min_temperature(years = 2018)) %>%
+#'   calc_indicators(
+#'     calc_temperature_min_wc(
+#'       engine = "extract",
+#'       stats = c("mean", "median")
+#'     )
 #'   ) %>%
 #'   tidyr::unnest(temperature_min_wc)
 #'
 #' aoi
 #' }
-NULL
+calc_temperature_min_wc <- function(engine = "extract", stats = "mean") {
+  engine <- check_engine(engine)
+  stats <- check_stats(stats)
 
-#' Calculate worldclim minimum temperature statistics
-#'
-#' Considering the 1km minimum temperature raster datasets from worldclim users
-#' can specify which statistics among min, max, sum, mean, median, variance or
-#' standard deviation to compute. Also, users can specify the functions i.e. zonal
-#' from package terra, extract from package terra, or exactextract from exactextractr
-#' as desired.
-#'
-#' @param x A single polygon for which to calculate the minimum temperature statistic
-#' @param worldclim_min_temperature minimum temperature raster from which to compute statistics
-#' @param stats_worldclim Function to be applied to compute statistics for polygons
-#'    either one or multiple inputs as character "min", "max", "sum", "mean", "median"
-#'    "sd" or "var".
-#' @param engine The preferred processing functions from either one of "zonal",
-#'   "extract" or "exactextract" as character.
-#' @param ... additional arguments
-#' @return A tibble
-#' @keywords internal
-#' @include register.R
-#' @noRd
-
-.calc_temperature_min_wc <- function(x,
-                                     worldclim_min_temperature,
-                                     engine = "extract",
-                                     stats_worldclim = "mean",
-                                     ...) {
-  results <- .calc_worldclim(
-    x = x,
-    worldclim = worldclim_min_temperature,
-    engine = engine,
-    stats_worldclim = stats_worldclim
-  )
-  results
+  function(x,
+           worldclim_min_temperature = NULL,
+           name = "temperature_min_wc",
+           mode = "asset",
+           verbose = mapme_options()[["verbose"]]) {
+    results <- .calc_worldclim(
+      x = x,
+      worldclim = worldclim_min_temperature,
+      engine = engine,
+      stats = stats
+    )
+    results
+  }
 }
 
 #' Helper function to compute worldclim statistics
 #'
 #' @param worldclim worldclim raster from which to compute statistics
 #' @param x A single polygon for which to calculate the climatic statistic
-#' @param stats_worldclim Function to be applied to compute statistics for polygons
+#' @param stats Function to be applied to compute statistics for polygons
 #'    either one or multiple inputs as character "min", "max", "sum", "mean", "median"
 #'    "sd" or "var".
 #' @param engine The preferred processing functions from either one of "zonal",
@@ -104,7 +85,7 @@ NULL
 .calc_worldclim <- function(x,
                             worldclim,
                             engine = "extract",
-                            stats_worldclim = "mean") {
+                            stats = "mean") {
   if (is.null(worldclim)) {
     return(NA)
   }
@@ -118,10 +99,10 @@ NULL
 
   layer <- strsplit(names(worldclim), "_")[[1]][3]
 
-  results <- .select_engine(
+  results <- select_engine(
     x = x,
     raster = worldclim,
-    stats = stats_worldclim,
+    stats = stats,
     engine = engine,
     name = layer,
     mode = "asset"
@@ -135,11 +116,6 @@ NULL
 
 register_indicator(
   name = "temperature_min_wc",
-  resources = list(worldclim_min_temperature = "raster"),
-  fun = .calc_temperature_min_wc,
-  arguments = list(
-    engine = "extract",
-    stats_worldclim = "mean"
-  ),
-  processing_mode = "asset"
+  description = "Statistics of WorldClim minimum temperature layer",
+  resources = "worldclim_min_temperature"
 )

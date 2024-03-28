@@ -8,31 +8,24 @@ test_that(".calc_fatalities works", {
     package = "mapme.biodiversity"
   ), pattern = ".gpkg$", full.names = TRUE)
   ucdp_ged <- read_sf(ucdp_ged)
-  attributes(shp)$years <- 1980
-
-  expect_equal(
-    .calc_fatalities(shp, ucdp_ged[0, ]),
-    NA
-  )
 
   expect_error(
-    .calc_fatalities(shp, list(ucdp_ged)),
+    calc_fatalities(years = 1980),
     "The target years do not intersect with the availability of ucdp_ged."
   )
-  attributes(shp)$years <- 1991:1992
-
   expect_error(
-    .calc_fatalities(shp, list(ucdp_ged), precision_location = 8),
+    calc_fatalities(precision_location = 8),
     "Argument precision_location must be a single numeric between 1 and 7."
   )
-
   expect_error(
-    .calc_fatalities(shp, list(ucdp_ged), precision_time = 6),
+    calc_fatalities(precision_time = 6),
     "Argument precision_time must be a single numeric between 1 and 5."
   )
 
-  result_default <- .calc_fatalities(shp, list(ucdp_ged))
-  result_all <- .calc_fatalities(shp, list(ucdp_ged), precision_location = 7, precision_time = 5)
+  cf <- calc_fatalities(years = 1991:1992)
+  result_default <- cf(shp, list(ucdp_ged))
+  cf <- calc_fatalities(years = 1991:1992, precision_location = 7, precision_time = 5)
+  result_all <- cf(shp, list(ucdp_ged))
 
   cols <- c("month", "type_of_violence", "deaths_civilians", "deaths_unknown", "deaths_total", "event_count")
   n_rows <- 72

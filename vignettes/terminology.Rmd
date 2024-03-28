@@ -27,63 +27,59 @@ Here we present a quick introduction to the most important terminologies and con
 used throughout this tutorial:
 
 - **Portfolio**: We define a portfolio as
-the collection of single assets in an <code>{sf}</code> object. The package
+the collection of single assets in an `{sf}` object. The package
 does only allow assets with geometries of type `'POLYGON'` to be included in the object.
 In case that some of your data has type `'MULTIPOLYGON'` (or others) you are required to 
-transform your data via <code>sf::st_cast()</code> before initiating your portfolio. 
+transform your data via `sf::st_cast()` before initiating your portfolio. 
 We also expect the data to be in geographic coordinates. 
 In case the CRS of the portfolio is projected, we will attempt to transform to
-<code>EPSG:4326</code>. Any metadata that is needed for your analysis is allowed
+`EPSG:4326`. Any metadata that is needed for your analysis is allowed
 in the columns of the object and will be retained throughout the workflow so that
 you can access it once you have calculated your indicators.
-The package will add a unique asset identifier called <code>assetid</code> and
-add *nested list columns* for each indicator. Portfolio-wide arguments are set as 
-attributes during the call of <code>init_portfolio()</code>. Except from these additional
-arguments, a portfolio object actually is and will behave as a familiar <code>{sf}</code>
-object in any important regard.
+The package will add a *nested list columns* for each indicator to the portfolio
+`sf`-object. Portfolio-wide arguments that govern the processing workflow, 
+are set using the `mapme_options()` config functions.
 
 - **Resources**: A resource is a supported dataset that can be downloaded via the 
-<code>get_resources()</code> function. A resource represents either a raster or a 
-vector data set. Vector datasets from are saved to disk as
+`get_resources()` function. A resource represents either a raster or a 
+vector data set. Vector datasets are saved to disk as
 GeoPackages. Raster datasets can be tiled so that only tiles that cover the 
 spatial extent of the portfolio will be downloaded. Global raster resources will
 be downloaded completely. Additionally, some raster resources are time-invariant
-(e.g. a <code>?nasa_srtm</code>), others contain a temporal dimension (e.g. <code>?esalandcover</code>). 
-If a raster resource contains a temporal dimension, usually only the time-frame 
-intersecting with the time-frame of the portfolio will be downloaded. Some resources might
-require additional arguments set by users. These can simply be added to the 
-<code>get_resources()</code> function call. To learn about resources and
-their arguments simply query the help-page for that resource (e.g. via <code>?treecover2000</code>).
+(e.g. a `nasa_srtm`), others contain a temporal dimension (e.g. `esalandcover`). 
+If a raster resource contains a temporal dimension, only those rasters
+intersecting with user supplied time-frame will be downloaded. To learn about resources and
+their arguments simply query the help-page for that resource (e.g. via `?gfw_treecover`).
 
-- **Indicators**: An indicator calculates a specific tabular output for all
-assets in a portfolio (formerly known as *zonal statistics*). Every indicator
-requires one or more resources available locally and will inform you about any
-missing resources. Additional arguments might be required for some indicators, 
-but sensible defaults have been set. The package will inform you about any 
-misspecification of arguments. To learn more about a specific indicator and its 
-required arguments, simply query the help-page (e.g. via <code>?treeloss</code>). 
+- **Indicators**: An indicator calculates a tabular output for all
+assets in a portfolio. Every indicator requires one or more resources to be
+available locally and will inform you about any missing resources. 
+Custom arrguments might be set for some indicators, but sensible defaults 
+have been set. The package will inform you about any misspecification of arguments. 
+To learn more about a specific indicator and its required arguments, simply query 
+the help-page (e.g. via `?treecover_area`). 
 When an indicator calculation is done a *nested list column* with the same name 
 will be added to the portfolio. For assets where no sensible values can be 
-calculated (e.g. for polygons over the ocean and the `?treeloss` indicator),
+calculated (e.g. for polygons over the ocean and the `treecover_area` indicator),
 `NA` values will be inserted.
 
 - **Engines**: Several indicators support different engines for the extraction of
-the numeric outputs. Currently, these engines are based on either <code>terra::zonal()</code>,
-<code>terra::extract()</code>, or <code>exactextractr::exact_extract()</code>. We took 
+the numeric outputs. Currently, these engines are based on either `terra::zonal()`,
+`terra::extract()`, or `exactextractr::exact_extract()`. We took 
 great care to set these engines to sensible defaults. However, to 
 customize your workflow you can choose to use a different engine instead.
 
 - **Processing Modes**: The processing mode is an important concept if you wish 
 to extend the package with a new indicator, but not so much if you simply want to
-use for your statistical analysis. For most indicators the default processing 
-mode is equal to <code>'asset'</code>, meaning that for each asset in the 
-portfolio the required input resources are cropped to the spatio-temporal extent 
+use it for your statistical analysis. For most indicators the default processing 
+mode is equal to `'asset'`, meaning that for each asset in the 
+portfolio the required input resources are matched to the spatio-temporal extent 
 of that specific asset and then the indicator calculation is conducted. For some 
 resources/indicators this is not the most efficient approach. These are most 
 commonly very coarse resolution raster resources where a cropping of many 
 relatively small assets would lead to an increased overhead and as a result
 very long processing times. For these indicators, the default processing mode is
-set to <code>'portfolio'</code>, meaning that the indicator is first calculated for the
+set to `'portfolio'`, meaning that the indicator is first calculated for the
 complete spatio-temporal extent of the portfolio and then the extraction is conducted
 for every single asset. If you want to open a pull-request for a new indicator for
 which neither of these two approaches yields satisfactory performance, please contact

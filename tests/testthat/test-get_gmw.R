@@ -14,16 +14,12 @@ test_that(".get_gmw works", {
   outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
   tmpdir <- tempdir()
 
-  portfolio <- init_portfolio(aoi,
-    years = 2007:2008,
+  mapme_options(
     outdir = outdir,
     tmpdir = tmpdir,
-    verbose = FALSE
+    verbose = FALSE,
+    testing = TRUE
   )
-  # Add testing attribute in order to skip downloads
-  attributes(portfolio)$testing <- TRUE
-  expect_equal(
-    .get_gmw(portfolio),
-    c("gmw-extent_2007.zip", "gmw-extent_2008.zip")
-  )
+  gmw <- get_gmw(years = 2007:2008)
+  expect_equal(gmw(), c("gmw-extent_2007.zip", "gmw-extent_2008.zip"))
 })
