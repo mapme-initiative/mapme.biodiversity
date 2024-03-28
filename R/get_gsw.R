@@ -220,7 +220,7 @@ get_global_surface_water_occurrence <- function(version = "v1_4_2021") {
 }
 
 .get_gsw <- function(x, statistic = "occurrence", vers_gsw = "v1_4_2021",
-                     rundir = tempdir(), verbose = TRUE) {
+                     dir = tempdir(), verbose = TRUE) {
   stopifnot(
     statistic %in% .gsw_statistics,
     vers_gsw %in% .gsw_versions
@@ -244,7 +244,7 @@ get_global_surface_water_occurrence <- function(version = "v1_4_2021") {
   ids <- sapply(tile_ids, function(n) .get_gsw_tile_id(grid_gfc[n, ]))
   urls <- sprintf(
     "%s_%s%s.tif",
-    baseurl, ids, version
+    baseurl, ids, vers_gsw
   )
   filenames <- file.path(dir, basename(urls))
   # start download and skip files that exist
