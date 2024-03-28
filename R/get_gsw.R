@@ -219,11 +219,11 @@ get_global_surface_water_occurrence <- function(version = "v1_4_2021") {
   }
 }
 
-.get_gsw <- function(x, statistic = "occurrence", version = "v1_4_2021",
-                     dir = tempdir(), verbose = TRUE) {
+.get_gsw <- function(x, statistic = "occurrence", vers_gsw = "v1_4_2021",
+                     rundir = tempdir(), verbose = TRUE) {
   stopifnot(
     statistic %in% .gsw_statistics,
-    version %in% .gsw_versions
+    vers_gsw %in% .gsw_versions
   )
 
   # make the gsw grid and construct urls for intersecting tiles
