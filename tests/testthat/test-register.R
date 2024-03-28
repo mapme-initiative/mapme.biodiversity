@@ -9,49 +9,61 @@ test_that("mapme_options works", {
 
 test_that("test register_resource works", {
   name <- "sample"
+  description <- "simple description"
   type <- "raster"
   source <- "sample_source"
   licence <- "CC-BY"
 
   expect_error(
     register_resource(),
-    "neither name, type, source or licence can be NULL"
+    "neither name, description, licence, source, nor type can be NULL"
   )
 
   expect_error(
     register_resource(
-      name = 1, type = type, source = source, licence = licence
+      name = 1, description = description, licence = licence, source = source, type = type
     ),
     "name needs to be a single charachter string"
   )
 
   expect_error(
     register_resource(
-      name = name, type = "unknown", source = source, licence = licence
+      name = name, description = 1, licence = licence, source = source, type = type
     ),
-    "type needs to be one of 'vector' or 'raster'"
+    "description needs to be a single charachter string"
   )
 
   expect_error(
     register_resource(
-      name = name, type = type, source = 1, licence = licence
-    ),
-    "source needs to be a single charachter string"
-  )
-
-  expect_error(
-    register_resource(
-      name = name, type = type, source = source, licence = 1
+      name = name, description = description, licence = 1, source = source, type = type
     ),
     "licence needs to be a single charachter string"
   )
 
-  expect_silent(register_resource(name, type, source, licence))
+  expect_error(
+    register_resource(
+      name = name, description = description, licence = licence, source = 1, type = type
+    ),
+    "source needs to be a single charachter string"
+  )
+
+
+  expect_error(
+    register_resource(
+      name = name, description = description, licence = licence, source = source, type = "unknown"
+    ),
+    "type needs to be one of 'vector' or 'raster'"
+  )
+
+
+  expect_silent(register_resource(name, description, licence, source, type))
   res <- available_resources(name)
-  expect_equal(names(res), c("name", "type", "source", "licence"))
-  expect_equal(res[["type"]], type)
-  expect_equal(res[["source"]], source)
+  expect_equal(names(res), c("name", "description", "licence", "source", "type"))
+  expect_equal(res[["name"]], name)
+  expect_equal(res[["description"]], description)
   expect_equal(res[["licence"]], licence)
+  expect_equal(res[["source"]], source)
+  expect_equal(res[["type"]], type)
 })
 
 test_that("test register_indicator works", {
