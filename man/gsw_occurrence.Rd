@@ -26,14 +26,14 @@ a 0 denotes a pixel that was never classified as water, 100 denotes a pixel
 with permanent water.
 }
 \details{
-The pixel values are aggregated using method provided via the
-\code{stats} parameter.
+The raw data values are aggregated based on a provided threshold parameter
+\code{min_occurrence}, the function returns the area covered by values
+greater or equal than this threshold.
 
 The required resources for this indicator are:
 \itemize{
 \item \link{global_surface_water_occurrence}
 }
-
 }
 \examples{
 \dontshow{
@@ -52,7 +52,8 @@ mapme_options(
 )
 
 aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
-  package = "mapme.biodiversity") \%>\%
+  package = "mapme.biodiversity"
+) \%>\%
   read_sf() \%>\%
   get_resources(get_global_surface_water_occurrence()) \%>\%
   calc_indicators(

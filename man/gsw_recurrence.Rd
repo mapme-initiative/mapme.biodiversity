@@ -27,8 +27,9 @@ expressed as a percentage. The raster files have integer cell values between
 whereas lower values indicate that water only occurs episodically.
 }
 \details{
-The pixel values are aggregated using method provided via the
-\code{stats} parameter.
+The raw data values are aggregated based on a provided threshold parameter
+\code{min_recurrence}, the function returns the area covered by values
+greater or equal than this threshold.
 
 The required resources for this indicator are:
 \itemize{

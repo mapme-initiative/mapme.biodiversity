@@ -4,15 +4,12 @@
 \alias{mapme_options}
 \title{Options for mapme.biodiversity}
 \usage{
-mapme_options(..., outdir, tempdir, verbose, aria_bin, testing)
+mapme_options(..., outdir, verbose, aria_bin, testing)
 }
 \arguments{
 \item{...}{ignored}
 
 \item{outdir}{A length one character indicating the output path.}
-
-\item{tempdir}{A length one character indicating the path to be used
-for temporary files.}
 
 \item{verbose}{A logical, indicating if informative messages should be printed.}
 
@@ -21,6 +18,9 @@ downloads.}
 
 \item{testing}{A logical. Not to be set by users. Controls the behavior
 during automated test pipelines.}
+
+\item{tempdir}{A length one character indicating the path to be used
+for temporary files.}
 }
 \value{
 A list of options if no arguments are specified. Otherwise sets
