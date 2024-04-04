@@ -54,3 +54,34 @@ test_that(".check_namespace works", {
   expect_error(check_namespace("not-a-package"))
   expect_silent(check_namespace("base"))
 })
+
+
+test_that("unzip and remove works", {
+  skip_on_cran()
+
+  dir <- tempfile()
+  dir.create(dir)
+  cnt <- "ABC"
+  text <- file.path(dir, "test.txt")
+  zip <- file.path(dir, "test.zip")
+  gz <- file.path(dir, "test.gz")
+
+  writeLines("ABC", text)
+  suppressMessages(utils::zip(zip, text, flags = "-j"))
+  suppressMessages(R.utils::gzip(text, gz))
+
+  expect_true(file.exists(zip))
+  expect_true(file.exists(gz))
+  expect_true(!file.exists(text))
+
+  expect_error(unzip_and_remove(zip = "test.txt"))
+  expect_silent(unzip_and_remove(zip, dir, remove = FALSE))
+  expect_true(file.exists(text))
+  expect_true(file.remove(text))
+  expect_silent(unzip_and_remove(gz, dir, remove = FALSE))
+  expect_true(file.exists(file.path(dir, "test")))
+  expect_silent(unzip_and_remove(zip, dir, remove = TRUE))
+  expect_silent(unzip_and_remove(gz, dir, remove = TRUE))
+  expect_true(!file.exists(zip))
+  expect_true(!file.exists(gz))
+})
