@@ -247,6 +247,9 @@ get_global_surface_water_occurrence <- function(version = "v1_4_2021") {
     baseurl, ids, version
   )
   filenames <- file.path(dir, basename(urls))
+  if (mapme_options()[["testing"]]) {
+    return(filenames)
+  }
   # start download and skip files that exist
   download_or_skip(urls, filenames, check_existence = FALSE)
   # return all paths to the downloaded files
