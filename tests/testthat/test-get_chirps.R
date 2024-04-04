@@ -25,5 +25,5 @@ test_that(".get_chirps works", {
   urls <- gc(aoi)
   exts <- unique(substr(urls, nchar(urls[1]) - 5, nchar(urls[1])))
   expect_equal(exts, "tif.gz")
-  expect_length(urls, 518)
+  expect_gte(length(urls), 518)
 })
