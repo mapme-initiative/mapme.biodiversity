@@ -50,8 +50,10 @@ write_portfolio <- function(x,
                             overwrite = FALSE,
                             ...) {
   assetid <- NULL
-  all_indicators <- names(available_indicators())
-  present_indicators <- names(x)[which(names(x) %in% all_indicators)]
+  stopifnot(inherits(x, "sf"))
+  list_cols <- sapply(st_drop_geometry(x), is.list)
+  present_indicators <- names(list_cols)[list_cols]
+
 
   if (length(present_indicators) == 0) {
     stop("No calculated indicators have been found. Cannot write as a portfolio.")
@@ -67,12 +69,6 @@ write_portfolio <- function(x,
 
   if (file.exists(dsn) & overwrite == FALSE) {
     stop(sprintf("Output file %s exists and overwrite is FALSE.", dsn))
-  }
-
-  if (any(lapply(x, class)[present_indicators] != "list")) {
-    warning("Some indicators are not nested list columns. Setting them to metadata.")
-    index <- which(lapply(x, class)[present_indicators] != "list")
-    present_indicators <- present_indicators[-index]
   }
 
   if (!"assetid" %in% names(x)) {
@@ -120,7 +116,7 @@ write_portfolio <- function(x,
 read_portfolio <- function(src, ...) {
   assetid <- NULL
   all_layers <- st_layers(src)
-  if (!"metadata" %in% all_layers$name | all_layers$geomtype[[which(all_layers$name == "metadata")]] != "Polygon") {
+  if (!"metadata" %in% all_layers$name) {
     stop(sprintf(
       "Input file at '%s' does not seem to be a proper mapme.biodiversity portfolio file written with 'write_portfolio()'",
       src
@@ -128,7 +124,7 @@ read_portfolio <- function(src, ...) {
   }
 
   metadata <- read_sf(src, layer = "metadata", ...)
-  present_indicators <- all_layers$name[which(all_layers$name %in% names(available_indicators()))]
+  present_indicators <- all_layers$name[-which(all_layers$name == "metadata")]
   if (length(present_indicators) == 0) {
     stop("Could not find any mapme.biodiversity indicator tables in the input file.")
   }
