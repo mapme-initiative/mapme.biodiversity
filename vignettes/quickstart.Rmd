@@ -222,7 +222,7 @@ Now let's take a look at the results. We will select only some of the metadata
 and the output indicator column to get a clearer picture of what has happened.
 
 ```{r select_cols}
-(aoi_gridded <- aoi_gridded %>% select(WDPAID, population_count))
+(aoi_gridded <- aoi_gridded %>% select(assetid, population_count))
 ```
 
 We obtained a new listed column in our `sf`-object that is named like the requested
@@ -239,7 +239,7 @@ Let's quickly visualize the results for a single asset:
 
 ```{r plot_popcount, echo = FALSE}
 data <- aoi_gridded %>%
-  filter(WDPAID == 478140) %>%
+  filter(assetid == 5) %>%
   st_drop_geometry() %>%
   unnest(population_count)
 
@@ -248,7 +248,7 @@ names(pop) <- data$year
 barplot(pop,
   main = "Population totals over time",
   xlab = "Year", ylab = "Persons",
-  col = "steelblue"
+  pch = 16, col = "steelblue"
 )
 ```
 
@@ -258,7 +258,7 @@ a good idea to keep the geometry information in a separated variable
 to keep the size of the data object relatively small.
 
 ```{r unnest}
-geometries <- select(aoi_gridded, WDPAID)
+geometries <- select(aoi_gridded, assetid)
 aoi_gridded %>%
   st_drop_geometry() %>%
   tidyr::unnest(population_count)
