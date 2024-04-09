@@ -14,22 +14,21 @@ test_that(".get_worldpop works", {
   outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
   tmpdir <- tempdir()
 
-  portfolio <- init_portfolio(aoi,
-    years = 2001,
+  mapme_options(
     outdir = outdir,
     tmpdir = tmpdir,
-    verbose = TRUE
+    verbose = FALSE,
+    testing = TRUE
   )
-  # Add testing attribute in order to skip downloads
-  attributes(portfolio)$testing <- TRUE
 
+  gwp <- get_worldpop(years = 2001)
   expect_equal(
-    .get_worldpop(portfolio),
+    gwp(aoi),
     "ppp_2001_1km_Aggregated.tif"
   )
 
-  expect_warning(
-    .get_worldpop_url(1999),
-    "Population count not available for target year 1999"
+  expect_error(
+    get_worldpop(years = 1999),
+    "The target years do not intersect with the availability of worldpop."
   )
 })

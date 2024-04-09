@@ -48,22 +48,21 @@
 #'   but specific dates are not provided
 #'
 #'
-#' The following arguments can be set:
-#' \describe{
-#'   \item{precision_location}{A numeric indicating precision value for the
-#'   geolocation up to which events are included. Defaults to 1.}
-#'   \item{precision_time}{A numeric indicating the precision value of the
-#'   temporal coding up to which events are included. Defaults to 1.}
-#' }
-#'
 #' @name fatalities
-#' @docType data
+#' @param years A numeric vector indicating the years for which to summarize
+#'    fatalities.
+#' @param precision_location A numeric indicating precision value for the
+#'   geolocation up to which events are included. Defaults to 1.
+#' @param precision_time A numeric indicating the precision value of the
+#'   temporal coding up to which events are included. Defaults to 1.
 #' @keywords indicator
-#' @format A tibble with a column for the date (year and month), the type
-#'  of violence an counts of civilian fatalities, unknown fatalities and the
-#'  total sum of fatalities.
+#' @returns A function that returns a tibble with a column for the date
+#'   (year and month), the type of violence an counts of civilian fatalities,
+#'   unknown fatalities and the total sum of fatalities.
 #' @references Sundberg, Ralph, and Erik Melander, 2013, “Introducing the UCDP
 #'   Georeferenced Event Dataset”, Journal of Peace Research, vol.50, no.4, 523-532
+#' @include register.R
+#' @export
 #' @examples
 #' \dontshow{
 #' mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
@@ -75,65 +74,31 @@
 #' outdir <- file.path(tempdir(), "mapme-data")
 #' dir.create(outdir, showWarnings = FALSE)
 #'
+#' mapme_options(
+#'   outdir = outdir,
+#'   verbose = FALSE
+#' )
+#'
 #' aoi <- system.file("extdata", "burundi.gpkg",
 #'   package = "mapme.biodiversity"
 #' ) %>%
 #'   read_sf() %>%
-#'   init_portfolio(
-#'     years = 1991:1992,
-#'     outdir = outdir,
-#'     tmpdir = tempdir(),
-#'     verbose = FALSE
-#'   ) %>%
-#'   get_resources("ucdp_ged", version_ged = "22.1") %>%
-#'   calc_indicators("fatalities",
-#'     precision_location = 1, precision_time = 1
+#'   get_resources(get_ucdp_ged(version = "22.1")) %>%
+#'   calc_indicators(
+#'     calc_fatalities(
+#'       years = 1991:1992,
+#'       precision_location = 1,
+#'       precision_time = 1
+#'     )
 #'   ) %>%
 #'   tidyr::unnest(fatalities)
 #'
 #' aoi
 #' }
-NULL
-
-#' Calculate fatalities from UCDP GED
-#'
-#' Filters the UCDP GED database based on the location and temporal
-#' precison code as well as the temporal window under investigation.
-#' Then fatalities are aggregated on a monthly time scale. Missing months
-#' are filled with zeros.
-#'
-#' @param x A single polygon for which to calculate the tri statistic
-#' @param ucdp_ged An sf object of the intersecting part of the UCDP database.
-#' @param precision_location A numeric indicating precision value for the
-#'   geolocation up to which events are included. Defaults to 1.
-#' @param precision_time A numeric indicating the precision value of the
-#'   temporal coding up to which events are included. Defaults to 1.
-#' @param rundir A directory where intermediate files are written to.
-#' @param verbose A directory where intermediate files are written to.
-#' @param ... additional arguments
-#' @return A tibble
-#' @keywords internal
-#' @include register.R
-#' @noRd
-.calc_fatalities <- function(x,
-                             ucdp_ged,
-                             precision_location = 1,
-                             precision_time = 1,
-                             verbose = TRUE,
-                             ...) {
-  date_prec <- where_prec <- date_start <- type_of_violence <- NULL
-  year <- month <- deaths_a <- deaths_b <- event_count <- NULL
-
-  ucdp_ged <- ucdp_ged[[1]]
-  if (length(ucdp_ged) == 0) {
-    return(NA)
-  }
-
-  target_years <- attributes(x)$years
-  available_years <- c(1989:2023)
-  target_years <- .check_available_years(
-    target_years, available_years, "ucdp_ged"
-  )
+calc_fatalities <- function(years = 1989:2023,
+                            precision_location = 1,
+                            precision_time = 1) {
+  years <- check_available_years(years, c(1989:2023), "ucdp_ged")
 
   if (!precision_location %in% 1:7) {
     stop("Argument precision_location must be a single numeric between 1 and 7.")
@@ -143,68 +108,77 @@ NULL
     stop("Argument precision_time must be a single numeric between 1 and 5.")
   }
 
-  months_tibble <- tidyr::expand_grid(
-    year = as.character(target_years),
-    month = sprintf("%02d", 1:12),
-    type_of_violence = as.character(1:3)
-  )
+  function(x,
+           ucdp_ged = NULL,
+           name = "fatalities",
+           mode = "asset",
+           verbose = mapme_options()[["verbose"]]) {
+    date_prec <- where_prec <- date_start <- type_of_violence <- NULL
+    year <- month <- deaths_a <- deaths_b <- event_count <- NULL
 
-  ucdp_ged %>%
-    st_drop_geometry() %>%
-    dplyr::select(
-      tidyr::starts_with("deaths_"),
-      type_of_violence,
-      date_prec,
-      where_prec,
-      date_start
-    ) %>%
-    dplyr::filter(
-      where_prec <= precision_location,
-      date_prec <= precision_time
-    ) %>%
-    dplyr::select(-date_prec, -where_prec) %>%
-    dplyr::mutate(
-      date_start = as.Date(date_start),
-      year = format(date_start, "%Y"),
-      month = format(date_start, "%m")
-    ) %>%
-    dplyr::filter(year %in% target_years) %>%
-    dplyr::summarise(
-      dplyr::across(
-        tidyselect::starts_with("deaths_"),
-        ~ sum(as.numeric(.x))
-      ),
-      event_count = dplyr::n(),
-      .by = c(year, month, type_of_violence)
-    ) %>%
-    dplyr::right_join(months_tibble, by = c("year", "month", "type_of_violence")) %>%
-    dplyr::mutate(dplyr::across(
-      tidyselect::starts_with(c("deaths_", "event_")),
-      ~ tidyr::replace_na(.x, 0)
-    )) %>%
-    dplyr::mutate(
-      deaths_total = rowSums(dplyr::across(tidyselect::starts_with("deaths_")))
-    ) %>%
-    dplyr::mutate(month = as.Date(paste0(year, "-", month, "-01"))) %>%
-    dplyr::select(-year, -deaths_a, -deaths_b) %>%
-    dplyr::relocate(event_count, .after = tidyselect::last_col()) %>%
-    dplyr::arrange(month, type_of_violence) %>%
-    dplyr::mutate(type_of_violence = dplyr::case_when(
-      type_of_violence == 1 ~ "state-based conflict",
-      type_of_violence == 2 ~ "non-state conflict",
-      type_of_violence == 3 ~ "one-sided violence"
-    )) %>%
-    tibble::as_tibble()
+    ucdp_ged <- ucdp_ged[[1]]
+    if (length(ucdp_ged) == 0) {
+      return(NA)
+    }
+
+    months_tibble <- tidyr::expand_grid(
+      year = as.character(years),
+      month = sprintf("%02d", 1:12),
+      type_of_violence = as.character(1:3)
+    )
+
+    ucdp_ged %>%
+      st_drop_geometry() %>%
+      dplyr::select(
+        tidyr::starts_with("deaths_"),
+        type_of_violence,
+        date_prec,
+        where_prec,
+        date_start
+      ) %>%
+      dplyr::filter(
+        where_prec <= precision_location,
+        date_prec <= precision_time
+      ) %>%
+      dplyr::select(-date_prec, -where_prec) %>%
+      dplyr::mutate(
+        date_start = as.Date(date_start),
+        year = format(date_start, "%Y"),
+        month = format(date_start, "%m")
+      ) %>%
+      dplyr::filter(year %in% years) %>%
+      dplyr::summarise(
+        dplyr::across(
+          tidyselect::starts_with("deaths_"),
+          ~ sum(as.numeric(.x))
+        ),
+        event_count = dplyr::n(),
+        .by = c(year, month, type_of_violence)
+      ) %>%
+      dplyr::right_join(months_tibble, by = c("year", "month", "type_of_violence")) %>%
+      dplyr::mutate(dplyr::across(
+        tidyselect::starts_with(c("deaths_", "event_")),
+        ~ tidyr::replace_na(.x, 0)
+      )) %>%
+      dplyr::mutate(
+        deaths_total = rowSums(dplyr::across(tidyselect::starts_with("deaths_")))
+      ) %>%
+      dplyr::mutate(month = as.Date(paste0(year, "-", month, "-01"))) %>%
+      dplyr::select(-year, -deaths_a, -deaths_b) %>%
+      dplyr::relocate(event_count, .after = tidyselect::last_col()) %>%
+      dplyr::arrange(month, type_of_violence) %>%
+      dplyr::mutate(type_of_violence = dplyr::case_when(
+        type_of_violence == 1 ~ "state-based conflict",
+        type_of_violence == 2 ~ "non-state conflict",
+        type_of_violence == 3 ~ "one-sided violence"
+      )) %>%
+      tibble::as_tibble()
+  }
 }
 
 
 register_indicator(
   name = "fatalities",
-  resources = list(ucdp_ged = "vector"),
-  fun = .calc_fatalities,
-  arguments = list(
-    precision_location = 1,
-    precision_time = 1
-  ),
-  processing_mode = "asset"
+  description = "Number of fatalities by group of conflict based on UCDP GED",
+  resources = "ucdp_ged"
 )

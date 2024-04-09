@@ -8,38 +8,29 @@
 #' pixel with regard to the reference period.
 #'
 #' @name nasa_grace
-#' @docType data
+#' @param years A numeric vector indicating the years for which to make the
+#'   resource available.
 #' @keywords resource
-#' @format Global raster layers available for years 2003 to present.
-NULL
-
-
-#' Downloads NASA GRACE-based Drought Indicator Layer
-#'
-#' @param x An sf object returned by init_portfolio
-#' @param rundir A directory where intermediate files are written to.
-#' @param verbose Logical controlling verbosity.
-#' @keywords internal
+#' @returns A function that returns a character of file paths.
 #' @include register.R
-#' @noRd
-.get_nasa_grace <- function(x,
-                            rundir = tempdir(),
-                            verbose = TRUE) {
-  target_years <- attributes(x)$years
-  available_years <- 2003:2022
-  target_years <- .check_available_years(
-    target_years, available_years, "droughtindicators"
-  )
+#' @export
+get_nasa_grace <- function(years = 2003:2022) {
+  years <- check_available_years(years, c(2003:2022), "esalandcover")
 
-  urls <- unlist(sapply(target_years, function(year) .get_nasagrace_url(year)))
-  filenames <- file.path(rundir, basename(urls))
-  if (attr(x, "testing")) {
-    return(basename(filenames))
+  function(x,
+           name = "nasa_grace",
+           type = "raster",
+           outdir = mapme_options()[["outdir"]],
+           verbose = mapme_options()[["verbose"]],
+           testing = mapme_options()[["testing"]]) {
+    urls <- unlist(sapply(years, function(year) .get_nasagrace_url(year)))
+    filenames <- file.path(outdir, basename(urls))
+    if (testing) {
+      return(basename(filenames))
+    }
+    download_or_skip(urls, filenames, check_existence = FALSE)
+    filenames
   }
-  # start download in a temporal directory within rundir
-  aria_bin <- attributes(x)$aria_bin
-  .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin, check_existence = FALSE)
-  filenames
 }
 
 
@@ -73,8 +64,8 @@ NULL
 
 register_resource(
   name = "nasa_grace",
-  type = "raster",
+  description = "NASA Gravity Recovery And Climate Experiment (GRACE) - Measurments of Earth's mass and water changes",
+  licence = "https://nasagrace.unl.edu/About.aspx",
   source = "https://nasagrace.unl.edu/globaldata/",
-  fun = .get_nasa_grace,
-  arguments <- list()
+  type = "raster"
 )

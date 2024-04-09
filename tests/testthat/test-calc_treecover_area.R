@@ -20,8 +20,7 @@ test_that("test gfw utils", {
 
   expect_warning(y <- .gfw_check_years(1999:2000, "treecover"))
   expect_length(y, 1)
-  expect_warning(y <- .gfw_check_years(1999, "treecover"))
-  expect_length(y, 0)
+  expect_error(expect_warning(.gfw_check_years(1999, "treecover")))
 
   expect_false(.gfw_empty_raster(treecover))
   dummy <- treecover
@@ -90,20 +89,19 @@ test_that("treecover works", {
     pattern = ".tif$", full.names = TRUE
   ))
 
-  attributes(x)$years <- 2000:2005
-
-  expect_equal(.calc_treecover_area(x, gfw_treecover, NULL), NA)
-  result <- .calc_treecover_area(x, gfw_treecover, gfw_lossyear,
-    min_size = 1, min_cover = 10
-  )
+  years <- 2000:2005
+  ta <- calc_treecover_area(years = years, min_size = 1, min_cover = 10)
+  expect_equal(ta(x, gfw_treecover, NULL), NA)
+  result <- ta(x, gfw_treecover, gfw_lossyear)
   expect_equal(names(result), c("years", "treecover"))
-  expect_equal(result$years, c(2000:2005))
+  expect_equal(result$years, years)
   expect_snapshot(result$treecover)
 
-  stats_treeloss <- .calc_treecover_area_and_emissions(
-    x, gfw_treecover,
-    gfw_lossyear, gfw_emissions,
-    min_size = 1, min_cover = 10
-  )[, c(1, 3)]
-  expect_equal(result$treecover, stats_treeloss$treecover)
+  tae <- calc_treecover_area_and_emissions(
+    years = years,
+    min_size = 1,
+    min_cover = 10
+  )
+  stats_treeloss <- tae(x, gfw_treecover, gfw_lossyear, gfw_emissions)
+  expect_equal(result$treecover, stats_treeloss[, c(1, 3)]$treecover)
 })

@@ -12,25 +12,22 @@ test_that("soilpoperties works", {
 
   soilgrids <- rast(soilgrids)
 
+  csp <- calc_soilproperties()
   expect_equal(
-    .calc_soilproperties(shp, NULL),
+    csp(shp, NULL),
     NA
   )
 
-  expect_error(
-    .calc_soilproperties(shp, soilgrids, engine = "not-available"),
-    "Engine 'not-available' is not an available engine. Please choose one of: zonal, extract, exactextract"
-  )
-  expect_error(
-    .calc_soilproperties(shp, soilgrids, stats_soil = "not-available"),
-    "Statistic 'not-available' is not supported. Please choose one of:"
-  )
-
-  result <- .calc_soilproperties(shp, soilgrids)
-  result_multi_stat <- .calc_soilproperties(shp, soilgrids, engine = "extract", stats_soil = c("mean", "median", "sd"))
-  result_zonal <- .calc_soilproperties(shp, soilgrids, engine = "zonal")
-  result_extract <- .calc_soilproperties(shp, soilgrids, engine = "extract")
-  result_exact <- .calc_soilproperties(shp, soilgrids, engine = "exactextract")
+  csp <- calc_soilproperties()
+  result <- csp(shp, soilgrids)
+  csp <- calc_soilproperties(engine = "extract", stats = c("mean", "median", "sd"))
+  result_multi_stat <- csp(shp, soilgrids)
+  csp <- calc_soilproperties(engine = "zonal")
+  result_zonal <- csp(shp, soilgrids)
+  csp <- calc_soilproperties(engine = "extract")
+  result_extract <- csp(shp, soilgrids)
+  csp <- calc_soilproperties(engine = "exactextract")
+  result_exact <- csp(shp, soilgrids)
 
   expect_equal(
     names(result),

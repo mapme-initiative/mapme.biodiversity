@@ -1,76 +1,17 @@
-#' Initialization of a biodiversity portfolio object
-#'
-#' This function expects an \code{sf} object as its first argument that contains
-#' only geometry of type \code{POLYGON}. Each row of the
-#' object is considered a single asset in the portfolio for which biodiversity
-#' indicators will be calculated further down the processing chain. Some
-#' preliminary checks are conducted, e.g. that the CRS of the object is
-#' EPSG:4326 otherwise it will be transformed. Some portfolio wide parameters
-#' such as the output directory for downloaded data sets, a temporal directory
-#' for intermediate calculations can be set by the user to have more fine-control
-#' of the workflow. However, these parameters are also set to sensible defaults
-#' and thus can be omitted during portfolio initialization.
-#'
-#' @param x The sf object to be transformed to a portfolio
-#' @param years Numeric vector for time frame of the analysis handed over as a
-#'   vector of consecutive years
-#' @param outdir Character indicating the directory where resources will be
-#'   written to. If the directory does not exist, we will attempt to create it.
-#'   The output director cannot be equal to the temporary directory. Defaults
-#'   to the current working directory.
-#' @param tmpdir Character vector to a directory used for intermediate files.
-#'   Defaults to the output of \code{tempdir()}, e.g. the current R session's
-#'   temporal directory. If a custom file path does not exist, we will attempt
-#'   to create it. Cannot be equal to the output directory. Note, that for
-#'   raster calculations we will set the temporal directory for the \code{terra}
-#'   package here. Please make sure that enough disk space is available because
-#'   some intermediate calculations can become quite large.
-#' @param cores Deprecated. Use future-style parallelzation instead.
-#' @param aria_bin A character vector to an aria2c executable for parallel
-#'  downloads
-#' @param verbose Logical, defaults to TRUE, indicating if progress information
-#'   is printed.
-#' @return The sf portfolio object `x` with amended attributes controlling the
-#'   processing behaviour further down the processing chain.
-#' @keywords function
-#' @export
-init_portfolio <- function(x,
-                           years,
-                           outdir = getwd(),
-                           tmpdir = tempdir(),
-                           cores = NULL,
-                           aria_bin = NULL,
-                           verbose = TRUE) {
-  if (outdir == tmpdir) {
-    stop("Parameters outdir and tmpdir need to point to different directories.")
-  }
-  if (!dir.exists(outdir)) dir.create(outdir, recursive = TRUE)
-  if (!dir.exists(tmpdir)) dir.create(tmpdir, recursive = TRUE)
+.check_portfolio <- function(x, verbose = mapme_options()[["verbose"]]) {
+  stopifnot(inherits(x, "sf"))
 
-  if (!is.null(aria_bin)) {
-    aria_output <- try(system2(aria_bin, args = "--version", stdout = TRUE, stderr = FALSE), silent = TRUE)
-    if (inherits(aria_output, "try-error") | !grepl("aria2 version", aria_output[1])) {
-      warning(paste(
-        "Argument 'aria_bin' does not point to a executable aria2 installation.",
-        "The package will use R internal download utility."
-      ))
-      aria_bin <- NULL
-    }
-  }
-
-  if (nrow(x) < 1) stop("x must contain at least one asset.")
   if (st_crs(x) != st_crs(4326)) {
     message("CRS of x is not EPSG:4326. Attempting to transform.")
     x <- st_transform(x, 4326)
   }
-  # use tibble for prettier printing of the object
-  x <- st_as_sf(tibble(x))
-  # check for geometry types
   if (any(!unique(st_geometry_type(x)) %in% c("POLYGON"))) {
     stop("Some assests are not of type POLYGON. Please use sf::st_cast() to cast to POLYGON.")
   }
-  # add a unique asset identifier
-  if ("assetid" %in% names(x)) {
+  if (!inherits(x, "tibble")) {
+    x <- st_as_sf(tibble::as_tibble(x))
+  }
+  if ("assetid" %in% names(x) && verbose) {
     message(
       paste("Found a column named 'assetid'.",
         " Overwritting its values with a unique identifier.",
@@ -79,58 +20,40 @@ init_portfolio <- function(x,
     )
   }
   x$assetid <- 1:nrow(x)
-
-  if (!is.null(cores)) {
-    warning(
-      "Argument cores is deprecated. To enable parallel processing\n",
-      "use future-style parallelization by enabling e.g. future::plan(future::multisession, workers = n).\n",
-      "Learn more at https://mapme-initiative.github.io/mapme.biodiversity/index.html#a-note-on-parallel-computing"
-    )
-  }
-
-  # setting portfolio level attributes
-  attr(x, "nitems") <- nrow(x)
-  attr(x, "bbox") <- st_bbox(x)
-  attr(x, "resources") <- list()
-  attr(x, "years") <- years
-  attr(x, "outdir") <- outdir
-  attr(x, "tmpdir") <- tmpdir
-  attr(x, "verbose") <- verbose
-  attr(x, "aria_bin") <- aria_bin
-  attr(x, "testing") <- FALSE
   x
 }
 
 #' Writing a portfolio to disk
 #'
-#' The function is used to save a processes biodiversity portfolio to disk.
+#' `write_portfolio()` writes a processed biodiversity portfolio to disk.
 #' In order to ensure interoperability with other geospatial software the only
-#' supported format is the GeoPackage. If any other format is chosen, the
-#' function will automatically replace the supplied file extension with '.gpkg'.
+#' supported format is the GeoPackage.
 #' The metadata of a portfolio together with the geometry will be written
-#' to a table called 'metadata'. All available and supported indicators, which
-#' are expected to be present as a nested list columns will be written to their
+#' to a table called `'metadata'`. All calculated indicators, which
+#' are expected to be present as nested list columns, will be written to their
 #' own respective tables. In order to allow re-joining the metadata with the
-#' indicators, it is expected that a column called 'assetid' which uniquely
+#' indicators, it is expected that a column called `'assetid'` which uniquely
 #' identifies all assets is present. Usually, users do not have to take care of
-#' this since the usual \code{{mapme.biodiversity}} workflow will ensure that this
-#' columns is present. Additional arguments to \code{st_write()} can be supplied.
+#' this since the usual `mapme.biodiversity` workflow will ensure that this
+#' columns is present. Additional arguments to `st_write()` can be supplied.
 #'
-#' @param x A portfolio object processed with \code{{mapme.biodiversity}}
-#' @param dsn A file path for the output file. Should end with \code{'.gpkg'}
+#' @param x A portfolio object processed with `mapme.biodiversity`
+#' @param dsn A file path for the output file. Should end with `'.gpkg'`
 #' @param overwrite A logical indicating if the output file should be overwritten
 #'   if it exists
-#' @param ... Additional arguments supplied to \code{st_write()}
-#' @return \code{x}, invisibly
-#' @keywords function
+#' @param ... Additional arguments supplied to `st_write()`
+#' @return `write_portfolio()` returns `x`, invisibly.
+#' @name portfolio
 #' @export
 write_portfolio <- function(x,
                             dsn,
                             overwrite = FALSE,
                             ...) {
   assetid <- NULL
-  all_indicators <- names(available_indicators())
-  present_indicators <- names(x)[which(names(x) %in% all_indicators)]
+  stopifnot(inherits(x, "sf"))
+  list_cols <- sapply(st_drop_geometry(x), is.list)
+  present_indicators <- names(list_cols)[list_cols]
+
 
   if (length(present_indicators) == 0) {
     stop("No calculated indicators have been found. Cannot write as a portfolio.")
@@ -146,12 +69,6 @@ write_portfolio <- function(x,
 
   if (file.exists(dsn) & overwrite == FALSE) {
     stop(sprintf("Output file %s exists and overwrite is FALSE.", dsn))
-  }
-
-  if (any(lapply(x, class)[present_indicators] != "list")) {
-    warning("Some indicators are not nested list columns. Setting them to metadata.")
-    index <- which(lapply(x, class)[present_indicators] != "list")
-    present_indicators <- present_indicators[-index]
   }
 
   if (!"assetid" %in% names(x)) {
@@ -181,47 +98,39 @@ write_portfolio <- function(x,
 
 #' Reading a portfolio object from disk
 #'
-#' This function can be used to read a portfolio object that was previously
-#' written to disk via \code{write_portfolio()} back into R as an \code{sf} object.
-#' It should specifically be directed against a GeoPackage which was the output
-#' of \code{write_portfolio()}, otherwise the function is very likely to fail.
+#' `read_portfolio()` is used to read a portfolio object that was previously
+#' written to disk via `write_portfolio()` back into R as an `sf` object.
+#' It should be directed against a GeoPackage which was the output
+#' of `write_portfolio()`, otherwise the function is very likely to fail.
 #' All available indicators will be read back into R as nested list columns
-#' reflecting the output once \code{calc_indicators()} has been called.
+#' reflecting the output once `calc_indicators()` has been called.
 #'
-#' **Important Note**
-#' Portfolio-wide attributes that were specified via \code{init_portfolio()} will
-#' not be reconstructed. The reason is that users most likely exported to a
-#' GeoPackage in order to share their data, thus the file is very likely to be
-#' opened on a different machine / in a different working directory. Users can
-#' simply apply \code{init_portfolio()} on the object to re-set these attributes.
-#'
-#'
-#' @param file A character vector pointing to a GeoPackage that has been
-#'   previously written to disk via \code{write_portfolio()}
-#' @param ... Additional arguments supplied to \code{st_read()}
-#' @return An sf object object with nested list columns for every indicator
-#'   table found in the GeoPackage source file.
-#' @keywords function
+#' @param src A character vector pointing to a GeoPackage that has been
+#'   previously written to disk via `write_portfolio()`
+#' @param ... Additional arguments supplied to `st_read()`
+#' @return `read_portfolio()` reutnrs an `sf` object object with nested list
+#'   columns for every indicator table found in the GeoPackage source file.
+#' @name portfolio
 #' @export
 #'
-read_portfolio <- function(file, ...) {
+read_portfolio <- function(src, ...) {
   assetid <- NULL
-  all_layers <- st_layers(file)
-  if (!"metadata" %in% all_layers$name | all_layers$geomtype[[which(all_layers$name == "metadata")]] != "Polygon") {
+  all_layers <- st_layers(src)
+  if (!"metadata" %in% all_layers$name) {
     stop(sprintf(
       "Input file at '%s' does not seem to be a proper mapme.biodiversity portfolio file written with 'write_portfolio()'",
-      file
+      src
     ))
   }
 
-  metadata <- read_sf(file, layer = "metadata", ...)
-  present_indicators <- all_layers$name[which(all_layers$name %in% names(available_indicators()))]
+  metadata <- read_sf(src, layer = "metadata", ...)
+  present_indicators <- all_layers$name[-which(all_layers$name == "metadata")]
   if (length(present_indicators) == 0) {
     stop("Could not find any mapme.biodiversity indicator tables in the input file.")
   }
 
   for (ind in present_indicators) {
-    tmp <- read_sf(file, layer = ind, ...)
+    tmp <- read_sf(src, layer = ind, ...)
     tmp <- tidyr::nest(tmp, data = !assetid)
     names(tmp)[2] <- ind
     metadata <- dplyr::left_join(metadata, tmp, by = "assetid")

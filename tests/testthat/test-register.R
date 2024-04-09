@@ -1,116 +1,144 @@
+test_that("mapme_options works", {
+  opts <- mapme_options()
+  expect_equal(names(opts), c("outdir", "verbose", "aria_bin", "testing"))
+
+  expect_error(mapme_options(outdir = 1))
+  expect_error(mapme_options(verbose = 1))
+  expect_error(mapme_options(testing = 1))
+})
+
 test_that("test register_resource works", {
   name <- "sample"
+  description <- "simple description"
   type <- "raster"
   source <- "sample_source"
-  test_fun <- function() {}
-  arguments <- list(
-    a = 1,
-    b = 2
-  )
-
+  licence <- "CC-BY"
 
   expect_error(
     register_resource(),
-    "neither name, type, fun or arguments can be NULL"
+    "neither name, description, licence, source, nor type can be NULL"
   )
 
   expect_error(
     register_resource(
-      name = 1, type = type, source = source,
-      fun = test_fun, arguments = arguments
+      name = 1, description = description, licence = licence, source = source, type = type
     ),
     "name needs to be a single charachter string"
   )
 
   expect_error(
     register_resource(
-      name = name, type = "unknown", source = source,
-      fun = test_fun, arguments = arguments
+      name = name, description = 1, licence = licence, source = source, type = type
     ),
-    "type needs to be one of 'vector' or 'raster'"
+    "description needs to be a single charachter string"
   )
 
   expect_error(
     register_resource(
-      name = name, type = type, source = 1,
-      fun = test_fun, arguments = arguments
+      name = name, description = description, licence = 1, source = source, type = type
+    ),
+    "licence needs to be a single charachter string"
+  )
+
+  expect_error(
+    register_resource(
+      name = name, description = description, licence = licence, source = 1, type = type
     ),
     "source needs to be a single charachter string"
   )
 
-  expect_error(
-    register_resource(
-      name = name, type = type, source = source,
-      fun = "test_fun", arguments = arguments
-    ),
-    "fun needs to be a valid function signature"
-  )
 
   expect_error(
     register_resource(
-      name = name, type = type, source = source,
-      fun = test_fun, arguments = "arguments"
+      name = name, description = description, licence = licence, source = source, type = "unknown"
     ),
-    "arguments needs to be a list."
+    "type needs to be one of 'vector' or 'raster'"
   )
+
+
+  expect_silent(register_resource(name, description, licence, source, type))
+  res <- available_resources(name)
+  expect_equal(names(res), c("name", "description", "licence", "source", "type"))
+  expect_equal(res[["name"]], name)
+  expect_equal(res[["description"]], description)
+  expect_equal(res[["licence"]], licence)
+  expect_equal(res[["source"]], source)
+  expect_equal(res[["type"]], type)
 })
-
-
 
 test_that("test register_indicator works", {
   name <- "sample"
-  resources <- list(gfw_treecover = "raster", gmw = "vector")
-  processing_mode <- "asset"
-  test_fun <- function() {}
-  arguments <- list(
-    a = 1,
-    b = 2
-  )
-
+  description <- "sample desc"
+  resources <- c("gfw_treecover", "gmw")
 
   expect_error(
     register_indicator(),
-    "neither name, resources, fun, arguments, or processing_mode can be NULL"
+    "neither name, description nor resources can be NULL"
   )
 
   expect_error(
     register_indicator(
-      name = 1, resources = resources, fun = test_fun,
-      processing_mode = processing_mode, arguments = arguments
+      name = 1, description = description, resources = resources
     ),
     "name needs to be a single charachter string"
   )
 
   expect_error(
     register_indicator(
-      name = name, fun = test_fun, arguments = arguments,
-      processing_mode = processing_mode,
-      resources = append(resources, list(gfw_lossyear = "unknown"))
+      name = name, description = 1, resources = resources
     ),
-    "the following resources have an unknown type specified"
+    "description needs to be a single charachter string"
   )
 
   expect_error(
     register_indicator(
-      name = name, resources = resources, fun = 1,
-      processing_mode = processing_mode, arguments = arguments
+      name = name,
+      description = description,
+      resources = 1
     ),
-    "fun needs to be a valid function signature"
+    "resources needs to be a charachter vector"
   )
 
-  expect_error(
-    register_indicator(
-      name = name, resources = resources, fun = test_fun,
-      processing_mode = "unknown", arguments = arguments
-    ),
-    "processing_mode needs to be one of 'asset' or 'portfolio'"
-  )
+  expect_silent(register_indicator(name, description, resources))
+  ind <- available_indicators(name)
+  expect_equal(names(ind), c("name", "description", "resources"))
+  res <- ind[["resources"]]
+  expect_true(inherits(res, "list"))
+  res <- res[[1]]
+  expect_true(inherits(res, "tbl_df"))
+  expect_equal(nrow(res), 2)
+  expect_equal(res[["name"]], resources)
+})
 
-  expect_error(
-    register_indicator(
-      name = name, resources = resources, fun = test_fun,
-      processing_mode = processing_mode, arguments = 1
-    ),
-    "arguments needs to be a list."
-  )
+test_that("test available_resources works", {
+  res <- available_resources()
+  expect_true(inherits(res, "tbl_df"))
+  expect_true(length(res) > 1)
+  expect_error(available_resources("not-available"))
+})
+
+test_that("test available_indicators works", {
+  ind <- available_indicators()
+  expect_true(inherits(ind, "tbl_df"))
+  expect_true(nrow(ind) > 1)
+  expect_error(available_indicators("not-available"))
+})
+
+
+test_that("add / clear resource works", {
+  .clear_resources()
+  add <- list(1:10)
+  names(add) <- "test_res"
+  res <- .avail_resources()
+  expect_true(class(res) == "list")
+  expect_length(res, 0)
+  .add_resource(add)
+  res <- .avail_resources()
+  expect_true(class(res) == "list")
+  expect_length(res, 1)
+  expect_equal(names(res), "test_res")
+  expect_equal(res[["test_res"]], 1:10)
+  .clear_resources()
+  res <- .avail_resources()
+  expect_length(res, 0)
 })

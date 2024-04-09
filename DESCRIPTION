@@ -1,6 +1,6 @@
 Package: mapme.biodiversity
 Title: Efficient Monitoring of Global Biodiversity Portfolios
-Version: 0.5.0.9001
+Version: 0.5.9002
 Authors@R: c(
     person("Darius A.", "Görgen", , "darius2402@web.de", role = c("aut", "cre")),
     person("Om Prakash", "Bhandari", role = "aut")
@@ -35,7 +35,7 @@ Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-GB
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.0
+RoxygenNote: 7.3.1
 Collate: 
     'register.R'
     'calc_active_fire_counts.R'
@@ -51,6 +51,7 @@ Collate:
     'calc_gsw_recurrence.R'
     'calc_gsw_seasonality.R'
     'calc_gsw_transitions.R'
+    'get_resources.R'
     'calc_indicators.R'
     'calc_landcover.R'
     'calc_mangroves_area.R'
@@ -78,7 +79,6 @@ Collate:
     'get_nasa_grace.R'
     'get_nasa_srtm.R'
     'get_nelson_et_al.R'
-    'get_resources.R'
     'get_soilgrids.R'
     'get_teow.R'
     'get_ucdp_ged.R'

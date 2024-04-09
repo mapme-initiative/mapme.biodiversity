@@ -6,16 +6,9 @@ test_that("gsw occurrence works", {
   )
 
   shp <- suppressWarnings(st_cast(shp, to = "POLYGON")[1, ])
-  tmpdir <- tempdir()
-  portfolio <- init_portfolio(
-    shp,
-    years = 2024,
-    tmpdir = tmpdir,
-    verbose = TRUE
-  )
-
+  gswo <- calc_gsw_occurrence(min_occurrence = 10)
   expect_equal(
-    .calc_gsw_occurrence(portfolio, NULL),
+    gswo(shp, NULL),
     NA
   )
 
@@ -23,11 +16,7 @@ test_that("gsw occurrence works", {
     package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)
   gsw_occurrence <- rast(gsw_occurrence)
-  occ <- .calc_gsw_occurrence(portfolio, gsw_occurrence, min_occurrence = 10)
-
-  expect_error(
-    .calc_gsw_occurrence(portfolio, gsw_occurrence, min_occurrence = NULL)
-  )
+  occ <- gswo(shp, gsw_occurrence)
 
   expect_equal(
     occ$gsw_occurrence_area_sum,

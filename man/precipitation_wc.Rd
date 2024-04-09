@@ -3,27 +3,32 @@
 \docType{data}
 \name{precipitation_wc}
 \alias{precipitation_wc}
+\alias{calc_precipitation_wc}
 \title{Calculate precipitation statistics}
-\format{
-A tibble with a column for precipitation statistics (in mm)
+\usage{
+calc_precipitation_wc(engine = "extract", stats = "mean")
+}
+\arguments{
+\item{engine}{The preferred processing functions from either one of "zonal",
+"extract" or "exactextract" as character.}
+
+\item{stats}{Function to be applied to compute statistics for polygons either
+single or multiple inputs as character. Supported statistics are: "mean",
+"median", "sd", "min", "max", "sum" "var".}
+}
+\value{
+A function that returns a tibble with a column for precipitation
+statistics (in mm).
 }
 \description{
 This function allows to efficiently calculate precipitation statistics
 from Worldclim for polygons. For each polygon, the desired statistic/s (min,
 max, sum, mean, median, sd or var) is/are returned.
-The required resources for this indicator are:
-\itemize{
-\item precipitation layer from \link{worldclim}
-}
 }
 \details{
-The following arguments can be set:
-\describe{
-\item{stats_worldclim}{Function to be applied to compute statistics for polygons either
-one or multiple inputs as character. Supported statistics are: "mean",
-"median", "sd", "min", "max", "sum" "var".}
-\item{engine}{The preferred processing functions from either one of "zonal",
-"extract" or "exactextract" as character.}
+The required resources for this indicator are:
+\itemize{
+\item precipitation layer from \link{worldclim_precipitation}
 }
 }
 \examples{
@@ -37,21 +42,21 @@ library(mapme.biodiversity)
 outdir <- file.path(tempdir(), "mapme-data")
 dir.create(outdir, showWarnings = FALSE)
 
+mapme_options(
+  outdir = outdir,
+  verbose = FALSE
+)
 
 aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   package = "mapme.biodiversity"
 ) \%>\%
   read_sf() \%>\%
-  init_portfolio(
-    years = 2018,
-    outdir = outdir,
-    tmpdir = tempdir(),
-    verbose = FALSE
-  ) \%>\%
-  get_resources("worldclim_precipitation") \%>\%
-  calc_indicators("precipitation_wc",
-    stats_worldclim = c("mean", "median"),
-    engine = "extract"
+  get_resources(get_worldclim_precipitation(years = 2018)) \%>\%
+  calc_indicators(
+    calc_precipitation_wc(
+      engine = "extract",
+      stats = c("mean", "median")
+    )
   ) \%>\%
   tidyr::unnest(precipitation_wc)
 

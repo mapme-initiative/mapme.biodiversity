@@ -14,30 +14,23 @@ test_that(".get_esalandcover works", {
   outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
   tmpdir <- tempdir()
 
-  portfolio <- init_portfolio(aoi,
-    years = 2015,
+  mapme_options(
     outdir = outdir,
     tmpdir = tmpdir,
-    verbose = FALSE
+    verbose = FALSE,
+    testing = TRUE
   )
   # Add testing attribute in order to skip downloads
-  attributes(portfolio)$testing <- TRUE
+  gel <- get_esalandcover(years = 2015)
   expect_equal(
-    .get_esalandcover(portfolio),
+    gel(aoi),
     "W080N20_LC100_v3.0.1_2015.tif"
   )
 
   # adds test to check for multiple polygons in the same tile
   splitted_aoi <- st_as_sf(st_make_grid(aoi, n = 2))
-  portfolio <- init_portfolio(splitted_aoi,
-    years = 2015,
-    outdir = outdir,
-    tmpdir = tmpdir,
-    verbose = TRUE
-  )
-  attributes(portfolio)$testing <- TRUE
   expect_equal(
-    .get_esalandcover(portfolio),
+    gel(splitted_aoi),
     "W080N20_LC100_v3.0.1_2015.tif"
   )
 })

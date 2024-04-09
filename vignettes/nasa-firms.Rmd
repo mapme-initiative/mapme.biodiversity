@@ -68,13 +68,11 @@ aoi <- data[data$NAME == "Serengeti National Park", ]
 aoi <- st_cast(aoi[1, ], "POLYGON")
 ```
 
-In the next code chunk, we initiate a portfolio with the geometry of the
-Serengeti NP specifying the temporal extent we are interested in - here
-the years 2010 to 2020 - as well as the output directory where the data
+In the next code chunk, we specify the output directory where the data
 will be downloaded to.
 
-```{r data-portfolio, eval = FALSE}
-aoi <- init_portfolio(aoi, years = 2010:2020, outdir = data_dir)
+```{r data-options, eval = FALSE}
+aoi <- mapme_options(outdir = data_dir, verbose = TRUE)
 ```
 
 We are now ready to actually download the data. Note, that running the
@@ -82,7 +80,7 @@ next code chunk actually takes significant time because the `nasa_firms`
 resource is a rather large data set.
 
 ```{r data-download, eval = FALSE}
-aoi <- get_resources(aoi, "nasa_firms", instrument = "MODIS")
+aoi <- get_resources(aoi, get_nasa_firms(years = 2010:2020, instrument = "MODIS"))
 ```
 
 The `nasa_firms` data set as processed by the `{mapme.biodiversity}`

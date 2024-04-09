@@ -11,42 +11,46 @@ test_that(".get_gsw works", {
   dir.create(temp_loc, showWarnings = FALSE)
   resource_dir <- system.file("res", package = "mapme.biodiversity")
   file.copy(resource_dir, temp_loc, recursive = TRUE)
-  outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
+  outdir <- file.path(tempdir(), "mapme.biodiversity", "res", "gsw_occurrence")
   tmpdir <- tempdir()
 
-  portfolio <- init_portfolio(aoi,
-    years = 2000:2020,
+  mapme_options(
     outdir = outdir,
-    tmpdir = tmpdir,
-    verbose = TRUE
+    verbose = FALSE,
+    testing = TRUE
   )
-  # Add testing attribute in order to skip downloads
-  attributes(portfolio)$testing <- TRUE
-
   expect_error(
-    .get_gsw(portfolio, statistic = "not-available")
+    .get_gsw(aoi, statistic = "not-available")
   )
 
   expect_error(
-    .get_gsw(portfolio, vers_gsw = "not-available")
+    .get_gsw(aoi, vers_gsw = "not-available")
   )
 
   expect_equal(
-    basename(.get_gsw(portfolio, statistic = "occurrence")),
+    basename(.get_gsw(aoi, statistic = "occurrence")),
     "occurrence_80W_20Nv1_4_2021.tif"
   )
 
+  gsw <- get_global_surface_water_change()
+  expect_equal(basename(gsw(aoi)), "change_80W_20Nv1_4_2021.tif")
+
+  gsw <- get_global_surface_water_transitions()
+  expect_equal(basename(gsw(aoi)), "transitions_80W_20Nv1_4_2021.tif")
+
+  gsw <- get_global_surface_water_seasonality()
+  expect_equal(basename(gsw(aoi)), "seasonality_80W_20Nv1_4_2021.tif")
+
+  gsw <- get_global_surface_water_recurrence()
+  expect_equal(basename(gsw(aoi)), "recurrence_80W_20Nv1_4_2021.tif")
+
+  gsw <- get_global_surface_water_occurrence()
+  expect_equal(basename(gsw(aoi)), "occurrence_80W_20Nv1_4_2021.tif")
+
   # adds test to check for multiple polygons in the same tile
   splitted_aoi <- st_as_sf(st_make_grid(aoi, n = 2))
-  portfolio <- init_portfolio(splitted_aoi,
-    years = 2000:2020,
-    outdir = outdir,
-    tmpdir = tmpdir,
-    verbose = TRUE
-  )
-  attributes(portfolio)$testing <- TRUE
   expect_equal(
-    basename(.get_gsw(portfolio, statistic = "occurrence")),
+    basename(.get_gsw(splitted_aoi, statistic = "occurrence")),
     "occurrence_80W_20Nv1_4_2021.tif"
   )
 })

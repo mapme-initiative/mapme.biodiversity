@@ -11,9 +11,9 @@ test_that("deforestation drivers orks", {
     pattern = ".tif$", full.names = TRUE
   )
   drivers <- rast(drivers)
-  attributes(shp)$years <- 2000:2020
 
-  result <- .calc_deforestation_drivers(shp, drivers)
+  cdf <- calc_deforestation_drivers()
+  result <- cdf(shp, drivers)
 
   expect_true(inherits(result, "tbl_df"))
 

@@ -8,21 +8,17 @@ test_that("traveltime works", {
     package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)
   nelson_et_al <- rast(nelson_et_al)
-  attributes(shp)$years <- 2015
-  expect_error(
-    .calc_traveltime(shp, nelson_et_al, engine = "not-available"),
-    "Engine 'not-available' is not an available engine. Please choose one of:"
-  )
-  expect_error(
-    .calc_traveltime(shp, nelson_et_al, stats = "not-available"),
-    "Statistic 'not-available' is not supported. Please choose one of:"
-  )
 
-  result <- .calc_traveltime(shp, nelson_et_al)
-  result_multi_stat <- .calc_traveltime(shp, nelson_et_al, stats = c("mean", "median", "sd"))
-  result_zonal <- .calc_traveltime(shp, nelson_et_al, engine = "zonal")
-  result_extract <- .calc_traveltime(shp, nelson_et_al, engine = "extract")
-  result_exact <- .calc_traveltime(shp, nelson_et_al, engine = "exactextract")
+  ctt <- calc_traveltime()
+  result <- ctt(shp, nelson_et_al)
+  ctt <- calc_traveltime(stats = c("mean", "median", "sd"))
+  result_multi_stat <- ctt(shp, nelson_et_al)
+  ctt <- calc_traveltime(engine = "zonal")
+  result_zonal <- ctt(shp, nelson_et_al)
+  ctt <- calc_traveltime(engine = "extract")
+  result_extract <- ctt(shp, nelson_et_al)
+  ctt <- calc_traveltime(engine = "exactextract")
+  result_exact <- ctt(shp, nelson_et_al)
 
   expect_equal(
     names(result),

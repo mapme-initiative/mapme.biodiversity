@@ -21,13 +21,6 @@
 #'   \item{ocs}{Organic carbon stocks (kg/m²)}
 #' }
 #'
-#' Users can specify the following arguments:
-#' \describe{
-#'   \item{layer}{The soil parameter as a single character}
-#'   \item{depth}{The requested depth as a single character}
-#'   \item{stat}{The predicted statistic as a single character}
-#'   }
-#'
 #' Except for \code{ocs}, which is only available for a depth of \code{"0-30cm"},
 #' all other parameters are available at the following depths:
 #' - "0-5cm"
@@ -43,47 +36,21 @@
 #' - "mean"
 #' - "Q0.95"
 #' @name soilgrids
-#' @docType data
+#' @param layers A character vector indicating the layers to download from
+#'   soilgrids
+#' @param depths A character vector indicating the depths to download
+#' @param stats A character vector indicating the statistics to download.
 #' @keywords resource
-#' @format A global tiled raster resource available for all land areas.
+#' @returns A function that returns a character of file paths.
 #' @references Hengl T, Mendes de Jesus J, Heuvelink GBM, Ruiperez Gonzalez M,
 #' Kilibarda M, et al. (2017) SoilGrids250m: Global gridded soil information
 #' based on machine learning. PLOS ONE 12(2): e0169748.
 #' \doi{https://doi.org/10.1371/journal.pone.0169748}
 #' @source \url{https://www.isric.org/explore/soilgrids}
-NULL
-
-#' Helper function to download any soilgrids data layer
-#'
-#' This function constructs for a given data layer, depth and stat a data layer
-#' for the extent of a portfolio and projects the original interrupted  Goode's
-#' homolosine projection to Lat/Lon for further processing in the package.
-#' Depending on the size of a portfolio this process requires a lot of time. If
-#' the portfolio extents of interrupted areas of the homolosine projection (e.g.
-#' over the oceans) gdal issues some error messages but proceeds anyway. This is
-#' not an issue for the scope of the soil grid indicators because they only make
-#' sense for land masses.
-#'
-#' @param x A sf portfolio object
-#' @param layers A charchter vector indicating the layers to download from
-#'   soilgrids
-#' @param depths A character vector indicating the depths to download
-#' @param stats A chrachter vector indicating the statistics to download.
-#' @param rundir The directory where temporary and final results are written to.
-#' @param verbose A logical controlling the verbosity.
-#'
-#' @return A charchter vector of the final filenames
-#' @keywords internal
 #' @importFrom stringr str_replace
 #' @include register.R
-#' @noRd
-.get_soilgrids <- function(x,
-                           layers,
-                           depths,
-                           stats,
-                           rundir = tempdir(),
-                           verbose,
-                           ...) {
+#' @export
+get_soilgrids <- function(layers, depths, stats) {
   if (any(missing(layers), missing(depths), missing(stats))) {
     stop(
       paste("For downloading data from soilgrid a valid layer, a valid ",
@@ -131,65 +98,71 @@ NULL
     )
   }
 
-
-  filenames <- list()
-  for (layer in layers) {
-    for (depth in depths) {
-      for (stat in stats) {
-        if (layer != "ocs" & depth == "0-30cm") {
-          message("Depth '0-30cm' is only available of layer 'ocs'.")
-          next
-        }
-
-        if (layer == "ocs" & depth != "0-30cm") {
-          message("Layer 'ocs' is only available at depth '0-30cm'.")
-          next
-        }
-
-        baseurl <- "/vsicurl/https://files.isric.org/soilgrids/latest/data/"
-        datalayer <- sprintf("%s/%s_%s_%s.vrt", layer, layer, depth, stat)
-        filename <- file.path(rundir, str_replace(basename(datalayer), "vrt", "tif"))
-        if (attr(x, "testing")) {
-          filenames <- append(filenames, basename(filename))
-          next
-        }
-
-        if (!file.exists(filename)) {
-          if (verbose) {
-            message(
-              sprintf(
-                paste("Starting to download data for layer '%s', depth '%s', and stat '%s'.",
-                  " This may take a while...",
-                  sep = ""
-                ),
-                layer, depth, stat
-              )
-            )
+  function(x,
+           name = "soilgrids",
+           type = "raster",
+           outdir = mapme_options()[["outdir"]],
+           verbose = mapme_options()[["verbose"]],
+           testing = mapme_options()[["testing"]]) {
+    filenames <- list()
+    for (layer in layers) {
+      for (depth in depths) {
+        for (stat in stats) {
+          if (layer != "ocs" & depth == "0-30cm") {
+            message("Depth '0-30cm' is only available of layer 'ocs'.")
+            next
           }
-          soilgrid_source <- rast(file.path(baseurl, datalayer))
-          x_bbox <- st_as_sf(st_as_sfc(st_bbox(x)))
-          x_proj <- st_transform(x_bbox, crs(soilgrid_source))
-          soilgrid_cropped <- crop(soilgrid_source, x_proj,
-            filename = file.path(rundir, "soillayer_cropped.tif"),
-            datatype = "INT2U", overwrite = TRUE
-          )
-          suppressWarnings(
-            project(soilgrid_cropped, "EPSG:4326",
-              filename = filename,
+
+          if (layer == "ocs" & depth != "0-30cm") {
+            message("Layer 'ocs' is only available at depth '0-30cm'.")
+            next
+          }
+
+          baseurl <- "/vsicurl/https://files.isric.org/soilgrids/latest/data/"
+          datalayer <- sprintf("%s/%s_%s_%s.vrt", layer, layer, depth, stat)
+          filename <- file.path(outdir, str_replace(basename(datalayer), "vrt", "tif"))
+          if (testing) {
+            filenames <- append(filenames, basename(filename))
+            next
+          }
+
+          if (!file.exists(filename)) {
+            if (verbose) {
+              message(
+                sprintf(
+                  paste("Starting to download data for layer '%s', depth '%s', and stat '%s'.",
+                    " This may take a while...",
+                    sep = ""
+                  ),
+                  layer, depth, stat
+                )
+              )
+            }
+            soilgrid_source <- rast(file.path(baseurl, datalayer))
+            x_bbox <- st_as_sf(st_as_sfc(st_bbox(x)))
+            x_proj <- st_transform(x_bbox, crs(soilgrid_source))
+            soilgrid_cropped <- crop(soilgrid_source, x_proj,
+              filename = file.path(outdir, "soillayer_cropped.tif"),
               datatype = "INT2U", overwrite = TRUE
             )
-          )
-          file.remove(file.path(rundir, "soillayer_cropped.tif"))
-        } else {
-          if (verbose) {
-            message(sprintf("Output file %s exists. Skipping re-download. Please delete if spatial extent has changed.", basename(filename)))
+            suppressWarnings(
+              project(soilgrid_cropped, "EPSG:4326",
+                filename = filename,
+                datatype = "INT2U", overwrite = TRUE
+              )
+            )
+            file.remove(file.path(outdir, "soillayer_cropped.tif"))
+          } else {
+            if (verbose) {
+              message(sprintf("Output file %s exists. Skipping re-download. Please delete if spatial extent has changed.", basename(filename)))
+            }
           }
+          filenames <- append(filenames, filename)
         }
-        filenames <- append(filenames, filename)
       }
     }
+    unlist(filenames)
   }
-  unlist(filenames)
 }
 
 
@@ -279,12 +252,8 @@ NULL
 
 register_resource(
   name = "soilgrids",
-  type = "raster",
+  description = "ISRIC - Modelled global soil property layers",
+  licence = "CC-BY 4.0",
   source = "https://www.isric.org/explore/soilgrids",
-  fun = .get_soilgrids,
-  arguments <- list(
-    layers = "clay",
-    depths = "0-5cm",
-    stats = "mean"
-  )
+  type = "raster"
 )

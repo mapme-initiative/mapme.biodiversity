@@ -11,19 +11,19 @@ test_that(".get_teow works", {
   dir.create(temp_loc, showWarnings = FALSE)
   resource_dir <- system.file("res", package = "mapme.biodiversity")
   file.copy(resource_dir, temp_loc, recursive = TRUE)
-  outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
+  outdir <- file.path(tempdir(), "mapme.biodiversity", "res", "teow")
   tmpdir <- tempdir()
 
-  portfolio <- init_portfolio(aoi,
-    years = 2000:2010,
+  mapme_options(
     outdir = outdir,
     tmpdir = tmpdir,
-    verbose = FALSE
+    verbose = FALSE,
+    testing = TRUE
   )
-  # Add testing attribute in order to skip downloads
-  attributes(portfolio)$testing <- TRUE
+
+  gteow <- get_teow()
   expect_equal(
-    .get_teow(portfolio, rundir = file.path(outdir, "teow")) %>%
+    gteow() %>%
       basename(),
     "wwf_terr_ecos.gpkg"
   )

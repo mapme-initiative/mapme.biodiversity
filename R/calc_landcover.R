@@ -6,14 +6,16 @@
 #' allows to efficiently calculate area of different landcover classes for
 #' polygons. For each polygon, the area of the classes in hectare(ha) is
 #' returned.
+#'
 #' The required resources for this indicator are:
 #'  - [esalandcover]
 #'
 #' @name landcover
-#' @docType data
 #' @keywords indicator
-#' @format A tibble with a column for area (in ha) and the percentage covered per
-#'   landcover class
+#' @returns A function that returns tibble with a column for area (in ha) and
+#'   the percentage covered per landcover class.
+#' @include register.R
+#' @export
 #' @examples
 #' \dontshow{
 #' mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
@@ -25,66 +27,51 @@
 #' outdir <- file.path(tempdir(), "mapme-data")
 #' dir.create(outdir, showWarnings = FALSE)
 #'
+#' mapme_options(
+#'   outdir = outdir,
+#'   verbose = FALSE
+#' )
+#'
 #' aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
 #'   package = "mapme.biodiversity"
 #' ) %>%
 #'   read_sf() %>%
-#'   init_portfolio(
-#'     years = 2016:2017,
-#'     outdir = outdir,
-#'     tmpdir = tempdir(),
-#'     verbose = FALSE
-#'   ) %>%
-#'   get_resources("esalandcover") %>%
-#'   calc_indicators("landcover") %>%
+#'   get_resources(get_esalandcover(years = 2016:2017)) %>%
+#'   calc_indicators(calc_landcover()) %>%
 #'   tidyr::unnest(landcover)
 #'
 #' aoi
 #' }
-NULL
+calc_landcover <- function() {
+  function(x,
+           esalandcover = NULL,
+           name = "landcover",
+           mode = "asset",
+           verbose = mapme_options()[["verbose"]]) {
+    percentage <- NULL
+    year <- NULL
+    classes <- NULL
 
-#' Calculate area of different landcover classes from ESA
-#'
-#' Considering the 100 meter global copernicus landcover raster datasets users
-#' can compute the area of the landcover classes among 23 discrete classes provided
-#' from ESA available for years 2015 to 2019.
-#'
-#' @param x A single polygon for which to calculate the area of landcover classes
-#' @param esalandcover The landcover raster resource from ESA
-#' @param verbose A directory where intermediate files are written to.
-#' @param ... additional arguments
-#' @return A tibble
-#' @keywords internal
-#' @include register.R
-#' @noRd
+    if (is.null(esalandcover)) {
+      return(NA)
+    }
 
-.calc_landcover <- function(x,
-                            esalandcover,
-                            verbose = TRUE,
-                            ...) {
-  percentage <- NULL
-  year <- NULL
-  classes <- NULL
+    x_v <- vect(x)
+    esa_mask <- terra::mask(esalandcover, x_v)
+    arearaster <- cellSize(esa_mask, mask = TRUE, unit = "ha")
+    total_size <- as.numeric(global(arearaster, fun = sum, na.rm = TRUE))
 
-  if (is.null(esalandcover)) {
-    return(NA)
+    purrr::map_dfr(1:nlyr(esa_mask), function(i) {
+      zonal(arearaster, esa_mask[[i]], sum) %>%
+        tidyr::pivot_longer(cols = -area, names_to = "year", values_to = "code") %>%
+        dplyr::left_join(.esa_landcover_classes, by = "code") %>%
+        dplyr::mutate(
+          percentage = area / total_size,
+          year = regmatches(year, regexpr("\\d{4}", year))
+        ) %>%
+        dplyr::select(classes, year, area, percentage)
+    })
   }
-
-  x_v <- vect(x)
-  esa_mask <- terra::mask(esalandcover, x_v)
-  arearaster <- cellSize(esa_mask, mask = TRUE, unit = "ha")
-  total_size <- as.numeric(global(arearaster, fun = sum, na.rm = TRUE))
-
-  purrr::map_dfr(1:nlyr(esa_mask), function(i) {
-    zonal(arearaster, esa_mask[[i]], sum) %>%
-      tidyr::pivot_longer(cols = -area, names_to = "year", values_to = "code") %>%
-      dplyr::left_join(.esa_landcover_classes, by = "code") %>%
-      dplyr::mutate(
-        percentage = area / total_size,
-        year = regmatches(year, regexpr("\\d{4}", year))
-      ) %>%
-      dplyr::select(classes, year, area, percentage)
-  })
 }
 
 .esa_landcover_classes <- data.frame(
@@ -100,8 +87,6 @@ NULL
 
 register_indicator(
   name = "landcover",
-  resources = list(esalandcover = "raster"),
-  fun = .calc_landcover,
-  arguments = list(),
-  processing_mode = "asset"
+  description = "Areal statistics grouped by landcover class",
+  resources = "esalandcover"
 )

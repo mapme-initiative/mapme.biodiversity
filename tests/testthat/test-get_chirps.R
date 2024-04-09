@@ -14,15 +14,16 @@ test_that(".get_chirps works", {
   outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
   tmpdir <- tempdir()
 
-  portfolio <- init_portfolio(aoi,
-    years = 2000:2020,
+  mapme_options(
     outdir = outdir,
     tmpdir = tmpdir,
-    verbose = FALSE
+    verbose = FALSE,
+    testing = TRUE
   )
-  # Add testing attribute in order to skip downloads
-  attributes(portfolio)$testing <- TRUE
-  urls <- .get_chirps(portfolio)
+
+  gc <- get_chirps()
+  urls <- gc(aoi)
   exts <- unique(substr(urls, nchar(urls[1]) - 5, nchar(urls[1])))
   expect_equal(exts, "tif.gz")
+  expect_gte(length(urls), 518)
 })

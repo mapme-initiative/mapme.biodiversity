@@ -1,7 +1,8 @@
 test_that("calc_indicator works", {
+  .clear_resources()
   aoi <- read_sf(
     system.file("extdata", "gfw_sample.gpkg",
-                package = "mapme.biodiversity"
+      package = "mapme.biodiversity"
     )
   )
 
@@ -13,35 +14,21 @@ test_that("calc_indicator works", {
   tmpdir <- tempdir()
 
   aoi <- suppressWarnings(st_cast(aoi, to = "POLYGON"))[1, ]
-  portfolio <- init_portfolio(
-    aoi,
-    years = 2000:2005,
+  mapme_options(
     outdir = outdir,
     tmpdir = tmpdir,
     verbose = FALSE
   )
 
-  portfolio <- get_resources(
-    portfolio,
-    resources = c("gfw_treecover", "gfw_lossyear"),
-    vers_treecover = "GFC-2020-v1.8",
-    vers_lossyear = "GFC-2020-v1.8"
-  )
-
-  expect_message(
-    calc_indicators(
-      portfolio,
-      indicators = "treecover_area",
-      min_cover = 10
-    ),
-    "was not specified. Setting to default value"
+  aoi <- get_resources(
+    aoi,
+    get_gfw_treecover(version = "GFC-2020-v1.8"),
+    get_gfw_lossyear(version = "GFC-2020-v1.8")
   )
 
   stat <- calc_indicators(
-    portfolio,
-    indicators = "treecover_area",
-    min_size = 5,
-    min_cover = 30
+    aoi,
+    calc_treecover_area(years = 2000:2005, min_size = 5, min_cover = 30)
   )$treecover_area[[1]]
 
   expect_equal(
@@ -74,9 +61,10 @@ test_that("calc_indicator works", {
 })
 
 test_that("Parallelization works", {
+  .clear_resources()
   aoi <- read_sf(
     system.file("extdata", "gfw_sample.gpkg",
-                package = "mapme.biodiversity"
+      package = "mapme.biodiversity"
     )
   )
 
@@ -90,29 +78,27 @@ test_that("Parallelization works", {
   aoi <- suppressWarnings(st_cast(aoi, to = "POLYGON"))[1, ]
   aoi <- st_as_sf(st_make_grid(aoi, n = 3))
 
-  portfolio <- init_portfolio(
-    aoi,
-    years = 2000:2005,
+  mapme_options(
     outdir = outdir,
     tmpdir = tmpdir,
     verbose = FALSE
   )
 
-  portfolio <- get_resources(
-    portfolio,
-    resources = c("gfw_treecover", "gfw_lossyear"),
-    vers_treecover = "GFC-2020-v1.8",
-    vers_lossyear = "GFC-2020-v1.8"
-  )
+  # aoi <- get_resources(
+  #   aoi,
+  #   get_gfw_treecover(version = "GFC-2020-v1.8"),
+  #   get_gfw_lossyear(version="GFC-2020-v1.8"))
 
   library(future)
   plan(multisession, workers = 2)
-  stat <- calc_indicators(
-    portfolio,
-    indicators = "treecover_area",
-    min_size = 5,
-    min_cover = 30
-  )
+  stat <- get_resources(
+    aoi,
+    get_gfw_treecover(version = "GFC-2020-v1.8"),
+    get_gfw_lossyear(version = "GFC-2020-v1.8")
+  ) %>%
+    calc_indicators(
+      calc_treecover_area(years = 2000:2005, min_size = 5, min_cover = 30)
+    )
   plan(sequential)
 
   expect_equal(
@@ -133,6 +119,32 @@ test_that("Parallelization works", {
     c(2610.735, 2607.605, 2603.340, 2564.097, 2547.076, 2539.395),
     tolerance = 1e-3
   )
+})
+
+test_that(".check_indicator_fun works correctly", {
+  expect_error(.check_indicator_fun("a"))
+  fun <- function(x, name, mode) {}
+  expect_error(.check_indicator_fun(fun))
+  fun <- function(x, name, mode, verbose) {}
+  expect_silent(.check_indicator_fun(fun))
+  fun <- function(x, some_resource, name, mode, verbose) {}
+  expect_silent(f <- .check_indicator_fun(fun))
+  expect_true(inherits(f, "function"))
+})
+
+test_that(".get_req_resources works", {
+  expect_error(.get_req_resources("a"))
+  fun <- function(x, name, mode) {}
+  expect_error(.get_req_resources(fun))
+  fun <- function(x, some_resource, other_resource, name, mode, verbose) {}
+  expect_silent(f <- .get_req_resources(fun))
+  expect_equal(f, c("some_resource", "other_resource"))
+})
+
+test_that(".check_avail_resources works correctly", {
+  expect_silent(.check_avail_resources("some_resource", "some_resource"))
+  expect_error(.check_avail_resources("some_resource", c("some_resource", "other_resource")))
+  expect_error(.check_avail_resources(list(), "some_resource"))
 })
 
 test_that(".bind_assets works correctly", {
@@ -198,9 +210,10 @@ test_that(".bind_assets works correctly", {
 
 
 test_that(".prep works correctly", {
+  .clear_resources()
   x <- read_sf(
     system.file("extdata", "gfw_sample.gpkg",
-                package = "mapme.biodiversity"
+      package = "mapme.biodiversity"
     )
   )
 
@@ -214,9 +227,7 @@ test_that(".prep works correctly", {
   x <- suppressWarnings(st_cast(x, to = "POLYGON"))[1, ]
   x <- st_as_sf(st_make_grid(x, n = 3))
 
-  x <- init_portfolio(
-    x,
-    years = 2000:2005,
+  mapme_options(
     outdir = outdir,
     tmpdir = tmpdir,
     verbose = FALSE
@@ -224,13 +235,12 @@ test_that(".prep works correctly", {
 
   x <- get_resources(
     x,
-    resources = c("gfw_treecover", "gfw_lossyear"),
-    vers_treecover = "GFC-2020-v1.8",
-    vers_lossyear = "GFC-2020-v1.8"
+    get_gfw_treecover(version = "GFC-2020-v1.8"),
+    get_gfw_lossyear(version = "GFC-2020-v1.8")
   )
 
-  available_resources <- attr(x, "resources")
-  required_resources <- available_indicators("treecover_area")[[1]][["resources"]]
+  available_resources <- .avail_resources()
+  required_resources <- available_indicators("treecover_area")[["resources"]][[1]][["name"]]
   output <- .prep_resources(x, available_resources, required_resources)
 
   expect_equal(
@@ -239,7 +249,7 @@ test_that(".prep works correctly", {
   )
   expect_equal(
     names(output),
-    c("gfw_treecover", "gfw_lossyear")
+    c("gfw_lossyear", "gfw_treecover")
   )
   expect_true(
     inherits(output[[1]], "SpatRaster"),
@@ -248,14 +258,19 @@ test_that(".prep works correctly", {
 
   x2 <- read_sf(list.files(
     system.file("extdata", package = "mapme.biodiversity"),
-    pattern = "shell_beach", full.names = TRUE )) %>%
-    init_portfolio(years = 2016,
-                     outdir = outdir,
-                     tmpdir = tmpdir,
-                     verbose = FALSE) %>%
-    get_resources("gmw")
-  available_resources <- attr(x2, "resources")
-  required_resources <- available_indicators("mangroves_area")[[1]][["resources"]]
+    pattern = "shell_beach", full.names = TRUE
+  ))
+
+  mapme_options(
+    outdir = outdir,
+    tmpdir = tmpdir,
+    verbose = FALSE
+  )
+
+  x2 <- get_resources(x2, get_gmw(years = 2016))
+
+  available_resources <- .avail_resources()
+  required_resources <- available_indicators("mangroves_area")[["resources"]][[1]][["name"]]
   output <- .prep_resources(x2, available_resources, required_resources)
 
   expect_equal(
@@ -269,25 +284,24 @@ test_that(".prep works correctly", {
   output <- output$gmw
   expect_equal(
     length(output),
-    2
+    1
   )
   expect_equal(
     names(output),
-    c("gmw-extent_1996.gpkg", "gmw-extent_2016.gpkg")
+    "gmw-extent_2016.gpkg"
   )
   expect_true(
     inherits(output[[1]], "sf")
   )
 
   expect_error(
-    .prep_resources(x, available_resources, list(gmw = "sth")),
-    "Resource type 'sth' currently not supported"
+    .prep_resources(x, available_resources, "not-available"),
+    "Some required resources are not available."
   )
 })
 
 
 test_that(".read_raster works correctly", {
-
   dummy <- terra::rast()
   dummy_splitted <- aggregate(dummy, fact = c(ceiling(nrow(dummy) / 4), ceiling(ncol(dummy) / 4)))
   dummy_splitted[] <- 1:16
@@ -302,7 +316,9 @@ test_that(".read_raster works correctly", {
 
   files <- list.files(temp_loc, full.names = TRUE)
   footprints <- .make_footprints(files)
-  x <- st_bbox(dummy) %>% st_as_sfc() %>% st_as_sf()
+  x <- st_bbox(dummy) %>%
+    st_as_sfc() %>%
+    st_as_sf()
   extent <- c(-180, 180, -90, 90)
   names(extent) <- c("xmin", "xmax", "ymin", "ymax")
 
@@ -325,7 +341,16 @@ test_that(".read_raster works correctly", {
   expect_equal(as.vector(ext(single)), extent)
 
   expect_error(.read_raster(x, footprints[1:24, ]))
+})
 
+test_that(".read_vector works", {
+  v <- system.file("extdata", "burundi.gpkg", package = "mapme.biodiversity")
+  x <- st_as_sf(st_as_sfc(st_bbox(read_sf(v))))
+  expect_silent(out <- .read_vector(x, rep(v, 2)))
+  expect_true(class(out) == "list")
+  expect_equal(length(out), 2)
+  expect_equal(names(out), rep("burundi.gpkg", 2))
+  expect_true(inherits(out[[1]], "sf"))
 })
 
 

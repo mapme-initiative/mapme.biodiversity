@@ -1,102 +1,113 @@
-#' WorldClim climatic variables (min temperature, max temperature, mean precipitation)
+#' Downloads WorldClim Minimum Temperature layer
 #'
 #' This resource is published by Fick et al. (2017) "WorldClim 2: new 1-km
-#' spatial resolution climate surfaces for global land areas". This resource
+#' spatial resolution climate surfaces for global land areas" and
 #' represents multiple climatic variables from which we will be requiring minimum
 #' temperature, maximum temperature, and mean precipitation layers. The layers are
 #' available to download for the period 2000 - 2018 on monthly basis from WorldClim.
-#'
-#' Enlisted different resources can be requested with their dedicated functions:
-#' \describe{
-#'   \item{tmin}{Encoded as (°C), representing the minimum temperature per output grid cell.}
-#'   \item{tmax}{Encoded as (°C), representing the maximum temperature per output grid cell.}
-#'   \item{prec}{Encoded as (mm), representing the mean precipitation per output grid cell.}
-#' }
-#'
-#' @name worldclim
-#' @docType data
-#' @keywords resource
-#' @format Global raster layers available for years 2000 to 2018.
-#' @source \url{https://www.worldclim.org/data/index.html}
-NULL
-
-
-#' Downloads WorldClim Minimum Temperature layer
 #'
 #' This resource represents the minimum temperature, layers available to
 #' download for the period 2000 - 2018 on monthly basis from WorldClim. Encoded
 #' as (°C), representing the minimum temperature per output grid cell.
 #'
-#' @param x An sf object returned by init_portfolio
-#' @param rundir A directory where intermediate files are written to.
-#' @param verbose Logical controlling verbosity.
+#' @name worldclim_min_temperature
+#' @param years A numeric vector indicating for which years to make the
+#'   resource available.
+#' @keywords resource
+#' @returns A function that returns a character of file paths.
+#' @source \url{https://www.worldclim.org/data/index.html}
 #' @importFrom utils unzip
-#' @name WorldClim_Minimum_Temperature
-#' @keywords internal
 #' @include register.R
-#' @noRd
-.get_worldclim_min_temperature <- function(x,
-                                           rundir = tempdir(),
-                                           verbose = TRUE) {
-  .get_climatic_variables(x = x, layer = "tmin", rundir, verbose)
+#' @export
+get_worldclim_min_temperature <- function(years = 2000:2018) {
+  years <- check_available_years(years, 2000:2018, "tmax")
+
+  function(x,
+           name = "worldclim_min_temperature",
+           type = "raster",
+           outdir = mapme_options()[["outdir"]],
+           verbose = mapme_options()[["verbose"]],
+           testing = mapme_options()[["testing"]]) {
+    .get_climatic_variables(x = x, years = years, layer = "tmin", outdir, verbose, testing)
+  }
 }
 
-
 #' Downloads WorldClim Maximum Temperature layer
+#'
+#' This resource is published by Fick et al. (2017) "WorldClim 2: new 1-km
+#' spatial resolution climate surfaces for global land areas" and
+#' represents multiple climatic variables from which we will be requiring minimum
+#' temperature, maximum temperature, and mean precipitation layers. The layers are
+#' available to download for the period 2000 - 2018 on monthly basis from WorldClim.
 #'
 #' This resource represents the maximum temperature, layers available to
 #' download for the period 2000 - 2018 on monthly basis from WorldClim. Encoded
 #' as (°C), representing the maximum temperature per output grid cell.
 #'
-#' @param x An sf object returned by init_portfolio
-#' @param rundir A directory where intermediate files are written to.
-#' @param verbose Logical controlling verbosity.
+#' @name worldclim_max_temperature
+#' @param years A numeric vector indicating for which years to make the
+#'   resource available.
+#' @keywords resource
+#' @returns  A character of file paths.
+#' @source \url{https://www.worldclim.org/data/index.html}
 #' @importFrom utils unzip
-#' @name WorldClim_Maximum_Temperature
-#' @keywords internal
 #' @include register.R
-#' @noRd
-.get_worldclim_max_temperature <- function(x,
-                                           rundir = tempdir(),
-                                           verbose = TRUE) {
-  .get_climatic_variables(x = x, layer = "tmax", rundir, verbose)
+#' @export
+get_worldclim_max_temperature <- function(years = 2000:2018) {
+  years <- check_available_years(years, 2000:2018, "tmax")
+
+  function(x,
+           name = "worldclim_max_temperature",
+           type = "raster",
+           outdir = mapme_options()[["outdir"]],
+           verbose = mapme_options()[["verbose"]],
+           testing = mapme_options()[["testing"]]) {
+    .get_climatic_variables(x = x, years = years, layer = "tmax", outdir, verbose, testing)
+  }
 }
 
-
-
-
 #' Downloads WorldClim Mean Precipitation layer
+#'
+#' This resource is published by Fick et al. (2017) "WorldClim 2: new 1-km
+#' spatial resolution climate surfaces for global land areas" and
+#' represents multiple climatic variables from which we will be requiring minimum
+#' temperature, maximum temperature, and mean precipitation layers. The layers are
+#' available to download for the period 2000 - 2018 on monthly basis from WorldClim.
 #'
 #' This resource represents the average precipitation, layers available to
 #' download for the period 2000 - 2018 on monthly basis from WorldClim. Encoded
 #' as (mm), representing the mean precipitation per output grid cell.
 #'
-#' @param x An sf object returned by init_portfolio
-#' @param rundir A directory where intermediate files are written to.
-#' @param verbose Logical controlling verbosity.
+#' @name worldclim_precipitation
+#' @param years A numeric vector indicating for which years to make the
+#'   resource available.
+#' @keywords resource
+#' @returns  A character of file paths.
+#' @source \url{https://www.worldclim.org/data/index.html}
 #' @importFrom utils unzip
-#' @name WorldClim_Mean_Precipitation
-#' @keywords internal
 #' @include register.R
-#' @noRd
-.get_worldclim_precipitation <- function(x,
-                                         rundir = tempdir(),
-                                         verbose = TRUE) {
-  .get_climatic_variables(x = x, layer = "prec", rundir, verbose)
+#' @export
+get_worldclim_precipitation <- function(years = 2000:2018) {
+  years <- check_available_years(years, 2000:2018, "prec")
+
+  function(x,
+           name = "worldclim_precipitation",
+           type = "raster",
+           outdir = mapme_options()[["outdir"]],
+           verbose = mapme_options()[["verbose"]],
+           testing = mapme_options()[["testing"]]) {
+    .get_climatic_variables(x = x, years = years, layer = "prec", outdir, verbose, testing)
+  }
 }
 
 
-#' Helper function to download climate variable layers
-#'
-#' @param layer A character indicating the target variable name
-#'
-#' @return A character vector.
-#' @keywords internal
-#' @noRd
 .get_climatic_variables <- function(x,
+                                    years = 2000:2018,
                                     layer,
-                                    rundir = tempdir(),
-                                    verbose = TRUE) {
+                                    dir = tempdir(),
+                                    verbose = TRUE,
+                                    testing = FALSE) {
+  available_years <- 2000:2018
   if (missing(layer)) {
     stop(paste("No target layer has been specified. ",
       "Please select one of 'tmin', 'tmax', 'prec'.",
@@ -104,37 +115,28 @@ NULL
     ))
   }
 
-  target_years <- attributes(x)$years
-  available_years <- 2000:2018
-  target_years <- .check_available_years(
-    target_years, available_years, layer
-  )
-
-  all_urls <- unlist(sapply(target_years, function(year) {
+  all_urls <- unlist(sapply(years, function(year) {
     .get_climate_url(layer, year)
   }))
   urls <- unique(all_urls)
-  filenames <- file.path(rundir, basename(urls))
-  if (attr(x, "testing")) {
+  filenames <- file.path(dir, basename(urls))
+  if (testing) {
     return(basename(filenames))
   }
-  # start download in a temporal directory within tmpdir
-  # TODO: Parallel downloads
-  aria_bin <- attributes(x)$aria_bin
-  .download_or_skip(urls, filenames, verbose, aria_bin = aria_bin, check_existence = FALSE)
+  download_or_skip(urls, filenames, check_existence = FALSE)
 
   # unzip the downloaded file
   sapply(filenames, function(zip) {
-    .unzip_and_remove(zip, rundir, remove = FALSE)
+    unzip_and_remove(zip, dir, remove = FALSE)
   })
 
   # remove all except desired layers
-  nontarget_years <- available_years[!available_years %in% target_years]
+  nontarget_years <- available_years[!available_years %in% years]
 
   for (i in seq_along(nontarget_years)) {
     unlink(
       file.path(
-        rundir,
+        dir,
         paste0(
           "wc2.1_2.5m_", layer, "_",
           nontarget_years[i], "*.tif"
@@ -145,7 +147,7 @@ NULL
   }
 
   # return paths to the raster
-  list.files(rundir, full.names = T, pattern = ".tif")
+  list.files(dir, full.names = T, pattern = ".tif")
 }
 
 
@@ -177,24 +179,24 @@ NULL
 
 register_resource(
   name = "worldclim_min_temperature",
-  type = "raster",
+  description = "WorldClim - Monthly minimum temperature 2000 - 2018",
+  licence = "https://www.worldclim.org/about.html",
   source = "https://www.worldclim.org/data/index.html",
-  fun = .get_worldclim_min_temperature,
-  arguments <- list()
+  type = "raster"
 )
 
 register_resource(
   name = "worldclim_max_temperature",
-  type = "raster",
+  description = "WorldClim - Monthly maximum temperature 2000 - 2018",
+  licence = "https://www.worldclim.org/about.html",
   source = "https://www.worldclim.org/data/index.html",
-  fun = .get_worldclim_max_temperature,
-  arguments <- list()
+  type = "raster"
 )
 
 register_resource(
   name = "worldclim_precipitation",
-  type = "raster",
+  description = "WorldClim - Monthly precipitation 2000 - 2018",
+  licence = "https://www.worldclim.org/about.html",
   source = "https://www.worldclim.org/data/index.html",
-  fun = .get_worldclim_precipitation,
-  arguments <- list()
+  type = "raster"
 )

@@ -7,7 +7,7 @@ tmp_loc <- tempfile()
 dir.create(tmp_loc)
 aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   package = "mapme.biodiversity"
-) |> st_read()
+) %>% st_read()
 
 attr(aoi, "testing") <- FALSE
 tif <- mapme.biodiversity:::.get_nasa_srtm(aoi, download_srtm = TRUE, rundir = tmp_loc)

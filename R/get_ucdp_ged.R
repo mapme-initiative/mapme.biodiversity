@@ -15,86 +15,70 @@
 #' - 19.1
 #' - 20.1
 #' - 21.1
-#' - 22.1 or latest
-#'
-#' The following argument should be specified by users:
-#'
-#' \describe{
-#'   \item{version_ged}{A character vector specifying
-#'   the version to download. Defaults to "latest".}
-#'   }
+#' - 22.1
+#' - latest
 #'
 #' @name ucdp_ged
-#' @docType data
+#' @param version A character vector specifying
+#'   the version to download. Defaults to "latest".
 #' @keywords resource
-#' @format A global event dataset (GED) encoding envents of organized
-#'   violence a point geometries
+#' @returns A function that returns a character of file paths.
 #' @references Davies, Shawn, Therese Pettersson & Magnus Öberg (2022).
 #' Organized violence 1989-2021 and drone warfare.
 #' Journal of Peace Research 59(4).
 #' \doi{10.1177/00223433221108428}
 #' @source \url{https://ucdp.uu.se/downloads/}
-NULL
-
-
-#' Downloads UCDP GED dataset and transforms to sf
-#'
-#' @param x An sf object returned by init_portfolio
-#' @param version_ged A character vector specifying the version of GED to
-#'   download. Defaults to "latest".
-#' @param rundir A directory where intermediate files are written to.
-#' @param verbose Logical controlling verbosity.
 #' @importFrom utils unzip read.csv
-#' @keywords internal
 #' @include register.R
-#' @noRd
-.get_ucdp_ged <- function(x,
-                          version_ged = "latest",
-                          rundir = tempdir(),
-                          verbose = TRUE) {
+#' @export
+get_ucdp_ged <- function(version = "latest") {
   try(versions <- .ucdp_versions())
-
   if (inherits(versions, "try-error")) {
     stop("Available versions of UCDP GED could not be fetched")
   }
-
-  if (version_ged == "latest") version_ged <- versions[length(versions)]
-
-  if (!version_ged %in% versions) {
+  if (version == "latest") version <- versions[length(versions)]
+  if (!version %in% versions) {
     msg <- paste(versions, collapse = ", ")
     stop(paste0("Valid versions for UCDP GED: ", msg, "."))
   }
 
-  version <- paste0("ged", stringr::str_remove_all(version_ged, "\\."), "-csv.zip")
+  function(x,
+           name = "ucdp_ged",
+           type = "vector",
+           outdir = mapme_options()[["outdir"]],
+           verbose = mapme_options()[["verbose"]],
+           testing = mapme_options()[["testing"]]) {
+    version_ged <- paste0("ged", stringr::str_remove_all(version, "\\."), "-csv.zip")
 
-  base_url <- "/vsizip/vsicurl/https://ucdp.uu.se/downloads/ged/"
-  url <- paste0(base_url, version)
-  if (version_ged == "19.1") {
-    url <- paste0(url, "/ged191.csv")
-  } else if (version_ged == "5.0") {
-    url <- paste0(url, "/ged50.csv")
-  }
-  filename <- file.path(rundir, str_replace(version, "zip", "gpkg"))
+    base_url <- "/vsizip/vsicurl/https://ucdp.uu.se/downloads/ged/"
+    url <- paste0(base_url, version_ged)
+    if (version == "19.1") {
+      url <- paste0(url, "/ged191.csv")
+    } else if (version == "5.0") {
+      url <- paste0(url, "/ged50.csv")
+    }
+    filename <- file.path(outdir, str_replace(version_ged, "zip", "gpkg"))
 
-  # return early if testing
-  if (attr(x, "testing")) {
-    return(basename(filename))
-  }
+    # return early if testing
+    if (testing) {
+      return(basename(filename))
+    }
 
-  if (file.exists(filename)) {
-    return(filename)
-  }
+    if (file.exists(filename)) {
+      return(filename)
+    }
 
-  gdal_utils(
-    util = "vectortranslate",
-    source = url,
-    destination = filename,
-    options = c(
-      "-a_srs", "EPSG:4326",
-      "-oo", "GEOM_POSSIBLE_NAMES=geom_wkt"
+    gdal_utils(
+      util = "vectortranslate",
+      source = url,
+      destination = filename,
+      options = c(
+        "-a_srs", "EPSG:4326",
+        "-oo", "GEOM_POSSIBLE_NAMES=geom_wkt"
+      )
     )
-  )
-  filename
+    filename
+  }
 }
 
 
@@ -114,10 +98,8 @@ NULL
 
 register_resource(
   name = "ucdp_ged",
-  type = "vector",
+  description = "UCDP Georeferenced Event Dataset (UCDP GED)",
+  licence = "CC-BY 4.0",
   source = "https://ucdp.uu.se/downloads/",
-  fun = .get_ucdp_ged,
-  arguments <- list(
-    version_ged = "latest"
-  )
+  type = "vector"
 )

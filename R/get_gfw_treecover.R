@@ -8,81 +8,57 @@
 #' and afterwards are not directly comparable until reprocessing has finished.
 #' Users should be aware of this limitation, especially when the timeframe
 #' of the analysis spans over the two periods delimited by the year 2011.
-#'
-#' The following argument can be set:
-#' \describe{
-#'   \item{vers_treecover}{The version of the dataset to download. Defaults to
-#'   "GFC-2022-v1.10". Check mapme.biodiversity:::.available_gfw_versions()
-#'   to get a list of available versions}
-#' }
-#'
+#
 #' @name gfw_treecover
-#' @docType data
+#' @param version The version of the dataset to download. Defaults to
+#'   "GFC-2022-v1.10". Check mapme.biodiversity:::.available_gfw_versions()
+#'   to get a list of available versions
 #' @keywords resource
-#' @format A global tiled raster resource available for all land areas.
+#' @returns A function that returns a character of file paths.
 #' @references Hansen, M. C., P. V. Potapov, R. Moore, M. Hancher, S. A.
 #' Turubanova, A. Tyukavina, D. Thau, S. V. Stehman, S. J. Goetz, T. R.
 #' Loveland, A. Kommareddy, A. Egorov, L. Chini, C. O. Justice, and J. R. G.
 #' Townshend. 2013. “High-Resolution Global Maps of 21st-Century Forest Cover
 #' Change.” Science 342 (15 November): 850–53.
 #' @source \url{https://data.globalforestwatch.org/documents/tree-cover-2000/explore}
-NULL
-
-
-#' Get treecover layer
-#'
-#' @param x An sf object returned by init_portfolio
-#' @param vers_treecover The version to download, defaults to
-#'   \code{"GFC-2022-v1.10"}.
-#' @param rundir A directory where intermediate files are written to.
-#' @param verbose Logical controlling verbosity.
-#' @keywords internal
 #' @include register.R
-#' @noRd
-.get_gfw_treecover <- function(x,
-                               vers_treecover = "GFC-2022-v1.10",
-                               rundir = tempdir(),
-                               verbose = TRUE) {
-  # check that version is correct
-  if (!vers_treecover %in% .available_gfw_versions()) {
-    stop(
-      sprintf(
-        "Wrong version specified for treecover resource. Select one of %s.",
-        paste(.available_gfw_versions(), collapse = ", ")
-      ),
-      call. = FALSE
+#' @export
+get_gfw_treecover <- function(version = "GFC-2022-v1.10") {
+  version <- .check_gfw_version(version)
+
+  function(x,
+           name = "gfw_treecover",
+           type = "raster",
+           outdir = mapme_options()[["outdir"]],
+           verbose = mapme_options()[["verbose"]],
+           testing = mapme_options()[["testing"]]) {
+    # make the GFW grid and construct urls for intersecting tiles
+    baseurl <- sprintf(
+      "https://storage.googleapis.com/earthenginepartners-hansen/%s/",
+      version
     )
-  }
-  # make the GFW grid and construct urls for intersecting tiles
-  baseurl <- sprintf(
-    "https://storage.googleapis.com/earthenginepartners-hansen/%s/",
-    vers_treecover
-  )
-  grid_gfc <- .make_global_grid(
-    xmin = -180, xmax = 170, dx = 10,
-    ymin = -50, ymax = 80, dy = 10
-  )
-  tile_ids <- unique(unlist(st_intersects(x, grid_gfc)))
-  if (length(tile_ids) == 0) {
-    stop("The extent of the portfolio does not intersect with the GFW grid.",
-      call. = FALSE
+    grid_gfc <- make_global_grid(
+      xmin = -180, xmax = 170, dx = 10,
+      ymin = -50, ymax = 80, dy = 10
     )
+    tile_ids <- unique(unlist(st_intersects(x, grid_gfc)))
+    if (length(tile_ids) == 0) {
+      stop("The extent of the portfolio does not intersect with the GFW grid.",
+        call. = FALSE
+      )
+    }
+    ids <- sapply(tile_ids, function(n) .get_gfw_tile_id(grid_gfc[n, ]))
+    urls <- sprintf(
+      "%sHansen_%s_treecover2000_%s.tif",
+      baseurl, version, ids
+    )
+    filenames <- file.path(outdir, basename(urls))
+    if (mapme_options()[["testing"]]) {
+      return(basename(filenames))
+    }
+    filenames <- download_or_skip(urls, filenames, check_existence = FALSE)
+    filenames
   }
-  ids <- sapply(tile_ids, function(n) .get_gfw_tile_id(grid_gfc[n, ]))
-  urls <- sprintf(
-    "%sHansen_%s_treecover2000_%s.tif",
-    baseurl, vers_treecover, ids
-  )
-  filenames <- file.path(rundir, basename(urls))
-  if (attr(x, "testing")) {
-    return(basename(filenames))
-  }
-  # start download and skip files that exist
-  # TODO: parallel downloads
-  aria_bin <- attributes(x)$aria_bin
-  .download_or_skip(urls, filenames, verbose, check_existence = FALSE, aria_bin = aria_bin)
-  # return all paths to the downloaded files
-  filenames
 }
 
 .available_gfw_versions <- function() {
@@ -93,11 +69,43 @@ NULL
   )
 }
 
+.check_gfw_version <- function(version) {
+  if (!version %in% .available_gfw_versions()) {
+    stop(
+      sprintf(
+        "Wrong version specified for treecover resource. Select one of %s.",
+        paste(.available_gfw_versions(), collapse = ", ")
+      ),
+      call. = FALSE
+    )
+  }
+  invisible(version)
+}
+
+.get_gfw_tile_id <- function(tile) {
+  min_x <- st_bbox(tile)[1]
+  max_y <- st_bbox(tile)[4]
+
+  # prepare tile names
+  if (min_x < 0) {
+    min_x <- paste0(sprintf("%03i", abs(min_x)), "W")
+  } else {
+    min_x <- paste0(sprintf("%03i", min_x), "E")
+  }
+  if (max_y < 0) {
+    max_y <- paste0(sprintf("%02i", abs(max_y)), "S")
+  } else {
+    max_y <- paste0(sprintf("%02i", max_y), "N")
+  }
+
+  paste0(max_y, "_", min_x)
+}
+
 
 register_resource(
   name = "gfw_treecover",
-  type = "raster",
+  description = "Global Forest Watch - Percentage of canopy closure in 2000",
+  licence = "CC-BY 4.0",
   source = "https://data.globalforestwatch.org/documents/tree-cover-2000/explore",
-  fun = .get_gfw_treecover,
-  arguments <- list(vers_treecover = "GFC-2022-v1.10")
+  type = "raster"
 )
