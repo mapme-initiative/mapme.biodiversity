@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.9002</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -103,15 +103,13 @@
     
 <p>This section describes how to install the
 <a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> package. Since the package handles
-spatial data, we assume that you have a working installation of <a href="https://gdal.org/index.html" class="external-link">GDAL</a> and <a href="https://proj.org/" class="external-link">PROJ</a> on your system. The GDAL installation
-needs to be found on your PATH variable, because several system calls
-will be issued when the package is used. Please refer to the respective
-installation guides to learn about how to install these programs on your
-OS. While the package supports sequentially downloading all supported
-resources, we include the option to provide a path to an <a href="https://aria2.github.io/" class="external-link">aria2</a> executable to speed up the
-download based on parallel processing. We expect that the path to the
-executable binary is known to the user and we test it if provided during
-portfolio initialization.</p>
+spatial data, we assume that you have a working installation of <a href="https://gdal.org/index.html" class="external-link">GDAL</a> and <a href="https://proj.org/" class="external-link">PROJ</a> on your system. Our recommendation is
+to follow the <a href="https://r-spatial.github.io/sf/" class="external-link">sf</a> installation instructions.</p>
+<p>While the package supports sequentially downloading all supported
+resources, we include the option to provide a path to an <a href="https://aria2.github.io/" class="external-link">aria2</a> executable to speed up
+downloads based on parallel processing. We expect that the path to the
+executable binary is known to the user and we test if it is acually
+executable.</p>
 <p>Given that the above requirements are met, installing the
 <a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> current CRAN release is then achieved
 through the following function call:</p>

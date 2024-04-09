@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.9002</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -209,18 +209,12 @@ portfolio. As usual, we will have to make available the Nelson et
 al. resource as well as requesting the calculation of the respective
 indicator.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">port</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init_portfolio.html">init_portfolio</a></span><span class="op">(</span></span>
-<span>  <span class="va">aoi</span>,</span>
-<span>  years <span class="op">=</span> <span class="fl">2018</span>,</span>
-<span>  outdir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"res"</span>, package <span class="op">=</span> <span class="st">"mapme.biodiversity"</span><span class="op">)</span>,</span>
-<span>  tmpdir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"tmp"</span>, package <span class="op">=</span> <span class="st">"mapme.biodiversity"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/mapme.html">mapme_options</a></span><span class="op">(</span>outdir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"res"</span>, package <span class="op">=</span> <span class="st">"mapme.biodiversity"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">port_w_nelson</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_resources.html">get_resources</a></span><span class="op">(</span><span class="va">port</span>, <span class="st">"nelson_et_al"</span>, range_traveltime <span class="op">=</span> <span class="st">"20k_50k"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Starting process to download resource 'nelson_et_al'........</span></span>
+<span><span class="va">port_w_nelson</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mapme.html">get_resources</a></span><span class="op">(</span><span class="va">aoi</span>, <span class="fu"><a href="../reference/nelson_et_al.html">get_nelson_et_al</a></span><span class="op">(</span>ranges <span class="op">=</span> <span class="st">"20k_50k"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Skipping existing files in output directory.</span></span>
-<span><span class="va">port_w_traveltime</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_indicators.html">calc_indicators</a></span><span class="op">(</span><span class="va">port_w_nelson</span>, <span class="st">"traveltime"</span>, stats_accessibility <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Argument 'engine' for resource 'traveltime' was not specified. Setting to default value of 'extract'.</span></span>
+<span><span class="va">port_w_traveltime</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mapme.html">calc_indicators</a></span><span class="op">(</span><span class="va">port_w_nelson</span>, <span class="fu"><a href="../reference/traveltime.html">calc_traveltime</a></span><span class="op">(</span>stats <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Found a column named 'assetid'. Overwritting its values with a unique identifier.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">port_w_traveltime</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Simple feature collection with 9 features and 2 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POLYGON</span></span>
@@ -239,15 +233,13 @@ indicator.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>       7 <span style="color: #949494;">&lt;tibble [1 × 2]&gt;</span> ((-71.80933 18.65844, -71.65022 18.65844, -71.65022 …</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>       8 <span style="color: #949494;">&lt;tibble [1 × 2]&gt;</span> ((-71.65022 18.65844, -71.49111 18.65844, -71.49111 …</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>       9 <span style="color: #949494;">&lt;tibble [1 × 2]&gt;</span> ((-71.49111 18.65844, -71.33201 18.65844, -71.33201 …</span></span></code></pre></div>
-<p>As we can observe from the output, two new columns were added to the
-sf object. The first is called <code>assetid</code> and simply is a
-unique identifier of the respective asset. The second column is called
-<code>traveltime</code> and is of type <code>list</code> indicating that
-it represents a nested-list column. What that means is that we are able
-to maintain the rectangular shape of our original data (e.g. one polygon
-per row), while supporting arbitrarily shaped outputs for indicators.
-Let’s observe how the traveltime indicator looks like in this
-instance:</p>
+<p>As we can observe from the output, a new column was added to the
+<code>sf</code> object. It is called <code>traveltime</code> and is of
+type <code>list</code> indicating that it represents a nested-list
+column. What that means is that we are able to maintain the rectangular
+shape of our original data (e.g. one polygon per row), while supporting
+arbitrarily shaped outputs for indicators. Let’s observe how the
+traveltime indicator looks like in this instance:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">port_w_traveltime</span><span class="op">$</span><span class="va">traveltime</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 2</span></span></span>
@@ -291,8 +283,8 @@ as a geopackage that can be read directly into e.g. QGIS or as a CSV
 without the geospatial information:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">st_write</a></span><span class="op">(</span><span class="va">port_wide_1</span>, dsn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".gpkg"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Writing layer `file24f62b976536' to data source </span></span>
-<span><span class="co">#&gt;   `/tmp/Rtmpt9tFKR/file24f62b976536.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt; Writing layer `file253a468ee53e' to data source </span></span>
+<span><span class="co">#&gt;   `/tmp/RtmpBF9LU0/file253a468ee53e.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">#&gt; Writing 9 features with 3 fields and geometry type Polygon.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="va">port_wide_1</span><span class="op">)</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".csv"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -302,11 +294,10 @@ without the geospatial information:</p>
 <p>Let’s continue to query an indicator which has a multi-row output,
 i.e. precipitation statistics from <a href="https://www.worldclim.org/" class="external-link">WorldClim</a>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">port_w_chirps</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_resources.html">get_resources</a></span><span class="op">(</span><span class="va">port</span>, <span class="st">"worldclim_precipitation"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Starting process to download resource 'worldclim_precipitation'........</span></span>
+<code class="sourceCode R"><span><span class="va">port_w_wc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mapme.html">get_resources</a></span><span class="op">(</span><span class="va">aoi</span>, <span class="fu"><a href="../reference/worldclim_precipitation.html">get_worldclim_precipitation</a></span><span class="op">(</span>years <span class="op">=</span> <span class="fl">2010</span><span class="op">:</span><span class="fl">2018</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Skipping existing files in output directory.</span></span>
-<span><span class="va">port_w_prec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_indicators.html">calc_indicators</a></span><span class="op">(</span><span class="va">port_w_chirps</span>, <span class="st">"precipitation_wc"</span>, stats_worldclim <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Argument 'engine' for resource 'precipitation_wc' was not specified. Setting to default value of 'extract'.</span></span>
+<span><span class="va">port_w_prec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mapme.html">calc_indicators</a></span><span class="op">(</span><span class="va">port_w_wc</span>, <span class="fu"><a href="../reference/precipitation_wc.html">calc_precipitation_wc</a></span><span class="op">(</span>stats <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Found a column named 'assetid'. Overwritting its values with a unique identifier.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">port_w_prec</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Simple feature collection with 9 features and 2 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POLYGON</span></span>
@@ -328,7 +319,7 @@ i.e. precipitation statistics from <a href="https://www.worldclim.org/" class="e
 <p>We see that similar to the traveltime indicator, the output consists
 of 9 rows with the precipitation indicator as a single nested-list
 column. Note, however, the differences when we take a look at the shape
-of a the indicator for a specific asset:</p>
+of the indicator for a specific asset:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">port_w_prec</span><span class="op">$</span><span class="va">precipitation_wc</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 12 × 2</span></span></span>
@@ -402,39 +393,39 @@ overwrite the original), and finally simply call unnest to get the
 output in a wide format.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">port_w_prec</span><span class="op">$</span><span class="va">precipitation_wc2</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">port_w_prec</span><span class="op">$</span><span class="va">precipitation_wc</span>, <span class="va">prec2wide</span><span class="op">)</span></span>
-<span><span class="va">port_w_prec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">port_w_prec</span>, <span class="va">assetid</span>, <span class="va">precipitation_wc2</span><span class="op">)</span></span>
+<span><span class="va">port_w_prec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">port_w_prec</span>, <span class="va">precipitation_wc2</span><span class="op">)</span></span>
 <span><span class="va">port_wide_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">port_w_prec</span>, <span class="va">precipitation_wc2</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">port_wide_3</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Simple feature collection with 9 features and 13 fields</span></span>
+<span><span class="co">#&gt; Simple feature collection with 9 features and 12 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POLYGON</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
 <span><span class="co">#&gt; Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span></span>
 <span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 14</span></span></span>
-<span><span class="co">#&gt;   assetid `prec-2018-01-01` `prec-2018-02-01` `prec-2018-03-01`</span></span>
-<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       1              21.1              21.4              61.4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       2              25.9              24.5              62.0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       3              24.5              24.2              58.4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       4              32.1              28.1              72.8</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>       5              28.7              28.4              68.4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>       6              17.6              19.8              54.4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>       7              24.5              24.3              69.9</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>       8              19.4              21.1              62.8</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>       9              14.2              17.5              52.2</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 10 more variables: `prec-2018-04-01` &lt;dbl&gt;, `prec-2018-05-01` &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   `prec-2018-06-01` &lt;dbl&gt;, `prec-2018-07-01` &lt;dbl&gt;, `prec-2018-08-01` &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   `prec-2018-09-01` &lt;dbl&gt;, `prec-2018-10-01` &lt;dbl&gt;, `prec-2018-11-01` &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   `prec-2018-12-01` &lt;dbl&gt;, x &lt;POLYGON [°]&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 13</span></span></span>
+<span><span class="co">#&gt;   `prec-2018-01-01` `prec-2018-02-01` `prec-2018-03-01` `prec-2018-04-01`</span></span>
+<span><span class="co">#&gt;               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>              21.1              21.4              61.4              83.6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>              25.9              24.5              62.0              82.8</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>              24.5              24.2              58.4              83.9</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>              32.1              28.1              72.8              80.9</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>              28.7              28.4              68.4              83.3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>              17.6              19.8              54.4              83.6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>              24.5              24.3              69.9              80.1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>              19.4              21.1              62.8              86.8</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>              14.2              17.5              52.2              85.6</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 9 more variables: `prec-2018-05-01` &lt;dbl&gt;, `prec-2018-06-01` &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   `prec-2018-07-01` &lt;dbl&gt;, `prec-2018-08-01` &lt;dbl&gt;, `prec-2018-09-01` &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   `prec-2018-10-01` &lt;dbl&gt;, `prec-2018-11-01` &lt;dbl&gt;, `prec-2018-12-01` &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   x &lt;POLYGON [°]&gt;</span></span></span></code></pre></div>
 <p>We can now use <code><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">st_write()</a></code> to save this wide-format sf
 object to a geospatial format of our choice or drop the geometry
 information altogether and dump the data into a csv.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">st_write</a></span><span class="op">(</span><span class="va">port_wide_3</span>, dsn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".gpkg"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Writing layer `file24f653a6f83b' to data source </span></span>
-<span><span class="co">#&gt;   `/tmp/Rtmpt9tFKR/file24f653a6f83b.gpkg' using driver `GPKG'</span></span>
-<span><span class="co">#&gt; Writing 9 features with 13 fields and geometry type Polygon.</span></span>
+<span><span class="co">#&gt; Writing layer `file253a122a3178' to data source </span></span>
+<span><span class="co">#&gt;   `/tmp/RtmpBF9LU0/file253a122a3178.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt; Writing 9 features with 12 fields and geometry type Polygon.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="va">port_wide_3</span><span class="op">)</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".csv"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.9002</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -120,14 +120,15 @@ article to learn about the most important concepts.</p>
 <p>The idealized workflow for using <a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a>
 consists of the following steps:</p>
 <ul>
-<li>initialize your portfolio using an sf-object containing only
-geometries of type POLYGON</li>
-<li>decide which indicator(s) you wish to calculate and download the
-required resource(s)</li>
+<li>prepare your sf-object containing only geometries of type
+<code>'POLYGON'</code>
+</li>
+<li>decide which indicator(s) you wish to calculate and make the
+required resource(s) available</li>
 <li>conduct your indicator calculation, which adds a nested list column
 to your portfolio object</li>
 <li>continue your analysis in R or decide to export your results to a
-GeoPackage to use it with other geospatial software</li>
+GeoPackage and use it with other geospatial software</li>
 </ul>
 </div>
 <div class="section level2">
@@ -136,7 +137,7 @@ GeoPackage to use it with other geospatial software</li>
 <p>First, we will load the <a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> and the
 <a href="https://r-spatial.github.io/sf/" class="external-link">sf</a> package for handling spatial vector data. For tabular
 data handling, we will also load the <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> and
-<a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a>packages. Then, we will read an internal GeoPackage
+<a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a> packages. Then, we will read an internal GeoPackage
 which includes the geometry of a protected area in the Dominican
 Republic from the WDPA database.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -157,13 +158,14 @@ Republic from the WDPA database.</p>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;MULTIPOLYGON [°]&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">478</span>140 Sierra de Neiba National Park DOM   (((-71.76134 18.66333, -71.76067 1…</span></span></code></pre></div>
 <p>The sf-object contains a single object of geometry type
-<code>MULTIPOLYGON</code>. The <a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a>
-package, however, only supports geometries of type <code>POLYGON</code>,
-thus we need to cast the geometry before we advance. The resulting sf
-object also contains some metadata, that will be retained throughout the
-complete workflow. Because some of the cast geometries represent
-artefacts of the digitization process, in this example we will subset to
-only the largest polygon.</p>
+<code>'MULTIPOLYGON'</code>. The <a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a>
+package, however, only supports geometries of type
+<code>'POLYGON'</code>, thus we need to cast the geometry before we
+advance. The resulting <code>sf</code> object also contains some
+metadata, that will be retained throughout the complete workflow.
+Because some of the casted geometries represent artefacts of the
+digitization process, in this example we will subset to include only the
+largest polygon.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_cast.html" class="external-link">st_cast</a></span><span class="op">(</span><span class="va">aoi</span>, to <span class="op">=</span> <span class="st">"POLYGON"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in st_cast.sf(aoi, to = "POLYGON"): repeating attributes for all</span></span>
@@ -183,13 +185,14 @@ smaller polygons within the original extent of the main polygon. This
 way, we can showcase the behavior of the
 <a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> package for portfolios that contain
 multiple assets. We will only select single assets with geometry type
-<code>POLYGON</code> that lie within the original boundary of the
+<code>'POLYGON'</code> that lie within the original boundary of the
 protected area.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">aoi_gridded</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_make_grid.html" class="external-link">st_make_grid</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">aoi</span><span class="op">)</span>,</span>
 <span>  n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span>,</span>
-<span>  square <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  square <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html" class="external-link">st_intersection</a></span><span class="op">(</span><span class="va">aoi</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>geom_type <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry_type.html" class="external-link">st_geometry_type</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -198,16 +201,17 @@ protected area.</p>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">metanames</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="va">aoi</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">aoi_gridded</span><span class="op">[</span><span class="va">metanames</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="va">aoi</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">aoi_gridded</span><span class="op">[</span><span class="va">metanames</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="va">aoi</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">aoi_gridded</span><span class="op">)</span></span></code></pre></div>
+<p><img src="quickstart_files/figure-html/chunking-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="initialization-of-a-portfolio">Initialization of a portfolio<a class="anchor" aria-label="anchor" href="#initialization-of-a-portfolio"></a>
 </h2>
 <p>Now, we are ready to initiate a portfolio object containing multiple
-assets. We use the <code><a href="../reference/init_portfolio.html">init_portfolio()</a></code> function and set some
-attributes that are important for the subsequent processing. The
-function will add a unique identifier column called ‘assetid’ that is
-used to uniquely identify each asset in the portfolio.</p>
+assets. We use the <code><a href="../reference/mapme.html">mapme_options()</a></code> function and set some
+arguments, such as the output directory, that are important for the
+subsequent processing.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># copying package internal resource to a temporary location</span></span>
 <span><span class="va">outdir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"mapme.biodiversity"</span><span class="op">)</span></span>
@@ -216,61 +220,49 @@ used to uniquely identify each asset in the portfolio.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.copy</a></span><span class="op">(</span><span class="va">resource_dir</span>, <span class="va">outdir</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span>
 <span></span>
-<span><span class="va">sample_portfolio</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init_portfolio.html">init_portfolio</a></span><span class="op">(</span></span>
-<span>  x <span class="op">=</span> <span class="va">aoi_gridded</span>,</span>
-<span>  years <span class="op">=</span> <span class="fl">2010</span><span class="op">:</span><span class="fl">2015</span>,</span>
+<span><span class="fu"><a href="../reference/mapme.html">mapme_options</a></span><span class="op">(</span></span>
 <span>  outdir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">outdir</span>, <span class="st">"res"</span><span class="op">)</span>,</span>
-<span>  tmpdir <span class="op">=</span> <span class="va">outdir</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sample_portfolio</span><span class="op">[</span><span class="st">"assetid"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<p><img src="quickstart_files/figure-html/init_portfolio-1.png" width="700"></p>
-<p>The first argument, <code>x</code>, is the sf-object that we want to
-turn into a portfolio. The argument <code>years</code> allows us to
-restrict our analysis to certain years only. Certain resources with a
-temporal dimension are only processed for the portfolio’s temporal
-extent. All resource and indicator functions will inform the user if the
-portfolio’s temporal extent does not intersect. The <code>outdir</code>
-and <code>tmpdir</code> arguments point towards directories on the local
-file system of your machine. If these directories do not exist, the
-package attempts to create them. The <code>outdir</code> cannot be equal
-to the <code>tmpdir</code> argument. All downloaded resources will be
-written to respective directories nested within <code>outdir</code>. Any
-intermediate files during the calculation of an indicator will be
-written to <code>tmpdir</code>. Thus, please ensure that you have write
-access to both directories and that there is sufficient free disk space
-to support the analysis of your portfolio.</p>
+<span><span class="op">)</span></span></code></pre></div>
+<p>The <code>outdir</code> argument points towards a directory on the
+local file system of your machine. All downloaded resources will be
+written to respective directories nested within <code>outdir</code>.</p>
 <p>Once you request a specific resource for your portfolio, only those
 files will be downloaded that are missing to match its spatio-temporal
 extent. This behavior is beneficial, e.g. in case you share the
 <code>outdir</code> between different projects to ensure that only
 resources matching your current portfolio are returned.</p>
-<p>Finally, the <code>verbose</code> logical controls whether or not the
-package will print informative messages during the calculations. Note,
-that even if set to <code>FALSE</code>, the package will inform users
-about any potential errors or warnings.</p>
+<p>The <code>verbose</code> logical controls whether or not the package
+will print informative messages during the calculations. Note, that even
+if set to <code>FALSE</code>, the package will inform users about any
+potential errors or warnings.</p>
 </div>
 <div class="section level2">
 <h2 id="getting-the-right-resources">Getting the right resources<a class="anchor" aria-label="anchor" href="#getting-the-right-resources"></a>
 </h2>
 <p>You can check which indicators are available via the
-<code><a href="../reference/available_indicators.html">available_indicators()</a></code> function. For this, we inspect the
-names of the returned object:</p>
+<code><a href="../reference/indicators.html">available_indicators()</a></code> function:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="../reference/available_indicators.html">available_indicators</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] "active_fire_counts"           "active_fire_properties"      </span></span>
-<span><span class="co">#&gt;  [3] "biome"                        "deforestation_drivers"       </span></span>
-<span><span class="co">#&gt;  [5] "drought_indicator"            "ecoregion"                   </span></span>
-<span><span class="co">#&gt;  [7] "elevation"                    "fatalities"                  </span></span>
-<span><span class="co">#&gt;  [9] "gsw_change"                   "gsw_occurrence"              </span></span>
-<span><span class="co">#&gt; [11] "gsw_recurrence"               "gsw_seasonality"             </span></span>
-<span><span class="co">#&gt; [13] "gsw_transitions"              "landcover"                   </span></span>
-<span><span class="co">#&gt; [15] "mangroves_area"               "population_count"            </span></span>
-<span><span class="co">#&gt; [17] "precipitation_chirps"         "precipitation_wc"            </span></span>
-<span><span class="co">#&gt; [19] "soilproperties"               "temperature_max_wc"          </span></span>
-<span><span class="co">#&gt; [21] "temperature_min_wc"           "traveltime"                  </span></span>
-<span><span class="co">#&gt; [23] "treecover_area"               "treecover_area_and_emissions"</span></span>
-<span><span class="co">#&gt; [25] "treecoverloss_emissions"      "tri"</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/indicators.html">available_indicators</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 26 × 3</span></span></span>
+<span><span class="co">#&gt;    name                   description                                  resources</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                        <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> active_fire_counts     Number of detected fires by NASA FIRMS       <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> active_fire_properties Extraction of properties of fires detected … <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> biome                  Areal statistics of biomes from TEOW         <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> deforestation_drivers  Areal statistics of deforestation drivers    <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> drought_indicator      Relative wetness statistics based on NASA G… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> ecoregion              Areal statstics of ecoregions based on TEOW  <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> elevation              Statistics of elevation based on NASA SRTM   <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> fatalities             Number of fatalities by group of conflict b… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> gsw_change             Statistics of the surface water change laye… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> gsw_occurrence         Areal statistic of surface water based on o… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 16 more rows</span></span></span>
+<span><span class="fu"><a href="../reference/indicators.html">available_indicators</a></span><span class="op">(</span><span class="st">"population_count"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 3</span></span></span>
+<span><span class="co">#&gt;   name             description                    resources       </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                          <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> population_count Statistic of population counts <span style="color: #949494;">&lt;tibble [1 × 5]&gt;</span></span></span></code></pre></div>
 <p>Say, we are interested in the <code>population_count</code>
 indicator. We can learn more about this indicator and its required
 resources by using either of the commands below or, if you are viewing
@@ -285,21 +277,28 @@ arguments: the population statistic to calculate and the eninge to be
 used for the calculation (learn more about engines <a href="https://mapme-initiative.github.io/mapme.biodiversity/articles/terminology.html">here</a>).</p>
 <p>With that information at hand, we can start to retrieve the required
 resource. We can learn about all available resources using the
-<code><a href="../reference/available_resources.html">available_resources()</a></code> function:</p>
+<code><a href="../reference/resources.html">available_resources()</a></code> function:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="../reference/available_resources.html">available_resources</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] "chirps"                           "esalandcover"                    </span></span>
-<span><span class="co">#&gt;  [3] "fritz_et_al"                      "gfw_emissions"                   </span></span>
-<span><span class="co">#&gt;  [5] "gfw_lossyear"                     "gfw_treecover"                   </span></span>
-<span><span class="co">#&gt;  [7] "global_surface_water_change"      "global_surface_water_occurrence" </span></span>
-<span><span class="co">#&gt;  [9] "global_surface_water_recurrence"  "global_surface_water_seasonality"</span></span>
-<span><span class="co">#&gt; [11] "global_surface_water_transitions" "gmw"                             </span></span>
-<span><span class="co">#&gt; [13] "nasa_firms"                       "nasa_grace"                      </span></span>
-<span><span class="co">#&gt; [15] "nasa_srtm"                        "nelson_et_al"                    </span></span>
-<span><span class="co">#&gt; [17] "soilgrids"                        "teow"                            </span></span>
-<span><span class="co">#&gt; [19] "ucdp_ged"                         "worldclim_max_temperature"       </span></span>
-<span><span class="co">#&gt; [21] "worldclim_min_temperature"        "worldclim_precipitation"         </span></span>
-<span><span class="co">#&gt; [23] "worldpop"</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/resources.html">available_resources</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 23 × 5</span></span></span>
+<span><span class="co">#&gt;    name                             description             licence source type </span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> chirps                           Climate Hazards Group … CC - u… https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> esalandcover                     Copernicus Land Monito… CC-BY … https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> fritz_et_al                      Drivers of deforestati… CC-BY … https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> gfw_emissions                    Global Forest Watch - … CC-BY … https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> gfw_lossyear                     Global Forest Watch - … CC-BY … https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> gfw_treecover                    Global Forest Watch - … CC-BY … https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> global_surface_water_change      Global Surface Water -… https:… https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> global_surface_water_occurrence  Global Surface Water -… https:… https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> global_surface_water_recurrence  Global Surface Water -… https:… https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> global_surface_water_seasonality Global Surface Water -… https:… https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 13 more rows</span></span></span>
+<span><span class="fu"><a href="../reference/resources.html">available_resources</a></span><span class="op">(</span><span class="st">"worldpop"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 5</span></span></span>
+<span><span class="co">#&gt;   name     description                                      licence source type </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> worldpop WorldPop - Unconstrained Global Mosaics 2000 - … CC-BY … https… rast…</span></span></code></pre></div>
 <p>For the purpose of this vignette, we are going to download the
 <code>worldpop</code> resource. We can get more detailed information
 about a given resource, by using either of the commands below to open up
@@ -311,24 +310,21 @@ resource documentation.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/help.html" class="external-link">help</a></span><span class="op">(</span><span class="va">worldpop</span><span class="op">)</span></span></code></pre></div>
 <p>We can now make the <code>worldpop</code> resource available for our
 portfolio. We will use a common interface that is used for all
-resources, called <code><a href="../reference/get_resources.html">get_resources()</a></code>. We have to specify our
-portfolio object and the names of the resource(s) we wish to download.
-Additional arguments for the specific resource can be specified. The
-output of the function is the portfolio object with its attributes
-appended for the new resource, thus we simply can overwrite the
-<code>sample_portfolio</code> variable.</p>
+resources, called <code><a href="../reference/mapme.html">get_resources()</a></code>. We have to specify our
+portfolio object and supply one or more resource functions with their
+respective arguments. This will then download the matching resources to
+the output directory specified earlier.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sample_portfolio</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_resources.html">get_resources</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">sample_portfolio</span>, resources <span class="op">=</span> <span class="st">"worldpop"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Starting process to download resource 'worldpop'........</span></span>
+<code class="sourceCode R"><span><span class="va">aoi_gridded</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mapme.html">get_resources</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">aoi_gridded</span>, <span class="fu"><a href="../reference/worldpop.html">get_worldpop</a></span><span class="op">(</span>years <span class="op">=</span> <span class="fl">2010</span><span class="op">:</span><span class="fl">2015</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Skipping existing files in output directory.</span></span></code></pre></div>
 <p>In case you want to download more than one resource, you can use the
 same interface and the resources will be made available sequentially.
 Required arguments for a resource are simply added as usual:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sample_portfolio</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_resources.html">get_resources</a></span><span class="op">(</span></span>
-<span>  x <span class="op">=</span> <span class="va">sample_portfolio</span>,</span>
-<span>  resources <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"worldpop"</span>, <span class="st">"gfw_treecover"</span><span class="op">)</span>,</span>
-<span>  vers_treecover <span class="op">=</span> <span class="st">"GFC-2021-v1.9"</span></span>
+<code class="sourceCode R"><span><span class="va">aoi_gridded</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mapme.html">get_resources</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="va">aoi_gridded</span>,</span>
+<span>  <span class="fu"><a href="../reference/worldpop.html">get_worldpop</a></span><span class="op">(</span>years <span class="op">=</span> <span class="fl">2010</span><span class="op">:</span><span class="fl">2015</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="../reference/gfw_treecover.html">get_gfw_treecover</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"GFC-2021-v1.8"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -336,90 +332,100 @@ Required arguments for a resource are simply added as usual:</p>
 </h2>
 <p>The next step consists of calculating specific indicators. Note that
 each indicator requires one or more resources that were made available
-via the <code><a href="../reference/get_resources.html">get_resources()</a></code> function explained above. Here, we
-are going to calculate the <code>population_count</code> indicator which
-is based on the <code>worldpop</code> resource. Since the resource has
-been made available in the previous step, we can continue requesting the
-calculation of our desired indicator. Note the command below would issue
-an error in case a required resource has not been made available via
-<code><a href="../reference/get_resources.html">get_resources()</a></code> beforehand.</p>
+via the <code><a href="../reference/mapme.html">get_resources()</a></code> function explained above. You will
+have to re-run this function in every new R session, but note that data
+that is already available will not be re-downloaded.</p>
+<p>Here, we are goingto calculate the <code>population_count</code>
+indicator which is based on the <code>worldpop</code> resource. Since
+the resource has been made available in the previous step, we can
+continue requesting the calculation of our desired indicator. Note the
+command below would issue an error in case a required resource has not
+been made available via <code><a href="../reference/mapme.html">get_resources()</a></code> beforehand.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sample_portfolio</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_indicators.html">calc_indicators</a></span><span class="op">(</span><span class="va">sample_portfolio</span>, indicators <span class="op">=</span> <span class="st">"population_count"</span>,</span>
-<span>                                    stats_popcount <span class="op">=</span> <span class="st">"sum"</span>, engine <span class="op">=</span> <span class="st">"zonal"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">aoi_gridded</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mapme.html">calc_indicators</a></span><span class="op">(</span></span>
+<span>  <span class="va">aoi_gridded</span>,</span>
+<span>  <span class="fu"><a href="../reference/population_count.html">calc_population_count</a></span><span class="op">(</span>engine <span class="op">=</span> <span class="st">"zonal"</span>, stats <span class="op">=</span> <span class="st">"sum"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Found a column named 'assetid'. Overwritting its values with a unique identifier.</span></span></code></pre></div>
 <p>Now let’s take a look at the results. We will select only some of the
 metadata and the output indicator column to get a clearer picture of
 what has happened.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="op">(</span><span class="va">sample_portfolio</span> <span class="op">&lt;-</span> <span class="va">sample_portfolio</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">assetid</span>, <span class="va">WDPAID</span>, <span class="va">population_count</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Simple feature collection with 23 features and 3 fields</span></span>
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">aoi_gridded</span> <span class="op">&lt;-</span> <span class="va">aoi_gridded</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">assetid</span>, <span class="va">population_count</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Simple feature collection with 23 features and 2 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POLYGON</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
 <span><span class="co">#&gt; Bounding box:  xmin: -71.80731 ymin: 18.58134 xmax: -71.33268 ymax: 18.69799</span></span>
 <span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 23 × 4</span></span></span>
-<span><span class="co">#&gt;    assetid WDPAID population_count                                          geom</span></span>
-<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>                                           <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>       1 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.78358 18.65871, -71.78358 18.67725, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>       2 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.79993 18.6867, -71.78358 18.67725, -71…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>       3 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.76202 18.66333, -71.74668 18.64602, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>       4 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.71238 18.62893, -71.71238 18.63615, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>       5 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.75984 18.69367, -71.75984 18.69095, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>       6 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.71429 18.68985, -71.73611 18.67725, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>       7 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.66702 18.63736, -71.68865 18.64985, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>       8 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.70975 18.68944, -71.68865 18.67725, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>       9 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.67141 18.68721, -71.68865 18.67725, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>      10 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.64095 18.64971, -71.64119 18.64985, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 23 × 3</span></span></span>
+<span><span class="co">#&gt;    assetid population_count                                                 geom</span></span>
+<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>                                                  <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>       1 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.78358 18.65871, -71.78358 18.67725, -71.79993…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>       2 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.79993 18.6867, -71.78358 18.67725, -71.75984 …</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>       3 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.76202 18.66333, -71.74668 18.64602, -71.74431…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>       4 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.71238 18.62893, -71.71238 18.63615, -71.73611…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>       5 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.75984 18.69367, -71.75984 18.69095, -71.73611…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>       6 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.71429 18.68985, -71.73611 18.67725, -71.73611…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>       7 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.66702 18.63736, -71.68865 18.64985, -71.71238…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>       8 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.70975 18.68944, -71.68865 18.67725, -71.67141…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>       9 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.67141 18.68721, -71.68865 18.67725, -71.68865…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>      10 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.64095 18.64971, -71.64119 18.64985, -71.64178…</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 13 more rows</span></span></span></code></pre></div>
-<p>We obtained a new listed column in our sf object that is called like
-the requested indicator. For each asset in our portfolio, this column
-contains a tibble with 6 rows and two columns. Let’s have a closer look
-at one of these objects.</p>
+<p>We obtained a new listed column in our <code>sf</code>-object that is
+named like the requested indicator. For each asset in our portfolio,
+this column contains a tibble with 6 rows and two columns. Let’s have a
+closer look at one of these objects.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sample_portfolio</span><span class="op">$</span><span class="va">population_count</span><span class="op">[</span><span class="fl">10</span><span class="op">]</span></span>
+<code class="sourceCode R"><span><span class="va">aoi_gridded</span><span class="op">$</span><span class="va">population_count</span><span class="op">[</span><span class="fl">10</span><span class="op">]</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 2</span></span></span>
-<span><span class="co">#&gt;   popcount_sum year </span></span>
-<span><span class="co">#&gt;          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>         31.9 2010 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>         43.3 2011 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>         32.8 2012 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>         32.9 2013 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>         36.5 2014 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>         38.0 2015</span></span></code></pre></div>
+<span><span class="co">#&gt;   population_count_sum year </span></span>
+<span><span class="co">#&gt;                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                 31.9 2010 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>                 43.3 2011 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>                 32.8 2012 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>                 32.9 2013 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>                 36.5 2014 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>                 38.0 2015</span></span></code></pre></div>
 <p>For each asset, the result is a tibble in long format indicating the
 population sum per year (make sure to read the detailed indicator
 documentation via <code><a href="../reference/population_count.html">?population_count</a></code>). Let’s quickly
 visualize the results for a single asset:</p>
-<p><img src="quickstart_files/figure-html/plot_landcover-1.png" width="700"></p>
+<p><img src="quickstart_files/figure-html/plot_popcount-1.png" width="700"></p>
 <p>If you wish to conduct your statistical analysis in R, you can use
 <a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a> functionality to unnest one or multiple columns.
 Especially for large portfolios, it is usually a good idea to keep the
 geometry information in a separated variable to keep the size of the
 data object relatively small.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">geometries</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">sample_portfolio</span>, <span class="va">assetid</span><span class="op">)</span></span>
-<span><span class="va">sample_portfolio</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">geometries</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">aoi_gridded</span>, <span class="va">assetid</span><span class="op">)</span></span>
+<span><span class="va">aoi_gridded</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">population_count</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">assetid</span> <span class="op">==</span> <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 4</span></span></span>
-<span><span class="co">#&gt;   assetid WDPAID popcount_sum year </span></span>
-<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       3 <span style="text-decoration: underline;">478</span>140         255. 2010 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       3 <span style="text-decoration: underline;">478</span>140         292. 2011 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       3 <span style="text-decoration: underline;">478</span>140         297. 2012 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       3 <span style="text-decoration: underline;">478</span>140         291. 2013 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>       3 <span style="text-decoration: underline;">478</span>140         271. 2014 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>       3 <span style="text-decoration: underline;">478</span>140         265. 2015</span></span></code></pre></div>
+<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">population_count</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 138 × 3</span></span></span>
+<span><span class="co">#&gt;    assetid population_count_sum year </span></span>
+<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>       1                 305. 2010 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>       1                 313. 2011 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>       1                 324. 2012 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>       1                 321. 2013 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>       1                 286. 2014 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>       1                 330. 2015 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>       2                 217. 2010 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>       2                 218. 2011 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>       2                 224. 2012 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>       2                 241. 2013 </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 128 more rows</span></span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="enabling-parallel-computing">Enabling parallel computing<a class="anchor" aria-label="anchor" href="#enabling-parallel-computing"></a>
 </h2>
-<p>{mapme.biodiversity} follows the parallelization paradigm of the {<a href="https://cran.r-project.org/package=future" class="external-link">future</a>} package.
-That means that you as a user are in the control if and how you would
-like to set up parallel processing. Currently,
+<p><a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> follows the parallelization
+paradigm of the <a href="https://cran.r-project.org/package=future" class="external-link"><code>{future}</code></a>
+package. That means that you as a user are in the control if and how you
+would like to set up parallel processing. Currently,
 <a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> supports parallel processing on the
-asset level of the <code><a href="../reference/calc_indicators.html">calc_indicators()</a></code> function only. We also
+asset level of the <code><a href="../reference/mapme.html">calc_indicators()</a></code> function only. We also
 currently assume that parallel processing is done on the cores of a
 single machine. In future developments, we would like to support
 distributed processing. If you are working on a distributed use-cases,
@@ -434,11 +440,12 @@ will have to set up the following in your code:</p>
 <span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">multisession</span>, workers <span class="op">=</span> <span class="fl">6</span><span class="op">)</span> <span class="co"># set up parallel plan with 6 concurrent threads</span></span>
 <span></span>
 <span><span class="fu"><a href="https://progressr.futureverse.org/reference/with_progress.html" class="external-link">with_progress</a></span><span class="op">(</span><span class="op">{</span></span>
-<span>  <span class="va">portfolio</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_indicators.html">calc_indicators</a></span><span class="op">(</span></span>
-<span>    <span class="va">sample_portfolio</span>,</span>
-<span>    indicators <span class="op">=</span> <span class="st">"population_count"</span>,</span>
-<span>    stats_popcount <span class="op">=</span> <span class="st">"sum"</span>, </span>
-<span>    engine <span class="op">=</span> <span class="st">"zonal"</span></span>
+<span>  <span class="va">aoi_gridded</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mapme.html">calc_indicators</a></span><span class="op">(</span></span>
+<span>    <span class="va">aoi_gridded</span>,</span>
+<span>    <span class="fu"><a href="../reference/population_count.html">calc_population_count</a></span><span class="op">(</span></span>
+<span>      engine <span class="op">=</span> <span class="st">"zonal"</span>,</span>
+<span>      stats <span class="op">=</span> <span class="st">"sum"</span></span>
+<span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span></span>
@@ -455,51 +462,25 @@ processing.</p>
 <div class="section level2">
 <h2 id="exporting-an-portfolio-object">Exporting an portfolio object<a class="anchor" aria-label="anchor" href="#exporting-an-portfolio-object"></a>
 </h2>
-<p>You can use the <code><a href="../reference/write_portfolio.html">write_portfolio()</a></code> function to save a
+<p>You can use the <code><a href="../reference/portfolio.html">write_portfolio()</a></code> function to save a
 processed portfolio object to disk as a GeoPackage. This allows sharing
 your data with others who might not be using R, but any other geospatial
 software. Simply point towards a non-existing file on your local disk to
 write the portfolio. The function will create an individual table for
-all processed indicators. Via the <code><a href="../reference/read_portfolio.html">read_portfolio()</a></code>
+all processed indicators. Via the <code><a href="../reference/portfolio.html">read_portfolio()</a></code>
 function, a portfolio which has been written to disk in such a way can
 be read back into R. However, users should note that the portfolio-wide
-arguments that were set during the portfolio initialization are
-<strong>not</strong> reconstructed (e.g. the temporal extent,
-<code>outdir</code> and <code>tmpdir</code>, etc.). Thus if you wish to
-continue to use <a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> functionality on such
-a portfolio object, make sure to re-run <code><a href="../reference/init_portfolio.html">init_portfolio()</a></code> on
-it.</p>
+arguments that were set with <code><a href="../reference/mapme.html">mapme_options()</a></code> are
+<strong>not</strong> reconstructed. Thus if you wish to continue to use
+<a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> functionality on such a portfolio
+object, make sure to re-run init_portfolio()` on it.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tmp_output</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".gpkg"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/write_portfolio.html">write_portfolio</a></span><span class="op">(</span></span>
-<span>  x <span class="op">=</span> <span class="va">sample_portfolio</span>,</span>
+<span><span class="fu"><a href="../reference/portfolio.html">write_portfolio</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="va">aoi_gridded</span>,</span>
 <span>  dsn <span class="op">=</span> <span class="va">tmp_output</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Writing layer `metadata' to data source </span></span>
-<span><span class="co">#&gt;   `/tmp/Rtmp6Ny8RR/file252f5b1fdfb8.gpkg' using driver `GPKG'</span></span>
-<span><span class="co">#&gt; Writing 23 features with 2 fields and geometry type Polygon.</span></span>
-<span><span class="co">#&gt; Updating layer `population_count' to data source `/tmp/Rtmp6Ny8RR/file252f5b1fdfb8.gpkg' using driver `GPKG'</span></span>
-<span><span class="co">#&gt; Writing 138 features with 3 fields without geometries.</span></span>
-<span><span class="op">(</span><span class="va">portfolio_from_disk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_portfolio.html">read_portfolio</a></span><span class="op">(</span><span class="va">tmp_output</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Simple feature collection with 23 features and 3 fields</span></span>
-<span><span class="co">#&gt; Geometry type: POLYGON</span></span>
-<span><span class="co">#&gt; Dimension:     XY</span></span>
-<span><span class="co">#&gt; Bounding box:  xmin: -71.80731 ymin: 18.58134 xmax: -71.33268 ymax: 18.69799</span></span>
-<span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 23 × 4</span></span></span>
-<span><span class="co">#&gt;    assetid WDPAID population_count                                          geom</span></span>
-<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>                                           <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>       1 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.78358 18.65871, -71.78358 18.67725, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>       2 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.79993 18.6867, -71.78358 18.67725, -71…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>       3 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.76202 18.66333, -71.74668 18.64602, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>       4 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.71238 18.62893, -71.71238 18.63615, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>       5 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.75984 18.69367, -71.75984 18.69095, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>       6 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.71429 18.68985, -71.73611 18.67725, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>       7 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.66702 18.63736, -71.68865 18.64985, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>       8 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.70975 18.68944, -71.68865 18.67725, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>       9 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.67141 18.68721, -71.68865 18.67725, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>      10 <span style="text-decoration: underline;">478</span>140 <span style="color: #949494;">&lt;tibble [6 × 2]&gt;</span> ((-71.64095 18.64971, -71.64119 18.64985, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 13 more rows</span></span></span></code></pre></div>
+<span><span class="op">(</span><span class="va">portfolio_from_disk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/portfolio.html">read_portfolio</a></span><span class="op">(</span><span class="va">tmp_output</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.9002</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,6 +67,32 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="mapmebiodiversity-development-version">mapme.biodiversity (development version)<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-development-version"></a></h2>
 <div class="section level3">
+<h3 id="breaking-changes-development-version">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
+<ul><li>introduces a new UI based on closures for resources and indicators, see <a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/240" class="external-link">#240</a> for more information</li>
+</ul></div>
+<div class="section level3">
+<h3 id="general-development-version">General<a class="anchor" aria-label="anchor" href="#general-development-version"></a></h3>
+<ul><li>improves output of <code><a href="../reference/resources.html">available_resources()</a></code> and <code><a href="../reference/indicators.html">available_indicators()</a></code>
+</li>
+<li>introduces <code><a href="../reference/mapme.html">mapme_options()</a></code> to add fine-control of the packages behaviour</li>
+<li>deprecates <code>init_portfolio()</code> in favor of <code><a href="../reference/mapme.html">mapme_options()</a></code>
+</li>
+<li>exports helper functions for third parties to extend the package for custom resources and indicators:
+<ul><li><code><a href="../reference/check_available_years.html">check_available_years()</a></code></li>
+<li><code><a href="../reference/check_namespace.html">check_namespace()</a></code></li>
+<li><code><a href="../reference/download_or_skip.html">download_or_skip()</a></code></li>
+<li><code><a href="../reference/engine.html">check_engine()</a></code></li>
+<li><code><a href="../reference/engine.html">check_stats()</a></code></li>
+<li><code><a href="../reference/engine.html">select_engine()</a></code></li>
+<li><code><a href="../reference/make_global_grid.html">make_global_grid()</a></code></li>
+<li><code><a href="../reference/unzip_and_remove.html">unzip_and_remove()</a></code></li>
+</ul></li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<ul><li>added Global Surface Water resources and respective indicators (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/235" class="external-link">#235</a>, <a href="https://github.com/karpfen" class="external-link">@karpfen</a>)</li>
+</ul></div>
+<div class="section level3">
 <h3 id="internal-development-version">Internal<a class="anchor" aria-label="anchor" href="#internal-development-version"></a></h3>
 <ul><li>removed <code><a href="https://r-spatial.github.io/sf/reference/valid.html" class="external-link">st_make_valid()</a></code> from <code>.read_vector()</code>.</li>
 </ul></div>
@@ -84,14 +110,14 @@
 </ul></div>
 <div class="section level3">
 <h3 id="breaking-changes-0-5-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-5-0"></a></h3>
-<ul><li><p>The argument <code>add_resources</code> to <code><a href="../reference/init_portfolio.html">init_portfolio()</a></code> is deprecated. This means that <code><a href="../reference/get_resources.html">get_resources()</a></code> has to be run in every new R session to make resource available for further processing (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/219" class="external-link">#219</a>).</p></li>
+<ul><li><p>The argument <code>add_resources</code> to <code>init_portfolio()</code> is deprecated. This means that <code><a href="../reference/mapme.html">get_resources()</a></code> has to be run in every new R session to make resource available for further processing (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/219" class="external-link">#219</a>).</p></li>
 <li><p>Rasters are now cropped to the spatial extent of an asset with setting <code>snap="out"</code>, thus delivering a slightly bigger extent (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/212" class="external-link">#212</a>).</p></li>
 <li><p>Speed improvements for GFW indicators (up to x10 for larger rasters) now require R package <code>exactextractr</code> to be installed. Also, it is advised to have the R package <code>landscapemetrics</code> installed to gain the full computation speed improvement.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-5-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-5-0"></a></h3>
 <ul><li>
-<code><a href="../reference/calc_indicators.html">calc_indicators()</a></code> checks for 0-length tibbles (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/196" class="external-link">#196</a>, <a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/199" class="external-link">#199</a>, <a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/215" class="external-link">#215</a>).</li>
+<code><a href="../reference/mapme.html">calc_indicators()</a></code> checks for 0-length tibbles (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/196" class="external-link">#196</a>, <a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/199" class="external-link">#199</a>, <a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/215" class="external-link">#215</a>).</li>
 <li>Fix bug with reading rasters with temporal dimensions (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/209" class="external-link">#209</a>).</li>
 <li>All raster cells touching a polygon are now returned (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/208" class="external-link">#208</a>).</li>
 </ul></div>
@@ -106,7 +132,7 @@
 <li>
 <code>.read_raster_source()</code> now applies a precision round-trip of 5 decimal point to match rasters with slight changes in their spatial extent (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/217" class="external-link">#217</a>).</li>
 <li>
-<code><a href="../reference/register_resource.html">register_resource()</a></code> and <code><a href="../reference/register_indicator.html">register_indicator()</a></code> now issue warnings for resources/indicators with names already registered and overwrites them (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/220" class="external-link">#220</a>).</li>
+<code><a href="../reference/resources.html">register_resource()</a></code> and <code><a href="../reference/indicators.html">register_indicator()</a></code> now issue warnings for resources/indicators with names already registered and overwrites them (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/220" class="external-link">#220</a>).</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -118,7 +144,7 @@
 <li><p>Added a new resource called <code>fritz_et_al</code> providing a raster layer of deforestation</p></li>
 <li><p>added a new resource called <code>fritz_et_al</code> providing a raster layer of deforestation drivers in tropical forests based on <a href="https://www.frontiersin.org/articles/10.3389/fcosc.2022.830248/full" class="external-link">Fritz et al. (2022)</a></p></li>
 <li><p>added a new indicator called <code>deforestation_drivers</code> using the <code>fritz_et_al</code> resource to obtain information on the absolute and relative area driving forest losses in assets for the period 2008-2019</p></li>
-<li><p>added two new exported functions <code><a href="../reference/register_resource.html">register_resource()</a></code> and <code><a href="../reference/register_indicator.html">register_indicator()</a></code> which allow users to register custom functions for resources/indicators</p></li>
+<li><p>added two new exported functions <code><a href="../reference/resources.html">register_resource()</a></code> and <code><a href="../reference/indicators.html">register_indicator()</a></code> which allow users to register custom functions for resources/indicators</p></li>
 <li><p>added a new vignette for the web-version of the package only informing about how to obtain wide-output from indicators</p></li>
 <li><p>added a new vignette for the web-version for a custom analysis of the NASA FIRMS resource in the example section</p></li>
 <li><p>added the data for years 2017-2020 to the Global Mangrove Watch resource</p></li>
@@ -151,7 +177,7 @@
 <div class="section level3">
 <h3 id="breaking-changes-0-3-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-3-0"></a></h3>
 <ul><li><p>on MacOS s2-based calculations are now enabled so users can expect the package to return numerically equivalent results on any operating system (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/131" class="external-link">#131</a>)</p></li>
-<li><p>the online source for the <code>nasa_srtm</code> resource shows an expired SSL certificate since November 2022. The <code><a href="../reference/get_resources.html">get_resources()</a></code> function now includes an error and instructions how to disable SSL certification at a users own risk. The websites maintainers have been contacted and asked to renew the certification. (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/131" class="external-link">#131</a>)</p></li>
+<li><p>the online source for the <code>nasa_srtm</code> resource shows an expired SSL certificate since November 2022. The <code><a href="../reference/mapme.html">get_resources()</a></code> function now includes an error and instructions how to disable SSL certification at a users own risk. The websites maintainers have been contacted and asked to renew the certification. (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/131" class="external-link">#131</a>)</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="new-features-0-3-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-3-0"></a></h3>
@@ -249,12 +275,12 @@
 <div class="section level3">
 <h3 id="internal-0-1-1">Internal<a class="anchor" aria-label="anchor" href="#internal-0-1-1"></a></h3>
 <ul><li>
-<code><a href="../reference/init_portfolio.html">init_portfolio()</a></code> now sets the <code>testing</code> attribute to FALSE by default.</li>
+<code>init_portfolio()</code> now sets the <code>testing</code> attribute to FALSE by default.</li>
 <li>
 <code>get_&lt;resource&gt;()</code> functions now return filenames early if <code>testing</code> is set to TRUE.</li>
 <li>
 <code>calc_&lt;indicator&gt;()</code> examples now copy files to the R temporal directory and are wrapped in <code><a href="https://rdrr.io/r/base/try.html" class="external-link">try()</a></code> to avoid errors/warnings on CRAN if an internet resource is not available.</li>
-<li>examples for <code>calc_tri()</code> and <code>calc_elevation()</code> are now disabled on CRAN because of the responsiveness of CIGAR servers.</li>
+<li>examples for <code><a href="../reference/tri.html">calc_tri()</a></code> and <code><a href="../reference/elevation.html">calc_elevation()</a></code> are now disabled on CRAN because of the responsiveness of CIGAR servers.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -311,16 +337,16 @@
 <li>wctmin</li>
 </ul></li>
 <li>
-<code><a href="../reference/init_portfolio.html">init_portfolio()</a></code> is used to initialize a portfolio object. The input must be an sf object where all geometries are of type <code>POLYGON</code>
+<code>init_portfolio()</code> is used to initialize a portfolio object. The input must be an sf object where all geometries are of type <code>POLYGON</code>
 </li>
-<li>users can request the download of one or more resources via <code><a href="../reference/get_resources.html">get_resources()</a></code>
+<li>users can request the download of one or more resources via <code><a href="../reference/mapme.html">get_resources()</a></code>
 </li>
-<li>users can request the processing of an indicator via <code><a href="../reference/calc_indicators.html">calc_indicators()</a></code>
+<li>users can request the processing of an indicator via <code><a href="../reference/mapme.html">calc_indicators()</a></code>
 </li>
 <li>indicators are added to the portfolio object as nested list columns</li>
-<li>a processed portfolio object can be exported as a GeoPackage via <code><a href="../reference/write_portfolio.html">write_portfolio()</a></code>
+<li>a processed portfolio object can be exported as a GeoPackage via <code><a href="../reference/portfolio.html">write_portfolio()</a></code>
 </li>
-<li>a portfolio saved to disk as a GeoPackage can be read back into R via <code><a href="../reference/read_portfolio.html">read_portfolio()</a></code>. If users wish to download additional resources or calculate indicators, <code><a href="../reference/init_portfolio.html">init_portfolio()</a></code> has to be called again.</li>
+<li>a portfolio saved to disk as a GeoPackage can be read back into R via <code><a href="../reference/portfolio.html">read_portfolio()</a></code>. If users wish to download additional resources or calculate indicators, <code>init_portfolio()</code> has to be called again.</li>
 <li>Parallelization using multiple cores on the host machine is disabled on Windows</li>
 <li>on MacOS, the s2 engine for spherical geometric vector operations is disabled and lwgeom is used instead.</li>
 </ul></div>

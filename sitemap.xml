@@ -49,22 +49,22 @@
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/active_fire_properties.html</loc>
   </url>
   <url>
-    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/available_indicators.html</loc>
-  </url>
-  <url>
-    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/available_resources.html</loc>
-  </url>
-  <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/biome.html</loc>
   </url>
   <url>
-    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/calc_indicators.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/check_available_years.html</loc>
+  </url>
+  <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/check_namespace.html</loc>
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/chirps.html</loc>
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/deforestation_drivers.html</loc>
+  </url>
+  <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/download_or_skip.html</loc>
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/drought_indicator.html</loc>
@@ -76,6 +76,9 @@
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/elevation.html</loc>
   </url>
   <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/engine.html</loc>
+  </url>
+  <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/esalandcover.html</loc>
   </url>
   <url>
@@ -83,9 +86,6 @@
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/fritz_et_al.html</loc>
-  </url>
-  <url>
-    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/get_resources.html</loc>
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/gfw_emissions.html</loc>
@@ -133,13 +133,19 @@
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/init_portfolio.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/indicators.html</loc>
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/landcover.html</loc>
   </url>
   <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/make_global_grid.html</loc>
+  </url>
+  <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/mangroves_area.html</loc>
+  </url>
+  <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/mapme.html</loc>
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/nasa_firms.html</loc>
@@ -157,19 +163,16 @@
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/population_count.html</loc>
   </url>
   <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/portfolio.html</loc>
+  </url>
+  <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/precipitation_chirps.html</loc>
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/precipitation_wc.html</loc>
   </url>
   <url>
-    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/read_portfolio.html</loc>
-  </url>
-  <url>
-    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/register_indicator.html</loc>
-  </url>
-  <url>
-    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/register_resource.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/resources.html</loc>
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/soilgrids.html</loc>
@@ -205,12 +208,18 @@
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/ucdp_ged.html</loc>
   </url>
   <url>
-    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/worldclim.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/unzip_and_remove.html</loc>
+  </url>
+  <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/worldclim_max_temperature.html</loc>
+  </url>
+  <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/worldclim_min_temperature.html</loc>
+  </url>
+  <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/worldclim_precipitation.html</loc>
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/worldpop.html</loc>
-  </url>
-  <url>
-    <loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/write_portfolio.html</loc>
   </url>
 </urlset>

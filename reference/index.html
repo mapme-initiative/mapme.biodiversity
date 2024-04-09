@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.9002</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,39 +76,24 @@
 
       <dl><dt>
           
-          <code><a href="init_portfolio.html">init_portfolio()</a></code> 
+          <code><a href="mapme.html">mapme_options()</a></code> <code><a href="mapme.html">get_resources()</a></code> <code><a href="mapme.html">calc_indicators()</a></code> 
         </dt>
-        <dd>Initialization of a biodiversity portfolio object</dd>
+        <dd>Portfolio methods for mapme.biodiversity</dd>
       </dl><dl><dt>
           
-          <code><a href="get_resources.html">get_resources()</a></code> 
+          <code><a href="resources.html">register_resource()</a></code> <code><a href="resources.html">available_resources()</a></code> 
         </dt>
-        <dd>Download specific biodiversity resources</dd>
+        <dd>Register or list resources in mapme.biodiversity</dd>
       </dl><dl><dt>
           
-          <code><a href="calc_indicators.html">calc_indicators()</a></code> 
+          <code><a href="indicators.html">register_indicator()</a></code> <code><a href="indicators.html">available_indicators()</a></code> 
         </dt>
-        <dd>Compute specific indicators</dd>
+        <dd>Register or list indicators in mapme.biodiversity</dd>
       </dl><dl><dt>
           
-          <code><a href="write_portfolio.html">write_portfolio()</a></code> 
+          <code><a href="portfolio.html">write_portfolio()</a></code> <code><a href="portfolio.html">read_portfolio()</a></code> 
         </dt>
         <dd>Writing a portfolio to disk</dd>
-      </dl><dl><dt>
-          
-          <code><a href="read_portfolio.html">read_portfolio()</a></code> 
-        </dt>
-        <dd>Reading a portfolio object from disk</dd>
-      </dl><dl><dt>
-          
-          <code><a href="register_resource.html">register_resource()</a></code> 
-        </dt>
-        <dd>Register a new resource to the mapme.biodiversity</dd>
-      </dl><dl><dt>
-          
-          <code><a href="register_indicator.html">register_indicator()</a></code> 
-        </dt>
-        <dd>Register a new indicator to mapme.biodiversity</dd>
       </dl></div><div class="section level2">
       <h2 id="resources">Resources<a class="anchor" aria-label="anchor" href="#resources"></a></h2>
       
@@ -122,112 +107,117 @@
 
       <dl><dt>
           
-          <code><a href="available_resources.html">available_resources()</a></code> 
-        </dt>
-        <dd>Backlog function for available resources</dd>
-      </dl><dl><dt>
-          
-          <code><a href="chirps.html">chirps</a></code> 
+          <code><a href="chirps.html">get_chirps()</a></code> 
         </dt>
         <dd>Climate Hazards Group InfraRed Precipitation with Station data (CHIRPS)</dd>
       </dl><dl><dt>
           
-          <code><a href="esalandcover.html">esalandcover</a></code> 
+          <code><a href="esalandcover.html">get_esalandcover()</a></code> 
         </dt>
         <dd>ESA Copernicus Global Land Cover layer</dd>
       </dl><dl><dt>
           
-          <code><a href="fritz_et_al.html">fritz_et_al</a></code> 
+          <code><a href="fritz_et_al.html">get_fritz_et_al()</a></code> 
         </dt>
         <dd>Drivers of deforestation for tropical forests</dd>
       </dl><dl><dt>
           
-          <code><a href="gfw_emissions.html">gfw_emissions</a></code> 
+          <code><a href="gfw_emissions.html">get_gfw_emissions()</a></code> 
         </dt>
         <dd>Forest greenhouse gas emissions</dd>
       </dl><dl><dt>
           
-          <code><a href="gfw_lossyear.html">gfw_lossyear</a></code> 
+          <code><a href="gfw_lossyear.html">get_gfw_lossyear()</a></code> 
         </dt>
         <dd>Year of forest loss occurrence</dd>
       </dl><dl><dt>
           
-          <code><a href="gfw_treecover.html">gfw_treecover</a></code> 
+          <code><a href="gfw_treecover.html">get_gfw_treecover()</a></code> 
         </dt>
         <dd>Treecover for the year 2000</dd>
       </dl><dl><dt>
           
-          <code><a href="global_surface_water_change.html">global_surface_water_change</a></code> 
+          <code><a href="global_surface_water_change.html">get_global_surface_water_change()</a></code> 
         </dt>
         <dd>Global Surface Water Change</dd>
       </dl><dl><dt>
           
-          <code><a href="global_surface_water_occurrence.html">global_surface_water_occurrence</a></code> 
+          <code><a href="global_surface_water_occurrence.html">get_global_surface_water_occurrence()</a></code> 
         </dt>
         <dd>Global Surface Water Occurrence</dd>
       </dl><dl><dt>
           
-          <code><a href="global_surface_water_recurrence.html">global_surface_water_recurrence</a></code> 
+          <code><a href="global_surface_water_recurrence.html">get_global_surface_water_recurrence()</a></code> 
         </dt>
         <dd>Global Surface Water Recurrence</dd>
       </dl><dl><dt>
           
-          <code><a href="global_surface_water_seasonality.html">global_surface_water_seasonality</a></code> 
+          <code><a href="global_surface_water_seasonality.html">get_global_surface_water_seasonality()</a></code> 
         </dt>
         <dd>Global Surface Water Seasonality</dd>
       </dl><dl><dt>
           
-          <code><a href="global_surface_water_transitions.html">global_surface_water_transitions</a></code> 
+          <code><a href="global_surface_water_transitions.html">get_global_surface_water_transitions()</a></code> 
         </dt>
         <dd>Global Surface Water Transitions</dd>
       </dl><dl><dt>
           
-          <code><a href="gmw.html">gmw</a></code> 
+          <code><a href="gmw.html">get_gmw()</a></code> 
         </dt>
         <dd>Global Mangrove Extent Polygon</dd>
       </dl><dl><dt>
           
-          <code><a href="nasa_firms.html">nasa_firms</a></code> 
+          <code><a href="nasa_firms.html">get_nasa_firms()</a></code> 
         </dt>
         <dd>Active Fire Polygon</dd>
       </dl><dl><dt>
           
-          <code><a href="nasa_grace.html">nasa_grace</a></code> 
+          <code><a href="nasa_grace.html">get_nasa_grace()</a></code> 
         </dt>
         <dd>NASA GRACE-based Drought Indicator layer</dd>
       </dl><dl><dt>
           
-          <code><a href="nasa_srtm.html">nasa_srtm</a></code> 
+          <code><a href="nasa_srtm.html">get_nasa_srtm()</a></code> 
         </dt>
         <dd>NASADEM HGT v001</dd>
       </dl><dl><dt>
           
-          <code><a href="nelson_et_al.html">nelson_et_al</a></code> 
+          <code><a href="nelson_et_al.html">get_nelson_et_al()</a></code> 
         </dt>
         <dd>Accessibility to Cities layer</dd>
       </dl><dl><dt>
           
-          <code><a href="soilgrids.html">soilgrids</a></code> 
+          <code><a href="soilgrids.html">get_soilgrids()</a></code> 
         </dt>
         <dd>SoilGrids data layers</dd>
       </dl><dl><dt>
           
-          <code><a href="teow.html">teow</a></code> 
+          <code><a href="teow.html">get_teow()</a></code> 
         </dt>
         <dd>Terrestrial Ecoregions of the World (TEOW) Polygon</dd>
       </dl><dl><dt>
           
-          <code><a href="ucdp_ged.html">ucdp_ged</a></code> 
+          <code><a href="ucdp_ged.html">get_ucdp_ged()</a></code> 
         </dt>
         <dd>UCDP Georeferenced Event Dataset (UCDP GED)</dd>
       </dl><dl><dt>
           
-          <code><a href="worldclim.html">worldclim</a></code> 
+          <code><a href="worldclim_max_temperature.html">get_worldclim_max_temperature()</a></code> 
         </dt>
-        <dd>WorldClim climatic variables (min temperature, max temperature, mean precipitation)</dd>
+        <dd>Downloads WorldClim Maximum Temperature layer</dd>
       </dl><dl><dt>
           
-          <code><a href="worldpop.html">worldpop</a></code> 
+          <code><a href="worldclim_min_temperature.html">get_worldclim_min_temperature()</a></code> 
+        </dt>
+        <dd>Downloads WorldClim Minimum Temperature layer</dd>
+      </dl><dl><dt>
+          
+          <code><a href="worldclim_precipitation.html">get_worldclim_precipitation()</a></code> 
+        </dt>
+        <dd>Downloads WorldClim Mean Precipitation layer</dd>
+      </dl><dl><dt>
+          
+          <code><a href="worldpop.html">get_worldpop()</a></code> 
         </dt>
         <dd>Population Count layer for year 2000-2020</dd>
       </dl></div><div class="section level2">
@@ -243,139 +233,175 @@
 
       <dl><dt>
           
-          <code><a href="available_indicators.html">available_indicators()</a></code> 
-        </dt>
-        <dd>Backlog function for available indicators</dd>
-      </dl><dl><dt>
-          
-          <code><a href="active_fire_counts.html">active_fire_counts</a></code> 
+          <code><a href="active_fire_counts.html">calc_active_fire_counts()</a></code> 
         </dt>
         <dd>Calculate active fire counts based on NASA FIRMS polygons</dd>
       </dl><dl><dt>
           
-          <code><a href="active_fire_properties.html">active_fire_properties</a></code> 
+          <code><a href="active_fire_properties.html">calc_active_fire_properties()</a></code> 
         </dt>
         <dd>Calculate active fire properties based on NASA FIRMS polygons</dd>
       </dl><dl><dt>
           
-          <code><a href="biome.html">biome</a></code> 
+          <code><a href="biome.html">calc_biome()</a></code> 
         </dt>
         <dd>Calculate biomes statistics (TEOW) based on WWF</dd>
       </dl><dl><dt>
           
-          <code><a href="deforestation_drivers.html">deforestation_drivers</a></code> 
+          <code><a href="deforestation_drivers.html">calc_deforestation_drivers()</a></code> 
         </dt>
         <dd>Calculate deforestation drivers</dd>
       </dl><dl><dt>
           
-          <code><a href="drought_indicator.html">drought_indicator</a></code> 
+          <code><a href="drought_indicator.html">calc_drought_indicator()</a></code> 
         </dt>
         <dd>Calculate drought indicator statistics</dd>
       </dl><dl><dt>
           
-          <code><a href="ecoregion.html">ecoregion</a></code> 
+          <code><a href="ecoregion.html">calc_ecoregion()</a></code> 
         </dt>
         <dd>Calculate terrestrial ecoregions statistics (TEOW) based on WWF</dd>
       </dl><dl><dt>
           
-          <code><a href="elevation.html">elevation</a></code> 
+          <code><a href="elevation.html">calc_elevation()</a></code> 
         </dt>
         <dd>Calculate elevation statistics</dd>
       </dl><dl><dt>
           
-          <code><a href="fatalities.html">fatalities</a></code> 
+          <code><a href="fatalities.html">calc_fatalities()</a></code> 
         </dt>
         <dd>Calculate number of fatalities of violent conflict from UCDP GED</dd>
       </dl><dl><dt>
           
-          <code><a href="gsw_change.html">gsw_change</a></code> 
+          <code><a href="gsw_change.html">calc_gsw_change()</a></code> 
         </dt>
         <dd>Calculate Global Surface Water (GSW) Change</dd>
       </dl><dl><dt>
           
-          <code><a href="gsw_occurrence.html">gsw_occurrence</a></code> 
+          <code><a href="gsw_occurrence.html">calc_gsw_occurrence()</a></code> 
         </dt>
         <dd>Calculate Global Surface Water (GSW) Occurrence</dd>
       </dl><dl><dt>
           
-          <code><a href="gsw_recurrence.html">gsw_recurrence</a></code> 
+          <code><a href="gsw_recurrence.html">calc_gsw_recurrence()</a></code> 
         </dt>
         <dd>Calculate Global Surface Water (GSW) Recurrence</dd>
       </dl><dl><dt>
           
-          <code><a href="gsw_seasonality.html">gsw_seasonality</a></code> 
+          <code><a href="gsw_seasonality.html">calc_gsw_seasonality()</a></code> 
         </dt>
         <dd>Calculate Global Surface Water (GSW) Seasonality</dd>
       </dl><dl><dt>
           
-          <code><a href="gsw_transitions.html">gsw_transitions</a></code> 
+          <code><a href="gsw_transitions.html">calc_gsw_transitions()</a></code> 
         </dt>
         <dd>Calculate Global Surface Water (GSW) Transitions</dd>
       </dl><dl><dt>
           
-          <code><a href="landcover.html">landcover</a></code> 
+          <code><a href="landcover.html">calc_landcover()</a></code> 
         </dt>
         <dd>Calculate area of different landcover classes</dd>
       </dl><dl><dt>
           
-          <code><a href="mangroves_area.html">mangroves_area</a></code> 
+          <code><a href="mangroves_area.html">calc_mangroves_area()</a></code> 
         </dt>
         <dd>Calculate mangrove extent based on Global Mangrove Watch (GMW)</dd>
       </dl><dl><dt>
           
-          <code><a href="population_count.html">population_count</a></code> 
+          <code><a href="population_count.html">calc_population_count()</a></code> 
         </dt>
         <dd>Calculate population count statistics</dd>
       </dl><dl><dt>
           
-          <code><a href="precipitation_chirps.html">precipitation_chirps</a></code> 
+          <code><a href="precipitation_chirps.html">calc_precipitation_chirps()</a></code> 
         </dt>
         <dd>Calculate precipitation statistics based on CHIRPS</dd>
       </dl><dl><dt>
           
-          <code><a href="precipitation_wc.html">precipitation_wc</a></code> 
+          <code><a href="precipitation_wc.html">calc_precipitation_wc()</a></code> 
         </dt>
         <dd>Calculate precipitation statistics</dd>
       </dl><dl><dt>
           
-          <code><a href="soilproperties.html">soilproperties</a></code> 
+          <code><a href="soilproperties.html">calc_soilproperties()</a></code> 
         </dt>
         <dd>Calculate Zonal Soil Properties</dd>
       </dl><dl><dt>
           
-          <code><a href="temperature_max_wc.html">temperature_max_wc</a></code> 
+          <code><a href="temperature_max_wc.html">calc_temperature_max_wc()</a></code> 
         </dt>
         <dd>Calculate maximum temperature statistics</dd>
       </dl><dl><dt>
           
-          <code><a href="temperature_min_wc.html">temperature_min_wc</a></code> 
+          <code><a href="temperature_min_wc.html">calc_temperature_min_wc()</a></code> 
         </dt>
         <dd>Calculate minimum temperature statistics based on WorldClim</dd>
       </dl><dl><dt>
           
-          <code><a href="traveltime.html">traveltime</a></code> 
+          <code><a href="traveltime.html">calc_traveltime()</a></code> 
         </dt>
         <dd>Calculate accessibility statistics</dd>
       </dl><dl><dt>
           
-          <code><a href="treecover_area.html">treecover_area</a></code> 
+          <code><a href="treecover_area.html">calc_treecover_area()</a></code> 
         </dt>
         <dd>Calculate treecover statistics</dd>
       </dl><dl><dt>
           
-          <code><a href="treecover_area_and_emissions.html">treecover_area_and_emissions</a></code> 
+          <code><a href="treecover_area_and_emissions.html">calc_treecover_area_and_emissions()</a></code> 
         </dt>
         <dd>Calculate treeloss statistics</dd>
       </dl><dl><dt>
           
-          <code><a href="treecoverloss_emissions.html">treecoverloss_emissions</a></code> 
+          <code><a href="treecoverloss_emissions.html">calc_treecoverloss_emissions()</a></code> 
         </dt>
         <dd>Calculate emission statistics</dd>
       </dl><dl><dt>
           
-          <code><a href="tri.html">tri</a></code> 
+          <code><a href="tri.html">calc_tri()</a></code> 
         </dt>
         <dd>Calculate Terrain Ruggedness Index (TRI) statistics</dd>
+      </dl></div><div class="section level2">
+      <h2 id="utilities">Utilities<a class="anchor" aria-label="anchor" href="#utilities"></a></h2>
+      
+      <p class="section-desc"></p><p>Development utilities</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="check_available_years.html">check_available_years()</a></code> 
+        </dt>
+        <dd>Helper to check yearly availability</dd>
+      </dl><dl><dt>
+          
+          <code><a href="check_namespace.html">check_namespace()</a></code> 
+        </dt>
+        <dd>Checks if namespace is available</dd>
+      </dl><dl><dt>
+          
+          <code><a href="download_or_skip.html">download_or_skip()</a></code> 
+        </dt>
+        <dd>Helper to check and download urls</dd>
+      </dl><dl><dt>
+          
+          <code><a href="engine.html">check_engine()</a></code> <code><a href="engine.html">check_stats()</a></code> <code><a href="engine.html">select_engine()</a></code> 
+        </dt>
+        <dd>Function to select processing engines</dd>
+      </dl><dl><dt>
+          
+          <code><a href="make_global_grid.html">make_global_grid()</a></code> 
+        </dt>
+        <dd>Helper to create a grid of regular resolution and CRS</dd>
+      </dl><dl><dt>
+          
+          <code><a href="unzip_and_remove.html">unzip_and_remove()</a></code> 
+        </dt>
+        <dd>Helper to unzip and remove zip/gzip files</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>

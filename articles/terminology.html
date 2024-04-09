@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.9002</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -115,39 +115,34 @@ case the CRS of the portfolio is projected, we will attempt to transform
 to <code>EPSG:4326</code>. Any metadata that is needed for your analysis
 is allowed in the columns of the object and will be retained throughout
 the workflow so that you can access it once you have calculated your
-indicators. The package will add a unique asset identifier called
-<code>assetid</code> and add <em>nested list columns</em> for each
-indicator. Portfolio-wide arguments are set as attributes during the
-call of <code><a href="../reference/init_portfolio.html">init_portfolio()</a></code>. Except from these additional
-arguments, a portfolio object actually is and will behave as a familiar
-<a href="https://r-spatial.github.io/sf/" class="external-link">sf</a> object in any important regard.</p></li>
+indicators. The package will add a <em>nested list columns</em> for each
+indicator to the portfolio <code>sf</code>-object. Portfolio-wide
+arguments that govern the processing workflow, are set using the
+<code><a href="../reference/mapme.html">mapme_options()</a></code> config functions.</p></li>
 <li><p><strong>Resources</strong>: A resource is a supported dataset
-that can be downloaded via the <code><a href="../reference/get_resources.html">get_resources()</a></code> function. A
+that can be downloaded via the <code><a href="../reference/mapme.html">get_resources()</a></code> function. A
 resource represents either a raster or a vector data set. Vector
-datasets from are saved to disk as GeoPackages. Raster datasets can be
-tiled so that only tiles that cover the spatial extent of the portfolio
-will be downloaded. Global raster resources will be downloaded
-completely. Additionally, some raster resources are time-invariant
-(e.g. a <code><a href="../reference/nasa_srtm.html">?nasa_srtm</a></code>), others contain a temporal dimension
-(e.g. <code><a href="../reference/esalandcover.html">?esalandcover</a></code>). If a raster resource contains a
-temporal dimension, usually only the time-frame intersecting with the
-time-frame of the portfolio will be downloaded. Some resources might
-require additional arguments set by users. These can simply be added to
-the <code><a href="../reference/get_resources.html">get_resources()</a></code> function call. To learn about resources
-and their arguments simply query the help-page for that resource
-(e.g. via <code>?treecover2000</code>).</p></li>
-<li><p><strong>Indicators</strong>: An indicator calculates a specific
-tabular output for all assets in a portfolio (formerly known as
-<em>zonal statistics</em>). Every indicator requires one or more
-resources available locally and will inform you about any missing
-resources. Additional arguments might be required for some indicators,
+datasets are saved to disk as GeoPackages. Raster datasets can be tiled
+so that only tiles that cover the spatial extent of the portfolio will
+be downloaded. Global raster resources will be downloaded completely.
+Additionally, some raster resources are time-invariant (e.g. a
+<code>nasa_srtm</code>), others contain a temporal dimension
+(e.g. <code>esalandcover</code>). If a raster resource contains a
+temporal dimension, only those rasters intersecting with user supplied
+time-frame will be downloaded. To learn about resources and their
+arguments simply query the help-page for that resource (e.g. via
+<code><a href="../reference/gfw_treecover.html">?gfw_treecover</a></code>).</p></li>
+<li><p><strong>Indicators</strong>: An indicator calculates a tabular
+output for all assets in a portfolio. Every indicator requires one or
+more resources to be available locally and will inform you about any
+missing resources. Custom arrguments might be set for some indicators,
 but sensible defaults have been set. The package will inform you about
 any misspecification of arguments. To learn more about a specific
 indicator and its required arguments, simply query the help-page
-(e.g. via <code>?treeloss</code>). When an indicator calculation is done
-a <em>nested list column</em> with the same name will be added to the
-portfolio. For assets where no sensible values can be calculated
-(e.g. for polygons over the ocean and the <code>?treeloss</code>
+(e.g. via <code><a href="../reference/treecover_area.html">?treecover_area</a></code>). When an indicator calculation
+is done a <em>nested list column</em> with the same name will be added
+to the portfolio. For assets where no sensible values can be calculated
+(e.g. for polygons over the ocean and the <code>treecover_area</code>
 indicator), <code>NA</code> values will be inserted.</p></li>
 <li><p><strong>Engines</strong>: Several indicators support different
 engines for the extraction of the numeric outputs. Currently, these
@@ -158,17 +153,17 @@ these engines to sensible defaults. However, to customize your workflow
 you can choose to use a different engine instead.</p></li>
 <li><p><strong>Processing Modes</strong>: The processing mode is an
 important concept if you wish to extend the package with a new
-indicator, but not so much if you simply want to use for your
+indicator, but not so much if you simply want to use it for your
 statistical analysis. For most indicators the default processing mode is
-equal to <code>‘asset’</code>, meaning that for each asset in the
-portfolio the required input resources are cropped to the
+equal to <code>'asset'</code>, meaning that for each asset in the
+portfolio the required input resources are matched to the
 spatio-temporal extent of that specific asset and then the indicator
 calculation is conducted. For some resources/indicators this is not the
 most efficient approach. These are most commonly very coarse resolution
 raster resources where a cropping of many relatively small assets would
 lead to an increased overhead and as a result very long processing
 times. For these indicators, the default processing mode is set to
-<code>‘portfolio’</code>, meaning that the indicator is first calculated
+<code>'portfolio'</code>, meaning that the indicator is first calculated
 for the complete spatio-temporal extent of the portfolio and then the
 extraction is conducted for every single asset. If you want to open a
 pull-request for a new indicator for which neither of these two

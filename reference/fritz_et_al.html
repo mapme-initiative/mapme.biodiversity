@@ -18,7 +18,7 @@ meters. Dominant drivers were determined for the period 2008 to 2009."><meta pro
     
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.9002</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,15 +81,27 @@ of VHR images matched with Global Forest Loss data by Hansen (2013) version
 meters. Dominant drivers were determined for the period 2008 to 2009.</p>
     </div>
 
-
     <div class="section level2">
-    <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
-    <p>Global raster layer available of deforestation drivers for the
-period 2008-2019.</p>
+    <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_fritz_et_al</span><span class="op">(</span>resolution <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="source">Source<a class="anchor" aria-label="anchor" href="#source"></a></h2>
     <p><a href="https://zenodo.org/record/7997885" class="external-link">https://zenodo.org/record/7997885</a></p>
+    </div>
+    <div class="section level2">
+    <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+    <dl><dt>resolution</dt>
+<dd><p>An integer indicating the resolution
+to download. Defaults to 100.</p></dd>
+
+</dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    
+
+<p>A function that returns a character of file paths.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -103,13 +115,7 @@ period 2008-2019.</p>
 <li><p>wildfire</p></li>
 <li><p>other subsistence agriculture</p></li>
 <li><p>shifting cultivation</p></li>
-</ul><p>The following argument should be specified:</p>
-<dl><dt>res_drivers</dt>
-<dd><p>An integer indicating the resolution
-to download. Defaults to 100.</p></dd>
-
-
-</dl></div>
+</ul></div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Steffen, F., Carlos, J.C.L., See. L., Schepaschenko D.,

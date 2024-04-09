@@ -24,7 +24,7 @@ one-sided violence
     
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.9002</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,12 +87,35 @@ of conflicts encoded in the UCDP GED database are:</p><ul><li><p>state-based con
 <li><p>one-sided violence</p></li>
 </ul></div>
 
+    <div class="section level2">
+    <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">calc_fatalities</span><span class="op">(</span>years <span class="op">=</span> <span class="fl">1989</span><span class="op">:</span><span class="fl">2023</span>, precision_location <span class="op">=</span> <span class="fl">1</span>, precision_time <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+    </div>
 
     <div class="section level2">
-    <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
-    <p>A tibble with a column for the date (year and month), the type
-of violence an counts of civilian fatalities, unknown fatalities and the
-total sum of fatalities.</p>
+    <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+    <dl><dt>years</dt>
+<dd><p>A numeric vector indicating the years for which to summarize
+fatalities.</p></dd>
+
+
+<dt>precision_location</dt>
+<dd><p>A numeric indicating precision value for the
+geolocation up to which events are included. Defaults to 1.</p></dd>
+
+
+<dt>precision_time</dt>
+<dd><p>A numeric indicating the precision value of the
+temporal coding up to which events are included. Defaults to 1.</p></dd>
+
+</dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    
+
+<p>A function that returns a tibble with a column for the date
+(year and month), the type of violence an counts of civilian fatalities,
+unknown fatalities and the total sum of fatalities.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -129,16 +152,7 @@ week, but specific dates are not provided</p></li>
 <li><p>value 4: if start and end dates for events are specified to a certain month</p></li>
 <li><p>value 5: if start and enddates for events are specified to a certain year,
 but specific dates are not provided</p></li>
-</ul><p>The following arguments can be set:</p><dl><dt>precision_location</dt>
-<dd><p>A numeric indicating precision value for the
-geolocation up to which events are included. Defaults to 1.</p></dd>
-
-<dt>precision_time</dt>
-<dd><p>A numeric indicating the precision value of the
-temporal coding up to which events are included. Defaults to 1.</p></dd>
-
-
-</dl></div>
+</ul></div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Sundberg, Ralph, and Erik Melander, 2013, “Introducing the UCDP
@@ -157,19 +171,22 @@ Georeferenced Event Dataset”, Journal of Peace Research, vol.50, no.4, 523-532
 <span class="r-in"><span><span class="va">outdir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"mapme-data"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">outdir</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="mapme.html">mapme_options</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  outdir <span class="op">=</span> <span class="va">outdir</span>,</span></span>
+<span class="r-in"><span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"burundi.gpkg"</span>,</span></span>
 <span class="r-in"><span>  package <span class="op">=</span> <span class="st">"mapme.biodiversity"</span></span></span>
 <span class="r-in"><span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="init_portfolio.html">init_portfolio</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    years <span class="op">=</span> <span class="fl">1991</span><span class="op">:</span><span class="fl">1992</span>,</span></span>
-<span class="r-in"><span>    outdir <span class="op">=</span> <span class="va">outdir</span>,</span></span>
-<span class="r-in"><span>    tmpdir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    verbose <span class="op">=</span> <span class="cn">FALSE</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="get_resources.html">get_resources</a></span><span class="op">(</span><span class="st">"ucdp_ged"</span>, version_ged <span class="op">=</span> <span class="st">"22.1"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="calc_indicators.html">calc_indicators</a></span><span class="op">(</span><span class="st">"fatalities"</span>,</span></span>
-<span class="r-in"><span>    precision_location <span class="op">=</span> <span class="fl">1</span>, precision_time <span class="op">=</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="mapme.html">get_resources</a></span><span class="op">(</span><span class="fu"><a href="ucdp_ged.html">get_ucdp_ged</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"22.1"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="mapme.html">calc_indicators</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu">calc_fatalities</span><span class="op">(</span></span></span>
+<span class="r-in"><span>      years <span class="op">=</span> <span class="fl">1991</span><span class="op">:</span><span class="fl">1992</span>,</span></span>
+<span class="r-in"><span>      precision_location <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>      precision_time <span class="op">=</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">fatalities</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
