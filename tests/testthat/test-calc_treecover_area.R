@@ -22,7 +22,7 @@ test_that("test gfw utils", {
   expect_length(y, 1)
   expect_error(expect_warning(.gfw_check_years(1999, "treecover")))
 
-  expect_false(.gfw_empty_raster(treecover))
+  expect_false(.gfw_empty_raster(treecover, 1))
   dummy <- treecover
   dummy[] <- NA
   expect_true(.gfw_empty_raster(dummy))

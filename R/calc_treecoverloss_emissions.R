@@ -72,8 +72,10 @@ calc_treecoverloss_emissions <- function(years = 2000:2020,
     if (any(is.null(gfw_treecover), is.null(gfw_lossyear), is.null(gfw_emissions))) {
       return(NA)
     }
+    # mask gfw
+    gfw_treecover <- terra::mask(gfw_treecover, x)
     # check if gfw_treecover only contains 0s, e.g. on the ocean
-    if (.gfw_empty_raster(gfw_treecover)) {
+    if (.gfw_empty_raster(gfw_treecover, min_cover)) {
       return(tibble::tibble(years = years, emissions = 0))
     }
     # prepare gfw rasters

@@ -66,8 +66,10 @@ calc_treecover_area <- function(years = 2000:2020,
     if (any(is.null(gfw_treecover), is.null(gfw_lossyear))) {
       return(NA)
     }
+    # mask gfw
+    gfw_treecover <- terra::mask(gfw_treecover, x)
     # check if gfw_treecover only contains 0s, e.g. on the ocean
-    if (.gfw_empty_raster(gfw_treecover)) {
+    if (.gfw_empty_raster(gfw_treecover, min_cover)) {
       return(tibble::tibble(years = years, treecover = 0))
     }
     # prepare gfw rasters
@@ -155,14 +157,12 @@ calc_treecover_area <- function(years = 2000:2020,
   return(years)
 }
 
-.gfw_empty_raster <- function(gfw) {
+.gfw_empty_raster <- function(gfw, min_cover) {
   minmax <- unique(as.vector(terra::minmax(gfw)))
-  if (length(minmax) > 1) {
+  if (length(minmax) > 1 && max(minmax) >= min_cover) {
     return(FALSE)
   }
-  if (minmax == 0 || is.nan(minmax)) {
-    return(TRUE)
-  }
+  TRUE
 }
 
 .gfw_check_min_cover <- function(min_cover, indicator) {
@@ -208,8 +208,6 @@ calc_treecover_area <- function(years = 2000:2020,
 
 
 .gfw_prep_rasters <- function(x, treecover, lossyear, emissions, cover) {
-  # mask gfw_treecover
-  treecover <- terra::mask(treecover, x)
   # binarize the treecover layer based on mcover argument
   binary_treecover <- terra::classify(treecover,
     rcl = matrix(c(
