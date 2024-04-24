@@ -1,7 +1,7 @@
 # .calc_population_count works
 
     Code
-      result_exact$population_count_sum
+      result_exact$value
     Output
        [1] 3969.500 3819.491 4038.464 4112.244 4358.426 4352.115 4590.671 4361.335
        [9] 4803.901 4946.433 4030.166 4009.092 4057.395 3969.157 3993.480 4215.225

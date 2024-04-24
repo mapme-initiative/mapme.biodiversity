@@ -243,8 +243,8 @@ data <- aoi_gridded %>%
   st_drop_geometry() %>%
   unnest(population_count)
 
-pop <- data$population_count_sum
-names(pop) <- data$year
+pop <- data$value
+names(pop) <- data$datetime
 barplot(pop,
   main = "Population totals over time",
   xlab = "Year", ylab = "Persons",

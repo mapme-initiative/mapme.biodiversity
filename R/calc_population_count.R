@@ -59,7 +59,7 @@ calc_population_count <- function(engine = "extract", stats = "sum") {
            mode = "asset",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(worldpop)) {
-      return(NA)
+      return(NULL)
     }
 
     # set max value of 65535 to NA
@@ -75,13 +75,16 @@ calc_population_count <- function(engine = "extract", stats = "sum") {
       raster = worldpop,
       stats = stats,
       engine = engine,
-      name = "population_count",
+      name = "population",
       mode = "asset"
     )
 
     years <- unlist(lapply(names(worldpop), function(x) strsplit(x, "_")[[1]][2]))
-    results$year <- years
-    results
+    results[["datetime"]] <- as.Date(paste0(years, "-01-01"))
+    results[["unit"]] <- "count"
+    results %>%
+      tidyr::pivot_longer(-c(datetime, unit), names_to = "variable", values_to = "value") %>%
+      dplyr::select(datetime, variable, unit, value)
   }
 }
 
