@@ -1,5 +1,5 @@
 test_that("drought indicator works", {
-  shp <- read_sf(
+  x <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
       package = "mapme.biodiversity"
     )
@@ -10,23 +10,20 @@ test_that("drought indicator works", {
   nasa_grace <- rast(nasa_grace)
 
   cdi <- calc_drought_indicator()
-  result <- cdi(shp, nasa_grace)
+  result <- cdi(x, nasa_grace)
   cdi <- calc_drought_indicator(stats = c("mean", "median", "sd"))
-  result_multi_stats <- cdi(shp, nasa_grace)
+  result_multi_stats <- cdi(x, nasa_grace)
   cdi <- calc_drought_indicator(engine = "zonal")
-  result_zonal <- cdi(shp, nasa_grace)
+  result_zonal <- cdi(x, nasa_grace)
   cdi <- calc_drought_indicator(engine = "extract")
-  result_extract <- cdi(shp, nasa_grace)
+  result_extract <- cdi(x, nasa_grace)
   cdi <- calc_drought_indicator(engine = "exactextract")
-  result_exact <- cdi(shp, nasa_grace)
+  result_exact <- cdi(x, nasa_grace)
 
+  expect_silent(.check_single_asset(result[[1]]))
   expect_equal(
-    names(result[[1]]),
-    c("wetness_mean", "date")
-  )
-  expect_equal(
-    names(result_multi_stats[[1]]),
-    c("wetness_mean", "wetness_median", "wetness_sd", "date")
+    unique(result_multi_stats[[1]]$variable),
+    c("wetness_mean", "wetness_median", "wetness_sd")
   )
   expect_equal(
     names(result_zonal),
@@ -37,16 +34,16 @@ test_that("drought indicator works", {
     names(result_exact)
   )
   expect_equal(
-    result[[1]]$wetness_mean,
-    result_zonal[[1]]$wetness_mean,
+    result[[1]]$value,
+    result_zonal[[1]]$value,
     tolerance = 1e-4
   )
   expect_equal(
-    result_zonal[[1]]$wetness_mean,
-    result_extract[[1]]$wetness_mean,
+    result_zonal[[1]]$value,
+    result_extract[[1]]$value,
     tolerance = 1e-4
   )
   expect_snapshot(
-    result_exact[[1]]$wetness_mean
+    result_exact[[1]]$value
   )
 })
