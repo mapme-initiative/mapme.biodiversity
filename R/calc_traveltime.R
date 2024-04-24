@@ -59,7 +59,7 @@ calc_traveltime <- function(engine = "extract", stats = "mean") {
            mode = "asset",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(nelson_et_al)) {
-      return(NA)
+      return(NULL)
     }
     # set max value of 65535 to NA
     nelson_et_al <- clamp(nelson_et_al, lower = -Inf, upper = 65534, values = FALSE)
@@ -68,11 +68,26 @@ calc_traveltime <- function(engine = "extract", stats = "mean") {
       raster = nelson_et_al,
       stats = stats,
       engine = engine,
-      name = "minutes",
+      name = "traveltime",
       mode = "asset"
     )
-    results$distance <- unlist(lapply(names(nelson_et_al), function(x) strsplit(x, "-|.tif")[[1]][2]))
-    results
+
+    distances <- unlist(
+      lapply(
+        names(nelson_et_al),
+        function(x) strsplit(x, "-|.tif")[[1]][2]
+      )
+    )
+
+    results %>%
+      dplyr::mutate(distances = distances) %>%
+      tidyr::pivot_longer(-distances, names_to = "variable") %>%
+      dplyr::mutate(
+        datetime = as.Date("2000-01-01"),
+        variable = paste0(distances, "_", variable),
+        unit = "minutes"
+      ) %>%
+      dplyr::select(datetime, variable, unit, value)
   }
 }
 
