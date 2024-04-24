@@ -59,11 +59,16 @@ calc_precipitation_wc <- function(engine = "extract", stats = "mean") {
            name = "precipitation_wc",
            mode = "asset",
            verbose = mapme_options()[["verbose"]]) {
+    if (is.null(worldclim_precipitation)) {
+      return(NULL)
+    }
+
     results <- .calc_worldclim(
       x = x,
       worldclim = worldclim_precipitation,
       engine = engine,
-      stats = stats
+      stats = stats,
+      unit = "mm"
     )
     results
   }
