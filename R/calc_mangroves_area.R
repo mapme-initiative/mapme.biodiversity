@@ -47,19 +47,23 @@ calc_mangroves_area <- function() {
            name = "mangroves_area",
            mode = "asset",
            verbose = mapme_options()[["verbose"]]) {
-    results <- lapply(1:length(gmw), function(j) {
+    if (is.null(gmw)) {
+      return(NULL)
+    }
+
+    results <- purrr::map(1:length(gmw), function(j) {
       intersected <- suppressWarnings(st_intersection(gmw[[j]], x))
-      area <- st_area(intersected) %>%
-        as.numeric() %>%
-        sum() %>%
-        `/`(., 10000)
-      out <- tibble(
-        mangrove_extent = area,
-        year = strsplit(names(gmw[j]), "_|.gpkg")[[1]][2]
+      area <- sum(as.numeric(st_area(intersected)), na.rm = TRUE) / 10000
+      year <- strsplit(names(gmw[j]), "_|.gpkg")[[1]][2]
+
+      tibble::tibble(
+        datetime = as.Date(paste0(year, "-01-01")),
+        variable = "mangrove_area",
+        unit = "ha",
+        value = area
       )
-    })
-    results <- tibble(do.call(rbind, results))
-    results
+    }) %>%
+      purrr::list_rbind()
   }
 }
 
