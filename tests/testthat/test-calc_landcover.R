@@ -1,5 +1,5 @@
 test_that("esa global landcover works", {
-  shp <- read_sf(
+  x <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
       package = "mapme.biodiversity"
     )
@@ -9,13 +9,7 @@ test_that("esa global landcover works", {
   ), pattern = ".tif$", full.names = TRUE)
   esalandcover <- rast(esalandcover)
   cl <- calc_landcover()
-  result <- cl(shp, esalandcover)
-  expect_equal(
-    names(result),
-    c("classes", "year", "area", "percentage")
-  )
-  expect_equal(
-    unique(result$year),
-    c("2015", "2016", "2017", "2018", "2019")
-  )
+  expect_true(is.null(cl(x, NULL)))
+  result <- cl(x, esalandcover)
+  expect_silent(.check_single_asset(result))
 })

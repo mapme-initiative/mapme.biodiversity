@@ -53,7 +53,7 @@ calc_landcover <- function() {
     classes <- NULL
 
     if (is.null(esalandcover)) {
-      return(NA)
+      return(NULL)
     }
 
     x_v <- vect(x)
@@ -63,20 +63,21 @@ calc_landcover <- function() {
 
     purrr::map_dfr(1:nlyr(esa_mask), function(i) {
       zonal(arearaster, esa_mask[[i]], sum) %>%
-        tidyr::pivot_longer(cols = -area, names_to = "year", values_to = "code") %>%
+        tidyr::pivot_longer(cols = -area, names_to = "datetime", values_to = "code") %>%
         dplyr::left_join(.esa_landcover_classes, by = "code") %>%
         dplyr::mutate(
-          percentage = area / total_size,
-          year = regmatches(year, regexpr("\\d{4}", year))
+          datetime = regmatches(datetime, regexpr("\\d{4}", datetime)),
+          datetime = as.Date(paste0(datetime, "-01-01")),
+          unit = "ha"
         ) %>%
-        dplyr::select(classes, year, area, percentage)
+        dplyr::select(datetime, variable, unit, value = area)
     })
   }
 }
 
 .esa_landcover_classes <- data.frame(
   code = c(0, 111:116, 121:126, seq(20, 100, 10), 200),
-  classes = c(
+  variable = c(
     "no_data", "closed_forest_evergreen_needle_leaf", "closed_forest_evergreen_broad_leaf", "closed_forest_deciduous_needle_leaf",
     "closed_forest_deciduous_broad_leaf", "closed_forest_mixed", "closed_forest_unknown", "open_forest_evergreen_needle_leaf",
     "open_forest_evergreen_broad_leaf", "open_forest_deciduous_needle_leaf", "open_forest_deciduous_broad_leaf",
