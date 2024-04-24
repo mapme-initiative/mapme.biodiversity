@@ -62,7 +62,7 @@ calc_gsw_change <- function(engine = "extract", stats = "mean") {
            mode = "asset",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(global_surface_water_change)) {
-      return(NA)
+      return(NULL)
     }
 
     global_surface_water_change <- terra::clamp(
@@ -81,7 +81,13 @@ calc_gsw_change <- function(engine = "extract", stats = "mean") {
       mode = "asset"
     )
 
-    results
+    results %>%
+      tidyr::pivot_longer(cols = dplyr::everything(), names_to = "variable") %>%
+      dplyr::mutate(
+        datetime = as.Date("2000-01-01"),
+        unit = "unitless"
+      ) %>%
+      dplyr::select(datetime, variable, unit, value)
   }
 }
 
