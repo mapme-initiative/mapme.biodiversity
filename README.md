@@ -94,7 +94,6 @@ Next, is a list of supported indicators.
 | name                         | description                                                                    |
 |:-----------------------------|:-------------------------------------------------------------------------------|
 | active_fire_counts           | Number of detected fires by NASA FIRMS                                         |
-| active_fire_properties       | Extraction of properties of fires detected by NASA FIRMS                       |
 | biome                        | Areal statistics of biomes from TEOW                                           |
 | deforestation_drivers        | Areal statistics of deforestation drivers                                      |
 | drought_indicator            | Relative wetness statistics based on NASA GRACE                                |
@@ -168,16 +167,18 @@ mapme_options(
   tidyr::unnest(treecover_area_and_emissions))
 ```
 
-    ## Simple feature collection with 2 features and 8 fields
+    ## Simple feature collection with 4 features and 9 fields
     ## Geometry type: POLYGON
     ## Dimension:     XY
     ## Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931
     ## Geodetic CRS:  WGS 84
-    ## # A tibble: 2 × 9
-    ##   WDPAID NAME            DESIG_ENG     ISO3  assetid years emissions treecover
-    ##    <dbl> <chr>           <chr>         <chr>   <int> <int>     <dbl>     <dbl>
-    ## 1 478140 Sierra de Neiba National Park DOM         1  2016      2400     2360.
-    ## 2 478140 Sierra de Neiba National Park DOM         1  2017      2839     2348.
+    ## # A tibble: 4 × 10
+    ##   WDPAID NAME            DESIG_ENG ISO3  assetid datetime   variable unit  value
+    ##    <dbl> <chr>           <chr>     <chr>   <int> <date>     <chr>    <chr> <dbl>
+    ## 1 478140 Sierra de Neiba National… DOM         1 2016-01-01 emissio… Mg    2400 
+    ## 2 478140 Sierra de Neiba National… DOM         1 2016-01-01 treecov… ha    2360.
+    ## 3 478140 Sierra de Neiba National… DOM         1 2017-01-01 emissio… Mg    2839 
+    ## 4 478140 Sierra de Neiba National… DOM         1 2017-01-01 treecov… ha    2348.
     ## # ℹ 1 more variable: geom <POLYGON [°]>
 
 ## A note on parallel computing
