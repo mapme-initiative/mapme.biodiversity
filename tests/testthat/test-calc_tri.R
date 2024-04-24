@@ -1,5 +1,5 @@
 test_that("terrain ruggedness index works", {
-  shp <- read_sf(
+  x <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
       package = "mapme.biodiversity"
     )
@@ -10,38 +10,25 @@ test_that("terrain ruggedness index works", {
   nasa_srtm <- rast(nasa_srtm)
 
   ctri <- calc_tri()
-  result <- ctri(shp, nasa_srtm)
+  expect_true(is.null(ctri(x, NULL)))
+  result <- ctri(x, nasa_srtm)
   ctri <- calc_tri(stats = c("mean", "median", "sd"))
-  result_multi_stat <- ctri(shp, nasa_srtm)
+  result_multi_stat <- ctri(x, nasa_srtm)
   ctri <- calc_tri(engine = "zonal")
-  result_zonal <- ctri(shp, nasa_srtm)
+  result_zonal <- ctri(x, nasa_srtm)
   ctri <- calc_tri(engine = "extract")
-  result_extract <- ctri(shp, nasa_srtm)
+  result_extract <- ctri(x, nasa_srtm)
   ctri <- calc_tri(engine = "exactextract")
-  result_exact <- ctri(shp, nasa_srtm)
+  result_exact <- ctri(x, nasa_srtm)
 
-  expect_equal(
-    names(result),
-    c("tri_mean")
-  )
-  expect_equal(
-    names(result_multi_stat),
-    c("tri_mean", "tri_median", "tri_sd")
-  )
-  expect_equal(
-    names(result_zonal),
-    names(result_extract)
-  )
-  expect_equal(
-    names(result_zonal),
-    names(result_exact)
-  )
-  expect_equal(
-    result_zonal$tri_mean,
-    result_extract$tri_mean,
-    tolerance = 1e-4
-  )
-  expect_snapshot(
-    result_exact$tri_mean
-  )
+  expect_silent(.check_single_asset(result))
+  expect_silent(.check_single_asset(result_multi_stat))
+  expect_silent(.check_single_asset(result_zonal))
+  expect_silent(.check_single_asset(result_extract))
+  expect_silent(.check_single_asset(result_exact))
+
+  vars <- c("tri_mean", "tri_median", "tri_sd")
+  expect_equal(unique(result_multi_stat$variable), vars)
+  expect_equal(result_zonal$value, result_extract$value, tolerance = 1e-4)
+  expect_snapshot(result_exact$value)
 })

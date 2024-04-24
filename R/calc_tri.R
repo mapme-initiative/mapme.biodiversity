@@ -69,7 +69,7 @@ calc_tri <- function(engine = "extract", stats = "mean") {
            mode = "asset",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(nasa_srtm)) {
-      return(NA)
+      return(NULL)
     }
 
     tri <- terra::terrain(
@@ -79,7 +79,7 @@ calc_tri <- function(engine = "extract", stats = "mean") {
       neighbors = 8
     )
 
-    select_engine(
+    result <- select_engine(
       x = x,
       raster = tri,
       stats = stats,
@@ -87,6 +87,14 @@ calc_tri <- function(engine = "extract", stats = "mean") {
       name = "tri",
       mode = "asset"
     )
+
+    result %>%
+      tidyr::pivot_longer(cols = dplyr::everything(), names_to = "variable") %>%
+      dplyr::mutate(
+        datetime = as.Date("2000-01-01"),
+        unit = "m"
+      ) %>%
+      dplyr::select(datetime, variable, unit, value)
   }
 }
 
