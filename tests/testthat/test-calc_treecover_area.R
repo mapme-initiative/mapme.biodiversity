@@ -91,11 +91,11 @@ test_that("treecover works", {
 
   years <- 2000:2005
   ta <- calc_treecover_area(years = years, min_size = 1, min_cover = 10)
-  expect_equal(ta(x, gfw_treecover, NULL), NA)
+  expect_true(is.null(ta(x, gfw_treecover, NULL)))
   result <- ta(x, gfw_treecover, gfw_lossyear)
-  expect_equal(names(result), c("years", "treecover"))
-  expect_equal(result$years, years)
-  expect_snapshot(result$treecover)
+  expect_silent(.check_single_asset(result))
+  expect_equal(format(result$datetime, "%Y"), as.character(years))
+  expect_snapshot(result$value)
 
   tae <- calc_treecover_area_and_emissions(
     years = years,
@@ -103,5 +103,6 @@ test_that("treecover works", {
     min_cover = 10
   )
   stats_treeloss <- tae(x, gfw_treecover, gfw_lossyear, gfw_emissions)
-  expect_equal(result$treecover, stats_treeloss[, c(1, 3)]$treecover)
+  stats_treeloss <- stats_treeloss[stats_treeloss$variable == "treecover", ]
+  expect_equal(result$value, stats_treeloss$value)
 })

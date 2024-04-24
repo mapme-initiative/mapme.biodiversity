@@ -62,9 +62,10 @@ calc_treecover_area <- function(years = 2000:2020,
            name = "treecover_area",
            mode = "asset",
            verbose = mapme_options()[["verbose"]]) {
+    treecover <- NULL
     # handling of return value if resources are missing, e.g. no overlap
     if (any(is.null(gfw_treecover), is.null(gfw_lossyear))) {
-      return(NA)
+      return(NULL)
     }
     # mask gfw
     gfw_treecover <- terra::mask(gfw_treecover, x)
@@ -108,7 +109,15 @@ calc_treecover_area <- function(years = 2000:2020,
 
     rm(gfw)
     gc()
-    tibble::as_tibble(gfw_stats)
+    gfw_stats %>%
+      dplyr::mutate(
+        datetime = as.Date(paste0(years, "-01-01")),
+        variable = "treecover",
+        unit = "ha",
+        value = treecover
+      ) %>%
+      dplyr::select(datetime, variable, unit, value) %>%
+      tibble::as_tibble()
   }
 }
 
