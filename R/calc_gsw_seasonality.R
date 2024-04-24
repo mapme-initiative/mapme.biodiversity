@@ -50,7 +50,7 @@ calc_gsw_seasonality <- function() {
            mode = "asset",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(global_surface_water_seasonality)) {
-      return(NA)
+      return(NULL)
     }
 
     global_surface_water_seasonality <- terra::mask(
@@ -76,22 +76,26 @@ calc_gsw_seasonality <- function() {
       global_surface_water_seasonality,
       fun = "sum"
     )
-    names(res_zonal) <- c("value", "area")
+    names(res_zonal) <- c("variable", "value")
 
     result <- tibble::tibble(
-      month = 0:12
+      variable = 0:12
     )
 
     result <- merge(
       result,
       res_zonal,
-      by.x = "month",
-      by.y = "value",
       all.x = TRUE
     )
-    result$area[is.na(result$area)] <- 0
+    result[["value"]][is.na(result[["value"]])] <- 0
 
-    return(tibble::tibble(result))
+    result %>%
+      dplyr::mutate(
+        variable = paste0("gsw_seasonality_", sprintf("%02d", variable)),
+        datetime = as.Date("2000-01-01"),
+        unit = "ha"
+      ) %>%
+      dplyr::select(datetime, variable, unit, value)
   }
 }
 
