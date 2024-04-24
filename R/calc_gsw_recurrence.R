@@ -68,7 +68,7 @@ calc_gsw_recurrence <- function(engine = "extract", min_recurrence = NULL) {
            mode = "asset",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(global_surface_water_recurrence)) {
-      return(NA)
+      return(NULL)
     }
 
     rcl <- matrix(
@@ -99,7 +99,14 @@ calc_gsw_recurrence <- function(engine = "extract", min_recurrence = NULL) {
       mode = "asset"
     )
 
-    results
+    results %>%
+      tidyr::pivot_longer(cols = dplyr::everything(), names_to = "variable") %>%
+      dplyr::mutate(
+        variable = "gsw_recurrence_area",
+        datetime = as.Date("2000-01-01"),
+        unit = "ha"
+      ) %>%
+      dplyr::select(datetime, variable, unit, value)
   }
 }
 
