@@ -22,17 +22,18 @@ test_that("emissions works", {
   min_size <- 1
   min_cover <- 10
   te <- calc_treecoverloss_emissions(years, min_size, min_cover)
-  expect_equal(te(x, gfw_treecover, gfw_lossyear, NULL), NA)
+  expect_true(is.null(te(x, gfw_treecover, gfw_lossyear, NULL)))
   result <- te(x, gfw_treecover, gfw_lossyear, gfw_emissions)
-  expect_equal(names(result), c("years", "emissions"))
-  expect_snapshot(result$emissions)
+  expect_silent(.check_single_asset(result))
+  expect_snapshot(result$value)
 
   tea <- calc_treecover_area_and_emissions(years, min_size, min_cover)
   stats_treeloss <- tea(x, gfw_treecover, gfw_lossyear, gfw_emissions)
-  expect_equal(result$emissions, stats_treeloss[, c(1, 2)]$emissions, tolerance = 1e-4)
+  stats_treeloss <- stats_treeloss[stats_treeloss$variable == "emissions", ]
+  expect_equal(result$value, stats_treeloss$value, tolerance = 1e-4)
 
   # test that emissions and forest loss are returned as 0 if now loss occurs
   gfw_lossyear[gfw_lossyear == 3] <- 1
   stats_treeloss <- te(x, gfw_treecover, gfw_lossyear, gfw_emissions)
-  expect_equal(stats_treeloss$emissions[stats_treeloss$years == 2003], 0)
+  expect_equal(stats_treeloss$value[stats_treeloss$datetime == "2003-01-01"], 0)
 })

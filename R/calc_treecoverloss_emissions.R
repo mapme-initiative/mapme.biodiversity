@@ -69,8 +69,10 @@ calc_treecoverloss_emissions <- function(years = 2000:2020,
            name = "treecoverloss_emissions",
            mode = "asset",
            verbose = mapme_options()[["verbose"]]) {
+    emissions <- NULL
+
     if (any(is.null(gfw_treecover), is.null(gfw_lossyear), is.null(gfw_emissions))) {
-      return(NA)
+      return(NULL)
     }
     # mask gfw
     gfw_treecover <- terra::mask(gfw_treecover, x)
@@ -103,7 +105,15 @@ calc_treecoverloss_emissions <- function(years = 2000:2020,
 
     rm(gfw)
     gc()
-    tibble::as_tibble(gfw_stats)
+    gfw_stats %>%
+      dplyr::mutate(
+        datetime = as.Date(paste0(years, "-01-01")),
+        variable = "emissions",
+        unit = "Mg",
+        value = emissions
+      ) %>%
+      dplyr::select(datetime, variable, unit, value) %>%
+      tibble::as_tibble()
   }
 }
 
