@@ -31,30 +31,9 @@ test_that("calc_indicator works", {
     calc_treecover_area(years = 2000:2005, min_size = 5, min_cover = 30)
   )$treecover_area[[1]]
 
-  expect_equal(
-    names(stat),
-    c("years", "treecover")
-  )
-  expect_equal(
-    stat$years,
-    2000:2005
-  )
-  expect_equal(
-    stat$treecover,
-    c(1996.577, 1996.064, 1994.376, 1960.769, 1951.388, 1947.187),
-    tolerance = 1e-3
-  )
-
-  expect_equal(
-    names(stat),
-    c("years", "treecover")
-  )
-  expect_equal(
-    stat$years,
-    2000:2005
-  )
-  expect_equal(
-    stat$treecover,
+  expect_equal(names(stat), c("datetime", "variable", "unit", "value"))
+  expect_equal(format(stat$datetime, "%Y"), as.character(2000:2005))
+  expect_equal(stat$value,
     c(1996.577, 1996.064, 1994.376, 1960.769, 1951.388, 1947.187),
     tolerance = 1e-3
   )
@@ -101,16 +80,10 @@ test_that("Parallelization works", {
     )
   plan(sequential)
 
-  expect_equal(
-    names(stat),
-    c("assetid", "treecover_area", "x")
-  )
-  expect_equal(
-    nrow(stat),
-    9
-  )
+  expect_equal(names(stat), c("assetid", "treecover_area", "x"))
+  expect_equal(nrow(stat), 9)
 
-  stat <- lapply(stat$treecover_area, function(x) x$treecover)
+  stat <- lapply(stat$treecover_area, function(x) x$value)
   names(stat) <- 1:length(stat)
   stat <- rowSums(as.data.frame(stat))
 
@@ -356,11 +329,13 @@ test_that(".read_vector works", {
 
 test_that(".check_single_asset works correctly", {
   expect_warning(out <- .check_single_asset(NA, 1))
-  expect_equal(out, NA)
+  expect_equal(out, NULL)
   expect_warning(out <- .check_single_asset(try("a" + 1, silent = TRUE), 1))
-  expect_equal(out, NA)
+  expect_equal(out, NULL)
   expect_warning(out <- .check_single_asset(c(1:10), 1))
-  expect_equal(out, NA)
+  expect_equal(out, NULL)
   expect_warning(out <- .check_single_asset(tibble(), 1))
-  expect_equal(out, NA)
+  expect_equal(out, NULL)
+  expect_warning(out <- .check_single_asset(tibble(a = 1), 1))
+  expect_equal(out, NULL)
 })

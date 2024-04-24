@@ -182,19 +182,28 @@ calc_indicators <- function(x, ...) {
 
 .check_single_asset <- function(obj, i) {
   if (inherits(obj, "try-error")) {
-    warning(sprintf("At asset %s an error occured. Returning NA.\n", i), obj)
-    return(NA)
+    warning(sprintf("At asset %s an error occured. Returning NULL.\n", i), obj)
+    return(NULL)
   }
 
   if (!inherits(obj, "tbl_df")) {
-    warning(sprintf("At asset %s a non-tibble object was returned. Returning NA.\n", i), obj)
-    return(NA)
+    warning(sprintf("At asset %s a non-tibble object was returned. Returning NULL.\n", i), obj)
+    return(NULL)
   }
 
   if (nrow(obj) == 0) {
-    warning(sprintf("At asset %s a 0-length tibble was returned. Returning NA.", i))
-    return(NA)
+    warning(sprintf("At asset %s a 0-length tibble was returned. Returning NULL.", i))
+    return(NULL)
   }
+
+  if (!identical(names(obj), c("datetime", "variable", "unit", "value"))) {
+    warning(
+      paste0("Indicator function did return wrong colnames:\n"),
+      paste(names(obj), collapse = ", ")
+    )
+    return(NULL)
+  }
+
   obj
 }
 
