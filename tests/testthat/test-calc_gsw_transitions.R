@@ -1,23 +1,20 @@
 test_that("gsw transitions works", {
-  shp <- read_sf(
+  x <- read_sf(
     system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
       package = "mapme.biodiversity"
     )
   )
 
-  shp <- suppressWarnings(st_cast(shp, to = "POLYGON")[1, ])
+  x <- suppressWarnings(st_cast(x, to = "POLYGON")[1, ])
   gswt <- calc_gsw_transitions()
-
-  expect_equal(
-    gswt(shp, NULL),
-    NA
-  )
+  expect_true(is.null(gswt(x, NULL)))
 
   gsw_transitions <- list.files(system.file("res", "gsw_transitions",
     package = "mapme.biodiversity"
   ), pattern = ".tif$", full.names = TRUE)
   gsw_transitions <- rast(gsw_transitions)
-  transitions <- gswt(shp, gsw_transitions)
+  transitions <- gswt(x, gsw_transitions)
+  expect_silent(.check_single_asset(transitions))
 
   transitions_expected <- tibble(
     class = c(
@@ -26,15 +23,10 @@ test_that("gsw transitions works", {
       "Ephemeral Permanent", "Ephemeral Seasonal"
     ),
     area = c(
-      199.4017921627606142, 388.8460738439933948, 0.3806794781267643,
-      1.9034698475368319, 83.9057809752881099, 28.8569105465255689,
-      1.0659035851024090, 0.6091238501258194, 21.6236787112284574
+      199.40, 388.84, 0.38,
+      1.90, 83.90, 28.859,
+      1.06, 0.60, 21.62
     )
   )
-
-  expect_equal(
-    transitions$area,
-    transitions_expected$area,
-    tolerance = 1e-4
-  )
+  expect_equal(transitions$value, transitions_expected$area, tolerance = 1e-4)
 })

@@ -61,7 +61,7 @@ calc_gsw_transitions <- function() {
            mode = "asset",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(global_surface_water_transitions)) {
-      return(NA)
+      return(NULL)
     }
 
     global_surface_water_transitions <- terra::clamp(
@@ -75,21 +75,25 @@ calc_gsw_transitions <- function() {
     transition_mask <- terra::mask(global_surface_water_transitions, x_v)
     arearaster <- terra::cellSize(transition_mask, mask = TRUE, unit = "ha")
 
-    result <- purrr::map_dfr(seq_len(terra::nlyr(transition_mask)), function(i) {
+    purrr::map_dfr(seq_len(terra::nlyr(transition_mask)), function(i) {
       terra::zonal(arearaster, transition_mask[[i]], sum) %>%
-        stats::setNames(c("code", "area")) %>%
+        stats::setNames(c("code", "value")) %>%
         dplyr::left_join(.gsw_transition_classes, by = "code") %>%
-        dplyr::select(class, area)
+        dplyr::select(variable, value)
     }) %>%
-      tibble::tibble()
-
-    return(result)
+      dplyr::mutate(
+        variable = paste0("GSW ", variable),
+        datetime = as.Date("2000-01-01"),
+        unit = "ha"
+      ) %>%
+      tibble::as_tibble() %>%
+      dplyr::select(datetime, variable, unit, value)
   }
 }
 
 .gsw_transition_classes <- data.frame(
   code = 1:10,
-  class = c(
+  variable = c(
     "Permanent", "New Permanent", "Lost Permanent", "Seasonal",
     "New Seasonal", "Lost Seasonal", "Seasonal to Permanent",
     "Permanent to Seasonal", "Ephemeral Permanent", "Ephemeral Seasonal"
