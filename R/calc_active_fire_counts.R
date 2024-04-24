@@ -49,6 +49,10 @@ calc_active_fire_counts <- function() {
     acq_date <- NULL
     year <- NULL
     instrument <- NULL
+
+    if (is.null(nasa_firms)) {
+      return(NULL)
+    }
     # select required columns and rbind objects
     nasa_firms <- lapply(nasa_firms, function(x) {
       dplyr::select(x, acq_date, instrument)
@@ -57,15 +61,21 @@ calc_active_fire_counts <- function() {
 
     intersected <- suppressWarnings(st_intersection(nasa_firms, st_geometry(x)))
     if (nrow(intersected) == 0) {
-      return(NA)
+      return(NULL)
     }
-    intersected <- dplyr::as_tibble(intersected)
-    intersected <- dplyr::select(intersected, -geom)
-    intersected <- tidyr::separate(intersected, acq_date, c("year", "month", "day"))
     intersected %>%
+      dplyr::select(-geom) %>%
+      dplyr::as_tibble() %>%
+      tidyr::separate(acq_date, c("year", "month", "day")) %>%
       dplyr::group_by(instrument, year) %>%
-      dplyr::summarise(active_fire_counts = dplyr::n()) %>%
-      dplyr::ungroup()
+      dplyr::summarise(value = dplyr::n()) %>%
+      dplyr::ungroup() %>%
+      dplyr::mutate(
+        datetime = as.Date(paste0(year, "-01-01")),
+        variable = paste0(instrument, "-fire_count"),
+        unit = "count"
+      ) %>%
+      dplyr::select(datetime, variable, unit, value)
   }
 }
 

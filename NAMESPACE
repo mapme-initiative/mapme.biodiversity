@@ -3,7 +3,6 @@
 export(available_indicators)
 export(available_resources)
 export(calc_active_fire_counts)
-export(calc_active_fire_properties)
 export(calc_biome)
 export(calc_deforestation_drivers)
 export(calc_drought_indicator)
