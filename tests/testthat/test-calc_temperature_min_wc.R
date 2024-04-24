@@ -1,5 +1,5 @@
 test_that("worldclim minimum temperature works", {
-  shp <- read_sf(
+  x <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
       package = "mapme.biodiversity"
     )
@@ -11,38 +11,26 @@ test_that("worldclim minimum temperature works", {
   worldclim_min_temperature <- rast(worldclim_min_temperature)
 
   cmin <- calc_temperature_min_wc()
-  result <- cmin(shp, worldclim_min_temperature)
+  expect_true(is.null(cmin(x, NULL)))
+  result <- cmin(x, worldclim_min_temperature)
   cmin <- calc_temperature_min_wc(stats = c("mean", "median", "sd"))
-  result_multi_stat <- cmin(shp, worldclim_min_temperature)
+  result_multi_stat <- cmin(x, worldclim_min_temperature)
   cmin <- calc_temperature_min_wc(engine = "zonal")
-  result_zonal <- cmin(shp, worldclim_min_temperature)
+  result_zonal <- cmin(x, worldclim_min_temperature)
   cmin <- calc_temperature_min_wc(engine = "extract")
-  result_extract <- cmin(shp, worldclim_min_temperature)
+  result_extract <- cmin(x, worldclim_min_temperature)
   cmin <- calc_temperature_min_wc(engine = "exactextract")
-  result_exact <- cmin(shp, worldclim_min_temperature)
+  result_exact <- cmin(x, worldclim_min_temperature)
 
-  expect_equal(
-    names(result),
-    c("tmin_mean", "date")
-  )
-  expect_equal(
-    names(result_multi_stat),
-    c("tmin_mean", "tmin_median", "tmin_sd", "date")
-  )
-  expect_equal(
-    names(result_zonal),
-    names(result_extract)
-  )
-  expect_equal(
-    names(result_zonal),
-    names(result_exact)
-  )
-  expect_equal(
-    result_zonal$tmin_mean,
-    result_extract$tmin_mean,
-    tolerance = 1e-4
-  )
-  expect_snapshot(
-    result_exact$tmin_mean
-  )
+  expect_silent(.check_single_asset(result))
+  expect_silent(.check_single_asset(result_multi_stat))
+  expect_silent(.check_single_asset(result_zonal))
+  expect_silent(.check_single_asset(result_extract))
+  expect_silent(.check_single_asset(result_exact))
+
+
+  vars <- c("worldclim_tmin_mean", "worldclim_tmin_median", "worldclim_tmin_sd")
+  expect_equal(unique(result_multi_stat$variable), vars)
+  expect_equal(result_zonal$value, result_extract$value, tolerance = 1e-4)
+  expect_snapshot(result_exact$value)
 })
