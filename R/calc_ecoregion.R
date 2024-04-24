@@ -46,35 +46,17 @@ calc_ecoregion <- function() {
            mode = "asset",
            verbose = mapme_options()[["verbose"]]) {
     ECO_NAME <- NULL
-    new_area <- NULL
-    ecoregions <- NULL
-    area <- NULL
 
     if (nrow(teow[[1]]) == 0) {
-      return(NA)
+      return(NULL)
     }
 
-    merged <- .comp_teow(
+    .comp_teow(
       x = x,
       teow = teow,
+      var = ECO_NAME,
       verbose = verbose
     )
-
-    if (nrow(merged) == 0) {
-      return(NA)
-    }
-
-    out <- merged %>%
-      dplyr::select(ECO_NAME, new_area)
-
-    out_tibble <- tibble(
-      ecoregions = out[[1]],
-      area = out[[2]]
-    )
-
-    out_tibble %>%
-      dplyr::group_by(ecoregions) %>%
-      dplyr::summarise(area = sum(as.numeric(area)))
   }
 }
 
@@ -88,10 +70,12 @@ calc_ecoregion <- function() {
 
 .comp_teow <- function(x,
                        teow,
+                       var,
                        verbose = TRUE,
                        ...) {
   teow <- teow[[1]]
   teow <- st_make_valid(teow)
+
   intersected <- suppressWarnings(st_intersection(x, teow))
   biome_and_name <- data.frame(
     BIOME = c(1:14, 98, 99),
@@ -114,13 +98,26 @@ calc_ecoregion <- function() {
       "Rock and Ice"
     )
   )
-  merged <- merge(intersected, biome_and_name)
-  area <- st_area(merged) %>%
-    as.numeric() %>%
-    `/`(., 10000)
-  merged <- st_drop_geometry(merged)
-  merged$new_area <- area
-  return(merged)
+
+  intersected <- merge(intersected, biome_and_name)
+  intersected$value <- as.numeric((st_area(intersected))) / 10000
+
+  if (nrow(intersected) == 0) {
+    return(NULL)
+  }
+
+  intersected %>%
+    sf::st_drop_geometry() %>%
+    dplyr::select({{ var }}, value) %>%
+    dplyr::mutate(
+      datetime = as.Date("2000-01-01"),
+      variable = {{ var }},
+      unit = "ha"
+    ) %>%
+    dplyr::select(datetime, variable, unit, value) %>%
+    dplyr::group_by(datetime, variable, unit) %>%
+    dplyr::summarise(value = sum(as.numeric(value))) %>%
+    dplyr::ungroup()
 }
 
 register_indicator(
