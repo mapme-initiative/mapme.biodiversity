@@ -55,10 +55,10 @@ calc_elevation <- function(engine = "extract",
            mode = "asset",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(nasa_srtm)) {
-      return(NA)
+      return(NULL)
     }
 
-    select_engine(
+    result <- select_engine(
       x = x,
       raster = nasa_srtm,
       stats = stats,
@@ -66,6 +66,14 @@ calc_elevation <- function(engine = "extract",
       name = "elevation",
       mode = "asset"
     )
+
+    result %>%
+      tidyr::pivot_longer(cols = dplyr::everything(), names_to = "variable") %>%
+      dplyr::mutate(
+        datetime = as.Date("2000-01-01"),
+        unit = "m"
+      ) %>%
+      dplyr::select(datetime, variable, unit, value)
   }
 }
 

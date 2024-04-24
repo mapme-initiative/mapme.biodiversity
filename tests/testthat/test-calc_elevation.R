@@ -1,5 +1,5 @@
 test_that("srtm elevation works", {
-  shp <- read_sf(
+  x <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
       package = "mapme.biodiversity"
     )
@@ -9,22 +9,19 @@ test_that("srtm elevation works", {
   ), pattern = ".tif$", full.names = TRUE)
   nasa_srtm <- rast(nasa_srtm)
   ce <- calc_elevation()
-  result <- ce(shp, nasa_srtm)
+  result <- ce(x, nasa_srtm)
   ce <- calc_elevation(stats = c("mean", "median", "sd"))
-  result_multi_stat <- ce(shp, nasa_srtm)
+  result_multi_stat <- ce(x, nasa_srtm)
   ce <- calc_elevation(engine = "zonal")
-  result_zonal <- ce(shp, nasa_srtm)
+  result_zonal <- ce(x, nasa_srtm)
   ce <- calc_elevation(engine = "extract")
-  result_extract <- ce(shp, nasa_srtm)
+  result_extract <- ce(x, nasa_srtm)
   ce <- calc_elevation(engine = "exactextract")
-  result_exact <- ce(shp, nasa_srtm)
+  result_exact <- ce(x, nasa_srtm)
 
+  expect_silent(.check_single_asset(result))
   expect_equal(
-    names(result),
-    c("elevation_mean")
-  )
-  expect_equal(
-    names(result_multi_stat),
+    unique(result_multi_stat$variable),
     c("elevation_mean", "elevation_median", "elevation_sd")
   )
   expect_equal(
@@ -36,10 +33,10 @@ test_that("srtm elevation works", {
     names(result_exact)
   )
   expect_equal(
-    result_zonal$elevation_mean,
-    result_extract$elevation_mean
+    result_zonal$value,
+    result_extract$value
   )
   expect_snapshot(
-    result_exact$elevation_mean
+    result_exact$value
   )
 })
