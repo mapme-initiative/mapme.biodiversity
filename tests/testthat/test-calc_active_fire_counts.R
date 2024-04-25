@@ -22,5 +22,5 @@ test_that("active fire count works", {
   result2 <- afc(x, nasa_firms2)
   expect_silent(.check_single_asset(result2))
   expect_equal(nrow(result2), 2)
-  expect_equal(result2$variable, c("MODIS-fire_count", "VIIRS-fire_count"))
+  expect_equal(result2$variable, c("modis_fire_count", "viirs_fire_count"))
 })

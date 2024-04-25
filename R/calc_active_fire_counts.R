@@ -72,7 +72,7 @@ calc_active_fire_counts <- function() {
       dplyr::ungroup() %>%
       dplyr::mutate(
         datetime = as.Date(paste0(year, "-01-01")),
-        variable = paste0(instrument, "-fire_count"),
+        variable = paste0(tolower(instrument), "_fire_count"),
         unit = "count"
       ) %>%
       dplyr::select(datetime, variable, unit, value)
