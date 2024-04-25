@@ -100,7 +100,7 @@ calc_precipitation_chirps <- function(years = 1981:2020,
       results <- purrr::map(1:length(results), function(i) {
         tibble(
           datetime = datetime,
-          variable = "chirps_prec",
+          variable = "precipitation",
           unit = "mm",
           value = as.numeric(results[[i]][["sum"]])
         )
@@ -108,7 +108,7 @@ calc_precipitation_chirps <- function(years = 1981:2020,
     } else {
       results <- tibble(
         datetime = datetime,
-        variable = "chirps_prec",
+        variable = "precipitation",
         unit = "mm",
         value = as.numeric(results[[1]][["sum"]])
       )
