@@ -27,9 +27,9 @@ test_that(".calc_fatalities works", {
   cf <- calc_fatalities(years = 1991:1992, precision_location = 7, precision_time = 5)
   result_all <- cf(x, list(ucdp_ged))
 
-  conf_types <- c("state-based conflict", "non-state conflict", "one-sided violence")
+  conf_types <- c("state_based_conflict", "non_state_conflict", "one_sided_violence")
   death_types <- c("deaths_civilians", "deaths_unknown", "deaths_total")
-  vars <- paste(rep(conf_types, each = length(death_types)), death_types, sep = " - ")
+  vars <- paste(rep(conf_types, each = length(death_types)), death_types, sep = "_")
   n_rows <- 216
 
   expect_silent(.check_single_asset(result_default))
