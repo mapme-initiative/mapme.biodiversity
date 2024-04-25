@@ -95,14 +95,14 @@ calc_gsw_recurrence <- function(engine = "extract", min_recurrence = NULL) {
       raster = global_surface_water_recurrence,
       stats = "sum",
       engine = engine,
-      name = "gsw_recurrence_area",
+      name = "gsw_recurrence",
       mode = "asset"
     )
 
     results %>%
       tidyr::pivot_longer(cols = dplyr::everything(), names_to = "variable") %>%
       dplyr::mutate(
-        variable = "gsw_recurrence_area",
+        variable = "gsw_recurrence",
         datetime = as.Date("2000-01-01"),
         unit = "ha"
       ) %>%
