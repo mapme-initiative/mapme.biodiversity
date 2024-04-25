@@ -28,7 +28,7 @@ test_that("precipitation indicator works", {
   expect_silent(.check_single_asset(result_extract[[1]]))
   expect_silent(.check_single_asset(result_exact[[1]]))
 
-  expect_equal(unique(result[[1]]$variable), "chirps_prec")
+  expect_equal(unique(result[[1]]$variable), "precipitation")
   expect_equal(result_zonal[[1]]$value, result_extract[[1]]$value,
     tolerance = 1e-4
   )
