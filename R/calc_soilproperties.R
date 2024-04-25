@@ -77,7 +77,7 @@ calc_soilproperties <- function(engine = "extract", stats = "mean") {
       mode = "asset"
     )
 
-    layers <- gsub(".tif", "", names(soilgrids))
+    layers <- gsub("-", "_", gsub(".tif", "", names(soilgrids)))
     results[["variable"]] <- layers
     results[["layer"]] <- purrr::map_chr(layers, function(lyr) strsplit(lyr, "_")[[1]][1])
     results <- tidyr::pivot_longer(results, -c(variable, layer), names_to = "stat", values_to = "value")
