@@ -68,6 +68,7 @@ calc_landcover <- function() {
         dplyr::mutate(
           datetime = regmatches(datetime, regexpr("\\d{4}", datetime)),
           datetime = as.Date(paste0(datetime, "-01-01")),
+          variable = variable,
           unit = "ha"
         ) %>%
         dplyr::select(datetime, variable, unit, value = area)
