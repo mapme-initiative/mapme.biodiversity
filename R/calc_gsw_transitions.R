@@ -82,7 +82,7 @@ calc_gsw_transitions <- function() {
         dplyr::select(variable, value)
     }) %>%
       dplyr::mutate(
-        variable = paste0("GSW ", variable),
+        variable = paste0("gsw_", variable),
         datetime = as.Date("2000-01-01"),
         unit = "ha"
       ) %>%
@@ -94,9 +94,9 @@ calc_gsw_transitions <- function() {
 .gsw_transition_classes <- data.frame(
   code = 1:10,
   variable = c(
-    "Permanent", "New Permanent", "Lost Permanent", "Seasonal",
-    "New Seasonal", "Lost Seasonal", "Seasonal to Permanent",
-    "Permanent to Seasonal", "Ephemeral Permanent", "Ephemeral Seasonal"
+    "permanent", "new_permanent", "lost_permanent", "seasonal",
+    "new_seasonal", "lost_seasonal", "seasonal_to_permanent",
+    "permanent_to_seasonal", "ephemeral_permanent", "ephemeral_seasonal"
   )
 )
 
