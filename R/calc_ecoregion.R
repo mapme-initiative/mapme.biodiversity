@@ -75,27 +75,28 @@ calc_ecoregion <- function() {
                        ...) {
   teow <- teow[[1]]
   teow <- st_make_valid(teow)
+  teow[["ECO_NAME"]] <- gsub("[-/&'() ]+", "_", tolower(teow[["ECO_NAME"]]))
 
   intersected <- suppressWarnings(st_intersection(x, teow))
   biome_and_name <- data.frame(
     BIOME = c(1:14, 98, 99),
     BIOME_NAME = c(
-      "Tropical & Subtropical Moist Broadleaf Forests",
-      "Tropical & Subtropical Dry Broadleaf Forests",
-      "Tropical & Subtropical Coniferous Forests",
-      "Temperate Broadleaf & Mixed Forests",
-      "Temperate Conifer Forests",
-      "Boreal Forests/Taiga",
-      "Tropical & Subtropical Grasslands, Savannas & Shrublands",
-      "Temperate Grasslands, Savannas & Shrublands",
-      "Flooded Grasslands & Savannas",
-      "Montane Grasslands & Shrublands",
-      "Tundra",
-      "Mediterranean Forests, Woodlands & Scrub",
-      "Deserts & Xeric Shrublands",
-      "Mangroves",
-      "Lake",
-      "Rock and Ice"
+      "tropical_subtropical_moist_broadleaf_forests",
+      "tropical_subtropical_dry_broadleaf_forests",
+      "tropical_subtropical_coniferous_forests",
+      "temperate_broadleaf_mixed_forests",
+      "temperate_conifer_forests",
+      "boreal_forests_taiga",
+      "tropical_subtropical_grasslands_savannas_shrublands",
+      "temperate_grasslands_savannas_shrublands",
+      "flooded_grasslands_savannas",
+      "montane_grasslands_shrublands",
+      "tundra",
+      "mediterranea_forests_woodlands_scrub",
+      "deserts_xeric_shrublands",
+      "mangroves",
+      "lake",
+      "rock_and_ice"
     )
   )
 
