@@ -18,9 +18,9 @@ test_that("deforestation drivers works", {
   expect_equal(
     unique(result$variable),
     c(
-      "commercial agriculture", "commercial oil palm", "managed forests",
-      "mining", "natural disturbances", "pasture", "roads", "wildfire",
-      "other subsistance agriculture", "shifting cultivation"
+      "commercial_agriculture", "commercial_oil_palm", "managed_forests",
+      "mining", "natural_disturbances", "pasture", "roads", "wildfire",
+      "other_subsistance_agriculture", "shifting_cultivation"
     )
   )
   expect_equal(sum(result$value), 16209.58, tolerance = 1e-4)

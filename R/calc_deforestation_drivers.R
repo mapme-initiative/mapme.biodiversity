@@ -51,10 +51,10 @@ calc_deforestation_drivers <- function() {
     }
     classes <- data.frame(
       class = c(
-        "commercial agriculture", "commercial oil palm",
-        "managed forests", "mining", "natural disturbances", "pasture",
-        "roads", "wildfire", "other subsistance agriculture",
-        "shifting cultivation"
+        "commercial_agriculture", "commercial_oil_palm",
+        "managed_forests", "mining", "natural_disturbances", "pasture",
+        "roads", "wildfire", "other_subsistance_agriculture",
+        "shifting_cultivation"
       ),
       code = c(1:7, 9, 80, 81)
     )
