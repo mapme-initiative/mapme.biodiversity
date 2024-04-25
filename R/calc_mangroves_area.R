@@ -58,7 +58,7 @@ calc_mangroves_area <- function() {
 
       tibble::tibble(
         datetime = as.Date(paste0(year, "-01-01")),
-        variable = "mangrove_area",
+        variable = "mangroves",
         unit = "ha",
         value = area
       )
