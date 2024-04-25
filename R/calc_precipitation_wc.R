@@ -63,14 +63,13 @@ calc_precipitation_wc <- function(engine = "extract", stats = "mean") {
       return(NULL)
     }
 
-    results <- .calc_worldclim(
+    .calc_worldclim(
       x = x,
       worldclim = worldclim_precipitation,
       engine = engine,
       stats = stats,
       unit = "mm"
     )
-    results
   }
 }
 
