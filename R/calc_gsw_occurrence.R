@@ -93,14 +93,14 @@ calc_gsw_occurrence <- function(engine = "extract", min_occurrence = NULL) {
       raster = global_surface_water_occurrence,
       stats = "sum",
       engine = engine,
-      name = "gsw_occurrence_area",
+      name = "gsw_occurrence",
       mode = "asset"
     )
 
     results %>%
       tidyr::pivot_longer(cols = dplyr::everything(), names_to = "variable") %>%
       dplyr::mutate(
-        variable = "gsw_occurrence_area",
+        variable = "gsw_occurrence",
         datetime = as.Date("2000-01-01"),
         unit = "ha"
       ) %>%
