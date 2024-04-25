@@ -77,7 +77,7 @@ calc_gsw_change <- function(engine = "extract", stats = "mean") {
       raster = global_surface_water_change,
       stats = stats,
       engine = engine,
-      name = "global_surface_water_change",
+      name = "gsw_change",
       mode = "asset"
     )
 
