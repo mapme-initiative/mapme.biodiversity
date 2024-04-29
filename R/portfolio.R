@@ -1,3 +1,137 @@
+#' Portfolio methods
+#'
+#' `write_portfolio()` writes a processed biodiversity portfolio to disk.
+#' In order to ensure interoperability with other geospatial software, the
+#' data has to be transformed to either long- or wide-format. With the long
+#' format, geometries will be repeated thus possibly resulting in
+#' a large file size. With the wide-format, indicators will be added
+#' to the portfolio as columns without repeating the geometries, but potentially
+#' resulting in a large number of columns
+#'
+#' @param x A portfolio object processed with `mapme.biodiversity`.
+#' @param dsn A file path for the output file.
+#' @param format A character indicating if data should be written in long or
+#'   wide format.
+#' @param overwrite A logical indicating if the output file should be
+#'   overwritten if it exists.
+#' @param ... Additional arguments supplied to `st_write()`
+#' @return `write_portfolio()` returns `dsn`, invisibly.
+#' @name portfolio
+#' @export
+write_portfolio <- function(x,
+                            dsn,
+                            format = c("long", "wide"),
+                            overwrite = FALSE,
+                            ...) {
+  x <- .check_portfolio(x)
+  format <- match.arg(format)
+
+  if (length(.indicators_col(x)) == 0) {
+    stop("No calculated indicators have been found")
+  }
+
+  if (file.exists(dsn) & !overwrite) {
+    stop(sprintf("Output file %s exists and overwrite is FALSE.", dsn))
+  }
+
+  transformer <- switch(format,
+    long = portfolio_long,
+    wide = portfolio_wide
+  )
+
+  data <- transformer(x)
+
+  st_write(data, dsn, delete_dsn = overwrite, ...)
+  invisible(dsn)
+}
+
+#' Transform portfolio to long
+#'
+#' `portfolio_long()` transforms a portfolio to long-format, potentially
+#' dropping geometries in the process.
+#'
+#' @param indicators If NULL (the default), all indicator columns will be detected
+#'   and transformed automatically. If a character vector is supplied, only
+#'   those indicators will be transformed.
+#' @param drop_geoms A logical, indicating if geometries should be dropped.
+#'
+#' @return `portfolio_long()` returns the portfolio object in long-format.
+#' @name portfolio
+#' @export
+#'
+portfolio_long <- function(x, indicators = NULL, drop_geoms = FALSE) {
+  .check_portfolio(x)
+  if (is.null(indicators)) {
+    indicators <- names(.indicators_col(x))
+  }
+  stopifnot(all(indicators %in% names(x)))
+
+  if (drop_geoms) x <- st_drop_geometry(x)
+
+  ind_cols <- c("indicator", "datetime", "variable", "unit", "value")
+  all_cols <- names(x)
+  other_cols <- all_cols[-which(all_cols %in% indicators)]
+
+  x_long <- purrr::map(indicators, function(ind) {
+    indicator <- tidyr::unnest(x, cols = {{ ind }})
+    indicator["indicator"] <- ind
+    indicator <- indicator[, c(other_cols, ind_cols)]
+  }) %>%
+    purrr::list_rbind()
+
+  if (!drop_geoms) {
+    x_long <- st_as_sf(x_long)
+  }
+  x_long
+}
+
+#' Transform portfolio to wide
+#'
+#' `portfolio_wide()` transforms a portfolio to wide-format, potentially
+#' dropping geometries in the process.
+#'
+#' @return `portfolio_wide()` returns the portfolio object in wide-format.
+#' @name portfolio
+#' @export
+#'
+portfolio_wide <- function(x, indicators = NULL, drop_geoms = FALSE) {
+  .check_portfolio(x)
+  if (is.null(indicators)) {
+    indicators <- names(.indicators_col(x))
+  }
+  stopifnot(all(indicators %in% names(x)))
+
+  if (drop_geoms) x <- st_drop_geometry(x)
+
+  indicators_wide <- purrr::map(indicators, function(indicator) {
+    indicator_assets <- x[[indicator]]
+    purrr::map(indicator_assets, function(asset) {
+      asset[["indicator"]] <- indicator
+      tidyr::pivot_wider(
+        asset,
+        names_from = c(indicator, datetime, variable, unit),
+        names_sep = "_", values_from = value
+      )
+    }) %>%
+      purrr::list_rbind()
+  }) %>%
+    purrr::list_cbind() %>%
+    dplyr::mutate(assetid = x[["assetid"]])
+
+  x_wide <- x %>%
+    dplyr::select(-{{ indicators }}) %>%
+    dplyr::left_join(indicators_wide)
+
+  if (!drop_geoms) {
+    x_wide <- st_as_sf(x_wide)
+    dplyr::relocate(x_wide, !!attributes(x_wide)[["sf_column"]],
+      .after = tidyselect::last_col()
+    )
+  }
+
+  x_wide
+}
+
 .check_portfolio <- function(x, verbose = mapme_options()[["verbose"]]) {
   stopifnot(inherits(x, "sf"))
 
@@ -6,135 +140,39 @@
     x <- st_transform(x, 4326)
   }
   if (any(!unique(st_geometry_type(x)) %in% c("POLYGON"))) {
-    stop("Some assests are not of type POLYGON. Please use sf::st_cast() to cast to POLYGON.")
+    msg <- paste("Some assests are not of type POLYGON.",
+      "Please use sf::st_cast() to cast to POLYGON.",
+      sep = " "
+    )
+    stop(msg)
   }
   if (!inherits(x, "tibble")) {
     x <- st_as_sf(tibble::as_tibble(x))
   }
   if ("assetid" %in% names(x) && verbose) {
-    message(
-      paste("Found a column named 'assetid'.",
-        " Overwritting its values with a unique identifier.",
-        sep = ""
-      )
+    msg <- paste("Found a column named 'assetid'.",
+      "Overwritting its values with a unique identifier.",
+      sep = " "
     )
+    message(msg)
   }
-  x$assetid <- 1:nrow(x)
+  x[["assetid"]] <- 1:nrow(x)
   x
 }
 
-#' Writing a portfolio to disk
-#'
-#' `write_portfolio()` writes a processed biodiversity portfolio to disk.
-#' In order to ensure interoperability with other geospatial software the only
-#' supported format is the GeoPackage.
-#' The metadata of a portfolio together with the geometry will be written
-#' to a table called `'metadata'`. All calculated indicators, which
-#' are expected to be present as nested list columns, will be written to their
-#' own respective tables. In order to allow re-joining the metadata with the
-#' indicators, it is expected that a column called `'assetid'` which uniquely
-#' identifies all assets is present. Usually, users do not have to take care of
-#' this since the usual `mapme.biodiversity` workflow will ensure that this
-#' columns is present. Additional arguments to `st_write()` can be supplied.
-#'
-#' @param x A portfolio object processed with `mapme.biodiversity`
-#' @param dsn A file path for the output file. Should end with `'.gpkg'`
-#' @param overwrite A logical indicating if the output file should be overwritten
-#'   if it exists
-#' @param ... Additional arguments supplied to `st_write()`
-#' @return `write_portfolio()` returns `x`, invisibly.
-#' @name portfolio
-#' @export
-write_portfolio <- function(x,
-                            dsn,
-                            overwrite = FALSE,
-                            ...) {
-  assetid <- NULL
-  stopifnot(inherits(x, "sf"))
-  list_cols <- sapply(st_drop_geometry(x), is.list)
-  present_indicators <- names(list_cols)[list_cols]
-
-
-  if (length(present_indicators) == 0) {
-    stop("No calculated indicators have been found. Cannot write as a portfolio.")
+.indicators_col <- function(x) {
+  inds <- which(sapply(x, is.list))
+  is_sf <- inherits(x, "sf")
+  if (is_sf && length(inds) == 1) {
+    msg <- paste("No calculated indicators have been found.",
+      "Cannot write as a portfolio.",
+      sep = " "
+    )
+    stop(msg)
   }
-
-  if (tools::file_ext(dsn) != "gpkg") {
-    warning("Can only write portfolio as GPKG. Changing file extension.")
-    filename <- paste0(strsplit(basename(dsn), split = "\\.")[[1]][1], ".gpkg")
-    if (length(filename) != 1) stop("Please omit any additional dots ('.') from your filename.")
-    dir <- dirname(dsn)
-    dsn <- file.path(dir, filename)
+  if (is_sf) {
+    inds[-which(names(inds) == attributes(x)[["sf_column"]])]
+  } else {
+    inds
   }
-
-  if (file.exists(dsn) & overwrite == FALSE) {
-    stop(sprintf("Output file %s exists and overwrite is FALSE.", dsn))
-  }
-
-  if (!"assetid" %in% names(x)) {
-    stop("Column 'assetid' is missing.")
-  }
-
-  if (nrow(x) != length(unique(x$assetid))) {
-    stop("Column 'assetid' does not uniquley identify assets.")
-  }
-
-  # separate metadata from data
-  metadata <- dplyr::select(x, -tidyselect::all_of(present_indicators))
-  data <- st_drop_geometry(dplyr::select(x, assetid, tidyselect::all_of(present_indicators)))
-
-  # initiate GPKG with metadata (including geometries)
-  st_write(metadata, dsn, "metadata", delete_dsn = overwrite, ...)
-
-  # loop through the nested indicators and append as their own layers
-  for (ind in present_indicators) {
-    tmp <- dplyr::select(data, assetid, tidyselect::all_of(ind))
-    tmp <- tidyr::unnest(tmp, tidyselect::all_of(ind))
-    st_write(tmp, dsn, ind, append = TRUE, ...)
-  }
-  invisible(x)
-}
-
-
-#' Reading a portfolio object from disk
-#'
-#' `read_portfolio()` is used to read a portfolio object that was previously
-#' written to disk via `write_portfolio()` back into R as an `sf` object.
-#' It should be directed against a GeoPackage which was the output
-#' of `write_portfolio()`, otherwise the function is very likely to fail.
-#' All available indicators will be read back into R as nested list columns
-#' reflecting the output once `calc_indicators()` has been called.
-#'
-#' @param src A character vector pointing to a GeoPackage that has been
-#'   previously written to disk via `write_portfolio()`
-#' @param ... Additional arguments supplied to `st_read()`
-#' @return `read_portfolio()` reutnrs an `sf` object object with nested list
-#'   columns for every indicator table found in the GeoPackage source file.
-#' @name portfolio
-#' @export
-#'
-read_portfolio <- function(src, ...) {
-  assetid <- NULL
-  all_layers <- st_layers(src)
-  if (!"metadata" %in% all_layers$name) {
-    stop(sprintf(
-      "Input file at '%s' does not seem to be a proper mapme.biodiversity portfolio file written with 'write_portfolio()'",
-      src
-    ))
-  }
-
-  metadata <- read_sf(src, layer = "metadata", ...)
-  present_indicators <- all_layers$name[-which(all_layers$name == "metadata")]
-  if (length(present_indicators) == 0) {
-    stop("Could not find any mapme.biodiversity indicator tables in the input file.")
-  }
-
-  for (ind in present_indicators) {
-    tmp <- read_sf(src, layer = ind, ...)
-    tmp <- tidyr::nest(tmp, data = !assetid)
-    names(tmp)[2] <- ind
-    metadata <- dplyr::left_join(metadata, tmp, by = "assetid")
-  }
-
-  dplyr::relocate(metadata, !!attributes(metadata)[["sf_column"]], .after = tidyselect::last_col())
 }

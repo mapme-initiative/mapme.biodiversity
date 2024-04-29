@@ -3,49 +3,54 @@
 \name{portfolio}
 \alias{portfolio}
 \alias{write_portfolio}
-\alias{read_portfolio}
-\title{Writing a portfolio to disk}
+\alias{portfolio_long}
+\alias{portfolio_wide}
+\title{Portfolio methods}
 \usage{
-write_portfolio(x, dsn, overwrite = FALSE, ...)
+write_portfolio(x, dsn, format = c("long", "wide"), overwrite = FALSE, ...)
 
-read_portfolio(src, ...)
+portfolio_long(x, indicators = NULL, drop_geoms = FALSE)
+
+portfolio_wide(x, indicators = NULL, drop_geoms = FALSE)
 }
 \arguments{
-\item{x}{A portfolio object processed with \code{mapme.biodiversity}}
+\item{x}{A portfolio object processed with \code{mapme.biodiversity}.}
 
-\item{dsn}{A file path for the output file. Should end with \code{'.gpkg'}}
+\item{dsn}{A file path for the output file.}
 
-\item{overwrite}{A logical indicating if the output file should be overwritten
-if it exists}
+\item{format}{A character indicating if data should be written in long or
+wide format.}
 
-\item{...}{Additional arguments supplied to \code{st_read()}}
+\item{overwrite}{A logical indicating if the output file should be
+overwritten if it exists.}
 
-\item{src}{A character vector pointing to a GeoPackage that has been
-previously written to disk via \code{write_portfolio()}}
+\item{...}{Additional arguments supplied to \code{st_write()}}
+
+\item{indicators}{If NULL (the default), all indicator columns will be detected
+and transformed automatically. If a character vector is supplied, only
+those indicators will be transformed.}
+
+\item{drop_geoms}{A logical, indicating if geometries should be dropped.}
 }
 \value{
-\code{write_portfolio()} returns \code{x}, invisibly.
+\code{write_portfolio()} returns \code{dsn}, invisibly.
 
-\code{read_portfolio()} reutnrs an \code{sf} object object with nested list
-columns for every indicator table found in the GeoPackage source file.
+\code{portfolio_long()} returns the portfolio object in long-format.
+
+\code{portfolio_wide()} returns the portfolio object in wide-format.
 }
 \description{
 \code{write_portfolio()} writes a processed biodiversity portfolio to disk.
-In order to ensure interoperability with other geospatial software the only
-supported format is the GeoPackage.
-The metadata of a portfolio together with the geometry will be written
-to a table called \code{'metadata'}. All calculated indicators, which
-are expected to be present as nested list columns, will be written to their
-own respective tables. In order to allow re-joining the metadata with the
-indicators, it is expected that a column called \code{'assetid'} which uniquely
-identifies all assets is present. Usually, users do not have to take care of
-this since the usual \code{mapme.biodiversity} workflow will ensure that this
-columns is present. Additional arguments to \code{st_write()} can be supplied.
+In order to ensure interoperability with other geospatial software, the
+data has to be transformed to either long- or wide-format. With the long
+format, geometries will be repeated thus possibly resulting in
+a large file size. With the wide-format, indicators will be added
+to the portfolio as columns without repeating the geometries, but potentially
+resulting in a large number of columns
 
-\code{read_portfolio()} is used to read a portfolio object that was previously
-written to disk via \code{write_portfolio()} back into R as an \code{sf} object.
-It should be directed against a GeoPackage which was the output
-of \code{write_portfolio()}, otherwise the function is very likely to fail.
-All available indicators will be read back into R as nested list columns
-reflecting the output once \code{calc_indicators()} has been called.
+\code{portfolio_long()} transforms a portfolio to long-format, potentially
+dropping geometries in the process.
+
+\code{portfolio_wide()} transforms a portfolio to wide-format, potentially
+dropping geometries in the process.
 }
