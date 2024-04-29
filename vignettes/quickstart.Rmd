@@ -193,7 +193,7 @@ for a resource are simply added as usual:
 aoi_gridded <- get_resources(
   x = aoi_gridded,
   get_worldpop(years = 2010:2015),
-  get_gfw_treecover(version = "GFC-2021-v1.8")
+  get_gfw_treecover(version = "GFC-2021-v1.9")
 )
 ```
 
@@ -252,16 +252,15 @@ barplot(pop,
 )
 ```
 
-If you wish to conduct your statistical analysis in R, you can use `{tidyr}` functionality
-to unnest one or multiple columns. Especially for large portfolios, it is usually
-a good idea to keep the geometry information in a separated variable
-to keep the size of the data object relatively small.
+If you wish to conduct your statistical analysis in R, you can use `portfolio_long()`
+and `portfolio_wide()` to change the data layout (see the respective [online tutorial](file:///home/darius/Documents/git-repos/mapme/mapme.biodiversity/docs/articles/output-wide.html)). 
+Especially for large portfolios, it is usually a good idea to keep the geometry 
+information in a separated variable to keep the size of the data object relatively 
+small.
 
 ```{r unnest}
 geometries <- select(aoi_gridded, assetid)
-aoi_gridded %>%
-  st_drop_geometry() %>%
-  tidyr::unnest(population_count)
+portfolio_long(aoi_gridded, drop_geoms = TRUE)
 ```
 
 # Enabling parallel computing
@@ -325,7 +324,7 @@ write_portfolio(
   x = aoi_gridded,
   dsn = tmp_output
 )
-(portfolio_from_disk <- read_portfolio(tmp_output))
+(portfolio_from_disk <- st_read(tmp_output))
 ```
 
 ```{r delete_tmp, echo=FALSE, include=FALSE, eval=FALSE}

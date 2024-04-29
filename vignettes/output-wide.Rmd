@@ -102,7 +102,10 @@ we will have to make available the Nelson et al. resource as well as requesting
 the calculation of the respective indicator.
 
 ```{r calc-elev}
-mapme_options(outdir = system.file("res", package = "mapme.biodiversity"))
+mapme_options(
+  outdir = system.file("res", package = "mapme.biodiversity"),
+  verbose = FALSE
+)
 
 port_w_nelson <- get_resources(aoi, get_nelson_et_al(ranges = "20k_50k"))
 port_w_traveltime <- calc_indicators(port_w_nelson, calc_traveltime(stats = "mean"))
@@ -125,26 +128,25 @@ From the syntax above, you can see how you can access a single object
 within the nested list column (e.g. by using the list accessor `[[`). In
 this case, the shape of the traveltime indicator is a single-row and
 two-column tibble with the average minutes and the distance category as its value. 
-Because the indicator comes as a single row, we can simply unnest
-the traveltime column to get to a wide-format output:
+We can now use either of two functions to transform the portfolio to long
+or wide formats:
 
 ```{r elev-to-wide}
-port_wide_1 <- tidyr::unnest(port_w_traveltime, traveltime)
-print(port_wide_1)
+portfolio_long(port_w_traveltime)
+portfolio_wide(port_w_traveltime)
 ```
 
-In this case, the result has 9 rows just like the original data frame.
-In this particular scenario, where the only variable is `minutes_mean`, the 
-object `port_wide_1` contains just one value per polygon.
-This aligns well with the characteristics of the wide format, which can be 
-easily understood and processed by various (geospatial) software.
-So, we can now export our portfolio for example as a geopackage that can be
-read directly into e.g. QGIS or as a CSV without the geospatial
-information:
+In either case, the result still has 9 rows just like the original data frame.
+In this particular scenario, where the is only a single variable for each asset, 
+the unnested portfolio contains just one value per asset.
+
+We could serialize the object to disk in either format by calling `write_portfolio()`:
 
 ```{r simple-export}
-st_write(port_wide_1, dsn = tempfile(fileext = ".gpkg"))
-write.csv(st_drop_geometry(port_wide_1), file = tempfile(fileext = ".csv"))
+dsn_long <- tempfile(fileext = ".gpkg")
+dsn_wide <- tempfile(fileext = ".gpkg")
+write_portfolio(port_w_traveltime, dsn_long, format = "long")
+write_portfolio(port_w_traveltime, dsn_wide, format = "wide")
 ```
 
 ## The harder case - indicators with multi-row output
@@ -168,52 +170,38 @@ print(port_w_prec$precipitation_wc[[1]])
 ```
 
 For a single asset, we obtain a tibble with 12 rows (for each month in
-the queried year 2018). Now, if we just simply unnest this indicator
-column observe what happens to the shape of the output:
+the queried year 2018). Now, let's have a look at what happens if we transform
+this table to long format:
 
 ```{r prec-unnest}
-port_wide_2 <- tidyr::unnest(port_w_prec, precipitation_wc)
-print(port_wide_2)
+portfolio_long(port_w_prec)
 ```
 
 Instead of 9 rows, we get a tibble with 108 rows (9 assets \* 12), with
 the metadata for each asset as well as the geometry column being
-repeated. This is not desirable, especially for portfolios with large
-numbers of assets where the repetition of the geometry data can cause
-very large objects. Now, let's investigate how we still are able to get
-a wide output. A valid approach is to re-shape the indicators per asset
-to a wide format before unnesting the indicator column. For this, let's
-write a function which takes the precipitation indicator of a single
-asset as input and transforms it to a wide-format.
+repeated. For very large portfolios, this data layout might be very memory 
+intensive. In these cases it is more favorable to transform the portfolio
+to a wide layout.
 
 ```{r fun-prec-to-wide}
-prec2wide <- function(data) {
-  pivot_wider(data, names_from = date, values_from = prec_mean, names_prefix = "prec-")
-}
-prec2wide(port_w_prec$precipitation_wc[[1]])
+portfolio_wide(port_w_prec)
 ```
 
-From the example output above we see that our custom `prec2wide()`
-functions takes a single tibble as input, puts in the dates appended by
-`prec-` as column names and the associated average precipitation values
-as a single row. Now, we can use functionality of the `purrr` package to
-map this function over our indicator column, save the result in a new
-column (or simply overwrite the original), and finally simply call
-unnest to get the output in a wide format.
+From the example output above we see that in this case, we obtain a resulting
+object with 9 rows only. The indicator data is now found in the respective
+columns which are named according to this schema:
 
-```{r prec-to-wide}
-port_w_prec$precipitation_wc2 <- purrr::map(port_w_prec$precipitation_wc, prec2wide)
-port_w_prec <- select(port_w_prec, precipitation_wc2)
-port_wide_3 <- unnest(port_w_prec, precipitation_wc2)
+`<indicator-name>_<datetime>_<variable>_<unit>`
 
-print(port_wide_3)
-```
+with the values being found in the rows for each unique combination of this 
+pattern.
 
-We can now use `st_write()` to save this wide-format sf object to a
-geospatial format of our choice or drop the geometry information
-altogether and dump the data into a csv.
+Similar to the simple case, we can use `write_portfolio()` to serialize 
+the portfolio object to disk in the desired layout:
 
 ```{r write-output}
-st_write(port_wide_3, dsn = tempfile(fileext = ".gpkg"))
-write.csv(st_drop_geometry(port_wide_3), file = tempfile(fileext = ".csv"))
+dsn_long <- tempfile(fileext = ".gpkg")
+dsn_wide <- tempfile(fileext = ".gpkg")
+write_portfolio(port_w_prec, dsn_long, format = "long")
+write_portfolio(port_w_prec, dsn_wide, format = "wide")
 ```
