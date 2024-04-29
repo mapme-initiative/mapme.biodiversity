@@ -44,6 +44,7 @@ calc_ecoregion <- function() {
            teow = NULL,
            name = "ecoregion",
            mode = "asset",
+           aggregation = "sum",
            verbose = mapme_options()[["verbose"]]) {
     ECO_NAME <- NULL
 

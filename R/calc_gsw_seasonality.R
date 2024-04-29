@@ -48,6 +48,7 @@ calc_gsw_seasonality <- function() {
            global_surface_water_seasonality = NULL,
            name = "gsw_seasonality",
            mode = "asset",
+           aggregation = "sum",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(global_surface_water_seasonality)) {
       return(NULL)

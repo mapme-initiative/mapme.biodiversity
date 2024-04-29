@@ -45,6 +45,7 @@ calc_active_fire_counts <- function() {
            nasa_firms = NULL,
            name = "active_fire_counts",
            mode = "asset",
+           aggregation = "sum",
            verbose = mapme_options()[["verbose"]]) {
     acq_date <- NULL
     year <- NULL

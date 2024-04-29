@@ -57,6 +57,7 @@ calc_temperature_min_wc <- function(engine = "extract", stats = "mean") {
            worldclim_min_temperature = NULL,
            name = "temperature_min_wc",
            mode = "asset",
+           aggregation = "stat",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(worldclim_min_temperature)) {
       return(NULL)

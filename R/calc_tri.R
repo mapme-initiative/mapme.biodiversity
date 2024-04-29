@@ -67,6 +67,7 @@ calc_tri <- function(engine = "extract", stats = "mean") {
            nasa_srtm = NULL,
            name = "tri",
            mode = "asset",
+           aggregation = "stat",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(nasa_srtm)) {
       return(NULL)

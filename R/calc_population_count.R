@@ -57,6 +57,7 @@ calc_population_count <- function(engine = "extract", stats = "sum") {
            worldpop = NULL,
            name = "population_count",
            mode = "asset",
+           aggregation = "stat",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(worldpop)) {
       return(NULL)

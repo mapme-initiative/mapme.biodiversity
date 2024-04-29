@@ -47,6 +47,7 @@ calc_landcover <- function() {
            esalandcover = NULL,
            name = "landcover",
            mode = "asset",
+           aggregation = "sum",
            verbose = mapme_options()[["verbose"]]) {
     percentage <- NULL
     year <- NULL

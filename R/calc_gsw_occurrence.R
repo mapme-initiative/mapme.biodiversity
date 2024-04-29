@@ -64,6 +64,7 @@ calc_gsw_occurrence <- function(engine = "extract", min_occurrence = NULL) {
            global_surface_water_occurrence = NULL,
            name = "gsw_occurence",
            mode = "asset",
+           aggregation = "sum",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(global_surface_water_occurrence)) {
       return(NULL)

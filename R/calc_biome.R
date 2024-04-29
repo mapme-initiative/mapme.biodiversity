@@ -44,6 +44,7 @@ calc_biome <- function() {
            teow = NULL,
            name = "biome",
            mode = "asset",
+           aggregation = "sum",
            verbose = mapme_options()[["verbose"]]) {
     BIOME_NAME <- NULL
 

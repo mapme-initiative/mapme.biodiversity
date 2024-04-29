@@ -66,6 +66,7 @@ calc_gsw_recurrence <- function(engine = "extract", min_recurrence = NULL) {
            global_surface_water_recurrence = NULL,
            name = "gsw_recurrence",
            mode = "asset",
+           aggregation = "sum",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(global_surface_water_recurrence)) {
       return(NULL)

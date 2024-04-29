@@ -57,6 +57,7 @@ calc_traveltime <- function(engine = "extract", stats = "mean") {
            nelson_et_al = NULL,
            name = "traveltime",
            mode = "asset",
+           aggregation = "stat",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(nelson_et_al)) {
       return(NULL)

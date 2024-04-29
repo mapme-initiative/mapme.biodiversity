@@ -46,6 +46,7 @@ calc_mangroves_area <- function() {
            gmw = NULL,
            name = "mangroves_area",
            mode = "asset",
+           aggregation = "sum",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(gmw)) {
       return(NULL)

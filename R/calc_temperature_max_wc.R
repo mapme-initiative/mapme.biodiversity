@@ -56,6 +56,7 @@ calc_temperature_max_wc <- function(engine = "extract", stats = "mean") {
            worldclim_max_temperature = NULL,
            name = "temperature_max_wc",
            mode = "asset",
+           aggregation = "stat",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(worldclim_max_temperature)) {
       return(NULL)

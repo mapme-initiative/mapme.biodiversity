@@ -53,6 +53,7 @@ calc_elevation <- function(engine = "extract",
            nasa_srtm,
            name = "elevation",
            mode = "asset",
+           aggregation = "stat",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(nasa_srtm)) {
       return(NULL)

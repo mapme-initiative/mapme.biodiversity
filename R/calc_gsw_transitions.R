@@ -59,6 +59,7 @@ calc_gsw_transitions <- function() {
            global_surface_water_transitions = NULL,
            name = "gsw_transitions",
            mode = "asset",
+           aggregation = "sum",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(global_surface_water_transitions)) {
       return(NULL)

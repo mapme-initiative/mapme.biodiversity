@@ -63,6 +63,7 @@ calc_soilproperties <- function(engine = "extract", stats = "mean") {
            soilgrids = NULL,
            name = "soilproperties",
            mode = "asset",
+           aggregation = "stat",
            verbose = mapme_options()[["verbose"]]) {
     layer <- stat <- conversion_factor <- conventional_units <- NULL
     # check if input engines are correct
