@@ -336,15 +336,33 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL) {
 
 .combine_chunks <- function(data, aggregation = "sum") {
   is_null <- sapply(data, is.null)
+
   if (all(is_null)) {
     return(NULL)
   }
 
-  agg <- .aggregation_fun(aggregation)
+  data <- data[!is_null]
+  if (length(data) == 1) {
+    return(data[[1]])
+  }
 
-  data %>%
-    purrr::list_rbind() %>%
-    dplyr::group_by(datetime, variable, unit) %>%
-    dplyr::summarise(value = agg(value, na.rm = TRUE)) %>%
-    dplyr::ungroup()
+  if (aggregation == "stat") {
+    data <- data %>%
+      purrr::list_rbind() %>%
+      dplyr::mutate(
+        stat = purrr::map_chr(strsplit(variable, "_"), function(x) rev(x)[1])
+      ) %>%
+      dplyr::group_by(datetime, variable, unit) %>%
+      dplyr::summarise(value = .aggregation_fun(stat[1])(value, na.rm = TRUE)) %>%
+      dplyr::ungroup()
+  } else {
+    agg <- .aggregation_fun(aggregation)
+    data <- data %>%
+      purrr::list_rbind() %>%
+      dplyr::group_by(datetime, variable, unit) %>%
+      dplyr::summarise(value = agg(value, na.rm = TRUE)) %>%
+      dplyr::ungroup()
+  }
+
+  data
 }
