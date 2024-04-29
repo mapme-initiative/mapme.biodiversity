@@ -148,7 +148,9 @@ made available, we can query the calculation of an indicator by using
 the `calc_indicators()` function. This function also expects the
 portfolio as input and one or more indicator functions. Once the
 indicator has been calculated for all assets in a portfolio, the data is
-returned as a nested list column to the original portfolio object.
+returned as a nested list column to the original portfolio object. The
+output of each indicator is standardized to common format, consisting of
+a tibble with columns `datetime`, `variable`, `unit`, and `value`.
 
 ``` r
 mapme_options(
