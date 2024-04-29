@@ -44,8 +44,9 @@ test_that(".check_portfolio works as expected", {
       package = "mapme.biodiversity"
     )
   )
-  expect_error(.check_portfolio(x), "Some assests are not of type POLYGON.")
-  x <- suppressWarnings(st_cast(x, to = "POLYGON")[1, ])
+  p <- suppressWarnings(st_centroid(x))
+  expect_error(.check_portfolio(p), "Only assets of type 'POLYGON' and 'MULTIPOLYGON' are supported.")
+  expect_silent(.check_portfolio(x))
 
   center <- as.numeric(suppressWarnings(st_coordinates(st_centroid(x))))
   srs <- sprintf(

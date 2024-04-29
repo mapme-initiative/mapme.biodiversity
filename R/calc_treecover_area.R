@@ -61,6 +61,7 @@ calc_treecover_area <- function(years = 2000:2020,
            gfw_lossyear = NULL,
            name = "treecover_area",
            mode = "asset",
+           aggregation = "sum",
            verbose = mapme_options()[["verbose"]]) {
     treecover <- NULL
     # handling of return value if resources are missing, e.g. no overlap
@@ -71,7 +72,7 @@ calc_treecover_area <- function(years = 2000:2020,
     gfw_treecover <- terra::mask(gfw_treecover, x)
     # check if gfw_treecover only contains 0s, e.g. on the ocean
     if (.gfw_empty_raster(gfw_treecover, min_cover)) {
-      return(tibble::tibble(years = years, treecover = 0))
+      return(NULL)
     }
     # prepare gfw rasters
     gfw <- .gfw_prep_rasters(x, gfw_treecover, gfw_lossyear, cover = min_cover)

@@ -139,12 +139,8 @@ portfolio_wide <- function(x, indicators = NULL, drop_geoms = FALSE) {
     message("CRS of x is not EPSG:4326. Attempting to transform.")
     x <- st_transform(x, 4326)
   }
-  if (any(!unique(st_geometry_type(x)) %in% c("POLYGON"))) {
-    msg <- paste("Some assests are not of type POLYGON.",
-      "Please use sf::st_cast() to cast to POLYGON.",
-      sep = " "
-    )
-    stop(msg)
+  if (any(!unique(st_geometry_type(x)) %in% c("POLYGON", "MULTIPOLYGON"))) {
+    stop("Only assets of type 'POLYGON' and 'MULTIPOLYGON' are supported.")
   }
   if (!inherits(x, "tibble")) {
     x <- st_as_sf(tibble::as_tibble(x))

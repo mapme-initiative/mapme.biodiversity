@@ -6,18 +6,24 @@
 \alias{mapme_options}
 \alias{get_resources}
 \alias{calc_indicators}
+\alias{prep_resources}
 \title{Portfolio methods for mapme.biodiversity}
 \usage{
-mapme_options(..., outdir, verbose, aria_bin, testing)
+mapme_options(..., outdir, chunk_size, verbose, aria_bin, testing)
 
 get_resources(x, ...)
 
 calc_indicators(x, ...)
+
+prep_resources(x, avail_resources = NULL, resources = NULL)
 }
 \arguments{
 \item{...}{One or more functions for resources/indicators}
 
 \item{outdir}{A length one character indicating the output path.}
+
+\item{chunk_size}{A numeric of length one giving the maximum chunk area in ha.
+Defaults to 100,000 ha.}
 
 \item{verbose}{A logical, indicating if informative messages should be printed.}
 
@@ -28,6 +34,12 @@ downloads.}
 during automated test pipelines.}
 
 \item{x}{An \code{sf} object with features of type \code{"POLYGON"}}
+
+\item{avail_resources}{A list object of available resources. If NULL (the default),
+the available resources will automatically be determined.}
+
+\item{resources}{A character vector with the resources to be prepared. If it
+it is NULL (the default) all available resources will be prepared.}
 }
 \value{
 \code{mapme_options()} returns a list of options if no arguments are specified. Otherwise sets
@@ -38,6 +50,9 @@ available in the package environment. Returns \code{x}, invisibly.
 
 \code{calc_indicators()} returns \code{x}, invisibly, with an additional nested
 list column per requested indicator.
+
+\code{prep_resources()} returns a list with prepared vector and raster
+resources as \code{sf} and \code{SpatRaster}-objects.
 }
 \description{
 \code{mapme_options()} sets default options for mapme.biodiversity to control the
@@ -56,6 +71,10 @@ temporary directory and verbosity, the output of \code{mapme_options()} is used.
 requirement is that the resources that are mandatory inputs for the requested
 indicators are available locally. Multiple indicators and their respective
 additional arguments can be supplied.
+
+This function reads and crops available resources to the extent of a single
+asset. Specific resources can be queried. If not supplied (the default), all
+available resources will be prepared.
 }
 \examples{
 library(mapme.biodiversity)
