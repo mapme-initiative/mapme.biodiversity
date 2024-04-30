@@ -17,7 +17,6 @@
 #' J. F., Wettengel, W. W., Hedao, P., Kassem, K. R. 2001. Terrestrial ecoregions of
 #' the world: a new map of life on Earth. Bioscience 51(11):933-938.
 #' \doi{https://doi.org/10.1641/0006-3568(2001)051[0933:TEOTWA]2.0.CO;2}
-#' @source \url{https://www.worldwildlife.org}
 #' @importFrom utils unzip
 #' @include register.R
 #' @export

@@ -4,9 +4,6 @@
 \alias{teow}
 \alias{get_teow}
 \title{Terrestrial Ecoregions of the World (TEOW) Polygon}
-\source{
-\url{https://www.worldwildlife.org}
-}
 \usage{
 get_teow()
 }
