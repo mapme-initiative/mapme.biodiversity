@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -283,8 +283,8 @@ as a geopackage that can be read directly into e.g. QGIS or as a CSV
 without the geospatial information:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">st_write</a></span><span class="op">(</span><span class="va">port_wide_1</span>, dsn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".gpkg"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Writing layer `file252d61cb08a4' to data source </span></span>
-<span><span class="co">#&gt;   `/tmp/Rtmp5yhPIc/file252d61cb08a4.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt; Writing layer `file25803cc9acdf' to data source </span></span>
+<span><span class="co">#&gt;   `/tmp/RtmpWnQtrq/file25803cc9acdf.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">#&gt; Writing 9 features with 3 fields and geometry type Polygon.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="va">port_wide_1</span><span class="op">)</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".csv"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -423,8 +423,8 @@ object to a geospatial format of our choice or drop the geometry
 information altogether and dump the data into a csv.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">st_write</a></span><span class="op">(</span><span class="va">port_wide_3</span>, dsn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".gpkg"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Writing layer `file252d4a9f2d13' to data source </span></span>
-<span><span class="co">#&gt;   `/tmp/Rtmp5yhPIc/file252d4a9f2d13.gpkg' using driver `GPKG'</span></span>
+<span><span class="co">#&gt; Writing layer `file25804feaf6c2' to data source </span></span>
+<span><span class="co">#&gt;   `/tmp/RtmpWnQtrq/file25804feaf6c2.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">#&gt; Writing 9 features with 12 fields and geometry type Polygon.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="va">port_wide_3</span><span class="op">)</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".csv"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
