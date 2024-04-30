@@ -297,7 +297,11 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL) {
   if (area < chunk_size) {
     return(x)
   }
-  if (st_is_longlat(x)) x <- st_transform(x, "ESRI:54009")
+  if (st_is_longlat(x)) {
+    crs <- "+proj=laea +lon_0=%s +lat_0=%s +ellps=WGS84 +no_defs"
+    coords <- suppressWarnings(as.numeric(st_coordinates(st_centroid(x))))
+    x <- st_transform(x, sprintf(crs, coords[1], coords[2]))
+  }
   size <- sqrt(chunk_size * 10000) # to meters
 
   x_grid <- st_make_grid(x, cellsize = c(size, size))
@@ -335,6 +339,7 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL) {
 }
 
 .combine_chunks <- function(data, aggregation = "sum") {
+  stat <- NULL
   is_null <- sapply(data, is.null)
 
   if (all(is_null)) {

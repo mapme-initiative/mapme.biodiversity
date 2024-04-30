@@ -184,7 +184,7 @@ test_that(
     expect_silent(x_chunked <- .chunk_asset(x, chunk_size = area_ha))
     expect_equal(st_bbox(x), st_bbox(x_chunked))
     expect_equal(st_area(x), sum(st_area(x_chunked)))
-    expect_equal(nrow(x_chunked), 27)
+    expect_equal(nrow(x_chunked), 24)
     expect_equal(x, .chunk_asset(x, chunk_size = area_ha * 10))
 
     data <- tibble(
