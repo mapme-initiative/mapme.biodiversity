@@ -1,5 +1,7 @@
 # mapme.biodiversity (development version)
 
+# mapme.biodiversity 0.6.0
+
 ## Breaking changes
 
 - introduces a new UI based on closures for resources and indicators, see #240 for
