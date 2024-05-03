@@ -17,11 +17,12 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, message=FALSE}
 library(sf)
 library(dplyr)
 library(tidyr)
 library(mapme.biodiversity)
+mapme_options(verbose = FALSE)
 ```
 
 ## Objectives
@@ -29,12 +30,11 @@ library(mapme.biodiversity)
 This tutorial gives you some information how to transform the output of
 the mapme-biodiversity package to a wide format for exchange with other
 (geospatial-)software, such as QGIS. This is necessary because the
-package uses the so-called nested-list format by default to support very
-different indicators that each may come in its own format. However, this
-format is specific to R and to use the data in other software thus
-requires some additional steps to be taken. This vignette thus shows you
-how you can obtain a wide-format for your portfolio that you can easily
-export and use with other software.
+package uses the so-called nested-list format by default to represent indicators. 
+However, this format is specific to R and to use the data in other software thus
+requires some additional steps to be taken. This vignette shows you
+how you can change the data layout of your portfolio that you can easily
+serialize to a spatial format of your choice and use with other software.
 
 ## What are long vs. wide tables?
 
@@ -45,7 +45,7 @@ structure our data when we work with spreadsheets, e.g. in Excel. In
 wide-format, the identifier of a observation is included exactly once
 and does not repeat itself (see Table A). In the long format, the
 identifier as well as other qualifying variables, might be repeated
-several times to uniquely identify each observation is a single row (see
+several times to uniquely identify each observation in a single row (see
 Table B). The long format is often required when interacting with
 computers, e.g. to make plots with ggplot2. The content of the two is
 exactly the same either way, the one might be just more friendly to
@@ -101,15 +101,25 @@ to cities between 20,000 and 50,000 inhabitants in our portfolio. As usual,
 we will have to make available the Nelson et al. resource as well as requesting 
 the calculation of the respective indicator.
 
+
+```{r init-data-dir, echo=FALSE}
+outdir <- file.path(tempdir(), "mapme-resources")
+mapme.biodiversity:::.copy_resource_dir(outdir)
+```
+
+
 ```{r calc-elev}
+outdir <- file.path(tempdir(), "mapme-resources")
+dir.create(outdir, showWarnings = FALSE)
+
 mapme_options(
-  outdir = system.file("res", package = "mapme.biodiversity"),
+  outdir = outdir,
   verbose = FALSE
 )
 
-port_w_nelson <- get_resources(aoi, get_nelson_et_al(ranges = "20k_50k"))
-port_w_traveltime <- calc_indicators(port_w_nelson, calc_traveltime(stats = "mean"))
-print(port_w_traveltime)
+aoi <- get_resources(aoi, get_nelson_et_al(ranges = "20k_50k"))
+aoi <- calc_indicators(aoi, calc_traveltime(stats = "mean"))
+print(aoi)
 ```
 
 As we can observe from the output, a new column was added to the `sf`
@@ -117,36 +127,38 @@ object. It is called `traveltime` and is of type `list` indicating
 that it represents a nested-list column. What that means is that we 
 are able to maintain the rectangular shape of our original data 
 (e.g. one polygon per row), while supporting arbitrarily shaped 
-outputs for indicators. Let's observe how the traveltime indicator
+outputs for indicators. Let's observe how the `traveltime` indicator
 looks like in this instance:
 
 ```{r investigate-elev}
-print(port_w_traveltime$traveltime[[1]])
+print(aoi$traveltime[[1]])
 ```
 
 From the syntax above, you can see how you can access a single object
 within the nested list column (e.g. by using the list accessor `[[`). In
-this case, the shape of the traveltime indicator is a single-row and
+this case, the shape of the `traveltime` indicator is a single-row and
 two-column tibble with the average minutes and the distance category as its value. 
 We can now use either of two functions to transform the portfolio to long
 or wide formats:
 
 ```{r elev-to-wide}
-portfolio_long(port_w_traveltime)
-portfolio_wide(port_w_traveltime)
+portfolio_long(aoi)
+portfolio_wide(aoi)
 ```
 
-In either case, the result still has 9 rows just like the original data frame.
-In this particular scenario, where the is only a single variable for each asset, 
-the unnested portfolio contains just one value per asset.
+Both function will, by default, automatically detect nested-list columns and 
+change the data layout. In this case, the result still has 9 rows just like the 
+original data frame because the indicator `traveltime` consisted of just a single
+row per asset. 
 
-We could serialize the object to disk in either format by calling `write_portfolio()`:
+We could serialize the object to disk in either format by calling `write_portfolio()`
+with the respective `format` argument:
 
 ```{r simple-export}
 dsn_long <- tempfile(fileext = ".gpkg")
 dsn_wide <- tempfile(fileext = ".gpkg")
-write_portfolio(port_w_traveltime, dsn_long, format = "long")
-write_portfolio(port_w_traveltime, dsn_wide, format = "wide")
+write_portfolio(aoi, dsn_long, format = "long", quiet = TRUE)
+write_portfolio(aoi, dsn_wide, format = "wide", quiet = TRUE)
 ```
 
 ## The harder case - indicators with multi-row output
@@ -155,36 +167,37 @@ Let's continue to query an indicator which has a multi-row output, i.e.
 precipitation statistics from [WorldClim](https://www.worldclim.org/).
 
 ```{r calc-prec}
-port_w_wc <- get_resources(aoi, get_worldclim_precipitation(years = 2010:2018))
-port_w_prec <- calc_indicators(port_w_wc, calc_precipitation_wc(stats = "mean"))
-print(port_w_prec)
+aoi <- get_resources(aoi, get_worldclim_precipitation(years = 2010:2018))
+aoi <- calc_indicators(aoi, calc_precipitation_wc(stats = "mean"))
+print(aoi)
 ```
 
-We see that similar to the traveltime indicator, the output consists of 9
-rows with the precipitation indicator as a single nested-list column.
-Note, however, the differences when we take a look at the shape of the
-indicator for a specific asset:
+We see that in addition to the `traveltime` indicator, we now obtained an
+additional nested-list column called `precipitation_wc`.
+Note, however, the differences in the shape of the indicator tibble when we 
+take a closer look for a specific asset:
 
 ```{r investigate-precip}
-print(port_w_prec$precipitation_wc[[1]])
+print(aoi$precipitation_wc[[1]])
 ```
 
 For a single asset, we obtain a tibble with 12 rows (for each month in
 the queried year 2018). Now, let's have a look at what happens if we transform
-this table to long format:
+this table to long format, this time specifically requesting to only extract
+the `precipitation_wc` indicators:
 
 ```{r prec-unnest}
-portfolio_long(port_w_prec)
+portfolio_long(aoi, indicators = "precipitation_wc")
 ```
 
 Instead of 9 rows, we get a tibble with 108 rows (9 assets \* 12), with
-the metadata for each asset as well as the geometry column being
-repeated. For very large portfolios, this data layout might be very memory 
-intensive. In these cases it is more favorable to transform the portfolio
-to a wide layout.
+the metadata for each asset with the geometry column and other identifying 
+values being repeated 12 times each. For very large portfolios, this data layout 
+might be very memory intensive. In these cases it might be more favorable to 
+transform the portfolio to a wide layout.
 
 ```{r fun-prec-to-wide}
-portfolio_wide(port_w_prec)
+portfolio_wide(aoi, indicators = "precipitation_wc")
 ```
 
 From the example output above we see that in this case, we obtain a resulting
@@ -196,12 +209,15 @@ columns which are named according to this schema:
 with the values being found in the rows for each unique combination of this 
 pattern.
 
-Similar to the simple case, we can use `write_portfolio()` to serialize 
-the portfolio object to disk in the desired layout:
+Note, that the `traveltime` still is represented as a nested-list column. When
+serializing to disk, all present indicators are going to extracted in order to
+be able to serialize to spatial data formats. If it is not desired to include
+certain indicators you will have to subset the portfolio as indicated 
+in the following code block:
 
 ```{r write-output}
 dsn_long <- tempfile(fileext = ".gpkg")
 dsn_wide <- tempfile(fileext = ".gpkg")
-write_portfolio(port_w_prec, dsn_long, format = "long")
-write_portfolio(port_w_prec, dsn_wide, format = "wide")
+write_portfolio(select(aoi, traveltime), dsn_long, format = "long", quiet = TRUE)
+write_portfolio(select(aoi, traveltime), dsn_wide, format = "wide", quiet = TRUE)
 ```
