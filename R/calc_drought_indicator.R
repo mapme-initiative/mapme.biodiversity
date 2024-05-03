@@ -47,7 +47,7 @@
 #'       stats = c("mean", "median")
 #'     )
 #'   ) %>%
-#'   tidyr::unnest(drought_indicator)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
