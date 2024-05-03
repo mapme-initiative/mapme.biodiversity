@@ -36,7 +36,7 @@
 #'   read_sf() %>%
 #'   get_resources(get_fritz_et_al(resolution = 100)) %>%
 #'   calc_indicators(calc_deforestation_drivers()) %>%
-#'   tidyr::unnest(deforestation_drivers)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
