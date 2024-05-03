@@ -102,7 +102,7 @@ calc_gsw_occurrence <- function(engine = "extract", min_occurrence = NULL) {
       tidyr::pivot_longer(cols = dplyr::everything(), names_to = "variable") %>%
       dplyr::mutate(
         variable = "gsw_occurrence",
-        datetime = as.Date("2000-01-01"),
+        datetime = as.Date("2021-01-01"),
         unit = "ha"
       ) %>%
       dplyr::select(datetime, variable, unit, value)
