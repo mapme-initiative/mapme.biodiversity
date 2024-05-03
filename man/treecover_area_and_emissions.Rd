@@ -67,7 +67,7 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   calc_indicators(
     calc_treecover_area_and_emissions(years = 2016:2017, min_size = 1, min_cover = 30)
   ) \%>\%
-  tidyr::unnest(treecover_area_and_emissions)
+  portfolio_long()
 
 aoi
 }
