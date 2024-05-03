@@ -40,7 +40,7 @@
 #'   calc_indicators(
 #'     calc_elevation(engine = "extract", stats = c("mean", "median", "sd", "var"))
 #'   ) %>%
-#'   tidyr::unnest(elevation)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
