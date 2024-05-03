@@ -45,7 +45,7 @@
 #'   calc_indicators(
 #'     calc_traveltime(engine = "extract", stats = c("min", "max"))
 #'   ) %>%
-#'   tidyr::unnest(traveltime)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
