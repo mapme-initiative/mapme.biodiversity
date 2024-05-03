@@ -48,7 +48,7 @@
 #'   calc_indicators(
 #'     calc_gsw_recurrence(engine = "extract", min_recurrence = 10)
 #'   ) %>%
-#'   tidyr::unnest(gsw_recurrence)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
