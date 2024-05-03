@@ -48,7 +48,7 @@ aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
   read_sf() \%>\%
   get_resources(get_global_surface_water_seasonality()) \%>\%
   calc_indicators(calc_gsw_seasonality()) \%>\%
-  tidyr::unnest(gsw_seasonality)
+  portfolio_long()
 
 aoi
 }

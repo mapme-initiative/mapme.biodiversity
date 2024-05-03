@@ -39,7 +39,7 @@
 #'   read_sf() %>%
 #'   get_resources(get_global_surface_water_seasonality()) %>%
 #'   calc_indicators(calc_gsw_seasonality()) %>%
-#'   tidyr::unnest(gsw_seasonality)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
