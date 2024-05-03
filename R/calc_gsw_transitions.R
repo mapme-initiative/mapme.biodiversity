@@ -50,7 +50,7 @@
 #'   read_sf() %>%
 #'   get_resources(get_global_surface_water_transitions()) %>%
 #'   calc_indicators(calc_gsw_transitions()) %>%
-#'   tidyr::unnest(gsw_transitions)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
