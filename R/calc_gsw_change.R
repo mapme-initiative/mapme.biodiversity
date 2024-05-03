@@ -85,7 +85,7 @@ calc_gsw_change <- function(engine = "extract", stats = "mean") {
     results %>%
       tidyr::pivot_longer(cols = dplyr::everything(), names_to = "variable") %>%
       dplyr::mutate(
-        datetime = as.Date("2000-01-01"),
+        datetime = as.Date("2021-01-01"),
         unit = "unitless"
       ) %>%
       dplyr::select(datetime, variable, unit, value)
