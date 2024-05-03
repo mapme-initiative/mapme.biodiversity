@@ -60,7 +60,7 @@ aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
   calc_indicators(
     calc_gsw_change(engine = "extract", stats = "mean")
   ) \%>\%
-  tidyr::unnest(gsw_change)
+  portfolio_long()
 
 aoi
 }

@@ -48,7 +48,7 @@
 #'   calc_indicators(
 #'     calc_gsw_change(engine = "extract", stats = "mean")
 #'   ) %>%
-#'   tidyr::unnest(gsw_change)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
