@@ -44,7 +44,7 @@
 #'     get_gfw_lossyear(version = "GFC-2022-v1.10")
 #'   ) %>%
 #'   calc_indicators(calc_treecover_area(years = 2016:2017, min_size = 1, min_cover = 30)) %>%
-#'   tidyr::unnest(treecover_area)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
@@ -61,16 +61,18 @@ calc_treecover_area <- function(years = 2000:2020,
            gfw_lossyear = NULL,
            name = "treecover_area",
            mode = "asset",
+           aggregation = "sum",
            verbose = mapme_options()[["verbose"]]) {
+    treecover <- NULL
     # handling of return value if resources are missing, e.g. no overlap
     if (any(is.null(gfw_treecover), is.null(gfw_lossyear))) {
-      return(NA)
+      return(NULL)
     }
     # mask gfw
     gfw_treecover <- terra::mask(gfw_treecover, x)
     # check if gfw_treecover only contains 0s, e.g. on the ocean
     if (.gfw_empty_raster(gfw_treecover, min_cover)) {
-      return(tibble::tibble(years = years, treecover = 0))
+      return(NULL)
     }
     # prepare gfw rasters
     gfw <- .gfw_prep_rasters(x, gfw_treecover, gfw_lossyear, cover = min_cover)
@@ -108,7 +110,15 @@ calc_treecover_area <- function(years = 2000:2020,
 
     rm(gfw)
     gc()
-    tibble::as_tibble(gfw_stats)
+    gfw_stats %>%
+      dplyr::mutate(
+        datetime = as.Date(paste0(years, "-01-01")),
+        variable = "treecover",
+        unit = "ha",
+        value = treecover
+      ) %>%
+      dplyr::select(datetime, variable, unit, value) %>%
+      tibble::as_tibble()
   }
 }
 

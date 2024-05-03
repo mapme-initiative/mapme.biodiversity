@@ -9,7 +9,7 @@
 #' @importFrom utils download.file
 #' @noRd
 #' @keywords internal
-globalVariables(c(":=", "!!", ".id", "."))
+globalVariables(c(":=", "!!", ".id", ".", "datetime", "variable", "unit", "value"))
 NULL
 
 

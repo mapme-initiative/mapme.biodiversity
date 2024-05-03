@@ -1,6 +1,6 @@
 test_that("calc_indicator works", {
   .clear_resources()
-  aoi <- read_sf(
+  x <- read_sf(
     system.file("extdata", "gfw_sample.gpkg",
       package = "mapme.biodiversity"
     )
@@ -11,53 +11,67 @@ test_that("calc_indicator works", {
   resource_dir <- system.file("res", package = "mapme.biodiversity")
   file.copy(resource_dir, temp_loc, recursive = TRUE)
   outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
-  tmpdir <- tempdir()
 
-  aoi <- suppressWarnings(st_cast(aoi, to = "POLYGON"))[1, ]
+  x <- suppressWarnings(st_cast(x, to = "POLYGON"))[1, ]
   mapme_options(
     outdir = outdir,
-    tmpdir = tmpdir,
     verbose = FALSE
   )
 
-  aoi <- get_resources(
-    aoi,
+  x <- get_resources(
+    x,
     get_gfw_treecover(version = "GFC-2020-v1.8"),
     get_gfw_lossyear(version = "GFC-2020-v1.8")
   )
 
   stat <- calc_indicators(
-    aoi,
+    x,
     calc_treecover_area(years = 2000:2005, min_size = 5, min_cover = 30)
   )$treecover_area[[1]]
 
-  expect_equal(
-    names(stat),
-    c("years", "treecover")
-  )
-  expect_equal(
-    stat$years,
-    2000:2005
-  )
-  expect_equal(
-    stat$treecover,
+  expect_equal(names(stat), c("datetime", "variable", "unit", "value"))
+  expect_equal(format(stat$datetime, "%Y"), as.character(2000:2005))
+  expect_equal(stat$value,
     c(1996.577, 1996.064, 1994.376, 1960.769, 1951.388, 1947.187),
     tolerance = 1e-3
+  )
+})
+
+test_that("calc_indicator works with MULTIPOLYGON and chunking", {
+  x <- read_sf(
+    system.file("extdata", "gfw_sample.gpkg",
+      package = "mapme.biodiversity"
+    )
+  )
+  x <- st_cast(x, "MULTIPOLYGON")
+  area_ha <- as.numeric(st_area(x)) / 10000 / 2
+
+  expect_true(st_geometry_type(x) == "MULTIPOLYGON")
+
+  temp_loc <- file.path(tempdir(), "mapme.biodiversity")
+  dir.create(temp_loc, showWarnings = FALSE)
+  resource_dir <- system.file("res", package = "mapme.biodiversity")
+  file.copy(resource_dir, temp_loc, recursive = TRUE)
+  outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
+
+  mapme_options(
+    outdir = outdir,
+    chunk_size = area_ha,
+    verbose = FALSE
   )
 
-  expect_equal(
-    names(stat),
-    c("years", "treecover")
+  x <- get_resources(
+    x,
+    get_gfw_treecover(version = "GFC-2020-v1.8"),
+    get_gfw_lossyear(version = "GFC-2020-v1.8")
   )
-  expect_equal(
-    stat$years,
-    2000:2005
+
+  stat <- calc_indicators(
+    x,
+    calc_treecover_area(years = 2000:2005, min_size = 5, min_cover = 30)
   )
-  expect_equal(
-    stat$treecover,
-    c(1996.577, 1996.064, 1994.376, 1960.769, 1951.388, 1947.187),
-    tolerance = 1e-3
-  )
+
+  expect_true(inherits(stat$treecover_area[[1]], "tbl_df"))
 })
 
 test_that("Parallelization works", {
@@ -101,16 +115,10 @@ test_that("Parallelization works", {
     )
   plan(sequential)
 
-  expect_equal(
-    names(stat),
-    c("assetid", "treecover_area", "x")
-  )
-  expect_equal(
-    nrow(stat),
-    9
-  )
+  expect_equal(names(stat), c("assetid", "treecover_area", "x"))
+  expect_equal(nrow(stat), 9)
 
-  stat <- lapply(stat$treecover_area, function(x) x$treecover)
+  stat <- lapply(stat$treecover_area, function(x) x$value)
   names(stat) <- 1:length(stat)
   stat <- rowSums(as.data.frame(stat))
 
@@ -123,11 +131,11 @@ test_that("Parallelization works", {
 
 test_that(".check_indicator_fun works correctly", {
   expect_error(.check_indicator_fun("a"))
-  fun <- function(x, name, mode) {}
+  fun <- function(x, name, mode, aggregation) {}
   expect_error(.check_indicator_fun(fun))
-  fun <- function(x, name, mode, verbose) {}
+  fun <- function(x, name, mode, aggregation, verbose) {}
   expect_silent(.check_indicator_fun(fun))
-  fun <- function(x, some_resource, name, mode, verbose) {}
+  fun <- function(x, some_resource, name, mode, aggregation, verbose) {}
   expect_silent(f <- .check_indicator_fun(fun))
   expect_true(inherits(f, "function"))
 })
@@ -147,66 +155,64 @@ test_that(".check_avail_resources works correctly", {
   expect_error(.check_avail_resources(list(), "some_resource"))
 })
 
-test_that(".bind_assets works correctly", {
-  # Case 1: All assets return equally shaped tibble
-  results <- list(
-    tibble::tibble(
-      year = c(2010, 2011),
-      value = c(0.5, 1.0)
-    ),
-    tibble::tibble(
-      year = c(2010, 2011),
-      value = c(0.0, 0.5)
+test_that(".add_indicator_column works correctly", {
+  .clear_resources()
+  x <- read_sf(
+    system.file("extdata", "gfw_sample.gpkg",
+      package = "mapme.biodiversity"
     )
   )
 
-  expected_results <- tibble::tibble(
-    .id = c("1", "1", "2", "2"),
-    year = c(2010, 2011, 2010, 2011),
-    value = c(0.5, 1.0, 0.0, 0.5)
-  )
-
-  expect_equal(
-    .bind_assets(results),
-    expected_results
-  )
-
-  # Case 2: All assets return NA
-  results <- list(
-    NA,
-    NA
-  )
-
-  expected_results <- tibble::tibble(
-    .id = c("1", "2"),
-    value = c(NA, NA)
-  )
-
-  expect_equal(
-    .bind_assets(results),
-    expected_results
-  )
-
-  # Case 3: Some asset(s) return(s) NA
-  results <- list(
-    tibble::tibble(
-      year = c(2010, 2011),
-      value = c(0.5, 1.0)
-    ),
-    NA
-  )
-
-  expected_results <- tibble::tibble(
-    .id = c("1", "1", "2"),
-    year = c(2010, 2011, NA),
-    value = c(0.5, 1.0, NA)
-  )
-
-  expect_equal(
-    .bind_assets(results),
-    expected_results
-  )
+  indicator <- lapply(1:nrow(x), function(i) tibble(A = 1, b = 2))
+  expect_silent(x <- .add_indicator_column(x, indicator, name = "new_indicator"))
+  expect_warning(.add_indicator_column(x, indicator, name = "new_indicator"))
+  expect_true("new_indicator" %in% names(x))
 })
+
+test_that(
+  {
+    "chunking works correctly"
+  },
+  {
+    .clear_resources()
+    x <- read_sf(
+      system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+        package = "mapme.biodiversity"
+      )
+    )
+    area_ha <- (as.numeric(st_area(x)) / 10000) / 5
+    expect_silent(x_chunked <- .chunk_asset(x, chunk_size = area_ha))
+    expect_equal(st_bbox(x), st_bbox(x_chunked))
+    expect_equal(st_area(x), sum(st_area(x_chunked)))
+    expect_equal(nrow(x_chunked), 24)
+    expect_equal(x, .chunk_asset(x, chunk_size = area_ha * 10))
+
+    data <- tibble(
+      datetime = "2000-01-01",
+      variable = "test",
+      unit = "ha",
+      value = 1
+    )
+
+    data <- lapply(1:10, function(i) {
+      if (i == 5) {
+        return(NULL)
+      }
+      data
+    })
+
+    expect_silent(data2 <- .combine_chunks(data, aggregation = "sum"))
+    expect_true(inherits(data2, "tbl_df"))
+    expect_equal(nrow(data2), 1)
+    expect_equal(data2[["value"]], 9)
+    vals <- c()
+    for (agg in available_stats) {
+      expect_silent(data3 <- .combine_chunks(data, aggregation = agg))
+      vals <- c(vals, data3[["value"]])
+    }
+    expect_equal(vals, c(1, 1, 0, 1, 1, 9, 0))
+  }
+)
 
 
 test_that(".prep works correctly", {
@@ -241,7 +247,7 @@ test_that(".prep works correctly", {
 
   available_resources <- .avail_resources()
   required_resources <- available_indicators("treecover_area")[["resources"]][[1]][["name"]]
-  output <- .prep_resources(x, available_resources, required_resources)
+  output <- prep_resources(x[1, ], available_resources, required_resources)
 
   expect_equal(
     length(output),
@@ -254,7 +260,6 @@ test_that(".prep works correctly", {
   expect_true(
     inherits(output[[1]], "SpatRaster"),
   )
-
 
   x2 <- read_sf(list.files(
     system.file("extdata", package = "mapme.biodiversity"),
@@ -271,7 +276,7 @@ test_that(".prep works correctly", {
 
   available_resources <- .avail_resources()
   required_resources <- available_indicators("mangroves_area")[["resources"]][[1]][["name"]]
-  output <- .prep_resources(x2, available_resources, required_resources)
+  output <- prep_resources(x2, available_resources, required_resources)
 
   expect_equal(
     length(output),
@@ -295,8 +300,8 @@ test_that(".prep works correctly", {
   )
 
   expect_error(
-    .prep_resources(x, available_resources, "not-available"),
-    "Some required resources are not available."
+    prep_resources(x[1, ], available_resources, "not-available"),
+    "Some requested resources are not available."
   )
 })
 
@@ -355,12 +360,14 @@ test_that(".read_vector works", {
 
 
 test_that(".check_single_asset works correctly", {
-  expect_warning(out <- .check_single_asset(NA, 1))
-  expect_equal(out, NA)
-  expect_warning(out <- .check_single_asset(try("a" + 1, silent = TRUE), 1))
-  expect_equal(out, NA)
-  expect_warning(out <- .check_single_asset(c(1:10), 1))
-  expect_equal(out, NA)
-  expect_warning(out <- .check_single_asset(tibble(), 1))
-  expect_equal(out, NA)
+  expect_warning(out <- .check_single_asset(NA))
+  expect_equal(out, NULL)
+  expect_warning(out <- .check_single_asset(try("a" + 1, silent = TRUE)))
+  expect_equal(out, NULL)
+  expect_warning(out <- .check_single_asset(c(1:10)))
+  expect_equal(out, NULL)
+  expect_warning(out <- .check_single_asset(tibble()))
+  expect_equal(out, NULL)
+  expect_warning(out <- .check_single_asset(tibble(a = 1)))
+  expect_equal(out, NULL)
 })

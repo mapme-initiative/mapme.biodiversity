@@ -28,7 +28,7 @@
 #'   (6) 498-958 m :- highly rugged surface
 #'   (7) 959-4367 m:- extremely rugged surface
 #' @references Riley, S. J., DeGloria, S. D., & Elliot, R. (1999). Index that quantifies
-#'   topographic heterogeneity. intermountain Journal of sciences, 5(1-4), 23-27.
+#'   topographic heterogeneity. Intermountain Journal of Sciences, 5(1-4), 23-27.
 #' @include register.R
 #' @export
 #' @examples
@@ -55,7 +55,7 @@
 #'   calc_indicators(
 #'     calc_tri(stats = c("mean", "median", "sd", "var"), engine = "extract")
 #'   ) %>%
-#'   tidyr::unnest(tri)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
@@ -67,9 +67,10 @@ calc_tri <- function(engine = "extract", stats = "mean") {
            nasa_srtm = NULL,
            name = "tri",
            mode = "asset",
+           aggregation = "stat",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(nasa_srtm)) {
-      return(NA)
+      return(NULL)
     }
 
     tri <- terra::terrain(
@@ -79,7 +80,7 @@ calc_tri <- function(engine = "extract", stats = "mean") {
       neighbors = 8
     )
 
-    select_engine(
+    result <- select_engine(
       x = x,
       raster = tri,
       stats = stats,
@@ -87,6 +88,14 @@ calc_tri <- function(engine = "extract", stats = "mean") {
       name = "tri",
       mode = "asset"
     )
+
+    result %>%
+      tidyr::pivot_longer(cols = dplyr::everything(), names_to = "variable") %>%
+      dplyr::mutate(
+        datetime = as.Date("2000-02-01"),
+        unit = "m"
+      ) %>%
+      dplyr::select(datetime, variable, unit, value)
   }
 }
 

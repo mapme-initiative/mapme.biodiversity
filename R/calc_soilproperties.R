@@ -51,7 +51,7 @@
 #'   calc_indicators(
 #'     calc_soilproperties(engine = "extract", stats = c("mean", "median"))
 #'   ) %>%
-#'   tidyr::unnest(soilproperties)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
@@ -63,10 +63,12 @@ calc_soilproperties <- function(engine = "extract", stats = "mean") {
            soilgrids = NULL,
            name = "soilproperties",
            mode = "asset",
+           aggregation = "stat",
            verbose = mapme_options()[["verbose"]]) {
+    layer <- stat <- conversion_factor <- conventional_units <- NULL
     # check if input engines are correct
     if (is.null(soilgrids)) {
-      return(NA)
+      return(NULL)
     }
     results <- select_engine(
       x = x,
@@ -76,26 +78,23 @@ calc_soilproperties <- function(engine = "extract", stats = "mean") {
       mode = "asset"
     )
 
-    parameters <- gsub(".tif", "", names(soilgrids))
-    parameters <- lapply(parameters, function(param) {
-      splitted <- strsplit(param, "_")[[1]]
-      names(splitted) <- c("layer", "depth", "stat")
-      splitted
-    })
+    layers <- gsub("-", "_", gsub(".tif", "", names(soilgrids)))
+    results[["variable"]] <- layers
+    results[["layer"]] <- purrr::map_chr(layers, function(lyr) strsplit(lyr, "_")[[1]][1])
+    results <- tidyr::pivot_longer(results, -c(variable, layer), names_to = "stat", values_to = "value")
 
-    results$layer <- sapply(parameters, function(para) para["layer"])
-    results$depth <- sapply(parameters, function(para) para["depth"])
-    results$stat <- sapply(parameters, function(para) para["stat"])
+    conv_df <- purrr::map(.sg_layers, tibble::as_tibble) %>% purrr::list_rbind()
+    conv_df[["layer"]] <- names(.sg_layers)
 
-    # conversion to conventional units
-    conv_df <- lapply(.sg_layers, function(y) as.data.frame(y))
-    conv_df <- do.call(rbind, conv_df)["conversion_factor"]
-    conv_df$layer <- row.names(conv_df)
-    results <- tibble(merge(results, conv_df))
-    # apply conversion factor
-    for (stat in stats) results[[stat]] <- results[[stat]] / results[["conversion_factor"]]
-    # select cols in right order
-    as_tibble(results[, c("layer", "depth", "stat", stats)])
+    results <- tibble::tibble(merge(results, conv_df))
+
+    results %>%
+      dplyr::mutate(
+        value = value / conversion_factor,
+        variable = paste0(variable, "_", stat),
+        datetime = as.Date("2017-02-01")
+      ) %>%
+      dplyr::select(datetime, variable, unit = conventional_units, value = value)
   }
 }
 

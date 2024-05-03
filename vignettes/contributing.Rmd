@@ -261,7 +261,7 @@ comprehensive definition of these two terms.
 - [ ] Check user-specified arguments (if any) for correctness
 - [ ] Create inner-level function with standard arguments
 - [ ] If applicable, implement both, asset and portfolio based processing modes
-- [ ] Return a tibble in long format (no variables "hidden" in column names)
+- [ ] Return a tibble in long format with standardized column names
 - [ ] Write a testthat script testing all the newly added functionality write it to `test/testthat/test-calc_<indicator_name>.R`
 - [ ] Added a new dependency? Make sure to include a supporting statement for that dependency in your PR!
 
@@ -352,6 +352,7 @@ function(x,
          nasa_srtm = NULL,
          name = "elevation",
          mode = "asset",
+         aggregation = "stat",
          verbose = mapme_options()[["verbose"]]) {
   # ... function body
 }
@@ -373,6 +374,22 @@ portfolio level is more efficient.
 If neither of the two processing modes lead to satisfactory processing times for 
 your indicator, please leave an issue/comment to discuss the addition of 
 another processing mode with the maintainers of the package. 
+
+The argument `aggregation` governs how chunked results for large polygons are
+to be combined into a single indicator. In case uses supply polygons larger
+than the specified code path or assets of type `MULTIPOLYGON`, a code path
+is triggered that splits assets into sub-components. The aggregation method
+specifies which statistic is used to combine values that share the same values
+in the remaining indicator columns (i.e. `datetime`, `variable`, and `unit`).
+The `stat` keyword is a special keyword used for indicators where statistics are
+specified by the user and will trigger to select the respective statistic
+as the aggregation statistic (e.g. take the sum of sums).
+
+The available statistics are:
+
+```{r stat}
+mapme.biodiversity:::available_stats
+```
 
 The argument `verbose` defaults to the corresponding package-wide option and 
 should control the verbosity of you indicator function.
@@ -408,7 +425,7 @@ given configuration, make sure to return `NA` as early as possible.
 ## Adding units tests for an indicator
 
 You are required to add unit tests for your indicator using the package internal
-example data sets for resources. Make sure to properly test for missspecification
+example data sets for resources. Make sure to properly test for miss-specification
 of user-facing arguments and also check for the correctness of numerical results
 of your indicator.
 

@@ -44,7 +44,7 @@
 #'       stats = c("mean", "median")
 #'     )
 #'   ) %>%
-#'   tidyr::unnest(temperature_max_wc)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
@@ -56,12 +56,18 @@ calc_temperature_max_wc <- function(engine = "extract", stats = "mean") {
            worldclim_max_temperature = NULL,
            name = "temperature_max_wc",
            mode = "asset",
+           aggregation = "stat",
            verbose = mapme_options()[["verbose"]]) {
+    if (is.null(worldclim_max_temperature)) {
+      return(NULL)
+    }
+
     results <- .calc_worldclim(
       x = x,
       worldclim = worldclim_max_temperature,
       engine = engine,
-      stats = stats
+      stats = stats,
+      unit = "C"
     )
     results
   }

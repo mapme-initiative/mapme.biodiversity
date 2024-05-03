@@ -1,5 +1,5 @@
 test_that(".calc_fatalities works", {
-  shp <- read_sf(
+  x <- read_sf(
     system.file("extdata", "burundi.gpkg",
       package = "mapme.biodiversity"
     )
@@ -23,50 +23,21 @@ test_that(".calc_fatalities works", {
   )
 
   cf <- calc_fatalities(years = 1991:1992)
-  result_default <- cf(shp, list(ucdp_ged))
+  result_default <- cf(x, list(ucdp_ged))
   cf <- calc_fatalities(years = 1991:1992, precision_location = 7, precision_time = 5)
-  result_all <- cf(shp, list(ucdp_ged))
+  result_all <- cf(x, list(ucdp_ged))
 
-  cols <- c("month", "type_of_violence", "deaths_civilians", "deaths_unknown", "deaths_total", "event_count")
-  n_rows <- 72
+  conf_types <- c("state_based_conflict", "non_state_conflict", "one_sided_violence")
+  death_types <- c("deaths_civilians", "deaths_unknown", "deaths_total")
+  vars <- paste(rep(conf_types, each = length(death_types)), death_types, sep = "_")
+  n_rows <- 216
 
-  expect_equal(
-    names(result_default),
-    cols
-  )
+  expect_silent(.check_single_asset(result_default))
+  expect_equal(unique(result_default$variable), vars)
+  expect_equal(nrow(result_default), n_rows)
+  expect_equal(sum(result_default$value), 40)
 
-  expect_equal(
-    nrow(result_default),
-    n_rows
-  )
-
-  expect_equal(
-    sum(result_default$deaths_total),
-    20
-  )
-
-  expect_equal(
-    sum(result_default$event_count),
-    1
-  )
-
-  expect_equal(
-    names(result_all),
-    cols
-  )
-
-  expect_equal(
-    nrow(result_all),
-    n_rows
-  )
-
-  expect_equal(
-    sum(result_all$deaths_total),
-    403
-  )
-
-  expect_equal(
-    sum(result_all$event_count),
-    22
-  )
+  expect_equal(unique(result_all$variable), vars)
+  expect_equal(nrow(result_all), n_rows)
+  expect_equal(sum(result_all$value), 673)
 })

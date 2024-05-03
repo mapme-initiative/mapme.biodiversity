@@ -56,7 +56,7 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
       stats = c("mean", "median")
     )
   ) \%>\%
-  tidyr::unnest(temperature_max_wc)
+  portfolio_long()
 
 aoi
 }

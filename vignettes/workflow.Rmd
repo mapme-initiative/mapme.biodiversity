@@ -26,7 +26,8 @@ are described here. A typical workflow consists of the following steps:
 -  download one or more resources that are required for your desired indicators
 -  automated calculation of the indicators for all assets within a portfolio
 -  then, you are free to conduct your statistical analysis within R, or,
--  you can export the portfolio as a GeoPackage to share with others or use it with other Geo-spatial software (e.g. QGIS)
+-  you can export the portfolio as a GeoPackage or other spatial data formats to 
+   share with others or use it with other Geo-spatial software (e.g. QGIS)
 
 ```{r wflow, echo = FALSE}
 library(DiagrammeR)

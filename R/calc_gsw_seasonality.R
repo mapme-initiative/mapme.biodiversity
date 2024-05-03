@@ -39,7 +39,7 @@
 #'   read_sf() %>%
 #'   get_resources(get_global_surface_water_seasonality()) %>%
 #'   calc_indicators(calc_gsw_seasonality()) %>%
-#'   tidyr::unnest(gsw_seasonality)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
@@ -48,9 +48,10 @@ calc_gsw_seasonality <- function() {
            global_surface_water_seasonality = NULL,
            name = "gsw_seasonality",
            mode = "asset",
+           aggregation = "sum",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(global_surface_water_seasonality)) {
-      return(NA)
+      return(NULL)
     }
 
     global_surface_water_seasonality <- terra::mask(
@@ -76,22 +77,28 @@ calc_gsw_seasonality <- function() {
       global_surface_water_seasonality,
       fun = "sum"
     )
-    names(res_zonal) <- c("value", "area")
+
+    names(res_zonal) <- c("variable", "value")
 
     result <- tibble::tibble(
-      month = 0:12
+      variable = 0:12
     )
 
     result <- merge(
       result,
       res_zonal,
-      by.x = "month",
-      by.y = "value",
       all.x = TRUE
     )
-    result$area[is.na(result$area)] <- 0
+    result[["value"]][is.na(result[["value"]])] <- 0
 
-    return(tibble::tibble(result))
+    result %>%
+      dplyr::mutate(
+        variable = paste0("gsw_seasonality_", sprintf("%02d", variable)),
+        datetime = as.Date("2021-01-01"),
+        unit = "ha"
+      ) %>%
+      dplyr::select(datetime, variable, unit, value) %>%
+      tibble::as_tibble()
   }
 }
 

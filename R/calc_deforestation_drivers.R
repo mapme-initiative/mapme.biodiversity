@@ -36,7 +36,7 @@
 #'   read_sf() %>%
 #'   get_resources(get_fritz_et_al(resolution = 100)) %>%
 #'   calc_indicators(calc_deforestation_drivers()) %>%
-#'   tidyr::unnest(deforestation_drivers)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
@@ -45,30 +45,35 @@ calc_deforestation_drivers <- function() {
            fritz_et_al = NULL,
            name = "deforestation_drivers",
            mode = "asset",
+           aggregation = "sum",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(fritz_et_al)) {
-      return(NA)
+      return(NULL)
     }
     classes <- data.frame(
       class = c(
-        "commercial agriculture", "commercial oil palm",
-        "managed forests", "mining", "natural disturbances", "pasture",
-        "roads", "wildfire", "other subsistance agriculture",
-        "shifting cultivation"
+        "commercial_agriculture", "commercial_oil_palm",
+        "managed_forests", "mining", "natural_disturbances", "pasture",
+        "roads", "wildfire", "other_subsistance_agriculture",
+        "shifting_cultivation"
       ),
       code = c(1:7, 9, 80, 81)
     )
-    cropped <- mask(fritz_et_al, x)
-    names(cropped) <- "code"
-    arearaster <- cellSize(cropped, unit = "ha")
-    arearaster <- mask(arearaster, x)
-    zonal_stat <- zonal(arearaster, cropped, fun = "sum")
+
+    fritz_et_al <- terra::mask(fritz_et_al, x)
+    names(fritz_et_al) <- "code"
+    arearaster <- cellSize(fritz_et_al, unit = "ha")
+    zonal_stat <- zonal(arearaster, fritz_et_al, fun = "sum")
 
     dplyr::left_join(classes, zonal_stat, by = "code") %>%
       tidyr::replace_na(list(area = 0)) %>%
-      dplyr::select(class, area) %>%
-      dplyr::mutate(percent = area / sum(area)) %>%
-      tidyr::replace_na(list(percent = 0)) %>%
+      dplyr::mutate(
+        datetime = "2008-01-01",
+        variable = class,
+        unit = "ha",
+        value = area
+      ) %>%
+      dplyr::select(datetime, variable, unit, value) %>%
       tibble::as_tibble()
   }
 }

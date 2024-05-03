@@ -45,9 +45,9 @@
 #'   read_sf() %>%
 #'   get_resources(get_global_surface_water_occurrence()) %>%
 #'   calc_indicators(
-#'     calc_gsw_occurrence(engine = "extract", stats = "mean")
+#'     calc_gsw_occurrence(engine = "extract", min_occurrence = 10)
 #'   ) %>%
-#'   tidyr::unnest(gsw_occurence)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
@@ -64,9 +64,10 @@ calc_gsw_occurrence <- function(engine = "extract", min_occurrence = NULL) {
            global_surface_water_occurrence = NULL,
            name = "gsw_occurence",
            mode = "asset",
+           aggregation = "sum",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(global_surface_water_occurrence)) {
-      return(NA)
+      return(NULL)
     }
 
     rcl <- matrix(
@@ -93,11 +94,18 @@ calc_gsw_occurrence <- function(engine = "extract", min_occurrence = NULL) {
       raster = global_surface_water_occurrence,
       stats = "sum",
       engine = engine,
-      name = "gsw_occurrence_area",
+      name = "gsw_occurrence",
       mode = "asset"
     )
 
-    return(results)
+    results %>%
+      tidyr::pivot_longer(cols = dplyr::everything(), names_to = "variable") %>%
+      dplyr::mutate(
+        variable = "gsw_occurrence",
+        datetime = as.Date("2021-01-01"),
+        unit = "ha"
+      ) %>%
+      dplyr::select(datetime, variable, unit, value)
   }
 }
 

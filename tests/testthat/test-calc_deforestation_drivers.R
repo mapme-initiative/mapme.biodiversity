@@ -1,5 +1,5 @@
-test_that("deforestation drivers orks", {
-  shp <- read_sf(
+test_that("deforestation drivers works", {
+  x <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
       package = "mapme.biodiversity"
     )
@@ -13,25 +13,15 @@ test_that("deforestation drivers orks", {
   drivers <- rast(drivers)
 
   cdf <- calc_deforestation_drivers()
-  result <- cdf(shp, drivers)
-
-  expect_true(inherits(result, "tbl_df"))
-
+  result <- cdf(x, drivers)
+  expect_silent(.check_single_asset(result))
   expect_equal(
-    names(result),
-    c("class", "area", "percent")
-  )
-
-  expect_equal(
-    unique(result$class),
+    unique(result$variable),
     c(
-      "commercial agriculture", "commercial oil palm", "managed forests",
-      "mining", "natural disturbances", "pasture", "roads", "wildfire",
-      "other subsistance agriculture", "shifting cultivation"
+      "commercial_agriculture", "commercial_oil_palm", "managed_forests",
+      "mining", "natural_disturbances", "pasture", "roads", "wildfire",
+      "other_subsistance_agriculture", "shifting_cultivation"
     )
   )
-  expect_equal(
-    result$percent[9],
-    1
-  )
+  expect_equal(sum(result$value), 16209.58, tolerance = 1e-4)
 })

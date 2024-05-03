@@ -57,7 +57,7 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   calc_indicators(
     calc_population_count(engine = "extract", stats = c("sum", "median"))
   ) \%>\%
-  tidyr::unnest(population_count)
+  portfolio_long()
 
 aoi
 }

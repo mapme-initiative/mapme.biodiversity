@@ -94,7 +94,6 @@ Next, is a list of supported indicators.
 | name                         | description                                                                    |
 |:-----------------------------|:-------------------------------------------------------------------------------|
 | active_fire_counts           | Number of detected fires by NASA FIRMS                                         |
-| active_fire_properties       | Extraction of properties of fires detected by NASA FIRMS                       |
 | biome                        | Areal statistics of biomes from TEOW                                           |
 | deforestation_drivers        | Areal statistics of deforestation drivers                                      |
 | drought_indicator            | Relative wetness statistics based on NASA GRACE                                |
@@ -137,27 +136,33 @@ library(sf)
 
 Once you have decided on an indicator you are interested in, you can
 start by making the required resource available for your portfolio.
-Using `mapme_options()` you can set an output directory and control the
-verbosity of the package.
+Using `mapme_options()` you can set an output directory, control the
+maximum size of polygons before they are chunked into smaller parts, and
+control the verbosity of the package.
 
 A portfolio is represented by an sf-object. It is required for the
-object to only contain geometries of type `POLYGON` as assets. We can
-request the download of a resource for the spatial extent of our
-portfolio by using the `get_resources()` function. We simply supply our
-portfolio and one or more resource functions. Once the resources were
-made available, we can query the calculation of an indicator by using
-the `calc_indicators()` function. This function also expects the
-portfolio as input and one or more indicator functions. Once the
-indicator has been calculated for all assets in a portfolio, the data is
-returned as a nested list column to the original portfolio object.
+object to only contain geometries of type `POLYGON` and `MULTIPOLYGON`
+as assets. We can request the download of a resource for the spatial
+extent of our portfolio by using the `get_resources()` function. We
+simply supply our portfolio and one or more resource functions. Once the
+resources were made available, we can query the calculation of an
+indicator by using the `calc_indicators()` function. This function also
+expects the portfolio as input and one or more indicator functions. Once
+the indicator has been calculated for all assets in a portfolio, the
+data is returned as a nested list column to the original portfolio
+object. The output of each indicator is standardized to common format,
+consisting of a tibble with columns `datetime`, `variable`, `unit`, and
+`value`. We can transform the the data to long format by using
+`portfolio_long()`.
 
 ``` r
 mapme_options(
   outdir = system.file("res", package = "mapme.biodiversity"),
+  chunk_size = 1e6, # in ha
   verbose = FALSE
 )
 
-(system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
+aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
   sf::read_sf() %>%
   get_resources(
     get_gfw_treecover(version = "GFC-2020-v1.8"),
@@ -165,19 +170,23 @@ mapme_options(
     get_gfw_emissions()
   ) %>%
   calc_indicators(calc_treecover_area_and_emissions(years = 2016:2017, min_size = 1, min_cover = 30)) %>%
-  tidyr::unnest(treecover_area_and_emissions))
+  portfolio_long()
+
+aoi
 ```
 
-    ## Simple feature collection with 2 features and 8 fields
+    ## Simple feature collection with 4 features and 10 fields
     ## Geometry type: POLYGON
     ## Dimension:     XY
     ## Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931
     ## Geodetic CRS:  WGS 84
-    ## # A tibble: 2 × 9
-    ##   WDPAID NAME            DESIG_ENG     ISO3  assetid years emissions treecover
-    ##    <dbl> <chr>           <chr>         <chr>   <int> <int>     <dbl>     <dbl>
-    ## 1 478140 Sierra de Neiba National Park DOM         1  2016      2400     2360.
-    ## 2 478140 Sierra de Neiba National Park DOM         1  2017      2839     2348.
+    ## # A tibble: 4 × 11
+    ##   WDPAID NAME  DESIG_ENG ISO3  assetid indicator datetime   variable unit  value
+    ##    <dbl> <chr> <chr>     <chr>   <int> <chr>     <date>     <chr>    <chr> <dbl>
+    ## 1 478140 Sier… National… DOM         1 treecove… 2016-01-01 emissio… Mg    2400 
+    ## 2 478140 Sier… National… DOM         1 treecove… 2016-01-01 treecov… ha    2360.
+    ## 3 478140 Sier… National… DOM         1 treecove… 2017-01-01 emissio… Mg    2839 
+    ## 4 478140 Sier… National… DOM         1 treecove… 2017-01-01 treecov… ha    2348.
     ## # ℹ 1 more variable: geom <POLYGON [°]>
 
 ## A note on parallel computing
@@ -185,23 +194,36 @@ mapme_options(
 `{mapme.biodiversity}` follows the parallel computing paradigm of the
 [`{future}`](https://cran.r-project.org/package=future) package. That
 means that you as a user are in the control if and how you would like to
-set up parallel processing. Currently, `{mapme.biodiversity}` supports
-parallel processing on the asset level of the `calc_indicators()`
-function only. We also currently assume that parallel processing is done
-on the cores of a single machine. In future developments, we would like
-to support distributed processing. If you are working on a distributed
-use-cases, please contact the developers, e.g. via the [discussion
-board](https://github.com/mapme-initiative/mapme.biodiversity/discussions)
-or mail.
+set up parallel processing. Since `{mapme.biodiversity} v0.7` supports
+parallel processing on a nested-level. The outer level applies parallel
+processing to the assets in a portfolio, the inner level to potential
+chunks for polygons that are larger than the specified chunks size or
+the single components of assets of type `MULTIPOLYGON`.
 
-To process 6 assets in parallel and report a progress bar you will have
-to set up the following in your code:
+The maximum chunk size is specified in hectares via `mapme_options()`
+and defaults to 100,000 ha. Polygons larger than this threshold will be
+split into chunks of roughly the same size.
+
+Fine-control of parallel processing is given by using future topologies
+(find more information
+[here](https://cran.r-project.org/web/packages/future/vignettes/future-3-topologies.html)).
+To process all assets sequentially, but allow to spawn up to 4 workers
+to process chunks in parallel you might specify:
 
 ``` r
 library(future)
+plan(list(sequential, tweak(cluster, workers = 6)))
+```
+
+As another example, with the code below one would apply parallel
+processing of 2 assets, with each having 4 workers available to process
+chunks, thus requiring a total of 8 available cores on the host machine.
+Be sure to not request more workers than available on your machine.
+
+``` r
 library(progressr)
 
-plan(multisession, workers = 6) # set up parallel plan
+plan(list(tweak(cluster, workers = 2), tweak(cluster, workers = 4)))
 
 with_progress({
   aoi <- calc_indicators(
@@ -215,14 +237,6 @@ with_progress({
 
 plan(sequential) # close child processes
 ```
-
-Note, that the above code uses `future::multisession()` as the parallel
-backend. This backend will resolve the calculation in multiple
-background R sessions. You should use that backend if you are operating
-on Windows, using RStudio or otherwise are not sure about which backend
-to use. In case you are operating on a system that allows process
-forking and are *not* using RStudio, consider using
-`future::multicore()` for more efficient parallel processing.
 
 Head over to the [online
 documentation](https://mapme-initiative.github.io/mapme.biodiversity/index.html)

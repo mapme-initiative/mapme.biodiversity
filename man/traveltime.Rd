@@ -57,7 +57,7 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   calc_indicators(
     calc_traveltime(engine = "extract", stats = c("min", "max"))
   ) \%>\%
-  tidyr::unnest(traveltime)
+  portfolio_long()
 
 aoi
 }

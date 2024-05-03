@@ -47,7 +47,7 @@
 #'       stats = c("mean", "median")
 #'     )
 #'   ) %>%
-#'   tidyr::unnest(drought_indicator)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
@@ -59,10 +59,11 @@ calc_drought_indicator <- function(engine = "extract", stats = "mean") {
            nasa_grace = NULL,
            name = "drought_indicator",
            mode = "portfolio",
+           aggregation = "stat",
            verbose = mapme_options()[["verbose"]]) {
     # check if input engines are correct
     if (is.null(nasa_grace)) {
-      return(NA)
+      return(NULL)
     }
     results <- select_engine(
       x = x,
@@ -75,13 +76,18 @@ calc_drought_indicator <- function(engine = "extract", stats = "mean") {
 
     dates <- sub(".*(\\d{8}).*", "\\1", names(nasa_grace))
     dates <- as.Date(dates, format = "%Y%m%d")
+
+    prep_results <- function(result, datetimes) {
+      result %>%
+        dplyr::mutate(datetime = datetimes, unit = "dimensionless") %>%
+        tidyr::pivot_longer(cols = -c(datetime, unit), names_to = "variable") %>%
+        dplyr::select(datetime, variable, unit, value)
+    }
+
     if (mode == "portfolio") {
-      results <- purrr::map(results, function(x) {
-        x$date <- dates
-        x
-      })
+      results <- purrr::map(results, prep_results, datetimes = dates)
     } else {
-      results$date <- dates
+      results <- prep_results(results, date)
     }
     results
   }

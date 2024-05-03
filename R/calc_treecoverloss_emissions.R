@@ -50,7 +50,7 @@
 #'   calc_indicators(
 #'     calc_treecoverloss_emissions(years = 2016:2017, min_size = 1, min_cover = 30)
 #'   ) %>%
-#'   tidyr::unnest(treecoverloss_emissions)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
@@ -68,15 +68,18 @@ calc_treecoverloss_emissions <- function(years = 2000:2020,
            gfw_emissions,
            name = "treecoverloss_emissions",
            mode = "asset",
+           aggregation = "sum",
            verbose = mapme_options()[["verbose"]]) {
+    emissions <- NULL
+
     if (any(is.null(gfw_treecover), is.null(gfw_lossyear), is.null(gfw_emissions))) {
-      return(NA)
+      return(NULL)
     }
     # mask gfw
     gfw_treecover <- terra::mask(gfw_treecover, x)
     # check if gfw_treecover only contains 0s, e.g. on the ocean
     if (.gfw_empty_raster(gfw_treecover, min_cover)) {
-      return(tibble::tibble(years = years, emissions = 0))
+      return(NULL)
     }
     # prepare gfw rasters
     gfw <- .gfw_prep_rasters(x, gfw_treecover, gfw_lossyear, gfw_emissions, min_cover)
@@ -103,7 +106,15 @@ calc_treecoverloss_emissions <- function(years = 2000:2020,
 
     rm(gfw)
     gc()
-    tibble::as_tibble(gfw_stats)
+    gfw_stats %>%
+      dplyr::mutate(
+        datetime = as.Date(paste0(years, "-01-01")),
+        variable = "emissions",
+        unit = "Mg",
+        value = emissions
+      ) %>%
+      dplyr::select(datetime, variable, unit, value) %>%
+      tibble::as_tibble()
   }
 }
 

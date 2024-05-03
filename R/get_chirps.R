@@ -11,6 +11,8 @@
 #'
 #'
 #' @name chirps
+#' @param years A numeric vector of the years to download CHIRPS precipitation
+#'   layers. Must be greater 1981, defaults to `c(1981:2020)`.
 #' @keywords resource
 #' @returns A function that returns a character of file paths.
 #' @source \url{https://data.chc.ucsb.edu/products/CHIRPS-2.0/global_monthly/cogs/}
@@ -20,7 +22,10 @@
 #' \doi{10.1038/sdata.2015.66}
 #' @include register.R
 #' @export
-get_chirps <- function() {
+get_chirps <- function(years = 1981:2020) {
+  avail_years <- seq(1981, format(Sys.Date(), "%Y"))
+  years <- check_available_years(years, avail_years, "chirps")
+
   function(x,
            name = "chirps",
            type = "raster",
@@ -38,6 +43,10 @@ get_chirps <- function() {
     }
 
     chirps_list <- grep("*.tif.gz$", chirps_list, value = TRUE)
+    chirps_list <- grep(
+      pattern = paste(years, collapse = "|"),
+      chirps_list, value = TRUE
+    )
     urls <- paste(chirps_url, chirps_list, sep = "")
     filenames <- file.path(outdir, basename(urls))
 

@@ -27,7 +27,8 @@ reference:
     - available_indicators
     - calc_indicators
     - write_portfolio
-    - read_portfolio
+    - portfolio_long
+    - portfolio_wide
   - title: Resources
     desc: Supported resources.
   - contents:

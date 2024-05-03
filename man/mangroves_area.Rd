@@ -46,7 +46,7 @@ aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
   read_sf() \%>\%
   get_resources(get_gmw(years = c(1996, 2016))) \%>\%
   calc_indicators(calc_mangroves_area()) \%>\%
-  tidyr::unnest(mangroves_area)
+  portfolio_long()
 
 aoi
 }

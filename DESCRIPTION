@@ -39,7 +39,6 @@ RoxygenNote: 7.3.1
 Collate: 
     'register.R'
     'calc_active_fire_counts.R'
-    'calc_active_fire_properties.R'
     'calc_biome.R'
     'calc_deforestation_drivers.R'
     'calc_drought_indicator.R'

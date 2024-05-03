@@ -1,5 +1,5 @@
 test_that("worldclim maximum temperature works", {
-  shp <- read_sf(
+  x <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
       package = "mapme.biodiversity"
     )
@@ -11,38 +11,26 @@ test_that("worldclim maximum temperature works", {
   worldclim_max_temperature <- rast(worldclim_max_temperature)
 
   cmx <- calc_temperature_max_wc()
-  result <- cmx(shp, worldclim_max_temperature)
-  cmx <- calc_temperature_max_wc(stats = c("mean", "median", "sd"))
-  result_multi_stat <- cmx(shp, worldclim_max_temperature)
-  cmx <- calc_temperature_max_wc(engine = "zonal")
-  result_zonal <- cmx(shp, worldclim_max_temperature)
-  cmx <- calc_temperature_max_wc(engine = "extract")
-  result_extract <- cmx(shp, worldclim_max_temperature)
-  cmx <- calc_temperature_max_wc(engine = "exactextract")
-  result_exact <- cmx(shp, worldclim_max_temperature)
+  expect_true(is.null(cmx(x, NULL)))
 
-  expect_equal(
-    names(result),
-    c("tmax_mean", "date")
-  )
-  expect_equal(
-    names(result_multi_stat),
-    c("tmax_mean", "tmax_median", "tmax_sd", "date")
-  )
-  expect_equal(
-    names(result_zonal),
-    names(result_extract)
-  )
-  expect_equal(
-    names(result_zonal),
-    names(result_exact)
-  )
-  expect_equal(
-    result_zonal$tmax_mean,
-    result_extract$tmax_mean,
-    tolerance = 1e-4
-  )
-  expect_snapshot(
-    result_exact$tmax_mean
-  )
+  result <- cmx(x, worldclim_max_temperature)
+  cmx <- calc_temperature_max_wc(stats = c("mean", "median", "sd"))
+  result_multi_stat <- cmx(x, worldclim_max_temperature)
+  cmx <- calc_temperature_max_wc(engine = "zonal")
+  result_zonal <- cmx(x, worldclim_max_temperature)
+  cmx <- calc_temperature_max_wc(engine = "extract")
+  result_extract <- cmx(x, worldclim_max_temperature)
+  cmx <- calc_temperature_max_wc(engine = "exactextract")
+  result_exact <- cmx(x, worldclim_max_temperature)
+
+  expect_silent(.check_single_asset(result))
+  expect_silent(.check_single_asset(result_multi_stat))
+  expect_silent(.check_single_asset(result_zonal))
+  expect_silent(.check_single_asset(result_extract))
+  expect_silent(.check_single_asset(result_exact))
+
+  vars <- c("worldclim_tmax_mean", "worldclim_tmax_median", "worldclim_tmax_sd")
+  expect_equal(unique(result_multi_stat$variable), vars)
+  expect_equal(result_zonal$value, result_extract$value, tolerance = 1e-4)
+  expect_snapshot(result_exact$value)
 })

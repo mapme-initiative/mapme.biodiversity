@@ -46,7 +46,7 @@
 #'       stats = c("mean", "median")
 #'     )
 #'   ) %>%
-#'   tidyr::unnest(precipitation_wc)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
@@ -58,14 +58,19 @@ calc_precipitation_wc <- function(engine = "extract", stats = "mean") {
            worldclim_precipitation = NULL,
            name = "precipitation_wc",
            mode = "asset",
+           aggregation = "stat",
            verbose = mapme_options()[["verbose"]]) {
-    results <- .calc_worldclim(
+    if (is.null(worldclim_precipitation)) {
+      return(NULL)
+    }
+
+    .calc_worldclim(
       x = x,
       worldclim = worldclim_precipitation,
       engine = engine,
-      stats = stats
+      stats = stats,
+      unit = "mm"
     )
-    results
   }
 }
 

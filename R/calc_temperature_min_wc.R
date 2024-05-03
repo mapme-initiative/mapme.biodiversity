@@ -45,7 +45,7 @@
 #'       stats = c("mean", "median")
 #'     )
 #'   ) %>%
-#'   tidyr::unnest(temperature_min_wc)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
@@ -57,16 +57,28 @@ calc_temperature_min_wc <- function(engine = "extract", stats = "mean") {
            worldclim_min_temperature = NULL,
            name = "temperature_min_wc",
            mode = "asset",
+           aggregation = "stat",
            verbose = mapme_options()[["verbose"]]) {
+    if (is.null(worldclim_min_temperature)) {
+      return(NULL)
+    }
+
     results <- .calc_worldclim(
       x = x,
       worldclim = worldclim_min_temperature,
       engine = engine,
-      stats = stats
+      stats = stats,
+      unit = "C"
     )
     results
   }
 }
+
+register_indicator(
+  name = "temperature_min_wc",
+  description = "Statistics of WorldClim minimum temperature layer",
+  resources = "worldclim_min_temperature"
+)
 
 #' Helper function to compute worldclim statistics
 #'
@@ -85,9 +97,11 @@ calc_temperature_min_wc <- function(engine = "extract", stats = "mean") {
 .calc_worldclim <- function(x,
                             worldclim,
                             engine = "extract",
-                            stats = "mean") {
+                            stats = "mean",
+                            unit = NULL) {
+  stopifnot(!is.null(unit))
   if (is.null(worldclim)) {
-    return(NA)
+    return(NULL)
   }
   # set max value of 65535 to NA
   worldclim <- clamp(
@@ -97,7 +111,9 @@ calc_temperature_min_wc <- function(engine = "extract", stats = "mean") {
     values = FALSE
   )
 
-  layer <- strsplit(names(worldclim), "_")[[1]][3]
+  layer <- paste0("worldclim_", strsplit(names(worldclim), "_")[[1]][3])
+  datetime <- unlist(lapply(names(worldclim), function(x) strsplit(x, "_")[[1]][4]))
+  datetime <- as.Date(paste0(tools::file_path_sans_ext(datetime), "-01"))
 
   results <- select_engine(
     x = x,
@@ -108,14 +124,10 @@ calc_temperature_min_wc <- function(engine = "extract", stats = "mean") {
     mode = "asset"
   )
 
-  dates <- unlist(lapply(names(worldclim), function(x) strsplit(x, "_")[[1]][4]))
-  dates <- paste0(tools::file_path_sans_ext(dates), "-01")
-  results$date <- as.Date(dates, "%Y-%m-%d")
-  results
-}
+  results[["datetime"]] <- datetime
 
-register_indicator(
-  name = "temperature_min_wc",
-  description = "Statistics of WorldClim minimum temperature layer",
-  resources = "worldclim_min_temperature"
-)
+  results %>%
+    tidyr::pivot_longer(-datetime, names_to = "variable", values_to = "value") %>%
+    dplyr::mutate(unit = unit) %>%
+    dplyr::select(datetime, variable, unit, value)
+}

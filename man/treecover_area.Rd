@@ -57,7 +57,7 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
     get_gfw_lossyear(version = "GFC-2022-v1.10")
   ) \%>\%
   calc_indicators(calc_treecover_area(years = 2016:2017, min_size = 1, min_cover = 30)) \%>\%
-  tidyr::unnest(treecover_area)
+  portfolio_long()
 
 aoi
 }

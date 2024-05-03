@@ -107,7 +107,7 @@ aoi <- system.file("extdata", "burundi.gpkg",
       precision_time = 1
     )
   ) \%>\%
-  tidyr::unnest(fatalities)
+  portfolio_long()
 
 aoi
 }

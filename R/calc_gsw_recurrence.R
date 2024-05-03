@@ -48,7 +48,7 @@
 #'   calc_indicators(
 #'     calc_gsw_recurrence(engine = "extract", min_recurrence = 10)
 #'   ) %>%
-#'   tidyr::unnest(gsw_recurrence)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
@@ -66,9 +66,10 @@ calc_gsw_recurrence <- function(engine = "extract", min_recurrence = NULL) {
            global_surface_water_recurrence = NULL,
            name = "gsw_recurrence",
            mode = "asset",
+           aggregation = "sum",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(global_surface_water_recurrence)) {
-      return(NA)
+      return(NULL)
     }
 
     rcl <- matrix(
@@ -95,11 +96,18 @@ calc_gsw_recurrence <- function(engine = "extract", min_recurrence = NULL) {
       raster = global_surface_water_recurrence,
       stats = "sum",
       engine = engine,
-      name = "gsw_recurrence_area",
+      name = "gsw_recurrence",
       mode = "asset"
     )
 
-    results
+    results %>%
+      tidyr::pivot_longer(cols = dplyr::everything(), names_to = "variable") %>%
+      dplyr::mutate(
+        variable = "gsw_recurrence",
+        datetime = as.Date("2021-01-01"),
+        unit = "ha"
+      ) %>%
+      dplyr::select(datetime, variable, unit, value)
   }
 }
 

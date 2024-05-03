@@ -1,14 +1,8 @@
 # treecover area and emissions works
 
     Code
-      result$treecover
+      result$value
     Output
-      [1] 2054.559 2054.046 2052.358 2018.501 2009.106 2004.831
-
----
-
-    Code
-      result$emissions
-    Output
-      [1]    0    7   46 1419  528  295
+       [1]    0.000 2054.559    7.000 2054.046   46.000 2052.358 1419.000 2018.501
+       [9]  528.000 2009.106  295.000 2004.831
 

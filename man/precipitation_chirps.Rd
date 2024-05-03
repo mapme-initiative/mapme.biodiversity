@@ -3,14 +3,9 @@
 \name{precipitation_chirps}
 \alias{precipitation_chirps}
 \alias{calc_precipitation_chirps}
-\title{Calculate precipitation statistics based on CHIRPS}
+\title{Calculate precipitation sums based on CHIRPS}
 \usage{
-calc_precipitation_chirps(
-  years = 1981:2020,
-  engine = "extract",
-  scales_spi = 3,
-  spi_prev_years = 8
-)
+calc_precipitation_chirps(years = 1981:2020, engine = "extract")
 }
 \arguments{
 \item{years}{A numeric vector indicating the years for which to calculate
@@ -18,25 +13,14 @@ precipitation statistics.}
 
 \item{engine}{The preferred processing functions from either one of "zonal",
 "extract" or "exactextract" as character.}
-
-\item{scales_spi}{Integers specifying time-scales for SPI}
-
-\item{spi_prev_years}{Integer specifying how many previous years to include in
-order to fit the SPI. Defaults to 8.}
 }
 \value{
-A function that returns a tibble with a column for years, months,
-absolute rainfall (in mm), rainfall anomaly (in mm) and one or more columns
-per selected time-scale for SPI (dimensionless).
+A function that returns a tibble with precipitation sums.
 }
 \description{
-This functions allows to calculate precipitation statistics based on the
+This functions allows to calculate precipitation sums based on the
 CHIRPS rainfall estimates. Corresponding to the time-frame of the analysis
-of the portfolio, monthly precipitation statistics are calculated. These include
-the total rainfall amount, rainfall anomaly against the 1981-2010 climate normal,
-and the Standardized Precipitation Index (SPI) which is available for scales
-between 1 and 48 months. Th function needs the \code{SPEI} package to be
-installed.
+of the portfolio, monthly precipitation sums are calculated.
 }
 \details{
 The required resources for this indicator are:
@@ -64,16 +48,14 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   package = "mapme.biodiversity"
 ) \%>\%
   read_sf() \%>\%
-  get_resources(get_chirps()) \%>\%
+  get_resources(get_chirps(years = 2010)) \%>\%
   calc_indicators(
     calc_precipitation_chirps(
       years = 2010,
-      engine = "extract",
-      scales_spi = 3,
-      spi_prev_years = 8
+      engine = "extract"
     )
   ) \%>\%
-  tidyr::unnest(precipitation_chirps)
+  portfolio_long()
 
 aoi
 }

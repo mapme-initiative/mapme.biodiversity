@@ -1,12 +1,8 @@
-#' Calculate precipitation statistics based on CHIRPS
+#' Calculate precipitation sums based on CHIRPS
 #'
-#' This functions allows to calculate precipitation statistics based on the
+#' This functions allows to calculate precipitation sums based on the
 #' CHIRPS rainfall estimates. Corresponding to the time-frame of the analysis
-#' of the portfolio, monthly precipitation statistics are calculated. These include
-#' the total rainfall amount, rainfall anomaly against the 1981-2010 climate normal,
-#' and the Standardized Precipitation Index (SPI) which is available for scales
-#' between 1 and 48 months. Th function needs the \code{SPEI} package to be
-#' installed.
+#' of the portfolio, monthly precipitation sums are calculated.
 #'
 #' The required resources for this indicator are:
 #'  - [chirps]
@@ -16,13 +12,8 @@
 #'   precipitation statistics.
 #' @param engine The preferred processing functions from either one of "zonal",
 #'   "extract" or "exactextract" as character.
-#' @param scales_spi Integers specifying time-scales for SPI
-#' @param spi_prev_years Integer specifying how many previous years to include in
-#'   order to fit the SPI. Defaults to 8.
 #' @keywords indicator
-#' @returns A function that returns a tibble with a column for years, months,
-#'   absolute rainfall (in mm), rainfall anomaly (in mm) and one or more columns
-#'   per selected time-scale for SPI (dimensionless).
+#' @returns A function that returns a tibble with precipitation sums.
 #' @include register.R
 #' @export
 #' @examples
@@ -45,51 +36,36 @@
 #'   package = "mapme.biodiversity"
 #' ) %>%
 #'   read_sf() %>%
-#'   get_resources(get_chirps()) %>%
+#'   get_resources(get_chirps(years = 2010)) %>%
 #'   calc_indicators(
 #'     calc_precipitation_chirps(
 #'       years = 2010,
-#'       engine = "extract",
-#'       scales_spi = 3,
-#'       spi_prev_years = 8
+#'       engine = "extract"
 #'     )
 #'   ) %>%
-#'   tidyr::unnest(precipitation_chirps)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
 calc_precipitation_chirps <- function(years = 1981:2020,
-                                      engine = "extract",
-                                      scales_spi = 3,
-                                      spi_prev_years = 8) {
+                                      engine = "extract") {
   check_namespace("SPEI")
   engine <- check_engine(engine)
-
-  if (!is.null(scales_spi)) {
-    if (any(scales_spi < 0) | any(scales_spi > 48)) {
-      stop("Values of 'scales_spi' for SPI calculation must be integers between 0 and 48.")
-    }
-  }
-
-  if (any(years < 1981)) {
-    warning(paste("Cannot calculate precipitation statistics ",
-      "for years smaller than 1981",
-      sep = ""
-    ))
-    years <- years[years >= 1981]
-  }
+  avail_years <- seq(1981, format(Sys.Date(), "%Y"))
+  years <- check_available_years(years, avail_years, "precipitation_chirps")
 
   function(x,
            chirps,
            name = "precipitation_chirps",
            mode = "portfolio",
+           aggregation = "sum",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(chirps)) {
-      return(NA)
+      return(NULL)
     }
 
     if (length(years) == 0) {
-      return(NA)
+      return(NULL)
     }
 
     src_names <- names(chirps)
@@ -102,102 +78,34 @@ calc_precipitation_chirps <- function(years = 1981:2020,
     )
 
     layer_years <- as.numeric(substr(src_names, 13, 17))
-    climate_chirps <- chirps[[which(layer_years %in% 1981:2010)]]
     target_chirps <- chirps[[which(layer_years %in% years)]]
-
-    # calculate long-term monthly average
-    layer_names <- names(climate_chirps)
-    layer_months <- as.numeric(substr(layer_names, 18, 19))
-    # chirps[chirps < 0] = NA
-    climate_chirps <- lapply(1:12, function(i) {
-      app(
-        climate_chirps[[layer_months == i]],
-        fun = "mean"
-      )
-    })
-    climate_chirps <- do.call(c, climate_chirps)
-    names(climate_chirps) <- c(1:12)
-    anomaly_chirps <- target_chirps - climate_chirps
-
-    # calculate SPI
-    if (!is.null(scales_spi)) {
-      spi_chirps <- lapply(scales_spi, function(scale) {
-        target_years_spi <- years[1] - spi_prev_years
-        target_years_spi <- target_years_spi:years[length(years)]
-        target_spi <- chirps[[which(layer_years %in% target_years_spi)]]
-        spi_chirps <- app(
-          target_spi,
-          scale = scale,
-          fun = function(x, scale) {
-            SPEI::spi(x, scale = scale, na.rm = TRUE, verbose = FALSE)$fitted
-          }
-        )
-        names(spi_chirps) <- names(target_spi)
-        spi_chirps[[names(target_chirps)]]
-      })
-      names(spi_chirps) <- paste0("spi_", scales_spi)
-    } else {
-      spi_chirps <- NULL
-    }
+    datetime <- as.Date(paste0(substr(names(target_chirps), 13, 19), ".01"), "%Y.%m.%d")
 
     # extract zonal statistics
-    results_absolute <- select_engine(
+    results <- select_engine(
       x = x,
       raster = target_chirps,
-      stats = "mean",
+      stats = "sum",
       engine = engine,
-      mode = mode
+      mode = "portfolio"
     )
-
-    results_anomaly <- select_engine(
-      x = x,
-      raster = anomaly_chirps,
-      stats = "mean",
-      engine = engine,
-      mode = mode
-    )
-
-    if (!is.null(spi_chirps)) {
-      results_spi <- purrr::map(1:nrow(x), function(i) {
-        results_x <- purrr::lmap(spi_chirps, function(spi) {
-          result <- select_engine(
-            x = x[i, ],
-            raster = spi[[1]],
-            stats = "mean",
-            engine = engine,
-            name = names(spi),
-            mode = "asset"
-          )
-          names(result) <- names(spi)
-          result
-        })
-        dplyr::bind_cols(results_x)
-      })
-      if (mode == "asset") results_spi <- results_spi[[1]]
-    }
-
-    dates <- as.Date(paste0(substr(names(target_chirps), 13, 19), ".01"), "%Y.%m.%d")
 
     if (mode == "portfolio") {
-      results <- purrr::map(1:nrow(x), function(i) {
-        result <- tibble(
-          dates = dates,
-          absolute = as.numeric(results_absolute[[i]]$mean),
-          anomaly = as.numeric(results_anomaly[[i]]$mean)
+      results <- purrr::map(1:length(results), function(i) {
+        tibble(
+          datetime = datetime,
+          variable = "precipitation",
+          unit = "mm",
+          value = as.numeric(results[[i]][["sum"]])
         )
-        if (!is.null(scales_spi)) {
-          result <- dplyr::bind_cols(result, results_spi[[i]])
-        }
       })
     } else {
       results <- tibble(
-        dates = dates,
-        absolute = as.numeric(results_absolute$mean),
-        anomaly = as.numeric(results_anomaly$mean)
+        datetime = datetime,
+        variable = "precipitation",
+        unit = "mm",
+        value = as.numeric(results[[1]][["sum"]])
       )
-      if (!is.null(scales_spi)) {
-        results <- dplyr::bind_cols(results, results_spi)
-      }
     }
     results
   }

@@ -35,7 +35,7 @@
 #'   read_sf() %>%
 #'   get_resources(get_teow()) %>%
 #'   calc_indicators(calc_biome()) %>%
-#'   tidyr::unnest(biome)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
@@ -44,39 +44,20 @@ calc_biome <- function() {
            teow = NULL,
            name = "biome",
            mode = "asset",
+           aggregation = "sum",
            verbose = mapme_options()[["verbose"]]) {
     BIOME_NAME <- NULL
-    biomes <- NULL
-    new_area <- NULL
-    area <- NULL
 
     if (nrow(teow[[1]]) == 0) {
-      return(NA)
+      return(NULL)
     }
 
-    merged <- .comp_teow(
+    .comp_teow(
       x = x,
       teow = teow,
+      var = BIOME_NAME,
       verbose = verbose
     )
-
-    if (nrow(merged) == 0) {
-      return(NA)
-    }
-
-    out <- merged %>%
-      dplyr::select(BIOME_NAME, new_area)
-
-    out_tibble <- tibble(
-      biomes = out[[1]],
-      area = out[[2]]
-    )
-
-    results_biome <- out_tibble %>%
-      dplyr::group_by(biomes) %>%
-      dplyr::summarise(area = sum(as.numeric(area)))
-
-    results_biome
   }
 }
 

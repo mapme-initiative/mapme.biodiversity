@@ -1,5 +1,5 @@
 test_that("worldclim precipitation works", {
-  shp <- read_sf(
+  x <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
       package = "mapme.biodiversity"
     )
@@ -11,38 +11,24 @@ test_that("worldclim precipitation works", {
   worldclim_precipitation <- rast(worldclim_precipitation)
 
   cpwc <- calc_precipitation_wc()
-  result <- cpwc(shp, worldclim_precipitation)
+  result <- cpwc(x, worldclim_precipitation)
   cpwc <- calc_precipitation_wc(stats = c("mean", "median", "sd"))
-  result_multi_stat <- cpwc(shp, worldclim_precipitation, )
+  result_multi_stat <- cpwc(x, worldclim_precipitation, )
   cpwc <- calc_precipitation_wc(engine = "zonal")
-  result_zonal <- cpwc(shp, worldclim_precipitation)
+  result_zonal <- cpwc(x, worldclim_precipitation)
   cpwc <- calc_precipitation_wc(engine = "extract")
-  result_extract <- cpwc(shp, worldclim_precipitation)
+  result_extract <- cpwc(x, worldclim_precipitation)
   cpwc <- calc_precipitation_wc(engine = "exactextract")
-  result_exact <- cpwc(shp, worldclim_precipitation)
+  result_exact <- cpwc(x, worldclim_precipitation)
 
-  expect_equal(
-    names(result),
-    c("prec_mean", "date")
-  )
-  expect_equal(
-    names(result_multi_stat),
-    c("prec_mean", "prec_median", "prec_sd", "date")
-  )
-  expect_equal(
-    names(result_zonal),
-    names(result_extract)
-  )
-  expect_equal(
-    names(result_zonal),
-    names(result_exact)
-  )
-  expect_equal(
-    result_zonal$prec_mean,
-    result_extract$prec_mean,
-    tolerance = 1e-4
-  )
-  expect_snapshot(
-    result_exact$prec_mean
-  )
+  expect_silent(.check_single_asset(result))
+  expect_silent(.check_single_asset(result_multi_stat))
+  expect_silent(.check_single_asset(result_zonal))
+  expect_silent(.check_single_asset(result_extract))
+  expect_silent(.check_single_asset(result_exact))
+
+  vars <- c("worldclim_prec_mean", "worldclim_prec_median", "worldclim_prec_sd")
+  expect_equal(unique(result_multi_stat$variable), vars)
+  expect_equal(result_zonal$value, result_extract$value, tolerance = 1e-4)
+  expect_snapshot(result_exact$value)
 })

@@ -48,7 +48,7 @@
 #'   calc_indicators(
 #'     calc_gsw_change(engine = "extract", stats = "mean")
 #'   ) %>%
-#'   tidyr::unnest(gsw_change)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
@@ -60,9 +60,10 @@ calc_gsw_change <- function(engine = "extract", stats = "mean") {
            global_surface_water_change = NULL,
            name = "gsw_change",
            mode = "asset",
+           aggregation = "stat",
            verbose = mapme_options()[["verbose"]]) {
     if (is.null(global_surface_water_change)) {
-      return(NA)
+      return(NULL)
     }
 
     global_surface_water_change <- terra::clamp(
@@ -77,11 +78,17 @@ calc_gsw_change <- function(engine = "extract", stats = "mean") {
       raster = global_surface_water_change,
       stats = stats,
       engine = engine,
-      name = "global_surface_water_change",
+      name = "gsw_change",
       mode = "asset"
     )
 
-    results
+    results %>%
+      tidyr::pivot_longer(cols = dplyr::everything(), names_to = "variable") %>%
+      dplyr::mutate(
+        datetime = as.Date("2021-01-01"),
+        unit = "unitless"
+      ) %>%
+      dplyr::select(datetime, variable, unit, value)
   }
 }
 

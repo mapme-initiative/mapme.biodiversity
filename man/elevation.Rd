@@ -52,7 +52,7 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   calc_indicators(
     calc_elevation(engine = "extract", stats = c("mean", "median", "sd", "var"))
   ) \%>\%
-  tidyr::unnest(elevation)
+  portfolio_long()
 
 aoi
 }

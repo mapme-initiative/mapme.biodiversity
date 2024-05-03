@@ -26,17 +26,20 @@ any resources from the internet. In a real use case, thus processing time
 might substantially increase because resources have to be downloaded and real
 portfolios might be larger than the one created in this example. 
 
-This vignette assumes that you have already followed the steps in [Installation](https://mapme-initiative.github.io/mapme.biodiversity/articles/installation.html) and have familiarized yourself with the 
-terminology used in the package. If you are unfamiliar with the terminology used here, please head over to the [Terminology](https://mapme-initiative.github.io/mapme.biodiversity/articles/terminology.html)
+This vignette assumes that you have already followed the steps in 
+[Installation](https://mapme-initiative.github.io/mapme.biodiversity/articles/installation.html)
+and have familiarized yourself with the terminology used in the package. If you 
+are unfamiliar with the terminology used here, please head over to the 
+[Terminology](https://mapme-initiative.github.io/mapme.biodiversity/articles/terminology.html)
 article to learn about the most important concepts. 
 
 The idealized workflow for using `{mapme.biodiversity}` consists of the following
 steps:
 
-- prepare your sf-object containing only geometries of type `'POLYGON'`
+- prepare your sf-object containing only geometries of type `'POLYGON'` or `'MULTIPOLYGON'`
 - decide which indicator(s) you wish to calculate and make the required resource(s) available
 - conduct your indicator calculation, which adds a nested list column to your portfolio object
-- continue your analysis in R or decide to export your results to a GeoPackage and use it with
+- continue your analysis in R or decide to export your results to a spatial data format to use it with
   other geospatial software
 
 # Getting started
@@ -53,64 +56,38 @@ library(dplyr)
 library(tidyr)
 
 aoi_path <- system.file("extdata", "sierra_de_neiba_478140.gpkg", package = "mapme.biodiversity")
-(aoi <- read_sf(aoi_path))
+aoi <- st_read(aoi_path, quiet = TRUE)
+aoi
 ```
 
 ```{r simplify-aoi, echo = FALSE}
 aoi <- st_simplify(aoi, preserveTopology = TRUE, dTolerance = 500)
 ```
 
-The sf-object contains a single object of geometry type `'MULTIPOLYGON'`. The 
-`{mapme.biodiversity}` package, however, only supports geometries of type `'POLYGON'`,
-thus we need to cast the geometry before we advance. The resulting `sf` object 
-also contains some metadata, that will be retained throughout the complete
-workflow. Because some of the casted geometries represent artefacts of the 
-digitization process, in this example we will subset to include only the largest polygon.
+The sf-object contains a single object of geometry type `'MULTIPOLYGON'`. Each
+of these polygons will be processed individually before the results are combined
+and returned. The `sf` object also contains some metadata (e.g. its WDPAID and 
+its name), that will be retained throughout the complete workflow.
 
-```{r cast}
-(aoi <- st_cast(aoi, to = "POLYGON")[1, ])
-```
+# Setting standard option
 
-In the following, we will simulate a portfolio consisting of several polygons (assets,
-in the jargon of this package). To this end, we create smaller polygons within 
-the original extent of the main polygon. This way, we can showcase the behavior 
-of the `{mapme.biodiversity}` package for portfolios that contain multiple assets. 
-We will only select single assets with geometry type `'POLYGON'` that lie within 
-the original boundary of the protected area.
-
-```{r chunking}
-aoi_gridded <- st_make_grid(
-  x = st_bbox(aoi),
-  n = c(10, 10),
-  square = FALSE
-) %>%
-  st_intersection(aoi) %>%
-  st_as_sf() %>%
-  mutate(geom_type = st_geometry_type(x)) %>%
-  filter(geom_type == "POLYGON") %>%
-  select(-geom_type, geom = x) %>%
-  st_as_sf()
-
-metanames <- names(st_drop_geometry(aoi))
-aoi_gridded[metanames] <- st_drop_geometry(aoi)
-plot(aoi_gridded)
-```
-
-# Initialization of a portfolio
-
-Now, we are ready to initiate a portfolio object containing multiple assets.
 We use the `mapme_options()` function and set some arguments, such as the
-output directory, that are important for the subsequent processing.
+output directory, that are important to govern the subsequent processing.
+For this, we create a temporary directory. Internally, to save time on
+downloading when building this vignette, we copied already existing files
+to that output location (code not shown here).
 
-```{r init_portfolio}
-# copying package internal resource to a temporary location
-outdir <- file.path(tempdir(), "mapme.biodiversity")
-dir.create(outdir)
-resource_dir <- system.file("res", package = "mapme.biodiversity")
-file.copy(resource_dir, outdir, recursive = TRUE)
+```{r init-data-dir, echo=FALSE}
+outdir <- file.path(tempdir(), "mapme-resources")
+mapme.biodiversity:::.copy_resource_dir(outdir)
+```
+
+```{r portfolio-opts}
+outdir <- file.path(tempdir(), "mapme-resources")
+dir.create(outdir, showWarnings = FALSE)
 
 mapme_options(
-  outdir = file.path(outdir, "res"),
+  outdir = outdir,
   verbose = TRUE
 )
 ```
@@ -134,7 +111,7 @@ errors or warnings.
 You can check which indicators are available via the `available_indicators()`
 function:
 
-```{r query_indicator}
+```{r query-indicator}
 available_indicators()
 available_indicators("population_count")
 ```
@@ -144,7 +121,7 @@ We can learn more about this indicator and its required resources by using
 either of the commands below or, if you are viewing the online version, head
 over to the [population_count](https://mapme-initiative.github.io/mapme.biodiversity/reference/population_count.html) documentation.
 
-```{r helppage_indicator, eval = FALSE}
+```{r help-indicator, eval = FALSE}
 ?population_count
 help(population_count)
 ```
@@ -158,7 +135,7 @@ With that information at hand, we can start to retrieve the required resource.
 We can learn about all available resources using the `available_resources()` 
 function:
 
-```{r query_resources}
+```{r query-resources}
 available_resources()
 available_resources("worldpop")
 ```
@@ -170,7 +147,7 @@ online version of this documentation, you can simply head over to the
 [worldpop](https://mapme-initiative.github.io/mapme.biodiversity/reference/worldpop.html)
 resource documentation.
 
-```{r helppage_resource, eval = FALSE}
+```{r help-resource, eval = FALSE}
 ?worldpop
 help(worldpop)
 ```
@@ -181,19 +158,19 @@ We have to specify our portfolio object and supply one or more resource function
 with their respective arguments. This will then download the matching resources
 to the output directory specified earlier.
 
-```{r get_worldpop}
-aoi_gridded <- get_resources(x = aoi_gridded, get_worldpop(years = 2010:2015))
+```{r get-worldpop}
+aoi <- get_resources(x = aoi, get_worldpop(years = 2010:2015))
 ```
 
 In case you want to download more than one resource, you can use the same interface
 and the resources will be made available sequentially. Required arguments 
 for a resource are simply added as usual:
 
-```{r get_multi_resources, eval = FALSE}
-aoi_gridded <- get_resources(
-  x = aoi_gridded,
+```{r get-multi-resources, eval = FALSE}
+aoi <- get_resources(
+  x = aoi,
   get_worldpop(years = 2010:2015),
-  get_gfw_treecover(version = "GFC-2021-v1.8")
+  get_gfw_treecover(version = "GFC-2021-v1.9")
 )
 ```
 
@@ -205,92 +182,102 @@ indicator requires one or more resources that were made available via the
 function in every new R session, but note that data that is already available
 will not be re-downloaded. 
 
-Here, we are goingto calculate the `population_count` indicator which is based 
+Here, we are going to calculate the `population_count` indicator which is based 
 on the `worldpop` resource. Since the resource has been made available in the 
 previous step, we can continue requesting the calculation of our desired indicator. 
 Note the command below would issue an error in case a required resource has not 
 been made available via `get_resources()` beforehand.
 
-```{r calc_indicator}
-aoi_gridded <- calc_indicators(
-  aoi_gridded,
-  calc_population_count(engine = "zonal", stats = "sum")
-)
+```{r calc-indicator}
+aoi <- calc_indicators(aoi, calc_population_count(engine = "zonal", stats = "sum"))
 ```
 
-Now let's take a look at the results. We will select only some of the metadata
-and the output indicator column to get a clearer picture of what has happened.
+Now let's take a look at the results. In addition to the metadata we are 
+already familiar with, we see that there is an additional column called
+`population_count` which contains a `tibble`. 
 
-```{r select_cols}
-(aoi_gridded <- aoi_gridded %>% select(assetid, population_count))
+```{r print-aoi}
+aoi
 ```
 
-We obtained a new listed column in our `sf`-object that is named like the requested
-indicator. For each asset in our portfolio, this column contains a tibble with 
-6 rows and two columns. Let's have a closer look at one of these objects.
+The indicator is represented as a nested-list column in our `sf`-object that is 
+named alike the requested indicator. For our single asset, this column contains 
+a tibble with 6 rows and four columns. Let's have a closer look at this object
 
-```{r investigate_indicator}
-aoi_gridded$population_count[10]
+```{r print-indicator}
+aoi$population_count
 ```
 
-For each asset, the result is a tibble in long format indicating the population
-sum per year (make sure to read the detailed indicator documentation via `?population_count`).
-Let's quickly visualize the results for a single asset:
+The tibble follows a standard output format, which is the same for all indicators.
+Each indicator is represented as a tibble with the four columns `datetime`, `variable`, `unit`, and `value`.
+In case of the population indicator, the variable is the sum of the population,
+its unit is a count and the value column gives the actual number.
 
-```{r plot_popcount, echo = FALSE}
-data <- aoi_gridded %>%
-  filter(assetid == 5) %>%
-  st_drop_geometry() %>%
-  unnest(population_count)
+Let's quickly visualize the results:
 
-pop <- data$population_count_sum
-names(pop) <- data$year
-barplot(pop,
+```{r plot-popcount, echo = FALSE, warning=FALSE}
+mapme_options(verbose = FALSE)
+data <- portfolio_long(aoi)
+
+plot(value ~ datetime, data,
   main = "Population totals over time",
   xlab = "Year", ylab = "Persons",
   pch = 16, col = "steelblue"
 )
 ```
 
-If you wish to conduct your statistical analysis in R, you can use `{tidyr}` functionality
-to unnest one or multiple columns. Especially for large portfolios, it is usually
-a good idea to keep the geometry information in a separated variable
-to keep the size of the data object relatively small.
+If you wish to change the layout of an portfolio, you can use `portfolio_long()`
+and `portfolio_wide()` (see the respective [online tutorial](file:///home/darius/Documents/git-repos/mapme/mapme.biodiversity/docs/articles/output-wide.html)). 
+Especially for large portfolios, it is usually a good idea to keep the geometry 
+information in a separated variable to keep the size of the data object relatively 
+small.
 
-```{r unnest}
-geometries <- select(aoi_gridded, assetid)
-aoi_gridded %>%
-  st_drop_geometry() %>%
-  tidyr::unnest(population_count)
+```{r long-drop-geoms}
+geoms <- st_geometry(aoi)
+portfolio_long(aoi, drop_geoms = TRUE)
 ```
 
 # Enabling parallel computing
 
-`{mapme.biodiversity}` follows the parallelization paradigm of the
-[`{future}`](https://cran.r-project.org/package=future) 
-package. That means that you as a user are in the control if and how you would 
-like to set up parallel processing. Currently, `{mapme.biodiversity}` supports 
-parallel processing on the asset level of the `calc_indicators()` function only. We
-also currently assume that parallel processing is done on the cores of a single 
-machine. In future developments, we would like to support distributed processing.
-If you are working on a distributed use-cases, please contact the developers,
-e.g. via the [discussion board](https://github.com/mapme-initiative/mapme.biodiversity/discussions) or mail.
+`{mapme.biodiversity}` follows the parallel computing paradigm of the
+[`{future}`](https://cran.r-project.org/package=future) package. That means 
+that you as a user are in the control if and how you would like to set up 
+parallel processing. Since `{mapme.biodiversity} v0.7` supports 
+parallel processing on a nested-level. The outer level applies parallel processing 
+to the assets in a portfolio, the inner level to potential chunks for polygons 
+that are larger than the specified chunks size or the single components
+of assets of type `MULTIPOLYGON`. 
 
-To process e.g. 6 assets in parallel and report a progress bar you will have to set 
-up the following in your code:
+The maximum chunk size is specified in hectares via `mapme_options()` and defaults
+to 100,000 ha. Polygons larger than this threshold will be split into chunks
+of roughly the same size.
+
+Fine-control of parallel processing is given by using future topologies
+(find more information [here](https://cran.r-project.org/web/packages/future/vignettes/future-3-topologies.html)).
+To process all assets sequentially, but allow to spawn up to 4 workers to 
+process chunks in parallel you might specify:
+
+```{r parallel-1, eval = FALSE}
+library(future)
+plan(list(sequential, tweak(cluster, workers = 6)))
+```
+
+As another example, with the code below one would apply parallel processing of 2 
+assets, with each having 4 workers available to process chunks, thus requiring 
+a total of 8 available cores on the host machine. Be sure to not request
+more workers than available on your machine.
 
 ```{r parallel, eval = FALSE}
-library(future)
 library(progressr)
 
-plan(multisession, workers = 6) # set up parallel plan with 6 concurrent threads
+plan(list(tweak(cluster, workers = 2), tweak(cluster, workers = 4)))
 
 with_progress({
-  aoi_gridded <- calc_indicators(
-    aoi_gridded,
-    calc_population_count(
-      engine = "zonal",
-      stats = "sum"
+  aoi <- calc_indicators(
+    aoi,
+    calc_treecover_area_and_emissions(
+      min_size = 1,
+      min_cover = 30
     )
   )
 })
@@ -298,37 +285,23 @@ with_progress({
 plan(sequential) # close child processes
 ```
 
-Note, that the above code uses `future::multisession()` as the parallel backend.
-This backend will resolve the calculation in multiple background R sessions.
-You should use that backend if you are operating on Windows, using R Studio or
-otherwise are not sure about which backend to use. In case you are operating on 
-a system that allows process forking and are *not* using R Studio, consider
-using `future::multicore()` for more efficient parallel processing.
-
 # Exporting an portfolio object
 
 You can use the `write_portfolio()` function to save a processed 
-portfolio object to disk as a GeoPackage. This allows sharing your data with 
-others who might not be using R, but any other geospatial software. Simply 
-point towards a non-existing file on your local disk to write the portfolio. 
-The function will create an individual table for all processed indicators. Via 
-the `read_portfolio()` function, a portfolio which has been written 
-to disk in such a way can be read back into R. However, users should note that 
-the portfolio-wide arguments that were set with `mapme_options()` 
-are **not**  reconstructed.
-Thus if you wish to continue to use `{mapme.biodiversity}` functionality on 
-such a portfolio object, make sure to re-run init_portfolio()` on it.
+portfolio object to disk as a `GeoPackage` or any other spatial format supported
+by GDAL. This allows sharing your data with contributors who might not be using 
+R, but any other geospatial software. Simply point towards a non-existing file 
+on your local disk to write the portfolio. You can chose between serializing
+in the long or wide data layout.
 
-```{r portfolio_io, eval=FALSE}
-tmp_output <- tempfile(fileext = ".gpkg")
-write_portfolio(
-  x = aoi_gridded,
-  dsn = tmp_output
-)
-(portfolio_from_disk <- read_portfolio(tmp_output))
+```{r write-portfolio}
+dsn <- tempfile(fileext = ".gpkg")
+write_portfolio(x = aoi, dsn = dsn, format = "long", quiet = TRUE)
+from_disk <- st_read(dsn, quiet = TRUE)
+from_disk
 ```
 
-```{r delete_tmp, echo=FALSE, include=FALSE, eval=FALSE}
-file.remove(tmp_output)
+```{r delete-dsn, echo=FALSE}
+file.remove(dsn)
 ```
 

@@ -22,21 +22,21 @@ test_that("treecover area and emissions works", {
   min_size <- 1
   min_cover <- 10
   tae <- calc_treecover_area_and_emissions(years, min_size, min_cover)
-  expect_equal(tae(x, gfw_treecover, gfw_lossyear, NULL), NA)
+  expect_true(is.null(tae(x, gfw_treecover, gfw_lossyear, NULL)))
 
   result <- tae(x, gfw_treecover, gfw_lossyear, gfw_emissions)
 
-  expect_equal(names(result), c("years", "emissions", "treecover"))
-  expect_equal(result$years, c(2000:2005))
-  expect_snapshot(result$treecover)
-  expect_snapshot(result$emissions)
+  expect_equal(unique(result$variable), c("emissions", "treecover"))
+  expect_equal(unique(format(result$datetime, "%Y")), as.character(c(2000:2005)))
+  expect_snapshot(result$value)
 
   te <- calc_treecoverloss_emissions(years, min_size, min_cover)
   stats_emissions <- te(x, gfw_treecover, gfw_lossyear, gfw_emissions)
-  expect_equal(result$emissions, stats_emissions$emissions, tolerance = 1e-4)
+  expect_equal(result$value[result$variable == "emissions"], stats_emissions$value, tolerance = 1e-4)
 
   # test that emissions and forest loss are returned as 0 if no loss occurs
   gfw_lossyear[gfw_lossyear == 3] <- 1
   stats_treeloss <- tae(x, gfw_treecover, gfw_lossyear, gfw_emissions)
-  expect_equal(stats_treeloss$emissions[stats_treeloss$years == 2003], 0)
+  stats_treeloss <- stats_treeloss[stats_treeloss$variable == "emissions", ]
+  expect_equal(stats_treeloss$value[stats_treeloss$datetime == "2003-01-01"], 0)
 })
