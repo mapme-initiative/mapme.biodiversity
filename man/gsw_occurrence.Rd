@@ -59,7 +59,7 @@ aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
   calc_indicators(
     calc_gsw_occurrence(engine = "extract", min_occurrence = 10)
   ) \%>\%
-  tidyr::unnest(gsw_occurence)
+  portfolio_long()
 
 aoi
 }
