@@ -46,7 +46,7 @@
 #'       stats = c("mean", "median")
 #'     )
 #'   ) %>%
-#'   tidyr::unnest(precipitation_wc)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
