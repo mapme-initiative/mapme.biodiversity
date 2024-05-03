@@ -68,7 +68,7 @@ calc_deforestation_drivers <- function() {
     dplyr::left_join(classes, zonal_stat, by = "code") %>%
       tidyr::replace_na(list(area = 0)) %>%
       dplyr::mutate(
-        datetime = "2000-01-01",
+        datetime = "2008-01-01",
         variable = class,
         unit = "ha",
         value = area
