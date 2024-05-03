@@ -43,7 +43,7 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   read_sf() \%>\%
   get_resources(get_teow()) \%>\%
   calc_indicators(calc_biome()) \%>\%
-  tidyr::unnest(biome)
+  portfolio_long()
 
 aoi
 }

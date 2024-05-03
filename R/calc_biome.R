@@ -35,7 +35,7 @@
 #'   read_sf() %>%
 #'   get_resources(get_teow()) %>%
 #'   calc_indicators(calc_biome()) %>%
-#'   tidyr::unnest(biome)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
