@@ -47,7 +47,7 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   read_sf() \%>\%
   get_resources(get_esalandcover(years = 2016:2017)) \%>\%
   calc_indicators(calc_landcover()) \%>\%
-  tidyr::unnest(landcover)
+  portfolio_long()
 
 aoi
 }

@@ -38,7 +38,7 @@
 #'   read_sf() %>%
 #'   get_resources(get_esalandcover(years = 2016:2017)) %>%
 #'   calc_indicators(calc_landcover()) %>%
-#'   tidyr::unnest(landcover)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
