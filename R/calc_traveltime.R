@@ -84,7 +84,7 @@ calc_traveltime <- function(engine = "extract", stats = "mean") {
       dplyr::mutate(distances = distances) %>%
       tidyr::pivot_longer(-distances, names_to = "variable") %>%
       dplyr::mutate(
-        datetime = as.Date("2000-01-01"),
+        datetime = as.Date("2015-01-01"),
         variable = paste0(distances, "_", variable),
         unit = "minutes"
       ) %>%
