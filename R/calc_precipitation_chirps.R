@@ -43,7 +43,7 @@
 #'       engine = "extract"
 #'     )
 #'   ) %>%
-#'   tidyr::unnest(precipitation_chirps)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
