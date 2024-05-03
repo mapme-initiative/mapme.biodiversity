@@ -44,7 +44,7 @@
 #'       stats = c("mean", "median")
 #'     )
 #'   ) %>%
-#'   tidyr::unnest(temperature_max_wc)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
