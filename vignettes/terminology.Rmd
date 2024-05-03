@@ -28,10 +28,9 @@ used throughout this tutorial:
 
 - **Portfolio**: We define a portfolio as
 the collection of single assets in an `{sf}` object. The package
-does only allow assets with geometries of type `'POLYGON'` to be included in the object.
-In case that some of your data has type `'MULTIPOLYGON'` (or others) you are required to 
-transform your data via `sf::st_cast()` before initiating your portfolio. 
-We also expect the data to be in geographic coordinates. 
+does only allow assets with geometries of type `'POLYGON'` or `'MULTIPOLYGON'` 
+to be included in the object.
+We expect the data to be in geodetic, i.e. unprojected, coordinates. 
 In case the CRS of the portfolio is projected, we will attempt to transform to
 `EPSG:4326`. Any metadata that is needed for your analysis is allowed
 in the columns of the object and will be retained throughout the workflow so that
@@ -54,14 +53,15 @@ their arguments simply query the help-page for that resource (e.g. via `?gfw_tre
 - **Indicators**: An indicator calculates a tabular output for all
 assets in a portfolio. Every indicator requires one or more resources to be
 available locally and will inform you about any missing resources. 
-Custom arrguments might be set for some indicators, but sensible defaults 
+Custom arguments might be set for some indicators, but sensible defaults 
 have been set. The package will inform you about any misspecification of arguments. 
 To learn more about a specific indicator and its required arguments, simply query 
-the help-page (e.g. via `?treecover_area`). 
-When an indicator calculation is done a *nested list column* with the same name 
-will be added to the portfolio. For assets where no sensible values can be 
-calculated (e.g. for polygons over the ocean and the `treecover_area` indicator),
-`NA` values will be inserted.
+the help-page (e.g. via `?treecover_area`). The output for indicators is 
+standardized and is represented by a tibble with columns `datetime`, `variable`, 
+`unit`, and `value`. Indicators are appended to the portfolio as
+*nested list columns*. For assets where no sensible values can be calculated 
+(e.g. for polygons over the ocean and the `treecover_area` indicator), `NULL` 
+will be returned.
 
 - **Engines**: Several indicators support different engines for the extraction of
 the numeric outputs. Currently, these engines are based on either `terra::zonal()`,
