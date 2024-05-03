@@ -97,7 +97,8 @@ calc_gsw_seasonality <- function() {
         datetime = as.Date("2021-01-01"),
         unit = "ha"
       ) %>%
-      dplyr::select(datetime, variable, unit, value)
+      dplyr::select(datetime, variable, unit, value) %>%
+      tibble::as_tibble()
   }
 }
 
