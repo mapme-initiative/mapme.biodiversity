@@ -26,8 +26,11 @@ any resources from the internet. In a real use case, thus processing time
 might substantially increase because resources have to be downloaded and real
 portfolios might be larger than the one created in this example. 
 
-This vignette assumes that you have already followed the steps in [Installation](https://mapme-initiative.github.io/mapme.biodiversity/articles/installation.html) and have familiarized yourself with the 
-terminology used in the package. If you are unfamiliar with the terminology used here, please head over to the [Terminology](https://mapme-initiative.github.io/mapme.biodiversity/articles/terminology.html)
+This vignette assumes that you have already followed the steps in 
+[Installation](https://mapme-initiative.github.io/mapme.biodiversity/articles/installation.html)
+and have familiarized yourself with the terminology used in the package. If you 
+are unfamiliar with the terminology used here, please head over to the 
+[Terminology](https://mapme-initiative.github.io/mapme.biodiversity/articles/terminology.html)
 article to learn about the most important concepts. 
 
 The idealized workflow for using `{mapme.biodiversity}` consists of the following
@@ -213,6 +216,7 @@ its unit is a count and the value column gives the actual number.
 Let's quickly visualize the results:
 
 ```{r plot-popcount, echo = FALSE, warning=FALSE}
+mapme_options(verbose = FALSE)
 data <- portfolio_long(aoi)
 
 plot(value ~ datetime, data,
@@ -292,11 +296,7 @@ in the long or wide data layout.
 
 ```{r write-portfolio}
 dsn <- tempfile(fileext = ".gpkg")
-write_portfolio(
-  x = aoi,
-  dsn = dsn,
-  format = "long"
-)
+write_portfolio(x = aoi, dsn = dsn, format = "long", quiet = TRUE)
 from_disk <- st_read(dsn, quiet = TRUE)
 from_disk
 ```
