@@ -84,7 +84,7 @@ calc_gsw_transitions <- function() {
     }) %>%
       dplyr::mutate(
         variable = paste0("gsw_", variable),
-        datetime = as.Date("2000-01-01"),
+        datetime = as.Date("2021-01-01"),
         unit = "ha"
       ) %>%
       tibble::as_tibble() %>%
