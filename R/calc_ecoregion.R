@@ -112,7 +112,7 @@ calc_ecoregion <- function() {
     sf::st_drop_geometry() %>%
     dplyr::select({{ var }}, value) %>%
     dplyr::mutate(
-      datetime = as.Date("2000-01-01"),
+      datetime = as.Date("2001-01-01"),
       variable = {{ var }},
       unit = "ha"
     ) %>%
