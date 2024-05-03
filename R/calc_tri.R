@@ -28,7 +28,7 @@
 #'   (6) 498-958 m :- highly rugged surface
 #'   (7) 959-4367 m:- extremely rugged surface
 #' @references Riley, S. J., DeGloria, S. D., & Elliot, R. (1999). Index that quantifies
-#'   topographic heterogeneity. intermountain Journal of sciences, 5(1-4), 23-27.
+#'   topographic heterogeneity. Intermountain Journal of Sciences, 5(1-4), 23-27.
 #' @include register.R
 #' @export
 #' @examples
@@ -55,7 +55,7 @@
 #'   calc_indicators(
 #'     calc_tri(stats = c("mean", "median", "sd", "var"), engine = "extract")
 #'   ) %>%
-#'   tidyr::unnest(tri)
+#'   portfolio_long()
 #'
 #' aoi
 #' }

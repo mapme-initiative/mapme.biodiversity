@@ -65,13 +65,13 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   calc_indicators(
     calc_tri(stats = c("mean", "median", "sd", "var"), engine = "extract")
   ) \%>\%
-  tidyr::unnest(tri)
+  portfolio_long()
 
 aoi
 }
 }
 \references{
 Riley, S. J., DeGloria, S. D., & Elliot, R. (1999). Index that quantifies
-topographic heterogeneity. intermountain Journal of sciences, 5(1-4), 23-27.
+topographic heterogeneity. Intermountain Journal of Sciences, 5(1-4), 23-27.
 }
 \keyword{indicator}
