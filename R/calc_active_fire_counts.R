@@ -36,7 +36,7 @@
 #'   read_sf() %>%
 #'   get_resources(get_nasa_firms(years = 2021, instrument = "VIIRS")) %>%
 #'   calc_indicators(calc_active_fire_counts()) %>%
-#'   tidyr::unnest(active_fire_counts)
+#'   portfolio_long()
 #'
 #' aoi
 #' }
