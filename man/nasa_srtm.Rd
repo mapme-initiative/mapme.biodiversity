@@ -5,7 +5,7 @@
 \alias{get_nasa_srtm}
 \title{NASADEM HGT v001}
 \source{
-https://planetarycomputer.microsoft.com/dataset/nasadem
+\url{https://planetarycomputer.microsoft.com/dataset/nasadem}
 }
 \usage{
 get_nasa_srtm()
@@ -23,6 +23,6 @@ consist of all land between 60° N and 56° S latitude. This accounts for about
 \references{
 NASA JPL (2020). NASADEM Merged DEM Global 1 arc second V001.
 NASA EOSDIS Land Processes DAAC. Accessed 2023-07-01 from
-https://doi.org/10.5067/MEaSUREs/NASADEM/NASADEM_HGT.001
+\doi{https://doi.org/10.5067/MEaSUREs/NASADEM/NASADEM_HGT.001}
 }
 \keyword{resource}
