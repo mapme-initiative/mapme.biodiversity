@@ -1,5 +1,36 @@
 # mapme.biodiversity (development version)
 
+## Breaking changes
+
+- introduces a standardized output format for indicators, see #240 for
+  more information
+- `get_chirps()` now allows to specify the years for which to download CHIRPS
+  resources
+- `calc_precipitation_chirps()` now only returns precipitation sums
+- deprecation of indicator `active_fire_properties` since resources can now
+  be retrieved using `prep_resources()` (see below)
+  
+## General
+
+- exports `prep_resources()` to prepare resources for single assets
+- exports `portfolio_long()` and `portfolio_wide()` to automatically
+  un-nest indicator columns and change the data layout to either long or wide
+- changes the behavior of `write_portfolio()` to serialize portfolios to 
+  GDAL supported spatial formats in either long or wide format and deprecates
+  `read_portfolio()`
+- introduces option `chunk_size` to `mapme_options()` to control the size
+  for which polygons are split and processed in chunks
+- allows assets of type `'MULTIPOLYGON'` and automatically combines the results
+- indicator examples now use `portfolio_long()` instead of `tidyr::unnest()`
+
+## Internal
+
+- indicator functions must now return tibbles with columns named `datetime`, 
+  `variable`, `unit` and `value`
+- inner-level indicator functions must now specify a statistic for aggregation
+  of chunks
+- `chirps` and `nasa_grace` resources updated
+
 # mapme.biodiversity 0.6.0
 
 ## Breaking changes
