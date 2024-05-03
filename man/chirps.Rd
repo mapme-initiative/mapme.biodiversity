@@ -8,7 +8,11 @@
 \url{https://data.chc.ucsb.edu/products/CHIRPS-2.0/global_monthly/cogs/}
 }
 \usage{
-get_chirps()
+get_chirps(years = 1981:2020)
+}
+\arguments{
+\item{years}{A numeric vector of the years to download CHIRPS precipitation
+layers. Must be greater 1981, defaults to \code{c(1981:2020)}.}
 }
 \value{
 A function that returns a character of file paths.

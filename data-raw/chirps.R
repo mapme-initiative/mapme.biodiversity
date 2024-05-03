@@ -10,10 +10,9 @@ dir.create(tmp_loc)
 aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   package = "mapme.biodiversity"
 ) %>% st_read()
-attr(aoi, "testing") <- FALSE
-file.copy(list.files(outdir, full.names = T), tmp_loc)
 
-tifs <- mapme.biodiversity:::.get_chirps(aoi, rundir = tmp_loc, verbose = T)
+gch <- get_chirps(years = 2010)
+tifs <- gch(aoi, outdir = tmp_loc)
 chirps <- lapply(tifs, function(x) rast(x) %>% crop(aoi)) %>% rast()
 archives <- list.files(tmp_loc, pattern = "*.gz$")
 

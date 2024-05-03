@@ -36,7 +36,7 @@
 #'   package = "mapme.biodiversity"
 #' ) %>%
 #'   read_sf() %>%
-#'   get_resources(get_chirps()) %>%
+#'   get_resources(get_chirps(years = 2010)) %>%
 #'   calc_indicators(
 #'     calc_precipitation_chirps(
 #'       years = 2010,
@@ -51,15 +51,8 @@ calc_precipitation_chirps <- function(years = 1981:2020,
                                       engine = "extract") {
   check_namespace("SPEI")
   engine <- check_engine(engine)
-
-  if (any(years < 1981)) {
-    warning(paste("Cannot calculate precipitation statistics ",
-      "for years smaller than 1981",
-      sep = ""
-    ))
-    years <- years[years >= 1981]
-  }
-  if (length(years) == 0) stop("No valid years selected.")
+  avail_years <- seq(1981, format(Sys.Date(), "%Y"))
+  years <- check_available_years(years, avail_years, "precipitation_chirps")
 
   function(x,
            chirps,
