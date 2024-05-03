@@ -381,8 +381,8 @@ any) for correctness</label></li>
 standard arguments</label></li>
 <li><label><input type="checkbox">If applicable, implement both, asset
 and portfolio based processing modes</label></li>
-<li><label><input type="checkbox">Return a tibble in long format (no
-variables “hidden” in column names)</label></li>
+<li><label><input type="checkbox">Return a tibble in long format with
+standardized column names</label></li>
 <li><label><input type="checkbox">Write a testthat script testing all
 the newly added functionality write it to
 <code>test/testthat/test-calc_&lt;indicator_name&gt;.R</code></label></li>
@@ -477,6 +477,7 @@ required to exactly specify the below signature. For the
 <span>         <span class="va">nasa_srtm</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>         <span class="va">name</span> <span class="op">=</span> <span class="st">"elevation"</span>,</span>
 <span>         <span class="va">mode</span> <span class="op">=</span> <span class="st">"asset"</span>,</span>
+<span>         <span class="va">aggregation</span> <span class="op">=</span> <span class="st">"stat"</span>,</span>
 <span>         <span class="va">verbose</span> <span class="op">=</span> <span class="fu"><a href="../reference/mapme.html">mapme_options</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="st">"verbose"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co"># ... function body</span></span>
 <span><span class="op">}</span></span></code></pre></div>
@@ -498,6 +499,21 @@ efficient.</p>
 processing times for your indicator, please leave an issue/comment to
 discuss the addition of another processing mode with the maintainers of
 the package.</p>
+<p>The argument <code>aggregation</code> governs how chunked results for
+large polygons are to be combined into a single indicator. In case uses
+supply polygons larger than the specified code path or assets of type
+<code>MULTIPOLYGON</code>, a code path is triggered that splits assets
+into sub-components. The aggregation method specifies which statistic is
+used to combine values that share the same values in the remaining
+indicator columns (i.e. <code>datetime</code>, <code>variable</code>,
+and <code>unit</code>). The <code>stat</code> keyword is a special
+keyword used for indicators where statistics are specified by the user
+and will trigger to select the respective statistic as the aggregation
+statistic (e.g. take the sum of sums).</p>
+<p>The available statistics are:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">mapme.biodiversity</span><span class="fu">:::</span><span class="va">available_stats</span></span>
+<span><span class="co">#&gt; [1] "mean"   "median" "sd"     "min"    "max"    "sum"    "var"</span></span></code></pre></div>
 <p>The argument <code>verbose</code> defaults to the corresponding
 package-wide option and should control the verbosity of you indicator
 function.</p>
@@ -535,13 +551,13 @@ be calculated with the given configuration, make sure to return
 </h3>
 <p>You are required to add unit tests for your indicator using the
 package internal example data sets for resources. Make sure to properly
-test for missspecification of user-facing arguments and also check for
+test for miss-specification of user-facing arguments and also check for
 the correctness of numerical results of your indicator.</p>
 <p>You might not need to construct a portfolio from scratch to test you
 indicator function. Instead, you can directly call the returned function
 on an appropriate polygon with the respective required resource. For the
 <code>elevation</code> indicator, this looks like this:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
 <span>  <span class="st">"extdata"</span>, <span class="st">"sierra_de_neiba_478140.gpkg"</span>,</span>
 <span>  package <span class="op">=</span> <span class="st">"mapme.biodiversity"</span></span>

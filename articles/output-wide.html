@@ -103,30 +103,22 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Linking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     filter, lag</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/mapme.html">mapme_options</a></span><span class="op">(</span>verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="objectives">Objectives<a class="anchor" aria-label="anchor" href="#objectives"></a>
 </h2>
 <p>This tutorial gives you some information how to transform the output
 of the mapme-biodiversity package to a wide format for exchange with
 other (geospatial-)software, such as QGIS. This is necessary because the
-package uses the so-called nested-list format by default to support very
-different indicators that each may come in its own format. However, this
-format is specific to R and to use the data in other software thus
-requires some additional steps to be taken. This vignette thus shows you
-how you can obtain a wide-format for your portfolio that you can easily
-export and use with other software.</p>
+package uses the so-called nested-list format by default to represent
+indicators. However, this format is specific to R and to use the data in
+other software thus requires some additional steps to be taken. This
+vignette shows you how you can change the data layout of your portfolio
+that you can easily serialize to a spatial format of your choice and use
+with other software.</p>
 </div>
 <div class="section level2">
 <h2 id="what-are-long-vs--wide-tables">What are long vs. wide tables?<a class="anchor" aria-label="anchor" href="#what-are-long-vs--wide-tables"></a>
@@ -138,7 +130,7 @@ would naturally structure our data when we work with spreadsheets,
 e.g. in Excel. In wide-format, the identifier of a observation is
 included exactly once and does not repeat itself (see Table A). In the
 long format, the identifier as well as other qualifying variables, might
-be repeated several times to uniquely identify each observation is a
+be repeated several times to uniquely identify each observation in a
 single row (see Table B). The long format is often required when
 interacting with computers, e.g. to make plots with ggplot2. The content
 of the two is exactly the same either way, the one might be just more
@@ -209,13 +201,17 @@ portfolio. As usual, we will have to make available the Nelson et
 al. resource as well as requesting the calculation of the respective
 indicator.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/mapme.html">mapme_options</a></span><span class="op">(</span>outdir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"res"</span>, package <span class="op">=</span> <span class="st">"mapme.biodiversity"</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">outdir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"mapme-resources"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">outdir</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">port_w_nelson</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mapme.html">get_resources</a></span><span class="op">(</span><span class="va">aoi</span>, <span class="fu"><a href="../reference/nelson_et_al.html">get_nelson_et_al</a></span><span class="op">(</span>ranges <span class="op">=</span> <span class="st">"20k_50k"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Skipping existing files in output directory.</span></span>
-<span><span class="va">port_w_traveltime</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mapme.html">calc_indicators</a></span><span class="op">(</span><span class="va">port_w_nelson</span>, <span class="fu"><a href="../reference/traveltime.html">calc_traveltime</a></span><span class="op">(</span>stats <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Found a column named 'assetid'. Overwritting its values with a unique identifier.</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">port_w_traveltime</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/mapme.html">mapme_options</a></span><span class="op">(</span></span>
+<span>  outdir <span class="op">=</span> <span class="va">outdir</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mapme.html">get_resources</a></span><span class="op">(</span><span class="va">aoi</span>, <span class="fu"><a href="../reference/nelson_et_al.html">get_nelson_et_al</a></span><span class="op">(</span>ranges <span class="op">=</span> <span class="st">"20k_50k"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mapme.html">calc_indicators</a></span><span class="op">(</span><span class="va">aoi</span>, <span class="fu"><a href="../reference/traveltime.html">calc_traveltime</a></span><span class="op">(</span>stats <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">aoi</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Simple feature collection with 9 features and 2 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POLYGON</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
@@ -224,69 +220,84 @@ indicator.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 3</span></span></span>
 <span><span class="co">#&gt;   assetid traveltime                                                           x</span></span>
 <span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>                                                   <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       1 <span style="color: #949494;">&lt;tibble [1 × 2]&gt;</span> ((-71.80933 18.57668, -71.65022 18.57668, -71.65022 …</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       2 <span style="color: #949494;">&lt;tibble [1 × 2]&gt;</span> ((-71.65022 18.57668, -71.49111 18.57668, -71.49111 …</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       3 <span style="color: #949494;">&lt;tibble [1 × 2]&gt;</span> ((-71.49111 18.57668, -71.33201 18.57668, -71.33201 …</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       4 <span style="color: #949494;">&lt;tibble [1 × 2]&gt;</span> ((-71.80933 18.61756, -71.65022 18.61756, -71.65022 …</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>       5 <span style="color: #949494;">&lt;tibble [1 × 2]&gt;</span> ((-71.65022 18.61756, -71.49111 18.61756, -71.49111 …</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>       6 <span style="color: #949494;">&lt;tibble [1 × 2]&gt;</span> ((-71.49111 18.61756, -71.33201 18.61756, -71.33201 …</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>       7 <span style="color: #949494;">&lt;tibble [1 × 2]&gt;</span> ((-71.80933 18.65844, -71.65022 18.65844, -71.65022 …</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>       8 <span style="color: #949494;">&lt;tibble [1 × 2]&gt;</span> ((-71.65022 18.65844, -71.49111 18.65844, -71.49111 …</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>       9 <span style="color: #949494;">&lt;tibble [1 × 2]&gt;</span> ((-71.49111 18.65844, -71.33201 18.65844, -71.33201 …</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.80933 18.57668, -71.65022 18.57668, -71.65022 …</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       2 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.65022 18.57668, -71.49111 18.57668, -71.49111 …</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       3 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.49111 18.57668, -71.33201 18.57668, -71.33201 …</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       4 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.80933 18.61756, -71.65022 18.61756, -71.65022 …</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>       5 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.65022 18.61756, -71.49111 18.61756, -71.49111 …</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>       6 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.49111 18.61756, -71.33201 18.61756, -71.33201 …</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>       7 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.80933 18.65844, -71.65022 18.65844, -71.65022 …</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>       8 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.65022 18.65844, -71.49111 18.65844, -71.49111 …</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>       9 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.49111 18.65844, -71.33201 18.65844, -71.33201 …</span></span></code></pre></div>
 <p>As we can observe from the output, a new column was added to the
 <code>sf</code> object. It is called <code>traveltime</code> and is of
 type <code>list</code> indicating that it represents a nested-list
 column. What that means is that we are able to maintain the rectangular
 shape of our original data (e.g. one polygon per row), while supporting
 arbitrarily shaped outputs for indicators. Let’s observe how the
-traveltime indicator looks like in this instance:</p>
+<code>traveltime</code> indicator looks like in this instance:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">port_w_traveltime</span><span class="op">$</span><span class="va">traveltime</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 2</span></span></span>
-<span><span class="co">#&gt;   minutes_mean distance</span></span>
-<span><span class="co">#&gt;          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>         49.8 20k_50k</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">aoi</span><span class="op">$</span><span class="va">traveltime</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
+<span><span class="co">#&gt;   datetime   variable                unit    value</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 2015-01-01 20k_50k_traveltime_mean minutes  49.8</span></span></code></pre></div>
 <p>From the syntax above, you can see how you can access a single object
 within the nested list column (e.g. by using the list accessor
-<code>[[</code>). In this case, the shape of the traveltime indicator is
-a single-row and two-column tibble with the average minutes and the
-distance category as its value. Because the indicator comes as a single
-row, we can simply unnest the traveltime column to get to a wide-format
-output:</p>
+<code>[[</code>). In this case, the shape of the <code>traveltime</code>
+indicator is a single-row and two-column tibble with the average minutes
+and the distance category as its value. We can now use either of two
+functions to transform the portfolio to long or wide formats:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">port_wide_1</span> <span class="op">&lt;-</span> <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">port_w_traveltime</span>, <span class="va">traveltime</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">port_wide_1</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Simple feature collection with 9 features and 3 fields</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/portfolio.html">portfolio_long</a></span><span class="op">(</span><span class="va">aoi</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Simple feature collection with 9 features and 6 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POLYGON</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
 <span><span class="co">#&gt; Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span></span>
 <span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 4</span></span></span>
-<span><span class="co">#&gt;   assetid minutes_mean distance                                                x</span></span>
-<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                       <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       1         49.8 20k_50k  ((-71.80933 18.57668, -71.65022 18.57668, -71.6…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       2        104.  20k_50k  ((-71.65022 18.57668, -71.49111 18.57668, -71.4…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       3        112.  20k_50k  ((-71.49111 18.57668, -71.33201 18.57668, -71.3…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       4         84   20k_50k  ((-71.80933 18.61756, -71.65022 18.61756, -71.6…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>       5        139.  20k_50k  ((-71.65022 18.61756, -71.49111 18.61756, -71.4…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>       6        104.  20k_50k  ((-71.49111 18.61756, -71.33201 18.61756, -71.3…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>       7        141.  20k_50k  ((-71.80933 18.65844, -71.65022 18.65844, -71.6…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>       8        118.  20k_50k  ((-71.65022 18.65844, -71.49111 18.65844, -71.4…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>       9         73.1 20k_50k  ((-71.49111 18.65844, -71.33201 18.65844, -71.3…</span></span></code></pre></div>
-<p>In this case, the result has 9 rows just like the original data
-frame. In this particular scenario, where the only variable is
-<code>minutes_mean</code>, the object <code>port_wide_1</code> contains
-just one value per polygon. This aligns well with the characteristics of
-the wide format, which can be easily understood and processed by various
-(geospatial) software. So, we can now export our portfolio for example
-as a geopackage that can be read directly into e.g. QGIS or as a CSV
-without the geospatial information:</p>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 7</span></span></span>
+<span><span class="co">#&gt;   assetid indicator  datetime   variable   unit  value                         x</span></span>
+<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       1 traveltime 2015-01-01 20k_50k_t… minu…  49.8 ((-71.80933 18.57668, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       2 traveltime 2015-01-01 20k_50k_t… minu… 104.  ((-71.65022 18.57668, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       3 traveltime 2015-01-01 20k_50k_t… minu… 112.  ((-71.49111 18.57668, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       4 traveltime 2015-01-01 20k_50k_t… minu…  84   ((-71.80933 18.61756, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>       5 traveltime 2015-01-01 20k_50k_t… minu… 139.  ((-71.65022 18.61756, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>       6 traveltime 2015-01-01 20k_50k_t… minu… 104.  ((-71.49111 18.61756, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>       7 traveltime 2015-01-01 20k_50k_t… minu… 141.  ((-71.80933 18.65844, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>       8 traveltime 2015-01-01 20k_50k_t… minu… 118.  ((-71.65022 18.65844, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>       9 traveltime 2015-01-01 20k_50k_t… minu…  73.1 ((-71.49111 18.65844, -7…</span></span>
+<span><span class="fu"><a href="../reference/portfolio.html">portfolio_wide</a></span><span class="op">(</span><span class="va">aoi</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Simple feature collection with 9 features and 2 fields</span></span>
+<span><span class="co">#&gt; Geometry type: POLYGON</span></span>
+<span><span class="co">#&gt; Dimension:     XY</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span></span>
+<span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 3</span></span></span>
+<span><span class="co">#&gt;   assetid                                               x traveltime_2015-01-0…¹</span></span>
+<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>                                   <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       1 ((-71.80933 18.57668, -71.65022 18.57668, -71.…                   49.8</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       2 ((-71.65022 18.57668, -71.49111 18.57668, -71.…                  104. </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       3 ((-71.49111 18.57668, -71.33201 18.57668, -71.…                  112. </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       4 ((-71.80933 18.61756, -71.65022 18.61756, -71.…                   84  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>       5 ((-71.65022 18.61756, -71.49111 18.61756, -71.…                  139. </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>       6 ((-71.49111 18.61756, -71.33201 18.61756, -71.…                  104. </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>       7 ((-71.80933 18.65844, -71.65022 18.65844, -71.…                  141. </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>       8 ((-71.65022 18.65844, -71.49111 18.65844, -71.…                  118. </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>       9 ((-71.49111 18.65844, -71.33201 18.65844, -71.…                   73.1</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ abbreviated name: ¹​`traveltime_2015-01-01_20k_50k_traveltime_mean_minutes`</span></span></span></code></pre></div>
+<p>Both function will, by default, automatically detect nested-list
+columns and change the data layout. In this case, the result still has 9
+rows just like the original data frame because the indicator
+<code>traveltime</code> consisted of just a single row per asset.</p>
+<p>We could serialize the object to disk in either format by calling
+<code><a href="../reference/portfolio.html">write_portfolio()</a></code> with the respective <code>format</code>
+argument:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">st_write</a></span><span class="op">(</span><span class="va">port_wide_1</span>, dsn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".gpkg"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Writing layer `file2685675a0c57' to data source </span></span>
-<span><span class="co">#&gt;   `/tmp/RtmpQQA04X/file2685675a0c57.gpkg' using driver `GPKG'</span></span>
-<span><span class="co">#&gt; Writing 9 features with 3 fields and geometry type Polygon.</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="va">port_wide_1</span><span class="op">)</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".csv"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">dsn_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".gpkg"</span><span class="op">)</span></span>
+<span><span class="va">dsn_wide</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".gpkg"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/portfolio.html">write_portfolio</a></span><span class="op">(</span><span class="va">aoi</span>, <span class="va">dsn_long</span>, format <span class="op">=</span> <span class="st">"long"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/portfolio.html">write_portfolio</a></span><span class="op">(</span><span class="va">aoi</span>, <span class="va">dsn_wide</span>, format <span class="op">=</span> <span class="st">"wide"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="the-harder-case---indicators-with-multi-row-output">The harder case - indicators with multi-row output<a class="anchor" aria-label="anchor" href="#the-harder-case---indicators-with-multi-row-output"></a>
@@ -294,139 +305,123 @@ without the geospatial information:</p>
 <p>Let’s continue to query an indicator which has a multi-row output,
 i.e. precipitation statistics from <a href="https://www.worldclim.org/" class="external-link">WorldClim</a>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">port_w_wc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mapme.html">get_resources</a></span><span class="op">(</span><span class="va">aoi</span>, <span class="fu"><a href="../reference/worldclim_precipitation.html">get_worldclim_precipitation</a></span><span class="op">(</span>years <span class="op">=</span> <span class="fl">2010</span><span class="op">:</span><span class="fl">2018</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Skipping existing files in output directory.</span></span>
-<span><span class="va">port_w_prec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mapme.html">calc_indicators</a></span><span class="op">(</span><span class="va">port_w_wc</span>, <span class="fu"><a href="../reference/precipitation_wc.html">calc_precipitation_wc</a></span><span class="op">(</span>stats <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Found a column named 'assetid'. Overwritting its values with a unique identifier.</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">port_w_prec</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Simple feature collection with 9 features and 2 fields</span></span>
+<code class="sourceCode R"><span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mapme.html">get_resources</a></span><span class="op">(</span><span class="va">aoi</span>, <span class="fu"><a href="../reference/worldclim_precipitation.html">get_worldclim_precipitation</a></span><span class="op">(</span>years <span class="op">=</span> <span class="fl">2010</span><span class="op">:</span><span class="fl">2018</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mapme.html">calc_indicators</a></span><span class="op">(</span><span class="va">aoi</span>, <span class="fu"><a href="../reference/precipitation_wc.html">calc_precipitation_wc</a></span><span class="op">(</span>stats <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">aoi</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Simple feature collection with 9 features and 3 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POLYGON</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
 <span><span class="co">#&gt; Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span></span>
 <span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 3</span></span></span>
-<span><span class="co">#&gt;   assetid precipitation_wc                                                     x</span></span>
-<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>                                                   <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       1 <span style="color: #949494;">&lt;tibble [12 × 2]&gt;</span> ((-71.80933 18.57668, -71.65022 18.57668, -71.65022…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       2 <span style="color: #949494;">&lt;tibble [12 × 2]&gt;</span> ((-71.65022 18.57668, -71.49111 18.57668, -71.49111…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       3 <span style="color: #949494;">&lt;tibble [12 × 2]&gt;</span> ((-71.49111 18.57668, -71.33201 18.57668, -71.33201…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       4 <span style="color: #949494;">&lt;tibble [12 × 2]&gt;</span> ((-71.80933 18.61756, -71.65022 18.61756, -71.65022…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>       5 <span style="color: #949494;">&lt;tibble [12 × 2]&gt;</span> ((-71.65022 18.61756, -71.49111 18.61756, -71.49111…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>       6 <span style="color: #949494;">&lt;tibble [12 × 2]&gt;</span> ((-71.49111 18.61756, -71.33201 18.61756, -71.33201…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>       7 <span style="color: #949494;">&lt;tibble [12 × 2]&gt;</span> ((-71.80933 18.65844, -71.65022 18.65844, -71.65022…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>       8 <span style="color: #949494;">&lt;tibble [12 × 2]&gt;</span> ((-71.65022 18.65844, -71.49111 18.65844, -71.49111…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>       9 <span style="color: #949494;">&lt;tibble [12 × 2]&gt;</span> ((-71.49111 18.65844, -71.33201 18.65844, -71.33201…</span></span></code></pre></div>
-<p>We see that similar to the traveltime indicator, the output consists
-of 9 rows with the precipitation indicator as a single nested-list
-column. Note, however, the differences when we take a look at the shape
-of the indicator for a specific asset:</p>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 4</span></span></span>
+<span><span class="co">#&gt;   assetid traveltime       precipitation_wc                                    x</span></span>
+<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>                                  <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> <span style="color: #949494;">&lt;tibble [12 × 4]&gt;</span> ((-71.80933 18.57668, -71.65022 18…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       2 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> <span style="color: #949494;">&lt;tibble [12 × 4]&gt;</span> ((-71.65022 18.57668, -71.49111 18…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       3 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> <span style="color: #949494;">&lt;tibble [12 × 4]&gt;</span> ((-71.49111 18.57668, -71.33201 18…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       4 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> <span style="color: #949494;">&lt;tibble [12 × 4]&gt;</span> ((-71.80933 18.61756, -71.65022 18…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>       5 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> <span style="color: #949494;">&lt;tibble [12 × 4]&gt;</span> ((-71.65022 18.61756, -71.49111 18…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>       6 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> <span style="color: #949494;">&lt;tibble [12 × 4]&gt;</span> ((-71.49111 18.61756, -71.33201 18…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>       7 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> <span style="color: #949494;">&lt;tibble [12 × 4]&gt;</span> ((-71.80933 18.65844, -71.65022 18…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>       8 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> <span style="color: #949494;">&lt;tibble [12 × 4]&gt;</span> ((-71.65022 18.65844, -71.49111 18…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>       9 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> <span style="color: #949494;">&lt;tibble [12 × 4]&gt;</span> ((-71.49111 18.65844, -71.33201 18…</span></span></code></pre></div>
+<p>We see that in addition to the <code>traveltime</code> indicator, we
+now obtained an additional nested-list column called
+<code>precipitation_wc</code>. Note, however, the differences in the
+shape of the indicator tibble when we take a closer look for a specific
+asset:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">port_w_prec</span><span class="op">$</span><span class="va">precipitation_wc</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 12 × 2</span></span></span>
-<span><span class="co">#&gt;    prec_mean date      </span></span>
-<span><span class="co">#&gt;        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>      21.1 2018-01-01</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>      21.4 2018-02-01</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>      61.4 2018-03-01</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>      83.6 2018-04-01</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>     331.  2018-05-01</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>      60.3 2018-06-01</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>      74.0 2018-07-01</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>      94.0 2018-08-01</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>     207.  2018-09-01</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>     126.  2018-10-01</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span>      52.6 2018-11-01</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span>      20.2 2018-12-01</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">aoi</span><span class="op">$</span><span class="va">precipitation_wc</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 12 × 4</span></span></span>
+<span><span class="co">#&gt;    datetime   variable            unit  value</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2018-01-01 worldclim_prec_mean mm     21.1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2018-02-01 worldclim_prec_mean mm     21.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2018-03-01 worldclim_prec_mean mm     61.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2018-04-01 worldclim_prec_mean mm     83.6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2018-05-01 worldclim_prec_mean mm    331. </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2018-06-01 worldclim_prec_mean mm     60.3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2018-07-01 worldclim_prec_mean mm     74.0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2018-08-01 worldclim_prec_mean mm     94.0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2018-09-01 worldclim_prec_mean mm    207. </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2018-10-01 worldclim_prec_mean mm    126. </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 2018-11-01 worldclim_prec_mean mm     52.6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2018-12-01 worldclim_prec_mean mm     20.2</span></span></code></pre></div>
 <p>For a single asset, we obtain a tibble with 12 rows (for each month
-in the queried year 2018). Now, if we just simply unnest this indicator
-column observe what happens to the shape of the output:</p>
+in the queried year 2018). Now, let’s have a look at what happens if we
+transform this table to long format, this time specifically requesting
+to only extract the <code>precipitation_wc</code> indicators:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">port_wide_2</span> <span class="op">&lt;-</span> <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">port_w_prec</span>, <span class="va">precipitation_wc</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">port_wide_2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Simple feature collection with 108 features and 3 fields</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/portfolio.html">portfolio_long</a></span><span class="op">(</span><span class="va">aoi</span>, indicators <span class="op">=</span> <span class="st">"precipitation_wc"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Simple feature collection with 108 features and 7 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POLYGON</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
 <span><span class="co">#&gt; Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span></span>
 <span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 108 × 4</span></span></span>
-<span><span class="co">#&gt;    assetid prec_mean date                                                      x</span></span>
-<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>                                        <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>       1      21.1 2018-01-01 ((-71.80933 18.57668, -71.65022 18.57668, -71.6…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>       1      21.4 2018-02-01 ((-71.80933 18.57668, -71.65022 18.57668, -71.6…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>       1      61.4 2018-03-01 ((-71.80933 18.57668, -71.65022 18.57668, -71.6…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>       1      83.6 2018-04-01 ((-71.80933 18.57668, -71.65022 18.57668, -71.6…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>       1     331.  2018-05-01 ((-71.80933 18.57668, -71.65022 18.57668, -71.6…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>       1      60.3 2018-06-01 ((-71.80933 18.57668, -71.65022 18.57668, -71.6…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>       1      74.0 2018-07-01 ((-71.80933 18.57668, -71.65022 18.57668, -71.6…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>       1      94.0 2018-08-01 ((-71.80933 18.57668, -71.65022 18.57668, -71.6…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>       1     207.  2018-09-01 ((-71.80933 18.57668, -71.65022 18.57668, -71.6…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>       1     126.  2018-10-01 ((-71.80933 18.57668, -71.65022 18.57668, -71.6…</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 98 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 108 × 8</span></span></span>
+<span><span class="co">#&gt;    assetid traveltime       indicator        datetime   variable     unit  value</span></span>
+<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitation_wc 2018-01-01 worldclim_p… mm     21.1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitation_wc 2018-02-01 worldclim_p… mm     21.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitation_wc 2018-03-01 worldclim_p… mm     61.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitation_wc 2018-04-01 worldclim_p… mm     83.6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitation_wc 2018-05-01 worldclim_p… mm    331. </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitation_wc 2018-06-01 worldclim_p… mm     60.3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitation_wc 2018-07-01 worldclim_p… mm     74.0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitation_wc 2018-08-01 worldclim_p… mm     94.0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitation_wc 2018-09-01 worldclim_p… mm    207. </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitation_wc 2018-10-01 worldclim_p… mm    126. </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 98 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: x &lt;POLYGON [°]&gt;</span></span></span></code></pre></div>
 <p>Instead of 9 rows, we get a tibble with 108 rows (9 assets * 12),
-with the metadata for each asset as well as the geometry column being
-repeated. This is not desirable, especially for portfolios with large
-numbers of assets where the repetition of the geometry data can cause
-very large objects. Now, let’s investigate how we still are able to get
-a wide output. A valid approach is to re-shape the indicators per asset
-to a wide format before unnesting the indicator column. For this, let’s
-write a function which takes the precipitation indicator of a single
-asset as input and transforms it to a wide-format.</p>
+with the metadata for each asset with the geometry column and other
+identifying values being repeated 12 times each. For very large
+portfolios, this data layout might be very memory intensive. In these
+cases it might be more favorable to transform the portfolio to a wide
+layout.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">prec2wide</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span><span class="va">data</span>, names_from <span class="op">=</span> <span class="va">date</span>, values_from <span class="op">=</span> <span class="va">prec_mean</span>, names_prefix <span class="op">=</span> <span class="st">"prec-"</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span><span class="fu">prec2wide</span><span class="op">(</span><span class="va">port_w_prec</span><span class="op">$</span><span class="va">precipitation_wc</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 12</span></span></span>
-<span><span class="co">#&gt;   `prec-2018-01-01` `prec-2018-02-01` `prec-2018-03-01` `prec-2018-04-01`</span></span>
-<span><span class="co">#&gt;               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>              21.1              21.4              61.4              83.6</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 8 more variables: `prec-2018-05-01` &lt;dbl&gt;, `prec-2018-06-01` &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   `prec-2018-07-01` &lt;dbl&gt;, `prec-2018-08-01` &lt;dbl&gt;, `prec-2018-09-01` &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   `prec-2018-10-01` &lt;dbl&gt;, `prec-2018-11-01` &lt;dbl&gt;, `prec-2018-12-01` &lt;dbl&gt;</span></span></span></code></pre></div>
-<p>From the example output above we see that our custom
-<code>prec2wide()</code> functions takes a single tibble as input, puts
-in the dates appended by <code>prec-</code> as column names and the
-associated average precipitation values as a single row. Now, we can use
-functionality of the <code>purrr</code> package to map this function
-over our indicator column, save the result in a new column (or simply
-overwrite the original), and finally simply call unnest to get the
-output in a wide format.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">port_w_prec</span><span class="op">$</span><span class="va">precipitation_wc2</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">port_w_prec</span><span class="op">$</span><span class="va">precipitation_wc</span>, <span class="va">prec2wide</span><span class="op">)</span></span>
-<span><span class="va">port_w_prec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">port_w_prec</span>, <span class="va">precipitation_wc2</span><span class="op">)</span></span>
-<span><span class="va">port_wide_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">port_w_prec</span>, <span class="va">precipitation_wc2</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">port_wide_3</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Simple feature collection with 9 features and 12 fields</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/portfolio.html">portfolio_wide</a></span><span class="op">(</span><span class="va">aoi</span>, indicators <span class="op">=</span> <span class="st">"precipitation_wc"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Simple feature collection with 9 features and 14 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POLYGON</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
 <span><span class="co">#&gt; Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span></span>
 <span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 13</span></span></span>
-<span><span class="co">#&gt;   `prec-2018-01-01` `prec-2018-02-01` `prec-2018-03-01` `prec-2018-04-01`</span></span>
-<span><span class="co">#&gt;               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>              21.1              21.4              61.4              83.6</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>              25.9              24.5              62.0              82.8</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>              24.5              24.2              58.4              83.9</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>              32.1              28.1              72.8              80.9</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>              28.7              28.4              68.4              83.3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>              17.6              19.8              54.4              83.6</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>              24.5              24.3              69.9              80.1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>              19.4              21.1              62.8              86.8</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>              14.2              17.5              52.2              85.6</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 9 more variables: `prec-2018-05-01` &lt;dbl&gt;, `prec-2018-06-01` &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   `prec-2018-07-01` &lt;dbl&gt;, `prec-2018-08-01` &lt;dbl&gt;, `prec-2018-09-01` &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   `prec-2018-10-01` &lt;dbl&gt;, `prec-2018-11-01` &lt;dbl&gt;, `prec-2018-12-01` &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   x &lt;POLYGON [°]&gt;</span></span></span></code></pre></div>
-<p>We can now use <code><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">st_write()</a></code> to save this wide-format sf
-object to a geospatial format of our choice or drop the geometry
-information altogether and dump the data into a csv.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">st_write</a></span><span class="op">(</span><span class="va">port_wide_3</span>, dsn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".gpkg"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Writing layer `file268567f606a5' to data source </span></span>
-<span><span class="co">#&gt;   `/tmp/RtmpQQA04X/file268567f606a5.gpkg' using driver `GPKG'</span></span>
-<span><span class="co">#&gt; Writing 9 features with 12 fields and geometry type Polygon.</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="va">port_wide_3</span><span class="op">)</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".csv"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 15</span></span></span>
+<span><span class="co">#&gt;   assetid traveltime                                    x precipitation_wc_201…¹</span></span>
+<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.80933 18.57668, -71.650…                   21.1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       2 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.65022 18.57668, -71.491…                   25.9</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       3 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.49111 18.57668, -71.332…                   24.5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       4 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.80933 18.61756, -71.650…                   32.1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>       5 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.65022 18.61756, -71.491…                   28.7</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>       6 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.49111 18.61756, -71.332…                   17.6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>       7 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.80933 18.65844, -71.650…                   24.5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>       8 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.65022 18.65844, -71.491…                   19.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>       9 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.49111 18.65844, -71.332…                   14.2</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ abbreviated name: ¹​`precipitation_wc_2018-01-01_worldclim_prec_mean_mm`</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 11 more variables:</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   `precipitation_wc_2018-02-01_worldclim_prec_mean_mm` &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   `precipitation_wc_2018-03-01_worldclim_prec_mean_mm` &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   `precipitation_wc_2018-04-01_worldclim_prec_mean_mm` &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   `precipitation_wc_2018-05-01_worldclim_prec_mean_mm` &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   `precipitation_wc_2018-06-01_worldclim_prec_mean_mm` &lt;dbl&gt;, …</span></span></span></code></pre></div>
+<p>From the example output above we see that in this case, we obtain a
+resulting object with 9 rows only. The indicator data is now found in
+the respective columns which are named according to this schema:</p>
+<p><code>&lt;indicator-name&gt;_&lt;datetime&gt;_&lt;variable&gt;_&lt;unit&gt;</code></p>
+<p>with the values being found in the rows for each unique combination
+of this pattern.</p>
+<p>Note, that the <code>traveltime</code> still is represented as a
+nested-list column. When serializing to disk, all present indicators are
+going to extracted in order to be able to serialize to spatial data
+formats. If it is not desired to include certain indicators you will
+have to subset the portfolio as indicated in the following code
+block:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dsn_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".gpkg"</span><span class="op">)</span></span>
+<span><span class="va">dsn_wide</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".gpkg"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/portfolio.html">write_portfolio</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">aoi</span>, <span class="va">traveltime</span><span class="op">)</span>, <span class="va">dsn_long</span>, format <span class="op">=</span> <span class="st">"long"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/portfolio.html">write_portfolio</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">aoi</span>, <span class="va">traveltime</span><span class="op">)</span>, <span class="va">dsn_wide</span>, format <span class="op">=</span> <span class="st">"wide"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
