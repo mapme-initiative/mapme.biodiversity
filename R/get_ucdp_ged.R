@@ -32,6 +32,7 @@
 #' @include register.R
 #' @export
 get_ucdp_ged <- function(version = "latest") {
+  check_namespace("rvest")
   try(versions <- .ucdp_versions())
   if (inherits(versions, "try-error")) {
     stop("Available versions of UCDP GED could not be fetched")
@@ -48,7 +49,7 @@ get_ucdp_ged <- function(version = "latest") {
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {
-    version_ged <- paste0("ged", stringr::str_remove_all(version, "\\."), "-csv.zip")
+    version_ged <- paste0("ged", gsub("\\.", "", version), "-csv.zip")
 
     base_url <- "/vsizip/vsicurl/https://ucdp.uu.se/downloads/ged/"
     url <- paste0(base_url, version_ged)
@@ -57,7 +58,7 @@ get_ucdp_ged <- function(version = "latest") {
     } else if (version == "5.0") {
       url <- paste0(url, "/ged50.csv")
     }
-    filename <- file.path(outdir, str_replace(version_ged, "zip", "gpkg"))
+    filename <- file.path(outdir, gsub("zip", "gpkg", version_ged))
 
     # return early if testing
     if (testing) {
@@ -91,8 +92,8 @@ get_ucdp_ged <- function(version = "latest") {
   target_p <- sections[which(labels == "Available datasets")]
   content <- target_p %>% rvest::html_nodes("p")
   versions <- rvest::html_text(content[2])
-  versions <- stringr::str_extract_all(versions, "\\d+(?:\\.\\d+)+")[[1]]
-  versions
+  versions <- strsplit(x = versions, "\\s+")[[1]]
+  versions[versions != ""]
 }
 
 

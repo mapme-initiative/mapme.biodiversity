@@ -49,7 +49,6 @@
 #' }
 calc_precipitation_chirps <- function(years = 1981:2020,
                                       engine = "extract") {
-  check_namespace("SPEI")
   engine <- check_engine(engine)
   avail_years <- seq(1981, format(Sys.Date(), "%Y"))
   years <- check_available_years(years, avail_years, "precipitation_chirps")

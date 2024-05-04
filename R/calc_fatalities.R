@@ -150,7 +150,7 @@ calc_fatalities <- function(years = 1989:2023,
       dplyr::filter(year %in% years) %>%
       dplyr::summarise(
         dplyr::across(
-          tidyselect::starts_with("deaths_"),
+          dplyr::starts_with("deaths_"),
           ~ sum(as.numeric(.x))
         ),
         event_count = dplyr::n(),
@@ -158,15 +158,15 @@ calc_fatalities <- function(years = 1989:2023,
       ) %>%
       dplyr::right_join(months_tibble, by = c("year", "month", "type_of_violence")) %>%
       dplyr::mutate(dplyr::across(
-        tidyselect::starts_with(c("deaths_", "event_")),
+        dplyr::starts_with(c("deaths_", "event_")),
         ~ tidyr::replace_na(.x, 0)
       )) %>%
       dplyr::mutate(
-        deaths_total = rowSums(dplyr::across(tidyselect::starts_with("deaths_")))
+        deaths_total = rowSums(dplyr::across(dplyr::starts_with("deaths_")))
       ) %>%
       dplyr::mutate(month = as.Date(paste0(year, "-", month, "-01"))) %>%
       dplyr::select(-year, -deaths_a, -deaths_b) %>%
-      dplyr::relocate(event_count, .after = tidyselect::last_col()) %>%
+      dplyr::relocate(event_count, .after = dplyr::last_col()) %>%
       dplyr::arrange(month, type_of_violence) %>%
       dplyr::mutate(type_of_violence = dplyr::case_when(
         type_of_violence == 1 ~ "state_based_conflict",

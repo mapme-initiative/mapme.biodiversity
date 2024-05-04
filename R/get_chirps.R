@@ -23,6 +23,7 @@
 #' @include register.R
 #' @export
 get_chirps <- function(years = 1981:2020) {
+  check_namespace("rvest")
   avail_years <- seq(1981, format(Sys.Date(), "%Y"))
   years <- check_available_years(years, avail_years, "chirps")
 
@@ -34,14 +35,12 @@ get_chirps <- function(years = 1981:2020) {
            testing = mapme_options()[["testing"]]) {
     chirps_url <- "https://data.chc.ucsb.edu/products/CHIRPS-2.0/global_monthly/tifs/"
 
-    try(chirps_list <- rvest::read_html(chirps_url) %>%
-      rvest::html_elements("a") %>%
-      rvest::html_text2())
-
+    try(chirps_list <- httr::content(httr::GET(chirps_url), as = "text"))
     if (inherits(chirps_list, "try-error")) {
       stop("Download for CHIRPS resource was unsuccesfull")
     }
-
+    chirps_list <- regmatches(chirps_list, gregexpr(chirps_list, pattern = "<a href=\"(.*?)\""))
+    chirps_list <- gsub(".*\"([^`]+)\".*", "\\1", chirps_list[[1]])
     chirps_list <- grep("*.tif.gz$", chirps_list, value = TRUE)
     chirps_list <- grep(
       pattern = paste(years, collapse = "|"),

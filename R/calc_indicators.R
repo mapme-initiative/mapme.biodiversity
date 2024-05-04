@@ -94,7 +94,10 @@ calc_indicators <- function(x, ...) {
                              chunk_size,
                              aggregation,
                              verbose) {
-  progress <- progressr::progressor(steps = nrow(x))
+  has_progressr <- check_namespace("progressr")
+  if (has_progressr) {
+    progress <- progressr::progressor(steps = nrow(x))
+  }
 
   furrr::future_map(seq_len(nrow(x)), function(i) {
     asset <- .cast_to_polygon(x[i, ])
@@ -106,7 +109,10 @@ calc_indicators <- function(x, ...) {
       .check_single_asset(result, chunk)
     })
 
-    progress()
+    if (has_progressr) {
+      progress()
+    }
+
     .combine_chunks(results, aggregation)
   }, .options = furrr::furrr_options(seed = TRUE))
 }
@@ -279,7 +285,7 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL) {
     warning(sprintf(msg, name))
   }
   x[name] <- list(results)
-  dplyr::relocate(x, !!attributes(x)[["sf_column"]], .after = dplyr::last_col())
+  .geom_last(x)
 }
 
 .chunk <- function(x, chunk_size) {

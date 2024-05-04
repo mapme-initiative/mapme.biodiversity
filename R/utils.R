@@ -223,3 +223,20 @@ check_namespace <- function(pkg) {
   }
   invisible(TRUE)
 }
+
+#' @importFrom httr http_error
+.has_internet <- function() {
+  has_internet <- !httr::http_error("www.google.com")
+  if (!has_internet) {
+    message("There seems to be no internet connection. Cannot download resources.")
+  }
+  has_internet
+}
+
+.geom_last <- function(data) {
+  stopifnot(inherits(data, "sf"))
+  sf_col <- attr(data, "sf_column")
+  dplyr::relocate(data, !!sf_col,
+    .after = dplyr::last_col()
+  )
+}
