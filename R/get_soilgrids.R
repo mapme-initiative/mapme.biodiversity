@@ -47,7 +47,6 @@
 #' based on machine learning. PLOS ONE 12(2): e0169748.
 #' \doi{https://doi.org/10.1371/journal.pone.0169748}
 #' @source \url{https://www.isric.org/explore/soilgrids}
-#' @importFrom stringr str_replace
 #' @include register.R
 #' @export
 get_soilgrids <- function(layers, depths, stats) {
@@ -104,64 +103,57 @@ get_soilgrids <- function(layers, depths, stats) {
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {
-    filenames <- list()
-    for (layer in layers) {
-      for (depth in depths) {
-        for (stat in stats) {
-          if (layer != "ocs" & depth == "0-30cm") {
-            message("Depth '0-30cm' is only available of layer 'ocs'.")
-            next
-          }
+    grid <- expand.grid(layers, depths, stats)
+    names(grid) <- c("layer", "depth", "stat")
 
-          if (layer == "ocs" & depth != "0-30cm") {
-            message("Layer 'ocs' is only available at depth '0-30cm'.")
-            next
-          }
-
-          baseurl <- "/vsicurl/https://files.isric.org/soilgrids/latest/data/"
-          datalayer <- sprintf("%s/%s_%s_%s.vrt", layer, layer, depth, stat)
-          filename <- file.path(outdir, str_replace(basename(datalayer), "vrt", "tif"))
-          if (testing) {
-            filenames <- append(filenames, basename(filename))
-            next
-          }
-
-          if (!file.exists(filename)) {
-            if (verbose) {
-              message(
-                sprintf(
-                  paste("Starting to download data for layer '%s', depth '%s', and stat '%s'.",
-                    " This may take a while...",
-                    sep = ""
-                  ),
-                  layer, depth, stat
-                )
-              )
-            }
-            soilgrid_source <- rast(file.path(baseurl, datalayer))
-            x_bbox <- st_as_sf(st_as_sfc(st_bbox(x)))
-            x_proj <- st_transform(x_bbox, crs(soilgrid_source))
-            soilgrid_cropped <- crop(soilgrid_source, x_proj,
-              filename = file.path(outdir, "soillayer_cropped.tif"),
-              datatype = "INT2U", overwrite = TRUE
-            )
-            suppressWarnings(
-              project(soilgrid_cropped, "EPSG:4326",
-                filename = filename,
-                datatype = "INT2U", overwrite = TRUE
-              )
-            )
-            file.remove(file.path(outdir, "soillayer_cropped.tif"))
-          } else {
-            if (verbose) {
-              message(sprintf("Output file %s exists. Skipping re-download. Please delete if spatial extent has changed.", basename(filename)))
-            }
-          }
-          filenames <- append(filenames, filename)
-        }
+    urls <- purrr::pmap_chr(grid, function(layer, depth, stat) {
+      if (layer != "ocs" & depth == "0-30cm") {
+        message("Depth '0-30cm' is only available of layer 'ocs'.")
+        return(NA)
       }
+
+      if (layer == "ocs" & depth != "0-30cm") {
+        message("Layer 'ocs' is only available at depth '0-30cm'.")
+        return(NA)
+      }
+      baseurl <- "/vsicurl/https://files.isric.org/soilgrids/latest/data/"
+      datalayer <- sprintf("%s/%s_%s_%s.vrt", layer, layer, depth, stat)
+      paste0(baseurl, datalayer)
+    })
+    urls <- na.omit(urls)
+    filenames <- file.path(outdir, gsub("vrt", "tif", basename(urls)))
+
+    if (testing) {
+      return(basename(filenames))
     }
-    unlist(filenames)
+
+    tiles <- data.frame(src = urls, dsn = filenames)
+    purrr::pwalk(tiles, function(src, dsn) {
+      if (verbose) {
+        msg <- "Starting to download data for layer '%s'."
+        msg <- sprintf(msg, basename(dsn))
+        message(msg)
+      }
+
+      if (!file.exists(dsn)) {
+        layer <- rast(src)
+        x_bbox <- st_as_sf(st_as_sfc(st_bbox(x)))
+        x_proj <- st_transform(x_bbox, crs(layer))
+        layer_cropped <- crop(
+          layer, x_proj,
+          filename = file.path(outdir, "soillayer_cropped.tif"),
+          datatype = "INT2U", overwrite = TRUE
+        )
+        suppressWarnings(
+          project(layer_cropped, "EPSG:4326",
+            filename = dsn,
+            datatype = "INT2U", overwrite = TRUE
+          )
+        )
+        file.remove(file.path(outdir, "soillayer_cropped.tif"))
+      }
+    })
+    filenames
   }
 }
 

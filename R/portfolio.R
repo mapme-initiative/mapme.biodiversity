@@ -80,10 +80,7 @@ portfolio_long <- function(x, indicators = NULL, drop_geoms = FALSE) {
     purrr::list_rbind()
 
   if (!drop_geoms) {
-    x_long <- st_as_sf(x_long)
-    x_long <- dplyr::relocate(x_long, !!attributes(x_long)[["sf_column"]],
-      .after = tidyselect::last_col()
-    )
+    x_long <- .geom_last(st_as_sf(x_long))
   }
   x_long
 }
@@ -127,12 +124,8 @@ portfolio_wide <- function(x, indicators = NULL, drop_geoms = FALSE) {
     dplyr::left_join(indicators_wide, by = dplyr::join_by(assetid))
 
   if (!drop_geoms) {
-    x_wide <- st_as_sf(x_wide)
-    dplyr::relocate(x_wide, !!attributes(x_wide)[["sf_column"]],
-      .after = tidyselect::last_col()
-    )
+    x_wide <- .geom_last(st_as_sf(x_wide))
   }
-
   x_wide
 }
 

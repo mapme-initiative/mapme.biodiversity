@@ -14,12 +14,10 @@
 #' @export
 get_resources <- function(x, ...) {
   x <- .check_portfolio(x)
-  connection_available <- curl::has_internet()
-  if (!connection_available) {
-    stop("There seems to be no internet connection. Cannot download resources.")
+  if (!.has_internet()) {
+    return(invisible(x))
   }
-  funs <- list(...)
-  funs <- purrr::map(funs, function(fun) .check_resource_fun(fun))
+  funs <- purrr::map(list(...), function(fun) .check_resource_fun(fun))
   for (fun in funs) .get_single_resource(x, fun)
   invisible(x)
 }

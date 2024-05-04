@@ -24,10 +24,9 @@ URL: https://mapme-initiative.github.io/mapme.biodiversity/index.html,
 BugReports: https://github.com/mapme-initiative/mapme.biodiversity/issues
 Depends: R (>= 3.5.0)
 SystemRequirements: GDAL (>= 3.0.0), PROJ (>= 4.8.0)
-Imports: curl, dplyr, furrr, httr, magrittr, progressr, purrr, rvest, R.utils,
-    sf, stringr, terra, tibble, tidyr, tidyselect
-Suggests: exactextractr, future, knitr, landscapemetrics, rmarkdown, rstac, SPEI, 
-    testthat (>= 3.0.0)
+Imports: dplyr, furrr, httr, magrittr, purrr, R.utils, sf, terra, tibble, tidyr
+Suggests: exactextractr, future, knitr, landscapemetrics, progressr, rmarkdown, 
+  rstac, rvest, testthat (>= 3.0.0)
 VignetteBuilder: knitr
 Config/Needs/website: DiagrammeR, ggplot2, lubridate, manipulateWidget, rgl, spatstat, 
     wdpar
