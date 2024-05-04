@@ -274,17 +274,17 @@ functions to transform the portfolio to long or wide formats:</p>
 <span><span class="co">#&gt; Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span></span>
 <span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 3</span></span></span>
-<span><span class="co">#&gt;   assetid                                               x traveltime_2015-01-0…¹</span></span>
-<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>                                   <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       1 ((-71.80933 18.57668, -71.65022 18.57668, -71.…                   49.8</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       2 ((-71.65022 18.57668, -71.49111 18.57668, -71.…                  104. </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       3 ((-71.49111 18.57668, -71.33201 18.57668, -71.…                  112. </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       4 ((-71.80933 18.61756, -71.65022 18.61756, -71.…                   84  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>       5 ((-71.65022 18.61756, -71.49111 18.61756, -71.…                  139. </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>       6 ((-71.49111 18.61756, -71.33201 18.61756, -71.…                  104. </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>       7 ((-71.80933 18.65844, -71.65022 18.65844, -71.…                  141. </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>       8 ((-71.65022 18.65844, -71.49111 18.65844, -71.…                  118. </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>       9 ((-71.49111 18.65844, -71.33201 18.65844, -71.…                   73.1</span></span>
+<span><span class="co">#&gt;   assetid traveltime_2015-01-01_20k_50k_traveltime_m…¹                         x</span></span>
+<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>                                        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       1                                         49.8 ((-71.80933 18.57668, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       2                                        104.  ((-71.65022 18.57668, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       3                                        112.  ((-71.49111 18.57668, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       4                                         84   ((-71.80933 18.61756, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>       5                                        139.  ((-71.65022 18.61756, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>       6                                        104.  ((-71.49111 18.61756, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>       7                                        141.  ((-71.80933 18.65844, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>       8                                        118.  ((-71.65022 18.65844, -7…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>       9                                         73.1 ((-71.49111 18.65844, -7…</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ abbreviated name: ¹​`traveltime_2015-01-01_20k_50k_traveltime_mean_minutes`</span></span></span></code></pre></div>
 <p>Both function will, by default, automatically detect nested-list
 columns and change the data layout. In this case, the result still has 9
@@ -387,20 +387,20 @@ layout.</p>
 <span><span class="co">#&gt; Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span></span>
 <span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 15</span></span></span>
-<span><span class="co">#&gt;   assetid traveltime                                    x precipitation_wc_201…¹</span></span>
-<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.80933 18.57668, -71.650…                   21.1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       2 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.65022 18.57668, -71.491…                   25.9</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       3 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.49111 18.57668, -71.332…                   24.5</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       4 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.80933 18.61756, -71.650…                   32.1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>       5 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.65022 18.61756, -71.491…                   28.7</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>       6 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.49111 18.61756, -71.332…                   17.6</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>       7 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.80933 18.65844, -71.650…                   24.5</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>       8 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.65022 18.65844, -71.491…                   19.4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>       9 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> ((-71.49111 18.65844, -71.332…                   14.2</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ abbreviated name: ¹​`precipitation_wc_2018-01-01_worldclim_prec_mean_mm`</span></span></span>
+<span><span class="co">#&gt;   assetid traveltime       precipitation_wc_2018-01-01_…¹ precipitation_wc_201…²</span></span>
+<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>                                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span>                           21.1                   21.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       2 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span>                           25.9                   24.5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       3 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span>                           24.5                   24.2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       4 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span>                           32.1                   28.1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>       5 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span>                           28.7                   28.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>       6 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span>                           17.6                   19.8</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>       7 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span>                           24.5                   24.3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>       8 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span>                           19.4                   21.1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>       9 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span>                           14.2                   17.5</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ abbreviated names: ¹​`precipitation_wc_2018-01-01_worldclim_prec_mean_mm`,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   ²​`precipitation_wc_2018-02-01_worldclim_prec_mean_mm`</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 11 more variables:</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   `precipitation_wc_2018-02-01_worldclim_prec_mean_mm` &lt;dbl&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   `precipitation_wc_2018-03-01_worldclim_prec_mean_mm` &lt;dbl&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   `precipitation_wc_2018-04-01_worldclim_prec_mean_mm` &lt;dbl&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   `precipitation_wc_2018-05-01_worldclim_prec_mean_mm` &lt;dbl&gt;,</span></span></span>
