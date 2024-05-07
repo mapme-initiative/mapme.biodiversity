@@ -30,7 +30,8 @@
 - inner-level indicator functions must now specify a statistic for aggregation
   of chunks
 - `chirps` and `nasa_grace` resources updated
-
+- check for internet connectivity can now be disabled via environment variable
+  `mapme_check_connection` (#262)
 # mapme.biodiversity 0.6.0
 
 ## Breaking changes
