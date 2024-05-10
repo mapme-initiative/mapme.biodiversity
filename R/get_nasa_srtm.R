@@ -24,31 +24,33 @@ get_nasa_srtm <- function() {
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {
-    urls <- try(rstac::stac("https://planetarycomputer.microsoft.com/api/stac/v1/") %>%
+    items <- try(rstac::stac("https://planetarycomputer.microsoft.com/api/stac/v1/") %>%
       rstac::stac_search(
         collection = "nasadem",
         bbox = as.numeric(st_bbox(x)),
         limit = NULL
       ) %>%
       rstac::post_request() %>%
-      rstac::items_fetch() %>%
-      rstac::assets_url(asset_names = "elevation"))
+      rstac::items_fetch())
 
-    if (inherits(urls, "try-error")) {
+    if (inherits(items, "try-error")) {
       stop("Download for NASA SRTM resource was unsuccesfull")
     }
 
+    urls <- rstac::assets_url(items, asset_names = "elevation")
     if (length(urls) == 0) {
       stop("The extent of the portfolio does not intersect with the SRTM grid.")
     }
 
-    if (testing) {
-      return(basename(urls))
-    }
-
-    filenames <- file.path(outdir, basename(urls))
-    download_or_skip(urls = urls, filenames = filenames, check_existence = FALSE)
-    filenames
+    bboxs <- rstac::items_bbox(items)
+    fps <- purrr::map(bboxs, function(x) {
+      names(x) <- c("xmin", "ymin", "xmax", "ymax")
+      bbox <- st_bbox(x, crs = "EPSG:4326")
+      st_as_sf(st_as_sfc(bbox))
+    })
+    fps <- st_as_sf(purrr::list_rbind(fps))
+    fps[["source"]] <- paste0("/vsicurl/", urls)
+    make_footprints(fps, what = "raster", co = c("-co", "COMPRESS=DEFLATE"))
   }
 }
 
