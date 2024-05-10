@@ -9,7 +9,7 @@
 \url{https://data.unep-wcmc.org/datasets/45}
 }
 \usage{
-get_gmw(years = c(1996, 2007:2010, 2015:2020))
+get_gmw(years = c(1996, 2007:2010, 2015:2017, 2019:2020))
 }
 \arguments{
 \item{years}{A numeric vector of the years for which to make GMW available.}
@@ -22,8 +22,9 @@ This resource is part of the publication by Bunting et al. (2018)
 "The Global Mangrove Watch—A New 2010 Global Baseline of Mangrove Extent".
 The polygons represent the mangrove, which is tropical coastal vegetation
 and considered the most significant part of the marine ecosystem. This
-resource is available for the period 1996- 2020 from Global Mangrove Watch
-(GMW), providing geospatial information about global mangrove extent.
+resource is available for the selected years in the period 1996- 2020 from
+Global Mangrove Watch (GMW), providing geospatial information about global
+mangrove extent.
 }
 \references{
 Bunting P., Rosenqvist A., Lucas R., Rebelo L-M., Hilarides L.,
