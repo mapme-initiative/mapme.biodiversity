@@ -50,7 +50,8 @@ get_resources <- function(x, ...) {
 #' @noRd
 .get_single_resource <- function(x = NULL,
                                  fun = NULL,
-                                 opts = mapme_options()) {
+                                 opts = mapme_options(),
+                                 gdal_conf = mapme_gdal_conf()) {
   force(x)
   args <- formals(fun)
   resource_name <- args[["name"]]
@@ -59,25 +60,23 @@ get_resources <- function(x, ...) {
   args[["x"]] <- x
   args[["outdir"]] <- outdir
 
-  resource_to_add <- try(do.call(fun, args = as.list(args)))
+  resource <- try(do.call(fun, args = args))
+  resource <- .check_footprints(resource, name)
 
-  if (inherits(resource_to_add, "try-error")) {
-    msg <- sprintf(paste(
-      "Download for resource %s failed. ",
-      "Returning unmodified portfolio object.",
-      sep = ""
-    ), resource_name)
-    stop(msg)
-  }
-  if (is.null(resource_to_add[1])) {
-    return(x)
-  }
-  if (args[["type"]] == "raster") {
-    resource_to_add <- .make_footprints(resource_to_add)
-  }
-  resource_to_add <- list(resource_to_add)
-  names(resource_to_add) <- resource_name
-  .add_resource(resource_to_add)
+  resource <- .fetch_resource(
+    resource = resource,
+    name = resource_name,
+    type = args[["type"]],
+    outdir = outdir,
+    gdal_conf = gdal_conf
+  )
+
+  resource <- .set_precision(resource)
+
+  resource <- list(resource)
+  names(resource) <- resource_name
+  .add_resource(resource)
+
   x
 }
 
@@ -87,22 +86,62 @@ get_resources <- function(x, ...) {
   path
 }
 
-.make_footprints <- function(raster_files) {
-  footprints <- lapply(unique(raster_files), function(file) {
-    # get BBOX and CRS
-    tmp <- rast(file)
-    footprint <- st_bbox(tmp) %>% st_as_sfc()
-    crs <- crs(tmp)
-    # apply precision roundtrip
-    footprint <- footprint %>%
-      st_sfc(precision = 1e5) %>%
-      st_as_binary() %>%
-      st_as_sfc()
-    # to sf and add location info
-    footprint %>%
-      st_as_sf(crs = crs) %>%
-      dplyr::rename(geom = "x") %>%
-      dplyr::mutate(location = file)
-  })
-  do.call(rbind, footprints)
+.resource_cols <- c("filename", "type", "oo", "co", "source", "geometry")
+
+.check_footprints <- function(resource, name) {
+  if (inherits(resource, "try-error")) {
+    stop(paste0(
+      "Download for resource ", name, " failed.\n",
+      "Returning unmodified portfolio."
+    ))
+  }
+
+  if (!inherits(resource, "sf")) {
+    msg <- paste("Resource functions are expected to return sf objects.")
+    stop(msg)
+  }
+
+  if (any(!names(resource) %in% .resource_cols)) {
+    msg <- paste(
+      "Resource functions are expected to return sf objects with",
+      "columns:", paste(.resource_cols, collapse = ", ")
+    )
+    stop(msg)
+  }
+
+  invisible(resource)
+}
+
+
+.fetch_resource <- function(resource,
+                            name = NULL,
+                            type = NULL,
+                            outdir = NULL,
+                            verbose = TRUE,
+                            gdal_conf = mapme_gdal_conf()) {
+  stopifnot(inherits(resource, "sf"))
+  stopifnot(type %in% c("raster", "vector"))
+
+  msg <- paste0("Fetching resource ", name, "...")
+
+  if (!is.null(outdir)) {
+    resource[["destination"]] <- file.path(outdir, resource[["filename"]])
+
+    params <- list(
+      resource[["source"]],
+      resource[["destination"]],
+      resource[["oo"]],
+      resource[["co"]]
+    )
+
+    suceeded <- purrr::pwalk(params, function(src, dest, oo, co) {
+      .get_spds(src = src, dest = dest, oo = oo, co = co, what = type, gdal_conf = gdal_conf)
+    },
+    .progress = ifelse(verbose, msg, NULL)
+    )
+    resource[["location"]] <- resource[["destination"]]
+  } else {
+    resource[["location"]] <- resource[["source"]]
+  }
+  resource[c("location", "opts")]
 }
