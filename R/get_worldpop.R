@@ -26,42 +26,17 @@ get_worldpop <- function(years = 2000) {
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {
     urls <- unlist(sapply(years, function(year) .get_worldpop_url(year)))
-    filenames <- file.path(outdir, basename(urls))
-    if (testing) {
-      return(basename(filenames))
-    }
-    # start download in a temporal directory within tmpdir
-    download_or_skip(urls, filenames, check_existence = FALSE)
-
-    footprints <- lapply(filenames, function(file) {
-      paste(as.character(st_bbox(rast(file))), collapse = " ")
-    })
-    all_equal <- length(unique(unlist(footprints))) == 1
-
-    if (!all_equal) {
-      footprints <- unlist(lapply(filenames, function(file) {
-        bbox <- round(as.numeric(st_bbox(rast(file))), 3)
-        identical(bbox, round(c(-180.00125, -72.00042, 179.99875, 83.99958), 3))
-      }))
-      if (any(!footprints)) {
-        index <- which(!footprints)
-        index_ok <- which(footprints)[1]
-        target <- rast(filenames[index_ok])
-        if (verbose) message("Resampling worldpop layers...")
-        for (i in index) {
-          tmpfile <- tempfile(fileext = ".tif")
-          file.copy(filenames[i], tmpfile)
-          tmp <- rast(tmpfile)
-          project(tmp, target,
-            filename = filenames[i],
-            overwrite = TRUE, method = "bilinear", progress = verbose
-          )
-          file.remove(tmpfile)
-        }
-      }
-    }
-    # return paths to the raster
-    filenames
+    bbox <- c(xmin = -180.00125, ymin = -71.99208, xmax = 179.99875, ymax = 83.99958)
+    tiles <- st_as_sfc(st_bbox(bbox, crs = "EPSG:4326"))
+    tiles <- st_as_sf(rep(tiles, length(urls)))
+    tiles[["source"]] <- urls
+    make_footprints(tiles,
+      what = "raster",
+      co = c(
+        "-a_ullr", "-180.00125 -71.99208 179.99875 83.99958",
+        "-co", "COMPRESS=LZW"
+      )
+    )
   }
 }
 
@@ -77,7 +52,7 @@ get_worldpop <- function(years = 2000) {
   available_years <- c(2000:2020)
   if (target_year %in% available_years) {
     paste0(
-      "https://data.worldpop.org/GIS/Population/Global_2000_2020/",
+      "/vsicurl/https://data.worldpop.org/GIS/Population/Global_2000_2020/",
       target_year, "/0_Mosaicked/ppp_", target_year, "_1km_Aggregated.tif"
     )
   } else {
