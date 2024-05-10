@@ -34,7 +34,7 @@ get_gfw_treecover <- function(version = "GFC-2023-v1.11") {
            testing = mapme_options()[["testing"]]) {
     # make the GFW grid and construct urls for intersecting tiles
     baseurl <- sprintf(
-      "https://storage.googleapis.com/earthenginepartners-hansen/%s/",
+      "/vsicurl/https://storage.googleapis.com/earthenginepartners-hansen/%s/",
       version
     )
     grid_gfc <- make_global_grid(
@@ -52,12 +52,12 @@ get_gfw_treecover <- function(version = "GFC-2023-v1.11") {
       "%sHansen_%s_treecover2000_%s.tif",
       baseurl, version, ids
     )
-    filenames <- file.path(outdir, basename(urls))
-    if (mapme_options()[["testing"]]) {
-      return(basename(filenames))
-    }
-    filenames <- download_or_skip(urls, filenames, check_existence = FALSE)
-    filenames
+    fps <- grid_gfc[tile_ids, ]
+    fps[["source"]] <- urls
+    make_footprints(fps,
+      what = "raster",
+      co = c("-co", "INTERLEAVE=BAND", "-co", "COMPRESS=LZW", "-ot", "Byte")
+    )
   }
 }
 
