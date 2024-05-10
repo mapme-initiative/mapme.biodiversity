@@ -120,40 +120,10 @@ get_soilgrids <- function(layers, depths, stats) {
       datalayer <- sprintf("%s/%s_%s_%s.vrt", layer, layer, depth, stat)
       paste0(baseurl, datalayer)
     })
+
     urls <- na.omit(urls)
-    filenames <- file.path(outdir, gsub("vrt", "tif", basename(urls)))
-
-    if (testing) {
-      return(basename(filenames))
-    }
-
-    tiles <- data.frame(src = urls, dsn = filenames)
-    purrr::pwalk(tiles, function(src, dsn) {
-      if (verbose) {
-        msg <- "Starting to download data for layer '%s'."
-        msg <- sprintf(msg, basename(dsn))
-        message(msg)
-      }
-
-      if (!file.exists(dsn)) {
-        layer <- rast(src)
-        x_bbox <- st_as_sf(st_as_sfc(st_bbox(x)))
-        x_proj <- st_transform(x_bbox, crs(layer))
-        layer_cropped <- crop(
-          layer, x_proj,
-          filename = file.path(outdir, "soillayer_cropped.tif"),
-          datatype = "INT2U", overwrite = TRUE
-        )
-        suppressWarnings(
-          project(layer_cropped, "EPSG:4326",
-            filename = dsn,
-            datatype = "INT2U", overwrite = TRUE
-          )
-        )
-        file.remove(file.path(outdir, "soillayer_cropped.tif"))
-      }
-    })
-    filenames
+    filenames <- basename(urls)
+    make_footprints(urls, filename = filenames, what = "raster")
   }
 }
 
