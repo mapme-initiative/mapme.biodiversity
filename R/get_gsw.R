@@ -35,10 +35,7 @@ get_global_surface_water_change <- function(version = "v1_4_2021") {
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {
-    .get_gsw(x,
-      statistic = "change", version = version,
-      dir = outdir, verbose = verbose
-    )
+    .get_gsw(x, statistic = "change", version = version)
   }
 }
 #' Global Surface Water Transitions
@@ -87,10 +84,7 @@ get_global_surface_water_transitions <- function(version = "v1_4_2021") {
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {
-    .get_gsw(x,
-      statistic = "transitions", version = version,
-      dir = outdir, verbose = verbose
-    )
+    .get_gsw(x, statistic = "transitions", version = version)
   }
 }
 
@@ -127,10 +121,7 @@ get_global_surface_water_seasonality <- function(version = "v1_4_2021") {
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {
-    .get_gsw(x,
-      statistic = "seasonality", version = version,
-      dir = outdir, verbose = verbose
-    )
+    .get_gsw(x, statistic = "seasonality", version = version)
   }
 }
 
@@ -170,10 +161,7 @@ get_global_surface_water_recurrence <- function(version = "v1_4_2021") {
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {
-    .get_gsw(x,
-      statistic = "recurrence", version = version,
-      dir = outdir, verbose = verbose
-    )
+    .get_gsw(x, statistic = "recurrence", version = version)
   }
 }
 
@@ -212,15 +200,11 @@ get_global_surface_water_occurrence <- function(version = "v1_4_2021") {
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {
-    .get_gsw(x,
-      statistic = "occurrence", version = version,
-      dir = outdir, verbose = verbose
-    )
+    .get_gsw(x, statistic = "occurrence", version = version)
   }
 }
 
-.get_gsw <- function(x, statistic = "occurrence", version = "v1_4_2021",
-                     dir = tempdir(), verbose = TRUE) {
+.get_gsw <- function(x, statistic = "occurrence", version = "v1_4_2021") {
   stopifnot(
     statistic %in% .gsw_statistics,
     version %in% .gsw_versions
@@ -228,7 +212,7 @@ get_global_surface_water_occurrence <- function(version = "v1_4_2021") {
 
   # make the gsw grid and construct urls for intersecting tiles
   baseurl <- sprintf(
-    "https://storage.googleapis.com/global-surface-water/downloads2021/%s/%s",
+    "/vsicurl/https://storage.googleapis.com/global-surface-water/downloads2021/%s/%s",
     statistic, statistic
   )
   grid_gfc <- make_global_grid(
@@ -242,18 +226,12 @@ get_global_surface_water_occurrence <- function(version = "v1_4_2021") {
     )
   }
   ids <- sapply(tile_ids, function(n) .get_gsw_tile_id(grid_gfc[n, ]))
-  urls <- sprintf(
-    "%s_%s%s.tif",
-    baseurl, ids, version
-  )
-  filenames <- file.path(dir, basename(urls))
-  if (mapme_options()[["testing"]]) {
-    return(filenames)
-  }
-  # start download and skip files that exist
-  download_or_skip(urls, filenames, check_existence = FALSE)
-  # return all paths to the downloaded files
-  filenames
+  urls <- sprintf("%s_%s%s.tif", baseurl, ids, version)
+
+  fps <- grid_gfc[tile_ids, ]
+  fps[["source"]] <- urls
+
+  make_footprints(fps, what = "raster", co = c("-co", "COMPRESS=LZW", "-ot", "Byte"))
 }
 
 .get_gsw_tile_id <- function(tile) {
