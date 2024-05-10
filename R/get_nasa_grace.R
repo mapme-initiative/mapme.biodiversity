@@ -15,7 +15,7 @@
 #' @include register.R
 #' @export
 get_nasa_grace <- function(years = 2003:2022) {
-  years <- check_available_years(years, c(2003:2022), "esalandcover")
+  years <- check_available_years(years, c(2003:2022), "nasa_grace")
 
   function(x,
            name = "nasa_grace",
@@ -24,12 +24,11 @@ get_nasa_grace <- function(years = 2003:2022) {
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {
     urls <- unlist(sapply(years, function(year) .get_nasagrace_url(year)))
-    filenames <- file.path(outdir, basename(urls))
-    if (testing) {
-      return(basename(filenames))
-    }
-    download_or_skip(urls, filenames, check_existence = FALSE)
-    filenames
+    bbox <- c(xmin = -180.0, ymin = -60, xmax = 180, ymax = 90)
+    tiles <- st_as_sfc(st_bbox(bbox, crs = "EPSG:4326"))
+    tiles <- st_as_sf(rep(tiles, length(urls)))
+    tiles[["source"]] <- urls
+    make_footprints(tiles, what = "raster", co = c("-co", "COMPRESS=LZW"))
   }
 }
 
@@ -50,7 +49,7 @@ get_nasa_grace <- function(years = 2003:2022) {
       available_dates, substr(available_dates, 1, 4) == target_year
     )
     paste0(
-      "https://nasagrace.unl.edu/globaldata/", target_dates,
+      "/vsicurl/https://nasagrace.unl.edu/globaldata/", target_dates,
       "/gws_perc_025deg_GL_", target_dates, ".tif"
     )
   } else {
