@@ -23,7 +23,6 @@
 #' @include register.R
 #' @export
 get_chirps <- function(years = 1981:2020) {
-  check_namespace("rvest")
   avail_years <- seq(1981, format(Sys.Date(), "%Y"))
   years <- check_available_years(years, avail_years, "chirps")
 
@@ -33,32 +32,38 @@ get_chirps <- function(years = 1981:2020) {
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {
-    chirps_url <- "https://data.chc.ucsb.edu/products/CHIRPS-2.0/global_monthly/tifs/"
+    urls <- .get_chirps_urls(years)
+    filenames <- gsub("cog", "tif", basename(urls))
+    co <- c("-of", "COG", "-co", "COMPRESSION=LZW", "-a_nodata", "-9999")
 
-    try(chirps_list <- httr::content(httr::GET(chirps_url), as = "text"))
-    if (inherits(chirps_list, "try-error")) {
-      stop("Download for CHIRPS resource was unsuccesfull")
-    }
-    chirps_list <- regmatches(chirps_list, gregexpr(chirps_list, pattern = "<a href=\"(.*?)\""))
-    chirps_list <- gsub(".*\"([^`]+)\".*", "\\1", chirps_list[[1]])
-    chirps_list <- grep("*.tif.gz$", chirps_list, value = TRUE)
-    chirps_list <- grep(
-      pattern = paste(years, collapse = "|"),
-      chirps_list, value = TRUE
-    )
-    urls <- paste(chirps_url, chirps_list, sep = "")
-    filenames <- file.path(outdir, basename(urls))
+    bbox <- c(xmin = -180., ymin = -50., xmax = 180., ymax = 50.)
+    fps <- st_as_sfc(st_bbox(bbox, crs = "EPSG:4326"))
+    fps <- st_as_sf(rep(fps, length(urls)))
+    fps[["source"]] <- urls
 
-    if (testing) {
-      return(basename(filenames))
-    }
-
-    filenames <- download_or_skip(urls, filenames, check_existence = FALSE)
-    filenames <- purrr::walk(filenames, unzip_and_remove,
-      dir = outdir, remove = FALSE
-    )
-    gsub(".gz", "", filenames)
+    make_footprints(fps, what = "raster", filenames = filenames)
   }
+}
+
+.get_chirps_urls <- function(years = 1981:2020) {
+  chirps_url <- "https://data.chc.ucsb.edu/products/CHIRPS-2.0/global_monthly/cogs/"
+
+  try(chirps_list <- httr::content(httr::GET(chirps_url), as = "text"))
+
+  if (inherits(chirps_list, "try-error")) {
+    stop("Download for CHIRPS resource was unsuccesfull")
+  }
+
+  chirps_list <- regmatches(chirps_list, gregexpr(chirps_list, pattern = "<a href=\"(.*?)\""))
+  chirps_list <- gsub(".*\"([^`]+)\".*", "\\1", chirps_list[[1]])
+  chirps_list <- grep("*.cog$", chirps_list, value = TRUE)
+
+  chirps_list <- grep(
+    pattern = paste(years, collapse = "|"),
+    chirps_list, value = TRUE
+  )
+
+  paste("/vsicurl/", chirps_url, chirps_list, sep = "")
 }
 
 register_resource(
