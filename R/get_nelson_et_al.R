@@ -46,21 +46,15 @@ get_nelson_et_al <- function(ranges = "20k_50k") {
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {
-    filenames <- file.path(
-      outdir,
-      paste0("traveltime-", ranges, ".tif")
-    )
     # get url for accessibility layer
-    check <- .get_traveltime_url(ranges, filenames, verbose = verbose)
+    fps <- .get_traveltime_url(ranges, paste0("traveltime-", ranges, ".tif"),
+      verbose = verbose
+    )
 
-    urls <- check$urls
-    filenames <- check$filenames
-    if (testing) {
-      return(basename(filenames))
-    }
-    download_or_skip(urls, filenames, check_existence = FALSE)
-    # return paths to the raster
-    filenames
+    make_footprints(fps,
+      filenames = fps[["filename"]], what = "raster",
+      co = c("-co", "COMPRESS=LZW", "-ot", "UInt16", "-a_nodata", "65535")
+    )
   }
 }
 
@@ -79,9 +73,15 @@ get_nelson_et_al <- function(ranges = "20k_50k") {
 .get_traveltime_url <- function(range, filenames, verbose = TRUE) {
   urls <- unlist(lapply(range, function(x) {
     index <- .nelson_df$index[.nelson_df$range == x]
-    paste0("https://figshare.com/ndownloader/files/", index)
+    paste0("/vsicurl/https://figshare.com/ndownloader/files/", index)
   }))
-  return(list(urls = urls, filenames = filenames))
+
+  bbox <- c(xmin = -180., ymin = -60., xmax = 180., ymax = 85.)
+  fps <- st_as_sfc(st_bbox(bbox, crs = "EPSG:4326"))
+  fps <- st_as_sf(rep(fps, length(urls)))
+  fps[["source"]] <- urls
+  fps[["filename"]] <- filenames
+  fps
 }
 
 register_resource(
