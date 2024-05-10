@@ -43,49 +43,14 @@ get_fritz_et_al <- function(resolution = 100) {
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {
     urls <- c(
-      "https://zenodo.org/record/7997885/files/Deforestation%20Drivers%20100m%20IIASA.zip?download=1",
-      "https://zenodo.org/record/7997945/files/Deforestation%20drivers%201km%20IIASA%20.zip?download=1"
+      "/vsizip//vsicurl/https://zenodo.org/record/7997885/files/Deforestation%20Drivers%20100m%20IIASA.zip/dr_han_hei_pr1.tif",
+      "/vsizip//vsicurl/https://zenodo.org/record/7997945/files/Deforestation%20drivers%201km%20IIASA%20.zip/dr_heine_pr1.tif"
     )
 
     url <- ifelse(resolution == 100, urls[1], urls[2])
-    filename <- sub(".*/(.*\\..*)\\?.*", "\\1", utils::URLdecode(url))
-    filename <- file.path(outdir, gsub("\\s+", "_", filename))
-
-    if (testing) {
-      return(basename(filename))
-    }
-
-    download_or_skip(url, filename, check_existence = FALSE)
-    unzip_and_remove(filename, outdir, remove = FALSE)
-    files <- list.files(outdir, full.names = TRUE)
-    identifier <- paste0("geo_fritz_et_al_", resolution, "m.tif")
-    files_outdir <- list.files(outdir, full.names = TRUE)
-    geo_file <- grep(identifier, files, value = TRUE)
-    if (length(geo_file) > 0) {
-      return(geo_file)
-    }
-    tif_file <- grep("*.tif$", files, value = TRUE)
-    if (length(tif_file) > 1) {
-      tif_file <- grep("geo", tif_file, value = TRUE, invert = TRUE)
-    }
-    geo_file <- file.path(outdir, identifier)
-    sf::gdal_utils("warp", tif_file, geo_file,
-      options = c(
-        "-t_srs", "EPSG:4326",
-        "-r", "near",
-        "-ot", "Byte",
-        "-co", "COMPRESS=LZW"
-      )
-    )
-
-    # delete all files accept with geo component in name
-    del_files <- grep("geo_", list.files(outdir, full.names = TRUE),
-      value = TRUE, invert = TRUE
-    )
-    # exclude zip from files to delete
-    del_files <- grep("zip", del_files, value = TRUE, invert = TRUE)
-    file.remove(del_files)
-    return(geo_file)
+    filename <- paste0("geo_fritz_et_al_", resolution, "m.tif")
+    co <- c("-of", "COG", "-ot", "Byte", "-co", "COMPRESS=LZW")
+    make_footprints(url, filename, what = "raster", co = co)
   }
 }
 
