@@ -35,18 +35,20 @@ get_gfw_emissions <- function() {
            testing = mapme_options()[["testing"]]) {
     index_file <- system.file("extdata", "greenhouse_index.geosjon", package = "mapme.biodiversity")
     spatialindex <- st_read(index_file, quiet = TRUE)
+
     row_ids <- unique(unlist(st_intersects(x, spatialindex)))
-    tile_ids <- spatialindex$tile_id[row_ids]
+    tile_str <- spatialindex$tile_id[row_ids]
+
     urls <- as.character(spatialindex$Mg_CO2e_px_download[row_ids])
-    filenames <- file.path(
-      outdir,
-      sprintf("gfw_forest_carbon_gross_emissions_Mg_CO2e_px_%s.tif", tile_ids)
+    urls <- paste0("/vsicurl/", urls)
+    filenames <- sprintf("gfw_forest_carbon_gross_emissions_Mg_CO2e_px_%s.tif", tile_str)
+
+    fps <- spatialindex[row_ids, "geometry"]
+    fps[["source"]] <- urls
+    make_footprints(fps, filenames,
+      what = "raster",
+      co = c("-co", "INTERLEAVE=BAND", "-co", "COMPRESS=DEFLATE")
     )
-    if (mapme_options()[["testing"]]) {
-      return(basename(filenames))
-    }
-    filenames <- download_or_skip(urls, filenames, check_existence = FALSE)
-    filenames
   }
 }
 
