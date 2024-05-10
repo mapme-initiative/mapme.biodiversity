@@ -39,27 +39,25 @@ get_esalandcover <- function(years = 2015:2019) {
       ))
     }
     # create all urls for target years and per tile
-    urls <- c()
-    for (i in tile_ids) {
-      tmp <- purrr::map_chr(years, .get_esa_url, tile = grid_esa[i, ])
-      urls <- c(urls, tmp)
-    }
-    # change filename structure
-    basenames <- basename(urls)
-    splitted <- strsplit(basenames, "-|_")
-    filenames <- purrr::map_chr(basenames, function(x) {
-      x <- strsplit(x, "-|_")[[1]]
-      paste0(x[1], "_", x[3], "_", x[5], "_", x[6], ".tif")
+    fps <- purrr::map(tile_ids, function(id) {
+      urls <- purrr::map_chr(years, .get_esa_url, tile = grid_esa[id, ])
+      fp <- st_as_sf(rep(st_as_sfc(grid_esa[id, ]), length(urls)))
+      fp[["source"]] <- urls
+
+      filenames <- purrr::map_chr(basename(urls), function(x) {
+        x <- strsplit(x, "-|_")[[1]]
+        paste0(x[1], "_", x[3], "_", x[5], "_", x[6], ".tif")
+      })
+
+      fp[["filename"]] <- filenames
+      fp
     })
 
-    if (testing) {
-      return(basename(filenames))
-    }
-
-    filenames <- file.path(outdir, basename(filenames))
-    filenames <- download_or_skip(urls, filenames, check_existence = TRUE)
-    # return all paths to the downloaded files
-    filenames
+    fps <- st_as_sf(purrr::list_rbind(fps))
+    co <- c("-of", "COG", "-co", "COMPRESS=DEFLATE")
+    fps <- make_footprints(fps, filenames = fps[["filename"]], what = "raster", co = co)
+    does_exist <- purrr::map_lgl(fps[["source"]], spds_exists, what = "raster")
+    fps[does_exist, ]
   }
 }
 
@@ -92,19 +90,19 @@ get_esalandcover <- function(years = 2015:2019) {
   if (year %in% c(2015:2019)) {
     if (year == 2015) {
       paste0(
-        "https://s3-eu-west-1.amazonaws.com/vito.landcover.global/v3.0.1/",
+        "/vsicurl/https://s3-eu-west-1.amazonaws.com/vito.landcover.global/v3.0.1/",
         year, "/", grid, "/", grid, "_PROBAV_LC100_global_v3.0.1_", year,
         "-base_Discrete-Classification-map_EPSG-4326.tif"
       )
     } else if (year == 2019) {
       paste0(
-        "https://s3-eu-west-1.amazonaws.com/vito.landcover.global/v3.0.1/",
+        "/vsicurl/https://s3-eu-west-1.amazonaws.com/vito.landcover.global/v3.0.1/",
         year, "/", grid, "/", grid, "_PROBAV_LC100_global_v3.0.1_", year,
         "-nrt_Discrete-Classification-map_EPSG-4326.tif"
       )
     } else {
       paste0(
-        "https://s3-eu-west-1.amazonaws.com/vito.landcover.global/v3.0.1/",
+        "/vsicurl/https://s3-eu-west-1.amazonaws.com/vito.landcover.global/v3.0.1/",
         year, "/", grid, "/", grid, "_PROBAV_LC100_global_v3.0.1_", year,
         "-conso_Discrete-Classification-map_EPSG-4326.tif"
       )
