@@ -1,29 +1,10 @@
 test_that(".get_droughtind works", {
   skip_on_cran()
-  aoi <- read_sf(
-    system.file("extdata", "sierra_de_neiba_478140.gpkg",
-      package = "mapme.biodiversity"
-    )
-  )
-  aoi <- suppressWarnings(st_cast(aoi, to = "POLYGON")[1, ])
 
-  temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-  dir.create(temp_loc, showWarnings = FALSE)
-  resource_dir <- system.file("res", package = "mapme.biodiversity")
-  file.copy(resource_dir, temp_loc, recursive = TRUE)
-  outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
-  tmpdir <- tempdir()
-
-  mapme_options(
-    outdir = outdir,
-    tmpdir = tmpdir,
-    verbose = FALSE,
-    testing = TRUE
-  )
-
+  expect_error(get_nasa_grace(2000))
   gng <- get_nasa_grace(years = 2004:2010)
-
-  expect_snapshot(
-    gng(aoi)
-  )
+  expect_silent(.check_resource_fun(gng))
+  expect_silent(fps <- gng())
+  expect_silent(.check_footprints(fps))
+  expect_equal(nrow(fps), 365)
 })
