@@ -53,32 +53,22 @@ get_ucdp_ged <- function(version = "latest") {
 
     base_url <- "/vsizip/vsicurl/https://ucdp.uu.se/downloads/ged/"
     url <- paste0(base_url, version_ged)
-    if (version == "19.1") {
-      url <- paste0(url, "/ged191.csv")
-    } else if (version == "5.0") {
-      url <- paste0(url, "/ged50.csv")
-    }
-    filename <- file.path(outdir, gsub("zip", "gpkg", version_ged))
-
-    # return early if testing
-    if (testing) {
-      return(basename(filename))
-    }
-
-    if (file.exists(filename)) {
-      return(filename)
-    }
-
-    gdal_utils(
-      util = "vectortranslate",
-      source = url,
-      destination = filename,
-      options = c(
-        "-a_srs", "EPSG:4326",
-        "-oo", "GEOM_POSSIBLE_NAMES=geom_wkt"
-      )
+    switch(version,
+      "19.1" = {
+        url <- paste0(url, "/ged191.csv")
+      },
+      "5.0" = {
+        url <- paste0(url, "/ged50.csv")
+      }
     )
-    filename
+
+    fps <- make_footprints(
+      url,
+      filenames = gsub("zip", "gpkg", version_ged),
+      what = "vector", oo = c("-oo", "GEOM_POSSIBLE_NAMES=geom_wkt")
+    )
+    st_crs(fps) <- st_crs("EPSG:4326")
+    fps
   }
 }
 
