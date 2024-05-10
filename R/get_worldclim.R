@@ -28,7 +28,7 @@ get_worldclim_min_temperature <- function(years = 2000:2018) {
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {
-    .get_climatic_variables(x = x, years = years, layer = "tmin", outdir, verbose, testing)
+    .get_climatic_variables(x = x, years = years, layer = "tmin", verbose)
   }
 }
 
@@ -62,7 +62,7 @@ get_worldclim_max_temperature <- function(years = 2000:2018) {
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {
-    .get_climatic_variables(x = x, years = years, layer = "tmax", outdir, verbose, testing)
+    .get_climatic_variables(x = x, years = years, layer = "tmax", verbose)
   }
 }
 
@@ -96,7 +96,7 @@ get_worldclim_precipitation <- function(years = 2000:2018) {
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {
-    .get_climatic_variables(x = x, years = years, layer = "prec", outdir, verbose, testing)
+    .get_climatic_variables(x = x, years = years, layer = "prec", verbose)
   }
 }
 
@@ -104,10 +104,7 @@ get_worldclim_precipitation <- function(years = 2000:2018) {
 .get_climatic_variables <- function(x,
                                     years = 2000:2018,
                                     layer,
-                                    dir = tempdir(),
-                                    verbose = TRUE,
-                                    testing = FALSE) {
-  available_years <- 2000:2018
+                                    verbose = TRUE) {
   if (missing(layer)) {
     stop(paste("No target layer has been specified. ",
       "Please select one of 'tmin', 'tmax', 'prec'.",
@@ -115,39 +112,13 @@ get_worldclim_precipitation <- function(years = 2000:2018) {
     ))
   }
 
-  all_urls <- unlist(sapply(years, function(year) {
-    .get_climate_url(layer, year)
-  }))
-  urls <- unique(all_urls)
-  filenames <- file.path(dir, basename(urls))
-  if (testing) {
-    return(basename(filenames))
-  }
-  download_or_skip(urls, filenames, check_existence = FALSE)
-
-  # unzip the downloaded file
-  sapply(filenames, function(zip) {
-    unzip_and_remove(zip, dir, remove = FALSE)
-  })
-
-  # remove all except desired layers
-  nontarget_years <- available_years[!available_years %in% years]
-
-  for (i in seq_along(nontarget_years)) {
-    unlink(
-      file.path(
-        dir,
-        paste0(
-          "wc2.1_2.5m_", layer, "_",
-          nontarget_years[i], "*.tif"
-        )
-      ),
-      recursive = T, force = T
-    )
-  }
-
-  # return paths to the raster
-  list.files(dir, full.names = T, pattern = ".tif")
+  urls <- purrr::map(years, function(year) .get_climate_url(layer, year))
+  urls <- unlist(urls)
+  bbox <- c(xmin = -180., ymin = -90., xmax = 180., ymax = 90.)
+  tiles <- st_as_sfc(st_bbox(bbox, crs = "EPSG:4326"))
+  tiles <- st_as_sf(rep(tiles, length(urls)))
+  tiles[["source"]] <- urls
+  make_footprints(tiles, what = "raster")
 }
 
 
@@ -161,19 +132,20 @@ get_worldclim_precipitation <- function(years = 2000:2018) {
 #' @noRd
 .get_climate_url <- function(layer, year) {
   if (year %in% c(2000:2009)) {
-    paste0(
+    baseurl <- paste0(
       "https://biogeo.ucdavis.edu/data/worldclim/v2.1/hist/wc2.1_2.5m_",
       layer, "_2000-2009.zip"
     )
   } else if (year %in% c(2010:2018)) {
-    paste0(
+    baseurl <- paste0(
       "https://biogeo.ucdavis.edu/data/worldclim/v2.1/hist/wc2.1_2.5m_",
       layer, "_2010-2018.zip"
     )
-  } else {
-    warning(sprintf("Climate raster not available for target year %s", year))
-    NULL
   }
+  months <- sprintf("%02d", 1:12)
+  dates <- sprintf("%s-%s", year, months)
+  filenames <- sprintf("wc2.1_2.5m_%s_%s.tif", layer, dates)
+  file.path("/vsizip//vsicurl", baseurl, filenames)
 }
 
 
