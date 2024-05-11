@@ -51,7 +51,7 @@ get_resources <- function(x, ...) {
 .get_single_resource <- function(x = NULL,
                                  fun = NULL,
                                  opts = mapme_options(),
-                                 gdal_conf = mapme_gdal_conf()) {
+                                 gdal_conf = NULL) {
   force(x)
   args <- formals(fun)
   resource_name <- args[["name"]]
@@ -60,7 +60,7 @@ get_resources <- function(x, ...) {
   args[["x"]] <- x
   args[["outdir"]] <- outdir
 
-  resource <- try(do.call(fun, args = args))
+  resource <- try(do.call(fun, args = as.list(args)))
   resource <- .check_footprints(resource, name)
 
   resource <- .fetch_resource(
@@ -81,6 +81,9 @@ get_resources <- function(x, ...) {
 }
 
 .make_path <- function(outdir, name) {
+  if (is.null(outdir)) {
+    return(outdir)
+  }
   path <- file.path(outdir, name)
   dir.create(path, showWarnings = FALSE)
   path
@@ -118,7 +121,7 @@ get_resources <- function(x, ...) {
                             type = NULL,
                             outdir = NULL,
                             verbose = TRUE,
-                            gdal_conf = mapme_gdal_conf()) {
+                            gdal_conf = NULL) {
   stopifnot(inherits(resource, "sf"))
   stopifnot(type %in% c("raster", "vector"))
 
@@ -134,14 +137,23 @@ get_resources <- function(x, ...) {
       resource[["co"]]
     )
 
-    suceeded <- purrr::pwalk(params, function(src, dest, oo, co) {
-      .get_spds(src = src, dest = dest, oo = oo, co = co, what = type, gdal_conf = gdal_conf)
-    },
-    .progress = ifelse(verbose, msg, NULL)
-    )
+    withr::with_envvar(gdal_conf, code = {
+      is_available <- purrr::pwalk(params, function(src, dest, oo, co) {
+        .get_spds(
+          source = src,
+          destination = dest,
+          opts = c(oo, co),
+          what = type
+        )
+      },
+      .progress = ifelse(verbose, msg, NULL)
+      )
+    })
+
     resource[["location"]] <- resource[["destination"]]
+    resource <- resource[which(is_available), ]
   } else {
     resource[["location"]] <- resource[["source"]]
   }
-  resource[c("location", "opts")]
+  resource
 }
