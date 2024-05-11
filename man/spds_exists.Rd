@@ -4,7 +4,7 @@
 \alias{spds_exists}
 \title{Check if a spatial data sets exists}
 \usage{
-spds_exists(path, what = c("vector", "raster"))
+spds_exists(path, oo = NULL, what = c("vector", "raster"))
 }
 \arguments{
 \item{path}{A length 1 character vector with a GDAL readable file path.}
