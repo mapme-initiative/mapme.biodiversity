@@ -1,16 +1,22 @@
 test_that("soilpoperties works", {
+  skip_on_cran()
+
   x <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
       package = "mapme.biodiversity"
     )
   )
-  x <- suppressWarnings(st_cast(x, to = "POLYGON"))[1, ]
-
-  soilgrids <- list.files(system.file("res", "soilgrids",
-    package = "mapme.biodiversity"
-  ), pattern = ".tif$", full.names = TRUE)
-
-  soilgrids <- rast(soilgrids)
+  .clear_resources()
+  outdir <- file.path(tempdir(), "mapme.data")
+  .copy_resource_dir(outdir)
+  mapme_options(outdir = outdir, verbose = FALSE)
+  suppressWarnings(get_resources(x, get_soilgrids(
+    layer = "clay",
+    depth = "0-5cm",
+    stat = "mean"
+  )))
+  soilgrids <- prep_resources(x)[["soilgrids"]]
+  x <- st_transform(x, st_crs(soilgrids))
 
   csp <- calc_soilproperties()
   expect_true(is.null(csp(x, NULL)))
