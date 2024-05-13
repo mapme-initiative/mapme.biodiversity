@@ -225,6 +225,9 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL) {
 
   is_null <- unlist(lapply(vectors, is.null))
   vectors <- vectors[!is_null]
+  if (length(vectors) == 0) {
+    return(NULL)
+  }
   names(vectors) <- matches[["filename"]][!is_null]
   vectors
 }

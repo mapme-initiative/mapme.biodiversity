@@ -92,7 +92,8 @@ dir.create(outdir, showWarnings = FALSE)
 
 mapme_options(
   outdir = outdir,
-  verbose = FALSE
+  verbose = FALSE,
+  chunk_size = 1e8
 )
 
 aoi <- system.file("extdata", "burundi.gpkg",
