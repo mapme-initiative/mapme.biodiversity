@@ -5,14 +5,15 @@ test_that("gsw occurrence works", {
     )
   )
 
-  x <- suppressWarnings(st_cast(x, to = "POLYGON")[1, ])
+  .clear_resources()
+  outdir <- file.path(tempdir(), "mapme.data")
+  .copy_resource_dir(outdir)
+  mapme_options(outdir = outdir, verbose = FALSE)
+  get_resources(x, get_global_surface_water_occurrence(version = "v1_4_2021"))
+  gsw_occurrence <- prep_resources(x)[["global_surface_water_occurrence"]][[1]]
+
   gswo <- calc_gsw_occurrence(min_occurrence = 10)
   expect_true(is.null(gswo(x, NULL)))
-
-  gsw_occurrence <- list.files(system.file("res", "gsw_occurrence",
-    package = "mapme.biodiversity"
-  ), pattern = ".tif$", full.names = TRUE)
-  gsw_occurrence <- rast(gsw_occurrence)
   occ <- gswo(x, gsw_occurrence)
   expect_equal(occ$value, 694.159, tolerance = 1e-4)
 })
