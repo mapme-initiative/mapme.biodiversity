@@ -7,9 +7,10 @@ library(rnaturalearth)
 loc <- tempfile()
 dir.create(loc)
 bur <- ne_countries(country = "Burundi", returnclass = "sf")
-attr(bur, "testing") <- FALSE
-ged <- mapme.biodiversity:::.get_ucdp_ged(bur, version_ged = "22.1", rundir = loc)
-ged <- st_read(ged, wkt_filter = st_as_text(st_as_sfc(st_bbox(bur))))
+mapme_options(outdir = loc)
+
+get_resources(bur, get_ucdp_ged(version = "22.1"))
+ged <- prep_resources(bur)[["ucdp_ged"]][[1]]
 ged <- ged %>% filter(year %in% c(1991, 1992))
 ged <- select(
   ged,
@@ -21,5 +22,5 @@ ged <- select(
 )
 
 dir.create("inst/res/ucdp_ged/", showWarnings = F)
-st_write(ged, dsn = "inst/res/ucdp_ged/ged221-csv.gpkg", delete_dsn = T)
+st_write(ged, dsn = "inst/res/ucdp_ged/ged221-csv.gpkg")
 st_write(select(bur, sov_a3), dsn = "inst/extdata/burundi.gpkg", delete_dsn = T)
