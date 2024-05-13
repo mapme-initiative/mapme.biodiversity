@@ -89,7 +89,7 @@ get_resources <- function(x, ...) {
   path
 }
 
-.resource_cols <- c("filename", "type", "oo", "co", "source", "geometry")
+.resource_cols <- c("filename", "location", "type", "oo", "co", "source", "geometry")
 
 .check_footprints <- function(resource, name) {
   if (inherits(resource, "try-error")) {
@@ -138,7 +138,7 @@ get_resources <- function(x, ...) {
     )
 
     withr::with_envvar(gdal_conf, code = {
-      is_available <- purrr::pwalk(params, function(src, dest, oo, co) {
+      purrr::pwalk(params, function(src, dest, oo, co) {
         .get_spds(
           source = src,
           destination = dest,
@@ -151,7 +151,7 @@ get_resources <- function(x, ...) {
     })
 
     resource[["location"]] <- resource[["destination"]]
-    resource <- resource[which(is_available), ]
+    resource
   } else {
     resource[["location"]] <- resource[["source"]]
   }
