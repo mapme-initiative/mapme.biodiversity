@@ -4,10 +4,12 @@ test_that(".calc_fatalities works", {
       package = "mapme.biodiversity"
     )
   )
-  ucdp_ged <- list.files(system.file("res", "ucdp_ged",
-    package = "mapme.biodiversity"
-  ), pattern = ".gpkg$", full.names = TRUE)
-  ucdp_ged <- read_sf(ucdp_ged)
+  .clear_resources()
+  outdir <- file.path(tempdir(), "mapme.data")
+  .copy_resource_dir(outdir)
+  mapme_options(outdir = outdir, verbose = FALSE)
+  get_resources(x, get_ucdp_ged(version = "22.1"))
+  ucdp_ged <- prep_resources(x)[["ucdp_ged"]][[1]]
 
   expect_error(
     calc_fatalities(years = 1980),
