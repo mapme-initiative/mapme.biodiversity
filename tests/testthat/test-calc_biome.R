@@ -4,15 +4,13 @@ test_that("biome computation works", {
       package = "mapme.biodiversity"
     )
   )
-  x <- st_make_valid(x)
-  source <- list.files(system.file("res", "teow",
-    package = "mapme.biodiversity"
-  ), pattern = ".gpkg$", full.names = TRUE)
-  teow <- lapply(1:length(source), function(j) {
-    out <- read_sf(source[[j]])
-    out <- st_make_valid(out)
-  })
-  names(teow) <- basename(source)
+  .clear_resources()
+  outdir <- file.path(tempdir(), "mapme.data")
+  .copy_resource_dir(outdir)
+  mapme_options(outdir = outdir, verbose = FALSE)
+  get_resources(x, get_teow())
+  teow <- prep_resources(x)[["teow"]]
+
   cb <- calc_biome()
   result <- cb(x, teow)
   expect_silent(.check_single_asset(result))

@@ -1,5 +1,6 @@
 test_that(".get_gfw_lossyear works", {
   skip_on_cran()
+  .clear_resources()
 
   x <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",

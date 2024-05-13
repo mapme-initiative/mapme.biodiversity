@@ -5,10 +5,12 @@ test_that("worldclim maximum temperature works", {
     )
   )
 
-  worldclim_max_temperature <- list.files(system.file("res", "worldclim_max_temperature",
-    package = "mapme.biodiversity"
-  ), pattern = ".tif$", full.names = TRUE)
-  worldclim_max_temperature <- rast(worldclim_max_temperature)
+  .clear_resources()
+  outdir <- file.path(tempdir(), "mapme.data")
+  .copy_resource_dir(outdir)
+  mapme_options(outdir = outdir, verbose = FALSE)
+  get_resources(x, get_worldclim_max_temperature(years = 2018))
+  worldclim_max_temperature <- prep_resources(x)[["worldclim_max_temperature"]]
 
   cmx <- calc_temperature_max_wc()
   expect_true(is.null(cmx(x, NULL)))

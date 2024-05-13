@@ -5,10 +5,12 @@ test_that("worldclim minimum temperature works", {
     )
   )
 
-  worldclim_min_temperature <- list.files(system.file("res", "worldclim_min_temperature",
-    package = "mapme.biodiversity"
-  ), pattern = ".tif$", full.names = TRUE)
-  worldclim_min_temperature <- rast(worldclim_min_temperature)
+  .clear_resources()
+  outdir <- file.path(tempdir(), "mapme.data")
+  .copy_resource_dir(outdir)
+  mapme_options(outdir = outdir, verbose = FALSE)
+  get_resources(x, get_worldclim_min_temperature(years = 2018))
+  worldclim_min_temperature <- prep_resources(x)[["worldclim_min_temperature"]]
 
   cmin <- calc_temperature_min_wc()
   expect_true(is.null(cmin(x, NULL)))
