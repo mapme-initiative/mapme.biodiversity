@@ -9,7 +9,6 @@
   dir.create(.pkgenv$outdir, showWarnings = FALSE)
   .pkgenv$log_dir <- NULL
   .pkgenv$verbose <- TRUE
-  .pkgenv$aria_bin <- NULL
   .pkgenv$testing <- FALSE
   .pkgenv$chunk_size <- 100000
   invisible()
@@ -28,8 +27,6 @@
 #' @param outdir A length one character indicating the output path.
 #' @param chunk_size A numeric of length one giving the maximum chunk area in ha.
 #'   Defaults to 100,000 ha.
-#' @param aria_bin A character vector to an aria2c executable for parallel
-#'  downloads.
 #' @param verbose A logical, indicating if informative messages should be printed.
 #' @param testing A logical. Not to be set by users. Controls the behavior
 #'   during automated test pipelines.
@@ -46,7 +43,7 @@
 #' @examples
 #' library(mapme.biodiversity)
 #' mapme_options()
-mapme_options <- function(..., outdir, chunk_size, verbose, aria_bin, testing, log_dir) {
+mapme_options <- function(..., outdir, chunk_size, verbose, testing, log_dir) {
   if (!missing(outdir)) {
     stopifnot(is.character(outdir) && length(outdir) == 1)
     if (!dir.exists(outdir)) {
@@ -65,10 +62,6 @@ mapme_options <- function(..., outdir, chunk_size, verbose, aria_bin, testing, l
     .pkgenv$verbose <- verbose
   }
 
-  if (!missing(aria_bin)) {
-    .pkgenv$aria_bin <- .check_aria2(aria_bin)
-  }
-
   if (!missing(testing)) {
     stopifnot(is.logical(testing))
     .pkgenv$testing <- testing
@@ -84,25 +77,11 @@ mapme_options <- function(..., outdir, chunk_size, verbose, aria_bin, testing, l
       outdir = .pkgenv$outdir,
       chunk_size = .pkgenv$chunk_size,
       verbose = .pkgenv$verbose,
-      aria_bin = .pkgenv$aria_bin,
       testing = .pkgenv$testing,
       log_dir = .pkgenv$log_dir
     ))
   }
 }
-
-.check_aria2 <- function(aria_bin) {
-  aria_output <- try(system2(aria_bin, args = "--version", stdout = TRUE, stderr = FALSE), silent = TRUE)
-  if (inherits(aria_output, "try-error") | !grepl("aria2 version", aria_output[1])) {
-    warning(paste(
-      "Argument 'aria_bin' does not point to a executable aria2 installation.",
-      "The package will use R internal download utility."
-    ))
-    aria_bin <- NULL
-  }
-  return(aria_bin)
-}
-
 
 .check_char <- function(obj, name) {
   if (!inherits(obj, "character") || length(obj) > 1 || nchar(obj) == 0) {
