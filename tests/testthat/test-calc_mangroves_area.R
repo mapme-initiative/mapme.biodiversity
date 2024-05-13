@@ -4,15 +4,13 @@ test_that("mangrove extent works", {
       package = "mapme.biodiversity"
     )
   )
-  x <- st_make_valid(x)
-  source <- list.files(system.file("res", "gmw",
-    package = "mapme.biodiversity"
-  ), pattern = ".gpkg$", full.names = TRUE)
-  gmw <- lapply(1:length(source), function(j) {
-    out <- read_sf(source[[j]])
-    out <- st_make_valid(out)
-  })
-  names(gmw) <- basename(source)
+  .clear_resources()
+  outdir <- file.path(tempdir(), "mapme.data")
+  .copy_resource_dir(outdir)
+  mapme_options(outdir = outdir, verbose = FALSE)
+  get_resources(x, get_gmw(years = c(1996, 2016)))
+  gmw <- prep_resources(x)[["gmw"]]
+
   ma <- calc_mangroves_area()
   expect_true(is.null(ma(x, NULL)))
   result <- ma(x, gmw)
