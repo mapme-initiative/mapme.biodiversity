@@ -4,13 +4,13 @@ test_that("deforestation drivers works", {
       package = "mapme.biodiversity"
     )
   )
-  drivers <- list.files(
-    system.file("res", "fritz_et_al",
-      package = "mapme.biodiversity"
-    ),
-    pattern = ".tif$", full.names = TRUE
-  )
-  drivers <- rast(drivers)
+  .clear_resources()
+  outdir <- file.path(tempdir(), "mapme.data")
+  .copy_resource_dir(outdir)
+  mapme_options(outdir = outdir, verbose = FALSE)
+  suppressWarnings(get_resources(x, get_fritz_et_al(resolution = 100)))
+  drivers <- prep_resources(x)[["fritz_et_al"]]
+  x <- st_transform(x, st_crs(drivers))
 
   cdf <- calc_deforestation_drivers()
   result <- cdf(x, drivers)
@@ -23,5 +23,5 @@ test_that("deforestation drivers works", {
       "other_subsistance_agriculture", "shifting_cultivation"
     )
   )
-  expect_equal(sum(result$value), 16209.58, tolerance = 1e-4)
+  expect_equal(sum(result$value), 16809, tolerance = 1e-4)
 })
