@@ -45,7 +45,9 @@
   if (is.null(info)) {
     return(NULL)
   }
-  .raster_bbox(info)
+  bbox <- .raster_bbox(info)
+  bbox[["source"]] <- src
+  bbox
 }
 
 .raster_info <- function(src, oo = NULL) {
@@ -82,8 +84,6 @@
     ), crs = crs)
     bbox <- st_as_sf(st_as_sfc(bbox))
   }
-
-  bbox["source"] <- src
   bbox
 }
 
@@ -260,10 +260,11 @@ make_footprints <- function(srcs = NULL,
   }
 
   srcs <- st_as_sf(tibble::as_tibble(srcs))
+  srcs[["location"]] <- srcs[["source"]]
   srcs[["type"]] <- what
   srcs[["filename"]] <- filenames
   srcs[["oo"]] <- oo
   srcs[["co"]] <- co
   st_geometry(srcs) <- "geometry"
-  srcs[, c("filename", "type", "oo", "co", "source")]
+  srcs[, c("filename", "location", "type", "oo", "co", "source")]
 }

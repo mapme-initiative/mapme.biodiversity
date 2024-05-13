@@ -57,7 +57,7 @@ test_that("test .make_path works", {
   expect_equal(basename(out), "test")
 })
 
-test_that("test .make_footprints works", {
+test_that("test make_footprints works", {
   temp_loc <- file.path(tempdir(), "mapme.biodiversity")
   dir.create(temp_loc, showWarnings = FALSE)
   resource_dir <- system.file("res", package = "mapme.biodiversity")
@@ -68,7 +68,8 @@ test_that("test .make_footprints works", {
     pattern = ".tif$",
     recursive = TRUE, full.names = TRUE
   )
-  fps <- .make_footprints(tifs)
+
+  fps <- make_footprints(tifs, what = "raster")
   expect_true(inherits(fps, "sf"))
   expect_equal(nrow(fps), length(tifs))
   expect_equal(fps$location, tifs)

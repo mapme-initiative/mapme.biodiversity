@@ -179,7 +179,7 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL) {
 
   out <- purrr::map(resources, function(resource) {
     resource <- avail_resources[[resource]]
-    resource_type <- ifelse(inherits(resource, "sf"), "raster", "vector")
+    resource_type <- unique(resource[["type"]])
     reader <- switch(resource_type,
       raster = .read_raster,
       vector = .read_vector,
@@ -191,20 +191,58 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL) {
   out
 }
 
-.read_vector <- function(x, vector_sources) {
-  vectors <- purrr::map(vector_sources, function(source) {
-    read_sf(source, wkt_filter = st_as_text(st_as_sfc(st_bbox(x))))
+
+.get_intersection <- function(x, tindex) {
+  org <- sf::sf_use_s2()
+  suppressMessages(sf::sf_use_s2(FALSE))
+  on.exit(suppressMessages(sf::sf_use_s2(org)))
+
+  suppressMessages(targets <- st_intersects(x, tindex, sparse = FALSE))
+  tindex[which(colSums(targets) > 0), ]
+}
+
+.read_vector <- function(x, tindex) {
+  matches <- .get_intersection(x, tindex)
+
+  if (nrow(matches) == 0) {
+    warning("No intersection with asset.")
+    return(NULL)
+  }
+
+  paths <- matches[["location"]]
+
+  vectors <- purrr::map(paths, function(path) {
+    tmp <- try(read_sf(path, wkt_filter = st_as_text(st_as_sfc(st_bbox(x)))), silent = TRUE)
+    if (inherits(tmp, "try-error")) {
+      warning(tmp)
+      return(NULL)
+    }
+    if (nrow(tmp) == 0) {
+      return(NULL)
+    }
+    tmp
   })
-  names(vectors) <- basename(vector_sources)
+
+  is_null <- unlist(lapply(vectors, is.null))
+  vectors <- vectors[!is_null]
+  names(vectors) <- matches[["filename"]][!is_null]
   vectors
 }
+
 
 .read_raster <- function(x, tindex) {
   if (st_crs(x) != st_crs(tindex)) {
     x <- st_transform(x, st_crs(tindex))
   }
 
-  geoms <- tindex[["geom"]]
+  matches <- .get_intersection(x, tindex)
+
+  if (nrow(matches) == 0) {
+    warning("No intersection with asset.")
+    return(NULL)
+  }
+
+  geoms <- matches[["geometry"]]
   unique_geoms <- unique(geoms)
   grouped_geoms <- match(geoms, unique_geoms)
   names(grouped_geoms) <- tindex[["location"]]
