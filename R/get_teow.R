@@ -34,7 +34,7 @@ get_teow <- function() {
       "official/wwf_terr_ecos.shp",
       sep = ""
     )
-    make_footprints(url, filename = "wwf_terr_ecos.gpkg", what = "vector")
+    make_footprints(url, filenames = "wwf_terr_ecos.gpkg", what = "vector")
   }
 }
 

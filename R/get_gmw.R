@@ -36,7 +36,7 @@ get_gmw <- function(years = c(1996, 2007:2010, 2015:2017, 2019:2020)) {
     fps <- st_as_sfc(st_bbox(bbox, crs = "EPSG:4326"))
     fps <- st_as_sf(rep(fps, length(urls)))
     fps[["source"]] <- urls
-    make_footprints(fps, filename = gsub(".shp", ".gpkg", basename(urls)), what = "vector")
+    make_footprints(fps, filenames = gsub(".shp", ".gpkg", basename(urls)), what = "vector")
   }
 }
 

@@ -123,7 +123,7 @@ get_soilgrids <- function(layers, depths, stats) {
 
     urls <- na.omit(urls)
     filenames <- basename(urls)
-    make_footprints(urls, filename = filenames, what = "raster")
+    make_footprints(urls, filenames = filenames, what = "raster")
   }
 }
 
