@@ -51,9 +51,7 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   package = "mapme.biodiversity"
 ) \%>\%
   read_sf() \%>\%
-  get_resources(get_nelson_et_al(
-    ranges = c("5k_10k", "100k_200k", "500k_1mio", "1mio_5mio")
-  )) \%>\%
+  get_resources(get_nelson_et_al(ranges = "100k_200k")) \%>\%
   calc_indicators(
     calc_traveltime(engine = "extract", stats = c("min", "max"))
   ) \%>\%
