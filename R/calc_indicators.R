@@ -248,7 +248,7 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL) {
   geoms <- matches[["geometry"]]
   unique_geoms <- unique(geoms)
   grouped_geoms <- match(geoms, unique_geoms)
-  names(grouped_geoms) <- tindex[["location"]]
+  names(grouped_geoms) <- matches[["location"]]
   grouped_geoms <- sort(grouped_geoms)
 
   n_tiles <- length(unique(grouped_geoms))
