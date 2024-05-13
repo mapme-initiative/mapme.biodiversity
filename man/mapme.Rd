@@ -9,7 +9,7 @@
 \alias{prep_resources}
 \title{Portfolio methods for mapme.biodiversity}
 \usage{
-mapme_options(..., outdir, chunk_size, verbose, aria_bin, testing, log_dir)
+mapme_options(..., outdir, chunk_size, verbose, testing, log_dir)
 
 get_resources(x, ...)
 
@@ -26,9 +26,6 @@ prep_resources(x, avail_resources = NULL, resources = NULL)
 Defaults to 100,000 ha.}
 
 \item{verbose}{A logical, indicating if informative messages should be printed.}
-
-\item{aria_bin}{A character vector to an aria2c executable for parallel
-downloads.}
 
 \item{testing}{A logical. Not to be set by users. Controls the behavior
 during automated test pipelines.}
