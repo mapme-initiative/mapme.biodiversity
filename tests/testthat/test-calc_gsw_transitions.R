@@ -5,14 +5,15 @@ test_that("gsw transitions works", {
     )
   )
 
-  x <- suppressWarnings(st_cast(x, to = "POLYGON")[1, ])
+  .clear_resources()
+  outdir <- file.path(tempdir(), "mapme.data")
+  .copy_resource_dir(outdir)
+  mapme_options(outdir = outdir, verbose = FALSE)
+  get_resources(x, get_global_surface_water_transitions(version = "v1_4_2021"))
+  gsw_transitions <- prep_resources(x)[["global_surface_water_transitions"]][[1]]
+
   gswt <- calc_gsw_transitions()
   expect_true(is.null(gswt(x, NULL)))
-
-  gsw_transitions <- list.files(system.file("res", "gsw_transitions",
-    package = "mapme.biodiversity"
-  ), pattern = ".tif$", full.names = TRUE)
-  gsw_transitions <- rast(gsw_transitions)
   transitions <- gswt(x, gsw_transitions)
   expect_silent(.check_single_asset(transitions))
 

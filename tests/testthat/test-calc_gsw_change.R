@@ -5,14 +5,15 @@ test_that("gsw change works", {
     )
   )
 
-  x <- suppressWarnings(st_cast(x, to = "POLYGON")[1, ])
+  .clear_resources()
+  outdir <- file.path(tempdir(), "mapme.data")
+  .copy_resource_dir(outdir)
+  mapme_options(outdir = outdir, verbose = FALSE)
+  get_resources(x, get_global_surface_water_change(version = "v1_4_2021"))
+  gsw_change <- prep_resources(x)[["global_surface_water_change"]][[1]]
+
   gswc <- calc_gsw_change()
   expect_true(is.null(gswc(x, NULL)))
-
-  gsw_change <- list.files(system.file("res", "gsw_change",
-    package = "mapme.biodiversity"
-  ), pattern = ".tif$", full.names = TRUE)
-  gsw_change <- rast(gsw_change)
   chg <- gswc(x, gsw_change)
   expect_silent(.check_single_asset(chg))
   expect_equal(chg$value, 100, tolerance = 1e-4)
