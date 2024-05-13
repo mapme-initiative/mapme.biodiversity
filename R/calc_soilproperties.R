@@ -43,8 +43,8 @@
 #'   read_sf() %>%
 #'   get_resources(
 #'     get_soilgrids(
-#'       layers = c("clay", "silt"),
-#'       depths = c("0-5cm", "5-15cm"),
+#'       layers = "clay",
+#'       depths = "0-5cm",
 #'       stats = "mean"
 #'     )
 #'   ) %>%
