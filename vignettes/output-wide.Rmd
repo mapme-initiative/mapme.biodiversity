@@ -117,7 +117,7 @@ mapme_options(
   verbose = FALSE
 )
 
-aoi <- get_resources(aoi, get_nelson_et_al(ranges = "20k_50k"))
+aoi <- get_resources(aoi, get_nelson_et_al(ranges = "100k_200k"))
 aoi <- calc_indicators(aoi, calc_traveltime(stats = "mean"))
 print(aoi)
 ```
@@ -167,7 +167,7 @@ Let's continue to query an indicator which has a multi-row output, i.e.
 precipitation statistics from [WorldClim](https://www.worldclim.org/).
 
 ```{r calc-prec}
-aoi <- get_resources(aoi, get_worldclim_precipitation(years = 2010:2018))
+aoi <- get_resources(aoi, get_worldclim_precipitation(years = 2018))
 aoi <- calc_indicators(aoi, calc_precipitation_wc(stats = "mean"))
 print(aoi)
 ```
