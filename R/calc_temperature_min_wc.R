@@ -113,7 +113,7 @@ register_indicator(
 
   layer <- paste0("worldclim_", strsplit(names(worldclim), "_")[[1]][3])
   datetime <- unlist(lapply(names(worldclim), function(x) strsplit(x, "_")[[1]][4]))
-  datetime <- as.Date(paste0(tools::file_path_sans_ext(datetime), "-01"))
+  datetime <- as.Date(paste0(datetime, "-01"))
 
   results <- select_engine(
     x = x,
