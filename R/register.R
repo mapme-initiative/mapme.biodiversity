@@ -45,10 +45,7 @@
 #' mapme_options()
 mapme_options <- function(..., outdir, chunk_size, verbose, testing, log_dir) {
   if (!missing(outdir)) {
-    stopifnot(is.character(outdir) && length(outdir) == 1)
-    if (!dir.exists(outdir)) {
-      stop("outdir must point to an existing directory")
-    }
+    stopifnot(is.null(outdir) | (is.character(outdir) && length(outdir) == 1))
     .pkgenv$outdir <- outdir
   }
 
