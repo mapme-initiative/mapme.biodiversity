@@ -25,7 +25,11 @@ an sf object.}
 \item{what}{A character vector indicating if the files are vector or raster
 files.}
 
-\item{opts}{Either a list or a character vector with opening options (-oo)
+\item{oo}{Either a list or a character vector with opening options (-oo)
+of the respective GDAL driver. A list must have equal length of the
+input sources, a vector will be recycled.}
+
+\item{co}{Either a list or a character vector with creation options (-co)
 of the respective GDAL driver. A list must have equal length of the
 input sources, a vector will be recycled.}
 }

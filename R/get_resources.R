@@ -61,7 +61,7 @@ get_resources <- function(x, ...) {
   args[["outdir"]] <- outdir
 
   resource <- try(do.call(fun, args = as.list(args)))
-  resource <- .check_footprints(resource, name)
+  resource <- .check_footprints(resource, resource_name)
 
   resource <- .fetch_resource(
     resource = resource,

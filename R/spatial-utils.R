@@ -142,6 +142,9 @@
 #' server. It can also be used for files on the local file system.
 #'
 #' @param path A length 1 character vector with a GDAL readable file path.
+#' @param oo Either a list or a character vector with opening options (-oo)
+#'   of the respective GDAL driver. A list must have equal length of the
+#'   input sources, a vector will be recycled.
 #' @param what A character vector indicating if the resource is a vector or raster file.
 #'
 #' @return A logical, TRUE if the file exists, FALSE if it does not.
@@ -203,7 +206,10 @@ spds_exists <- function(path, oo = NULL, what = c("vector", "raster")) {
 #'   an sf object.
 #' @param what A character vector indicating if the files are vector or raster
 #'   files.
-#' @param opts Either a list or a character vector with opening options (-oo)
+#' @param oo Either a list or a character vector with opening options (-oo)
+#'   of the respective GDAL driver. A list must have equal length of the
+#'   input sources, a vector will be recycled.
+#' @param co Either a list or a character vector with creation options (-co)
 #'   of the respective GDAL driver. A list must have equal length of the
 #'   input sources, a vector will be recycled.
 #'
