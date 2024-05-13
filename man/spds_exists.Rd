@@ -40,3 +40,4 @@ spds_exists(ras, what = "raster")
 spds_exists("not-here.gpkg", what = "vector")
 
 }
+\keyword{utils}

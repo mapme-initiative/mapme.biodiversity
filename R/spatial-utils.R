@@ -148,6 +148,7 @@
 #' @param what A character vector indicating if the resource is a vector or raster file.
 #'
 #' @return A logical, TRUE if the file exists, FALSE if it does not.
+#' @keywords utils
 #' @export
 #'
 #' @examples
@@ -215,6 +216,7 @@ spds_exists <- function(path, oo = NULL, what = c("vector", "raster")) {
 #'
 #' @return An sf object with a the files sources and the geometry indicating
 #'   their spatial footprint.
+#' @keywords utils
 #' @export
 #'
 #' @examples

@@ -58,3 +58,4 @@ make_footprints(vec, what = "vector")
 ras <- system.file("ex/elev.tif", package = "terra")
 make_footprints(ras, what = "raster")
 }
+\keyword{utils}
