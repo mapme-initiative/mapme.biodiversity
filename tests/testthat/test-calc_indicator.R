@@ -360,14 +360,18 @@ test_that(".read_vector works", {
 
 
 test_that(".check_single_asset works correctly", {
-  expect_warning(out <- .check_single_asset(NA))
+  asset <- st_read(system.file("extdata", "burundi.gpkg", package = "mapme.biodiversity"))
+  expect_equal(.check_single_asset(NULL, asset), NULL)
+  expect_warning(out <- .check_single_asset(try("a" + 1, silent = TRUE), asset),
+                 "indicator calculation")
   expect_equal(out, NULL)
-  expect_warning(out <- .check_single_asset(try("a" + 1, silent = TRUE)))
+  expect_warning(out <- .check_single_asset(c(1:10), asset),
+                 "Non-tibble")
   expect_equal(out, NULL)
-  expect_warning(out <- .check_single_asset(c(1:10)))
+  expect_warning(out <- .check_single_asset(tibble(), asset),
+                 "0-length tibble")
   expect_equal(out, NULL)
-  expect_warning(out <- .check_single_asset(tibble()))
-  expect_equal(out, NULL)
-  expect_warning(out <- .check_single_asset(tibble(a = 1)))
+  expect_warning(out <- .check_single_asset(tibble(a = 1), asset),
+                 "non-standard colnames")
   expect_equal(out, NULL)
 })
