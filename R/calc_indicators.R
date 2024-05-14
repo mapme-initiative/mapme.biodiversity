@@ -94,9 +94,17 @@ calc_indicators <- function(x, ...) {
                              chunk_size,
                              aggregation,
                              verbose) {
-  has_progressr <- check_namespace("progressr")
-  if (has_progressr) {
-    progress <- progressr::progressor(steps = nrow(x))
+
+  if (verbose) {
+    has_progressr <- check_namespace("progressr", error = FALSE)
+    if(has_progressr) {
+      n <- nrow(x)
+      p <- progressr::progressor(steps = n)
+      s <- 1
+      if (n > 1000) {
+        s <- round(n * 0.01)
+      }
+    }
   }
 
   furrr::future_map(seq_len(nrow(x)), function(i) {
@@ -109,8 +117,10 @@ calc_indicators <- function(x, ...) {
       .check_single_asset(result, chunk)
     })
 
-    if (has_progressr) {
-      progress()
+    if (verbose && has_progressr) {
+      if(i %% s == 0) {
+        p()
+      }
     }
 
     .combine_chunks(results, aggregation)
