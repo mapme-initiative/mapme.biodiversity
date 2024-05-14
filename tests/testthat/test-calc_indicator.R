@@ -360,7 +360,7 @@ test_that(".read_vector works", {
 
 
 test_that(".check_single_asset works correctly", {
-  asset <- st_read(system.file("extdata", "burundi.gpkg", package = "mapme.biodiversity"))
+  asset <- read_sf(system.file("extdata", "burundi.gpkg", package = "mapme.biodiversity"))
   expect_equal(.check_single_asset(NULL, asset), NULL)
   expect_warning(out <- .check_single_asset(try("a" + 1, silent = TRUE), asset),
                  "indicator calculation")
