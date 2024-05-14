@@ -1,4 +1,5 @@
 .ind_defaults <- c("x", "name", "mode", "aggregation", "verbose")
+.ind_cols <- c("datetime", "variable", "unit", "value")
 #' Compute specific indicators
 #'
 #' `calc_indicators()` calculates specific biodiversity indicators. A
@@ -253,37 +254,13 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL) {
 }
 
 .check_single_asset <- function(obj, asset = NULL, log_dir = tempdir()) {
-  dsn <- file.path(log_dir, paste0(Sys.Date(), "_mapme-error-assets.gpkg"))
-  
-  if (is.null(obj)) {
-    return(NULL)
-  }
-
-  if (inherits(obj, "try-error")) {
-    warning("Error occured during indicator calculation.\n", obj)
+  obj_names <- names(obj)
+  if (!inherits(obj, "tbl_df") || nrow(obj) == 0 || !identical(obj_names, .ind_cols)) {
+    dsn <- file.path(log_dir, paste0(Sys.Date(), "_mapme-error-assets.gpkg"))
+    warning(sprintf("Non-standard output for asset. Appending asset to %s", dsn))
     st_write(asset, dsn, append = TRUE, quiet = TRUE)
     return(NULL)
   }
-
-  if (!inherits(obj, "tbl_df")) {
-    warning("Non-tibble object was returned.\n", obj)
-    st_write(asset, dsn, append = TRUE, quiet = TRUE)
-    return(NULL)
-  }
-
-  if (nrow(obj) == 0) {
-    warning("0-length tibble was returned.")
-    st_write(asset, dsn, append = TRUE, quiet = TRUE)
-    return(NULL)
-  }
-
-  if (!identical(names(obj), c("datetime", "variable", "unit", "value"))) {
-    msg <- "Tibble with non-standard colnames was returned.\n"
-    warning(msg, head(obj))
-    st_write(asset, dsn, append = TRUE, quiet = TRUE)
-    return(NULL)
-  }
-
   obj
 }
 
@@ -382,6 +359,5 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL) {
       dplyr::summarise(value = agg(value, na.rm = TRUE)) %>%
       dplyr::ungroup()
   }
-
   data
 }

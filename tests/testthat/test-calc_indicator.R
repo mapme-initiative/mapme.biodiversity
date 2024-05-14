@@ -361,17 +361,16 @@ test_that(".read_vector works", {
 
 test_that(".check_single_asset works correctly", {
   asset <- read_sf(system.file("extdata", "burundi.gpkg", package = "mapme.biodiversity"))
-  expect_equal(.check_single_asset(NULL, asset), NULL)
-  expect_warning(out <- .check_single_asset(try("a" + 1, silent = TRUE), asset),
-                 "indicator calculation")
+  expect_warning(out <- .check_single_asset(NULL, asset))
   expect_equal(out, NULL)
-  expect_warning(out <- .check_single_asset(c(1:10), asset),
-                 "Non-tibble")
+  expect_warning(out <- .check_single_asset(try("a" + 1, silent = TRUE), asset))
   expect_equal(out, NULL)
-  expect_warning(out <- .check_single_asset(tibble(), asset),
-                 "0-length tibble")
+  expect_warning(out <- .check_single_asset(c(1:10), asset))
   expect_equal(out, NULL)
-  expect_warning(out <- .check_single_asset(tibble(a = 1), asset),
-                 "non-standard colnames")
+  expect_warning(out <- .check_single_asset(tibble(), asset))
   expect_equal(out, NULL)
+  expect_warning(out <- .check_single_asset(tibble(a = 1), asset))
+  expect_equal(out, NULL)
+  obj <- tibble(datetime = 1, variable = 1, unit = 1, value = 1)
+  expect_identical(.check_single_asset(obj, asset), obj)
 })
