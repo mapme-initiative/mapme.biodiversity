@@ -96,6 +96,7 @@ calc_indicators <- function(x, ...) {
                              aggregation,
                              verbose) {
 
+  assetid <- NULL
   if (verbose) {
     has_progressr <- check_namespace("progressr", error = FALSE)
     if(has_progressr) {
@@ -108,15 +109,15 @@ calc_indicators <- function(x, ...) {
     }
   }
 
-  furrr::future_map(seq_len(nrow(x)), function(i) {
-    asset <- .cast_to_polygon(x[i, ])
-    asset_chunked <- .chunk(asset, chunk_size)
+  assets <- dplyr::group_split(x, assetid)
 
-    results <- furrr::future_map(seq_len(nrow(asset_chunked)), function(j) {
-      chunk <- asset_chunked[j, ]
+  furrr::future_imap(assets, function(asset, i) {
+    chunks <- .chunk(asset, chunk_size)
+    results <- furrr::future_map(chunks, function(chunk) {
       result <- .process(chunk, fun, avail_resources, req_resources, verbose)
       .check_single_asset(result, chunk)
-    })
+    }, .options = furrr::furrr_options(seed = TRUE))
+    results <- .combine_chunks(results, aggregation)
 
     if (verbose && has_progressr) {
       if(i %% s == 0) {
@@ -124,7 +125,7 @@ calc_indicators <- function(x, ...) {
       }
     }
 
-    .combine_chunks(results, aggregation)
+    results
   }, .options = furrr::furrr_options(seed = TRUE))
 }
 
@@ -148,14 +149,6 @@ calc_indicators <- function(x, ...) {
 .process <- function(x, fun, avail_resources, req_resources, verbose) {
   resources <- prep_resources(x, avail_resources, req_resources)
   .compute(x, resources, fun, verbose)
-}
-
-.cast_to_polygon <- function(asset) {
-  if (st_geometry_type(asset) == "MULTIPOLYGON") {
-    stopifnot("assetid" %in% names(asset))
-    asset <- suppressWarnings(st_cast(asset, "POLYGON"))
-  }
-  asset
 }
 
 #' Prepare resources for an asset
@@ -274,11 +267,24 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL) {
 }
 
 .chunk <- function(x, chunk_size) {
-  purrr::map(1:nrow(x), function(i) {
-    .chunk_asset(x[i, ], chunk_size)
-  }) %>%
-    purrr::list_rbind() %>%
-    st_as_sf()
+  assetid <- NULL
+  area_bbox <- as.numeric(st_area(st_as_sfc(st_bbox(x)))) / 10000
+  if (area_bbox > chunk_size) {
+    x <- .cast_to_polygon(x)
+    x <- purrr::map(1:nrow(x), function(i) {
+      .chunk_asset(x[i, ], chunk_size)
+    })
+    x <- st_as_sf(purrr::list_rbind(x))
+  }
+  lapply(1:nrow(x), function(i) x[i, ])
+}
+
+.cast_to_polygon <- function(x) {
+  if (st_geometry_type(x) == "MULTIPOLYGON") {
+    stopifnot("assetid" %in% names(x))
+    x <- suppressWarnings(st_cast(x, "POLYGON"))
+  }
+  x
 }
 
 .chunk_asset <- function(x,
@@ -306,11 +312,9 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL) {
     out
   })
 
-  x_grid %>%
-    purrr::list_rbind() %>%
-    tibble::as_tibble() %>%
-    st_as_sf() %>%
-    st_transform(crs_org)
+  x_grid <- tibble::as_tibble(purrr::list_rbind(x_grid))
+  x_grid <- st_transform(st_as_sf(x_grid), crs_org)
+  x_grid
 }
 
 #' @importFrom stats sd var

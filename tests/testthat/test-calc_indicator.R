@@ -169,49 +169,53 @@ test_that(".add_indicator_column works correctly", {
   expect_true("new_indicator" %in% names(x))
 })
 
-test_that(
-  {
-    "chunking works correctly"
-  },
-  {
-    .clear_resources()
-    x <- read_sf(
-      system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-        package = "mapme.biodiversity"
-      )
+test_that("chunking works correctly", {
+  .clear_resources()
+  x <- read_sf(
+    system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+                package = "mapme.biodiversity"
     )
-    area_ha <- (as.numeric(st_area(x)) / 10000) / 5
-    expect_silent(x_chunked <- .chunk_asset(x, chunk_size = area_ha))
-    expect_equal(st_bbox(x), st_bbox(x_chunked))
-    expect_equal(st_area(x), sum(st_area(x_chunked)))
-    expect_equal(nrow(x_chunked), 24)
-    expect_equal(x, .chunk_asset(x, chunk_size = area_ha * 10))
+  )
+  area_ha <- (as.numeric(st_area(x)) / 10000) / 5
+  expect_silent(x_chunked <- .chunk_asset(x, chunk_size = area_ha))
+  expect_equal(st_bbox(x), st_bbox(x_chunked))
+  expect_equal(st_area(x), sum(st_area(x_chunked)))
+  expect_equal(nrow(x_chunked), 24)
+  expect_equal(x, .chunk_asset(x, chunk_size = area_ha * 10))
 
-    data <- tibble(
-      datetime = "2000-01-01",
-      variable = "test",
-      unit = "ha",
-      value = 1
-    )
+  data <- tibble(
+    datetime = "2000-01-01",
+    variable = "test",
+    unit = "ha",
+    value = 1
+  )
 
-    data <- lapply(1:10, function(i) {
-      if (i == 5) {
-        return(NULL)
-      }
-      data
-    })
-
-    expect_silent(data2 <- .combine_chunks(data, aggregation = "sum"))
-    expect_true(inherits(data2, "tbl_df"))
-    expect_equal(nrow(data2), 1)
-    expect_equal(data2[["value"]], 9)
-    vals <- c()
-    for (agg in available_stats) {
-      expect_silent(data3 <- .combine_chunks(data, aggregation = agg))
-      vals <- c(vals, data3[["value"]])
+  data <- lapply(1:10, function(i) {
+    if (i == 5) {
+      return(NULL)
     }
-    expect_equal(vals, c(1, 1, 0, 1, 1, 9, 0))
+    data
+  })
+
+  expect_silent(data2 <- .combine_chunks(data, aggregation = "sum"))
+  expect_true(inherits(data2, "tbl_df"))
+  expect_equal(nrow(data2), 1)
+  expect_equal(data2[["value"]], 9)
+  vals <- c()
+  for (agg in available_stats) {
+    expect_silent(data3 <- .combine_chunks(data, aggregation = agg))
+    vals <- c(vals, data3[["value"]])
   }
+  expect_equal(vals, c(1, 1, 0, 1, 1, 9, 0))
+
+  chunks <- .chunk(x, chunk_size = area_ha)
+  expect_true(inherits(chunks, "list"))
+  expect_equal(length(chunks), 24)
+  chunks <- .chunk(x, chunk_size = area_ha * 1000)
+  expect_true(inherits(chunks, "list"))
+  expect_equal(length(chunks), 1)
+  expect_equal(nrow(chunks[[1]]), 1)
+}
 )
 
 
