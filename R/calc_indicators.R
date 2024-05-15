@@ -248,12 +248,17 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL) {
   try(do.call(what = fun, args = args), silent = TRUE)
 }
 
-.check_single_asset <- function(obj, asset = NULL, log_dir = tempdir()) {
+.check_single_asset <- function(
+    obj,
+    asset = NULL,
+    log_dir = mapme_options()[["log_dir"]]) {
   obj_names <- names(obj)
   if (!inherits(obj, "tbl_df") || nrow(obj) == 0 || !identical(obj_names, .ind_cols)) {
-    dsn <- file.path(log_dir, paste0(Sys.Date(), "_mapme-error-assets.gpkg"))
-    warning(sprintf("Non-standard output for asset. Appending asset to %s", dsn))
-    st_write(asset, dsn, append = TRUE, quiet = TRUE)
+    warning(obj)
+    if (!is.null(log_dir) && !is.null(asset)) {
+      dsn <- file.path(log_dir, paste0(Sys.Date(), "_mapme-error-assets.gpkg"))
+      st_write(asset, dsn, append = TRUE, quiet = TRUE)
+    }
     return(NULL)
   }
   obj
