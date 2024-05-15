@@ -88,7 +88,7 @@
 }
 
 #### -------------------------Unexported utils------------------------------####
-.set_precision <- function(data, precision = 1e5) {
+.set_precision <- function(data, precision = 1e2) {
   crs <- st_crs(data)
   geoms <- st_geometry(data)
   geoms <- st_sfc(geoms, precision = precision)
@@ -213,6 +213,8 @@ spds_exists <- function(path, oo = NULL, what = c("vector", "raster")) {
 #' @param co Either a list or a character vector with creation options (-co)
 #'   of the respective GDAL driver. A list must have equal length of the
 #'   input sources, a vector will be recycled.
+#' @param precision A numeric indicating the precision of coordinates when
+#'   a binary round-trip is done (see `?sf::st_as_binary()`).
 #'
 #' @return An sf object with a the files sources and the geometry indicating
 #'   their spatial footprint.
@@ -232,11 +234,13 @@ make_footprints <- function(srcs = NULL,
                             filenames = if (inherits(srcs, "sf")) basename(srcs[["source"]]) else basename(srcs),
                             what = c("vector", "raster"),
                             oo = NULL,
-                            co = NULL) {
+                            co = NULL,
+                            precision = 1e5) {
   stopifnot(is.null(oo) || (inherits(oo, "list") | inherits(oo, "character")))
   stopifnot(is.null(co) || (inherits(co, "list") | inherits(co, "character")))
   stopifnot(inherits(srcs, "sf") | inherits(srcs, "character"))
   stopifnot(inherits(filenames, "character") | is.null(filenames))
+  stopifnot(is.numeric(precision) && length(precision) == 1)
 
   n <- ifelse(inherits(srcs, "sf"), nrow(srcs), length(srcs))
   if (length(filenames) != n) stop("filenames required to be of equal length of sources.")
@@ -268,6 +272,7 @@ make_footprints <- function(srcs = NULL,
   }
 
   srcs <- st_as_sf(tibble::as_tibble(srcs))
+  srcs <- .set_precision(srcs, precision)
   srcs[["location"]] <- srcs[["source"]]
   srcs[["type"]] <- what
   srcs[["filename"]] <- filenames
