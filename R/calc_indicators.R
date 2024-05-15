@@ -95,17 +95,17 @@ calc_indicators <- function(x, ...) {
                              chunk_size,
                              aggregation,
                              verbose) {
-
   assetid <- NULL
   if (verbose) {
     has_progressr <- check_namespace("progressr", error = FALSE)
-    if(has_progressr) {
+    if (has_progressr) {
       n <- nrow(x)
-      p <- progressr::progressor(steps = n)
       s <- 1
-      if (n > 1000) {
+      if (n > 100) {
         s <- round(n * 0.01)
+        n <- 100
       }
+      p <- progressr::progressor(n)
     }
   }
 
@@ -113,14 +113,16 @@ calc_indicators <- function(x, ...) {
 
   furrr::future_imap(assets, function(asset, i) {
     chunks <- .chunk(asset, chunk_size)
+
     results <- furrr::future_map(chunks, function(chunk) {
       result <- .process(chunk, fun, avail_resources, req_resources, verbose)
       .check_single_asset(result, chunk)
     }, .options = furrr::furrr_options(seed = TRUE))
+
     results <- .combine_chunks(results, aggregation)
 
     if (verbose && has_progressr) {
-      if(i %% s == 0) {
+      if (i %% s == 0) {
         p()
       }
     }
