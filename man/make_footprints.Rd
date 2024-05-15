@@ -9,7 +9,8 @@ make_footprints(
   filenames = if (inherits(srcs, "sf")) basename(srcs[["source"]]) else basename(srcs),
   what = c("vector", "raster"),
   oo = NULL,
-  co = NULL
+  co = NULL,
+  precision = 1e+05
 )
 }
 \arguments{
@@ -32,6 +33,9 @@ input sources, a vector will be recycled.}
 \item{co}{Either a list or a character vector with creation options (-co)
 of the respective GDAL driver. A list must have equal length of the
 input sources, a vector will be recycled.}
+
+\item{precision}{A numeric indicating the precision of coordinates when
+a binary round-trip is done (see \code{?sf::st_as_binary()}).}
 }
 \value{
 An sf object with a the files sources and the geometry indicating

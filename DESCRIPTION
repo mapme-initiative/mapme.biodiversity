@@ -38,6 +38,7 @@ RoxygenNote: 7.3.1
 Collate: 
     'register.R'
     'calc_biome.R'
+    'calc_burned_area.R'
     'calc_deforestation_drivers.R'
     'calc_drought_indicator.R'
     'calc_ecoregion.R'
@@ -73,6 +74,7 @@ Collate:
     'get_gfw_treecover.R'
     'get_gmw.R'
     'get_gsw.R'
+    'get_mcd64A1.R'
     'get_nasa_grace.R'
     'get_nasa_srtm.R'
     'get_nelson_et_al.R'
