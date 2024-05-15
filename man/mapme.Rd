@@ -9,7 +9,7 @@
 \alias{prep_resources}
 \title{Portfolio methods for mapme.biodiversity}
 \usage{
-mapme_options(..., outdir, chunk_size, verbose, aria_bin, testing)
+mapme_options(..., outdir, chunk_size, verbose, aria_bin, testing, log_dir)
 
 get_resources(x, ...)
 
@@ -32,6 +32,12 @@ downloads.}
 
 \item{testing}{A logical. Not to be set by users. Controls the behavior
 during automated test pipelines.}
+
+\item{log_dir}{A character path pointing toward a GDAL-writable destination
+used to log erroneous assets. Defaults to NULL, meaning that erroneous
+assets will not be serialized to disk. If specified, a GPKG named
+\code{file.path(log_dir, paste0(Sys.Date(), "_mapme-error-assets.gpkg"))} will
+be created and appended to in case of erroneous assets.}
 
 \item{x}{An \code{sf} object with features of type \code{"POLYGON"}}
 

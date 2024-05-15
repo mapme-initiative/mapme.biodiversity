@@ -104,8 +104,6 @@ calc_treecoverloss_emissions <- function(years = 2000:2020,
       min_size = min_size, coverage_area = TRUE, summarize_df = TRUE
     )
 
-    rm(gfw)
-    gc()
     gfw_stats %>%
       dplyr::mutate(
         datetime = as.Date(paste0(years, "-01-01")),

@@ -118,8 +118,6 @@ calc_treecover_area_and_emissions <- function(years = 2000:2020,
       min_size = min_size, coverage_area = TRUE, summarize_df = TRUE
     )
 
-    rm(gfw)
-    gc()
     gfw_stats %>%
       tidyr::pivot_longer(-years, names_to = "variable") %>%
       dplyr::mutate(

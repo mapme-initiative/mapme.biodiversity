@@ -202,24 +202,31 @@ download_or_skip <- function(urls = NULL,
 #' Checks if namespace is available
 #'
 #' Use this function if your resource/indicator function requires the
-#' namespace of a certain package to be available. An informative error
+#' namespace of a certain package to be available. An informative error/warning
 #' message is printed if that is not the case.
 #'
 #' @param pkg A character vector of length one indicating a package name
 #'   for which the namespace is tested
+#' @param error A logical indicating whether or not to promote missing namespace
+#'   to error. If FALSE, a warning is emitted.
 #'
 #' @return TRUE, invisible, if the namespace is available. An error message
-#'   otherwise.
+#'   if `error = TRUE`, FALSE and a warning otherwise.
 #' @keywords utils
 #' @export
-check_namespace <- function(pkg) {
+check_namespace <- function(pkg, error = TRUE) {
   if (!requireNamespace(pkg, quietly = TRUE)) {
     msg <- paste("R package '%s' required.\n",
       "Please intsall via `install.packages('%s')`",
       sep = ""
     )
     msg <- sprintf(msg, pkg, pkg)
-    stop(msg, .call = FALSE)
+    if (error) {
+      stop(msg, .call = FALSE)
+    } else {
+      warning(msg, .call = FALSE)
+      return(invisible(FALSE))
+    }
   }
   invisible(TRUE)
 }
