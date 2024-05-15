@@ -76,7 +76,7 @@ mapme_options <- function(..., outdir, chunk_size, verbose, aria_bin, testing, l
 
   if (!missing(log_dir)){
     stopifnot(is.null(log_dir) | (is.character(log_dir) && length(log_dir) == 1))
-    .pkgenv$logdir <- logdir
+    .pkgenv$log_dir <- log_dir
   }
 
   if (nargs() == 0) {
