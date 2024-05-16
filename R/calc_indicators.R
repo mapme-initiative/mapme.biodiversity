@@ -270,10 +270,6 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL) {
   })
   out <- do.call(c, out)
 
-  if (st_crs(x) != st_crs(out)) {
-    x <- st_transform(x, st_crs(out))
-  }
-
   # crop the source to the extent of the current polygon
   cropped <- try(terra::crop(out, terra::vect(x), snap = "out"))
   if (inherits(cropped, "try-error")) {

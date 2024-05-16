@@ -66,6 +66,7 @@ get_mcd64a1 <- function(years = 2000:2022) {
     })
     fps <- st_as_sf(purrr::list_rbind(fps))
     fps[["source"]] <- paste0("/vsicurl?pc_url_signing=yes&url=", urls)
+    fps <- st_transform(fps, "+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +R=6371007.181 +units=m +no_defs")
     make_footprints(
       fps,
       what = "raster",
