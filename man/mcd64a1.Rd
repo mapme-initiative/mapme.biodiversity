@@ -10,6 +10,10 @@
 \usage{
 get_mcd64a1(years = 2000:2022)
 }
+\arguments{
+\item{years}{Numeric vector of years to make the MCD64A1 product available
+for. Must be greater than the year 2000.}
+}
 \value{
 A function that returns a character of file paths.
 }
