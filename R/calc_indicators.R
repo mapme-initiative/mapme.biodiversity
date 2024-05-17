@@ -112,10 +112,10 @@ calc_indicators <- function(x, ...) {
   assets <- dplyr::group_split(x, assetid)
 
   furrr::future_imap(assets, function(asset, i) {
-    chunks <- try(.chunk(asset, chunk_size))
+    chunks <- try(.chunk(asset, chunk_size), silent = TRUE)
 
     if (inherits(chunks, "try-error")) {
-      .check_single_asset(chunks, asset)
+      return(.check_single_asset(chunks, asset))
     }
 
     results <- furrr::future_map(chunks, function(chunk) {
