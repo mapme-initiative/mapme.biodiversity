@@ -66,6 +66,20 @@ portfolio_long <- function(x, indicators = NULL, drop_geoms = FALSE) {
   }
   stopifnot(all(indicators %in% names(x)))
 
+  is_null <- sapply(indicators, function(ind) {
+    all(sapply(x[[ind]], is.null))
+  })
+
+  if (all(is_null)) {
+    warning("All indicator columns contained 'NULL'.")
+    return(x[, -which(names(x) %in% indicators)])
+  }
+
+  if (any(is_null)) {
+    x <- x[, -.indicators_col(x)[is_null]]
+    indicators <- names(.indicators_col(x))
+  }
+
   if (drop_geoms) x <- st_drop_geometry(x)
 
   ind_cols <- c("indicator", "datetime", "variable", "unit", "value")
@@ -101,6 +115,20 @@ portfolio_wide <- function(x, indicators = NULL, drop_geoms = FALSE) {
     indicators <- names(.indicators_col(x))
   }
   stopifnot(all(indicators %in% names(x)))
+
+  is_null <- sapply(indicators, function(ind) {
+    all(sapply(x[[ind]], is.null))
+  })
+
+  if (all(is_null)) {
+    warning("All indicator columns contained 'NULL'.")
+    return(x[, -which(names(x) %in% indicators)])
+  }
+
+  if (any(is_null)) {
+    x <- x[, -.indicators_col(x)[is_null]]
+    indicators <- names(.indicators_col(x))
+  }
 
   if (drop_geoms) x <- st_drop_geometry(x)
 
