@@ -50,8 +50,7 @@ get_resources <- function(x, ...) {
 #' @noRd
 .get_single_resource <- function(x = NULL,
                                  fun = NULL,
-                                 opts = mapme_options(),
-                                 gdal_conf = NULL) {
+                                 opts = mapme_options()) {
   force(x)
   args <- formals(fun)
   resource_name <- args[["name"]]
@@ -68,7 +67,8 @@ get_resources <- function(x, ...) {
     name = resource_name,
     type = args[["type"]],
     outdir = outdir,
-    gdal_conf = gdal_conf
+    verbose = opts[["verbose"]],
+    retries = opts[["retries"]]
   )
 
   resource <- .set_precision(resource)
@@ -119,41 +119,61 @@ get_resources <- function(x, ...) {
 .fetch_resource <- function(resource,
                             name = NULL,
                             type = NULL,
-                            outdir = NULL,
-                            verbose = TRUE,
-                            gdal_conf = NULL) {
+                            outdir = mapme_options()[["outdir"]],
+                            verbose = mapme_options()[["verbose"]],
+                            retries = mapme_options()[["retries"]]) {
   stopifnot(inherits(resource, "sf"))
   stopifnot(type %in% c("raster", "vector"))
 
-  msg <- paste0("Fetching resource ", name, "...")
-
-  if (!is.null(outdir)) {
-    resource[["destination"]] <- file.path(outdir, resource[["filename"]])
-
-    params <- list(
-      resource[["source"]],
-      resource[["destination"]],
-      resource[["oo"]],
-      resource[["co"]]
-    )
-
-    withr::with_envvar(gdal_conf, code = {
-      purrr::pwalk(params, function(src, dest, oo, co) {
-        .get_spds(
-          source = src,
-          destination = dest,
-          opts = c(oo, co),
-          what = type
-        )
-      },
-      .progress = ifelse(verbose, msg, NULL)
-      )
-    })
-
-    resource[["location"]] <- resource[["destination"]]
-    resource
-  } else {
+  if (is.null(outdir)) {
     resource[["location"]] <- resource[["source"]]
+
+  } else {
+
+    if (verbose) {
+      has_progressr <- check_namespace("progressr", error = FALSE)
+      if (has_progressr) {
+        n <- nrow(resource)
+        s <- 1
+        if (n > 100) {
+          s <- round(n * 0.01)
+          n <- 100
+        }
+        p <- progressr::progressor(n)
+      }
+    }
+
+    resource[["destination"]] <- file.path(outdir, resource[["filename"]])
+    resource <- lapply(1:nrow(resource), function(i) resource[i, ])
+
+    furrr::future_iwalk(resource, function(x, i) {
+      attempts <- 0
+
+      while(attempts < retries) {
+        attempts <- attempts + 1
+
+        is_available <- .get_spds(
+          source = x[["source"]],
+          destination = x[["destination"]],
+          opts = unlist(x[["co"]], x[["oo"]]),
+          what = x[["type"]]
+        )
+
+        if (is_available) {
+          attempts <- retries
+        }
+      }
+
+      if(verbose && has_progressr) {
+        p(message = sprintf("Fetching resource '%s'.", name))
+      }
+
+    }, .options = furrr::furrr_options(seed = TRUE))
+
+    resource <- st_as_sf(do.call(rbind, resource))
+    resource[["location"]] <- resource[["destination"]]
+    is_available <- sapply(resource[["location"]], spds_exists, what = type)
+    resource[is_available, ]
   }
   resource
 }

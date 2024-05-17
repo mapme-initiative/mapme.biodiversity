@@ -5,45 +5,51 @@
 .pkgenv$avail_resources <- list()
 
 .onLoad <- function(libname, pkgname) {
-  .pkgenv$outdir <- tempfile()
-  dir.create(.pkgenv$outdir, showWarnings = FALSE)
-  .pkgenv$log_dir <- NULL
-  .pkgenv$verbose <- TRUE
-  .pkgenv$testing <- FALSE
-  .pkgenv$chunk_size <- 100000
+  outdir <- tempfile()
+  dir.create(outdir, showWarnings = FALSE)
+  mapme_options(
+    outdir = outdir,
+    chunk_size = 10000,
+    retries = 3,
+    log_dir = NULL,
+    verbose = TRUE
+  )
   invisible()
 }
 
 #' Portfolio methods for mapme.biodiversity
 #'
 #' `mapme_options()` sets default options for mapme.biodiversity to control the
-#' behavior of downstream functions.
-#' Mainly, the output path as well as the temporal directory for intermediate
-#' files can be set. Additionally, the verbosity can be set. The testing options
-#' should not be set by users, as it controls the behavior of the package during
-#' automated test pipelines. Might be extended by other options in the future.
+#' behavior of downstream functions. Mainly, the output path as well as the
+#' chunk size (in ha), can be set. Additionally, the verbosity can be set and
+#' the path to a log directory can be controlled. Might be extended by other
+#' options in the future.
 #'
 #' @param ... ignored
 #' @param outdir A length one character indicating the output path.
 #' @param chunk_size A numeric of length one giving the maximum chunk area in ha.
-#'   Defaults to 100,000 ha.
+#'   Defaults to 100,000 ha. It refers to the area of an asset's bounding box.
+#'   If it lies above the value `chunk_size`, splitting and chunking is considered.
+#'   An asset will be processes as-is with an bounding box area below the specified
+#'   value.
+#' @param retries A numeric of length one indicating the number or re-tries
+#'   the package should attempt to make a resource available. Defaults to 3.
 #' @param verbose A logical, indicating if informative messages should be printed.
-#' @param testing A logical. Not to be set by users. Controls the behavior
-#'   during automated test pipelines.
 #' @param log_dir A character path pointing toward a GDAL-writable destination
 #'   used to log erroneous assets. Defaults to NULL, meaning that erroneous
 #'   assets will not be serialized to disk. If specified, a GPKG named
 #'   `file.path(log_dir, paste0(Sys.Date(), "_mapme-error-assets.gpkg"))` will
 #'   be created and appended to in case of erroneous assets.
-#' @return `mapme_options()` returns a list of options if no arguments are specified. Otherwise sets
-#'   matching arguments to new values in the package's internal environment.
+#' @return `mapme_options()` returns a list of options if no arguments are
+#'   specified. Otherwise sets matching arguments to new values in the package's
+#'   internal environment.
 #' @name mapme
 #' @export
 #'
 #' @examples
 #' library(mapme.biodiversity)
 #' mapme_options()
-mapme_options <- function(..., outdir, chunk_size, verbose, testing, log_dir) {
+mapme_options <- function(..., outdir, chunk_size, retries, verbose, log_dir) {
   if (!missing(outdir)) {
     stopifnot(is.null(outdir) | (is.character(outdir) && length(outdir) == 1))
     .pkgenv$outdir <- outdir
@@ -54,14 +60,14 @@ mapme_options <- function(..., outdir, chunk_size, verbose, testing, log_dir) {
     .pkgenv$chunk_size <- chunk_size
   }
 
+  if(!missing(retries)){
+    stopifnot(length(retries) == 1 && is.numeric(retries))
+    .pkgenv$retries <- retries
+  }
+
   if (!missing(verbose)) {
     stopifnot(is.logical(verbose))
     .pkgenv$verbose <- verbose
-  }
-
-  if (!missing(testing)) {
-    stopifnot(is.logical(testing))
-    .pkgenv$testing <- testing
   }
 
   if (!missing(log_dir)){
@@ -73,8 +79,8 @@ mapme_options <- function(..., outdir, chunk_size, verbose, testing, log_dir) {
     return(list(
       outdir = .pkgenv$outdir,
       chunk_size = .pkgenv$chunk_size,
+      retries = .pkgenv$retries,
       verbose = .pkgenv$verbose,
-      testing = .pkgenv$testing,
       log_dir = .pkgenv$log_dir
     ))
   }
@@ -101,7 +107,8 @@ mapme_options <- function(..., outdir, chunk_size, verbose, testing, log_dir) {
 #'   'vector' or 'raster'.
 #' @param source Optional, preferably a URL where the data is found.
 #'
-#' @return `register_resource()` is called for the side-effect of registering a resource.
+#' @return `register_resource()` is called for the side-effect of registering a
+#'   resource.
 #' @name resources
 #' @export
 #'
