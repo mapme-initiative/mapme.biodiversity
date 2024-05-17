@@ -35,8 +35,8 @@ write_portfolio <- function(x,
   }
 
   transformer <- switch(format,
-    long = portfolio_long,
-    wide = portfolio_wide
+                        long = portfolio_long,
+                        wide = portfolio_wide
   )
 
   data <- transformer(x)
@@ -66,13 +66,18 @@ portfolio_long <- function(x, indicators = NULL, drop_geoms = FALSE) {
   }
   stopifnot(all(indicators %in% names(x)))
 
-  is_null <- all(sapply(indicators, function(ind) {
+  is_null <- sapply(indicators, function(ind) {
     all(sapply(x[[ind]], is.null))
-  }))
+  })
 
-  if(is_null) {
-    message("All indicator columns contained 'NULL'.")
-    return(invisible(x))
+  if(all(is_null)) {
+    warning("All indicator columns contained 'NULL'.")
+    return(x[ ,-which(names(x) %in% indicators)])
+  }
+
+  if(any(is_null)){
+    x <- x[ ,-.indicators_col(x)[is_null]]
+    indicators <- names(.indicators_col(x))
   }
 
   if (drop_geoms) x <- st_drop_geometry(x)
@@ -111,13 +116,18 @@ portfolio_wide <- function(x, indicators = NULL, drop_geoms = FALSE) {
   }
   stopifnot(all(indicators %in% names(x)))
 
-  is_null <- all(sapply(indicators, function(ind) {
+  is_null <- sapply(indicators, function(ind) {
     all(sapply(x[[ind]], is.null))
-  }))
+  })
 
-  if(is_null) {
-    message("All indicator columns contained 'NULL'.")
-    return(invisible(x))
+  if(all(is_null)) {
+    warning("All indicator columns contained 'NULL'.")
+    return(x[ ,-which(names(x) %in% indicators)])
+  }
+
+  if(any(is_null)){
+    x <- x[ ,-.indicators_col(x)[is_null]]
+    indicators <- names(.indicators_col(x))
   }
 
   if (drop_geoms) x <- st_drop_geometry(x)
@@ -162,8 +172,8 @@ portfolio_wide <- function(x, indicators = NULL, drop_geoms = FALSE) {
   }
   if ("assetid" %in% names(x) && verbose) {
     msg <- paste("Found a column named 'assetid'.",
-      "Overwritting its values with a unique identifier.",
-      sep = " "
+                 "Overwritting its values with a unique identifier.",
+                 sep = " "
     )
     message(msg)
   }
@@ -176,8 +186,8 @@ portfolio_wide <- function(x, indicators = NULL, drop_geoms = FALSE) {
   is_sf <- inherits(x, "sf")
   if (is_sf && length(inds) == 1) {
     msg <- paste("No calculated indicators have been found.",
-      "Cannot write as a portfolio.",
-      sep = " "
+                 "Cannot write as a portfolio.",
+                 sep = " "
     )
     stop(msg)
   }

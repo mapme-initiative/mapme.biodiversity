@@ -115,7 +115,9 @@ test_that("portfolio helpers work as expected", {
   expect_true(all(c(vars[1:2], "biome2") %in% names(out)))
 
   x$biome <- list(NULL)
+  expect_silent(portfolio_long(x))
+  expect_silent(portfolio_wide(x))
   x$biome2 <- list(NULL)
-  expect_message(portfolio_long(x), "All indicator columns contained 'NULL'.")
-  expect_message(portfolio_wide(x), "All indicator columns contained 'NULL'.")
+  expect_warning(portfolio_long(x), "All indicator columns contained 'NULL'.")
+  expect_warning(portfolio_wide(x), "All indicator columns contained 'NULL'.")
 })
