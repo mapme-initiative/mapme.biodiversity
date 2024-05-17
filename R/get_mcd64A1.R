@@ -30,7 +30,7 @@
 get_mcd64a1 <- function(years = 2000:2022) {
   check_namespace("rstac")
   now <- as.numeric(format(Sys.Date(), "%Y"))
-  years <- check_available_years(years, c(2000:now))
+  years <- check_available_years(years, c(2000:now), "mcd64a1")
 
   function(x,
            name = "mcd64a1",
