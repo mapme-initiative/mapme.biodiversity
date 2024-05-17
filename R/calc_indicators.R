@@ -112,7 +112,11 @@ calc_indicators <- function(x, ...) {
   assets <- dplyr::group_split(x, assetid)
 
   furrr::future_imap(assets, function(asset, i) {
-    chunks <- .chunk(asset, chunk_size)
+    try(chunks <- .chunk(asset, chunk_size))
+
+    if (inherits(chunks, "try-error")) {
+      .check_single_asset(chunks, asset)
+    }
 
     results <- furrr::future_map(chunks, function(chunk) {
       resources <- prep_resources(chunk, avail_resources, req_resources)
