@@ -314,6 +314,7 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL) {
 }
 
 .read_raster <- function(x, tindex) {
+  x <- st_as_sfc(st_bbox(x))
   if (st_crs(x) != st_crs(tindex)) {
     x <- st_transform(x, st_crs(tindex))
   }
