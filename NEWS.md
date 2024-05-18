@@ -1,5 +1,9 @@
 # mapme.biodiversity (development version)
 
+## Bug fixes
+
+- fixes bug with wrong tile paths returned by `get_gfw_emissions()`
+
 ## Breaking changes
 
 - introduces a standardized output format for indicators, see #240 for
@@ -32,6 +36,7 @@
 - `chirps` and `nasa_grace` resources updated
 - check for internet connectivity can now be disabled via environment variable
   `mapme_check_connection` (#262)
+  
 # mapme.biodiversity 0.6.0
 
 ## Breaking changes
