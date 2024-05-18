@@ -1,135 +1,3 @@
-#### -------------------------Vector footprint------------------------------####
-.vector_footprint <- function(src, oo = NULL) {
-  layers_info <- .vector_info(src, oo)
-  if (is.null(layers_info)) {
-    return(NULL)
-  }
-
-  bboxs <- purrr::map_vec(layers_info, .vector_bbox)
-  bbox <- st_as_sf(st_union(bboxs))
-  st_geometry(bbox) <- "geometry"
-  bbox["source"] <- src
-  bbox
-}
-
-.vector_info <- function(src, oo) {
-  stopifnot(is.character(src) && length(src) == 1)
-  stopifnot(is.null(oo) || is.character(oo))
-
-  info <- sf::gdal_utils(
-    "ogrinfo",
-    source = src,
-    options = c("-json", "-so", "-ro", "-nomd", "-nocount", oo),
-    quiet = TRUE
-  )
-
-  if (length(info) == 0) {
-    return(NULL)
-  }
-
-  info <- jsonlite::parse_json(info)
-  info[["layers"]]
-}
-
-.vector_bbox <- function(layer) {
-  crs <- layer[["geometryFields"]][[1]][["coordinateSystem"]][["wkt"]]
-  crs <- st_crs(crs)
-  bbox <- as.numeric(layer[["geometryFields"]][[1]][["extent"]])
-  names(bbox) <- c("xmin", "ymin", "xmax", "ymax")
-  st_as_sfc(st_bbox(bbox, crs = crs))
-}
-
-#### -------------------------Raster footprint------------------------------####
-.raster_footprint <- function(src, oo = NULL) {
-  info <- .raster_info(src, oo)
-  if (is.null(info)) {
-    return(NULL)
-  }
-  bbox <- .raster_bbox(info)
-  bbox[["source"]] <- src
-  bbox
-}
-
-.raster_info <- function(src, oo = NULL) {
-  stopifnot(is.character(src) && length(src) == 1)
-  stopifnot(is.null(oo) || is.character(oo))
-
-  info <- sf::gdal_utils(
-    "gdalinfo",
-    source = src,
-    options = c("-json", "-norat", "-noct", "-nomd", oo),
-    quiet = TRUE
-  )
-
-  if (length(info) == 0) {
-    return(NULL)
-  }
-
-  jsonlite::parse_json(info)
-}
-
-.raster_bbox <- function(info) {
-  crs <- st_crs(info[["coordinateSystem"]][["wkt"]])
-  poly <- jsonlite::toJSON(info[["wgs84Extent"]], auto_unbox = TRUE)
-  bbox <- st_read(poly, quiet = TRUE)
-  bbox <- st_transform(bbox, crs)
-
-  if (st_is_empty(bbox)) {
-    coords <- info[["cornerCoordinates"]]
-    bbox <- st_bbox(c(
-      xmin = coords$lowerLeft[[1]],
-      xmax = coords$upperRight[[1]],
-      ymin = coords$lowerLeft[[2]],
-      ymax = coords$upperLeft[[2]]
-    ), crs = crs)
-    bbox <- st_as_sf(st_as_sfc(bbox))
-  }
-  bbox
-}
-
-#### -------------------------Unexported utils------------------------------####
-.set_precision <- function(data, precision = 1e2) {
-  crs <- st_crs(data)
-  geoms <- st_geometry(data)
-  geoms <- st_sfc(geoms, precision = precision)
-  geoms_binary <- st_as_binary(geoms)
-  geoms <- st_as_sfc(geoms_binary)
-  st_geometry(data) <- geoms
-  st_geometry(data) <- "geometry"
-  st_crs(data) <- crs
-  .geom_last(data)
-}
-
-
-.get_spds <- function(source = NULL,
-                      destination = NULL,
-                      opts = NULL,
-                      what = c("vector", "raster")) {
-  what <- match.arg(what)
-  stopifnot(is.character(source) && length(source) == 1)
-  stopifnot(is.character(destination) && length(destination) == 1)
-  stopifnot(is.null(opts) || is.character(opts))
-  if (is.null(opts)) opts <- character(0)
-
-  does_exist <- spds_exists(destination)
-  if (does_exist) {
-    return(TRUE)
-  }
-
-  util <- switch(what,
-    vector = "vectortranslate",
-    raster = "translate"
-  )
-  try(sf::gdal_utils(
-    util = util,
-    source = source,
-    destination = destination,
-    options = opts
-  ))
-
-  return(spds_exists(destination))
-}
-
 #### -------------------------Exported utils------------------------------####
 
 #' Check if a spatial data sets exists
@@ -280,4 +148,303 @@ make_footprints <- function(srcs = NULL,
   srcs[["co"]] <- co
   st_geometry(srcs) <- "geometry"
   srcs[, c("filename", "location", "type", "oo", "co", "source")]
+}
+
+#' Prepare resources for an asset
+#'
+#' This function reads and crops available resources to the extent of a single
+#' asset. Specific resources can be queried. If not supplied (the default), all
+#' available resources will be prepared.
+#'
+#' @param avail_resources A list object of available resources. If NULL (the default),
+#'   the available resources will automatically be determined.
+#' @param resources A character vector with the resources to be prepared. If it
+#'   it is NULL (the default) all available resources will be prepared.
+#'
+#' @return `prep_resources()` returns a list with prepared vector and raster
+#'   resources as `sf` and `SpatRaster`-objects.
+#' @name mapme
+#' @export
+prep_resources <- function(x, avail_resources = NULL, resources = NULL) {
+  stopifnot(nrow(x) == 1)
+
+  if (is.null(avail_resources)) avail_resources <- .avail_resources()
+  if (length(avail_resources) == 0) {
+    return(NULL)
+  }
+  if (is.null(resources)) resources <- names(avail_resources)
+  if (!any(resources %in% names(avail_resources))) {
+    stop("Some requested resources are not available.")
+  }
+
+  out <- purrr::map(resources, function(resource) {
+    resource <- avail_resources[[resource]]
+    resource_type <- unique(resource[["type"]])
+    reader <- switch(resource_type,
+      raster = .read_raster,
+      vector = .read_vector,
+      stop(sprintf("Resource type '%s' currently not supported", resource_type))
+    )
+    reader(x, resource)
+  })
+  names(out) <- resources
+  out
+}
+
+
+#### -------------------------Vector Utils------------------------------####
+.vector_footprint <- function(src, oo = NULL) {
+  layers_info <- .vector_info(src, oo)
+  if (is.null(layers_info)) {
+    return(NULL)
+  }
+
+  bboxs <- purrr::map_vec(layers_info, .vector_bbox)
+  bbox <- st_as_sf(st_union(bboxs))
+  st_geometry(bbox) <- "geometry"
+  bbox["source"] <- src
+  bbox
+}
+
+.vector_info <- function(src, oo) {
+  stopifnot(is.character(src) && length(src) == 1)
+  stopifnot(is.null(oo) || is.character(oo))
+
+  info <- sf::gdal_utils(
+    "ogrinfo",
+    source = src,
+    options = c("-json", "-so", "-ro", "-nomd", "-nocount", oo),
+    quiet = TRUE
+  )
+
+  if (length(info) == 0) {
+    return(NULL)
+  }
+
+  info <- jsonlite::parse_json(info)
+  info[["layers"]]
+}
+
+.vector_bbox <- function(layer) {
+  crs <- layer[["geometryFields"]][[1]][["coordinateSystem"]][["wkt"]]
+  crs <- st_crs(crs)
+  bbox <- as.numeric(layer[["geometryFields"]][[1]][["extent"]])
+  names(bbox) <- c("xmin", "ymin", "xmax", "ymax")
+  st_as_sfc(st_bbox(bbox, crs = crs))
+}
+
+.read_vector <- function(x, tindex) {
+  matches <- .get_intersection(x, tindex)
+
+  if (nrow(matches) == 0) {
+    warning("No intersection with asset.")
+    return(NULL)
+  }
+
+  paths <- matches[["location"]]
+
+  vectors <- purrr::map(paths, function(path) {
+    tmp <- try(read_sf(path, wkt_filter = st_as_text(st_as_sfc(st_bbox(x)))), silent = TRUE)
+    if (inherits(tmp, "try-error")) {
+      warning(tmp)
+      return(NULL)
+    }
+    if (nrow(tmp) == 0) {
+      return(NULL)
+    }
+    tmp
+  })
+
+  is_null <- unlist(lapply(vectors, is.null))
+  vectors <- vectors[!is_null]
+  if (length(vectors) == 0) {
+    return(NULL)
+  }
+  names(vectors) <- matches[["filename"]][!is_null]
+  vectors
+}
+
+
+#### -------------------------Raster Utils------------------------------####
+.raster_footprint <- function(src, oo = NULL) {
+  info <- .raster_info(src, oo)
+  if (is.null(info)) {
+    return(NULL)
+  }
+  bbox <- .raster_bbox(info)
+  bbox[["source"]] <- src
+  bbox
+}
+
+.raster_info <- function(src, oo = NULL) {
+  stopifnot(is.character(src) && length(src) == 1)
+  stopifnot(is.null(oo) || is.character(oo))
+
+  info <- sf::gdal_utils(
+    "gdalinfo",
+    source = src,
+    options = c("-json", "-norat", "-noct", "-nomd", oo),
+    quiet = TRUE
+  )
+
+  if (length(info) == 0) {
+    return(NULL)
+  }
+
+  jsonlite::parse_json(info)
+}
+
+.raster_bbox <- function(info) {
+  crs <- st_crs(info[["coordinateSystem"]][["wkt"]])
+  poly <- jsonlite::toJSON(info[["wgs84Extent"]], auto_unbox = TRUE)
+  bbox <- st_read(poly, quiet = TRUE)
+  bbox <- st_transform(bbox, crs)
+
+  if (st_is_empty(bbox)) {
+    coords <- info[["cornerCoordinates"]]
+    bbox <- st_bbox(c(
+      xmin = coords$lowerLeft[[1]],
+      xmax = coords$upperRight[[1]],
+      ymin = coords$lowerLeft[[2]],
+      ymax = coords$upperLeft[[2]]
+    ), crs = crs)
+    bbox <- st_as_sf(st_as_sfc(bbox))
+  }
+  bbox
+}
+
+.read_raster <- function(x, tindex) {
+  if (st_crs(x) != st_crs(tindex)) {
+    x <- st_transform(x, st_crs(tindex))
+  }
+
+  matches <- .get_intersection(x, tindex)
+
+  if (nrow(matches) == 0) {
+    warning("No intersection with asset.")
+    return(NULL)
+  }
+
+  geoms <- matches[["geometry"]]
+  unique_geoms <- unique(geoms)
+  grouped_geoms <- match(geoms, unique_geoms)
+  names(grouped_geoms) <- matches[["location"]]
+  grouped_geoms <- sort(grouped_geoms)
+
+  n_tiles <- length(unique(grouped_geoms))
+  n_timesteps <- unique(table(grouped_geoms))
+
+  if (length(n_timesteps) > 1) {
+    stop("Did not find equal number of tiles per timestep.")
+  }
+
+  out <- lapply(1:n_timesteps, function(i) {
+    index <- rep(FALSE, n_timesteps)
+    index[i] <- TRUE
+    filenames <- names(grouped_geoms[index])
+    layer_name <- tools::file_path_sans_ext(basename(filenames[1]))
+    vrt_name <- tempfile(pattern = sprintf("vrt_%s", layer_name), fileext = ".vrt")
+    tmp <- terra::vrt(filenames, filename = vrt_name)
+    names(tmp) <- layer_name
+    tmp
+  })
+  out <- do.call(c, out)
+
+  # crop the source to the extent of the current polygon
+  cropped <- try(terra::crop(out, terra::vect(x), snap = "out"))
+  if (inherits(cropped, "try-error")) {
+    warning(as.character(cropped))
+    return(NULL)
+  }
+  cropped
+}
+
+#### -------------------------Unexported utils------------------------------####
+.set_precision <- function(data, precision = 1e2) {
+  crs <- st_crs(data)
+  geoms <- st_geometry(data)
+  geoms <- st_sfc(geoms, precision = precision)
+  geoms_binary <- st_as_binary(geoms)
+  geoms <- st_as_sfc(geoms_binary)
+  st_geometry(data) <- geoms
+  st_geometry(data) <- "geometry"
+  st_crs(data) <- crs
+  .geom_last(data)
+}
+
+
+.get_spds <- function(source = NULL,
+                      destination = NULL,
+                      opts = NULL,
+                      what = c("vector", "raster")) {
+  what <- match.arg(what)
+  stopifnot(is.character(source) && length(source) == 1)
+  stopifnot(is.character(destination) && length(destination) == 1)
+  stopifnot(is.null(opts) || is.character(opts))
+  if (is.null(opts)) opts <- character(0)
+
+  does_exist <- spds_exists(destination)
+  if (does_exist) {
+    return(TRUE)
+  }
+
+  util <- switch(what,
+    vector = "vectortranslate",
+    raster = "translate"
+  )
+  try(sf::gdal_utils(
+    util = util,
+    source = source,
+    destination = destination,
+    options = opts
+  ))
+
+  return(spds_exists(destination))
+}
+
+.get_intersection <- function(x, tindex) {
+  org <- sf::sf_use_s2()
+  suppressMessages(sf::sf_use_s2(FALSE))
+  on.exit(suppressMessages(sf::sf_use_s2(org)))
+
+  suppressMessages(targets <- st_intersects(x, tindex, sparse = FALSE))
+  tindex[which(colSums(targets) > 0), ]
+}
+
+.cast_to_polygon <- function(x) {
+  if (st_geometry_type(x) == "MULTIPOLYGON") {
+    stopifnot("assetid" %in% names(x))
+    x <- suppressWarnings(st_cast(x, "POLYGON"))
+  }
+  x
+}
+
+.chunk_asset <- function(x,
+                         chunk_size = mapme_options()[["chunk_size"]]) {
+  area <- as.numeric(st_area(x)) / 10000 # to ha
+  crs_org <- st_crs(x)
+  if (area < chunk_size) {
+    return(x)
+  }
+  if (st_is_longlat(x)) {
+    crs <- "+proj=laea +lon_0=%s +lat_0=%s +ellps=WGS84 +no_defs"
+    coords <- suppressWarnings(as.numeric(st_coordinates(st_centroid(x))))
+    x <- st_transform(x, sprintf(crs, coords[1], coords[2]))
+  }
+  size <- sqrt(chunk_size * 10000) # to meters
+
+  x_grid <- st_make_grid(x, cellsize = c(size, size))
+  x_grid <- suppressWarnings(st_intersection(x, x_grid))
+
+  x_grid <- purrr::map(1:nrow(x_grid), function(i) {
+    out <- try(suppressWarnings(st_cast(x_grid[i, ], "POLYGON")), silent = TRUE)
+    if (inherits(out, "try-error")) {
+      return(NULL)
+    }
+    out
+  })
+
+  x_grid <- tibble::as_tibble(purrr::list_rbind(x_grid))
+  x_grid <- st_transform(st_as_sf(x_grid), crs_org)
+  x_grid
 }
