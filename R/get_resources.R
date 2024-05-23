@@ -127,9 +127,7 @@ get_resources <- function(x, ...) {
 
   if (is.null(outdir)) {
     resource[["location"]] <- resource[["source"]]
-
   } else {
-
     if (verbose) {
       has_progressr <- check_namespace("progressr", error = FALSE)
       if (has_progressr) {
@@ -149,7 +147,7 @@ get_resources <- function(x, ...) {
     furrr::future_iwalk(resource, function(x, i) {
       attempts <- 0
 
-      while(attempts < retries) {
+      while (attempts < retries) {
         attempts <- attempts + 1
 
         is_available <- .get_spds(
@@ -164,11 +162,12 @@ get_resources <- function(x, ...) {
         }
       }
 
-      if(verbose && has_progressr) {
-        p(message = sprintf("Fetching resource '%s'.", name))
+      if (verbose && has_progressr) {
+        if (i %% s == 0) {
+          p(message = sprintf("Fetching resource '%s'.", name))
+        }
       }
-
-    }, .options = furrr::furrr_options(seed = TRUE))
+    }, .options = furrr::furrr_options(seed = TRUE, chunk_size = 1L))
 
     resource <- st_as_sf(do.call(rbind, resource))
     resource[["location"]] <- resource[["destination"]]
