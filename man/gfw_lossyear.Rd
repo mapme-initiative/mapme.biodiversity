@@ -8,11 +8,11 @@
 \url{https://data.globalforestwatch.org/documents/tree-cover-loss/explore}
 }
 \usage{
-get_gfw_lossyear(version = "GFC-2022-v1.10")
+get_gfw_lossyear(version = "GFC-2023-v1.11")
 }
 \arguments{
 \item{version}{The version of the dataset to download. Defaults to
-"GFC-2022-v1.10". Check \code{mapme.biodiversity:::.available_gfw_versions()}
+"GFC-2023-v1.11". Check \code{mapme.biodiversity:::.available_gfw_versions()}
 to get a list of available versions}
 }
 \value{

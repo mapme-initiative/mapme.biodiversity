@@ -6,7 +6,7 @@
 \title{Calculate treeloss statistics}
 \usage{
 calc_treecover_area_and_emissions(
-  years = 2000:2020,
+  years = 2000:2023,
   min_size = 10,
   min_cover = 35
 )
@@ -60,8 +60,8 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
 ) \%>\%
   read_sf() \%>\%
   get_resources(
-    get_gfw_treecover(version = "GFC-2020-v1.8"),
-    get_gfw_lossyear(version = "GFC-2020-v1.8"),
+    get_gfw_treecover(version = "GFC-2023-v1.11"),
+    get_gfw_lossyear(version = "GFC-2023-v1.11"),
     get_gfw_emissions()
   ) \%>\%
   calc_indicators(

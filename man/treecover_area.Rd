@@ -5,7 +5,7 @@
 \alias{calc_treecover_area}
 \title{Calculate treecover statistics}
 \usage{
-calc_treecover_area(years = 2000:2020, min_size = 10, min_cover = 35)
+calc_treecover_area(years = 2000:2023, min_size = 10, min_cover = 35)
 }
 \arguments{
 \item{years}{A numeric vector with the years for which to calculate treecover
@@ -53,8 +53,8 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
 ) \%>\%
   read_sf() \%>\%
   get_resources(
-    get_gfw_treecover(version = "GFC-2022-v1.10"),
-    get_gfw_lossyear(version = "GFC-2022-v1.10")
+    get_gfw_treecover(version = "GFC-2023-v1.11"),
+    get_gfw_lossyear(version = "GFC-2023-v1.11")
   ) \%>\%
   calc_indicators(calc_treecover_area(years = 2016:2017, min_size = 1, min_cover = 30)) \%>\%
   portfolio_long()
