@@ -40,15 +40,15 @@
 #' ) %>%
 #'   read_sf() %>%
 #'   get_resources(
-#'     get_gfw_treecover(version = "GFC-2022-v1.10"),
-#'     get_gfw_lossyear(version = "GFC-2022-v1.10")
+#'     get_gfw_treecover(version = "GFC-2023-v1.11"),
+#'     get_gfw_lossyear(version = "GFC-2023-v1.11")
 #'   ) %>%
 #'   calc_indicators(calc_treecover_area(years = 2016:2017, min_size = 1, min_cover = 30)) %>%
 #'   portfolio_long()
 #'
 #' aoi
 #' }
-calc_treecover_area <- function(years = 2000:2020,
+calc_treecover_area <- function(years = 2000:2023,
                                 min_size = 10,
                                 min_cover = 35) {
   check_namespace("exactextractr")
@@ -137,7 +137,7 @@ calc_treecover_area <- function(years = 2000:2020,
 
 .sum_gfw <- function(data, what = "coverage_area") {
   # calculate loss area by year
-  df <- data.frame(years = 2000:2022, var = 0)
+  df <- data.frame(years = 2000:2023, var = 0)
   names(df)[2] <- what
   my_sum <- by(data[[what]], data[["lossyear"]], sum, na.rm = TRUE)
   sum_years <- as.numeric(names(my_sum))
