@@ -11,7 +11,7 @@
 #
 #' @name gfw_treecover
 #' @param version The version of the dataset to download. Defaults to
-#'   "GFC-2022-v1.10". Check mapme.biodiversity:::.available_gfw_versions()
+#'   "GFC-2023-v1.11". Check mapme.biodiversity:::.available_gfw_versions()
 #'   to get a list of available versions
 #' @keywords resource
 #' @returns A function that returns a character of file paths.
@@ -23,7 +23,7 @@
 #' @source \url{https://data.globalforestwatch.org/documents/tree-cover-2000/explore}
 #' @include register.R
 #' @export
-get_gfw_treecover <- function(version = "GFC-2022-v1.10") {
+get_gfw_treecover <- function(version = "GFC-2023-v1.11") {
   version <- .check_gfw_version(version)
 
   function(x,
@@ -65,7 +65,7 @@ get_gfw_treecover <- function(version = "GFC-2022-v1.10") {
   c(
     "GFC-2015-v1.3", "GFC-2016-v1.4", "GFC-2017-v1.5",
     "GFC-2018-v1.6", "GFC-2019-v1.7", "GFC-2020-v1.8",
-    "GFC-2021-v1.9", "GFC-2022-v1.10"
+    "GFC-2021-v1.9", "GFC-2022-v1.10", "GFC-2023-v1.11"
   )
 }
 
