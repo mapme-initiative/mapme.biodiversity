@@ -8,11 +8,11 @@
 \url{https://data.globalforestwatch.org/documents/tree-cover-2000/explore}
 }
 \usage{
-get_gfw_treecover(version = "GFC-2022-v1.10")
+get_gfw_treecover(version = "GFC-2023-v1.11")
 }
 \arguments{
 \item{version}{The version of the dataset to download. Defaults to
-"GFC-2022-v1.10". Check mapme.biodiversity:::.available_gfw_versions()
+"GFC-2023-v1.11". Check mapme.biodiversity:::.available_gfw_versions()
 to get a list of available versions}
 }
 \value{
