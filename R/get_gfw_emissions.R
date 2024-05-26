@@ -35,9 +35,9 @@ get_gfw_emissions <- function() {
            testing = mapme_options()[["testing"]]) {
     index_file <- system.file("extdata", "greenhouse_index.geosjon", package = "mapme.biodiversity")
     spatialindex <- st_read(index_file, quiet = TRUE)
-    tile_ids <- unique(unlist(st_intersects(x, spatialindex)))
-    tile_ids <- spatialindex$tile_id[tile_ids]
-    urls <- as.character(spatialindex$Mg_CO2e_px_download[tile_ids])
+    row_ids <- unique(unlist(st_intersects(x, spatialindex)))
+    tile_ids <- spatialindex$tile_id[row_ids]
+    urls <- as.character(spatialindex$Mg_CO2e_px_download[row_ids])
     filenames <- file.path(
       outdir,
       sprintf("gfw_forest_carbon_gross_emissions_Mg_CO2e_px_%s.tif", tile_ids)
