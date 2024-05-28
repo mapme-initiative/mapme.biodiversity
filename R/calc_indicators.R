@@ -115,7 +115,8 @@ calc_indicators <- function(x, ...) {
     chunks <- .chunk(asset, chunk_size)
 
     results <- furrr::future_map(chunks, function(chunk) {
-      result <- .process(chunk, fun, avail_resources, req_resources, verbose)
+      resources <- prep_resources(chunk, avail_resources, req_resources)
+      result <- .compute(chunk, resources, fun, verbose)
       .check_single_asset(result, chunk)
     }, .options = furrr::furrr_options(seed = TRUE))
 
@@ -138,7 +139,9 @@ calc_indicators <- function(x, ...) {
                                  chunk_size,
                                  aggregation,
                                  verbose) {
-  results <- .process(x, fun, avail_resources, req_resources, verbose)
+  x_bbox <- st_as_sf(st_as_sfc(st_bbox(x)))
+  resources <- prep_resources(x_bbox, avail_resources, req_resources)
+  results <- .compute(x, resources, fun, verbose)
   if (!inherits(results, "list")) {
     stop("Expected output for processing mode 'portfolio' is a list.")
   }
@@ -147,12 +150,6 @@ calc_indicators <- function(x, ...) {
   })
   results
 }
-
-.process <- function(x, fun, avail_resources, req_resources, verbose) {
-  resources <- prep_resources(x, avail_resources, req_resources)
-  .compute(x, resources, fun, verbose)
-}
-
 #' Prepare resources for an asset
 #'
 #' This function reads and crops available resources to the extent of a single
@@ -248,10 +245,9 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL) {
   try(do.call(what = fun, args = args), silent = TRUE)
 }
 
-.check_single_asset <- function(
-    obj,
-    asset = NULL,
-    log_dir = mapme_options()[["log_dir"]]) {
+.check_single_asset <- function(obj,
+                                asset = NULL,
+                                log_dir = mapme_options()[["log_dir"]]) {
   obj_names <- names(obj)
   if (!inherits(obj, "tbl_df") || nrow(obj) == 0 || !identical(obj_names, .ind_cols)) {
     warning(obj)
