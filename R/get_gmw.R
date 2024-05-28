@@ -21,8 +21,8 @@
 #' @source \url{https://data.unep-wcmc.org/datasets/45}
 #' @include register.R
 #' @export
-get_gmw <- function(years = c(1996, 2007:2010, 2015:2017, 2019:2020)) {
-  avail_years <- c(1996, 2007:2010, 2015:2017, 2019:2020)
+get_gmw <- function(years = c(1996, 2007:2010, 2015:2020)) {
+  avail_years <- c(1996, 2007:2010, 2015:2020)
   years <- check_available_years(years, avail_years, "gmw")
 
   function(x,
