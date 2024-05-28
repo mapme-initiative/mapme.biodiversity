@@ -120,12 +120,18 @@ fire events per year and instrument.</p>
 <span class="r-in"><span>  <span class="fu"><a href="mapme.html">get_resources</a></span><span class="op">(</span><span class="fu"><a href="nasa_firms.html">get_nasa_firms</a></span><span class="op">(</span>years <span class="op">=</span> <span class="fl">2021</span>, instrument <span class="op">=</span> <span class="st">"VIIRS"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="mapme.html">calc_indicators</a></span><span class="op">(</span><span class="fu">calc_active_fire_counts</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="portfolio.html">portfolio_long</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error in curl::curl_fetch_memory(url, handle = handle) : </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Timeout was reached: [firms.modaps.eosdis.nasa.gov] Failed to connect to firms.modaps.eosdis.nasa.gov port 443 after 5257 ms: Connection timed out</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in .get_single_resource(x, fun):</span> Download for resource nasa_firms failed. Returning unmodified portfolio object.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">aoi</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'aoi' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 10 fields</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POLYGON</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  WGS 84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 11</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   WDPAID NAME  DESIG_ENG ISO3  assetid indicator datetime   variable unit  value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">478</span>140 Sier… National… DOM         1 active_f… 2021-01-01 viirs_f… count    21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1 more variable: geom &lt;POLYGON [°]&gt;</span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
