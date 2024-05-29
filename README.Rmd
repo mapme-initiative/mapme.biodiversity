@@ -116,8 +116,8 @@ mapme_options(
 aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
   sf::read_sf() %>%
   get_resources(
-    get_gfw_treecover(version = "GFC-2020-v1.8"),
-    get_gfw_lossyear(version = "GFC-2020-v1.8"),
+    get_gfw_treecover(version = "GFC-2023-v1.11"),
+    get_gfw_lossyear(version = "GFC-2023-v1.11"),
     get_gfw_emissions()
   ) %>%
   calc_indicators(calc_treecover_area_and_emissions(years = 2016:2017, min_size = 1, min_cover = 30)) %>%

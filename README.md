@@ -165,8 +165,8 @@ mapme_options(
 aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
   sf::read_sf() %>%
   get_resources(
-    get_gfw_treecover(version = "GFC-2020-v1.8"),
-    get_gfw_lossyear(version = "GFC-2020-v1.8"),
+    get_gfw_treecover(version = "GFC-2023-v1.11"),
+    get_gfw_lossyear(version = "GFC-2023-v1.11"),
     get_gfw_emissions()
   ) %>%
   calc_indicators(calc_treecover_area_and_emissions(years = 2016:2017, min_size = 1, min_cover = 30)) %>%
@@ -183,10 +183,10 @@ aoi
     ## # A tibble: 4 × 11
     ##   WDPAID NAME  DESIG_ENG ISO3  assetid indicator datetime   variable unit  value
     ##    <dbl> <chr> <chr>     <chr>   <int> <chr>     <date>     <chr>    <chr> <dbl>
-    ## 1 478140 Sier… National… DOM         1 treecove… 2016-01-01 emissio… Mg    2400 
-    ## 2 478140 Sier… National… DOM         1 treecove… 2016-01-01 treecov… ha    2360.
-    ## 3 478140 Sier… National… DOM         1 treecove… 2017-01-01 emissio… Mg    2839 
-    ## 4 478140 Sier… National… DOM         1 treecove… 2017-01-01 treecov… ha    2348.
+    ## 1 478140 Sier… National… DOM         1 treecove… 2016-01-01 emissio… Mg    4296.
+    ## 2 478140 Sier… National… DOM         1 treecove… 2016-01-01 treecov… ha    2370.
+    ## 3 478140 Sier… National… DOM         1 treecove… 2017-01-01 emissio… Mg    4970.
+    ## 4 478140 Sier… National… DOM         1 treecove… 2017-01-01 treecov… ha    2358.
     ## # ℹ 1 more variable: geom <POLYGON [°]>
 
 ## A note on parallel computing
