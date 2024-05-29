@@ -217,7 +217,7 @@ download_or_skip <- function(urls = NULL,
 check_namespace <- function(pkg, error = TRUE) {
   if (!requireNamespace(pkg, quietly = TRUE)) {
     msg <- paste("R package '%s' required.\n",
-      "Please intsall via `install.packages('%s')`",
+      "Please install via `install.packages('%s')`",
       sep = ""
     )
     msg <- sprintf(msg, pkg, pkg)
