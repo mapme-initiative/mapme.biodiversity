@@ -83,11 +83,23 @@ calc_treecover_area_and_emissions <- function(years = 2000:2023,
     # prepare gfw rasters
     gfw <- .gfw_prep_rasters(x, gfw_treecover, gfw_lossyear, gfw_emissions, min_cover)
 
+    # retrieves maximum lossyear value from layer name
+    max_year <- as.numeric(
+      gsub(
+        ".*GFC-([0-9]+)-.*", "\\1",
+        names(gfw_lossyear)
+      )
+    )
+
+    if (max_year < min(years)) {
+      return(NULL)
+    }
+
     gfw_stats <- exactextractr::exact_extract(
       gfw, x, function(data, min_size) {
         # retain only forest pixels and set area to ha
         data <- .prep_gfw_data(data, min_size)
-        losses <- .sum_gfw(data, "coverage_area")
+        losses <- .sum_gfw(data, "coverage_area", max_year)
         names(losses)[2] <- "loss"
         emissions <- .sum_gfw(data, "emissions")
 
