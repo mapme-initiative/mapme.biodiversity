@@ -27,15 +27,15 @@ test_that("get_resources works", {
   .clear_resources()
   aoi <- get_resources(
     aoi,
-    get_gfw_treecover(version = "GFC-2020-v1.8"),
-    get_gfw_lossyear(version = "GFC-2020-v1.8"),
+    get_gfw_treecover(version = "GFC-2023-v1.11"),
+    get_gfw_lossyear(version = "GFC-2023-v1.11"),
     get_gfw_emissions()
   )
 
   resources <- .avail_resources()
   expect_equal(names(resources), c("gfw_treecover", "gfw_lossyear", "gfw_emissions"))
   expect_message(
-    get_resources(aoi, get_gfw_treecover(version = "GFC-2020-v1.8")),
+    get_resources(aoi, get_gfw_treecover(version = "GFC-2023-v1.11")),
     "Resource 'gfw_treecover' is already available."
   )
 })

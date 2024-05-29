@@ -20,8 +20,8 @@ test_that("calc_indicator works", {
 
   x <- get_resources(
     x,
-    get_gfw_treecover(version = "GFC-2020-v1.8"),
-    get_gfw_lossyear(version = "GFC-2020-v1.8")
+    get_gfw_treecover(version = "GFC-2023-v1.11"),
+    get_gfw_lossyear(version = "GFC-2023-v1.11")
   )
 
   stat <- calc_indicators(
@@ -62,8 +62,8 @@ test_that("calc_indicator works with MULTIPOLYGON and chunking", {
 
   x <- get_resources(
     x,
-    get_gfw_treecover(version = "GFC-2020-v1.8"),
-    get_gfw_lossyear(version = "GFC-2020-v1.8")
+    get_gfw_treecover(version = "GFC-2023-v1.11"),
+    get_gfw_lossyear(version = "GFC-2023-v1.11")
   )
 
   stat <- calc_indicators(
@@ -100,15 +100,15 @@ test_that("Parallelization works", {
 
   # aoi <- get_resources(
   #   aoi,
-  #   get_gfw_treecover(version = "GFC-2020-v1.8"),
-  #   get_gfw_lossyear(version="GFC-2020-v1.8"))
+  #   get_gfw_treecover(version = "GFC-2023-v1.11"),
+  #   get_gfw_lossyear(version="GFC-2023-v1.11"))
 
   library(future)
   plan(multisession, workers = 2)
   stat <- get_resources(
     aoi,
-    get_gfw_treecover(version = "GFC-2020-v1.8"),
-    get_gfw_lossyear(version = "GFC-2020-v1.8")
+    get_gfw_treecover(version = "GFC-2023-v1.11"),
+    get_gfw_lossyear(version = "GFC-2023-v1.11")
   ) %>%
     calc_indicators(
       calc_treecover_area(years = 2000:2005, min_size = 5, min_cover = 30)
@@ -173,7 +173,7 @@ test_that("chunking works correctly", {
   .clear_resources()
   x <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-                package = "mapme.biodiversity"
+      package = "mapme.biodiversity"
     )
   )
   area_ha <- (as.numeric(st_area(x)) / 10000) / 5
@@ -215,8 +215,7 @@ test_that("chunking works correctly", {
   expect_true(inherits(chunks, "list"))
   expect_equal(length(chunks), 1)
   expect_equal(nrow(chunks[[1]]), 1)
-}
-)
+})
 
 
 test_that(".prep works correctly", {
@@ -245,8 +244,8 @@ test_that(".prep works correctly", {
 
   x <- get_resources(
     x,
-    get_gfw_treecover(version = "GFC-2020-v1.8"),
-    get_gfw_lossyear(version = "GFC-2020-v1.8")
+    get_gfw_treecover(version = "GFC-2023-v1.11"),
+    get_gfw_lossyear(version = "GFC-2023-v1.11")
   )
 
   available_resources <- .avail_resources()
