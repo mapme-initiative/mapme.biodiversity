@@ -380,8 +380,8 @@
 <span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"sierra_de_neiba_478140_2.gpkg"</span>, package <span class="op">=</span> <span class="st">"mapme.biodiversity"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="reference/mapme.html">get_resources</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="reference/gfw_treecover.html">get_gfw_treecover</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"GFC-2020-v1.8"</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="reference/gfw_lossyear.html">get_gfw_lossyear</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"GFC-2020-v1.8"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="reference/gfw_treecover.html">get_gfw_treecover</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"GFC-2023-v1.11"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="reference/gfw_lossyear.html">get_gfw_lossyear</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"GFC-2023-v1.11"</span><span class="op">)</span>,</span>
 <span>    <span class="fu"><a href="reference/gfw_emissions.html">get_gfw_emissions</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="reference/mapme.html">calc_indicators</a></span><span class="op">(</span><span class="fu"><a href="reference/treecover_area_and_emissions.html">calc_treecover_area_and_emissions</a></span><span class="op">(</span>years <span class="op">=</span> <span class="fl">2016</span><span class="op">:</span><span class="fl">2017</span>, min_size <span class="op">=</span> <span class="fl">1</span>, min_cover <span class="op">=</span> <span class="fl">30</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -396,10 +396,10 @@
 <span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="do">## # A tibble: 4 × 11</span></span>
 <span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="do">##   WDPAID NAME  DESIG_ENG ISO3  assetid indicator datetime   variable unit  value</span></span>
 <span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="do">##    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;     &lt;date&gt;     &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt;</span></span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="do">## 1 478140 Sier… National… DOM         1 treecove… 2016-01-01 emissio… Mg    2400 </span></span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="do">## 2 478140 Sier… National… DOM         1 treecove… 2016-01-01 treecov… ha    2360.</span></span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="do">## 3 478140 Sier… National… DOM         1 treecove… 2017-01-01 emissio… Mg    2839 </span></span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="do">## 4 478140 Sier… National… DOM         1 treecove… 2017-01-01 treecov… ha    2348.</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="do">## 1 478140 Sier… National… DOM         1 treecove… 2016-01-01 emissio… Mg    4296.</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="do">## 2 478140 Sier… National… DOM         1 treecove… 2016-01-01 treecov… ha    2370.</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="do">## 3 478140 Sier… National… DOM         1 treecove… 2017-01-01 emissio… Mg    4970.</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="do">## 4 478140 Sier… National… DOM         1 treecove… 2017-01-01 treecov… ha    2358.</span></span>
 <span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="do">## # ℹ 1 more variable: geom &lt;POLYGON [°]&gt;</span></span></code></pre></div>
 </div>
 <div class="section level2">
