@@ -77,12 +77,24 @@ calc_treecover_area <- function(years = 2000:2023,
     # prepare gfw rasters
     gfw <- .gfw_prep_rasters(x, gfw_treecover, gfw_lossyear, cover = min_cover)
 
+    # retrieves maximum lossyear value from layer name
+    max_year <- as.numeric(
+      gsub(
+        ".*GFC-([0-9]+)-.*", "\\1",
+        names(gfw_lossyear)
+      )
+    )
+
+    if (max_year < min(years)) {
+      return(NULL)
+    }
+
     # apply extraction routine
     gfw_stats <- exactextractr::exact_extract(
       gfw, x, function(data, min_size) {
         # retain only forest pixels and set area to ha
         data <- .prep_gfw_data(data, min_size)
-        losses <- .sum_gfw(data, "coverage_area")
+        losses <- .sum_gfw(data, "coverage_area", max_year)
         names(losses)[2] <- "loss"
         org_coverage <- sum(data[["coverage_area"]])
 
@@ -135,9 +147,9 @@ calc_treecover_area <- function(years = 2000:2023,
 }
 
 
-.sum_gfw <- function(data, what = "coverage_area") {
+.sum_gfw <- function(data, what = "coverage_area", max_year = 2023) {
   # calculate loss area by year
-  df <- data.frame(years = 2000:2023, var = 0)
+  df <- data.frame(years = 2000:max_year, var = 0)
   names(df)[2] <- what
   my_sum <- by(data[[what]], data[["lossyear"]], sum, na.rm = TRUE)
   sum_years <- as.numeric(names(my_sum))

@@ -39,4 +39,12 @@ test_that("treecover area and emissions works", {
   stats_treeloss <- tae(x, gfw_treecover, gfw_lossyear, gfw_emissions)
   stats_treeloss <- stats_treeloss[stats_treeloss$variable == "emissions", ]
   expect_equal(stats_treeloss$value[stats_treeloss$datetime == "2003-01-01"], 0)
+
+  years <- 2023:2024
+  te <- calc_treecoverloss_emissions(years, min_size, min_cover)
+  expect_equal(nrow(te(x, gfw_treecover, gfw_lossyear, gfw_emissions)), 1)
+
+  years <- 2024:2025
+  te <- calc_treecoverloss_emissions(years, min_size, min_cover)
+  expect_true(is.null(te(x, gfw_treecover, gfw_lossyear, gfw_emissions)))
 })
