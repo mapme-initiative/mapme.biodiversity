@@ -1,4 +1,5 @@
 test_that("deforestation drivers works", {
+  skip_on_cran()
   x <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
       package = "mapme.biodiversity"

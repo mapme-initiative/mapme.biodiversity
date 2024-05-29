@@ -83,7 +83,7 @@ test_that("Parallelization works", {
   library(future)
   plan(multisession, workers = 2)
   stat <- get_resources(
-    aoi,
+    x,
     get_gfw_treecover(version = "GFC-2023-v1.11"),
     get_gfw_lossyear(version = "GFC-2023-v1.11")
   ) %>%

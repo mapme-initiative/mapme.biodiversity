@@ -16,5 +16,5 @@ test_that(".get_gfw_treecover works", {
   expect_silent(.check_resource_fun(gt))
   expect_silent(fps <- gt(x))
   expect_silent(.check_footprints(fps))
-  expect_equal(fps$filename, "Hansen_GFC-2022-v1.10_treecover2000_20N_080W.tif")
+  expect_equal(fps$filename, "Hansen_GFC-2023-v1.11_treecover2000_20N_080W.tif")
 })
