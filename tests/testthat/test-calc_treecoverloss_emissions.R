@@ -9,8 +9,8 @@ test_that("emissions works", {
   mapme_options(outdir = outdir, verbose = FALSE)
   get_resources(
     x,
-    get_gfw_treecover(version = "GFC-2020-v1.8"),
-    get_gfw_lossyear(version = "GFC-2020-v1.8"),
+    get_gfw_treecover(version = "GFC-2023-v1.11"),
+    get_gfw_lossyear(version = "GFC-2023-v1.11"),
     get_gfw_emissions()
   )
   gfw_treecover <- prep_resources(x, resources = "gfw_treecover")[[1]]

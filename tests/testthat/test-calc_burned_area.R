@@ -1,4 +1,5 @@
 test_that("calc_burned_area works", {
+  skip_on_cran()
   x <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
       package = "mapme.biodiversity"

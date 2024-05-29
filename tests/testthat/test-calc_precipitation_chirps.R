@@ -1,4 +1,5 @@
 test_that("precipitation indicator works", {
+  skip_on_cran()
   x <- read_sf(
     system.file("extdata", "gfw_sample.gpkg",
       package = "mapme.biodiversity"
