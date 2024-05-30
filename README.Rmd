@@ -143,7 +143,7 @@ to 100,000 ha. Polygons larger than this threshold will be split into chunks
 of roughly the same size.
 
 Fine-control of parallel processing is given by using future topologies
-(find more information [here](https://cran.r-project.org/web/packages/future/vignettes/future-3-topologies.html)).
+(find more information [here](https://cran.r-project.org/package=future/vignettes/future-3-topologies.html)).
 To process all assets sequentially, but allow to spawn up to 4 workers to 
 process chunks in parallel you might specify:
 
