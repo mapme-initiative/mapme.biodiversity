@@ -304,7 +304,7 @@ for (gsw_statistic in .gsw_statistics) {
   register_resource(
     name = resource_name,
     description = .gsw_descr$desc[which(.gsw_descr$name == gsw_statistic)],
-    licence = "https://www.copernicus.eu/main/data-access/",
+    licence = "https://www.copernicus.eu/en/access-data",
     source = "https://global-surface-water.appspot.com/download",
     type = "raster"
   )

@@ -71,11 +71,11 @@ Below is a list of the resources currently supported by
 | gfw_emissions                    | Global Forest Watch - CO2 Emssions caused by forest cover loss                                       | CC-BY 4.0                                                                |
 | gfw_lossyear                     | Global Forest Watch - Year of forest cover loss occurence                                            | CC-BY 4.0                                                                |
 | gfw_treecover                    | Global Forest Watch - Percentage of canopy closure in 2000                                           | CC-BY 4.0                                                                |
-| global_surface_water_change      | Global Surface Water - Change of water occurrence intensity                                          | <https://www.copernicus.eu/main/data-access/>                            |
-| global_surface_water_occurrence  | Global Surface Water - Percentage of water occurrence                                                | <https://www.copernicus.eu/main/data-access/>                            |
-| global_surface_water_recurrence  | Global Surface Water - Percentage of water recurrence                                                | <https://www.copernicus.eu/main/data-access/>                            |
-| global_surface_water_seasonality | Global Surface Water - Seasonality of water occurrrence                                              | <https://www.copernicus.eu/main/data-access/>                            |
-| global_surface_water_transitions | Global Surface Water - Transition classes                                                            | <https://www.copernicus.eu/main/data-access/>                            |
+| global_surface_water_change      | Global Surface Water - Change of water occurrence intensity                                          | <https://www.copernicus.eu/en/access-data>                               |
+| global_surface_water_occurrence  | Global Surface Water - Percentage of water occurrence                                                | <https://www.copernicus.eu/en/access-data>                               |
+| global_surface_water_recurrence  | Global Surface Water - Percentage of water recurrence                                                | <https://www.copernicus.eu/en/access-data>                               |
+| global_surface_water_seasonality | Global Surface Water - Seasonality of water occurrrence                                              | <https://www.copernicus.eu/en/access-data>                               |
+| global_surface_water_transitions | Global Surface Water - Transition classes                                                            | <https://www.copernicus.eu/en/access-data>                               |
 | gmw                              | Global Mangrove Watch - Vector data of mangrove extent                                               | CC BY 4.0                                                                |
 | nasa_firms                       | NASA Fire Information for Resource Management System (FIRMS) - Global fire map data archive          | <https://www.earthdata.nasa.gov/learn/find-data/near-real-time/citation> |
 | nasa_grace                       | NASA Gravity Recovery And Climate Experiment (GRACE) - Measurments of Earth’s mass and water changes | <https://nasagrace.unl.edu/About.aspx>                                   |
@@ -206,7 +206,7 @@ split into chunks of roughly the same size.
 
 Fine-control of parallel processing is given by using future topologies
 (find more information
-[here](https://cran.r-project.org/web/packages/future/vignettes/future-3-topologies.html)).
+[here](https://cran.r-project.org/package=future/vignettes/future-3-topologies.html)).
 To process all assets sequentially, but allow to spawn up to 4 workers
 to process chunks in parallel you might specify:
 
