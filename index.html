@@ -162,27 +162,27 @@
 <tr class="odd">
 <td align="left">global_surface_water_change</td>
 <td align="left">Global Surface Water - Change of water occurrence intensity</td>
-<td align="left"><a href="https://www.copernicus.eu/main/data-access/" class="external-link uri">https://www.copernicus.eu/main/data-access/</a></td>
+<td align="left"><a href="https://www.copernicus.eu/en/access-data" class="external-link uri">https://www.copernicus.eu/en/access-data</a></td>
 </tr>
 <tr class="even">
 <td align="left">global_surface_water_occurrence</td>
 <td align="left">Global Surface Water - Percentage of water occurrence</td>
-<td align="left"><a href="https://www.copernicus.eu/main/data-access/" class="external-link uri">https://www.copernicus.eu/main/data-access/</a></td>
+<td align="left"><a href="https://www.copernicus.eu/en/access-data" class="external-link uri">https://www.copernicus.eu/en/access-data</a></td>
 </tr>
 <tr class="odd">
 <td align="left">global_surface_water_recurrence</td>
 <td align="left">Global Surface Water - Percentage of water recurrence</td>
-<td align="left"><a href="https://www.copernicus.eu/main/data-access/" class="external-link uri">https://www.copernicus.eu/main/data-access/</a></td>
+<td align="left"><a href="https://www.copernicus.eu/en/access-data" class="external-link uri">https://www.copernicus.eu/en/access-data</a></td>
 </tr>
 <tr class="even">
 <td align="left">global_surface_water_seasonality</td>
 <td align="left">Global Surface Water - Seasonality of water occurrrence</td>
-<td align="left"><a href="https://www.copernicus.eu/main/data-access/" class="external-link uri">https://www.copernicus.eu/main/data-access/</a></td>
+<td align="left"><a href="https://www.copernicus.eu/en/access-data" class="external-link uri">https://www.copernicus.eu/en/access-data</a></td>
 </tr>
 <tr class="odd">
 <td align="left">global_surface_water_transitions</td>
 <td align="left">Global Surface Water - Transition classes</td>
-<td align="left"><a href="https://www.copernicus.eu/main/data-access/" class="external-link uri">https://www.copernicus.eu/main/data-access/</a></td>
+<td align="left"><a href="https://www.copernicus.eu/en/access-data" class="external-link uri">https://www.copernicus.eu/en/access-data</a></td>
 </tr>
 <tr class="even">
 <td align="left">gmw</td>
@@ -407,7 +407,7 @@
 </h2>
 <p><a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> follows the parallel computing paradigm of the <a href="https://cran.r-project.org/package=future" class="external-link"><code>{future}</code></a> package. That means that you as a user are in the control if and how you would like to set up parallel processing. Since <code>{mapme.biodiversity} v0.7</code> supports parallel processing on a nested-level. The outer level applies parallel processing to the assets in a portfolio, the inner level to potential chunks for polygons that are larger than the specified chunks size or the single components of assets of type <code>MULTIPOLYGON</code>.</p>
 <p>The maximum chunk size is specified in hectares via <code><a href="reference/mapme.html">mapme_options()</a></code> and defaults to 100,000 ha. Polygons larger than this threshold will be split into chunks of roughly the same size.</p>
-<p>Fine-control of parallel processing is given by using future topologies (find more information <a href="https://cran.r-project.org/web/packages/future/vignettes/future-3-topologies.html" class="external-link">here</a>). To process all assets sequentially, but allow to spawn up to 4 workers to process chunks in parallel you might specify:</p>
+<p>Fine-control of parallel processing is given by using future topologies (find more information <a href="https://cran.r-project.org/package=future/vignettes/future-3-topologies.html" class="external-link">here</a>). To process all assets sequentially, but allow to spawn up to 4 workers to process chunks in parallel you might specify:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org" class="external-link">future</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">sequential</span>, <span class="fu"><a href="https://future.futureverse.org/reference/tweak.html" class="external-link">tweak</a></span><span class="op">(</span><span class="va">cluster</span>, workers <span class="op">=</span> <span class="fl">6</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
