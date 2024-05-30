@@ -87,7 +87,7 @@
 <li>changes the behavior of <code><a href="../reference/portfolio.html">write_portfolio()</a></code> to serialize portfolios to GDAL supported spatial formats in either long or wide format and deprecates <code>read_portfolio()</code>
 </li>
 <li>introduces option <code>chunk_size</code> to <code><a href="../reference/mapme.html">mapme_options()</a></code> to control the size for which polygons are split and processed in chunks</li>
-<li>allows assets of type <code>'MULTIPOLYGON'</code> and automatically combines the results</li>
+<li>allows assets of type <code>'MULTIPOLYGON'</code> and automatically combines the results based on an aggregation function</li>
 <li>indicator examples now use <code><a href="../reference/portfolio.html">portfolio_long()</a></code> instead of <code><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">tidyr::unnest()</a></code>
 </li>
 </ul></div>
@@ -99,6 +99,14 @@
 <li>
 <code>chirps</code> and <code>nasa_grace</code> resources updated</li>
 <li>check for internet connectivity can now be disabled via environment variable <code>mapme_check_connection</code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/262" class="external-link">#262</a>)</li>
+<li>
+<code>gfw_treecover</code> and <code>gfw_lossyear</code> resources updated to v1.11 (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/277" class="external-link">#277</a>, <a href="https://github.com/fBedecarrats" class="external-link">@fBedecarrats</a>)</li>
+<li>GFW indicators now automatically detect the maximum years based on the <code>gfw_lossyear</code> layer (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/273" class="external-link">#273</a>)</li>
+<li>drops <code>curl</code>, <code>stringr</code>, and <code>tidyselect</code> as dependencies</li>
+<li>moves <code>progressr</code> and <code>rvest</code> from <code>Imports</code> to <code>Suggests</code>
+</li>
+<li>drops <code>SPEI</code> from <code>Suggests</code>
+</li>
 </ul></div>
 </div>
     <div class="section level2">
