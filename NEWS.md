@@ -25,6 +25,7 @@
 - introduces option `chunk_size` to `mapme_options()` to control the size
   for which polygons are split and processed in chunks
 - allows assets of type `'MULTIPOLYGON'` and automatically combines the results
+  based on an aggregation function
 - indicator examples now use `portfolio_long()` instead of `tidyr::unnest()`
 
 ## Internal
@@ -36,6 +37,12 @@
 - `chirps` and `nasa_grace` resources updated
 - check for internet connectivity can now be disabled via environment variable
   `mapme_check_connection` (#262)
+- `gfw_treecover` and `gfw_lossyear` resources updated to v1.11 (#277, @fBedecarrats)
+- GFW indicators now automatically detect the maximum years based on the 
+  `gfw_lossyear` layer (#273)
+- drops `curl`, `stringr`, and `tidyselect` as dependencies
+- moves `progressr` and `rvest` from `Imports` to `Suggests`
+- drops `SPEI` from `Suggests`
   
 # mapme.biodiversity 0.6.0
 
