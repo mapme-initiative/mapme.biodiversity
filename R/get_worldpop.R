@@ -7,6 +7,11 @@
 #' The encoded cell value represents the total number of people in that particular
 #' grid cell.
 #'
+#' It may be required to increase the timeout option to successfully download
+#' theses WorldPop layers from their source location via e.g.
+#' `options(timeout = 600)`.
+#'
+#'
 #' @name worldpop
 #' @param years A numeric vector indicating the years for which to make the
 #'   resource available.
@@ -19,27 +24,63 @@
 get_worldpop <- function(years = 2000) {
   years <- check_available_years(years, c(2000:2020), "worldpop")
 
+  if (is.null(mapme_options()[["outdir"]])) {
+    warning(paste(
+      "Worldpop layers must be downloaded from the source location",
+      "irrespective if `outdir` was specified or not."
+    ))
+  }
+
   function(x,
            name = "worldpop",
            type = "raster",
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]],
            testing = mapme_options()[["testing"]]) {
-    urls <- unlist(sapply(years, function(year) .get_worldpop_url(year)))
-    bbox <- c(xmin = -180.00125, ymin = -71.99208, xmax = 179.99875, ymax = 83.99958)
-    tiles <- st_as_sfc(st_bbox(bbox, crs = "EPSG:4326"))
-    tiles <- st_as_sf(rep(tiles, length(urls)))
-    tiles[["source"]] <- urls
-    make_footprints(tiles,
+    srcs <- unlist(sapply(years, function(year) .get_worldpop_url(year)))
+    has_outdir <- !is.null(outdir)
+
+    if (has_outdir) {
+      dsts <- file.path(outdir, basename(srcs))
+    } else {
+      tmpdir <- tempfile()
+      dir.create(tmpdir)
+      dsts <- file.path(tmpdir, basename(srcs))
+    }
+
+    is_available <- purrr::map_lgl(dsts, spds_exists, what = "raster")
+    if (all(is_available)) {
+      return(make_footprints(dsts, what = "raster"))
+    }
+
+    purrr::walk2(srcs, dsts, function(src, dst) {
+      if (!spds_exists(dst)) {
+        # download original worldpop layer
+        tmp <- tempfile(fileext = ".tif")
+        download.file(src, tmp)
+
+        # translate to regular grid
+        sf::gdal_utils(
+          util = "translate",
+          source = tmp,
+          destination = dst,
+          options = c(
+            "-co", "COMPRESS=LZW",
+            "-co", "PREDICTOR=2",
+            "-ot", "Float32",
+            "-a_ullr", "-180.0", "84.0", "180.0", "-72.0"
+          )
+        )
+        file.remove(tmp)
+      }
+    })
+
+    make_footprints(dsts,
       what = "raster",
-      co = c(
-        "-a_ullr", "-180.00125 -71.99208 179.99875 83.99958",
-        "-co", "COMPRESS=LZW"
-      )
+      co = c("-co", "COMPRESS=LZW", "-ot", "Float32")
     )
   }
 }
-
 
 #' Helper function to construct population layer urls
 #'
@@ -52,7 +93,7 @@ get_worldpop <- function(years = 2000) {
   available_years <- c(2000:2020)
   if (target_year %in% available_years) {
     paste0(
-      "/vsicurl/https://data.worldpop.org/GIS/Population/Global_2000_2020/",
+      "https://data.worldpop.org/GIS/Population/Global_2000_2020/",
       target_year, "/0_Mosaicked/ppp_", target_year, "_1km_Aggregated.tif"
     )
   } else {
