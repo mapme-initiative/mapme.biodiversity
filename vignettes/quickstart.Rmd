@@ -227,7 +227,7 @@ plot(value ~ datetime, data,
 ```
 
 If you wish to change the layout of an portfolio, you can use `portfolio_long()`
-and `portfolio_wide()` (see the respective [online tutorial](file:///home/darius/Documents/git-repos/mapme/mapme.biodiversity/docs/articles/output-wide.html)). 
+and `portfolio_wide()` (see the respective [online tutorial](https://mapme-initiative.github.io/mapme.biodiversity/articles/output-wide.html)). 
 Especially for large portfolios, it is usually a good idea to keep the geometry 
 information in a separated variable to keep the size of the data object relatively 
 small.
