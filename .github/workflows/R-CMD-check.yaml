@@ -22,10 +22,7 @@ jobs:
         config:
           - {os: macOS-latest,   r: 'release', dev: false}
           - {os: windows-latest, r: 'release', dev: false}
-          - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release', dev: false}
           - {os: ubuntu-latest,   r: 'release', dev: false}
-          - {os: ubuntu-latest,   r: 'oldrel-1', dev: false}
-          - {os: ubuntu-latest,   r: 'release', dev: true}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -46,6 +43,20 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install gdal proj geos
+          
+      - name: "windows install spatial libraries"
+        if: runner.os == 'Windows'
+        run: |
+          choco install gdal
+          
+      - name: "ubuntu install spatial libraries"
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update -y && sudo apt-get install -y libgdal-dev
+          
+      - name: "install r-spatial deps from source"
+        run: |
+          Rscript -e "install.packages(c('sf', 'terra'), type = 'source')"
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
