@@ -1,6 +1,6 @@
 Package: mapme.biodiversity
 Title: Efficient Monitoring of Global Biodiversity Portfolios
-Version: 0.7.0
+Version: 0.7.0.9000
 Authors@R: c(
     person("Darius A.", "Görgen", , "darius2402@web.de", role = c("aut", "cre")),
     person("Om Prakash", "Bhandari", role = "aut")
