@@ -1,5 +1,7 @@
 # mapme.biodiversity (development version)
 
+# mapme.biodiversity 0.7.0
+
 ## Bug fixes
 
 - fixes bug with wrong tile paths returned by `get_gfw_emissions()`
