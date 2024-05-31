@@ -41,7 +41,7 @@
 #'   package = "mapme.biodiversity"
 #' ) %>%
 #'   read_sf() %>%
-#'   get_resources(get_worldpop(years = 2000:2010)) %>%
+#'   get_resources(get_worldpop(years = 2010:2020)) %>%
 #'   calc_indicators(
 #'     calc_population_count(engine = "extract", stats = c("sum", "median"))
 #'   ) %>%

@@ -8,7 +8,7 @@ test_that(".calc_population_count works", {
   outdir <- file.path(tempdir(), "mapme.data")
   .copy_resource_dir(outdir)
   mapme_options(outdir = outdir, verbose = FALSE)
-  get_resources(x, get_worldpop(years = 2000:2020))
+  get_resources(x, get_worldpop(years = 2010:2020))
   worldpop <- prep_resources(x)[["worldpop"]]
 
   cpc <- calc_population_count()

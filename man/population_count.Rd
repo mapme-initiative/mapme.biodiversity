@@ -53,7 +53,7 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   package = "mapme.biodiversity"
 ) \%>\%
   read_sf() \%>\%
-  get_resources(get_worldpop(years = 2000:2010)) \%>\%
+  get_resources(get_worldpop(years = 2010:2020)) \%>\%
   calc_indicators(
     calc_population_count(engine = "extract", stats = c("sum", "median"))
   ) \%>\%
