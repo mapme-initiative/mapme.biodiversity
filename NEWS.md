@@ -1,4 +1,4 @@
-# mapme.biodiversity (development version)
+# mapme.biodiversity 0.7.0
 
 ## Bug fixes
 
