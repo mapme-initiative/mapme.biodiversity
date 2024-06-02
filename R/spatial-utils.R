@@ -384,7 +384,7 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL) {
   stopifnot(is.null(opts) || is.character(opts))
   if (is.null(opts)) opts <- character(0)
 
-  does_exist <- spds_exists(destination)
+  does_exist <- spds_exists(destination, what = what)
   if (does_exist) {
     return(TRUE)
   }
@@ -400,7 +400,7 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL) {
     options = opts
   ))
 
-  return(spds_exists(destination))
+  return(spds_exists(destination, what = what))
 }
 
 .get_intersection <- function(x, tindex) {
