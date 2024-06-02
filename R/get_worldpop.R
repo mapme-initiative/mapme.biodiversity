@@ -54,7 +54,7 @@ get_worldpop <- function(years = 2000) {
     }
 
     purrr::walk2(srcs, dsts, function(src, dst) {
-      if (!spds_exists(dst)) {
+      if (!spds_exists(dst, what = "raster")) {
         # download original worldpop layer
         tmp <- tempfile(fileext = ".tif")
         download.file(src, tmp)
@@ -75,10 +75,7 @@ get_worldpop <- function(years = 2000) {
       }
     })
 
-    make_footprints(dsts,
-      what = "raster",
-      co = c("-co", "COMPRESS=LZW", "-ot", "Float32")
-    )
+    make_footprints(dsts, what = "raster")
   }
 }
 
