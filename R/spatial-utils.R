@@ -32,7 +32,7 @@
 #' # a non existing file
 #' spds_exists("not-here.gpkg", what = "vector")
 #'
-spds_exists <- function(path, oo = NULL, what = c("vector", "raster")) {
+spds_exists <- function(path, oo = character(0), what = c("vector", "raster")) {
   what <- match.arg(what)
   util <- switch(what,
     vector = "ogrinfo",
@@ -45,6 +45,10 @@ spds_exists <- function(path, oo = NULL, what = c("vector", "raster")) {
     ),
     raster = c("-json", "-nomd", "-norat", "-noct", oo)
   )
+  if (what == "vector" && sf::sf_extSoftVersion()[["GDAL"]] < "3.7.0") {
+    util <- "gdalinfo"
+    opts <- oo
+  }
   info <- sf::gdal_utils(
     util = util,
     source = path,
