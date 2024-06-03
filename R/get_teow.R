@@ -34,7 +34,10 @@ get_teow <- function() {
       "official/wwf_terr_ecos.shp",
       sep = ""
     )
-    make_footprints(url, filenames = "wwf_terr_ecos.gpkg", what = "vector")
+    bbox <- c(xmin = -180.0, ymin = -90.0, xmax = 180.0, ymax = 84.0)
+    tile <- st_as_sf(st_as_sfc(st_bbox(bbox, crs = "EPSG:4326")))
+    tile[["source"]] <- url
+    make_footprints(tile, filenames = "wwf_terr_ecos.gpkg", what = "vector")
   }
 }
 
