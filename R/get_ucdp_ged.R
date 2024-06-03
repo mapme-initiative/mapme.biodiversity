@@ -30,7 +30,6 @@
 #' Journal of Peace Research 59(4).
 #' \doi{10.1177/00223433221108428}
 #' @source \url{https://ucdp.uu.se/downloads/}
-#' @importFrom utils unzip read.csv
 #' @include register.R
 #' @export
 get_ucdp_ged <- function(version = "latest") {
@@ -64,13 +63,15 @@ get_ucdp_ged <- function(version = "latest") {
       }
     )
 
-    fps <- make_footprints(
-      url,
+    bbox <- c(xmin = -180.0, ymin = -90.0, xmax = 180.0, ymax = 90.0)
+    fps <- st_as_sf(st_as_sfc(st_bbox(bbox, crs = "EPSG:4326")))
+    fps[["source"]] <- url
+
+    make_footprints(
+      fps,
       filenames = gsub("zip", "gpkg", version_ged),
       what = "vector", oo = c("-oo", "GEOM_POSSIBLE_NAMES=geom_wkt")
     )
-    st_crs(fps) <- st_crs("EPSG:4326")
-    fps
   }
 }
 
