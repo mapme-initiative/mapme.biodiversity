@@ -92,8 +92,11 @@ spds_exists <- function(path, oo = NULL, what = c("vector", "raster")) {
 #' @examples
 #'
 #' # a vector resource
-#' vec <- system.file("shape/nc.shp", package = "sf")
-#' make_footprints(vec, what = "vector")
+#' # requires GDAL >= 3.7.0
+#' if (FALSE) {
+#'   vec <- system.file("shape/nc.shp", package = "sf")
+#'   make_footprints(vec, what = "vector")
+#' }
 #'
 #' # a raster resource
 #' ras <- system.file("ex/elev.tif", package = "terra")
