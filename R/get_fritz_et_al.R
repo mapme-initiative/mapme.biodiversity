@@ -50,7 +50,10 @@ get_fritz_et_al <- function(resolution = 100) {
     url <- ifelse(resolution == 100, urls[1], urls[2])
     filename <- paste0("geo_fritz_et_al_", resolution, "m.tif")
     co <- c("-of", "COG", "-ot", "Byte", "-co", "COMPRESS=LZW")
-    make_footprints(url, filename, what = "raster", co = co)
+    bbox <- c(xmin=-20037507, ymin=-3341359, xmax=20038000, ymax=3340559)
+    tile <- st_as_sf(st_as_sfc(st_bbox(bbox,  crs = "ESRI:54052")))
+    tile[["source"]] <- url
+    make_footprints(tile, filename, what = "raster", co = co)
   }
 }
 
