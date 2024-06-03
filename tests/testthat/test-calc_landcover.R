@@ -9,7 +9,7 @@ test_that("esa global landcover works", {
   outdir <- file.path(tempdir(), "mapme.data")
   .copy_resource_dir(outdir)
   mapme_options(outdir = outdir, verbose = FALSE)
-  get_resources(x, get_esalandcover(years = 2015:2019))
+  get_resources(x, get_esalandcover(years = 2015))
   esalandcover <- prep_resources(x)[["esalandcover"]][[1]]
 
   cl <- calc_landcover()

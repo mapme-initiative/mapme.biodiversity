@@ -57,7 +57,11 @@ get_esalandcover <- function(years = 2015:2019) {
     co <- c("-of", "COG", "-co", "COMPRESS=DEFLATE")
     fps <- make_footprints(fps, filenames = fps[["filename"]], what = "raster", co = co)
     does_exist <- purrr::map_lgl(fps[["source"]], spds_exists, what = "raster")
-    fps[does_exist, ]
+    fps <- fps[does_exist, ]
+    if (length(fps) == 0) {
+      return(NULL)
+    }
+    fps
   }
 }
 
