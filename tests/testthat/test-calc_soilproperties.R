@@ -1,15 +1,14 @@
 test_that("soilpoperties works", {
   skip_on_cran()
+  skip_if_not(Sys.getenv("USER") == "darius")
 
   x <- read_sf(
     system.file("extdata", "sierra_de_neiba_478140.gpkg",
       package = "mapme.biodiversity"
     )
   )
-  .clear_resources()
-  outdir <- file.path(tempdir(), "mapme.data")
-  .copy_resource_dir(outdir)
-  mapme_options(outdir = outdir, verbose = FALSE)
+
+  mapme_options(outdir = NULL, verbose = FALSE)
   suppressWarnings(get_resources(x, get_soilgrids(
     layer = "clay",
     depth = "0-5cm",

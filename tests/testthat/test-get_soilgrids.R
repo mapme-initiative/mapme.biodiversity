@@ -1,5 +1,6 @@
 test_that("get_soilgrids works", {
   skip_on_cran()
+  skip_if_not(Sys.getenv("USER") == "darius")
 
   expect_error(get_soilgrids(layers = "na", depths = .sg_depths, stats = .sg_stats))
   expect_error(get_soilgrids(layers = names(.sg_layers), depths = "na", stats = .sg_stats))
