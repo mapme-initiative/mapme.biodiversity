@@ -1,5 +1,4 @@
 test_that(".calc_fatalities works", {
-  skip_on_cran()
   x <- read_sf(
     system.file("extdata", "burundi.gpkg",
       package = "mapme.biodiversity"

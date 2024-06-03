@@ -7,7 +7,7 @@
 #' Older versions of the data set can be downloaded, but users are recommended
 #' to download the latest data set.
 #'
-#' The following versions are available
+#' The following versions are available:
 #' - 5.0
 #' - 17.1
 #' - 17.2
@@ -77,18 +77,8 @@ get_ucdp_ged <- function(version = "latest") {
 
 
 .ucdp_versions <- function() {
-  sections <- rvest::read_html("https://ucdp.uu.se/apidocs/") %>%
-    rvest::html_node("body") %>%
-    rvest::html_nodes("section")
-
-  labels <- sections %>% rvest::html_attr("aria-label")
-  target_p <- sections[which(labels == "Available datasets")]
-  content <- target_p %>% rvest::html_nodes("p")
-  versions <- rvest::html_text(content[2])
-  versions <- strsplit(x = versions, "\\s+")[[1]]
-  versions[versions != ""]
+  c("5.0", "17.1", "17.2", "18.1", "19.1", "20.1", "21.1", "22.1", "23.1", "24.1")
 }
-
 
 register_resource(
   name = "ucdp_ged",
