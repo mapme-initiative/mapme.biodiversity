@@ -123,7 +123,10 @@ get_soilgrids <- function(layers, depths, stats) {
 
     urls <- na.omit(urls)
     filenames <- basename(urls)
-    make_footprints(urls, filenames = filenames, what = "raster")
+    bbox <- c(xmin = -19949750, ymin = -6147500, xmax = 19861750, ymax = 8361000)
+    fps <- st_as_sf(st_as_sfc(st_bbox(bbox, crs = .sg_wkt)))
+    fps[["source"]] <- urls
+    make_footprints(fps, filenames = filenames, what = "raster")
   }
 }
 
@@ -211,6 +214,26 @@ get_soilgrids <- function(layers, depths, stats) {
   "60-100cm", "100-200cm", "0-30cm"
 )
 .sg_stats <- c("Q0.05", "Q0.5", "mean", "Q0.95")
+
+.sg_wkt <- 'PROJCRS["Interrupted_Goode_Homolosine",
+    BASEGEOGCRS["GCS_WGS_1984 ellipse",
+        DATUM["World Geodetic System 1984",
+            ELLIPSOID["WGS 84",6378137,298.257223563,
+                LENGTHUNIT["metre",1]],
+            ID["EPSG",6326]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["Degree",0.0174532925199433]]],
+    CONVERSION["unnamed",
+        METHOD["Interrupted Goode Homolosine"]],
+    CS[Cartesian,2],
+        AXIS["(E)",east,
+            ORDER[1],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]],
+        AXIS["(N)",north,
+            ORDER[2],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]]]'
 
 register_resource(
   name = "soilgrids",
