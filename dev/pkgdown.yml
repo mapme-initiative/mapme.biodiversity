@@ -1,0 +1,17 @@
+pandoc: 3.1.11
+pkgdown: 2.0.9
+pkgdown_sha: ~
+articles:
+  contributing: contributing.html
+  installation: installation.html
+  introduction: introduction.html
+  nasa-firms: nasa-firms.html
+  output-wide: output-wide.html
+  quickstart: quickstart.html
+  terminology: terminology.html
+  workflow: workflow.html
+last_built: 2024-06-06T06:39Z
+urls:
+  reference: https://mapme-initiative.github.io/mapme.biodiversity/reference
+  article: https://mapme-initiative.github.io/mapme.biodiversity/articles
+
