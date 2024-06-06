@@ -1,5 +1,7 @@
 url: https://mapme-initiative.github.io/mapme.biodiversity/
 destination: docs
+development:
+  mode: auto
 template:
   bootstrap: 5
   bslib:
