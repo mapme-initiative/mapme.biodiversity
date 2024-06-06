@@ -36,6 +36,8 @@ The following versions are available
 \item 20.1
 \item 21.1
 \item 22.1
+\item 23.1
+\item 24.1
 \item latest
 }
 }

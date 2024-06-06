@@ -30,7 +30,7 @@ test_that(".get_ucdp_ged works", {
   guc <- get_ucdp_ged(version = "latest")
   expect_equal(
     guc(aoi),
-    "ged231-csv.gpkg"
+    "ged241-csv.gpkg"
   )
 
   guc <- get_ucdp_ged(version = "21.1")
@@ -42,6 +42,6 @@ test_that(".get_ucdp_ged works", {
   skip_on_cran()
   expect_equal(
     .ucdp_versions(),
-    c("5.0", "17.1", "17.2", "18.1", "19.1", "652.1601.1911", "20.1", "21.1", "22.1", "23.1")
+    c("5.0", "17.1", "17.2", "18.1", "19.1", "652.1601.1911", "20.1", "21.1", "22.1", "23.1", "24.1")
   )
 })
