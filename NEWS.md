@@ -1,5 +1,10 @@
 # mapme.biodiversity (development version)
 
+## General
+
+- updates `gfw_lossyear` resource to `v20240402` which entails emission data
+  between 2000 - 2023
+
 # mapme.biodiversity 0.7.0
 
 ## Bug fixes
