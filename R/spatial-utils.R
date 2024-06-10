@@ -35,15 +35,15 @@
 spds_exists <- function(path, oo = character(0), what = c("vector", "raster")) {
   what <- match.arg(what)
   util <- switch(what,
-    vector = "ogrinfo",
-    raster = "gdalinfo"
+                 vector = "ogrinfo",
+                 raster = "gdalinfo"
   )
   opts <- switch(what,
-    vector = c(
-      "-json", "-ro", "-so", "-nomd",
-      "-nocount", "-noextent", "-nogeomtype", oo
-    ),
-    raster = c("-json", "-nomd", "-norat", "-noct", oo)
+                 vector = c(
+                   "-json", "-ro", "-so", "-nomd",
+                   "-nocount", "-noextent", "-nogeomtype", oo
+                 ),
+                 raster = c("-json", "-nomd", "-norat", "-noct", oo)
   )
   if (what == "vector" && sf::sf_extSoftVersion()[["GDAL"]] < "3.7.0") {
     util <- "gdalinfo"
@@ -139,9 +139,9 @@ make_footprints <- function(srcs = NULL,
   if (inherits(srcs, "character")) {
     what <- match.arg(what)
     srcs <- switch(what,
-      vector = purrr::map2(srcs, oo, function(src, opt) .vector_footprint(src, opt)),
-      raster = purrr::map2(srcs, oo, function(src, opt) .raster_footprint(src, opt)),
-      stop("Can make footprints for vector and raster data only.")
+                   vector = purrr::map2(srcs, oo, function(src, opt) .vector_footprint(src, opt)),
+                   raster = purrr::map2(srcs, oo, function(src, opt) .raster_footprint(src, opt)),
+                   stop("Can make footprints for vector and raster data only.")
     )
     srcs <- purrr::list_rbind(srcs)
   }
@@ -188,9 +188,9 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL) {
     resource <- avail_resources[[resource]]
     resource_type <- unique(resource[["type"]])
     reader <- switch(resource_type,
-      raster = .read_raster,
-      vector = .read_vector,
-      stop(sprintf("Resource type '%s' currently not supported", resource_type))
+                     raster = .read_raster,
+                     vector = .read_vector,
+                     stop(sprintf("Resource type '%s' currently not supported", resource_type))
     )
     reader(x, resource)
   })
@@ -302,12 +302,16 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL) {
 }
 
 .raster_bbox <- function(info) {
-  crs <- st_crs(info[["coordinateSystem"]][["wkt"]])
-  poly <- jsonlite::toJSON(info[["wgs84Extent"]], auto_unbox = TRUE)
-  bbox <- st_read(poly, quiet = TRUE)
-  bbox <- st_transform(bbox, crs)
 
-  if (st_is_empty(bbox)) {
+  crs <- st_crs(info[["coordinateSystem"]][["wkt"]])
+
+  bbox <- try({
+    poly <- jsonlite::toJSON(info[["wgs84Extent"]], auto_unbox = TRUE)
+    bbox <- st_read(poly, quiet = TRUE)
+    st_transform(bbox, crs)
+  }, silent = TRUE)
+
+  if (inherits(bbox, "try-error") || st_is_empty(bbox)) {
     coords <- info[["cornerCoordinates"]]
     bbox <- st_bbox(c(
       xmin = coords$lowerLeft[[1]],
@@ -397,8 +401,8 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL) {
   }
 
   util <- switch(what,
-    vector = "vectortranslate",
-    raster = "translate"
+                 vector = "vectortranslate",
+                 raster = "translate"
   )
   try(sf::gdal_utils(
     util = util,
