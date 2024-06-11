@@ -26,8 +26,7 @@ get_worldclim_min_temperature <- function(years = 2000:2018) {
            name = "worldclim_min_temperature",
            type = "raster",
            outdir = mapme_options()[["outdir"]],
-           verbose = mapme_options()[["verbose"]],
-           testing = mapme_options()[["testing"]]) {
+           verbose = mapme_options()[["verbose"]]) {
     .get_climatic_variables(x = x, years = years, layer = "tmin", verbose)
   }
 }
@@ -60,8 +59,7 @@ get_worldclim_max_temperature <- function(years = 2000:2018) {
            name = "worldclim_max_temperature",
            type = "raster",
            outdir = mapme_options()[["outdir"]],
-           verbose = mapme_options()[["verbose"]],
-           testing = mapme_options()[["testing"]]) {
+           verbose = mapme_options()[["verbose"]]) {
     .get_climatic_variables(x = x, years = years, layer = "tmax", verbose)
   }
 }
@@ -94,8 +92,7 @@ get_worldclim_precipitation <- function(years = 2000:2018) {
            name = "worldclim_precipitation",
            type = "raster",
            outdir = mapme_options()[["outdir"]],
-           verbose = mapme_options()[["verbose"]],
-           testing = mapme_options()[["testing"]]) {
+           verbose = mapme_options()[["verbose"]]) {
     .get_climatic_variables(x = x, years = years, layer = "prec", verbose)
   }
 }

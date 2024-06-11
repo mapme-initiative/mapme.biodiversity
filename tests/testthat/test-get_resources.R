@@ -44,7 +44,7 @@ test_that("test .check_resource_fun works", {
   expect_error(.check_resource_fun("a"))
   fun <- function(x, name, type, outdir, verbose) {}
   expect_error(.check_resource_fun(fun))
-  fun <- function(x, name = "new_res", type, outdir, verbose, testing) {}
+  fun <- function(x, name = "new_res", type, outdir, verbose) {}
   expect_silent(f <- .check_resource_fun(fun))
   expect_true(class(f) == "function")
 })

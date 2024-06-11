@@ -101,8 +101,7 @@ get_soilgrids <- function(layers, depths, stats) {
            name = "soilgrids",
            type = "raster",
            outdir = mapme_options()[["outdir"]],
-           verbose = mapme_options()[["verbose"]],
-           testing = mapme_options()[["testing"]]) {
+           verbose = mapme_options()[["verbose"]]) {
     grid <- expand.grid(layers, depths, stats)
     names(grid) <- c("layer", "depth", "stat")
 

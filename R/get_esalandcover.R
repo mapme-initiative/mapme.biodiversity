@@ -24,8 +24,7 @@ get_esalandcover <- function(years = 2015:2019) {
            name = "esalandcover",
            type = "raster",
            outdir = mapme_options()[["outdir"]],
-           verbose = mapme_options()[["verbose"]],
-           testing = mapme_options()[["testing"]]) {
+           verbose = mapme_options()[["verbose"]]) {
     # make the ESA grid and construct urls for intersecting tiles
     grid_esa <- make_global_grid(
       xmin = -180, xmax = 180, dx = 20,

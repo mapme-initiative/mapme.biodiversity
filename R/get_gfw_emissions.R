@@ -31,8 +31,7 @@ get_gfw_emissions <- function() {
            name = "gfw_emissions",
            type = "raster",
            outdir = mapme_options()[["outdir"]],
-           verbose = mapme_options()[["verbose"]],
-           testing = mapme_options()[["testing"]]) {
+           verbose = mapme_options()[["verbose"]]) {
     index_file <- system.file("extdata", "greenhouse_index.geosjon", package = "mapme.biodiversity")
     spatialindex <- st_read(index_file, quiet = TRUE)
 

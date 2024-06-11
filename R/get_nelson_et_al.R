@@ -44,8 +44,7 @@ get_nelson_et_al <- function(ranges = "20k_50k") {
            name = "nelson_et_al",
            type = "raster",
            outdir = mapme_options()[["outdir"]],
-           verbose = mapme_options()[["verbose"]],
-           testing = mapme_options()[["testing"]]) {
+           verbose = mapme_options()[["verbose"]]) {
     # get url for accessibility layer
     fps <- .get_traveltime_url(ranges, paste0("traveltime-", ranges, ".tif"),
       verbose = verbose

@@ -22,8 +22,7 @@ get_nasa_srtm <- function() {
            name = "nasa_srtm",
            type = "raster",
            outdir = mapme_options()[["outdir"]],
-           verbose = mapme_options()[["verbose"]],
-           testing = mapme_options()[["testing"]]) {
+           verbose = mapme_options()[["verbose"]]) {
     items <- try(rstac::stac("https://planetarycomputer.microsoft.com/api/stac/v1/") %>%
       rstac::stac_search(
         collection = "nasadem",

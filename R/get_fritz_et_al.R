@@ -40,8 +40,7 @@ get_fritz_et_al <- function(resolution = 100) {
            name = "fritz_et_al",
            type = "raster",
            outdir = mapme_options()[["outdir"]],
-           verbose = mapme_options()[["verbose"]],
-           testing = mapme_options()[["testing"]]) {
+           verbose = mapme_options()[["verbose"]]) {
     urls <- c(
       "/vsizip//vsicurl/https://zenodo.org/record/7997885/files/Deforestation%20Drivers%20100m%20IIASA.zip/dr_han_hei_pr1.tif",
       "/vsizip//vsicurl/https://zenodo.org/record/7997945/files/Deforestation%20drivers%201km%20IIASA%20.zip/dr_heine_pr1.tif"
@@ -50,8 +49,8 @@ get_fritz_et_al <- function(resolution = 100) {
     url <- ifelse(resolution == 100, urls[1], urls[2])
     filename <- paste0("geo_fritz_et_al_", resolution, "m.tif")
     co <- c("-of", "COG", "-ot", "Byte", "-co", "COMPRESS=LZW")
-    bbox <- c(xmin=-20037507, ymin=-3341359, xmax=20038000, ymax=3340559)
-    tile <- st_as_sf(st_as_sfc(st_bbox(bbox,  crs = "ESRI:54052")))
+    bbox <- c(xmin = -20037507, ymin = -3341359, xmax = 20038000, ymax = 3340559)
+    tile <- st_as_sf(st_as_sfc(st_bbox(bbox, crs = "ESRI:54052")))
     tile[["source"]] <- url
     make_footprints(tile, filename, what = "raster", co = co)
   }

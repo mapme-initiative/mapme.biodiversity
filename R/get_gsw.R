@@ -33,8 +33,7 @@ get_global_surface_water_change <- function(version = "v1_4_2021") {
            name = "global_surface_water_change",
            type = "raster",
            outdir = mapme_options()[["outdir"]],
-           verbose = mapme_options()[["verbose"]],
-           testing = mapme_options()[["testing"]]) {
+           verbose = mapme_options()[["verbose"]]) {
     .get_gsw(x, statistic = "change", version = version)
   }
 }
@@ -82,8 +81,7 @@ get_global_surface_water_transitions <- function(version = "v1_4_2021") {
            name = "global_surface_water_transitions",
            type = "raster",
            outdir = mapme_options()[["outdir"]],
-           verbose = mapme_options()[["verbose"]],
-           testing = mapme_options()[["testing"]]) {
+           verbose = mapme_options()[["verbose"]]) {
     .get_gsw(x, statistic = "transitions", version = version)
   }
 }
@@ -119,8 +117,7 @@ get_global_surface_water_seasonality <- function(version = "v1_4_2021") {
            name = "global_surface_water_seasonality",
            type = "raster",
            outdir = mapme_options()[["outdir"]],
-           verbose = mapme_options()[["verbose"]],
-           testing = mapme_options()[["testing"]]) {
+           verbose = mapme_options()[["verbose"]]) {
     .get_gsw(x, statistic = "seasonality", version = version)
   }
 }
@@ -159,8 +156,7 @@ get_global_surface_water_recurrence <- function(version = "v1_4_2021") {
            name = "global_surface_water_recurrence",
            type = "raster",
            outdir = mapme_options()[["outdir"]],
-           verbose = mapme_options()[["verbose"]],
-           testing = mapme_options()[["testing"]]) {
+           verbose = mapme_options()[["verbose"]]) {
     .get_gsw(x, statistic = "recurrence", version = version)
   }
 }
@@ -198,8 +194,7 @@ get_global_surface_water_occurrence <- function(version = "v1_4_2021") {
            name = "global_surface_water_occurrence",
            type = "raster",
            outdir = mapme_options()[["outdir"]],
-           verbose = mapme_options()[["verbose"]],
-           testing = mapme_options()[["testing"]]) {
+           verbose = mapme_options()[["verbose"]]) {
     .get_gsw(x, statistic = "occurrence", version = version)
   }
 }

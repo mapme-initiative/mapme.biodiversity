@@ -35,8 +35,7 @@ get_worldpop <- function(years = 2000) {
            name = "worldpop",
            type = "raster",
            outdir = mapme_options()[["outdir"]],
-           verbose = mapme_options()[["verbose"]],
-           testing = mapme_options()[["testing"]]) {
+           verbose = mapme_options()[["verbose"]]) {
     srcs <- unlist(sapply(years, function(year) .get_worldpop_url(year)))
     has_outdir <- !is.null(outdir)
 

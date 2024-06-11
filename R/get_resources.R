@@ -1,4 +1,4 @@
-.res_defaults <- c("x", "name", "type", "outdir", "verbose", "testing")
+.res_defaults <- c("x", "name", "type", "outdir", "verbose")
 #' Download biodiversity resources
 #'
 #' `get_resources()` data sets required for the

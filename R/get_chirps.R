@@ -30,8 +30,7 @@ get_chirps <- function(years = 1981:2020) {
            name = "chirps",
            type = "raster",
            outdir = mapme_options()[["outdir"]],
-           verbose = mapme_options()[["verbose"]],
-           testing = mapme_options()[["testing"]]) {
+           verbose = mapme_options()[["verbose"]]) {
     urls <- .get_chirps_urls(years)
     filenames <- gsub("cog", "tif", basename(urls))
     co <- c("-of", "COG", "-co", "COMPRESSION=LZW", "-a_nodata", "-9999")

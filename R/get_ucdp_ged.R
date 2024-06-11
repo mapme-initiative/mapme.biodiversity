@@ -48,8 +48,7 @@ get_ucdp_ged <- function(version = "latest") {
            name = "ucdp_ged",
            type = "vector",
            outdir = mapme_options()[["outdir"]],
-           verbose = mapme_options()[["verbose"]],
-           testing = mapme_options()[["testing"]]) {
+           verbose = mapme_options()[["verbose"]]) {
     version_ged <- paste0("ged", gsub("\\.", "", version), "-csv.zip")
 
     base_url <- "/vsizip/vsicurl/https://ucdp.uu.se/downloads/ged/"

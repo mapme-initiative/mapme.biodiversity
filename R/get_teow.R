@@ -25,8 +25,7 @@ get_teow <- function() {
            name = "teow",
            type = "vector",
            outdir = mapme_options()[["outdir"]],
-           verbose = mapme_options()[["verbose"]],
-           testing = mapme_options()[["testing"]]) {
+           verbose = mapme_options()[["verbose"]]) {
     url <- paste(
       "/vsizip//vsicurl/",
       "https://files.worldwildlife.org/wwfcmsprod/files/",

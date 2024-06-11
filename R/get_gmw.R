@@ -29,8 +29,7 @@ get_gmw <- function(years = c(1996, 2007:2010, 2015:2020)) {
            name = "gmw",
            type = "vector",
            outdir = mapme_options()[["outdir"]],
-           verbose = mapme_options()[["verbose"]],
-           testing = mapme_options()[["testing"]]) {
+           verbose = mapme_options()[["verbose"]]) {
     urls <- unlist(sapply(years, function(year) .get_mangrove_url(year)))
     bbox <- c(xmin = -180., ymin = -38.85822, xmax = 180., ymax = 32.36822)
     fps <- st_as_sfc(st_bbox(bbox, crs = "EPSG:4326"))

@@ -21,8 +21,7 @@ get_nasa_grace <- function(years = 2003:2022) {
            name = "nasa_grace",
            type = "raster",
            outdir = mapme_options()[["outdir"]],
-           verbose = mapme_options()[["verbose"]],
-           testing = mapme_options()[["testing"]]) {
+           verbose = mapme_options()[["verbose"]]) {
     urls <- unlist(sapply(years, function(year) .get_nasagrace_url(year)))
     bbox <- c(xmin = -180.0, ymin = -60, xmax = 180, ymax = 90)
     tiles <- st_as_sfc(st_bbox(bbox, crs = "EPSG:4326"))

@@ -36,8 +36,7 @@ get_mcd64a1 <- function(years = 2000:2022) {
            name = "mcd64a1",
            type = "raster",
            outdir = mapme_options()[["outdir"]],
-           verbose = mapme_options()[["verbose"]],
-           testing = mapme_options()[["testing"]]) {
+           verbose = mapme_options()[["verbose"]]) {
     dt <- paste0(min(years), "-01-01/", max(years), "-12-31")
     items <- try(rstac::stac("https://planetarycomputer.microsoft.com/api/stac/v1/") %>%
       rstac::stac_search(

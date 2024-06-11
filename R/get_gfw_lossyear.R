@@ -33,8 +33,7 @@ get_gfw_lossyear <- function(version = "GFC-2023-v1.11") {
            name = "gfw_lossyear",
            type = "raster",
            outdir = mapme_options()[["outdir"]],
-           verbose = mapme_options()[["verbose"]],
-           testing = mapme_options()[["testing"]]) {
+           verbose = mapme_options()[["verbose"]]) {
     # make the GFW grid and construct urls for intersecting tiles
     baseurl <- sprintf(
       "/vsicurl/https://storage.googleapis.com/earthenginepartners-hansen/%s/",
