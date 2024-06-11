@@ -19,12 +19,12 @@ knitr::opts_chunk$set(
 # Introduction
 
 In the following we will demonstrate an idealized workflow based on a subset
-of the WorldPop data set that is delivered together with this package. You 
-can follow along the code snippets below to reproduce the results. Please note 
-that to reduce the time it takes to process this vignette, we will not download
-any resources from the internet. In a real use case, thus processing time
-might substantially increase because resources have to be downloaded and real
-portfolios might be larger than the one created in this example. 
+of the Global Forest Watch (GFW) data set that is delivered together with this 
+package. You can follow along the code snippets below to reproduce the results. 
+Please note that to reduce the time it takes to process this vignette, we will 
+not download any resources from the internet. In a real use case, thus processing 
+time might substantially increase because resources have to be downloaded and 
+real portfolios might be larger than the one created in this example. 
 
 This vignette assumes that you have already followed the steps in 
 [Installation](https://mapme-initiative.github.io/mapme.biodiversity/articles/installation.html)
@@ -47,7 +47,8 @@ steps:
 First, we will load the `{mapme.biodiversity}` and the `{sf}` package for handling
 spatial vector data. For tabular data handling, we will also load the `{dplyr}` 
 and `{tidyr}` packages. Then, we will read an internal GeoPackage which includes 
-the geometry of a protected area in the Dominican Republic from the WDPA database.
+part of the geometry of a protected area in the Dominican Republic from the 
+WDPA database.
 
 ```{r setup, message=FALSE}
 library(mapme.biodiversity)
@@ -55,7 +56,7 @@ library(sf)
 library(dplyr)
 library(tidyr)
 
-aoi_path <- system.file("extdata", "sierra_de_neiba_478140.gpkg", package = "mapme.biodiversity")
+aoi_path <- system.file("extdata", "gfw_sample.gpkg", package = "mapme.biodiversity")
 aoi <- st_read(aoi_path, quiet = TRUE)
 aoi
 ```
@@ -63,11 +64,6 @@ aoi
 ```{r simplify-aoi, echo = FALSE}
 aoi <- st_simplify(aoi, preserveTopology = TRUE, dTolerance = 500)
 ```
-
-The sf-object contains a single object of geometry type `'MULTIPOLYGON'`. Each
-of these polygons will be processed individually before the results are combined
-and returned. The `sf` object also contains some metadata (e.g. its WDPAID and 
-its name), that will be retained throughout the complete workflow.
 
 # Setting standard option
 
@@ -113,23 +109,24 @@ function:
 
 ```{r query-indicator}
 available_indicators()
-available_indicators("population_count")
+available_indicators("treecover_area")
 ```
 
-Say, we are interested in the `population_count` indicator.
+Say, we are interested in the `treecover_area` indicator.
 We can learn more about this indicator and its required resources by using
 either of the commands below or, if you are viewing the online version, head
-over to the [population_count](https://mapme-initiative.github.io/mapme.biodiversity/reference/population_count.html) documentation.
+over to the [treecover_area](https://mapme-initiative.github.io/mapme.biodiversity/reference/treecover_area.html) documentation.
 
 ```{r help-indicator, eval = FALSE}
-?population_count
-help(population_count)
+?treecover_area
+help(treecover_area)
 ```
 
 By inspecting the help page we learned that this indicator requires the 
-`worldpop` resource and it requires to specify two extra arguments: the population
-statistic to calculate and the eninge to be used for the calculation (learn
-more about engines [here](https://mapme-initiative.github.io/mapme.biodiversity/articles/terminology.html)).
+`gfw_treecover` and `gfw_lossyear` resources and it requires to specify three 
+extra arguments: the years for which to calculate treecover, the minimum size
+of patches to be considered as forest and the minimum canopy coverage of a single
+pixel to be considered as forested.
 
 With that information at hand, we can start to retrieve the required resource. 
 We can learn about all available resources using the `available_resources()` 
@@ -137,42 +134,37 @@ function:
 
 ```{r query-resources}
 available_resources()
-available_resources("worldpop")
+available_resources("gfw_treecover")
 ```
 
-For the purpose of this vignette, we are going to download the `worldpop` 
-resource. We can get more detailed information about a given resource, by using 
-either of  the commands below to open up the help page. If you are viewing the 
-online version of this documentation, you can simply head over to the
-[worldpop](https://mapme-initiative.github.io/mapme.biodiversity/reference/worldpop.html)
+For the purpose of this vignette, we are going to download both, the `gfw_treecover`
+and `gfw_lossyear` resources. We can get more detailed information about a given 
+resource, by using either of the commands below to open up the help page. If 
+you are viewing the  online version of this documentation, you can simply head 
+over to the [gfw_treecover](https://mapme-initiative.github.io/mapme.biodiversity/reference/gfw_treecover.html)
 resource documentation.
 
 ```{r help-resource, eval = FALSE}
-?worldpop
-help(worldpop)
+?gfw_treecover
+help(gfw_treecover)
+?gfw_lossyear
+help(gfw_lossyear)
 ```
 
-We can now make the `worldpop` resource available for our portfolio. We will
+We can now make the required resources available for our portfolio. We will
 use a common interface that is used for all resources, called `get_resources()`.
 We have to specify our portfolio object and supply one or more resource functions
 with their respective arguments. This will then download the matching resources
 to the output directory specified earlier.
 
-```{r get-worldpop}
-aoi <- get_resources(x = aoi, get_worldpop(years = 2010:2015))
-```
-
-In case you want to download more than one resource, you can use the same interface
-and the resources will be made available sequentially. Required arguments 
-for a resource are simply added as usual:
-
-```{r get-multi-resources, eval = FALSE}
+```{r get-gfw}
 aoi <- get_resources(
   x = aoi,
-  get_worldpop(years = 2010:2015),
-  get_gfw_treecover(version = "GFC-2021-v1.9")
+  get_gfw_treecover(version = "GFC-2023-v1.11"),
+  get_gfw_lossyear(version = "GFC-2023-v1.11")
 )
 ```
+
 
 # Calculate specific indicators
 
@@ -182,19 +174,22 @@ indicator requires one or more resources that were made available via the
 function in every new R session, but note that data that is already available
 will not be re-downloaded. 
 
-Here, we are going to calculate the `population_count` indicator which is based 
-on the `worldpop` resource. Since the resource has been made available in the 
+Here, we are going to calculate the `treecover_area` indicator which is based 
+on the resources from GFW. Since the resources have been made available in the 
 previous step, we can continue requesting the calculation of our desired indicator. 
 Note the command below would issue an error in case a required resource has not 
 been made available via `get_resources()` beforehand.
 
 ```{r calc-indicator}
-aoi <- calc_indicators(aoi, calc_population_count(engine = "zonal", stats = "sum"))
+aoi <- calc_indicators(
+  aoi,
+  calc_treecover_area(years = 2000:2023, min_size = 1, min_cover = 30)
+)
 ```
 
 Now let's take a look at the results. In addition to the metadata we are 
 already familiar with, we see that there is an additional column called
-`population_count` which contains a `tibble`. 
+`treecover_area` which contains a `tibble`. 
 
 ```{r print-aoi}
 aoi
@@ -205,23 +200,23 @@ named alike the requested indicator. For our single asset, this column contains
 a tibble with 6 rows and four columns. Let's have a closer look at this object
 
 ```{r print-indicator}
-aoi$population_count
+aoi$treecover_area
 ```
 
 The tibble follows a standard output format, which is the same for all indicators.
-Each indicator is represented as a tibble with the four columns `datetime`, `variable`, `unit`, and `value`.
-In case of the population indicator, the variable is the sum of the population,
-its unit is a count and the value column gives the actual number.
+Each indicator is represented as a tibble with the four columns `datetime`, 
+`variable`, `unit`, and `value`. In case of the `treecover_area` indicator, 
+the variable is called `treecover` and is expressed in `ha`.
 
 Let's quickly visualize the results:
 
-```{r plot-popcount, echo = FALSE, warning=FALSE}
+```{r plot-treecover, echo = FALSE, warning=FALSE}
 mapme_options(verbose = FALSE)
 data <- portfolio_long(aoi)
 
 plot(value ~ datetime, data,
-  main = "Population totals over time",
-  xlab = "Year", ylab = "Persons",
+  main = "Treecover over time",
+  xlab = "Year", ylab = "ha",
   pch = 16, col = "steelblue"
 )
 ```
@@ -275,7 +270,7 @@ plan(list(tweak(cluster, workers = 2), tweak(cluster, workers = 4)))
 with_progress({
   aoi <- calc_indicators(
     aoi,
-    calc_treecover_area_and_emissions(
+    calc_treecover_area(
       min_size = 1,
       min_cover = 30
     )
