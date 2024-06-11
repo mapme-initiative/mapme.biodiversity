@@ -16,9 +16,6 @@
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/articles/introduction.html</loc>
   </url>
   <url>
-    <loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/articles/nasa-firms.html</loc>
-  </url>
-  <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/articles/output-wide.html</loc>
   </url>
   <url>
@@ -40,10 +37,10 @@
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/news/index.html</loc>
   </url>
   <url>
-    <loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/active_fire_counts.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/biome.html</loc>
   </url>
   <url>
-    <loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/biome.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/burned_area.html</loc>
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/check_available_years.html</loc>
@@ -56,9 +53,6 @@
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/deforestation_drivers.html</loc>
-  </url>
-  <url>
-    <loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/download_or_skip.html</loc>
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/drought_indicator.html</loc>
@@ -133,6 +127,9 @@
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/landcover.html</loc>
   </url>
   <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/make_footprints.html</loc>
+  </url>
+  <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/make_global_grid.html</loc>
   </url>
   <url>
@@ -142,7 +139,7 @@
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/mapme.html</loc>
   </url>
   <url>
-    <loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/nasa_firms.html</loc>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/mcd64a1.html</loc>
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/nasa_grace.html</loc>
@@ -175,6 +172,9 @@
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/soilproperties.html</loc>
   </url>
   <url>
+    <loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/spds_exists.html</loc>
+  </url>
+  <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/temperature_max_wc.html</loc>
   </url>
   <url>
@@ -200,9 +200,6 @@
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/ucdp_ged.html</loc>
-  </url>
-  <url>
-    <loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/unzip_and_remove.html</loc>
   </url>
   <url>
     <loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/worldclim_max_temperature.html</loc>

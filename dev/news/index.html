@@ -35,7 +35,6 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-how-to-s">How To's</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-how-to-s">
     <a class="dropdown-item" href="../articles/output-wide.html">Transform output to wide</a>
-    <a class="dropdown-item" href="../articles/nasa-firms.html">Use downloaded resources</a>
   </div>
 </li>
 <li class="nav-item">
@@ -69,6 +68,22 @@
 <div class="section level3">
 <h3 id="general-development-version">General<a class="anchor" aria-label="anchor" href="#general-development-version"></a></h3>
 <ul><li>updates <code>gfw_lossyear</code> resource to <code>v20240402</code> which entails emission data between 2000 - 2023</li>
+<li>removes the <code>nasa_firms</code> resource and associated <code>active_fire_counts</code> indicator</li>
+<li>adds <code>mcd64a1</code> resource and <code>burned_area</code> indicator</li>
+<li>
+<code>mapme.biodiveristy</code> now leverages GDAL for data I/O meaning that all GDAL readable source data sets and writable destinations are now supported</li>
+<li>
+<code>README.md</code> now includes a section on how to set up cloud-storages to use as a destination for resource data</li>
+<li>The quickstart vignette now uses GFW data as example data</li>
+<li>chunking is now applied based on the area of an assets bounding box instead of its own area</li>
+</ul></div>
+<div class="section level3">
+<h3 id="internal-development-version">Internal<a class="anchor" aria-label="anchor" href="#internal-development-version"></a></h3>
+<ul><li>exports <code><a href="../reference/make_footprints.html">make_footprints()</a></code> to ease the process of creating footprints for resource functions</li>
+<li>exports <code><a href="../reference/spds_exists.html">spds_exists()</a></code> for resource function to check if a data source is exists</li>
+<li>resource functions are now expected to return footprints for all resource elements including opening and creation options as well as standardized filenames</li>
+<li>in case a user-specified destination is found, the package now uses <code>gdal_translate</code> to write data from source to destination</li>
+<li>tests for long-running examples and tests are skipped on GA and CRAN</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -132,12 +147,12 @@
 <li>exports helper functions for third parties to extend the package for custom resources and indicators:
 <ul><li><code><a href="../reference/check_available_years.html">check_available_years()</a></code></li>
 <li><code><a href="../reference/check_namespace.html">check_namespace()</a></code></li>
-<li><code><a href="../reference/download_or_skip.html">download_or_skip()</a></code></li>
+<li><code>download_or_skip()</code></li>
 <li><code><a href="../reference/engine.html">check_engine()</a></code></li>
 <li><code><a href="../reference/engine.html">check_stats()</a></code></li>
 <li><code><a href="../reference/engine.html">select_engine()</a></code></li>
 <li><code><a href="../reference/make_global_grid.html">make_global_grid()</a></code></li>
-<li><code><a href="../reference/unzip_and_remove.html">unzip_and_remove()</a></code></li>
+<li><code>unzip_and_remove()</code></li>
 </ul></li>
 </ul></div>
 <div class="section level3">
