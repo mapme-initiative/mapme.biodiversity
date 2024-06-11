@@ -14,12 +14,6 @@ output: github_document
 
 # mapme.biodiversity <img src="man/figures/logo.png" align="right" height="110"/>
 
-
-> [!IMPORTANT]  
-> `{mapme.biodiversity}` is currently experiencing major changes
-> to its user-interface and overall functionality. Please visit
-> the [announcement issue](https://github.com/mapme-initiative/mapme.biodiversity/issues/240) to learn more about these changes.
-
 ## About
 
 Biodiversity areas, especially primary forests, provide multiple
@@ -126,6 +120,45 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.
 aoi
 ```
 
+## Using cloud storages
+
+`{mapme.biodiversity}` leverages GDAL's capabilities for data I/O. For users of
+this package, that means that integrating a cloud storage is as easy as setting
+up a configuration file and changing the `outdir` argument in `mapme_options()`.
+While you could also decide to use environment variables, we recommend to set
+up a GDAL config file. You can find GDAL's documentation on this topic [here](https://gdal.org/user/configoptions.html#gdal-configuration-file).
+
+Suppose that we want to use an AWS S3 bucket that we control to
+write resource data to. Let's assume this bucket is already set up and we wish
+to refer to it in our R code as `mapme-data`. The GDAL configuration file
+should look something like this:
+
+```{ini}
+[credentials]
+
+[.mapme-data]
+path=/vsis3/mapme-data
+AWS_SECRET_ACCESS_KEY=<your-access-key>
+AWS_ACCESS_KEY_ID=<your-access-id>
+```
+
+The connection will be handled based on GDAL's virtual file system. You can
+find documentation on specific options for your cloud provider [here](https://gdal.org/user/virtual_file_systems.html#network-based-file-systems).
+
+Ideally, you would also set the following in the `.Renviron` file in your user's
+home directory to ensure that GDAL is aware of this configuration when an R 
+session is started:
+
+```{ini}
+GDAL_CONFIG_FILE = "<path-to-your-config-file>"
+```
+
+Then, in your scripts set the `outdir` option to the value specified with
+the `path` variable in the configuration file:
+
+```{r s3-outdir, eval = FALSE}
+mapme_options(outdir = "/vsis3/mapme-data")
+```
 
 ## A note on parallel computing
 
