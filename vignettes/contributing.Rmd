@@ -50,7 +50,7 @@ re-implement the `nasa_srtm` resource and the associated `elevation`
 indicator, so we will create a branch reflecting this. Don't forget to check out
 to the newly created branch!
 
-```bash
+```{bash, eval = FALSE}
 git branch add-elevation
 git checkout add-elevation
 ```
@@ -75,10 +75,9 @@ devtools::install_dev_deps()
 - [ ] Check user-specified arguments (if any) for correctness
 - [ ] Create inner-level function with standard arguments
 - [ ] Match the spatio-temporal extent of the portfolio with your resource
-- [ ] Provide your own download functionality or use `download_or_skip()`
-- [ ] Delete any intermediate files that are no longer required
-- [ ] Return the absolute file paths for all matching resource files
-- [ ] Write a testthat script testing all the newly added functionality (except the actual download) and write it to `test/testthat/test-get_<resource_name>.R`
+- [ ] Create a footprint object via `make_footprints()` for resources matching the portfolio
+- [ ] Include opening (-oo) and creation (-co) options for your resources as needed
+- [ ] Write a testthat script testing all the newly added functionality and write it to `test/testthat/test-get_<resource_name>.R`
 - [ ] Add a small example data set of your resource to `inst/res/<resource_name>`
 - [ ] Add the script producing the sample resources to `data-raw`
 - [ ] Add useful information about the resource to the register via `register_resource()`
@@ -86,7 +85,7 @@ devtools::install_dev_deps()
 
 ## Overview of adding a resource
 
-A resource is a supported dataset that can be downloaded from a user's perspective
+A resource is a supported dataset that can be made available from a user's perspective
 by specifying one or more functions to `get_resources()`. Currently, the package 
 supports only raster and vector resources. If you wish to submit the support of 
 a new resource, please be aware that we will only accept new resources if they are
@@ -168,8 +167,7 @@ function(x,
          name = "nasa_srtm",
          type = "raster",
          outdir = mapme_options()[["outdir"]],
-         verbose = mapme_options()[["verbose"]],
-         testing = mapme_options()[["testing"]]) {
+         verbose = mapme_options()[["verbose"]]) {
   # ... function body
 }
 ```
@@ -182,33 +180,50 @@ output and log the resource once it has been made available.
 
 The other arguments should default to the their respective output values of 
 `mapme_options()` and represent a character vector for the output directory, 
-a logical to control the verbosity and another logical indicating if the code 
-is currently executed in a testing mode. We will look into how these things come 
-together now as we peak into constructing the actual body of a resource function.
+a logical to control the verbosity. Note, that the output directory might 
+be `NULL` in case a user wishes to access data directly from a remote source. 
+We will look into how these things come together now as we peak into constructing 
+the actual body of a resource function.
 
 ## Constructing a resource function - Body
 
-The expected output of a resource function is a character vector of file paths
-to either raster or vector sources that represent GDAL readable spatial data sets
-on the local file system. In case you require to download or write intermediate
-files, you can create files in the output of `tempdir()`. 
+The expected output of a resource function is an `sf`-object with geometries 
+representing the bounding box for single resource elements (e.g. tiles in case
+of a raster resource). We provide you with functionality to seamlessly produce 
+such a footprint object via `make_footprints()`. Note, this function either
+excepts a character vector to GDAL readable data sources or an `sf` object.
+In case you provide a charachter vector, the bounding box information will be
+retrieved automatically. This comes with a performance penalty for remote sources,
+because each file has to be opened once, so always opt for constructing an `sf`
+object in the resource function, if feasible.
 
-The output files should match the spatial extent of the portfolio and respect
-the arguments specified by the user. Output files should be constructed based on the
-`outdir` argument. The function should not re-download already existing
-files in the output directory. For flat files you can use the `download_or_skip()`
-helper function to make sure that existing files are not re-downloaded.
+The footprints `sf` object is expected to contain a column called `source` that
+points to a GDAL readable data source and the geometries to correspond to 
+the bounding box of each single resource element. You might opt to supply
+a `filename` argument to `make_footprints()`. This defaults to `basename(srcs[["source]])`,
+so you might supply a better suited filename, i.e. in the case the source location
+ends with an API key value, or similar. 
+
+Next to specifying if the the resource you wish to turn into a footprint object 
+represents a raster or vector resource, you can specify opening and creation 
+options. Opening options are relevant if opening a remote source requires 
+location or driver dependent options (e.g. specifying non-standard columns names 
+for longitude/latitude with the CSV driver). Creation options are relevant 
+if a user specified a `outdir` argument and and refer to the arguments used by 
+[`gdal_translate`](https://gdal.org/programs/gdal_translate.html). These should
+specifically specify data type and compression algorithms for raster resources, 
+but you are otherwise free to optimize the data layout for efficient access.
+
+Both `oo` and `co` can be specified as a single character vector, in which
+case the same options are applied to all elements of a resource, or as a list
+in order to accommodate file specific options.
 
 Use the `verbose` argument to decide if informative messages should be printed,
 e.g. to inform users about download progress. Errors or warnings should be emitted
 in either case. 
 
-Please include a check if `testing = TRUE` that returns example filenames early
-without actually downloading anything. This is mandatory for automated test checks
-of the package on CI platforms where it is not possible to conduct lengthy downloads.
-
 If there is no intersection between the `x` object and your resource, make sure
-to return `NA` as early as possible. 
+to return `NULL` as early as possible. 
 
 ## Adding sample resource for package internal testing
 
