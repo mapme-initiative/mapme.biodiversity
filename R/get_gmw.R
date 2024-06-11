@@ -4,8 +4,9 @@
 #' "The Global Mangrove Watch—A New 2010 Global Baseline of Mangrove Extent".
 #' The polygons represent the mangrove, which is tropical coastal vegetation
 #' and considered the most significant part of the marine ecosystem. This
-#' resource is available for the period 1996- 2020 from Global Mangrove Watch
-#' (GMW), providing geospatial information about global mangrove extent.
+#' resource is available for the selected years in the period 1996- 2020 from
+#' Global Mangrove Watch (GMW), providing geospatial information about global
+#' mangrove extent.
 #'
 #'
 #' @name gmw
@@ -28,70 +29,27 @@ get_gmw <- function(years = c(1996, 2007:2010, 2015:2020)) {
            name = "gmw",
            type = "vector",
            outdir = mapme_options()[["outdir"]],
-           verbose = mapme_options()[["verbose"]],
-           testing = mapme_options()[["testing"]]) {
+           verbose = mapme_options()[["verbose"]]) {
     urls <- unlist(sapply(years, function(year) .get_mangrove_url(year)))
-    filenames <- file.path(outdir, basename(paste0("gmw-extent_", years, ".zip")))
-    if (testing) {
-      return(basename(filenames))
-    }
-    filenames <- download_or_skip(urls, filenames, check_existence = FALSE)
-    if (verbose) {
-      message("Translating shapefiles to GeoPackages. This may take a while....")
-    }
-    sapply(filenames, function(zip) .unzip_mangrove(zip, outdir))
-    out <- list.files(outdir, full.names = T, pattern = ".gpkg")
-    grep(paste(years, collapse = "|"), out, value = TRUE)
-  }
-}
-
-
-#' Helper function to correctly unzip a mangrove layer zip file
-#'
-#'
-#' @param zip_files A character vector with potentially multiple zip files
-#' @param dir The directory to where the files are unzipped
-#'
-#' @return Nothing.
-#' @keywords internal
-#' @noRd
-.unzip_mangrove <- function(zip, dir) {
-  bn <- basename(zip)
-  year <- gsub(".*?([0-9]+).*", "\\1", bn)
-  gpkg <- file.path(dir, paste0("gmw-extent_", year, ".gpkg"))
-  if (file.exists(gpkg)) {
-    return(gpkg)
-  }
-  utils::unzip(
-    zipfile = file.path(
-      dir,
-      basename(paste0("gmw-extent_", year, ".zip"))
-    ),
-    exdir = dir
-  )
-
-  # Source data from 2018 doesn't correspond to the pattern for other years.
-  # We need to create an exception for it.
-  if (year == 2018) {
-    shp <- file.path(
-      dir,
-      paste0("GMW_v3_2018/00_Data/gmw_v3_", year, ".shp")
+    bbox <- c(xmin = -180., ymin = -38.85822, xmax = 180., ymax = 32.36822)
+    fps <- st_as_sfc(st_bbox(bbox, crs = "EPSG:4326"))
+    fps <- st_as_sf(rep(fps, length(urls)))
+    fps[["source"]] <- urls
+    fps <- make_footprints(
+      fps,
+      filenames = gsub(".shp", ".gpkg", basename(urls)),
+      what = "vector"
     )
-  } else {
-    shp <- file.path(dir, paste0("gmw_v3_", year, "_vec.shp"))
+
+    if (2018 %in% years) {
+      i <- which(years == 2018)
+      fps[["co"]][i] <- list(c("-t_srs", "EPSG:4326"))
+      fps[["filename"]][i] <- "gmw_v3_2018_vec.gpkg"
+    }
+
+    fps
   }
-
-  gdal_utils(
-    util = "vectortranslate", shp, gpkg,
-    options = c("-t_srs", "EPSG:4326")
-  )
-
-  d_files <- list.files(dir, full.names = T)
-  unlink(grep("gmw-extent*", d_files, value = T, invert = T),
-    recursive = T, force = T
-  )
 }
-
 
 #' A helper function to construct correct mangrove layer urls
 #'
@@ -101,17 +59,12 @@ get_gmw <- function(years = c(1996, 2007:2010, 2015:2020)) {
 #' @keywords internal
 #' @noRd
 .get_mangrove_url <- function(target_year) {
-  available_years <- c(1996, 2007:2010, 2015:2020)
-  if (target_year %in% available_years) {
-    paste0("https://wcmc.io/GMW_", target_year)
-  } else {
-    warning(
-      sprintf(
-        "Mangove extent not available for target year %s", target_year
-      )
-    )
-    NULL
-  }
+  base_url <- paste0("/vsizip//vsicurl/https://datadownload-production.s3.amazonaws.com/GMW_v3_", target_year, ".zip")
+  path <- switch(as.character(target_year),
+    "2018" = paste0("GMW_v3_2018/00_Data/gmw_v3_2018.shp"),
+    paste0("gmw_v3_", target_year, "_vec.shp")
+  )
+  file.path(base_url, path)
 }
 
 

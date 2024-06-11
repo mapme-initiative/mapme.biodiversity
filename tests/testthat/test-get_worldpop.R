@@ -1,34 +1,14 @@
 test_that(".get_worldpop works", {
   skip_on_cran()
-  aoi <- read_sf(
-    system.file("extdata", "sierra_de_neiba_478140.gpkg",
-      package = "mapme.biodiversity"
-    )
-  )
-  aoi <- suppressWarnings(st_cast(aoi, to = "POLYGON")[1, ])
+  .clear_resources()
+  outdir <- file.path(tempdir(), "mapme.data")
+  .copy_resource_dir(outdir)
+  mapme_options(outdir = outdir, verbose = FALSE)
 
-  temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-  dir.create(temp_loc, showWarnings = FALSE)
-  resource_dir <- system.file("res", package = "mapme.biodiversity")
-  file.copy(resource_dir, temp_loc, recursive = TRUE)
-  outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
-  tmpdir <- tempdir()
-
-  mapme_options(
-    outdir = outdir,
-    tmpdir = tmpdir,
-    verbose = FALSE,
-    testing = TRUE
-  )
-
-  gwp <- get_worldpop(years = 2001)
-  expect_equal(
-    gwp(aoi),
-    "ppp_2001_1km_Aggregated.tif"
-  )
-
-  expect_error(
-    get_worldpop(years = 1999),
-    "The target years do not intersect with the availability of worldpop."
-  )
+  expect_error(get_worldpop(1999))
+  gwp <- get_worldpop(years = 2010)
+  expect_silent(.check_resource_fun(gwp))
+  fps <- gwp(outdir = file.path(outdir, "worldpop"))
+  expect_silent(.check_footprints(fps))
+  expect_equal(fps$filename, "ppp_2010_1km_Aggregated.tif")
 })

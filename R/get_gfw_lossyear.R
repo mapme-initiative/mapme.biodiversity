@@ -33,11 +33,10 @@ get_gfw_lossyear <- function(version = "GFC-2023-v1.11") {
            name = "gfw_lossyear",
            type = "raster",
            outdir = mapme_options()[["outdir"]],
-           verbose = mapme_options()[["verbose"]],
-           testing = mapme_options()[["testing"]]) {
+           verbose = mapme_options()[["verbose"]]) {
     # make the GFW grid and construct urls for intersecting tiles
     baseurl <- sprintf(
-      "https://storage.googleapis.com/earthenginepartners-hansen/%s/",
+      "/vsicurl/https://storage.googleapis.com/earthenginepartners-hansen/%s/",
       version
     )
     grid_gfc <- make_global_grid(
@@ -52,12 +51,12 @@ get_gfw_lossyear <- function(version = "GFC-2023-v1.11") {
     }
     ids <- sapply(tile_ids, function(n) .get_gfw_tile_id(grid_gfc[n, ]))
     urls <- sprintf("%sHansen_%s_lossyear_%s.tif", baseurl, version, ids)
-    filenames <- file.path(outdir, basename(urls))
-    if (mapme_options()[["testing"]]) {
-      return(basename(filenames))
-    }
-    filenames <- download_or_skip(urls, filenames, check_existence = FALSE)
-    filenames
+    fps <- grid_gfc[tile_ids, ]
+    fps[["source"]] <- urls
+    make_footprints(fps,
+      what = "raster",
+      co = c("-co", "INTERLEAVE=BAND", "-co", "COMPRESS=LZW", "-ot", "Byte")
+    )
   }
 }
 

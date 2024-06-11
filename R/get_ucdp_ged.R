@@ -7,7 +7,7 @@
 #' Older versions of the data set can be downloaded, but users are recommended
 #' to download the latest data set.
 #'
-#' The following versions are available
+#' The following versions are available:
 #' - 5.0
 #' - 17.1
 #' - 17.2
@@ -30,7 +30,6 @@
 #' Journal of Peace Research 59(4).
 #' \doi{10.1177/00223433221108428}
 #' @source \url{https://ucdp.uu.se/downloads/}
-#' @importFrom utils unzip read.csv
 #' @include register.R
 #' @export
 get_ucdp_ged <- function(version = "latest") {
@@ -49,55 +48,36 @@ get_ucdp_ged <- function(version = "latest") {
            name = "ucdp_ged",
            type = "vector",
            outdir = mapme_options()[["outdir"]],
-           verbose = mapme_options()[["verbose"]],
-           testing = mapme_options()[["testing"]]) {
+           verbose = mapme_options()[["verbose"]]) {
     version_ged <- paste0("ged", gsub("\\.", "", version), "-csv.zip")
 
     base_url <- "/vsizip/vsicurl/https://ucdp.uu.se/downloads/ged/"
     url <- paste0(base_url, version_ged)
-    if (version == "19.1") {
-      url <- paste0(url, "/ged191.csv")
-    } else if (version == "5.0") {
-      url <- paste0(url, "/ged50.csv")
-    }
-    filename <- file.path(outdir, gsub("zip", "gpkg", version_ged))
-
-    # return early if testing
-    if (testing) {
-      return(basename(filename))
-    }
-
-    if (file.exists(filename)) {
-      return(filename)
-    }
-
-    gdal_utils(
-      util = "vectortranslate",
-      source = url,
-      destination = filename,
-      options = c(
-        "-a_srs", "EPSG:4326",
-        "-oo", "GEOM_POSSIBLE_NAMES=geom_wkt"
-      )
+    switch(version,
+      "19.1" = {
+        url <- paste0(url, "/ged191.csv")
+      },
+      "5.0" = {
+        url <- paste0(url, "/ged50.csv")
+      }
     )
-    filename
+
+    bbox <- c(xmin = -180.0, ymin = -90.0, xmax = 180.0, ymax = 90.0)
+    fps <- st_as_sf(st_as_sfc(st_bbox(bbox, crs = "EPSG:4326")))
+    fps[["source"]] <- url
+
+    make_footprints(
+      fps,
+      filenames = gsub("zip", "gpkg", version_ged),
+      what = "vector", oo = c("-oo", "GEOM_POSSIBLE_NAMES=geom_wkt")
+    )
   }
 }
 
 
 .ucdp_versions <- function() {
-  sections <- rvest::read_html("https://ucdp.uu.se/apidocs/") %>%
-    rvest::html_node("body") %>%
-    rvest::html_nodes("section")
-
-  labels <- sections %>% rvest::html_attr("aria-label")
-  target_p <- sections[which(labels == "Available datasets")]
-  content <- target_p %>% rvest::html_nodes("p")
-  versions <- rvest::html_text(content[2])
-  versions <- strsplit(x = versions, "\\s+")[[1]]
-  versions[versions != ""]
+  c("5.0", "17.1", "17.2", "18.1", "19.1", "20.1", "21.1", "22.1", "23.1", "24.1")
 }
-
 
 register_resource(
   name = "ucdp_ged",

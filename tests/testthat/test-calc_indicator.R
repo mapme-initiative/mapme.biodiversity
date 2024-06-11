@@ -6,17 +6,11 @@ test_that("calc_indicator works", {
     )
   )
 
-  temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-  dir.create(temp_loc, showWarnings = FALSE)
-  resource_dir <- system.file("res", package = "mapme.biodiversity")
-  file.copy(resource_dir, temp_loc, recursive = TRUE)
-  outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
+  outdir <- file.path(tempdir(), "mapme.data")
+  .copy_resource_dir(outdir)
+  mapme_options(outdir = outdir, verbose = FALSE)
 
-  x <- suppressWarnings(st_cast(x, to = "POLYGON"))[1, ]
-  mapme_options(
-    outdir = outdir,
-    verbose = FALSE
-  )
+  mapme_options(outdir = outdir, verbose = FALSE)
 
   x <- get_resources(
     x,
@@ -48,17 +42,11 @@ test_that("calc_indicator works with MULTIPOLYGON and chunking", {
 
   expect_true(st_geometry_type(x) == "MULTIPOLYGON")
 
-  temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-  dir.create(temp_loc, showWarnings = FALSE)
-  resource_dir <- system.file("res", package = "mapme.biodiversity")
-  file.copy(resource_dir, temp_loc, recursive = TRUE)
-  outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
+  outdir <- file.path(tempdir(), "mapme.data")
+  .copy_resource_dir(outdir)
+  mapme_options(outdir = outdir, verbose = FALSE)
 
-  mapme_options(
-    outdir = outdir,
-    chunk_size = area_ha,
-    verbose = FALSE
-  )
+  mapme_options(outdir = outdir, chunk_size = area_ha, verbose = FALSE)
 
   x <- get_resources(
     x,
@@ -76,27 +64,16 @@ test_that("calc_indicator works with MULTIPOLYGON and chunking", {
 
 test_that("Parallelization works", {
   .clear_resources()
-  aoi <- read_sf(
+  x <- read_sf(
     system.file("extdata", "gfw_sample.gpkg",
       package = "mapme.biodiversity"
     )
   )
+  x <- st_as_sf(st_make_grid(x, n = 3))
 
-  temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-  dir.create(temp_loc, showWarnings = FALSE)
-  resource_dir <- system.file("res", package = "mapme.biodiversity")
-  file.copy(resource_dir, temp_loc, recursive = TRUE)
-  outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
-  tmpdir <- tempdir()
-
-  aoi <- suppressWarnings(st_cast(aoi, to = "POLYGON"))[1, ]
-  aoi <- st_as_sf(st_make_grid(aoi, n = 3))
-
-  mapme_options(
-    outdir = outdir,
-    tmpdir = tmpdir,
-    verbose = FALSE
-  )
+  outdir <- file.path(tempdir(), "mapme.data")
+  .copy_resource_dir(outdir)
+  mapme_options(outdir = outdir, verbose = FALSE)
 
   # aoi <- get_resources(
   #   aoi,
@@ -106,7 +83,7 @@ test_that("Parallelization works", {
   library(future)
   plan(multisession, workers = 2)
   stat <- get_resources(
-    aoi,
+    x,
     get_gfw_treecover(version = "GFC-2023-v1.11"),
     get_gfw_lossyear(version = "GFC-2023-v1.11")
   ) %>%
@@ -217,30 +194,18 @@ test_that("chunking works correctly", {
   expect_equal(nrow(chunks[[1]]), 1)
 })
 
-
-test_that(".prep works correctly", {
+test_that("prep_resources works correctly", {
   .clear_resources()
   x <- read_sf(
     system.file("extdata", "gfw_sample.gpkg",
       package = "mapme.biodiversity"
     )
   )
-
-  temp_loc <- file.path(tempdir(), "mapme.biodiversity")
-  dir.create(temp_loc, showWarnings = FALSE)
-  resource_dir <- system.file("res", package = "mapme.biodiversity")
-  file.copy(resource_dir, temp_loc, recursive = TRUE)
-  outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
-  tmpdir <- tempdir()
-
-  x <- suppressWarnings(st_cast(x, to = "POLYGON"))[1, ]
   x <- st_as_sf(st_make_grid(x, n = 3))
 
-  mapme_options(
-    outdir = outdir,
-    tmpdir = tmpdir,
-    verbose = FALSE
-  )
+  outdir <- file.path(tempdir(), "mapme.data")
+  .copy_resource_dir(outdir)
+  mapme_options(outdir = outdir, verbose = FALSE)
 
   x <- get_resources(
     x,
@@ -252,28 +217,14 @@ test_that(".prep works correctly", {
   required_resources <- available_indicators("treecover_area")[["resources"]][[1]][["name"]]
   output <- prep_resources(x[1, ], available_resources, required_resources)
 
-  expect_equal(
-    length(output),
-    2
-  )
-  expect_equal(
-    names(output),
-    c("gfw_lossyear", "gfw_treecover")
-  )
-  expect_true(
-    inherits(output[[1]], "SpatRaster"),
-  )
+  expect_equal(length(output), 2)
+  expect_equal(names(output), c("gfw_lossyear", "gfw_treecover"))
+  expect_true(inherits(output[[1]], "SpatRaster"))
 
   x2 <- read_sf(list.files(
     system.file("extdata", package = "mapme.biodiversity"),
     pattern = "shell_beach", full.names = TRUE
   ))
-
-  mapme_options(
-    outdir = outdir,
-    tmpdir = tmpdir,
-    verbose = FALSE
-  )
 
   x2 <- get_resources(x2, get_gmw(years = 2016))
 
@@ -281,31 +232,13 @@ test_that(".prep works correctly", {
   required_resources <- available_indicators("mangroves_area")[["resources"]][[1]][["name"]]
   output <- prep_resources(x2, available_resources, required_resources)
 
-  expect_equal(
-    length(output),
-    1
-  )
-  expect_equal(
-    names(output),
-    "gmw"
-  )
+  expect_equal(length(output), 1)
+  expect_equal(names(output), "gmw")
   output <- output$gmw
-  expect_equal(
-    length(output),
-    1
-  )
-  expect_equal(
-    names(output),
-    "gmw-extent_2016.gpkg"
-  )
-  expect_true(
-    inherits(output[[1]], "sf")
-  )
-
-  expect_error(
-    prep_resources(x[1, ], available_resources, "not-available"),
-    "Some requested resources are not available."
-  )
+  expect_equal(length(output), 1)
+  expect_equal(names(output), "gmw_v3_2016_vec.gpkg")
+  expect_true(inherits(output[[1]], "sf"))
+  expect_error(prep_resources(x[1, ], available_resources, "not-available"))
 })
 
 
@@ -323,7 +256,8 @@ test_that(".read_raster works correctly", {
   })
 
   files <- list.files(temp_loc, full.names = TRUE)
-  footprints <- .make_footprints(files)
+  footprints <- make_footprints(files, what = "raster")
+  footprints[["location"]] <- files
   x <- st_bbox(dummy) %>%
     st_as_sfc() %>%
     st_as_sf()
@@ -352,9 +286,13 @@ test_that(".read_raster works correctly", {
 })
 
 test_that(".read_vector works", {
+  if (sf::sf_extSoftVersion()[["GDAL"]] < "3.7.0") skip()
   v <- system.file("extdata", "burundi.gpkg", package = "mapme.biodiversity")
   x <- st_as_sf(st_as_sfc(st_bbox(read_sf(v))))
-  expect_silent(out <- .read_vector(x, rep(v, 2)))
+  fps <- make_footprints(v, what = "vector")
+  fps[["location"]] <- v
+  fps <- rbind(fps, fps)
+  expect_silent(out <- .read_vector(x, fps))
   expect_true(class(out) == "list")
   expect_equal(length(out), 2)
   expect_equal(names(out), rep("burundi.gpkg", 2))
@@ -377,3 +315,4 @@ test_that(".check_single_asset works correctly", {
   obj <- tibble(datetime = 1, variable = 1, unit = 1, value = 1)
   expect_identical(.check_single_asset(obj, asset), obj)
 })
+de

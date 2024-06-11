@@ -5,14 +5,15 @@ test_that("gsw recurrence works", {
     )
   )
 
-  x <- suppressWarnings(st_cast(x, to = "POLYGON")[1, ])
+  .clear_resources()
+  outdir <- file.path(tempdir(), "mapme.data")
+  .copy_resource_dir(outdir)
+  mapme_options(outdir = outdir, verbose = FALSE)
+  get_resources(x, get_global_surface_water_recurrence(version = "v1_4_2021"))
+  gsw_recurrence <- prep_resources(x)[["global_surface_water_recurrence"]][[1]]
+
   gswr <- calc_gsw_recurrence(min_recurrence = 10)
   expect_true(is.null(gswr(x, NULL)))
-
-  gsw_recurrence <- list.files(system.file("res", "gsw_recurrence",
-    package = "mapme.biodiversity"
-  ), pattern = ".tif$", full.names = TRUE)
-  gsw_recurrence <- rast(gsw_recurrence)
   rec <- gswr(x, gsw_recurrence)
   expect_equal(rec$value, 719.590, tolerance = 1e-4)
 })

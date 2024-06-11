@@ -112,7 +112,11 @@ calc_indicators <- function(x, ...) {
   assets <- dplyr::group_split(x, assetid)
 
   furrr::future_imap(assets, function(asset, i) {
-    chunks <- .chunk(asset, chunk_size)
+    chunks <- try(.chunk(asset, chunk_size), silent = TRUE)
+
+    if (inherits(chunks, "try-error")) {
+      return(.check_single_asset(chunks, asset))
+    }
 
     results <- furrr::future_map(chunks, function(chunk) {
       resources <- prep_resources(chunk, avail_resources, req_resources)
@@ -150,92 +154,10 @@ calc_indicators <- function(x, ...) {
   })
   results
 }
-#' Prepare resources for an asset
-#'
-#' This function reads and crops available resources to the extent of a single
-#' asset. Specific resources can be queried. If not supplied (the default), all
-#' available resources will be prepared.
-#'
-#' @param avail_resources A list object of available resources. If NULL (the default),
-#'   the available resources will automatically be determined.
-#' @param resources A character vector with the resources to be prepared. If it
-#'   it is NULL (the default) all available resources will be prepared.
-#'
-#' @return `prep_resources()` returns a list with prepared vector and raster
-#'   resources as `sf` and `SpatRaster`-objects.
-#' @name mapme
-#' @export
-prep_resources <- function(x, avail_resources = NULL, resources = NULL) {
-  stopifnot(nrow(x) == 1)
 
-  if (is.null(avail_resources)) avail_resources <- .avail_resources()
-  if (length(avail_resources) == 0) {
-    return(NULL)
-  }
-  if (is.null(resources)) resources <- names(avail_resources)
-  if (!any(resources %in% names(avail_resources))) {
-    stop("Some requested resources are not available.")
-  }
-
-  out <- purrr::map(resources, function(resource) {
-    resource <- avail_resources[[resource]]
-    resource_type <- ifelse(inherits(resource, "sf"), "raster", "vector")
-    reader <- switch(resource_type,
-      raster = .read_raster,
-      vector = .read_vector,
-      stop(sprintf("Resource type '%s' currently not supported", resource_type))
-    )
-    reader(x, resource)
-  })
-  names(out) <- resources
-  out
-}
-
-.read_vector <- function(x, vector_sources) {
-  vectors <- purrr::map(vector_sources, function(source) {
-    read_sf(source, wkt_filter = st_as_text(st_as_sfc(st_bbox(x))))
-  })
-  names(vectors) <- basename(vector_sources)
-  vectors
-}
-
-.read_raster <- function(x, tindex) {
-  if (st_crs(x) != st_crs(tindex)) {
-    x <- st_transform(x, st_crs(tindex))
-  }
-
-  geoms <- tindex[["geom"]]
-  unique_geoms <- unique(geoms)
-  grouped_geoms <- match(geoms, unique_geoms)
-  names(grouped_geoms) <- tindex[["location"]]
-  grouped_geoms <- sort(grouped_geoms)
-
-  n_tiles <- length(unique(grouped_geoms))
-  n_timesteps <- unique(table(grouped_geoms))
-
-  if (length(n_timesteps) > 1) {
-    stop("Did not find equal number of tiles per timestep.")
-  }
-
-  out <- lapply(1:n_timesteps, function(i) {
-    index <- rep(FALSE, n_timesteps)
-    index[i] <- TRUE
-    filenames <- names(grouped_geoms[index])
-    layer_name <- tools::file_path_sans_ext(basename(filenames[1]))
-    vrt_name <- tempfile(pattern = sprintf("vrt_%s", layer_name), fileext = ".vrt")
-    tmp <- terra::vrt(filenames, filename = vrt_name)
-    names(tmp) <- layer_name
-    tmp
-  })
-  out <- do.call(c, out)
-
-  # crop the source to the extent of the current polygon
-  cropped <- try(terra::crop(out, terra::vect(x), snap = "out"))
-  if (inherits(cropped, "try-error")) {
-    warning(as.character(cropped))
-    return(NULL)
-  }
-  cropped
+.process <- function(x, fun, avail_resources, req_resources, verbose) {
+  resources <- prep_resources(x, avail_resources, req_resources)
+  .compute(x, resources, fun, verbose)
 }
 
 .compute <- function(x, resources, fun, verbose) {
@@ -280,44 +202,6 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL) {
     x <- st_as_sf(purrr::list_rbind(x))
   }
   lapply(1:nrow(x), function(i) x[i, ])
-}
-
-.cast_to_polygon <- function(x) {
-  if (st_geometry_type(x) == "MULTIPOLYGON") {
-    stopifnot("assetid" %in% names(x))
-    x <- suppressWarnings(st_cast(x, "POLYGON"))
-  }
-  x
-}
-
-.chunk_asset <- function(x,
-                         chunk_size = mapme_options()[["chunk_size"]]) {
-  area <- as.numeric(st_area(x)) / 10000 # to ha
-  crs_org <- st_crs(x)
-  if (area < chunk_size) {
-    return(x)
-  }
-  if (st_is_longlat(x)) {
-    crs <- "+proj=laea +lon_0=%s +lat_0=%s +ellps=WGS84 +no_defs"
-    coords <- suppressWarnings(as.numeric(st_coordinates(st_centroid(x))))
-    x <- st_transform(x, sprintf(crs, coords[1], coords[2]))
-  }
-  size <- sqrt(chunk_size * 10000) # to meters
-
-  x_grid <- st_make_grid(x, cellsize = c(size, size))
-  x_grid <- suppressWarnings(st_intersection(x, x_grid))
-
-  x_grid <- purrr::map(1:nrow(x_grid), function(i) {
-    out <- try(suppressWarnings(st_cast(x_grid[i, ], "POLYGON")), silent = TRUE)
-    if (inherits(out, "try-error")) {
-      return(NULL)
-    }
-    out
-  })
-
-  x_grid <- tibble::as_tibble(purrr::list_rbind(x_grid))
-  x_grid <- st_transform(st_as_sf(x_grid), crs_org)
-  x_grid
 }
 
 #' @importFrom stats sd var

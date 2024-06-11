@@ -1,4 +1,4 @@
-.res_defaults <- c("x", "name", "type", "outdir", "verbose", "testing")
+.res_defaults <- c("x", "name", "type", "outdir", "verbose")
 #' Download biodiversity resources
 #'
 #' `get_resources()` data sets required for the
@@ -59,50 +59,120 @@ get_resources <- function(x, ...) {
   args[["x"]] <- x
   args[["outdir"]] <- outdir
 
-  resource_to_add <- try(do.call(fun, args = as.list(args)))
+  resource <- try(do.call(fun, args = as.list(args)))
+  resource <- .check_footprints(resource, resource_name)
 
-  if (inherits(resource_to_add, "try-error")) {
-    msg <- sprintf(paste(
-      "Download for resource %s failed. ",
-      "Returning unmodified portfolio object.",
-      sep = ""
-    ), resource_name)
-    stop(msg)
-  }
-  if (is.null(resource_to_add[1])) {
-    return(x)
-  }
-  if (args[["type"]] == "raster") {
-    resource_to_add <- .make_footprints(resource_to_add)
-  }
-  resource_to_add <- list(resource_to_add)
-  names(resource_to_add) <- resource_name
-  .add_resource(resource_to_add)
+  resource <- .fetch_resource(
+    resource = resource,
+    name = resource_name,
+    type = args[["type"]],
+    outdir = outdir,
+    verbose = opts[["verbose"]],
+    retries = opts[["retries"]]
+  )
+
+  resource <- .set_precision(resource)
+
+  resource <- list(resource)
+  names(resource) <- resource_name
+  .add_resource(resource)
+
   x
 }
 
 .make_path <- function(outdir, name) {
+  if (is.null(outdir)) {
+    return(outdir)
+  }
   path <- file.path(outdir, name)
   dir.create(path, showWarnings = FALSE)
   path
 }
 
-.make_footprints <- function(raster_files) {
-  footprints <- lapply(unique(raster_files), function(file) {
-    # get BBOX and CRS
-    tmp <- rast(file)
-    footprint <- st_bbox(tmp) %>% st_as_sfc()
-    crs <- crs(tmp)
-    # apply precision roundtrip
-    footprint <- footprint %>%
-      st_sfc(precision = 1e5) %>%
-      st_as_binary() %>%
-      st_as_sfc()
-    # to sf and add location info
-    footprint %>%
-      st_as_sf(crs = crs) %>%
-      dplyr::rename(geom = "x") %>%
-      dplyr::mutate(location = file)
-  })
-  do.call(rbind, footprints)
+.resource_cols <- c("filename", "location", "type", "oo", "co", "source", "geometry")
+
+.check_footprints <- function(resource, name) {
+  if (inherits(resource, "try-error")) {
+    stop(paste0(
+      "Download for resource ", name, " failed.\n",
+      "Returning unmodified portfolio."
+    ))
+  }
+
+  if (!inherits(resource, "sf")) {
+    msg <- paste("Resource functions are expected to return sf objects.")
+    stop(msg)
+  }
+
+  if (any(!names(resource) %in% .resource_cols)) {
+    msg <- paste(
+      "Resource functions are expected to return sf objects with",
+      "columns:", paste(.resource_cols, collapse = ", ")
+    )
+    stop(msg)
+  }
+
+  invisible(resource)
+}
+
+
+.fetch_resource <- function(resource,
+                            name = NULL,
+                            type = NULL,
+                            outdir = mapme_options()[["outdir"]],
+                            verbose = mapme_options()[["verbose"]],
+                            retries = mapme_options()[["retries"]]) {
+  stopifnot(inherits(resource, "sf"))
+  stopifnot(type %in% c("raster", "vector"))
+
+  if (is.null(outdir)) {
+    resource[["location"]] <- resource[["source"]]
+  } else {
+    if (verbose) {
+      has_progressr <- check_namespace("progressr", error = FALSE)
+      if (has_progressr) {
+        n <- nrow(resource)
+        s <- 1
+        if (n > 100) {
+          s <- round(n * 0.01)
+          n <- 100
+        }
+        p <- progressr::progressor(n)
+      }
+    }
+
+    resource[["destination"]] <- file.path(outdir, resource[["filename"]])
+    resource <- lapply(1:nrow(resource), function(i) resource[i, ])
+
+    furrr::future_iwalk(resource, function(x, i) {
+      attempts <- 0
+
+      while (attempts < retries) {
+        attempts <- attempts + 1
+
+        is_available <- .get_spds(
+          source = x[["source"]],
+          destination = x[["destination"]],
+          opts = unlist(x[["co"]], x[["oo"]]),
+          what = x[["type"]]
+        )
+
+        if (is_available) {
+          attempts <- retries
+        }
+      }
+
+      if (verbose && has_progressr) {
+        if (i %% s == 0) {
+          p(message = sprintf("Fetching resource '%s'.", name))
+        }
+      }
+    }, .options = furrr::furrr_options(seed = TRUE, chunk_size = 1L))
+
+    resource <- st_as_sf(do.call(rbind, resource))
+    resource[["location"]] <- resource[["destination"]]
+    is_available <- sapply(resource[["location"]], spds_exists, what = type)
+    resource[is_available, ]
+  }
+  resource
 }

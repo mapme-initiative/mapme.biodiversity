@@ -14,13 +14,6 @@ version](https://www.r-pkg.org/badges/version/mapme.biodiversity)](https://CRAN.
 
 # mapme.biodiversity <img src="man/figures/logo.png" align="right" height="110"/>
 
-> \[!IMPORTANT\]  
-> `{mapme.biodiversity}` is currently experiencing major changes to its
-> user-interface and overall functionality. Please visit the
-> [announcement
-> issue](https://github.com/mapme-initiative/mapme.biodiversity/issues/240)
-> to learn more about these changes.
-
 ## About
 
 Biodiversity areas, especially primary forests, provide multiple
@@ -63,38 +56,38 @@ remotes::install_github("https://github.com/mapme-initiative/mapme.biodiversity"
 Below is a list of the resources currently supported by
 `mapme.biodiversity`.
 
-| name                             | description                                                                                          | licence                                                                  |
-|:---------------------------------|:-----------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------|
-| chirps                           | Climate Hazards Group InfraRed Precipitation with Station data (CHIRPS)                              | CC - unknown                                                             |
-| esalandcover                     | Copernicus Land Monitoring Service (CLMS) 100 meter land cover product                               | CC-BY 4.0                                                                |
-| fritz_et_al                      | Drivers of deforestation in the tropics                                                              | CC-BY 4.0                                                                |
-| gfw_emissions                    | Global Forest Watch - CO2 Emssions caused by forest cover loss                                       | CC-BY 4.0                                                                |
-| gfw_lossyear                     | Global Forest Watch - Year of forest cover loss occurence                                            | CC-BY 4.0                                                                |
-| gfw_treecover                    | Global Forest Watch - Percentage of canopy closure in 2000                                           | CC-BY 4.0                                                                |
-| global_surface_water_change      | Global Surface Water - Change of water occurrence intensity                                          | <https://www.copernicus.eu/en/access-data>                               |
-| global_surface_water_occurrence  | Global Surface Water - Percentage of water occurrence                                                | <https://www.copernicus.eu/en/access-data>                               |
-| global_surface_water_recurrence  | Global Surface Water - Percentage of water recurrence                                                | <https://www.copernicus.eu/en/access-data>                               |
-| global_surface_water_seasonality | Global Surface Water - Seasonality of water occurrrence                                              | <https://www.copernicus.eu/en/access-data>                               |
-| global_surface_water_transitions | Global Surface Water - Transition classes                                                            | <https://www.copernicus.eu/en/access-data>                               |
-| gmw                              | Global Mangrove Watch - Vector data of mangrove extent                                               | CC BY 4.0                                                                |
-| nasa_firms                       | NASA Fire Information for Resource Management System (FIRMS) - Global fire map data archive          | <https://www.earthdata.nasa.gov/learn/find-data/near-real-time/citation> |
-| nasa_grace                       | NASA Gravity Recovery And Climate Experiment (GRACE) - Measurments of Earth’s mass and water changes | <https://nasagrace.unl.edu/About.aspx>                                   |
-| nasa_srtm                        | NASA Shuttle Radar Topography Mission (SRTM) Digital Elevation Model (DEM)                           | <https://lpdaac.usgs.gov/data/data-citation-and-policies/>               |
-| nelson_et_al                     | Global maps of traveltime to cities                                                                  | CC-BY 4.0                                                                |
-| soilgrids                        | ISRIC - Modelled global soil property layers                                                         | CC-BY 4.0                                                                |
-| teow                             | Terrestrial Ecosystems of the World (TEOW) from WWF-US                                               | unknown                                                                  |
-| ucdp_ged                         | UCDP Georeferenced Event Dataset (UCDP GED)                                                          | CC-BY 4.0                                                                |
-| worldclim_max_temperature        | WorldClim - Monthly maximum temperature 2000 - 2018                                                  | <https://www.worldclim.org/about.html>                                   |
-| worldclim_min_temperature        | WorldClim - Monthly minimum temperature 2000 - 2018                                                  | <https://www.worldclim.org/about.html>                                   |
-| worldclim_precipitation          | WorldClim - Monthly precipitation 2000 - 2018                                                        | <https://www.worldclim.org/about.html>                                   |
-| worldpop                         | WorldPop - Unconstrained Global Mosaics 2000 - 2020                                                  | CC-BY 4.0                                                                |
+| name                             | description                                                                                          | licence                                                    |
+|:---------------------------------|:-----------------------------------------------------------------------------------------------------|:-----------------------------------------------------------|
+| chirps                           | Climate Hazards Group InfraRed Precipitation with Station data (CHIRPS)                              | CC - unknown                                               |
+| esalandcover                     | Copernicus Land Monitoring Service (CLMS) 100 meter land cover product                               | CC-BY 4.0                                                  |
+| fritz_et_al                      | Drivers of deforestation in the tropics                                                              | CC-BY 4.0                                                  |
+| gfw_emissions                    | Global Forest Watch - CO2 Emssions caused by forest cover loss                                       | CC-BY 4.0                                                  |
+| gfw_lossyear                     | Global Forest Watch - Year of forest cover loss occurence                                            | CC-BY 4.0                                                  |
+| gfw_treecover                    | Global Forest Watch - Percentage of canopy closure in 2000                                           | CC-BY 4.0                                                  |
+| global_surface_water_change      | Global Surface Water - Change of water occurrence intensity                                          | <https://www.copernicus.eu/en/access-data>                 |
+| global_surface_water_occurrence  | Global Surface Water - Percentage of water occurrence                                                | <https://www.copernicus.eu/en/access-data>                 |
+| global_surface_water_recurrence  | Global Surface Water - Percentage of water recurrence                                                | <https://www.copernicus.eu/en/access-data>                 |
+| global_surface_water_seasonality | Global Surface Water - Seasonality of water occurrrence                                              | <https://www.copernicus.eu/en/access-data>                 |
+| global_surface_water_transitions | Global Surface Water - Transition classes                                                            | <https://www.copernicus.eu/en/access-data>                 |
+| gmw                              | Global Mangrove Watch - Vector data of mangrove extent                                               | CC BY 4.0                                                  |
+| mcd64a1                          | MODIS Burned Area Monthly Product (Aqua and Terra)                                                   | <https://lpdaac.usgs.gov/data/data-citation-and-policies/> |
+| nasa_grace                       | NASA Gravity Recovery And Climate Experiment (GRACE) - Measurments of Earth’s mass and water changes | <https://nasagrace.unl.edu/About.aspx>                     |
+| nasa_srtm                        | NASA Shuttle Radar Topography Mission (SRTM) Digital Elevation Model (DEM)                           | <https://lpdaac.usgs.gov/data/data-citation-and-policies/> |
+| nelson_et_al                     | Global maps of traveltime to cities                                                                  | CC-BY 4.0                                                  |
+| soilgrids                        | ISRIC - Modelled global soil property layers                                                         | CC-BY 4.0                                                  |
+| teow                             | Terrestrial Ecosystems of the World (TEOW) from WWF-US                                               | unknown                                                    |
+| ucdp_ged                         | UCDP Georeferenced Event Dataset (UCDP GED)                                                          | CC-BY 4.0                                                  |
+| worldclim_max_temperature        | WorldClim - Monthly maximum temperature 2000 - 2018                                                  | <https://www.worldclim.org/about.html>                     |
+| worldclim_min_temperature        | WorldClim - Monthly minimum temperature 2000 - 2018                                                  | <https://www.worldclim.org/about.html>                     |
+| worldclim_precipitation          | WorldClim - Monthly precipitation 2000 - 2018                                                        | <https://www.worldclim.org/about.html>                     |
+| worldpop                         | WorldPop - Unconstrained Global Mosaics 2000 - 2020                                                  | CC-BY 4.0                                                  |
 
 Next, is a list of supported indicators.
 
 | name                         | description                                                                    |
 |:-----------------------------|:-------------------------------------------------------------------------------|
-| active_fire_counts           | Number of detected fires by NASA FIRMS                                         |
 | biome                        | Areal statistics of biomes from TEOW                                           |
+| burned_area                  | Monthly burned area detected by MODIS satellites                               |
 | deforestation_drivers        | Areal statistics of deforestation drivers                                      |
 | drought_indicator            | Relative wetness statistics based on NASA GRACE                                |
 | ecoregion                    | Areal statstics of ecoregions based on TEOW                                    |
@@ -175,19 +168,62 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.
 aoi
 ```
 
-    ## Simple feature collection with 4 features and 10 fields
+    ## Simple feature collection with 4 features and 8 fields
     ## Geometry type: POLYGON
     ## Dimension:     XY
     ## Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931
     ## Geodetic CRS:  WGS 84
-    ## # A tibble: 4 × 11
-    ##   WDPAID NAME  DESIG_ENG ISO3  assetid indicator datetime   variable unit  value
-    ##    <dbl> <chr> <chr>     <chr>   <int> <chr>     <date>     <chr>    <chr> <dbl>
-    ## 1 478140 Sier… National… DOM         1 treecove… 2016-01-01 emissio… Mg    4296.
-    ## 2 478140 Sier… National… DOM         1 treecove… 2016-01-01 treecov… ha    2370.
-    ## 3 478140 Sier… National… DOM         1 treecove… 2017-01-01 emissio… Mg    4970.
-    ## 4 478140 Sier… National… DOM         1 treecove… 2017-01-01 treecov… ha    2358.
+    ## # A tibble: 4 × 9
+    ##   WDPAID ISO3  assetid indicator                 datetime   variable unit  value
+    ##    <dbl> <chr>   <int> <chr>                     <date>     <chr>    <chr> <dbl>
+    ## 1 478140 DOM         1 treecover_area_and_emiss… 2016-01-01 emissio… Mg    4296.
+    ## 2 478140 DOM         1 treecover_area_and_emiss… 2016-01-01 treecov… ha    2370.
+    ## 3 478140 DOM         1 treecover_area_and_emiss… 2017-01-01 emissio… Mg    4970.
+    ## 4 478140 DOM         1 treecover_area_and_emiss… 2017-01-01 treecov… ha    2358.
     ## # ℹ 1 more variable: geom <POLYGON [°]>
+
+## Using cloud storages
+
+`{mapme.biodiversity}` leverages GDAL’s capabilities for data I/O. For
+users of this package, that means that integrating a cloud storage is as
+easy as setting up a configuration file and changing the `outdir`
+argument in `mapme_options()`. While you could also decide to use
+environment variables, we recommend to set up a GDAL config file. You
+can find GDAL’s documentation on this topic
+[here](https://gdal.org/user/configoptions.html#gdal-configuration-file).
+
+Suppose that we want to use an AWS S3 bucket that we have access to to
+write resource data. Let’s assume this bucket is already set up and we
+wish to refer to it in our R code as `mapme-data`, the GDAL
+configuration file should look something like this:
+
+``` ini
+[credentials]
+
+[.mapme-data]
+path=/vsis3/mapme-data
+AWS_SECRET_ACCESS_KEY=<your-access-key>
+AWS_ACCESS_KEY_ID=<your-access-id>
+```
+
+The connection will be handled based on GDAL’s virtual file system. You
+can find documentation on specific options for your cloud provider
+[here](https://gdal.org/user/virtual_file_systems.html#network-based-file-systems).
+
+Ideally, you would also set the following in the `.Renviron` file in
+your user’s home directory to ensure that GDAL is aware of this
+configuration when an R session is started:
+
+``` ini
+GDAL_CONFIG_FILE = "<path-to-your-config-file>"
+```
+
+Then, in your scripts set the `outdir` option to the value specified
+with the `path` variable in the configuration file:
+
+``` r
+mapme_options(outdir = "/vsis3/mapme-data")
+```
 
 ## A note on parallel computing
 

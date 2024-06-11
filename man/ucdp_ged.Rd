@@ -26,7 +26,7 @@ Older versions of the data set can be downloaded, but users are recommended
 to download the latest data set.
 }
 \details{
-The following versions are available
+The following versions are available:
 \itemize{
 \item 5.0
 \item 17.1

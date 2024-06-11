@@ -26,4 +26,9 @@ count, 1 km spatial resolution layers available to download from the year
 The encoded cell value represents the total number of people in that particular
 grid cell.
 }
+\details{
+It may be required to increase the timeout option to successfully download
+theses WorldPop layers from their source location via e.g.
+\code{options(timeout = 600)}.
+}
 \keyword{resource}

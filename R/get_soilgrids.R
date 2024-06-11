@@ -101,8 +101,7 @@ get_soilgrids <- function(layers, depths, stats) {
            name = "soilgrids",
            type = "raster",
            outdir = mapme_options()[["outdir"]],
-           verbose = mapme_options()[["verbose"]],
-           testing = mapme_options()[["testing"]]) {
+           verbose = mapme_options()[["verbose"]]) {
     grid <- expand.grid(layers, depths, stats)
     names(grid) <- c("layer", "depth", "stat")
 
@@ -120,40 +119,13 @@ get_soilgrids <- function(layers, depths, stats) {
       datalayer <- sprintf("%s/%s_%s_%s.vrt", layer, layer, depth, stat)
       paste0(baseurl, datalayer)
     })
+
     urls <- na.omit(urls)
-    filenames <- file.path(outdir, gsub("vrt", "tif", basename(urls)))
-
-    if (testing) {
-      return(basename(filenames))
-    }
-
-    tiles <- data.frame(src = urls, dsn = filenames)
-    purrr::pwalk(tiles, function(src, dsn) {
-      if (verbose) {
-        msg <- "Starting to download data for layer '%s'."
-        msg <- sprintf(msg, basename(dsn))
-        message(msg)
-      }
-
-      if (!file.exists(dsn)) {
-        layer <- rast(src)
-        x_bbox <- st_as_sf(st_as_sfc(st_bbox(x)))
-        x_proj <- st_transform(x_bbox, crs(layer))
-        layer_cropped <- crop(
-          layer, x_proj,
-          filename = file.path(outdir, "soillayer_cropped.tif"),
-          datatype = "INT2U", overwrite = TRUE
-        )
-        suppressWarnings(
-          project(layer_cropped, "EPSG:4326",
-            filename = dsn,
-            datatype = "INT2U", overwrite = TRUE
-          )
-        )
-        file.remove(file.path(outdir, "soillayer_cropped.tif"))
-      }
-    })
-    filenames
+    filenames <- basename(urls)
+    bbox <- c(xmin = -19949750, ymin = -6147500, xmax = 19861750, ymax = 8361000)
+    fps <- st_as_sf(st_as_sfc(st_bbox(bbox, crs = .sg_wkt)))
+    fps[["source"]] <- urls
+    make_footprints(fps, filenames = filenames, what = "raster")
   }
 }
 
@@ -241,6 +213,26 @@ get_soilgrids <- function(layers, depths, stats) {
   "60-100cm", "100-200cm", "0-30cm"
 )
 .sg_stats <- c("Q0.05", "Q0.5", "mean", "Q0.95")
+
+.sg_wkt <- 'PROJCRS["Interrupted_Goode_Homolosine",
+    BASEGEOGCRS["GCS_WGS_1984 ellipse",
+        DATUM["World Geodetic System 1984",
+            ELLIPSOID["WGS 84",6378137,298.257223563,
+                LENGTHUNIT["metre",1]],
+            ID["EPSG",6326]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["Degree",0.0174532925199433]]],
+    CONVERSION["unnamed",
+        METHOD["Interrupted Goode Homolosine"]],
+    CS[Cartesian,2],
+        AXIS["(E)",east,
+            ORDER[1],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]],
+        AXIS["(N)",north,
+            ORDER[2],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]]]'
 
 register_resource(
   name = "soilgrids",

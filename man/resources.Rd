@@ -33,7 +33,8 @@ In case it is a custom licence, put a link to the licence text.}
 Otherwise only the ones specified.}
 }
 \value{
-\code{register_resource()} is called for the side-effect of registering a resource.
+\code{register_resource()} is called for the side-effect of registering a
+resource.
 
 \code{available_resources()} returns a tibble listing available resources.
 }

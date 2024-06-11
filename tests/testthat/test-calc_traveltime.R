@@ -4,10 +4,12 @@ test_that("traveltime works", {
       package = "mapme.biodiversity"
     )
   )
-  nelson_et_al <- list.files(system.file("res", "nelson_et_al",
-    package = "mapme.biodiversity"
-  ), pattern = ".tif$", full.names = TRUE)
-  nelson_et_al <- rast(nelson_et_al)
+  .clear_resources()
+  outdir <- file.path(tempdir(), "mapme.data")
+  .copy_resource_dir(outdir)
+  mapme_options(outdir = outdir, verbose = FALSE)
+  get_resources(x, get_nelson_et_al(ranges = "100k_200k"))
+  nelson_et_al <- prep_resources(x)[["nelson_et_al"]]
 
   ctt <- calc_traveltime()
   expect_true(is.null(ctt(x, NULL)))

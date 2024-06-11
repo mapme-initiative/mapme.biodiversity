@@ -74,20 +74,19 @@ test_that("treecover works", {
     package = "mapme.biodiversity"
   ))
 
-  gfw_treecover <- rast(list.files(
-    system.file("res", "gfw_treecover", package = "mapme.biodiversity"),
-    pattern = ".tif$", full.names = TRUE
-  ))
-
-  gfw_lossyear <- rast(list.files(
-    system.file("res", "gfw_lossyear", package = "mapme.biodiversity"),
-    pattern = ".tif$", full.names = TRUE
-  ))
-
-  gfw_emissions <- rast(list.files(
-    system.file("res", "gfw_emissions", package = "mapme.biodiversity"),
-    pattern = ".tif$", full.names = TRUE
-  ))
+  .clear_resources()
+  outdir <- file.path(tempdir(), "mapme.data")
+  .copy_resource_dir(outdir)
+  mapme_options(outdir = outdir, verbose = FALSE)
+  get_resources(
+    x,
+    get_gfw_treecover(version = "GFC-2023-v1.11"),
+    get_gfw_lossyear(version = "GFC-2023-v1.11"),
+    get_gfw_emissions()
+  )
+  gfw_treecover <- prep_resources(x, resources = "gfw_treecover")[[1]]
+  gfw_lossyear <- prep_resources(x, resources = "gfw_lossyear")[[1]]
+  gfw_emissions <- prep_resources(x, resources = "gfw_emissions")[[1]]
 
   years <- 2000:2005
   ta <- calc_treecover_area(years = years, min_size = 1, min_cover = 10)

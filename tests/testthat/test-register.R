@@ -1,12 +1,12 @@
 test_that("mapme_options works", {
   opts <- mapme_options()
-  expect_equal(names(opts), c("outdir", "chunk_size", "verbose", "aria_bin",
-                              "testing", "log_dir"))
+  names <- c("outdir", "chunk_size", "retries", "verbose", "log_dir")
+  expect_equal(names(opts), names)
 
   expect_error(mapme_options(outdir = 1))
   expect_error(mapme_options(verbose = 1))
-  expect_error(mapme_options(testing = 1))
   expect_error(mapme_options(chunk_size = "a"))
+  expect_error(mapme_options(retries = "a"))
 })
 
 test_that("test register_resource works", {

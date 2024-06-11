@@ -5,10 +5,12 @@ test_that("worldclim precipitation works", {
     )
   )
 
-  worldclim_precipitation <- list.files(system.file("res", "worldclim_precipitation",
-    package = "mapme.biodiversity"
-  ), pattern = ".tif$", full.names = TRUE)
-  worldclim_precipitation <- rast(worldclim_precipitation)
+  .clear_resources()
+  outdir <- file.path(tempdir(), "mapme.data")
+  .copy_resource_dir(outdir)
+  mapme_options(outdir = outdir, verbose = FALSE)
+  get_resources(x, get_worldclim_precipitation(years = 2018))
+  worldclim_precipitation <- prep_resources(x)[["worldclim_precipitation"]]
 
   cpwc <- calc_precipitation_wc()
   result <- cpwc(x, worldclim_precipitation)

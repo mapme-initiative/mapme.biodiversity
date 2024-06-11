@@ -4,10 +4,13 @@ test_that("drought indicator works", {
       package = "mapme.biodiversity"
     )
   )
-  nasa_grace <- list.files(system.file("res", "nasa_grace",
-    package = "mapme.biodiversity"
-  ), pattern = ".tif$", full.names = TRUE)
-  nasa_grace <- rast(nasa_grace)
+
+  .clear_resources()
+  outdir <- file.path(tempdir(), "mapme.data")
+  .copy_resource_dir(outdir)
+  mapme_options(outdir = outdir, verbose = FALSE)
+  get_resources(x, get_nasa_grace(years = 2022))
+  nasa_grace <- prep_resources(x)[["nasa_grace"]]
 
   cdi <- calc_drought_indicator()
   result <- cdi(x, nasa_grace)

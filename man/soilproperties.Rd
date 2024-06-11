@@ -34,38 +34,32 @@ The required resource for this indicator is:
 }
 }
 \examples{
-\dontshow{
-mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
-}
-\dontrun{
-library(sf)
-library(mapme.biodiversity)
+if (FALSE) {
+  library(sf)
+  library(mapme.biodiversity)
 
-outdir <- file.path(tempdir(), "mapme-data")
-dir.create(outdir, showWarnings = FALSE)
+  mapme_options(
+    outdir = NULL,
+    verbose = FALSE
+  )
 
-mapme_options(
-  outdir = outdir,
-  verbose = FALSE
-)
-
-aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
-  package = "mapme.biodiversity"
-) \%>\%
-  read_sf() \%>\%
-  get_resources(
-    get_soilgrids(
-      layers = c("clay", "silt"),
-      depths = c("0-5cm", "5-15cm"),
-      stats = "mean"
-    )
+  aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
+    package = "mapme.biodiversity"
   ) \%>\%
-  calc_indicators(
-    calc_soilproperties(engine = "extract", stats = c("mean", "median"))
-  ) \%>\%
-  portfolio_long()
+    read_sf() \%>\%
+    get_resources(
+      get_soilgrids(
+        layers = "clay",
+        depths = "0-5cm",
+        stats = "mean"
+      )
+    ) \%>\%
+    calc_indicators(
+      calc_soilproperties(engine = "extract", stats = c("mean", "median"))
+    ) \%>\%
+    portfolio_long()
 
-aoi
+  aoi
 }
 }
 \keyword{indicator}

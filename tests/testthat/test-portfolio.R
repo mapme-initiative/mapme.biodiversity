@@ -86,7 +86,7 @@ test_that("portfolio helpers work as expected", {
   x[["biome2"]] <- indicator
 
   cols <- .indicators_col(x)
-  expected <- 7:8
+  expected <- 5:6
   names(expected) <- c("biome", "biome2")
   expect_equal(cols, expected)
 

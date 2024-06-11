@@ -71,8 +71,6 @@ navbar:
      menu:
        - text: Transform output to wide
          href: articles/output-wide.html
-       - text: Use downloaded resources
-         href: articles/nasa-firms.html
    github:
      icon: fab fa-github fa-lg
      href: https://github.com/mapme-initiative/mapme.biodiversity/

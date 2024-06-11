@@ -76,7 +76,8 @@
 #'
 #' mapme_options(
 #'   outdir = outdir,
-#'   verbose = FALSE
+#'   verbose = FALSE,
+#'   chunk_size = 1e8
 #' )
 #'
 #' aoi <- system.file("extdata", "burundi.gpkg",
@@ -117,10 +118,10 @@ calc_fatalities <- function(years = 1989:2023,
     date_prec <- where_prec <- date_start <- type_of_violence <- NULL
     year <- month <- deaths_a <- deaths_b <- event_count <- type_of_death <- NULL
 
-    ucdp_ged <- ucdp_ged[[1]]
-    if (length(ucdp_ged) == 0) {
-      return(NA)
+    if (is.null(ucdp_ged)) {
+      return(NULL)
     }
+    ucdp_ged <- ucdp_ged[[1]]
 
     months_tibble <- tidyr::expand_grid(
       year = as.character(years),

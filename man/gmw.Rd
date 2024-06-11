@@ -22,8 +22,9 @@ This resource is part of the publication by Bunting et al. (2018)
 "The Global Mangrove Watch—A New 2010 Global Baseline of Mangrove Extent".
 The polygons represent the mangrove, which is tropical coastal vegetation
 and considered the most significant part of the marine ecosystem. This
-resource is available for the period 1996- 2020 from Global Mangrove Watch
-(GMW), providing geospatial information about global mangrove extent.
+resource is available for the selected years in the period 1996- 2020 from
+Global Mangrove Watch (GMW), providing geospatial information about global
+mangrove extent.
 }
 \references{
 Bunting P., Rosenqvist A., Lucas R., Rebelo L-M., Hilarides L.,
