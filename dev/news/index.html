@@ -81,7 +81,8 @@
 <h3 id="internal-development-version">Internal<a class="anchor" aria-label="anchor" href="#internal-development-version"></a></h3>
 <ul><li>exports <code><a href="../reference/make_footprints.html">make_footprints()</a></code> to ease the process of creating footprints for resource functions</li>
 <li>exports <code><a href="../reference/spds_exists.html">spds_exists()</a></code> for resource function to check if a data source is exists</li>
-<li>resource functions are now expected to return footprints for all resource elements including opening and creation options as well as standardized filenames</li>
+<li>
+<code>get_*()</code> functions are now required to return footprint objects indicating the spatial extent of each elements and pointing towards a GDAL readable data source in the <code>source</code> column</li>
 <li>in case a user-specified destination is found, the package now uses <code>gdal_translate</code> to write data from source to destination</li>
 <li>tests for long-running examples and tests are skipped on GA and CRAN</li>
 </ul></div>

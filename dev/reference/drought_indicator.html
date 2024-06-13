@@ -104,8 +104,8 @@ either one or multiple inputs as character "mean", "median" or "sd".</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A function that returns a tibble with a column for each specified
-stats and a column with the respective date.</p>
+<p>A function that returns an indicator tibble with specified drought
+indicator statistics as variable and corresponding values as value.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -151,16 +151,16 @@ stats and a column with the respective date.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 40 × 9</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    WDPAID ISO3  assetid indicator         datetime   variable       unit   value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> <span style="text-decoration: underline;">478</span>140 DOM         1 drought_indicator 2022-01-03 wetness_mean   dimen…  57.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> <span style="text-decoration: underline;">478</span>140 DOM         1 drought_indicator 2022-01-03 wetness_median dimen…  57.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> <span style="text-decoration: underline;">478</span>140 DOM         1 drought_indicator 2022-01-10 wetness_mean   dimen…  55.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> <span style="text-decoration: underline;">478</span>140 DOM         1 drought_indicator 2022-01-10 wetness_median dimen…  55.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> <span style="text-decoration: underline;">478</span>140 DOM         1 drought_indicator 2022-01-17 wetness_mean   dimen…  54  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> <span style="text-decoration: underline;">478</span>140 DOM         1 drought_indicator 2022-01-17 wetness_median dimen…  54  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> <span style="text-decoration: underline;">478</span>140 DOM         1 drought_indicator 2022-01-24 wetness_mean   dimen…  53  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> <span style="text-decoration: underline;">478</span>140 DOM         1 drought_indicator 2022-01-24 wetness_median dimen…  53  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> <span style="text-decoration: underline;">478</span>140 DOM         1 drought_indicator 2022-01-31 wetness_mean   dimen…  43.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> <span style="text-decoration: underline;">478</span>140 DOM         1 drought_indicator 2022-01-31 wetness_median dimen…  43.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> <span style="text-decoration: underline;">478</span>140 DOM         1 drought_indicator 2022-01-03 wetness_mean   perce…  57.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> <span style="text-decoration: underline;">478</span>140 DOM         1 drought_indicator 2022-01-03 wetness_median perce…  57.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> <span style="text-decoration: underline;">478</span>140 DOM         1 drought_indicator 2022-01-10 wetness_mean   perce…  55.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> <span style="text-decoration: underline;">478</span>140 DOM         1 drought_indicator 2022-01-10 wetness_median perce…  55.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> <span style="text-decoration: underline;">478</span>140 DOM         1 drought_indicator 2022-01-17 wetness_mean   perce…  54  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> <span style="text-decoration: underline;">478</span>140 DOM         1 drought_indicator 2022-01-17 wetness_median perce…  54  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> <span style="text-decoration: underline;">478</span>140 DOM         1 drought_indicator 2022-01-24 wetness_mean   perce…  53  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> <span style="text-decoration: underline;">478</span>140 DOM         1 drought_indicator 2022-01-24 wetness_median perce…  53  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> <span style="text-decoration: underline;">478</span>140 DOM         1 drought_indicator 2022-01-31 wetness_mean   perce…  43.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> <span style="text-decoration: underline;">478</span>140 DOM         1 drought_indicator 2022-01-31 wetness_median perce…  43.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 30 more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1 more variable: geom &lt;POLYGON [°]&gt;</span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>

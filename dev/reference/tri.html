@@ -105,20 +105,19 @@ single or multiple inputs as character. Supported statistics are: "mean",
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A function that returns a tibble with a column for terrain
-ruggedness index statistics (in meters).
-The range of index values and corresponding meaning:
-(1) 0 - 80 m  :- level surface
-(2) 81-116 m  :- nearly level surface
-(3) 117-161 m :- slightly rugged surface
-(4) 162-239 m :- intermediately rugged surface
-(5) 240-497 m :- moderately rugged surface
-(6) 498-958 m :- highly rugged surface
-(7) 959-4367 m:- extremely rugged surface</p>
+<p>A function that returns an indicator tibble with tri as variable and
+the respective statistic as value.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The required resources for this indicator are:</p><ul><li><p><a href="nasa_srtm.html">nasa_srtm</a></p></li>
+    <p>The range of index values and corresponding meaning:</p><ul><li><p>0-80 m - level surface</p></li>
+<li><p>81-116 m - nearly level surface</p></li>
+<li><p>117-161 m - slightly rugged surface</p></li>
+<li><p>162-239 m - intermediately rugged surface</p></li>
+<li><p>240-497 m - moderately rugged surface</p></li>
+<li><p>498-958 m - highly rugged surface</p></li>
+<li><p>959-4367 m  extremely rugged surface</p></li>
+</ul><p>The required resources for this indicator are:</p><ul><li><p><a href="nasa_srtm.html">nasa_srtm</a></p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
