@@ -80,7 +80,7 @@ get_worldclim_max_temperature <- function(years = 2000:2018) {
 #' @param years A numeric vector indicating for which years to make the
 #'   resource available.
 #' @keywords resource
-#' @returns  A character of file paths.
+#' @returns  A function that returns an `sf` footprint object.
 #' @source \url{https://www.worldclim.org/data/index.html}
 #' @importFrom utils unzip
 #' @include register.R

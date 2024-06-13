@@ -18,8 +18,8 @@
 #' @param min_cover The minimum threshold of stand density for a pixel to be
 #'   considered forest in the year 2000.
 #' @keywords indicator
-#' @returns A function that returns a tibble with a column for years and
-#'   emissions (in Mg).
+#' @returns A function that returns an indicator tibble with emissions as variable
+#'   and emitted CO2 equivalent (in Mg)  as value.
 #' @include register.R
 #' @export
 #' @examples

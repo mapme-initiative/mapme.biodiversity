@@ -9,8 +9,8 @@
 #'
 #' @name ecoregion
 #' @keywords indicator
-#' @returns A function that returns a tibble with a column for name of the
-#'   ecoregions and corresponding area (in ha).
+#' @returns A function that returns an indicator tibble with ecoregion type as
+#'   variable and corresponding area (in ha) as value.
 #' @include register.R
 #' @export
 #' @examples

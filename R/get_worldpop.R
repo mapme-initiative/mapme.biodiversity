@@ -17,7 +17,7 @@
 #'   resource available.
 #' @docType data
 #' @keywords resource
-#' @returns A function that returns a character of file paths.
+#' @returns A function that returns an `sf` footprint object.
 #' @source \url{https://www.worldpop.org/}
 #' @include register.R
 #' @export

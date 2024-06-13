@@ -16,16 +16,8 @@ single or multiple inputs as character. Supported statistics are: "mean",
 "median", "sd", "min", "max", "sum" "var".}
 }
 \value{
-A function that returns a tibble with a column for terrain
-ruggedness index statistics (in meters).
-The range of index values and corresponding meaning:
-(1) 0 - 80 m  :- level surface
-(2) 81-116 m  :- nearly level surface
-(3) 117-161 m :- slightly rugged surface
-(4) 162-239 m :- intermediately rugged surface
-(5) 240-497 m :- moderately rugged surface
-(6) 498-958 m :- highly rugged surface
-(7) 959-4367 m:- extremely rugged surface
+A function that returns an indicator tibble with tri as variable and
+the respective statistic as value.
 }
 \description{
 Terrain Ruggedness Index is a measurement developed by Riley, et al. (1999).
@@ -36,6 +28,17 @@ index (tri) statistics for polygons. For each polygon, the desired statistic(s)
 are returned.
 }
 \details{
+The range of index values and corresponding meaning:
+\itemize{
+\item 0-80 m - level surface
+\item 81-116 m - nearly level surface
+\item 117-161 m - slightly rugged surface
+\item 162-239 m - intermediately rugged surface
+\item 240-497 m - moderately rugged surface
+\item 498-958 m - highly rugged surface
+\item 959-4367 m  extremely rugged surface
+}
+
 The required resources for this indicator are:
 \itemize{
 \item \link{nasa_srtm}

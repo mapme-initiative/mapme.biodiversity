@@ -19,8 +19,8 @@
 #' @param min_occurrence Threshold to define which pixels count towards the GSW
 #' occurrence area `[0, 100]`.
 #' @keywords indicator
-#' @returns A function that returns a tibble with a column for the aggregated
-#'   GSW occurrence indicator.
+#' @returns A function that returns an indicator tibble with occurrence as
+#'   variable and the corresponding area (in ha) as value.
 #' @include register.R
 #' @export
 #' @examples

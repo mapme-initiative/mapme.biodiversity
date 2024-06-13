@@ -15,7 +15,7 @@ get_worldclim_precipitation(years = 2000:2018)
 resource available.}
 }
 \value{
-A character of file paths.
+A function that returns an \code{sf} footprint object.
 }
 \description{
 This resource is published by Fick et al. (2017) "WorldClim 2: new 1-km

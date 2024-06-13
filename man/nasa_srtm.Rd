@@ -11,7 +11,7 @@
 get_nasa_srtm()
 }
 \value{
-A function that returns a character of file paths.
+A function that returns an \code{sf} footprint object.
 }
 \description{
 This resource is processed by the Land Processes Distributed Active Archive

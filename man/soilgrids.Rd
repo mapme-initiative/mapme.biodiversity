@@ -19,7 +19,7 @@ soilgrids}
 \item{stats}{A character vector indicating the statistics to download.}
 }
 \value{
-A function that returns a character of file paths.
+A function that returns an \code{sf} footprint object.
 }
 \description{
 SoilGrids is a project combining global observation data with

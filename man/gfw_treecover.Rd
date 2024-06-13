@@ -16,7 +16,7 @@ get_gfw_treecover(version = "GFC-2023-v1.11")
 to get a list of available versions}
 }
 \value{
-A function that returns a character of file paths.
+A function that returns an \code{sf} footprint object.
 }
 \description{
 This resource is part of the publication by Hansen et al. (2013)

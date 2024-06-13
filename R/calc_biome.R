@@ -9,8 +9,8 @@
 #'
 #' @name biome
 #' @keywords indicator
-#' @returns A function that returns a tibble with a column for name of the
-#'   biomes and corresponding area (in ha).
+#' @returns A function that returns an indicator tibble with variable biome type
+#'   and corresponding area (in ha) as values.
 #' @include register.R
 #' @export
 #' @examples

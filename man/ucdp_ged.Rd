@@ -15,7 +15,7 @@ get_ucdp_ged(version = "latest")
 the version to download. Defaults to "latest".}
 }
 \value{
-A function that returns a character of file paths.
+A function that returns an \code{sf} footprint object.
 }
 \description{
 This resource distributed by the Uppsala Conflict Data Program (UCDP) constitutes

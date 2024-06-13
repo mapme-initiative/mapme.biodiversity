@@ -14,7 +14,7 @@
 #' @param years A numeric vector of the years to download CHIRPS precipitation
 #'   layers. Must be greater 1981, defaults to `c(1981:2020)`.
 #' @keywords resource
-#' @returns A function that returns a character of file paths.
+#' @returns A function that returns an `sf` footprint object.
 #' @source \url{https://data.chc.ucsb.edu/products/CHIRPS-2.0/global_monthly/cogs/}
 #' @references Funk, C., Peterson, P., Landsfeld, M. et al. The climate hazards
 #' infrared precipitation with stations—a new environmental record for

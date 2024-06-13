@@ -13,7 +13,7 @@
 #' @param years A numeric vector of the years for which to make GMW available.
 #' @docType data
 #' @keywords resource
-#' @returns A function that returns a character of file paths.
+#' @returns A function that returns an `sf` footprint object.
 #' @references Bunting P., Rosenqvist A., Lucas R., Rebelo L-M., Hilarides L.,
 #' Thomas N., Hardy A., Itoh T., Shimada M. and Finlayson C.M. (2018). The Global
 #' Mangrove Watch – a New 2010 Global Baseline of Mangrove Extent. Remote Sensing

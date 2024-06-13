@@ -15,7 +15,7 @@ get_esalandcover(years = 2015:2019)
 resource available.}
 }
 \value{
-A function that returns a character of file paths.
+A function that returns an \code{sf} footprint object.
 }
 \description{
 This 100 meter spatial resolution land cover resource is published by Buchhorn

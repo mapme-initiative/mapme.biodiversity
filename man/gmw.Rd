@@ -15,7 +15,7 @@ get_gmw(years = c(1996, 2007:2010, 2015:2020))
 \item{years}{A numeric vector of the years for which to make GMW available.}
 }
 \value{
-A function that returns a character of file paths.
+A function that returns an \code{sf} footprint object.
 }
 \description{
 This resource is part of the publication by Bunting et al. (2018)

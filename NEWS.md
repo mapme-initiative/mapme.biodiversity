@@ -20,8 +20,11 @@
   for resource functions
 - exports `spds_exists()` for resource function to check if a data source
   is exists
-- resource functions are now expected to return footprints for all resource elements including opening and creation options as well as standardized filenames
-- in case a user-specified destination is found, the package now uses `gdal_translate` to write data from source to destination
+- `get_*()` functions are now required to return footprint objects indicating 
+  the spatial extent of each elements and pointing towards a GDAL readable
+  data source in the `source` column
+- in case a user-specified destination is found, the package now uses 
+  `gdal_translate` to write data from source to destination
 - tests for long-running examples and tests are skipped on GA and CRAN
 
 # mapme.biodiversity 0.7.0

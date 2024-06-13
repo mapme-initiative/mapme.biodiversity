@@ -16,8 +16,8 @@
 #' @param engine The preferred processing functions from either one of "zonal",
 #'   "extract" or "exactextract" as character.
 #' @keywords indicator
-#' @returns A function that returns a tibble with a column for each specified
-#'   stats and a column with the respective date.
+#' @returns A function that returns an indicator tibble with specified drought
+#'   indicator statistics as variable and corresponding values as value.
 #' @include register.R
 #' @export
 #' @examples
@@ -79,7 +79,7 @@ calc_drought_indicator <- function(engine = "extract", stats = "mean") {
 
     prep_results <- function(result, datetimes) {
       result %>%
-        dplyr::mutate(datetime = datetimes, unit = "dimensionless") %>%
+        dplyr::mutate(datetime = datetimes, unit = "percentage") %>%
         tidyr::pivot_longer(cols = -c(datetime, unit), names_to = "variable") %>%
         dplyr::select(datetime, variable, unit, value)
     }

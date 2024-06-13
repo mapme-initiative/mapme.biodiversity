@@ -11,7 +11,7 @@
 #' @param years A numeric vector indicating the years for which to make the
 #'   resource available.
 #' @keywords resource
-#' @returns A function that returns a character of file paths.
+#' @returns A function that returns an `sf` footprint object.
 #' @include register.R
 #' @export
 get_nasa_grace <- function(years = 2003:2022) {
