@@ -15,7 +15,7 @@ get_fritz_et_al(resolution = 100)
 to download. Defaults to 100.}
 }
 \value{
-A function that returns a character of file paths.
+A function that returns an \code{sf} footprint object.
 }
 \description{
 This resource is produced by a neirest-neighbour matching of a crowd-sourced

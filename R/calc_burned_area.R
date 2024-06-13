@@ -11,8 +11,8 @@
 #' @param engine The preferred processing functions from either one of "zonal",
 #'   "extract" or "exactextract" as character.
 #' @keywords indicator
-#' @returns A function that returns a tibble with a column for terrain
-#'   ruggedness index statistics (in meters).
+#' @returns A function that returns an indicator tibble with variable burned
+#'   area and corresponding area (in ha) as values.
 #' @references Giglio, L., C. Justice, L. Boschetti, D. Roy. MODIS/Terra+Aqua
 #'   Burned Area Monthly L3 Global 500m SIN Grid V061. 2021, distributed by
 #'   NASA EOSDIS Land Processes Distributed Active Archive Center.

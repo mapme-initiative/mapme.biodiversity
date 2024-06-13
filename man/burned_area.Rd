@@ -12,8 +12,8 @@ calc_burned_area(engine = "extract")
 "extract" or "exactextract" as character.}
 }
 \value{
-A function that returns a tibble with a column for terrain
-ruggedness index statistics (in meters).
+A function that returns an indicator tibble with variable burned
+area and corresponding area (in ha) as values.
 }
 \description{
 Calculates Monthly Burned Area based on the Terra and Aqua combined

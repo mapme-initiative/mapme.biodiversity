@@ -15,7 +15,7 @@ get_mcd64a1(years = 2000:2022)
 for. Must be greater than the year 2000.}
 }
 \value{
-A function that returns a character of file paths.
+A function that returns an \code{sf} footprint object.
 }
 \description{
 The Terra and Aqua combined MCD64A1 Version 6.1 Burned Area data product is

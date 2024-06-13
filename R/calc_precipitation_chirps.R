@@ -13,7 +13,8 @@
 #' @param engine The preferred processing functions from either one of "zonal",
 #'   "extract" or "exactextract" as character.
 #' @keywords indicator
-#' @returns A function that returns a tibble with precipitation sums.
+#' @returns A function that returns an indicator tibble with variable
+#'   precipitation and sum of precipitation (in mm) as value.
 #' @include register.R
 #' @export
 #' @examples

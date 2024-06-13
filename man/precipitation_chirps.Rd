@@ -15,7 +15,8 @@ precipitation statistics.}
 "extract" or "exactextract" as character.}
 }
 \value{
-A function that returns a tibble with precipitation sums.
+A function that returns an indicator tibble with variable
+precipitation and sum of precipitation (in mm) as value.
 }
 \description{
 This functions allows to calculate precipitation sums based on the

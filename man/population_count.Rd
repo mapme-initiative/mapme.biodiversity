@@ -16,8 +16,8 @@ either one or multiple inputs as character "min", "max", "sum", "mean", "median"
 "sd" or "var".}
 }
 \value{
-A function that returns tibble with a column for population count
-statistics.
+A function that returns an indicator tibble with the specified
+populations statistics as variable and the corresponding values as value.
 }
 \description{
 WorldPop, which was initiated in 2013, offers easy access to spatial demographic

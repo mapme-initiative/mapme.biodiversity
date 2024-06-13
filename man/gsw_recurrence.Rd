@@ -15,8 +15,8 @@ calc_gsw_recurrence(engine = "extract", min_recurrence = NULL)
 recurrence area \verb{[0, 100]}.}
 }
 \value{
-A function that returns a tibble with a column for the aggregated
-GSW recurrence indicator.
+A function that returns an indicator tibble with recurrence as
+variable and the corresponding area (in ha) as value.
 }
 \description{
 Water Recurrence is a measurement of the degree of variability in the

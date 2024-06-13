@@ -8,8 +8,8 @@
 calc_landcover()
 }
 \value{
-A function that returns tibble with a column for area (in ha) and
-the percentage covered per landcover class.
+A function that returns an indicator tibble with landcover classes
+as variables and corresponding areas (in ha) as value.
 }
 \description{
 The land cover data shows us how much of the region is covered by forests,

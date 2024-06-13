@@ -16,8 +16,8 @@ single or multiple inputs as character. Supported statistics are: "mean",
 "median", "sd", "min", "max", "sum" "var".}
 }
 \value{
-A function that returns a tibble with a column for minimum
-temperature statistics (in °C).
+A function that returns an indicator tibble with minimum temperature
+statistics as variables and corresponding values as value.
 }
 \description{
 This function allows to efficiently calculate minimum temperature statistics

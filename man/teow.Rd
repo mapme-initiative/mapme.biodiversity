@@ -8,7 +8,7 @@
 get_teow()
 }
 \value{
-A function that returns a character of file paths.
+A function that returns an \code{sf} footprint object.
 }
 \description{
 This resource is part of the publication by Olson et al. (2004)

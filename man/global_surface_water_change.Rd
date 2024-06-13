@@ -15,7 +15,7 @@ get_global_surface_water_change(version = "v1_4_2021")
 to make available.}
 }
 \value{
-A function that returns a character of file paths.
+A function that returns an \code{sf} footprint object.
 }
 \description{
 The Global Surface Water dataset was developed by the European Commission's

@@ -7,6 +7,15 @@
 #' index (tri) statistics for polygons. For each polygon, the desired statistic(s)
 #' are returned.
 #'
+#'  The range of index values and corresponding meaning:
+#'   - 0-80 m - level surface
+#'   - 81-116 m - nearly level surface
+#'   - 117-161 m - slightly rugged surface
+#'   - 162-239 m - intermediately rugged surface
+#'   - 240-497 m - moderately rugged surface
+#'   - 498-958 m - highly rugged surface
+#'   - 959-4367 m  extremely rugged surface
+#'
 #' The required resources for this indicator are:
 #'  - [nasa_srtm]
 #'
@@ -17,16 +26,9 @@
 #'   single or multiple inputs as character. Supported statistics are: "mean",
 #'   "median", "sd", "min", "max", "sum" "var".
 #' @keywords indicator
-#' @returns A function that returns a tibble with a column for terrain
-#'   ruggedness index statistics (in meters).
-#'   The range of index values and corresponding meaning:
-#'   (1) 0 - 80 m  :- level surface
-#'   (2) 81-116 m  :- nearly level surface
-#'   (3) 117-161 m :- slightly rugged surface
-#'   (4) 162-239 m :- intermediately rugged surface
-#'   (5) 240-497 m :- moderately rugged surface
-#'   (6) 498-958 m :- highly rugged surface
-#'   (7) 959-4367 m:- extremely rugged surface
+#' @returns A function that returns an indicator tibble with tri as variable and
+#'   the respective statistic as value.
+#'
 #' @references Riley, S. J., DeGloria, S. D., & Elliot, R. (1999). Index that quantifies
 #'   topographic heterogeneity. Intermountain Journal of Sciences, 5(1-4), 23-27.
 #' @include register.R

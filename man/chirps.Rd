@@ -15,7 +15,7 @@ get_chirps(years = 1981:2020)
 layers. Must be greater 1981, defaults to \code{c(1981:2020)}.}
 }
 \value{
-A function that returns a character of file paths.
+A function that returns an \code{sf} footprint object.
 }
 \description{
 This resource is published by Funk et al. (2015) and represents a quasi-global

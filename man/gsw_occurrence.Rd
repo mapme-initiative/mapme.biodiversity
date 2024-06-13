@@ -15,8 +15,8 @@ calc_gsw_occurrence(engine = "extract", min_occurrence = NULL)
 occurrence area \verb{[0, 100]}.}
 }
 \value{
-A function that returns a tibble with a column for the aggregated
-GSW occurrence indicator.
+A function that returns an indicator tibble with occurrence as
+variable and the corresponding area (in ha) as value.
 }
 \description{
 GSW occurrence raw data comes in raster files with integer cell values

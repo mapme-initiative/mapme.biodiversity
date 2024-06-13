@@ -11,8 +11,8 @@
 #' @name mangroves_area
 #' @docType data
 #' @keywords indicator
-#' @returns A function that returns a tibble with a column for area of mangrove
-#'   (in ha) and corresponding year.
+#' @returns A function that returns an indicator tibble with mangroves as variable
+#'   and corresponding areas (in ha) as value.
 #' @include register.R
 #' @export
 #' @examples

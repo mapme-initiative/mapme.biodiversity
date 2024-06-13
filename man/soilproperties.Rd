@@ -16,9 +16,8 @@ single or multiple inputs as character. Supported statistics are: "mean",
 "median", "sd", "min", "max", "sum" "var".}
 }
 \value{
-A tibble with a column for the SoilGrid layer, the depth and the model
-output statistic as well as additional columns for all zonal statistics
-specified via \code{stats_soil}
+A function that returns an indicator tibble with soilgrid layers and
+statistics as variables and the corresponding statistics as value.
 }
 \description{
 This indicator allows the extraction of zonal statistics for resource layers

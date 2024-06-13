@@ -19,7 +19,7 @@
 #' @param years Numeric vector of years to make the MCD64A1 product available
 #'   for. Must be greater than the year 2000.
 #' @keywords resource
-#' @returns A function that returns a character of file paths.
+#' @returns A function that returns an `sf` footprint object.
 #' @references Giglio, L., C. Justice, L. Boschetti, D. Roy. MODIS/Terra+Aqua
 #'   Burned Area Monthly L3 Global 500m SIN Grid V061. 2021, distributed by
 #'   NASA EOSDIS Land Processes Distributed Active Archive Center.

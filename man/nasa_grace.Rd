@@ -12,7 +12,7 @@ get_nasa_grace(years = 2003:2022)
 resource available.}
 }
 \value{
-A function that returns a character of file paths.
+A function that returns an \code{sf} footprint object.
 }
 \description{
 The resource is published by NASA GRACE Tellus. This data set

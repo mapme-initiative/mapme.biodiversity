@@ -14,7 +14,7 @@
 #'   "GFC-2023-v1.11". Check mapme.biodiversity:::.available_gfw_versions()
 #'   to get a list of available versions
 #' @keywords resource
-#' @returns A function that returns a character of file paths.
+#' @returns A function that returns an `sf` footprint object.
 #' @references Hansen, M. C., P. V. Potapov, R. Moore, M. Hancher, S. A.
 #' Turubanova, A. Tyukavina, D. Thau, S. V. Stehman, S. J. Goetz, T. R.
 #' Loveland, A. Kommareddy, A. Egorov, L. Chini, C. O. Justice, and J. R. G.

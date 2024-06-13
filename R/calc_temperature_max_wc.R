@@ -14,7 +14,8 @@
 #'   single or multiple inputs as character. Supported statistics are: "mean",
 #'   "median", "sd", "min", "max", "sum" "var".
 #' @keywords indicator
-#' @returns A tibble with a column for maximum temperature statistics (in °C)
+#' @returns A function that returns an indicator tibble with maximum temperature
+#'   statistics as variables and corresponding values as value.
 #' @include register.R
 #' @export
 #' @examples

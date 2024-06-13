@@ -56,9 +56,8 @@
 #' @param precision_time A numeric indicating the precision value of the
 #'   temporal coding up to which events are included. Defaults to 1.
 #' @keywords indicator
-#' @returns A function that returns a tibble with a column for the date
-#'   (year and month), the type of violence an counts of civilian fatalities,
-#'   unknown fatalities and the total sum of fatalities.
+#' @returns A function that returns an indicator tibble with the type of
+#'   violence as variable and counts of civilian fatalities as value.
 #' @references Sundberg, Ralph, and Erik Melander, 2013, “Introducing the UCDP
 #'   Georeferenced Event Dataset”, Journal of Peace Research, vol.50, no.4, 523-532
 #' @include register.R

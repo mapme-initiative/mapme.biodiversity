@@ -15,8 +15,8 @@
 #'   single or multiple inputs as character. Supported statistics are: "mean",
 #'   "median", "sd", "min", "max", "sum" "var".
 #' @keywords indicator
-#' @returns A function that returns a tibble with a column for accessibility
-#'   statistics (in minutes).
+#' @returns A function that returns an indicator tibble with city ranges and
+#'   statisics as variable and corresponding values (in minutes) as value.
 #' @include register.R
 #' @export
 #' @examples

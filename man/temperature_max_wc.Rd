@@ -16,7 +16,8 @@ single or multiple inputs as character. Supported statistics are: "mean",
 "median", "sd", "min", "max", "sum" "var".}
 }
 \value{
-A tibble with a column for maximum temperature statistics (in °C)
+A function that returns an indicator tibble with maximum temperature
+statistics as variables and corresponding values as value.
 }
 \description{
 This function allows to efficiently calculate maximum temperature statistics

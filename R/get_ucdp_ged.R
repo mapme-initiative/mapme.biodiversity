@@ -24,7 +24,7 @@
 #' @param version A character vector specifying
 #'   the version to download. Defaults to "latest".
 #' @keywords resource
-#' @returns A function that returns a character of file paths.
+#' @returns A function that returns an `sf` footprint object.
 #' @references Davies, Shawn, Therese Pettersson & Magnus Öberg (2022).
 #' Organized violence 1989-2021 and drone warfare.
 #' Journal of Peace Research 59(4).
