@@ -87,6 +87,8 @@
 <code>get_*()</code> functions are now required to return footprint objects indicating the spatial extent of each elements and pointing towards a GDAL readable data source in the <code>source</code> column</li>
 <li>in case a user-specified destination is found, the package now uses <code>gdal_translate</code> to write data from source to destination</li>
 <li>tests for long-running examples and tests are skipped on GA and CRAN</li>
+<li>fixes a bug in checking if a portfolio inherits from <code>tbl_df</code>
+</li>
 </ul></div>
 </div>
     <div class="section level2">
