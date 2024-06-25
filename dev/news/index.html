@@ -76,6 +76,8 @@
 <code>README.md</code> now includes a section on how to set up cloud-storages to use as a destination for resource data</li>
 <li>The quickstart vignette now uses GFW data as example data</li>
 <li>chunking is now applied based on the area of an assets bounding box instead of its own area</li>
+<li>
+<code><a href="../reference/portfolio.html">write_portfolio()</a></code> now again serializes to a two-table GeoPackage and re-introduces <code><a href="../reference/portfolio.html">read_portfolio()</a></code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/294" class="external-link">#294</a>)</li>
 </ul></div>
 <div class="section level3">
 <h3 id="internal-development-version">Internal<a class="anchor" aria-label="anchor" href="#internal-development-version"></a></h3>
@@ -107,7 +109,7 @@
 <h3 id="general-0-7-0">General<a class="anchor" aria-label="anchor" href="#general-0-7-0"></a></h3>
 <ul><li>exports <code><a href="../reference/mapme.html">prep_resources()</a></code> to prepare resources for single assets</li>
 <li>exports <code><a href="../reference/portfolio.html">portfolio_long()</a></code> and <code><a href="../reference/portfolio.html">portfolio_wide()</a></code> to automatically un-nest indicator columns and change the data layout to either long or wide</li>
-<li>changes the behavior of <code><a href="../reference/portfolio.html">write_portfolio()</a></code> to serialize portfolios to GDAL supported spatial formats in either long or wide format and deprecates <code>read_portfolio()</code>
+<li>changes the behavior of <code><a href="../reference/portfolio.html">write_portfolio()</a></code> to serialize portfolios to GDAL supported spatial formats in either long or wide format and deprecates <code><a href="../reference/portfolio.html">read_portfolio()</a></code>
 </li>
 <li>introduces option <code>chunk_size</code> to <code><a href="../reference/mapme.html">mapme_options()</a></code> to control the size for which polygons are split and processed in chunks</li>
 <li>allows assets of type <code>'MULTIPOLYGON'</code> and automatically combines the results based on an aggregation function</li>
@@ -414,7 +416,7 @@
 <li>indicators are added to the portfolio object as nested list columns</li>
 <li>a processed portfolio object can be exported as a GeoPackage via <code><a href="../reference/portfolio.html">write_portfolio()</a></code>
 </li>
-<li>a portfolio saved to disk as a GeoPackage can be read back into R via <code>read_portfolio()</code>. If users wish to download additional resources or calculate indicators, <code>init_portfolio()</code> has to be called again.</li>
+<li>a portfolio saved to disk as a GeoPackage can be read back into R via <code><a href="../reference/portfolio.html">read_portfolio()</a></code>. If users wish to download additional resources or calculate indicators, <code>init_portfolio()</code> has to be called again.</li>
 <li>Parallelization using multiple cores on the host machine is disabled on Windows</li>
 <li>on MacOS, the s2 engine for spherical geometric vector operations is disabled and lwgeom is used instead.</li>
 </ul></div>
