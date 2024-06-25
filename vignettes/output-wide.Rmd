@@ -216,8 +216,6 @@ certain indicators you will have to subset the portfolio as indicated
 in the following code block:
 
 ```{r write-output}
-dsn_long <- tempfile(fileext = ".gpkg")
-dsn_wide <- tempfile(fileext = ".gpkg")
-write_portfolio(select(aoi, traveltime), dsn_long, format = "long", quiet = TRUE)
-write_portfolio(select(aoi, traveltime), dsn_wide, format = "wide", quiet = TRUE)
+dsn <- tempfile(fileext = ".gpkg")
+write_portfolio(select(aoi, traveltime), dsn, quiet = TRUE)
 ```

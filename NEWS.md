@@ -13,6 +13,8 @@
 - The quickstart vignette now uses GFW data as example data
 - chunking is now applied based on the area of an assets bounding box instead
   of its own area
+- `write_portfolio()` now again serializes to a two-table GeoPackage and
+  re-introduces `read_portfolio()` (#294)
 
 ## Internal
 

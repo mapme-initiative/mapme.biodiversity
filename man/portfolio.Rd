@@ -3,11 +3,14 @@
 \name{portfolio}
 \alias{portfolio}
 \alias{write_portfolio}
+\alias{read_portfolio}
 \alias{portfolio_long}
 \alias{portfolio_wide}
 \title{Portfolio methods}
 \usage{
-write_portfolio(x, dsn, format = c("long", "wide"), overwrite = FALSE, ...)
+write_portfolio(x, dsn, ...)
+
+read_portfolio(src, ...)
 
 portfolio_long(x, indicators = NULL, drop_geoms = FALSE)
 
@@ -16,15 +19,12 @@ portfolio_wide(x, indicators = NULL, drop_geoms = FALSE)
 \arguments{
 \item{x}{A portfolio object processed with \code{mapme.biodiversity}.}
 
-\item{dsn}{A file path for the output file.}
+\item{dsn}{A file path for the output file (must end with \code{gpkg}).}
 
-\item{format}{A character indicating if data should be written in long or
-wide format.}
+\item{...}{Additional arguments supplied to \code{write_sf()} or \code{read_sf()}}
 
-\item{overwrite}{A logical indicating if the output file should be
-overwritten if it exists.}
-
-\item{...}{Additional arguments supplied to \code{st_write()}}
+\item{src}{A character vector pointing to a GeoPackage that has been
+previously written to disk via \code{write_portfolio()}}
 
 \item{indicators}{If NULL (the default), all indicator columns will be detected
 and transformed automatically. If a character vector is supplied, only
@@ -35,18 +35,23 @@ those indicators will be transformed.}
 \value{
 \code{write_portfolio()} returns \code{dsn}, invisibly.
 
+\code{read_portfolio()} returns an \code{sf} object object with nested list
+columns for every indicator found in the GeoPackage source file.
+
 \code{portfolio_long()} returns the portfolio object in long-format.
 
 \code{portfolio_wide()} returns the portfolio object in wide-format.
 }
 \description{
 \code{write_portfolio()} writes a processed biodiversity portfolio to disk.
-In order to ensure interoperability with other geospatial software, the
-data has to be transformed to either long- or wide-format. With the long
-format, geometries will be repeated thus possibly resulting in
-a large file size. With the wide-format, indicators will be added
-to the portfolio as columns without repeating the geometries, but potentially
-resulting in a large number of columns
+Portfolio data will only be serialized to disk as a GeoPackage including
+two tables: \code{metadata} and \code{indicators}. The \code{metadata} tables
+includes, among other simple variables the geometries and a primary
+key called \code{assetid}. The 'indicators' tables includes the foreign key
+\code{assetid}, a column called \code{indicator} giving the name of the original
+indicator as well as the standard indicator columns \code{datetime}, \code{variable},
+\code{unit}, and \code{value}. For convenience, use \code{read_portfolio()} to read
+such a portfolio GeoPackage back into R.
 
 \code{portfolio_long()} transforms a portfolio to long-format, potentially
 dropping geometries in the process.
