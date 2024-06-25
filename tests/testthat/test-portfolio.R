@@ -24,18 +24,47 @@ test_that("portoflio I/O works as expected", {
 
   x[["biome"]] <- indicator
 
-  expect_invisible(out <- write_portfolio(x, dsn, format = "long", quiet = TRUE))
+  expect_invisible(out <- write_portfolio(x, dsn, quiet = TRUE))
   expect_equal(out, dsn)
-  expect_error(write_portfolio(x, dsn, overwrite = FALSE))
-  result <- st_read(dsn, quiet = T)
-  vars <- c("indicator", "datetime", "variable", "unit", "value")
-  expect_true(all(vars %in% names(result)))
+  expect_silent(write_portfolio(x, dsn))
+  expect_equal(st_layers(dsn)[["name"]], c("metadata", "indicators"))
+
+  meta <- st_read(dsn, layer = "metadata", quiet = TRUE)
+  inds <- st_read(dsn, layer = "indicators", quiet = TRUE)
+
+  expect_true(inherits(meta, "sf"))
+  expect_true(inherits(inds, "data.frame"))
+
+  vars <- c("assetid", "indicator", "datetime", "variable", "unit", "value")
+  expect_true(all(vars %in% names(inds)))
+
+  data <- read_portfolio(dsn, quiet = TRUE)
+  vars <- c("WDPAID", "ISO3", "assetid", "biome", "geom")
+  expect_true(all(vars %in% names(data)))
+  expect_true(inherits(data[["biome"]], "list"))
+
   file.remove(dsn)
-  expect_invisible(out <- write_portfolio(x, dsn, format = "wide", quiet = TRUE))
-  expect_equal(out, dsn)
-  result <- st_read(dsn, quiet = T)
-  expect_true("biome_2000.01.01_biome_ha" %in% names(result))
+
+  x[["biome2"]] <- indicator
+  write_portfolio(x, dsn, quiet = TRUE)
+  data <- read_portfolio(dsn, quiet = TRUE)
+  vars <- c("biome", "biome2")
+  expect_true(all(vars %in% names(data)))
+
   file.remove(dsn)
+
+  x2 <- x
+  x2[["biome"]] <- list(NULL)
+  x2[["biome2"]] <- list(NULL)
+  x <- do.call(rbind, list(x, x2))
+  x$assetid <- 1:2
+
+  write_portfolio(x, dsn)
+  data <- read_portfolio(dsn)
+  expect_true(!is.null(data[["biome"]][[1]]))
+  expect_true(!is.null(data[["biome2"]][[1]]))
+  expect_true(is.null(data[["biome"]][[2]]))
+  expect_true(is.null(data[["biome2"]][[2]]))
 })
 
 test_that(".check_portfolio works as expected", {

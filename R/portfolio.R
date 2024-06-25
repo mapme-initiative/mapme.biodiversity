@@ -1,48 +1,86 @@
 #' Portfolio methods
 #'
 #' `write_portfolio()` writes a processed biodiversity portfolio to disk.
-#' In order to ensure interoperability with other geospatial software, the
-#' data has to be transformed to either long- or wide-format. With the long
-#' format, geometries will be repeated thus possibly resulting in
-#' a large file size. With the wide-format, indicators will be added
-#' to the portfolio as columns without repeating the geometries, but potentially
-#' resulting in a large number of columns
+#' Portfolio data will only be serialized to disk as a GeoPackage including
+#' two tables: `metadata` and `indicators`. The `metadata` tables
+#' includes, among other simple variables the geometries and a primary
+#' key called `assetid`. The 'indicators' tables includes the foreign key
+#' `assetid`, a column called `indicator` giving the name of the original
+#' indicator as well as the standard indicator columns `datetime`, `variable`,
+#' `unit`, and `value`. For convenience, use `read_portfolio()` to read
+#' such a portfolio GeoPackage back into R.
 #'
 #' @param x A portfolio object processed with `mapme.biodiversity`.
-#' @param dsn A file path for the output file.
-#' @param format A character indicating if data should be written in long or
-#'   wide format.
-#' @param overwrite A logical indicating if the output file should be
-#'   overwritten if it exists.
-#' @param ... Additional arguments supplied to `st_write()`
+#' @param dsn A file path for the output file (must end with `gpkg`).
+#' @param ... Additional arguments supplied to `write_sf()` or `read_sf()`
 #' @return `write_portfolio()` returns `dsn`, invisibly.
 #' @name portfolio
 #' @export
 write_portfolio <- function(x,
                             dsn,
-                            format = c("long", "wide"),
-                            overwrite = FALSE,
                             ...) {
+  assetid <- NULL
   x <- .check_portfolio(x)
-  format <- match.arg(format)
+  inds_cols <- .indicators_col(x)
 
-  if (length(.indicators_col(x)) == 0) {
+  if (length(inds_cols) == 0) {
     stop("No calculated indicators have been found")
   }
 
-  if (file.exists(dsn) & !overwrite) {
-    stop(sprintf("Output file %s exists and overwrite is FALSE.", dsn))
+  if (tools::file_ext(dsn) != "gpkg") {
+    warning("Can serialze portoflio only to GeoPackage.")
+    dsn <- gsub(tools::file_ext(dsn), "gpkg", dsn)
   }
 
-  transformer <- switch(format,
-    long = portfolio_long,
-    wide = portfolio_wide
-  )
+  metadata <- dplyr::select(x, -dplyr::all_of(names(inds_cols)))
+  write_sf(metadata, dsn, "metadata", ...)
 
-  data <- transformer(x)
+  data <- st_drop_geometry(dplyr::select(x, assetid, dplyr::all_of(names(inds_cols))))
+  purrr::walk(names(inds_cols), function(ind) {
+    tmp <- dplyr::select(data, assetid, dplyr::all_of(ind))
+    tmp <- tidyr::unnest(tmp, dplyr::all_of(ind), keep_empty = TRUE)
+    tmp[["indicator"]] <- ind
+    tmp <- tmp[, c("assetid", "indicator", "datetime", "variable", "unit", "value")]
+    write_sf(tmp, dsn, "indicators", append = TRUE, ...)
+  })
 
-  st_write(data, dsn, delete_dsn = overwrite, ...)
-  invisible(dsn)
+  return(invisible(dsn))
+}
+
+#' `read_portfolio()` is used to read a portfolio object that was previously
+#' written to disk via `write_portfolio()` back into R as an `sf` object.
+#' It should be directed against a GeoPackage which was the output
+#' of `write_portfolio()`, otherwise the function is very likely to fail.
+#' All available indicators will be read back into R as nested list columns
+#' reflecting the output once `calc_indicators()` has been called.
+#'
+#' @param src A character vector pointing to a GeoPackage that has been
+#'   previously written to disk via `write_portfolio()`
+#' @return `read_portfolio()` returns an `sf` object object with nested list
+#'   columns for every indicator found in the GeoPackage source file.
+#' @name portfolio
+#' @export
+#'
+read_portfolio <- function(src, ...) {
+  assetid <- indicator <- NULL
+  all_layers <- st_layers(src)
+  if (!identical(all_layers[["name"]], c("metadata", "indicators"))) {
+    stop(sprintf(
+      "Input file at '%s' does not seem to be a proper portfolio file written with 'write_portfolio()'",
+      src
+    ))
+  }
+
+  metadata <- read_sf(src, layer = "metadata")
+  data <- read_sf(src, layer = "indicators")
+
+  data <- tidyr::nest(data, data = c(-assetid, -indicator))
+  is_null <- purrr::map_lgl(data[["data"]], function(x) all(is.na(x)))
+  data[["data"]][is_null] <- list(NULL)
+  data <- tidyr::pivot_wider(data, id_cols = assetid, names_from = indicator, values_from = data)
+
+  metadata <- dplyr::left_join(metadata, data, by = "assetid")
+  .geom_last(st_as_sf(tibble::as_tibble(metadata)))
 }
 
 #' Transform portfolio to long

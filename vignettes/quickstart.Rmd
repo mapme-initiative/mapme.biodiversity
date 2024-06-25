@@ -283,16 +283,16 @@ plan(sequential) # close child processes
 # Exporting an portfolio object
 
 You can use the `write_portfolio()` function to save a processed 
-portfolio object to disk as a `GeoPackage` or any other spatial format supported
-by GDAL. This allows sharing your data with contributors who might not be using 
-R, but any other geospatial software. Simply point towards a non-existing file 
-on your local disk to write the portfolio. You can chose between serializing
-in the long or wide data layout.
+portfolio object to disk as a `GeoPackage`. This allows sharing your data with 
+contributors who might not be using R, but any other geospatial software. 
+Simply point towards a non-existing file on your local disk to write the portfolio. 
+You can use `read_portfolio()` to read back a GeoPackage written in such a way
+into R:
 
 ```{r write-portfolio}
 dsn <- tempfile(fileext = ".gpkg")
-write_portfolio(x = aoi, dsn = dsn, format = "long", quiet = TRUE)
-from_disk <- st_read(dsn, quiet = TRUE)
+write_portfolio(x = aoi, dsn = dsn, quiet = TRUE)
+from_disk <- read_portfolio(dsn, quiet = TRUE)
 from_disk
 ```
 
