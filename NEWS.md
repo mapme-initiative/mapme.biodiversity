@@ -28,6 +28,7 @@
 - in case a user-specified destination is found, the package now uses 
   `gdal_translate` to write data from source to destination
 - tests for long-running examples and tests are skipped on GA and CRAN
+- fixes a bug in checking if a portfolio inherits from `tbl_df`
 
 # mapme.biodiversity 0.7.0
 

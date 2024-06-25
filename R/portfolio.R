@@ -205,7 +205,7 @@ portfolio_wide <- function(x, indicators = NULL, drop_geoms = FALSE) {
   if (any(!unique(st_geometry_type(x)) %in% c("POLYGON", "MULTIPOLYGON"))) {
     stop("Only assets of type 'POLYGON' and 'MULTIPOLYGON' are supported.")
   }
-  if (!inherits(x, "tibble")) {
+  if (!inherits(x, "tbl_df")) {
     x <- st_as_sf(tibble::as_tibble(x))
   }
   if ("assetid" %in% names(x) && verbose) {
