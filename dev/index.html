@@ -364,7 +364,7 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="do">## Linking to GEOS 3.12.1, GDAL 3.8.2, PROJ 9.3.1; sf_use_s2() is TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="do">## Linking to GEOS 3.12.1, GDAL 3.9.0, PROJ 9.4.0; sf_use_s2() is TRUE</span></span></code></pre></div>
 <p>Once you have decided on an indicator you are interested in, you can start by making the required resource available for your portfolio. Using <code><a href="reference/mapme.html">mapme_options()</a></code> you can set an output directory, control the maximum size of polygons before they are chunked into smaller parts, and control the verbosity of the package.</p>
 <p>A portfolio is represented by an sf-object. It is required for the object to only contain geometries of type <code>POLYGON</code> and <code>MULTIPOLYGON</code> as assets. We can request the download of a resource for the spatial extent of our portfolio by using the <code><a href="reference/mapme.html">get_resources()</a></code> function. We simply supply our portfolio and one or more resource functions. Once the resources were made available, we can query the calculation of an indicator by using the <code><a href="reference/mapme.html">calc_indicators()</a></code> function. This function also expects the portfolio as input and one or more indicator functions. Once the indicator has been calculated for all assets in a portfolio, the data is returned as a nested list column to the original portfolio object. The output of each indicator is standardized to common format, consisting of a tibble with columns <code>datetime</code>, <code>variable</code>, <code>unit</code>, and <code>value</code>. We can transform the the data to long format by using <code><a href="reference/portfolio.html">portfolio_long()</a></code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -391,19 +391,19 @@
 <span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="do">## Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span></span>
 <span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="do">## Geodetic CRS:  WGS 84</span></span>
 <span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="do">## # A tibble: 4 × 9</span></span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="do">##   WDPAID ISO3  assetid indicator                 datetime   variable unit  value</span></span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="do">##    &lt;dbl&gt; &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;                     &lt;date&gt;     &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt;</span></span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="do">## 1 478140 DOM         1 treecover_area_and_emiss… 2016-01-01 emissio… Mg    4296.</span></span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="do">## 2 478140 DOM         1 treecover_area_and_emiss… 2016-01-01 treecov… ha    2370.</span></span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="do">## 3 478140 DOM         1 treecover_area_and_emiss… 2017-01-01 emissio… Mg    4970.</span></span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="do">## 4 478140 DOM         1 treecover_area_and_emiss… 2017-01-01 treecov… ha    2358.</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="do">##   WDPAID ISO3  assetid indicator        datetime            variable unit  value</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="do">##    &lt;dbl&gt; &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;            &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt;</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="do">## 1 478140 DOM         1 treecover_area_… 2016-01-01 00:00:00 emissio… Mg    4296.</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="do">## 2 478140 DOM         1 treecover_area_… 2016-01-01 00:00:00 treecov… ha    2370.</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="do">## 3 478140 DOM         1 treecover_area_… 2017-01-01 00:00:00 emissio… Mg    4970.</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="do">## 4 478140 DOM         1 treecover_area_… 2017-01-01 00:00:00 treecov… ha    2358.</span></span>
 <span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="do">## # ℹ 1 more variable: geom &lt;POLYGON [°]&gt;</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="using-cloud-storages">Using cloud storages<a class="anchor" aria-label="anchor" href="#using-cloud-storages"></a>
 </h2>
 <p><a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> leverages GDAL’s capabilities for data I/O. For users of this package, that means that integrating a cloud storage is as easy as setting up a configuration file and changing the <code>outdir</code> argument in <code><a href="reference/mapme.html">mapme_options()</a></code>. While you could also decide to use environment variables, we recommend to set up a GDAL config file. You can find GDAL’s documentation on this topic <a href="https://gdal.org/user/configoptions.html#gdal-configuration-file" class="external-link">here</a>.</p>
-<p>Suppose that we want to use an AWS S3 bucket that we have access to to write resource data. Let’s assume this bucket is already set up and we wish to refer to it in our R code as <code>mapme-data</code>, the GDAL configuration file should look something like this:</p>
+<p>Suppose that we want to use an AWS S3 bucket that we control to write resource data to. Let’s assume this bucket is already set up and we wish to refer to it in our R code as <code>mapme-data</code>. The GDAL configuration file should look something like this:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="kw">[credentials]</span></span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="kw">[.mapme-data]</span></span>
