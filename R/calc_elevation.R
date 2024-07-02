@@ -72,7 +72,7 @@ calc_elevation <- function(engine = "extract",
     result %>%
       tidyr::pivot_longer(cols = dplyr::everything(), names_to = "variable") %>%
       dplyr::mutate(
-        datetime = as.Date("2000-02-01"),
+        datetime = as.POSIXct("2000-02-01T00:00:00Z"),
         unit = "m"
       ) %>%
       dplyr::select(datetime, variable, unit, value)

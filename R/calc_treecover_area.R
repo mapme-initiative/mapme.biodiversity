@@ -122,7 +122,7 @@ calc_treecover_area <- function(years = 2000:2023,
 
     gfw_stats %>%
       dplyr::mutate(
-        datetime = as.Date(paste0(years, "-01-01")),
+        datetime = as.POSIXct(paste0(years, "-01-01T00:00:00Z")),
         variable = "treecover",
         unit = "ha",
         value = treecover

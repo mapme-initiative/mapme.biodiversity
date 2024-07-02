@@ -74,9 +74,9 @@ calc_burned_area <- function(engine = "extract") {
     )
 
     names(stats) <- "value"
-
     dates <- gsub("^.*?\\.A([0-9]+)\\..*$", "\\1", names(mcd64a1))
-    stats[["datetime"]] <- as.Date(dates, "%Y%j")
+    dates <- as.POSIXct(paste0(as.Date(dates, "%Y%j"), "T00:00:00Z"))
+    stats[["datetime"]] <- dates
     stats[["unit"]] <- "ha"
     stats[["variable"]] <- "burned_area"
     stats[, c("datetime", "variable", "unit", "value")]

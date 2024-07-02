@@ -58,7 +58,7 @@ calc_mangroves_area <- function() {
       year <- strsplit(names(gmw[j]), "_|.gpkg")[[1]][3]
 
       tibble::tibble(
-        datetime = as.Date(paste0(year, "-01-01")),
+        datetime = as.POSIXct(paste0(year, "-01-01T00:00:00Z")),
         variable = "mangroves",
         unit = "ha",
         value = area

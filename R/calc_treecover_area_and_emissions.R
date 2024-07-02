@@ -133,7 +133,7 @@ calc_treecover_area_and_emissions <- function(years = 2000:2023,
     gfw_stats %>%
       tidyr::pivot_longer(-years, names_to = "variable") %>%
       dplyr::mutate(
-        datetime = as.Date(paste0(years, "-01-01")),
+        datetime = as.POSIXct(paste0(years, "-01-01T00:00:00Z")),
         unit = ifelse(variable == "treecover", "ha", "Mg")
       ) %>%
       dplyr::select(datetime, variable, unit, value)

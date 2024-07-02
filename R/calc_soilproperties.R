@@ -85,7 +85,7 @@ calc_soilproperties <- function(engine = "extract", stats = "mean") {
       dplyr::mutate(
         value = value / conversion_factor,
         variable = paste0(variable, "_", stat),
-        datetime = as.Date("2017-02-01")
+        datetime = as.POSIXct("2017-02-01T00:00:00Z")
       ) %>%
       dplyr::select(datetime, variable, unit = conventional_units, value = value)
   }
