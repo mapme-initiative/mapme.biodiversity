@@ -239,9 +239,9 @@ arbitrarily shaped outputs for indicators. Let’s observe how the
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">aoi</span><span class="op">$</span><span class="va">traveltime</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
-<span><span class="co">#&gt;   datetime   variable                  unit    value</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 2015-01-01 100k_200k_traveltime_mean minutes  206.</span></span></code></pre></div>
+<span><span class="co">#&gt;   datetime            variable                  unit    value</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 2015-01-01 <span style="color: #949494;">00:00:00</span> 100k_200k_traveltime_mean minutes  206.</span></span></code></pre></div>
 <p>From the syntax above, you can see how you can access a single object
 within the nested list column (e.g. by using the list accessor
 <code>[[</code>). In this case, the shape of the <code>traveltime</code>
@@ -256,17 +256,18 @@ functions to transform the portfolio to long or wide formats:</p>
 <span><span class="co">#&gt; Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span></span>
 <span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 7</span></span></span>
-<span><span class="co">#&gt;   assetid indicator  datetime   variable   unit  value                         x</span></span>
-<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       1 traveltime 2015-01-01 100k_200k… minu…  206. ((-71.80933 18.57668, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       2 traveltime 2015-01-01 100k_200k… minu…  273. ((-71.65022 18.57668, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       3 traveltime 2015-01-01 100k_200k… minu…  283. ((-71.49111 18.57668, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       4 traveltime 2015-01-01 100k_200k… minu…  237. ((-71.80933 18.61756, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>       5 traveltime 2015-01-01 100k_200k… minu…  308. ((-71.65022 18.61756, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>       6 traveltime 2015-01-01 100k_200k… minu…  265. ((-71.49111 18.61756, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>       7 traveltime 2015-01-01 100k_200k… minu…  287. ((-71.80933 18.65844, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>       8 traveltime 2015-01-01 100k_200k… minu…  299. ((-71.65022 18.65844, -7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>       9 traveltime 2015-01-01 100k_200k… minu…  235. ((-71.49111 18.65844, -7…</span></span></code></pre></div>
+<span><span class="co">#&gt;   assetid indicator  datetime            variable                  unit    value</span></span>
+<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       1 traveltime 2015-01-01 <span style="color: #949494;">00:00:00</span> 100k_200k_traveltime_mean minutes  206.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       2 traveltime 2015-01-01 <span style="color: #949494;">00:00:00</span> 100k_200k_traveltime_mean minutes  273.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       3 traveltime 2015-01-01 <span style="color: #949494;">00:00:00</span> 100k_200k_traveltime_mean minutes  283.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       4 traveltime 2015-01-01 <span style="color: #949494;">00:00:00</span> 100k_200k_traveltime_mean minutes  237.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>       5 traveltime 2015-01-01 <span style="color: #949494;">00:00:00</span> 100k_200k_traveltime_mean minutes  308.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>       6 traveltime 2015-01-01 <span style="color: #949494;">00:00:00</span> 100k_200k_traveltime_mean minutes  265.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>       7 traveltime 2015-01-01 <span style="color: #949494;">00:00:00</span> 100k_200k_traveltime_mean minutes  287.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>       8 traveltime 2015-01-01 <span style="color: #949494;">00:00:00</span> 100k_200k_traveltime_mean minutes  299.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>       9 traveltime 2015-01-01 <span style="color: #949494;">00:00:00</span> 100k_200k_traveltime_mean minutes  235.</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: x &lt;POLYGON [°]&gt;</span></span></span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/portfolio.html">portfolio_wide</a></span><span class="op">(</span><span class="va">aoi</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Simple feature collection with 9 features and 2 fields</span></span>
@@ -335,20 +336,20 @@ asset:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">aoi</span><span class="op">$</span><span class="va">precipitation_wc</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 12 × 4</span></span></span>
-<span><span class="co">#&gt;    datetime   variable            unit  value</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2018-01-01 worldclim_prec_mean mm     21.1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2018-02-01 worldclim_prec_mean mm     21.4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2018-03-01 worldclim_prec_mean mm     61.4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2018-04-01 worldclim_prec_mean mm     83.6</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2018-05-01 worldclim_prec_mean mm    331. </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2018-06-01 worldclim_prec_mean mm     60.3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2018-07-01 worldclim_prec_mean mm     74.0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2018-08-01 worldclim_prec_mean mm     94.0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2018-09-01 worldclim_prec_mean mm    207. </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2018-10-01 worldclim_prec_mean mm    126. </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 2018-11-01 worldclim_prec_mean mm     52.6</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2018-12-01 worldclim_prec_mean mm     20.2</span></span></code></pre></div>
+<span><span class="co">#&gt;    datetime            variable            unit  value</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2018-01-01 <span style="color: #949494;">00:00:00</span> worldclim_prec_mean mm     21.1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2018-02-01 <span style="color: #949494;">00:00:00</span> worldclim_prec_mean mm     21.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2018-03-01 <span style="color: #949494;">00:00:00</span> worldclim_prec_mean mm     61.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2018-04-01 <span style="color: #949494;">00:00:00</span> worldclim_prec_mean mm     83.6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2018-05-01 <span style="color: #949494;">00:00:00</span> worldclim_prec_mean mm    331. </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2018-06-01 <span style="color: #949494;">00:00:00</span> worldclim_prec_mean mm     60.3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2018-07-01 <span style="color: #949494;">00:00:00</span> worldclim_prec_mean mm     74.0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2018-08-01 <span style="color: #949494;">00:00:00</span> worldclim_prec_mean mm     94.0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2018-09-01 <span style="color: #949494;">00:00:00</span> worldclim_prec_mean mm    207. </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2018-10-01 <span style="color: #949494;">00:00:00</span> worldclim_prec_mean mm    126. </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 2018-11-01 <span style="color: #949494;">00:00:00</span> worldclim_prec_mean mm     52.6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2018-12-01 <span style="color: #949494;">00:00:00</span> worldclim_prec_mean mm     20.2</span></span></code></pre></div>
 <p>For a single asset, we obtain a tibble with 12 rows (for each month
 in the queried year 2018). Now, let’s have a look at what happens if we
 transform this table to long format, this time specifically requesting
@@ -361,18 +362,18 @@ to only extract the <code>precipitation_wc</code> indicators:</p>
 <span><span class="co">#&gt; Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span></span>
 <span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 108 × 8</span></span></span>
-<span><span class="co">#&gt;    assetid traveltime       indicator        datetime   variable     unit  value</span></span>
-<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitation_wc 2018-01-01 worldclim_p… mm     21.1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitation_wc 2018-02-01 worldclim_p… mm     21.4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitation_wc 2018-03-01 worldclim_p… mm     61.4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitation_wc 2018-04-01 worldclim_p… mm     83.6</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitation_wc 2018-05-01 worldclim_p… mm    331. </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitation_wc 2018-06-01 worldclim_p… mm     60.3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitation_wc 2018-07-01 worldclim_p… mm     74.0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitation_wc 2018-08-01 worldclim_p… mm     94.0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitation_wc 2018-09-01 worldclim_p… mm    207. </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitation_wc 2018-10-01 worldclim_p… mm    126. </span></span>
+<span><span class="co">#&gt;    assetid traveltime       indicator   datetime            variable unit  value</span></span>
+<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitat… 2018-01-01 <span style="color: #949494;">00:00:00</span> worldcl… mm     21.1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitat… 2018-02-01 <span style="color: #949494;">00:00:00</span> worldcl… mm     21.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitat… 2018-03-01 <span style="color: #949494;">00:00:00</span> worldcl… mm     61.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitat… 2018-04-01 <span style="color: #949494;">00:00:00</span> worldcl… mm     83.6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitat… 2018-05-01 <span style="color: #949494;">00:00:00</span> worldcl… mm    331. </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitat… 2018-06-01 <span style="color: #949494;">00:00:00</span> worldcl… mm     60.3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitat… 2018-07-01 <span style="color: #949494;">00:00:00</span> worldcl… mm     74.0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitat… 2018-08-01 <span style="color: #949494;">00:00:00</span> worldcl… mm     94.0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitat… 2018-09-01 <span style="color: #949494;">00:00:00</span> worldcl… mm    207. </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>       1 <span style="color: #949494;">&lt;tibble [1 × 4]&gt;</span> precipitat… 2018-10-01 <span style="color: #949494;">00:00:00</span> worldcl… mm    126. </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 98 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: x &lt;POLYGON [°]&gt;</span></span></span></code></pre></div>
 <p>Instead of 9 rows, we get a tibble with 108 rows (9 assets * 12),

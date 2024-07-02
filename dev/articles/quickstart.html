@@ -321,18 +321,18 @@ columns. Let’s have a closer look at this object</p>
 <code class="sourceCode R"><span><span class="va">aoi</span><span class="op">$</span><span class="va">treecover_area</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 24 × 4</span></span></span>
-<span><span class="co">#&gt;    datetime   variable  unit  value</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2000-01-01 treecover ha    <span style="text-decoration: underline;">1</span>975.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2001-01-01 treecover ha    <span style="text-decoration: underline;">1</span>975.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2002-01-01 treecover ha    <span style="text-decoration: underline;">1</span>973.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2003-01-01 treecover ha    <span style="text-decoration: underline;">1</span>940.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2004-01-01 treecover ha    <span style="text-decoration: underline;">1</span>930.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2005-01-01 treecover ha    <span style="text-decoration: underline;">1</span>926.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2006-01-01 treecover ha    <span style="text-decoration: underline;">1</span>919.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2007-01-01 treecover ha    <span style="text-decoration: underline;">1</span>908.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2008-01-01 treecover ha    <span style="text-decoration: underline;">1</span>905.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2009-01-01 treecover ha    <span style="text-decoration: underline;">1</span>903.</span></span>
+<span><span class="co">#&gt;    datetime            variable  unit  value</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2000-01-01 <span style="color: #949494;">00:00:00</span> treecover ha    <span style="text-decoration: underline;">1</span>975.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2001-01-01 <span style="color: #949494;">00:00:00</span> treecover ha    <span style="text-decoration: underline;">1</span>975.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2002-01-01 <span style="color: #949494;">00:00:00</span> treecover ha    <span style="text-decoration: underline;">1</span>973.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2003-01-01 <span style="color: #949494;">00:00:00</span> treecover ha    <span style="text-decoration: underline;">1</span>940.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2004-01-01 <span style="color: #949494;">00:00:00</span> treecover ha    <span style="text-decoration: underline;">1</span>930.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2005-01-01 <span style="color: #949494;">00:00:00</span> treecover ha    <span style="text-decoration: underline;">1</span>926.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2006-01-01 <span style="color: #949494;">00:00:00</span> treecover ha    <span style="text-decoration: underline;">1</span>919.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2007-01-01 <span style="color: #949494;">00:00:00</span> treecover ha    <span style="text-decoration: underline;">1</span>908.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2008-01-01 <span style="color: #949494;">00:00:00</span> treecover ha    <span style="text-decoration: underline;">1</span>905.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2009-01-01 <span style="color: #949494;">00:00:00</span> treecover ha    <span style="text-decoration: underline;">1</span>903.</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 14 more rows</span></span></span></code></pre></div>
 <p>The tibble follows a standard output format, which is the same for
 all indicators. Each indicator is represented as a tibble with the four
@@ -352,18 +352,18 @@ the size of the data object relatively small.</p>
 <code class="sourceCode R"><span><span class="va">geoms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">aoi</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/portfolio.html">portfolio_long</a></span><span class="op">(</span><span class="va">aoi</span>, drop_geoms <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 24 × 6</span></span></span>
-<span><span class="co">#&gt;    assetid indicator      datetime   variable  unit  value</span></span>
-<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>       1 treecover_area 2000-01-01 treecover ha    <span style="text-decoration: underline;">1</span>975.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>       1 treecover_area 2001-01-01 treecover ha    <span style="text-decoration: underline;">1</span>975.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>       1 treecover_area 2002-01-01 treecover ha    <span style="text-decoration: underline;">1</span>973.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>       1 treecover_area 2003-01-01 treecover ha    <span style="text-decoration: underline;">1</span>940.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>       1 treecover_area 2004-01-01 treecover ha    <span style="text-decoration: underline;">1</span>930.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>       1 treecover_area 2005-01-01 treecover ha    <span style="text-decoration: underline;">1</span>926.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>       1 treecover_area 2006-01-01 treecover ha    <span style="text-decoration: underline;">1</span>919.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>       1 treecover_area 2007-01-01 treecover ha    <span style="text-decoration: underline;">1</span>908.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>       1 treecover_area 2008-01-01 treecover ha    <span style="text-decoration: underline;">1</span>905.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>       1 treecover_area 2009-01-01 treecover ha    <span style="text-decoration: underline;">1</span>903.</span></span>
+<span><span class="co">#&gt;    assetid indicator      datetime            variable  unit  value</span></span>
+<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>       1 treecover_area 2000-01-01 <span style="color: #949494;">00:00:00</span> treecover ha    <span style="text-decoration: underline;">1</span>975.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>       1 treecover_area 2001-01-01 <span style="color: #949494;">00:00:00</span> treecover ha    <span style="text-decoration: underline;">1</span>975.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>       1 treecover_area 2002-01-01 <span style="color: #949494;">00:00:00</span> treecover ha    <span style="text-decoration: underline;">1</span>973.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>       1 treecover_area 2003-01-01 <span style="color: #949494;">00:00:00</span> treecover ha    <span style="text-decoration: underline;">1</span>940.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>       1 treecover_area 2004-01-01 <span style="color: #949494;">00:00:00</span> treecover ha    <span style="text-decoration: underline;">1</span>930.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>       1 treecover_area 2005-01-01 <span style="color: #949494;">00:00:00</span> treecover ha    <span style="text-decoration: underline;">1</span>926.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>       1 treecover_area 2006-01-01 <span style="color: #949494;">00:00:00</span> treecover ha    <span style="text-decoration: underline;">1</span>919.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>       1 treecover_area 2007-01-01 <span style="color: #949494;">00:00:00</span> treecover ha    <span style="text-decoration: underline;">1</span>908.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>       1 treecover_area 2008-01-01 <span style="color: #949494;">00:00:00</span> treecover ha    <span style="text-decoration: underline;">1</span>905.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>       1 treecover_area 2009-01-01 <span style="color: #949494;">00:00:00</span> treecover ha    <span style="text-decoration: underline;">1</span>903.</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 14 more rows</span></span></span></code></pre></div>
 </div>
 <div class="section level2">
