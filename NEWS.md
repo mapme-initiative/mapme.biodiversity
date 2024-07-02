@@ -15,6 +15,7 @@
   of its own area
 - `write_portfolio()` now again serializes to a two-table GeoPackage and
   re-introduces `read_portfolio()` (#294)
+- `datetime` column values are now encoded as `POSIXct`
 
 ## Internal
 

@@ -176,7 +176,7 @@ calc_fatalities <- function(years = 1989:2023,
       tibble::as_tibble() %>%
       tidyr::pivot_longer(cols = tidyr::starts_with("death"), names_to = "type_of_death") %>%
       dplyr::mutate(
-        datetime = month,
+        datetime = as.POSIXct(paste0(month, "T00:00:00Z")),
         variable = paste0(type_of_violence, "_", type_of_death),
         unit = "count",
         value = value

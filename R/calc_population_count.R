@@ -81,7 +81,7 @@ calc_population_count <- function(engine = "extract", stats = "sum") {
     )
 
     years <- unlist(lapply(names(worldpop), function(x) strsplit(x, "_")[[1]][2]))
-    results[["datetime"]] <- as.Date(paste0(years, "-01-01"))
+    results[["datetime"]] <- as.POSIXct(paste0(years, "-01-01T00:00:00Z"))
     results[["unit"]] <- "count"
     results %>%
       tidyr::pivot_longer(-c(datetime, unit), names_to = "variable", values_to = "value") %>%

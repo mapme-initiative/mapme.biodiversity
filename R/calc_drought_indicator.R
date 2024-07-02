@@ -75,7 +75,7 @@ calc_drought_indicator <- function(engine = "extract", stats = "mean") {
     )
 
     dates <- sub(".*(\\d{8}).*", "\\1", names(nasa_grace))
-    dates <- as.Date(dates, format = "%Y%m%d")
+    dates <- as.POSIXct(paste0(as.Date(dates, "%Y%m%d"), "T00:00:00Z"))
 
     prep_results <- function(result, datetimes) {
       result %>%

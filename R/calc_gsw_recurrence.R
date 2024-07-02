@@ -104,7 +104,7 @@ calc_gsw_recurrence <- function(engine = "extract", min_recurrence = NULL) {
       tidyr::pivot_longer(cols = dplyr::everything(), names_to = "variable") %>%
       dplyr::mutate(
         variable = "gsw_recurrence",
-        datetime = as.Date("2021-01-01"),
+        datetime = as.POSIXct("2021-01-01T00:00:00Z"),
         unit = "ha"
       ) %>%
       dplyr::select(datetime, variable, unit, value)
