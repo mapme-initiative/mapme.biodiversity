@@ -125,7 +125,7 @@ library(mapme.biodiversity)
 library(sf)
 ```
 
-    ## Linking to GEOS 3.12.1, GDAL 3.8.2, PROJ 9.3.1; sf_use_s2() is TRUE
+    ## Linking to GEOS 3.12.1, GDAL 3.9.0, PROJ 9.4.0; sf_use_s2() is TRUE
 
 Once you have decided on an indicator you are interested in, you can
 start by making the required resource available for your portfolio.
@@ -174,12 +174,12 @@ aoi
     ## Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931
     ## Geodetic CRS:  WGS 84
     ## # A tibble: 4 × 9
-    ##   WDPAID ISO3  assetid indicator                 datetime   variable unit  value
-    ##    <dbl> <chr>   <int> <chr>                     <date>     <chr>    <chr> <dbl>
-    ## 1 478140 DOM         1 treecover_area_and_emiss… 2016-01-01 emissio… Mg    4296.
-    ## 2 478140 DOM         1 treecover_area_and_emiss… 2016-01-01 treecov… ha    2370.
-    ## 3 478140 DOM         1 treecover_area_and_emiss… 2017-01-01 emissio… Mg    4970.
-    ## 4 478140 DOM         1 treecover_area_and_emiss… 2017-01-01 treecov… ha    2358.
+    ##   WDPAID ISO3  assetid indicator        datetime            variable unit  value
+    ##    <dbl> <chr>   <int> <chr>            <dttm>              <chr>    <chr> <dbl>
+    ## 1 478140 DOM         1 treecover_area_… 2016-01-01 00:00:00 emissio… Mg    4296.
+    ## 2 478140 DOM         1 treecover_area_… 2016-01-01 00:00:00 treecov… ha    2370.
+    ## 3 478140 DOM         1 treecover_area_… 2017-01-01 00:00:00 emissio… Mg    4970.
+    ## 4 478140 DOM         1 treecover_area_… 2017-01-01 00:00:00 treecov… ha    2358.
     ## # ℹ 1 more variable: geom <POLYGON [°]>
 
 ## Using cloud storages
@@ -192,10 +192,10 @@ environment variables, we recommend to set up a GDAL config file. You
 can find GDAL’s documentation on this topic
 [here](https://gdal.org/user/configoptions.html#gdal-configuration-file).
 
-Suppose that we want to use an AWS S3 bucket that we have access to to
-write resource data. Let’s assume this bucket is already set up and we
-wish to refer to it in our R code as `mapme-data`, the GDAL
-configuration file should look something like this:
+Suppose that we want to use an AWS S3 bucket that we control to write
+resource data to. Let’s assume this bucket is already set up and we wish
+to refer to it in our R code as `mapme-data`. The GDAL configuration
+file should look something like this:
 
 ``` ini
 [credentials]
