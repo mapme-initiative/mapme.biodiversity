@@ -14,7 +14,7 @@ change for each pixel. The raster files have integer cell values between
     
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.8.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +39,6 @@ change for each pixel. The raster files have integer cell values between
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-how-to-s">How To's</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-how-to-s">
     <a class="dropdown-item" href="../articles/output-wide.html">Transform output to wide</a>
-    <a class="dropdown-item" href="../articles/nasa-firms.html">Use downloaded resources</a>
   </div>
 </li>
 <li class="active nav-item">
@@ -84,8 +83,8 @@ change for each pixel. The raster files have integer cell values between
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A function that returns a tibble with a column for name of the
-transition classes and corresponding area (in ha).</p>
+<p>A function that returns an indicator tibble with transition classes
+as variable and corresponding areas (in ha) as value.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -126,18 +125,18 @@ transition classes and corresponding area (in ha).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -59.84866 ymin: 8.307999 xmax: -59.71 ymax: 8.364002</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  WGS 84</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 9 × 11</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   WDPAID NAME        DESIG_ENG ISO3  assetid indicator datetime   variable unit </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>  <span style="text-decoration: underline;">41</span>057 Shell Beac… Managed … GUY         1 gsw_tran… 2021-01-01 gsw_per… ha   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>  <span style="text-decoration: underline;">41</span>057 Shell Beac… Managed … GUY         1 gsw_tran… 2021-01-01 gsw_new… ha   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>  <span style="text-decoration: underline;">41</span>057 Shell Beac… Managed … GUY         1 gsw_tran… 2021-01-01 gsw_los… ha   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>  <span style="text-decoration: underline;">41</span>057 Shell Beac… Managed … GUY         1 gsw_tran… 2021-01-01 gsw_sea… ha   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>  <span style="text-decoration: underline;">41</span>057 Shell Beac… Managed … GUY         1 gsw_tran… 2021-01-01 gsw_new… ha   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span>  <span style="text-decoration: underline;">41</span>057 Shell Beac… Managed … GUY         1 gsw_tran… 2021-01-01 gsw_sea… ha   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span>  <span style="text-decoration: underline;">41</span>057 Shell Beac… Managed … GUY         1 gsw_tran… 2021-01-01 gsw_per… ha   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span>  <span style="text-decoration: underline;">41</span>057 Shell Beac… Managed … GUY         1 gsw_tran… 2021-01-01 gsw_eph… ha   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">9</span>  <span style="text-decoration: underline;">41</span>057 Shell Beac… Managed … GUY         1 gsw_tran… 2021-01-01 gsw_eph… ha   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 more variables: value &lt;dbl&gt;, geom &lt;POLYGON [°]&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   WDPAID NAME     DESIG_ENG ISO3  assetid indicator datetime            variable</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>  <span style="text-decoration: underline;">41</span>057 Shell B… Managed … GUY         1 gsw_tran… 2021-01-01 <span style="color: #949494;">00:00:00</span> gsw_per…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>  <span style="text-decoration: underline;">41</span>057 Shell B… Managed … GUY         1 gsw_tran… 2021-01-01 <span style="color: #949494;">00:00:00</span> gsw_new…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>  <span style="text-decoration: underline;">41</span>057 Shell B… Managed … GUY         1 gsw_tran… 2021-01-01 <span style="color: #949494;">00:00:00</span> gsw_los…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>  <span style="text-decoration: underline;">41</span>057 Shell B… Managed … GUY         1 gsw_tran… 2021-01-01 <span style="color: #949494;">00:00:00</span> gsw_sea…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>  <span style="text-decoration: underline;">41</span>057 Shell B… Managed … GUY         1 gsw_tran… 2021-01-01 <span style="color: #949494;">00:00:00</span> gsw_new…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span>  <span style="text-decoration: underline;">41</span>057 Shell B… Managed … GUY         1 gsw_tran… 2021-01-01 <span style="color: #949494;">00:00:00</span> gsw_sea…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span>  <span style="text-decoration: underline;">41</span>057 Shell B… Managed … GUY         1 gsw_tran… 2021-01-01 <span style="color: #949494;">00:00:00</span> gsw_per…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span>  <span style="text-decoration: underline;">41</span>057 Shell B… Managed … GUY         1 gsw_tran… 2021-01-01 <span style="color: #949494;">00:00:00</span> gsw_eph…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">9</span>  <span style="text-decoration: underline;">41</span>057 Shell B… Managed … GUY         1 gsw_tran… 2021-01-01 <span style="color: #949494;">00:00:00</span> gsw_eph…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 3 more variables: unit &lt;chr&gt;, value &lt;dbl&gt;, geom &lt;POLYGON [°]&gt;</span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

@@ -5,12 +5,11 @@ articles:
   contributing: contributing.html
   installation: installation.html
   introduction: introduction.html
-  nasa-firms: nasa-firms.html
   output-wide: output-wide.html
   quickstart: quickstart.html
   terminology: terminology.html
   workflow: workflow.html
-last_built: 2024-06-06T06:22Z
+last_built: 2024-07-03T05:40Z
 urls:
   reference: https://mapme-initiative.github.io/mapme.biodiversity/reference
   article: https://mapme-initiative.github.io/mapme.biodiversity/articles

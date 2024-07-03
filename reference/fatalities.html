@@ -24,7 +24,7 @@ one-sided violence
     
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.8.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,6 @@ one-sided violence
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-how-to-s">How To's</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-how-to-s">
     <a class="dropdown-item" href="../articles/output-wide.html">Transform output to wide</a>
-    <a class="dropdown-item" href="../articles/nasa-firms.html">Use downloaded resources</a>
   </div>
 </li>
 <li class="active nav-item">
@@ -113,9 +112,8 @@ temporal coding up to which events are included. Defaults to 1.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A function that returns a tibble with a column for the date
-(year and month), the type of violence an counts of civilian fatalities,
-unknown fatalities and the total sum of fatalities.</p>
+<p>A function that returns an indicator tibble with the type of
+violence as variable and counts of civilian fatalities as value.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -173,7 +171,8 @@ Georeferenced Event Dataset”, Journal of Peace Research, vol.50, no.4, 523-532
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="mapme.html">mapme_options</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  outdir <span class="op">=</span> <span class="va">outdir</span>,</span></span>
-<span class="r-in"><span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>  chunk_size <span class="op">=</span> <span class="fl">1e8</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"burundi.gpkg"</span>,</span></span>
@@ -197,18 +196,18 @@ Georeferenced Event Dataset”, Journal of Peace Research, vol.50, no.4, 523-532
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 29.02493 ymin: -4.499983 xmax: 30.75226 ymax: -2.348487</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  +proj=longlat +datum=WGS84 +no_defs</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 216 × 8</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    sov_a3 assetid indicator  datetime   variable                     unit  value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> BDI          1 fatalities 1991-01-01 non_state_conflict_deaths_c… count     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> BDI          1 fatalities 1991-01-01 non_state_conflict_deaths_t… count     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> BDI          1 fatalities 1991-01-01 non_state_conflict_deaths_u… count     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> BDI          1 fatalities 1991-01-01 one_sided_violence_deaths_c… count     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> BDI          1 fatalities 1991-01-01 one_sided_violence_deaths_t… count     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> BDI          1 fatalities 1991-01-01 one_sided_violence_deaths_u… count     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> BDI          1 fatalities 1991-01-01 state_based_conflict_deaths… count     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> BDI          1 fatalities 1991-01-01 state_based_conflict_deaths… count     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> BDI          1 fatalities 1991-01-01 state_based_conflict_deaths… count     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> BDI          1 fatalities 1991-02-01 non_state_conflict_deaths_c… count     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    sov_a3 assetid indicator  datetime            variable            unit  value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> BDI          1 fatalities 1991-01-01 <span style="color: #949494;">00:00:00</span> state_based_confli… count     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> BDI          1 fatalities 1991-01-01 <span style="color: #949494;">00:00:00</span> state_based_confli… count     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> BDI          1 fatalities 1991-01-01 <span style="color: #949494;">00:00:00</span> state_based_confli… count     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> BDI          1 fatalities 1991-01-01 <span style="color: #949494;">00:00:00</span> non_state_conflict… count     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> BDI          1 fatalities 1991-01-01 <span style="color: #949494;">00:00:00</span> non_state_conflict… count     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> BDI          1 fatalities 1991-01-01 <span style="color: #949494;">00:00:00</span> non_state_conflict… count     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> BDI          1 fatalities 1991-01-01 <span style="color: #949494;">00:00:00</span> one_sided_violence… count     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> BDI          1 fatalities 1991-01-01 <span style="color: #949494;">00:00:00</span> one_sided_violence… count     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> BDI          1 fatalities 1991-01-01 <span style="color: #949494;">00:00:00</span> one_sided_violence… count     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> BDI          1 fatalities 1991-02-01 <span style="color: #949494;">00:00:00</span> state_based_confli… count     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 206 more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1 more variable: geom &lt;POLYGON [°]&gt;</span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
