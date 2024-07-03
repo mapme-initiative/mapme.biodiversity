@@ -1,4 +1,4 @@
-# mapme.biodiversity (development version)
+# mapme.biodiversity 0.8.0
 
 ## General
 
