@@ -1,5 +1,10 @@
 # mapme.biodiversity (development version)
 
+## Bug fixes
+
+- fixes transforming asset to the CRS of raster dataset 
+  in `calc_deforestation_drivers()` (#300)
+
 # mapme.biodiversity 0.8.0
 
 ## General

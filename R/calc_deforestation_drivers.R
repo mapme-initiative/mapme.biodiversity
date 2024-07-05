@@ -48,6 +48,7 @@ calc_deforestation_drivers <- function() {
     if (is.null(fritz_et_al)) {
       return(NULL)
     }
+    x <- st_transform(x, st_crs(fritz_et_al))
     classes <- data.frame(
       class = c(
         "commercial_agriculture", "commercial_oil_palm",

@@ -10,7 +10,6 @@ test_that("deforestation drivers works", {
   mapme_options(outdir = outdir, verbose = FALSE)
   suppressWarnings(get_resources(x, get_fritz_et_al(resolution = 100)))
   drivers <- prep_resources(x)[["fritz_et_al"]]
-  x <- st_transform(x, st_crs(drivers))
 
   cdf <- calc_deforestation_drivers()
   result <- cdf(x, drivers)
