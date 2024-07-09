@@ -245,9 +245,8 @@ functions to transform the portfolio to long or wide formats:</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>       7 traveltime 2015-01-01 <span style="color: #949494;">00:00:00</span> 100k_200k_traveltime_mean minutes  287.</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>       8 traveltime 2015-01-01 <span style="color: #949494;">00:00:00</span> 100k_200k_traveltime_mean minutes  299.</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>       9 traveltime 2015-01-01 <span style="color: #949494;">00:00:00</span> 100k_200k_traveltime_mean minutes  235.</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: x &lt;POLYGON [°]&gt;</span></span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/portfolio.html">portfolio_wide</a></span><span class="op">(</span><span class="va">aoi</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: x &lt;POLYGON [°]&gt;</span></span></span>
+<span><span class="fu"><a href="../reference/portfolio.html">portfolio_wide</a></span><span class="op">(</span><span class="va">aoi</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Simple feature collection with 9 features and 2 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POLYGON</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
@@ -274,7 +273,7 @@ rows just like the original data frame because the indicator
 <p>We could serialize the object to disk in either format by calling
 <code><a href="../reference/portfolio.html">write_portfolio()</a></code> with the respective <code>format</code>
 argument:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dsn_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".gpkg"</span><span class="op">)</span></span>
 <span><span class="va">dsn_wide</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".gpkg"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/portfolio.html">write_portfolio</a></span><span class="op">(</span><span class="va">aoi</span>, <span class="va">dsn_long</span>, format <span class="op">=</span> <span class="st">"long"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -285,7 +284,7 @@ argument:</p>
 </h2>
 <p>Let’s continue to query an indicator which has a multi-row output,
 i.e. precipitation statistics from <a href="https://www.worldclim.org/" class="external-link">WorldClim</a>.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mapme.html">get_resources</a></span><span class="op">(</span><span class="va">aoi</span>, <span class="fu"><a href="../reference/worldclim_precipitation.html">get_worldclim_precipitation</a></span><span class="op">(</span>years <span class="op">=</span> <span class="fl">2018</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mapme.html">calc_indicators</a></span><span class="op">(</span><span class="va">aoi</span>, <span class="fu"><a href="../reference/precipitation_wc.html">calc_precipitation_wc</a></span><span class="op">(</span>stats <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">aoi</span><span class="op">)</span></span>
@@ -311,7 +310,7 @@ now obtained an additional nested-list column called
 <code>precipitation_wc</code>. Note, however, the differences in the
 shape of the indicator tibble when we take a closer look for a specific
 asset:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">aoi</span><span class="op">$</span><span class="va">precipitation_wc</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 12 × 4</span></span></span>
 <span><span class="co">#&gt;    datetime            variable            unit  value</span></span>
@@ -332,7 +331,7 @@ asset:</p>
 in the queried year 2018). Now, let’s have a look at what happens if we
 transform this table to long format, this time specifically requesting
 to only extract the <code>precipitation_wc</code> indicators:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/portfolio.html">portfolio_long</a></span><span class="op">(</span><span class="va">aoi</span>, indicators <span class="op">=</span> <span class="st">"precipitation_wc"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Simple feature collection with 108 features and 7 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POLYGON</span></span>
@@ -360,7 +359,7 @@ identifying values being repeated 12 times each. For very large
 portfolios, this data layout might be very memory intensive. In these
 cases it might be more favorable to transform the portfolio to a wide
 layout.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/portfolio.html">portfolio_wide</a></span><span class="op">(</span><span class="va">aoi</span>, indicators <span class="op">=</span> <span class="st">"precipitation_wc"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Simple feature collection with 9 features and 14 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POLYGON</span></span>
@@ -398,7 +397,7 @@ going to extracted in order to be able to serialize to spatial data
 formats. If it is not desired to include certain indicators you will
 have to subset the portfolio as indicated in the following code
 block:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dsn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".gpkg"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/portfolio.html">write_portfolio</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">aoi</span>, <span class="va">traveltime</span><span class="op">)</span>, <span class="va">dsn</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>

@@ -185,9 +185,8 @@ potential errors or warnings.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> gsw_change            Statistics of the surface water change layer… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> gsw_occurrence        Areal statistic of surface water based on oc… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> gsw_recurrence        Areal statistic of surface water based on re… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 15 more rows</span></span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/indicators.html">available_indicators</a></span><span class="op">(</span><span class="st">"treecover_area"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 15 more rows</span></span></span>
+<span><span class="fu"><a href="../reference/indicators.html">available_indicators</a></span><span class="op">(</span><span class="st">"treecover_area"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 3</span></span></span>
 <span><span class="co">#&gt;   name           description                  resources       </span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>          </span></span>
@@ -197,7 +196,7 @@ We can learn more about this indicator and its required resources by
 using either of the commands below or, if you are viewing the online
 version, head over to the <a href="https://mapme-initiative.github.io/mapme.biodiversity/reference/treecover_area.html">treecover_area</a>
 documentation.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">?</span><span class="va">treecover_area</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/help.html" class="external-link">help</a></span><span class="op">(</span><span class="va">treecover_area</span><span class="op">)</span></span></code></pre></div>
 <p>By inspecting the help page we learned that this indicator requires
@@ -209,7 +208,7 @@ considered as forested.</p>
 <p>With that information at hand, we can start to retrieve the required
 resource. We can learn about all available resources using the
 <code><a href="../reference/resources.html">available_resources()</a></code> function:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/resources.html">available_resources</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 23 × 5</span></span></span>
 <span><span class="co">#&gt;    name                             description             licence source type </span></span>
@@ -224,9 +223,8 @@ resource. We can learn about all available resources using the
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> global_surface_water_occurrence  Global Surface Water -… https:… https… rast…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> global_surface_water_recurrence  Global Surface Water -… https:… https… rast…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> global_surface_water_seasonality Global Surface Water -… https:… https… rast…</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 13 more rows</span></span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/resources.html">available_resources</a></span><span class="op">(</span><span class="st">"gfw_treecover"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 13 more rows</span></span></span>
+<span><span class="fu"><a href="../reference/resources.html">available_resources</a></span><span class="op">(</span><span class="st">"gfw_treecover"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 5</span></span></span>
 <span><span class="co">#&gt;   name          description                                 licence source type </span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
@@ -238,7 +236,7 @@ either of the commands below to open up the help page. If you are
 viewing the online version of this documentation, you can simply head
 over to the <a href="https://mapme-initiative.github.io/mapme.biodiversity/reference/gfw_treecover.html">gfw_treecover</a>
 resource documentation.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">?</span><span class="va">gfw_treecover</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/help.html" class="external-link">help</a></span><span class="op">(</span><span class="va">gfw_treecover</span><span class="op">)</span></span>
 <span><span class="op">?</span><span class="va">gfw_lossyear</span></span>
@@ -249,7 +247,7 @@ We will use a common interface that is used for all resources, called
 and supply one or more resource functions with their respective
 arguments. This will then download the matching resources to the output
 directory specified earlier.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mapme.html">get_resources</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">aoi</span>,</span>
 <span>  <span class="fu"><a href="../reference/gfw_treecover.html">get_gfw_treecover</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"GFC-2023-v1.11"</span><span class="op">)</span>,</span>
@@ -270,7 +268,7 @@ have been made available in the previous step, we can continue
 requesting the calculation of our desired indicator. Note the command
 below would issue an error in case a required resource has not been made
 available via <code><a href="../reference/mapme.html">get_resources()</a></code> beforehand.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mapme.html">calc_indicators</a></span><span class="op">(</span></span>
 <span>  <span class="va">aoi</span>,</span>
 <span>  <span class="fu"><a href="../reference/treecover_area.html">calc_treecover_area</a></span><span class="op">(</span>years <span class="op">=</span> <span class="fl">2000</span><span class="op">:</span><span class="fl">2023</span>, min_size <span class="op">=</span> <span class="fl">1</span>, min_cover <span class="op">=</span> <span class="fl">30</span><span class="op">)</span></span>
@@ -280,7 +278,7 @@ available via <code><a href="../reference/mapme.html">get_resources()</a></code>
 are already familiar with, we see that there is an additional column
 called <code>treecover_area</code> which contains a
 <code>tibble</code>.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">aoi</span></span>
 <span><span class="co">#&gt; Simple feature collection with 1 feature and 2 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POLYGON</span></span>
@@ -295,7 +293,7 @@ called <code>treecover_area</code> which contains a
 <code>sf</code>-object that is named alike the requested indicator. For
 our single asset, this column contains a tibble with 6 rows and four
 columns. Let’s have a closer look at this object</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">aoi</span><span class="op">$</span><span class="va">treecover_area</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 24 × 4</span></span></span>
@@ -326,7 +324,7 @@ respective <a href="https://mapme-initiative.github.io/mapme.biodiversity/articl
 tutorial</a>). Especially for large portfolios, it is usually a good
 idea to keep the geometry information in a separated variable to keep
 the size of the data object relatively small.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">geoms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">aoi</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/portfolio.html">portfolio_long</a></span><span class="op">(</span><span class="va">aoi</span>, drop_geoms <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 24 × 6</span></span></span>
@@ -364,14 +362,14 @@ size.</p>
 topologies (find more information <a href="https://cran.r-project.org/package=future/vignettes/future-3-topologies.html" class="external-link">here</a>).
 To process all assets sequentially, but allow to spawn up to 4 workers
 to process chunks in parallel you might specify:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org" class="external-link">future</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">sequential</span>, <span class="fu"><a href="https://future.futureverse.org/reference/tweak.html" class="external-link">tweak</a></span><span class="op">(</span><span class="va">cluster</span>, workers <span class="op">=</span> <span class="fl">6</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>As another example, with the code below one would apply parallel
 processing of 2 assets, with each having 4 workers available to process
 chunks, thus requiring a total of 8 available cores on the host machine.
 Be sure to not request more workers than available on your machine.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://progressr.futureverse.org" class="external-link">progressr</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://future.futureverse.org/reference/tweak.html" class="external-link">tweak</a></span><span class="op">(</span><span class="va">cluster</span>, workers <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://future.futureverse.org/reference/tweak.html" class="external-link">tweak</a></span><span class="op">(</span><span class="va">cluster</span>, workers <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
@@ -398,7 +396,7 @@ any other geospatial software. Simply point towards a non-existing file
 on your local disk to write the portfolio. You can use
 <code><a href="../reference/portfolio.html">read_portfolio()</a></code> to read back a GeoPackage written in such
 a way into R:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dsn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".gpkg"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/portfolio.html">write_portfolio</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">aoi</span>, dsn <span class="op">=</span> <span class="va">dsn</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">from_disk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/portfolio.html">read_portfolio</a></span><span class="op">(</span><span class="va">dsn</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
