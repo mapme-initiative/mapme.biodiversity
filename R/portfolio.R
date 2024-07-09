@@ -213,14 +213,17 @@ portfolio_wide <- function(x, indicators = NULL, drop_geoms = FALSE) {
   if (!inherits(x, "tbl_df")) {
     x <- st_as_sf(tibble::as_tibble(x))
   }
-  if ("assetid" %in% names(x) && verbose) {
-    msg <- paste("Found a column named 'assetid'.",
-      "Overwritting its values with a unique identifier.",
+  has_assetid <- "assetid" %in% names(x)
+  if (!has_assetid) x[["assetid"]] <- 1:nrow(x)
+  is_unique <- length(unique(x[["assetid"]])) == nrow(x)
+  if (!is_unique) {
+    msg <- paste("Found a column named 'assetid' with non-unique identifiers.",
+      "Overwritting its values.",
       sep = " "
     )
     message(msg)
+    x[["assetid"]] <- 1:nrow(x)
   }
-  x[["assetid"]] <- 1:nrow(x)
   x
 }
 

@@ -7,6 +7,11 @@
 - `write_portfolio()` now drops indicators with only NULL values instead
   of throwing an error (#303)
 
+## Internal 
+
+- `.check_portfolio()` now checks if `assetid` has unique values and only 
+  overrides them if this in not the case (#305)
+
 # mapme.biodiversity 0.8.0
 
 ## General
