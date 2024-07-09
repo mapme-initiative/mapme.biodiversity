@@ -4,6 +4,8 @@
 
 - fixes transforming asset to the CRS of raster dataset 
   in `calc_deforestation_drivers()` (#300)
+- `write_portfolio()` now drops indicators with only NULL values instead
+  of throwing an error (#303)
 
 # mapme.biodiversity 0.8.0
 

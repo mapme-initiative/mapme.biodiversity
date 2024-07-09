@@ -40,8 +40,13 @@ write_portfolio <- function(x,
     tmp <- dplyr::select(data, assetid, dplyr::all_of(ind))
     tmp <- tidyr::unnest(tmp, dplyr::all_of(ind), keep_empty = TRUE)
     tmp[["indicator"]] <- ind
-    tmp <- tmp[, c("assetid", "indicator", "datetime", "variable", "unit", "value")]
-    write_sf(tmp, dsn, "indicators", append = TRUE, ...)
+    vars <- c("assetid", "indicator", "datetime", "variable", "unit", "value")
+    if (!all(vars %in% names(tmp))) {
+      msg <- sprintf("Indicator '%s' contained no valid values. Dropping it from the output.", ind)
+      warning(msg)
+      return()
+    }
+    write_sf(tmp[, vars], dsn, "indicators", append = TRUE, ...)
   })
 
   return(invisible(dsn))

@@ -65,6 +65,13 @@ test_that("portoflio I/O works as expected", {
   expect_true(!is.null(data[["biome2"]][[1]]))
   expect_true(is.null(data[["biome"]][[2]]))
   expect_true(is.null(data[["biome2"]][[2]]))
+
+  file.remove(dsn)
+
+  x$biome2 <- list(c(NULL, NULL))
+  expect_warning(write_portfolio(x, dsn), "Dropping")
+  data <- read_portfolio(dsn)
+  expect_true(!"biome2" %in% names(data))
 })
 
 test_that(".check_portfolio works as expected", {
