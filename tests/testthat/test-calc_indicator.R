@@ -153,12 +153,14 @@ test_that("chunking works correctly", {
       package = "mapme.biodiversity"
     )
   )
+  x$assetid <- 1
+  x <- .geom_last(x)
   area_ha <- (as.numeric(st_area(x)) / 10000) / 5
-  expect_silent(x_chunked <- .chunk_asset(x, chunk_size = area_ha))
-  expect_equal(st_bbox(x), st_bbox(x_chunked))
-  expect_equal(st_area(x), sum(st_area(x_chunked)))
-  expect_equal(nrow(x_chunked), 24)
-  expect_equal(x, .chunk_asset(x, chunk_size = area_ha * 10))
+  x_chunked <- .chunk(x, chunk_size = area_ha)
+  expect_equal(st_bbox(x), st_bbox(x_chunked), tolerance = 1e-4)
+  expect_equal(st_area(x), sum(st_area(x_chunked)), tolerance = 1e-4)
+  expect_equal(nrow(x_chunked), 17)
+  expect_equal(x, .chunk(x, chunk_size = area_ha * 10))
 
   data <- tibble(
     datetime = "2000-01-01",
@@ -186,12 +188,11 @@ test_that("chunking works correctly", {
   expect_equal(vals, c(1, 1, 0, 1, 1, 9, 0))
 
   chunks <- .chunk(x, chunk_size = area_ha)
-  expect_true(inherits(chunks, "list"))
-  expect_equal(length(chunks), 24)
+  expect_true(inherits(chunks, "sf"))
+  expect_equal(nrow(chunks), 17)
   chunks <- .chunk(x, chunk_size = area_ha * 1000)
-  expect_true(inherits(chunks, "list"))
-  expect_equal(length(chunks), 1)
-  expect_equal(nrow(chunks[[1]]), 1)
+  expect_true(inherits(chunks, "sf"))
+  expect_equal(nrow(chunks), 1)
 })
 
 test_that("prep_resources works correctly", {
