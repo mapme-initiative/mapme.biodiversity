@@ -127,6 +127,13 @@ to download.</p></dd>
     <p>A function that returns an <code>sf</code> footprint object.</p>
     </div>
     <div class="section level2">
+    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
+    <p>Note, that the figshare server applies a rather restrictive rate limit
+thus frequently resulting in opaque error codes (see <a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/308" class="external-link">https://github.com/mapme-initiative/mapme.biodiversity/issues/308</a>).
+Please set GDAL configuration options to sensible values in case
+you are running into this issue, e.g.: <code>Sys.setenv("GDAL_HTTP_MAX_RETRY" = "5", "GDAL_HTTP_RETRY_DELAY" = "15")</code>.</p>
+    </div>
+    <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Weiss, D. J., Nelson, A., Gibson, H. S., Temperley, W., Peedell,
 S., Lieber, A., … &amp; Gething, P. W. (2018). A global map of travel time to cities
