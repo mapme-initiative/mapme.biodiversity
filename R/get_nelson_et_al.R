@@ -20,6 +20,11 @@
 #' - "20k_110mio"
 #' - "5mio_50mio"
 #'
+#' @note Note, that the figshare server applies a rather restrictive rate limit
+#'   thus frequently resulting in opaque error codes (see \url{https://github.com/mapme-initiative/mapme.biodiversity/issues/308}).
+#'   Please set GDAL configuration options to sensible values in case
+#'   you are running into this issue, e.g.: \code{Sys.setenv("GDAL_HTTP_MAX_RETRY" = "5", "GDAL_HTTP_RETRY_DELAY" = "15")}.
+#'
 #' @name nelson_et_al
 #' @param ranges A character vector indicating one or more ranges
 #'   to download.
