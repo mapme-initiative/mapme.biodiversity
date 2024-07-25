@@ -15,7 +15,12 @@ get_resources(x, ...)
 
 calc_indicators(x, ...)
 
-prep_resources(x, avail_resources = NULL, resources = NULL)
+prep_resources(
+  x,
+  avail_resources = NULL,
+  resources = NULL,
+  mode = c("portfolio", "asset")
+)
 }
 \arguments{
 \item{...}{One or more functions for resources/indicators}
@@ -46,6 +51,9 @@ the available resources will automatically be determined.}
 
 \item{resources}{A character vector with the resources to be prepared. If it
 it is NULL (the default) all available resources will be prepared.}
+
+\item{mode}{A character indicating the reading mode, e.g. either "portfolio"
+(the default) or "asset".}
 }
 \value{
 \code{mapme_options()} returns a list of options if no arguments are
