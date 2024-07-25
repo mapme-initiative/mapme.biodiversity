@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.8.0.9002</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.8.0.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,6 +45,11 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="mapmebiodiversity-development-version">mapme.biodiversity (development version)<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-development-version"></a></h2>
 <div class="section level3">
+<h3 id="general-development-version">General<a class="anchor" aria-label="anchor" href="#general-development-version"></a></h3>
+<ul><li>
+<code><a href="../reference/mapme.html">prep_resources()</a></code> recieved additional argument <code>mode</code> to get control over the reading mode (e.g. portfolio or asset)</li>
+</ul></div>
+<div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
 <ul><li>fixes transforming asset to the CRS of raster dataset in <code><a href="../reference/deforestation_drivers.html">calc_deforestation_drivers()</a></code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/300" class="external-link">#300</a>)</li>
 <li>
@@ -54,6 +59,8 @@
 <h3 id="internal-development-version">Internal<a class="anchor" aria-label="anchor" href="#internal-development-version"></a></h3>
 <ul><li>
 <code>.check_portfolio()</code> now checks if <code>assetid</code> has unique values and only overrides them if this in not the case (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/305" class="external-link">#305</a>)</li>
+<li>
+<code>.read_raster()</code> now reads values into memory and removes VRT files on-exit</li>
 </ul></div>
 </div>
     <div class="section level2">

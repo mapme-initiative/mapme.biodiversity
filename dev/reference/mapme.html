@@ -37,7 +37,7 @@ available resources will be prepared."><meta property="og:image" content="https:
 
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.8.0.9002</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.8.0.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -100,7 +100,12 @@ available resources will be prepared.</p>
 <span></span>
 <span><span class="fu">calc_indicators</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">prep_resources</span><span class="op">(</span><span class="va">x</span>, avail_resources <span class="op">=</span> <span class="cn">NULL</span>, resources <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">prep_resources</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  avail_resources <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  resources <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  mode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"portfolio"</span>, <span class="st">"asset"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -153,6 +158,11 @@ the available resources will automatically be determined.</p></dd>
 <dd><p>A character vector with the resources to be prepared. If it
 it is NULL (the default) all available resources will be prepared.</p></dd>
 
+
+<dt id="arg-mode">mode<a class="anchor" aria-label="anchor" href="#arg-mode"></a></dt>
+<dd><p>A character indicating the reading mode, e.g. either "portfolio"
+(the default) or "asset".</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -172,7 +182,7 @@ resources as <code>sf</code> and <code>SpatRaster</code>-objects.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">mapme_options</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $outdir</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpaVoWTI/mapme-data"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp33n70s/mapme-data"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $chunk_size</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1e+08</span>
