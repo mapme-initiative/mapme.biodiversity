@@ -119,7 +119,7 @@ calc_indicators <- function(x, ...) {
     }
 
     results <- furrr::future_map(chunks, function(chunk) {
-      resources <- prep_resources(chunk, avail_resources, req_resources)
+      resources <- prep_resources(chunk, avail_resources, req_resources, mode = "asset")
       result <- .compute(chunk, resources, fun, verbose)
       .check_single_asset(result, chunk)
     }, .options = furrr::furrr_options(seed = TRUE))
@@ -144,7 +144,7 @@ calc_indicators <- function(x, ...) {
                                  aggregation,
                                  verbose) {
   x_bbox <- st_as_sf(st_as_sfc(st_bbox(x)))
-  resources <- prep_resources(x_bbox, avail_resources, req_resources)
+  resources <- prep_resources(x_bbox, avail_resources, req_resources, mode = "portfolio")
   results <- .compute(x, resources, fun, verbose)
   if (!inherits(results, "list")) {
     stop("Expected output for processing mode 'portfolio' is a list.")

@@ -242,6 +242,30 @@ test_that("prep_resources works correctly", {
 })
 
 
+test_that("VRT deletion works as expected", {
+  .clear_resources()
+  x <- read_sf(
+    system.file("extdata", "gfw_sample.gpkg",
+      package = "mapme.biodiversity"
+    )
+  )
+
+  xb <- st_buffer(x, 10000)
+  x2 <- st_as_sf(st_as_sfc(st_bbox(xb)))
+
+  r <- rast(ext(xb), nrows = 100, ncols = 100)
+  r[] <- runif(ncell(r))
+  f <- tempfile(fileext = ".tif")
+  writeRaster(r, f)
+  fps <- list(test = make_footprints(f, what = "raster"))
+
+  out <- prep_resources(x, avail_resources = fps, resources = "test", mode = "asset")
+  expect_true(inMemory(out$test))
+  out <- prep_resources(x2, avail_resources = fps, resources = "test", mode = "portfolio")
+  expect_true(file.exists(sources(out$test)))
+})
+
+
 test_that(".read_raster works correctly", {
   dummy <- terra::rast()
   dummy_splitted <- aggregate(dummy, fact = c(ceiling(nrow(dummy) / 4), ceiling(ncol(dummy) / 4)))

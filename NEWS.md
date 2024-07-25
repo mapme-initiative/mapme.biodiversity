@@ -1,5 +1,10 @@
 # mapme.biodiversity (development version)
 
+## General
+
+- `prep_resources()` recieved additional argument `mode` to 
+  get control over the reading mode (e.g. portfolio or asset)
+
 ## Bug fixes
 
 - fixes transforming asset to the CRS of raster dataset 
@@ -11,6 +16,7 @@
 
 - `.check_portfolio()` now checks if `assetid` has unique values and only 
   overrides them if this in not the case (#305)
+- `.read_raster()` now reads values into memory and removes VRT files on-exit
 
 # mapme.biodiversity 0.8.0
 
