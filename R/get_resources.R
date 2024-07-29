@@ -153,7 +153,7 @@ get_resources <- function(x, ...) {
         is_available <- .get_spds(
           source = x[["source"]],
           destination = x[["destination"]],
-          opts = unlist(x[["co"]], x[["oo"]]),
+          opts = unlist(c(x[["co"]], x[["oo"]])),
           what = x[["type"]]
         )
 

@@ -18,6 +18,7 @@
 - `.check_portfolio()` now checks if `assetid` has unique values and only 
   overrides them if this in not the case (#305)
 - `.read_raster()` now reads values into memory and removes VRT files on-exit
+- `.fetch_resources()` now honors both creation and opening options (#315)
 
 # mapme.biodiversity 0.8.0
 
