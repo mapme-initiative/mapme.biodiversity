@@ -69,7 +69,7 @@ get_ucdp_ged <- function(version = "latest") {
     make_footprints(
       fps,
       filenames = gsub("zip", "gpkg", version_ged),
-      what = "vector", oo = c("-oo", "GEOM_POSSIBLE_NAMES=geom_wkt")
+      what = "vector", oo = c("-oo", "GEOM_POSSIBLE_NAMES=geom_wkt", "-s_srs", "EPSG:4326", "-t_srs", "EPSG:4326")
     )
   }
 }
