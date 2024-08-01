@@ -3,11 +3,11 @@
 spatial resolution climate surfaces for global land areas" and
 represents multiple climatic variables from which we will be requiring minimum
 temperature, maximum temperature, and mean precipitation layers. The layers are
-available to download for the period 2000 - 2018 on monthly basis from WorldClim.'><meta property="og:description" content='This resource is published by Fick et al. (2017) "WorldClim 2: new 1-km
+available to download for the period 1960 - 2021 on monthly basis from WorldClim.'><meta property="og:description" content='This resource is published by Fick et al. (2017) "WorldClim 2: new 1-km
 spatial resolution climate surfaces for global land areas" and
 represents multiple climatic variables from which we will be requiring minimum
 temperature, maximum temperature, and mean precipitation layers. The layers are
-available to download for the period 2000 - 2018 on monthly basis from WorldClim.'><meta property="og:image" content="https://mapme-initiative.github.io/mapme.biodiversity/logo.png"><meta name="robots" content="noindex"></head><body>
+available to download for the period 1960 - 2021 on monthly basis from WorldClim.'><meta property="og:image" content="https://mapme-initiative.github.io/mapme.biodiversity/logo.png"><meta name="robots" content="noindex"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -15,7 +15,7 @@ available to download for the period 2000 - 2018 on monthly basis from WorldClim
 
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.8.0.9005</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.8.0.9006</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,12 +56,15 @@ available to download for the period 2000 - 2018 on monthly basis from WorldClim
 spatial resolution climate surfaces for global land areas" and
 represents multiple climatic variables from which we will be requiring minimum
 temperature, maximum temperature, and mean precipitation layers. The layers are
-available to download for the period 2000 - 2018 on monthly basis from WorldClim.</p>
+available to download for the period 1960 - 2021 on monthly basis from WorldClim.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_worldclim_min_temperature</span><span class="op">(</span>years <span class="op">=</span> <span class="fl">2000</span><span class="op">:</span><span class="fl">2018</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_worldclim_min_temperature</span><span class="op">(</span></span>
+<span>  years <span class="op">=</span> <span class="fl">2000</span><span class="op">:</span><span class="fl">2018</span>,</span>
+<span>  resolution <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2.5m"</span>, <span class="st">"5m"</span>, <span class="st">"10m"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -76,6 +79,10 @@ available to download for the period 2000 - 2018 on monthly basis from WorldClim
 <dd><p>A numeric vector indicating for which years to make the
 resource available.</p></dd>
 
+
+<dt id="arg-resolution">resolution<a class="anchor" aria-label="anchor" href="#arg-resolution"></a></dt>
+<dd><p>A character vector indicating the desired resolution.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -84,7 +91,7 @@ resource available.</p></dd>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This resource represents the minimum temperature, layers available to
-download for the period 2000 - 2018 on monthly basis from WorldClim. Encoded
+download for the period 1960 - 2021 on monthly basis from WorldClim. Encoded
 as (°C), representing the minimum temperature per output grid cell.</p>
     </div>
 
