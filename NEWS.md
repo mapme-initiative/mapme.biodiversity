@@ -4,6 +4,8 @@
 
 - `prep_resources()` recieved additional argument `mode` to 
   get control over the reading mode (e.g. portfolio or asset)
+- resources based on WorldClim now support selecting the spatial
+  resolution and cover the historical timeseries starting from 1960 (#302)
 
 ## Bug fixes
 
