@@ -7,6 +7,11 @@
 - resources based on WorldClim now support selecting the spatial
   resolution and cover the historical timeseries starting from 1960 (#302)
 
+- new resources: 
+  - `get_chelsa()`
+- new indicators:
+  - `calc_precipitation_chelsa()`
+
 ## Bug fixes
 
 - fixes transforming asset to the CRS of raster dataset 
