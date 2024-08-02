@@ -44,8 +44,6 @@ test_that("calc_indicator works with MULTIPOLYGON and chunking", {
 
   outdir <- file.path(tempdir(), "mapme.data")
   .copy_resource_dir(outdir)
-  mapme_options(outdir = outdir, verbose = FALSE)
-
   mapme_options(outdir = outdir, chunk_size = area_ha, verbose = FALSE)
 
   x <- get_resources(

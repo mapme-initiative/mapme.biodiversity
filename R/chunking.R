@@ -1,9 +1,8 @@
-.crosses_dateline <- function(geom) {
-  offset <- 10
+.crosses_dateline <- function(geom, offset = 10) {
   bbox <- st_bbox(geom)
   sum <- abs(bbox[[1]]) + abs(bbox[[3]])
   diff <- bbox[[1]] < 0 && bbox[[3]] > 0
-  diff && (360 - offset) < sum
+  diff && (360 - offset) <= sum
 }
 
 .cast_to_polygon <- function(geom) {
@@ -35,6 +34,7 @@
 }
 
 .grid_geom <- function(geom, chunk_size) {
+  stopifnot("assetid" %in% names(geom))
   n <- ceiling(sqrt(.calc_bbox_areas(geom) / chunk_size))
   geom_grid <- st_make_grid(geom, n = n)
   geom_grid <- st_intersection(geom_grid, geom)
