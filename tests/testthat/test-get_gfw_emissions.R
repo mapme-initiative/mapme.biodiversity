@@ -6,6 +6,7 @@ test_that(".get_gfw_emissions works", {
       package = "mapme.biodiversity"
     )
   )
+  .clear_resources()
   ge <- get_gfw_emissions()
   expect_silent(.check_resource_fun(ge))
   expect_silent(fps <- ge(x))
