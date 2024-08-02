@@ -22,6 +22,7 @@
 - `write_portfolio()` now drops indicators with only NULL values instead
   of throwing an error (#303)
 - `get_ucdp_ged()` now adds SRS infos to the footprints object (#313)
+- uses binary writing mode for `worldpop` resource on Windows (#319)
 
 ## Internal 
 
