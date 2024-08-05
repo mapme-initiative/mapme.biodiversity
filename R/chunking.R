@@ -1,8 +1,35 @@
 .crosses_dateline <- function(geom, offset = 10) {
+  stopifnot(inherits(geom, "sfg"))
   bbox <- st_bbox(geom)
   sum <- abs(bbox[[1]]) + abs(bbox[[3]])
   diff <- bbox[[1]] < 0 && bbox[[3]] > 0
   diff && (360 - offset) <= sum
+}
+
+.split_dateline <- function(x) {
+  stopifnot(inherits(x, "sf"))
+  crosses_dateline <- sapply(st_geometry(x), .crosses_dateline)
+  if (any(crosses_dateline)) {
+    fix_dt <- st_wrap_dateline(x[which(crosses_dateline), ])
+    fix_dt <- .cast_to_polygon(fix_dt)
+    x <- rbind(x[-which(crosses_dateline), ], fix_dt)
+  }
+  x
+}
+
+.split_multipolygons <- function(x, chunk_size) {
+  stopifnot(inherits(x, "sf"))
+  is_smaller <- .calc_bbox_areas(x) < chunk_size
+  x[["chunked"]][is_smaller] <- TRUE
+
+  if (all(is_smaller)) {
+    return(x)
+  }
+
+  x_split <- .cast_to_polygon(x[!is_smaller, ])
+  is_smaller <- .calc_bbox_areas(x_split) < chunk_size
+  x_split[["chunked"]][is_smaller] <- TRUE
+  x <- rbind(x[is_smaller, ], x_split)
 }
 
 .cast_to_polygon <- function(geom) {
@@ -62,25 +89,12 @@
   stopifnot("assetid" %in% names(x))
   metadata <- st_drop_geometry(x)
   x <- x[, "assetid"]
+  x[["chunked"]] <- FALSE
+  x <- .split_dateline(x)
+  x <- .split_multipolygons(x, chunk_size)
 
-  crosses_dateline <- sapply(st_geometry(x), .crosses_dateline)
-  if (any(crosses_dateline)) {
-    fix_dt <- st_wrap_dateline(x[which(crosses_dateline), ])
-    fix_dt <- .cast_to_polygon(fix_dt)
-    x <- rbind(x[-which(crosses_dateline), ], fix_dt)
-  }
 
-  areas <- .calc_bbox_areas(x)
-  smaller_chunk_size <- areas < chunk_size
 
-  if (all(smaller_chunk_size)) {
-    return(.finalize_assets(x, metadata))
-  }
-
-  x_ok <- x[smaller_chunk_size, ]
-  x <- x[!smaller_chunk_size, ]
-
-  x <- .cast_to_polygon(x)
   areas <- .calc_bbox_areas(x)
   smaller_chunk_size <- areas < chunk_size
   x_ok <- rbind(x_ok, x[smaller_chunk_size, ])
