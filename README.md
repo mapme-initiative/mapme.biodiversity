@@ -89,6 +89,7 @@ Next, is a list of supported indicators.
 |:-----------------------------|:-------------------------------------------------------------------------------|
 | biome                        | Areal statistics of biomes from TEOW                                           |
 | burned_area                  | Monthly burned area detected by MODIS satellites                               |
+| conflict_exposure            | Percentage of people exposed to conflicts based on UCDP GED                    |
 | deforestation_drivers        | Areal statistics of deforestation drivers                                      |
 | drought_indicator            | Relative wetness statistics based on NASA GRACE                                |
 | ecoregion                    | Areal statstics of ecoregions based on TEOW                                    |
