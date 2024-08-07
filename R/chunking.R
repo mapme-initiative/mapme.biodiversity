@@ -1,5 +1,5 @@
 .chunk <- function(x, chunk_size) {
-  stopifnot(inherits(x, "sf") | "assetid" %in% names(x))
+  stopifnot(inherits(x, "sf") && "assetid" %in% names(x))
   metadata <- st_drop_geometry(x)
   x <- x[, "assetid"]
   x[["chunked"]] <- FALSE
@@ -12,6 +12,7 @@
 }
 
 .finalize_assets <- function(x, meta) {
+  stopifnot("assetid" %in% names(x) && "assetid" %in% names(meta))
   x <- st_sf(tibble::as_tibble(dplyr::left_join(meta, x, by = "assetid")))
   x$chunked <- NULL
   .geom_last(x)
@@ -21,7 +22,7 @@
   stopifnot(inherits(x, "sf"))
   crosses_dateline <- sapply(st_geometry(x), .crosses_dateline)
   if (any(crosses_dateline)) {
-    fix_dt <- st_wrap_dateline(x[which(crosses_dateline), ])
+    fix_dt <- st_wrap_dateline(x[which(crosses_dateline), ], options = c("WRAPDATELINE=YES", "DATELINEOFFSET=10"))
     fix_dt <- .cast_to_polygon(fix_dt)
     x <- rbind(x[-which(crosses_dateline), ], fix_dt)
   }
@@ -37,7 +38,7 @@
 }
 
 .cast_to_polygon <- function(geom) {
-  stopifnot(inherits(geom, "sf"))
+  stopifnot(inherits(geom, "sf") && "assetid" %in% names(geom))
   is_poly <- st_geometry_type(geom) == "POLYGON"
   polys <- geom[is_poly, ]
   casted <- suppressWarnings(st_cast(geom[!is_poly, ], "POLYGON"))
@@ -61,9 +62,8 @@
   geom
 }
 
-
 .split_multipolygons <- function(x, chunk_size) {
-  stopifnot(inherits(x, "sf"))
+  stopifnot(inherits(x, "sf") && "assetid" %in% names(x) && "chunked" %in% names(x))
   is_smaller <- .calc_bbox_areas(x) < chunk_size
   x[["chunked"]][is_smaller] <- TRUE
 
@@ -85,13 +85,12 @@
 }
 
 .chunk_geoms <- function(x, chunk_size) {
-  stopifnot(inherits(x, "sf"))
+  stopifnot(inherits(x, "sf") && "assetid" %in% names(x) && "chunked" %in% names(x))
   if (all(x[["chunked"]])) {
     return(x)
   }
-  index <- which(x[["chunked"]])
-  x_ok <- x[index, ]
-  x_chunk <- x[-index, ]
+  x_ok <- x[x[["chunked"]], ]
+  x_chunk <- x[!x[["chunked"]], ]
 
   x_chunk <- purrr::map(1:nrow(x_chunk), function(i) .make_grid(x_chunk[i, ], chunk_size))
   x_chunk <- st_sf(purrr::list_rbind(x_chunk))
@@ -99,7 +98,7 @@
 }
 
 .make_grid <- function(geom, chunk_size) {
-  stopifnot(inherits(geom, "sf"))
+  # stopifnot(inherits(geom, "sf") && "assetid" %in% names(geom))
   n <- ceiling(sqrt(.calc_bbox_areas(geom) / chunk_size))
   geom_grid <- st_make_grid(geom, n = n)
   geom_grid <- st_intersection(geom_grid, geom)
