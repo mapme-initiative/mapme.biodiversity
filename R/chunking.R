@@ -92,6 +92,12 @@
   x_ok <- x[x[["chunked"]], ]
   x_chunk <- x[!x[["chunked"]], ]
 
+  # only chunks if more than 2x2 cells
+  n_cells <- ceiling(sqrt(.calc_bbox_areas(x_chunk) / chunk_size))
+  to_grid <- n_cells > 2
+  x_ok <- rbind(x_ok, x_chunk[!to_grid, ])
+  x_chunk <- x_chunk[to_grid, ]
+
   x_chunk <- purrr::map(1:nrow(x_chunk), function(i) .make_grid(x_chunk[i, ], chunk_size))
   x_chunk <- st_sf(purrr::list_rbind(x_chunk))
   rbind(x_ok, x_chunk)
