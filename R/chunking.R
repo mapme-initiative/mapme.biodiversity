@@ -89,18 +89,22 @@
   if (all(x[["chunked"]])) {
     return(x)
   }
-  x_ok <- x[x[["chunked"]], ]
-  x_chunk <- x[!x[["chunked"]], ]
+  x_ok <- NULL
+  x_grid <- x[!x[["chunked"]], ]
+  if (any(x[["chunked"]])) {
+    x_ok <- x[x[["chunked"]], ]
+  }
 
   # only chunks if more than 2x2 cells
-  n_cells <- ceiling(sqrt(.calc_bbox_areas(x_chunk) / chunk_size))
+  n_cells <- ceiling(sqrt(.calc_bbox_areas(x_grid) / chunk_size))
   to_grid <- n_cells > 2
-  x_ok <- rbind(x_ok, x_chunk[!to_grid, ])
-  x_chunk <- x_chunk[to_grid, ]
-
-  x_chunk <- purrr::map(1:nrow(x_chunk), function(i) .make_grid(x_chunk[i, ], chunk_size))
-  x_chunk <- st_sf(purrr::list_rbind(x_chunk))
-  rbind(x_ok, x_chunk)
+  if (any(!to_grid)) {
+    x_ok <- rbind(x_ok, x_grid[!to_grid, ])
+    x_grid <- x_grid[to_grid, ]
+  }
+  x_grid <- purrr::map(1:nrow(x_grid), function(i) .make_grid(x_grid[i, ], chunk_size))
+  x_grid <- st_sf(purrr::list_rbind(x_grid))
+  rbind(x_ok, x_grid)
 }
 
 .make_grid <- function(geom, chunk_size) {
