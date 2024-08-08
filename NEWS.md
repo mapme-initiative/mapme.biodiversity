@@ -6,7 +6,9 @@
   get control over the reading mode (e.g. portfolio or asset)
 - resources based on WorldClim now support selecting the spatial
   resolution and cover the historical timeseries starting from 1960 (#302)
-
+- assets are now chunked into sub-components prior to indicator calculation thus
+  parallelization now is applied to a single level (#322)
+  
 - new resources: 
   - `get_chelsa()`
 - new indicators:
