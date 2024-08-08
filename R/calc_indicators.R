@@ -96,35 +96,26 @@ calc_indicators <- function(x, ...) {
                              aggregation,
                              verbose) {
   assetid <- NULL
+  x_chunk <- .chunk(x, chunk_size)
+
+  n <- nrow(x_chunk)
+  s <- 1
+  if (n > 100) {
+    s <- round(n * 0.01)
+    n <- 100
+  }
+
   if (verbose) {
     has_progressr <- check_namespace("progressr", error = FALSE)
     if (has_progressr) {
-      n <- nrow(x)
-      s <- 1
-      if (n > 100) {
-        s <- round(n * 0.01)
-        n <- 100
-      }
       p <- progressr::progressor(n)
     }
   }
 
-  assets <- dplyr::group_split(x, assetid)
-
-  furrr::future_imap(assets, function(asset, i) {
-    chunks <- try(.chunk(asset, chunk_size), silent = TRUE)
-
-    if (inherits(chunks, "try-error")) {
-      return(.check_single_asset(chunks, asset))
-    }
-
-    results <- furrr::future_map(chunks, function(chunk) {
-      resources <- prep_resources(chunk, avail_resources, req_resources, mode = "asset")
-      result <- .compute(chunk, resources, fun, verbose)
-      .check_single_asset(result, chunk)
-    }, .options = furrr::furrr_options(seed = TRUE))
-
-    results <- .combine_chunks(results, aggregation)
+  results <- furrr::future_map(1:nrow(x_chunk), function(i) {
+    chunk <- x_chunk[i, ]
+    resources <- prep_resources(chunk, avail_resources, req_resources, mode = "asset")
+    result <- .compute(chunk, resources, fun, verbose)
 
     if (verbose && has_progressr) {
       if (i %% s == 0) {
@@ -132,8 +123,13 @@ calc_indicators <- function(x, ...) {
       }
     }
 
-    results
-  }, .options = furrr::furrr_options(seed = TRUE))
+    .check_single_asset(result, chunk)
+  }, .options = furrr::furrr_options(seed = TRUE, chunk_size = s))
+
+  results <- split(results, x_chunk[["assetid"]])
+  results <- purrr::map(results, .combine_chunks, aggregation)
+  results <- results[as.character(x[["assetid"]])]
+  unname(results)
 }
 
 .portfolio_processor <- function(x,
@@ -189,66 +185,4 @@ calc_indicators <- function(x, ...) {
   }
   x[name] <- list(results)
   .geom_last(x)
-}
-
-.chunk <- function(x, chunk_size) {
-  assetid <- NULL
-  area_bbox <- as.numeric(st_area(st_as_sfc(st_bbox(x)))) / 10000
-  if (area_bbox > chunk_size) {
-    x <- .cast_to_polygon(x)
-    x <- purrr::map(1:nrow(x), function(i) {
-      .chunk_asset(x[i, ], chunk_size)
-    })
-    x <- st_as_sf(purrr::list_rbind(x))
-  }
-  lapply(1:nrow(x), function(i) x[i, ])
-}
-
-#' @importFrom stats sd var
-.aggregation_fun <- function(agg) {
-  stopifnot(agg %in% available_stats)
-
-  switch(agg,
-    sum = sum,
-    mean = mean,
-    median = median,
-    sd = sd,
-    min = min,
-    max = max,
-    sum = sum,
-    var = var
-  )
-}
-
-.combine_chunks <- function(data, aggregation = "sum") {
-  stat <- NULL
-  is_null <- sapply(data, is.null)
-
-  if (all(is_null)) {
-    return(NULL)
-  }
-
-  data <- data[!is_null]
-  if (length(data) == 1) {
-    return(data[[1]])
-  }
-
-  if (aggregation == "stat") {
-    data <- data %>%
-      purrr::list_rbind() %>%
-      dplyr::mutate(
-        stat = purrr::map_chr(strsplit(variable, "_"), function(x) rev(x)[1])
-      ) %>%
-      dplyr::group_by(datetime, variable, unit) %>%
-      dplyr::summarise(value = .aggregation_fun(stat[1])(value, na.rm = TRUE)) %>%
-      dplyr::ungroup()
-  } else {
-    agg <- .aggregation_fun(aggregation)
-    data <- data %>%
-      purrr::list_rbind() %>%
-      dplyr::group_by(datetime, variable, unit) %>%
-      dplyr::summarise(value = agg(value, na.rm = TRUE)) %>%
-      dplyr::ungroup()
-  }
-  data
 }

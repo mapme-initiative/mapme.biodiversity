@@ -65,6 +65,7 @@ Collate:
     'calc_treecover_area_and_emissions.R'
     'calc_treecoverloss_emissions.R'
     'calc_tri.R'
+    'chunking.R'
     'engines.R'
     'get_chelsa.R'
     'get_chirps.R'

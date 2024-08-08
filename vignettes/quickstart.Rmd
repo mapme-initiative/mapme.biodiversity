@@ -232,29 +232,20 @@ geoms <- st_geometry(aoi)
 portfolio_long(aoi, drop_geoms = TRUE)
 ```
 
-# Enabling parallel computing
+## A note on parallel computing
 
 `{mapme.biodiversity}` follows the parallel computing paradigm of the
 [`{future}`](https://cran.r-project.org/package=future) package. That means 
 that you as a user are in the control if and how you would like to set up 
-parallel processing. Since `{mapme.biodiversity} v0.7` supports 
-parallel processing on a nested-level. The outer level applies parallel processing 
-to the assets in a portfolio, the inner level to potential chunks for polygons 
-that are larger than the specified chunks size or the single components
-of assets of type `MULTIPOLYGON`. 
-
-The maximum chunk size is specified in hectares via `mapme_options()` and defaults
-to 100,000 ha. Polygons larger than this threshold will be split into chunks
-of roughly the same size.
-
-Fine-control of parallel processing is given by using future topologies
-(find more information [here](https://cran.r-project.org/package=future/vignettes/future-3-topologies.html)).
-To process all assets sequentially, but allow to spawn up to 4 workers to 
-process chunks in parallel you might specify:
+parallel processing. Since `{mapme.biodiversity} v0.9`, we apply pre-chunking
+to all assets in the portfolio. That means that assets are split up into
+components of roughly the size of `chunk_size`. These components can than be
+iterated over in parallel to speed up processing. Indicator values will
+be aggregated automatically.
 
 ```{r parallel-1, eval = FALSE}
 library(future)
-plan(list(sequential, tweak(cluster, workers = 6)))
+plan(cluster, workers = 6)
 ```
 
 As another example, with the code below one would apply parallel processing of 2 
@@ -265,12 +256,12 @@ more workers than available on your machine.
 ```{r parallel, eval = FALSE}
 library(progressr)
 
-plan(list(tweak(cluster, workers = 2), tweak(cluster, workers = 4)))
+plan(cluster, workers = 2)
 
 with_progress({
   aoi <- calc_indicators(
     aoi,
-    calc_treecover_area(
+    calc_treecover_area_and_emissions(
       min_size = 1,
       min_cover = 30
     )
