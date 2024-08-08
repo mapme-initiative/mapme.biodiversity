@@ -340,30 +340,21 @@ the size of the data object relatively small.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>       1 treecover_area 2008-01-01 <span style="color: #949494;">00:00:00</span> treecover ha    <span style="text-decoration: underline;">1</span>905.</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>       1 treecover_area 2009-01-01 <span style="color: #949494;">00:00:00</span> treecover ha    <span style="text-decoration: underline;">1</span>903.</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 14 more rows</span></span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="enabling-parallel-computing">Enabling parallel computing<a class="anchor" aria-label="anchor" href="#enabling-parallel-computing"></a>
-</h2>
+<div class="section level3">
+<h3 id="a-note-on-parallel-computing">A note on parallel computing<a class="anchor" aria-label="anchor" href="#a-note-on-parallel-computing"></a>
+</h3>
 <p><a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> follows the parallel computing
 paradigm of the <a href="https://cran.r-project.org/package=future" class="external-link"><code>{future}</code></a>
 package. That means that you as a user are in the control if and how you
 would like to set up parallel processing. Since
-<code>{mapme.biodiversity} v0.7</code> supports parallel processing on a
-nested-level. The outer level applies parallel processing to the assets
-in a portfolio, the inner level to potential chunks for polygons that
-are larger than the specified chunks size or the single components of
-assets of type <code>MULTIPOLYGON</code>.</p>
-<p>The maximum chunk size is specified in hectares via
-<code><a href="../reference/mapme.html">mapme_options()</a></code> and defaults to 100,000 ha. Polygons larger
-than this threshold will be split into chunks of roughly the same
-size.</p>
-<p>Fine-control of parallel processing is given by using future
-topologies (find more information <a href="https://cran.r-project.org/package=future/vignettes/future-3-topologies.html" class="external-link">here</a>).
-To process all assets sequentially, but allow to spawn up to 4 workers
-to process chunks in parallel you might specify:</p>
+<code>{mapme.biodiversity} v0.9</code>, we apply pre-chunking to all
+assets in the portfolio. That means that assets are split up into
+components of roughly the size of <code>chunk_size</code>. These
+components can than be iterated over in parallel to speed up processing.
+Indicator values will be aggregated automatically.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org" class="external-link">future</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">sequential</span>, <span class="fu"><a href="https://future.futureverse.org/reference/tweak.html" class="external-link">tweak</a></span><span class="op">(</span><span class="va">cluster</span>, workers <span class="op">=</span> <span class="fl">6</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">cluster</span>, workers <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span></code></pre></div>
 <p>As another example, with the code below one would apply parallel
 processing of 2 assets, with each having 4 workers available to process
 chunks, thus requiring a total of 8 available cores on the host machine.
@@ -371,12 +362,12 @@ Be sure to not request more workers than available on your machine.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://progressr.futureverse.org" class="external-link">progressr</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://future.futureverse.org/reference/tweak.html" class="external-link">tweak</a></span><span class="op">(</span><span class="va">cluster</span>, workers <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://future.futureverse.org/reference/tweak.html" class="external-link">tweak</a></span><span class="op">(</span><span class="va">cluster</span>, workers <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">cluster</span>, workers <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://progressr.futureverse.org/reference/with_progress.html" class="external-link">with_progress</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mapme.html">calc_indicators</a></span><span class="op">(</span></span>
 <span>    <span class="va">aoi</span>,</span>
-<span>    <span class="fu"><a href="../reference/treecover_area.html">calc_treecover_area</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/treecover_area_and_emissions.html">calc_treecover_area_and_emissions</a></span><span class="op">(</span></span>
 <span>      min_size <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>      min_cover <span class="op">=</span> <span class="fl">30</span></span>
 <span>    <span class="op">)</span></span>
@@ -384,6 +375,7 @@ Be sure to not request more workers than available on your machine.</p>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">sequential</span><span class="op">)</span> <span class="co"># close child processes</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="exporting-an-portfolio-object">Exporting an portfolio object<a class="anchor" aria-label="anchor" href="#exporting-an-portfolio-object"></a>

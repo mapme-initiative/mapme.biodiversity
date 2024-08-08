@@ -48,6 +48,7 @@
 <h3 id="general-development-version">General<a class="anchor" aria-label="anchor" href="#general-development-version"></a></h3>
 <ul><li><p><code><a href="../reference/mapme.html">prep_resources()</a></code> recieved additional argument <code>mode</code> to get control over the reading mode (e.g. portfolio or asset)</p></li>
 <li><p>resources based on WorldClim now support selecting the spatial resolution and cover the historical timeseries starting from 1960 (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/302" class="external-link">#302</a>)</p></li>
+<li><p>assets are now chunked into sub-components prior to indicator calculation thus parallelization now is applied to a single level (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/322" class="external-link">#322</a>)</p></li>
 <li>
 <p>new resources:</p>
 <ul><li><code><a href="../reference/chelsa.html">get_chelsa()</a></code></li>
