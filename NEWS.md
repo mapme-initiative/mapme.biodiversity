@@ -13,6 +13,7 @@
   - `get_chelsa()`
 - new indicators:
   - `calc_precipitation_chelsa()`
+  - `calc_exposed_population()`
 
 ## Bug fixes
 

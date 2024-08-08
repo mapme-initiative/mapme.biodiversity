@@ -93,6 +93,7 @@ Next, is a list of supported indicators.
 | drought_indicator            | Relative wetness statistics based on NASA GRACE                                |
 | ecoregion                    | Areal statstics of ecoregions based on TEOW                                    |
 | elevation                    | Statistics of elevation based on NASA SRTM                                     |
+| exposed_population           | Number of people exposed to conflicts based on UCDP GED                        |
 | fatalities                   | Number of fatalities by group of conflict based on UCDP GED                    |
 | gsw_change                   | Statistics of the surface water change layer by JRC                            |
 | gsw_occurrence               | Areal statistic of surface water based on occurrence threshold                 |
