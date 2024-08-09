@@ -58,6 +58,7 @@ calc_treecoverloss_emissions <- function(years = 2000:2023,
                                          min_size = 10,
                                          min_cover = 35) {
   check_namespace("exactextractr")
+  check_namespace("landscapemetrics", error = FALSE)
   min_cover <- .gfw_check_min_cover(min_cover, "treecoverloss_emissions")
   min_size <- .gfw_check_min_size(min_size, "treecoverloss_emissions")
   years <- .gfw_check_years(years, "treecoverloss_emissions")

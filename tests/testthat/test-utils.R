@@ -31,5 +31,6 @@ test_that(".check_available_years works", {
 
 test_that(".check_namespace works", {
   expect_error(check_namespace("not-a-package"))
+  expect_message(check_namespace("not-a-package", error = FALSE))
   expect_silent(check_namespace("base"))
 })
