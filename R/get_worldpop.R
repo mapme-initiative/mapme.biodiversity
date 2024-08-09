@@ -56,7 +56,7 @@ get_worldpop <- function(years = 2000) {
       if (!spds_exists(dst, what = "raster")) {
         # download original worldpop layer
         tmp <- tempfile(fileext = ".tif")
-        download.file(src, tmp)
+        download.file(src, tmp, mode = ifelse(Sys.info()["sysname"] == "Windows", "wb", "w"))
 
         # translate to regular grid
         sf::gdal_utils(
