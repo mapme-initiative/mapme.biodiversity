@@ -17,6 +17,29 @@ test_that(".calc_bbox_area works", {
   expect_equal(.calc_bbox_areas(x), rep(0.25, 4))
 })
 
+test_that(".try_make_valid works", {
+  bbox <- c(xmin = -10.0, ymin = -10.0, xmax = 10.0, ymax = 10.0)
+  x <- st_as_sf(st_as_sfc(st_bbox(bbox)), crs ="EPSG:4326")
+  grid <- st_sf(geometry = st_make_grid(x, n = 2))
+
+  # invalid geom
+  invalid <- st_sf(geometry = st_sfc(st_polygon(x = list(
+    matrix(c(unlist(st_geometry(grid)[1]), 0, -10, -10, 0), ncol = 2, byrow = T)
+    )), crs = "EPSG:4326"))
+  expect_false(st_is_valid(invalid))
+
+  # geom collection
+  lst <- st_linestring(matrix(c(-10, -10, 10, 10), ncol = 2, byrow = T))
+  col <- st_geometrycollection(x = list(lst, st_geometry(grid)[[2]]))
+  col <- st_sf(geometry = st_sfc(col, crs = "EPSG:4326"))
+  expect_equal(as.character(st_geometry_type(col)), "GEOMETRYCOLLECTION")
+  # try make valid
+  expect_silent(x2 <- .try_make_valid(rbind(grid, invalid, col)))
+  expect_true(inherits(x2, "sf"))
+  expect_equal(nrow(x2), 6)
+  expect_equal(as.character(unique(st_geometry_type(x2))), "POLYGON")
+})
+
 test_that(".cast_to_polygon works", {
   bbox <- c(xmin = -1.0, ymin = -1., xmax = 1.0, ymax = 1.0)
   x <- st_as_sfc(st_bbox(bbox))
