@@ -49,16 +49,26 @@
 .try_make_valid <- function(geom) {
   stopifnot(inherits(geom, "sf"))
   is_invalid <- !st_is_valid(geom)
-  if (all(!is_invalid)) {
-    return(geom)
-  }
-  geom[is_invalid, ] <- st_make_valid(geom[is_invalid, ])
-  still_invalid <- !st_is_valid(geom[is_invalid, ])
-  still_invalid <- which(is_invalid)[still_invalid]
 
-  if (length(still_invalid) > 0) {
-    geom <- geom[-still_invalid, ]
+  if (!all(!is_invalid)) {
+    geom[is_invalid, ] <- st_make_valid(geom[is_invalid, ])
+    still_invalid <- !st_is_valid(geom[is_invalid, ])
+    still_invalid <- which(is_invalid)[still_invalid]
+
+    if (length(still_invalid) > 0) {
+      geom <- geom[-still_invalid, ]
+    }
   }
+
+  types <- st_geometry_type(geom)
+  if (any(types == "GEOMETRYCOLLECTION")) {
+    cols <- geom[types == "GEOMETRYCOLLECTION", ]
+    cols <- suppressWarnings(st_cast(cols))
+    types2 <- st_geometry_type(cols)
+    cols <- cols[types2 %in% c("POLYGON", "MULTIPOLYGON"), ]
+    geom <- rbind(geom[types != "GEOMETRYCOLLECTION", ], cols)
+  }
+
   geom
 }
 
@@ -122,14 +132,14 @@
   stopifnot(agg %in% available_stats)
 
   switch(agg,
-    sum = sum,
-    mean = mean,
-    median = median,
-    sd = sd,
-    min = min,
-    max = max,
-    sum = sum,
-    var = var
+         sum = sum,
+         mean = mean,
+         median = median,
+         sd = sd,
+         min = min,
+         max = max,
+         sum = sum,
+         var = var
   )
 }
 
