@@ -52,6 +52,7 @@ calc_treecover_area <- function(years = 2000:2023,
                                 min_size = 10,
                                 min_cover = 35) {
   check_namespace("exactextractr")
+  check_namespace("landscapemetrics", error = FALSE)
   min_cover <- .gfw_check_min_cover(min_cover, "treecover_area")
   min_size <- .gfw_check_min_size(min_size, "treecover_area")
   years <- .gfw_check_years(years, "treecover_area")
@@ -213,12 +214,6 @@ calc_treecover_area <- function(years = 2000:2023,
 
 .gfw_calc_patches <- function(gfw) {
   if (!requireNamespace("landscapemetrics", quietly = TRUE)) {
-    msg <- paste("Could not load package 'landscapemetrics'.\n",
-      "Consider installing it for better performance with:\n",
-      "install.packages('landscapemetrics)'",
-      sep = ""
-    )
-    message(msg)
     patched <- terra::patches(gfw, directions = 4, zeroAsNA = TRUE)
   } else {
     patched <- landscapemetrics::get_patches(gfw, class = 1, direction = 4)[[1]][[1]]
