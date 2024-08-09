@@ -8,6 +8,8 @@
   resolution and cover the historical timeseries starting from 1960 (#302)
 - assets are now chunked into sub-components prior to indicator calculation thus
   parallelization now is applied to a single level (#322)
+- `chunk_size` now is properly set to 100,000 ha as per documentation (before
+  it was set to 10,000 ha)
   
 - new resources: 
   - `get_chelsa()`

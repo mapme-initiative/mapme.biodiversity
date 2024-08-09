@@ -9,7 +9,7 @@
   dir.create(outdir, showWarnings = FALSE)
   mapme_options(
     outdir = outdir,
-    chunk_size = 10000,
+    chunk_size = 100000,
     retries = 3,
     log_dir = NULL,
     verbose = TRUE
@@ -60,7 +60,7 @@ mapme_options <- function(..., outdir, chunk_size, retries, verbose, log_dir) {
     .pkgenv$chunk_size <- chunk_size
   }
 
-  if(!missing(retries)){
+  if (!missing(retries)) {
     stopifnot(length(retries) == 1 && is.numeric(retries))
     .pkgenv$retries <- retries
   }
@@ -70,7 +70,7 @@ mapme_options <- function(..., outdir, chunk_size, retries, verbose, log_dir) {
     .pkgenv$verbose <- verbose
   }
 
-  if (!missing(log_dir)){
+  if (!missing(log_dir)) {
     stopifnot(is.null(log_dir) | (is.character(log_dir) && length(log_dir) == 1))
     .pkgenv$log_dir <- log_dir
   }
