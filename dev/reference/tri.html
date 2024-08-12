@@ -128,15 +128,21 @@ topographic heterogeneity. Intermountain Journal of Sciences, 5(1-4), 23-27.</p>
 <span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="portfolio.html">portfolio_long</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Resource 'nasa_srtm' is already available.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error : Error while requesting 'https://planetarycomputer.microsoft.com/api/stac/v1/search'. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error in the HTTP2 framing layer</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error in (function (x, name = "nasa_srtm", type = "raster", outdir = mapme_options()[["outdir"]],  : </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Download for NASA SRTM resource was unsuccesfull</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in .check_footprints(resource, resource_name):</span> Download for resource nasa_srtm failed.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> Returning unmodified portfolio.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">aoi</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'aoi' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 4 features and 8 fields</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POLYGON</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  WGS 84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 9</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   WDPAID ISO3  assetid indicator datetime            variable   unit  value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">478</span>140 DOM         1 tri       2000-02-01 <span style="color: #949494;">00:00:00</span> tri_mean   m      33.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> <span style="text-decoration: underline;">478</span>140 DOM         1 tri       2000-02-01 <span style="color: #949494;">00:00:00</span> tri_median m      30.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> <span style="text-decoration: underline;">478</span>140 DOM         1 tri       2000-02-01 <span style="color: #949494;">00:00:00</span> tri_sd     m      18.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> <span style="text-decoration: underline;">478</span>140 DOM         1 tri       2000-02-01 <span style="color: #949494;">00:00:00</span> tri_var    m     349. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1 more variable: geom &lt;POLYGON [°]&gt;</span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
