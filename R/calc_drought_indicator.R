@@ -13,8 +13,7 @@
 #' @name drought_indicator
 #' @param stats Function to be applied to compute statistics for polygons
 #'    either one or multiple inputs as character "mean", "median" or "sd".
-#' @param engine The preferred processing functions from either one of "zonal",
-#'   "extract" or "exactextract" as character.
+#' @param engine Deprecated. Will be removed in a future release.
 #' @keywords indicator
 #' @returns A function that returns an indicator tibble with specified drought
 #'   indicator statistics as variable and corresponding values as value.
@@ -43,7 +42,6 @@
 #'   get_resources(get_nasa_grace(years = 2022)) %>%
 #'   calc_indicators(
 #'     calc_drought_indicator(
-#'       engine = "extract",
 #'       stats = c("mean", "median")
 #'     )
 #'   ) %>%
@@ -51,7 +49,7 @@
 #'
 #' aoi
 #' }
-calc_drought_indicator <- function(engine = "extract", stats = "mean") {
+calc_drought_indicator <- function(stats = "mean", engine = NULL) {
   engine <- check_engine(engine)
   stats <- check_stats(stats)
 

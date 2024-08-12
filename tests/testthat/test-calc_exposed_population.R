@@ -18,8 +18,6 @@ test_that("conflict_exposure works", {
   expect_error(calc_exposed_population(years = 1988), "years")
   expect_error(calc_exposed_population(precision_location = 8), "precision_location")
   expect_error(calc_exposed_population(precision_time = 8), "precision_time")
-  expect_error(calc_exposed_population(engine = "NA"), "engine")
-
 
   cce <- calc_exposed_population(
     distance = 10000,
@@ -47,7 +45,7 @@ test_that("conflict_exposure works", {
   result <- cce(x, ucdp_ged, worldpop)
   expect_silent(.check_single_asset(result))
   expect_equal(nrow(result), 2)
-  expect_equal(result$value, c(875551, 124199))
+  expect_equal(result$value, c(873211, 123397.3), tolerance = 1e-3)
 
 
   ucdp_ged[[1]]$date_start <- as.POSIXct(ucdp_ged[[1]]$date_start) + 14 * 365 * 24 * 60 * 60
@@ -67,5 +65,5 @@ test_that("conflict_exposure works", {
   result <- cce(x, ucdp_ged, worldpop)
   expect_silent(.check_single_asset(result))
   expect_equal(nrow(result), 2)
-  expect_equal(result$value, c(1006881, 142832))
+  expect_equal(result$value, c(1004192.7, 141910.4), tolerance = 1e-3)
 })

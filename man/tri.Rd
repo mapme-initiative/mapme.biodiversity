@@ -5,15 +5,14 @@
 \alias{calc_tri}
 \title{Calculate Terrain Ruggedness Index (TRI) statistics}
 \usage{
-calc_tri(engine = "extract", stats = "mean")
+calc_tri(stats = "mean", engine = NULL)
 }
 \arguments{
-\item{engine}{The preferred processing functions from either one of "zonal",
-"extract" or "exactextract" as character.}
-
 \item{stats}{Function to be applied to compute statistics for polygons either
 single or multiple inputs as character. Supported statistics are: "mean",
-"median", "sd", "min", "max", "sum" "var".}
+"median", "stdev", "min", "max", "sum" "var".}
+
+\item{engine}{Deprecated. Will be removed in a future release.}
 }
 \value{
 A function that returns an indicator tibble with tri as variable and
@@ -65,9 +64,7 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
 ) \%>\%
   read_sf() \%>\%
   get_resources(get_nasa_srtm()) \%>\%
-  calc_indicators(
-    calc_tri(stats = c("mean", "median", "sd", "var"), engine = "extract")
-  ) \%>\%
+  calc_indicators(calc_tri(stats = c("mean", "median", "stdev", "var"))) \%>\%
   portfolio_long()
 
 aoi

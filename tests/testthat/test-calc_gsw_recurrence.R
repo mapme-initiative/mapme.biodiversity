@@ -15,5 +15,5 @@ test_that("gsw recurrence works", {
   gswr <- calc_gsw_recurrence(min_recurrence = 10)
   expect_true(is.null(gswr(x, NULL)))
   rec <- gswr(x, gsw_recurrence)
-  expect_equal(rec$value, 719.590, tolerance = 1e-4)
+  expect_equal(rec$value, 718.7, tolerance = 1e-4)
 })

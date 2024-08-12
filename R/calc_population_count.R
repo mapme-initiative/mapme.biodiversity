@@ -11,11 +11,10 @@
 #'  - [worldpop]
 #'
 #' @name population_count
-#' @param engine The preferred processing functions from either one of "zonal",
-#'   "extract" or "exactextract" as character.
 #' @param stats Function to be applied to compute statistics for polygons
 #'    either one or multiple inputs as character "min", "max", "sum", "mean", "median"
 #'    "sd" or "var".
+#' @param engine Deprecated. Will be removed in a future release.
 #' @keywords indicator
 #' @returns A function that returns an indicator tibble with the specified
 #'   populations statistics as variable and the corresponding values as value.
@@ -43,13 +42,13 @@
 #'   read_sf() %>%
 #'   get_resources(get_worldpop(years = 2010:2020)) %>%
 #'   calc_indicators(
-#'     calc_population_count(engine = "extract", stats = c("sum", "median"))
+#'     calc_population_count(stats = c("sum", "median"))
 #'   ) %>%
 #'   portfolio_long()
 #'
 #' aoi
 #' }
-calc_population_count <- function(engine = "extract", stats = "sum") {
+calc_population_count <- function(stats = "sum", engine = NULL) {
   engine <- check_engine(engine)
   stats <- check_stats(stats)
 

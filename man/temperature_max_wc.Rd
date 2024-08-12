@@ -5,15 +5,14 @@
 \alias{calc_temperature_max_wc}
 \title{Calculate maximum temperature statistics}
 \usage{
-calc_temperature_max_wc(engine = "extract", stats = "mean")
+calc_temperature_max_wc(stats = "mean", engine = NULL)
 }
 \arguments{
-\item{engine}{The preferred processing functions from either one of "zonal",
-"extract" or "exactextract" as character.}
-
 \item{stats}{Function to be applied to compute statistics for polygons either
 single or multiple inputs as character. Supported statistics are: "mean",
-"median", "sd", "min", "max", "sum" "var".}
+"median", "stdev", "min", "max", "sum" "var".}
+
+\item{engine}{Deprecated. Will be removed in a future release.}
 }
 \value{
 A function that returns an indicator tibble with maximum temperature
@@ -52,11 +51,7 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   read_sf() \%>\%
   get_resources(get_worldclim_max_temperature(years = 2018)) \%>\%
   calc_indicators(
-    calc_temperature_max_wc(
-      engine = "extract",
-      stats = c("mean", "median")
-    )
-  ) \%>\%
+    calc_temperature_max_wc(stats = c("mean", "median"))) \%>\%
   portfolio_long()
 
 aoi

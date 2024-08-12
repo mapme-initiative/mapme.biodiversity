@@ -5,11 +5,10 @@
 \alias{calc_burned_area}
 \title{Calculate Monthly Burned Area based on MODIS (MCD64A1)}
 \usage{
-calc_burned_area(engine = "extract")
+calc_burned_area(engine = NULL)
 }
 \arguments{
-\item{engine}{The preferred processing functions from either one of "zonal",
-"extract" or "exactextract" as character.}
+\item{engine}{Deprecated. Will be removed in a future release.}
 }
 \value{
 A function that returns an indicator tibble with variable burned
@@ -47,7 +46,7 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
 ) \%>\%
   read_sf() \%>\%
   get_resources(get_mcd64a1(years = 2010)) \%>\%
-  calc_indicators(calc_burned_area(engine = "extract")) \%>\%
+  calc_indicators(calc_burned_area()) \%>\%
   portfolio_long()
 
 aoi

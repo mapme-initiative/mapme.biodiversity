@@ -10,8 +10,7 @@
 #' @name precipitation_chirps
 #' @param years A numeric vector indicating the years for which to calculate
 #'   precipitation statistics.
-#' @param engine The preferred processing functions from either one of "zonal",
-#'   "extract" or "exactextract" as character.
+#' @param engine Deprecated. Will be removed in a future release.
 #' @keywords indicator
 #' @returns A function that returns an indicator tibble with variable
 #'   precipitation and sum of precipitation (in mm) as value.
@@ -38,18 +37,13 @@
 #' ) %>%
 #'   read_sf() %>%
 #'   get_resources(get_chirps(years = 2010)) %>%
-#'   calc_indicators(
-#'     calc_precipitation_chirps(
-#'       years = 2010,
-#'       engine = "extract"
-#'     )
-#'   ) %>%
+#'   calc_indicators(calc_precipitation_chirps(years = 2010)) %>%
 #'   portfolio_long()
 #'
 #' aoi
 #' }
 calc_precipitation_chirps <- function(years = 1981:2020,
-                                      engine = "extract") {
+                                      engine = NULL) {
   engine <- check_engine(engine)
   avail_years <- seq(1981, format(Sys.Date(), "%Y"))
   years <- check_available_years(years, avail_years, "precipitation_chirps")
@@ -91,23 +85,15 @@ calc_precipitation_chirps <- function(years = 1981:2020,
       mode = "portfolio"
     )
 
-    if (mode == "portfolio") {
-      results <- purrr::map(1:length(results), function(i) {
-        tibble(
-          datetime = datetime,
-          variable = "precipitation",
-          unit = "mm",
-          value = as.numeric(results[[i]][["sum"]])
-        )
-      })
-    } else {
-      results <- tibble(
+    results <- purrr::map(1:length(results), function(i) {
+      tibble(
         datetime = datetime,
         variable = "precipitation",
         unit = "mm",
-        value = as.numeric(results[[1]][["sum"]])
+        value = as.numeric(results[[i]][["sum"]])
       )
-    }
+    })
+
     results
   }
 }

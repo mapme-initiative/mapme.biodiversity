@@ -5,14 +5,13 @@
 \alias{calc_elevation}
 \title{Calculate elevation statistics}
 \usage{
-calc_elevation(engine = "extract", stats = "mean")
+calc_elevation(stats = "mean", engine = NULL)
 }
 \arguments{
-\item{engine}{The preferred processing functions from either one of "zonal",
-"extract" or "exactextract" as character.}
-
 \item{stats}{Function to be applied to compute statistics for polygons either
 one or multiple inputs as character "mean", "median" or "sd".}
+
+\item{engine}{Deprecated. Will be removed in a future release.}
 }
 \value{
 A function that returns an indicator tibble with specified elevation
@@ -51,7 +50,7 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   read_sf() \%>\%
   get_resources(get_nasa_srtm()) \%>\%
   calc_indicators(
-    calc_elevation(engine = "extract", stats = c("mean", "median", "sd", "var"))
+    calc_elevation(stats = c("mean", "median", "stdev", "var"))
   ) \%>\%
   portfolio_long()
 

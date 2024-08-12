@@ -5,14 +5,13 @@
 \alias{calc_drought_indicator}
 \title{Calculate drought indicator statistics}
 \usage{
-calc_drought_indicator(engine = "extract", stats = "mean")
+calc_drought_indicator(stats = "mean", engine = NULL)
 }
 \arguments{
-\item{engine}{The preferred processing functions from either one of "zonal",
-"extract" or "exactextract" as character.}
-
 \item{stats}{Function to be applied to compute statistics for polygons
 either one or multiple inputs as character "mean", "median" or "sd".}
+
+\item{engine}{Deprecated. Will be removed in a future release.}
 }
 \value{
 A function that returns an indicator tibble with specified drought
@@ -55,7 +54,6 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   get_resources(get_nasa_grace(years = 2022)) \%>\%
   calc_indicators(
     calc_drought_indicator(
-      engine = "extract",
       stats = c("mean", "median")
     )
   ) \%>\%

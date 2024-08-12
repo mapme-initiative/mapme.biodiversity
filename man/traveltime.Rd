@@ -5,15 +5,14 @@
 \alias{calc_traveltime}
 \title{Calculate accessibility statistics}
 \usage{
-calc_traveltime(engine = "extract", stats = "mean")
+calc_traveltime(stats = "mean", engine = NULL)
 }
 \arguments{
-\item{engine}{The preferred processing functions from either one of "zonal",
-"extract" or "exactextract" as character.}
-
 \item{stats}{Function to be applied to compute statistics for polygons either
 single or multiple inputs as character. Supported statistics are: "mean",
-"median", "sd", "min", "max", "sum" "var".}
+"median", "stdev", "min", "max", "sum" "var".}
+
+\item{engine}{Deprecated. Will be removed in a future release.}
 }
 \value{
 A function that returns an indicator tibble with city ranges and
@@ -53,7 +52,7 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   read_sf() \%>\%
   get_resources(get_nelson_et_al(ranges = "100k_200k")) \%>\%
   calc_indicators(
-    calc_traveltime(engine = "extract", stats = c("min", "max"))
+    calc_traveltime(stats = c("min", "max"))
   ) \%>\%
   portfolio_long()
 

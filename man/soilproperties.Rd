@@ -5,15 +5,14 @@
 \alias{calc_soilproperties}
 \title{Calculate Zonal Soil Properties}
 \usage{
-calc_soilproperties(engine = "extract", stats = "mean")
+calc_soilproperties(stats = "mean", engine = NULL)
 }
 \arguments{
-\item{engine}{The preferred processing functions from either one of "zonal",
-"extract" or "exactextract" as character.}
-
 \item{stats}{Function to be applied to compute statistics for polygons either
 single or multiple inputs as character. Supported statistics are: "mean",
-"median", "sd", "min", "max", "sum" "var".}
+"median", "stdev", "min", "max", "sum" "var".}
+
+\item{engine}{Deprecated. Will be removed in a future release.}
 }
 \value{
 A function that returns an indicator tibble with soilgrid layers and

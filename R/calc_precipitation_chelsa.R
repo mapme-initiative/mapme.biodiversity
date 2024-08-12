@@ -10,8 +10,7 @@
 #' @name precipitation_chelsa
 #' @param years A numeric vector indicating the years for which to calculate
 #'   precipitation statistics.
-#' @param engine The preferred processing functions from either one of "zonal",
-#'   "extract" or "exactextract" as character.
+#' @param engine Deprecated. Will be removed in a future release.
 #' @keywords indicator
 #' @returns A function that returns an indicator tibble with variable
 #'   precipitation and sum of precipitation (in mm/m^2) as value.
@@ -38,18 +37,13 @@
 #' ) %>%
 #'   read_sf() %>%
 #'   get_resources(get_chelsa(years = 2010)) %>%
-#'   calc_indicators(
-#'     calc_precipitation_chelsa(
-#'       years = 2010,
-#'       engine = "extract"
-#'     )
-#'   ) %>%
+#'   calc_indicators(calc_precipitation_chelsa(years = 2010)) %>%
 #'   portfolio_long()
 #'
 #' aoi
 #' }
 calc_precipitation_chelsa <- function(years = 1979:2018,
-                                      engine = "extract") {
+                                      engine = NULL) {
   engine <- check_engine(engine)
   avail_years <- 1979:2018
   years <- check_available_years(years, avail_years, "precipitation_chelsa")

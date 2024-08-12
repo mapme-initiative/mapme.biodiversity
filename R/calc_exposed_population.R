@@ -71,8 +71,7 @@
 #'   geolocation up to which events are included. Defaults to 1.
 #' @param precision_time A numeric indicating the precision value of the
 #'   temporal coding up to which events are included. Defaults to 1.
-#' @param engine The preferred processing functions from either one of "zonal",
-#'   "extract" or "exactextract" as character.
+#' @param engine Deprecated. Will be removed in a future release.
 #' @keywords indicator
 #' @returns A function that returns an indicator tibble with conflict exposure
 #'   as variable and precentage of the population as its value.
@@ -124,7 +123,7 @@ calc_exposed_population <- function(distance = 5000,
                                     years = c(1989:2023),
                                     precision_location = 1,
                                     precision_time = 1,
-                                    engine = "extract") {
+                                    engine = NULL) {
   stopifnot(length(distance) == 1 && distance > 0)
   if (!all(violence_types %in% 1:3)) {
     stop("Argument violence_types must be an numeric vector with values between 1 and 3.")

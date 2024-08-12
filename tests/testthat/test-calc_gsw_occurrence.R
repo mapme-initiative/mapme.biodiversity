@@ -15,5 +15,5 @@ test_that("gsw occurrence works", {
   gswo <- calc_gsw_occurrence(min_occurrence = 10)
   expect_true(is.null(gswo(x, NULL)))
   occ <- gswo(x, gsw_occurrence)
-  expect_equal(occ$value, 694.159, tolerance = 1e-4)
+  expect_equal(occ$value, 693.3, tolerance = 1e-4)
 })

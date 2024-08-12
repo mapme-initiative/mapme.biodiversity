@@ -14,10 +14,9 @@
 #'  - [global_surface_water_occurrence]
 #'
 #' @name gsw_occurrence
-#' @param engine The preferred processing functions from either one of "zonal",
-#' "extract" or "exactextract". Default: "extract".
 #' @param min_occurrence Threshold to define which pixels count towards the GSW
 #' occurrence area `[0, 100]`.
+#' @param engine Deprecated. Will be removed in a future release.
 #' @keywords indicator
 #' @returns A function that returns an indicator tibble with occurrence as
 #'   variable and the corresponding area (in ha) as value.
@@ -45,13 +44,13 @@
 #'   read_sf() %>%
 #'   get_resources(get_global_surface_water_occurrence()) %>%
 #'   calc_indicators(
-#'     calc_gsw_occurrence(engine = "extract", min_occurrence = 10)
+#'     calc_gsw_occurrence(min_occurrence = 10)
 #'   ) %>%
 #'   portfolio_long()
 #'
 #' aoi
 #' }
-calc_gsw_occurrence <- function(engine = "extract", min_occurrence = NULL) {
+calc_gsw_occurrence <- function(min_occurrence = NULL, engine = NULL) {
   engine <- check_engine(engine)
   stopifnot(
     !is.null(min_occurrence),

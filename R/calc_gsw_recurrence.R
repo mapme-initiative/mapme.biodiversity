@@ -15,10 +15,9 @@
 #'  - [global_surface_water_recurrence]
 
 #' @name gsw_recurrence
-#' @param engine The preferred processing functions from either one of "zonal",
-#' "extract" or "exactextract". Default: "extract".
 #' @param min_recurrence Threshold to define which pixels count towards the GSW
 #' recurrence area `[0, 100]`.
+#' @param engine Deprecated. Will be removed in a future release.
 #' @keywords indicator
 #' @returns A function that returns an indicator tibble with recurrence as
 #'   variable and the corresponding area (in ha) as value.
@@ -46,13 +45,13 @@
 #'   read_sf() %>%
 #'   get_resources(get_global_surface_water_recurrence()) %>%
 #'   calc_indicators(
-#'     calc_gsw_recurrence(engine = "extract", min_recurrence = 10)
+#'     calc_gsw_recurrence(min_recurrence = 10)
 #'   ) %>%
 #'   portfolio_long()
 #'
 #' aoi
 #' }
-calc_gsw_recurrence <- function(engine = "extract", min_recurrence = NULL) {
+calc_gsw_recurrence <- function(min_recurrence = NULL, engine = NULL) {
   engine <- check_engine(engine)
 
   stopifnot(

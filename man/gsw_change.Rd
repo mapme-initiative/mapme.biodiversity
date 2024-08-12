@@ -5,14 +5,13 @@
 \alias{calc_gsw_change}
 \title{Calculate Global Surface Water (GSW) Change}
 \usage{
-calc_gsw_change(engine = "extract", stats = "mean")
+calc_gsw_change(stats = "mean", engine = NULL)
 }
 \arguments{
-\item{engine}{The preferred processing functions from either one of "zonal",
-"extract" or "exactextract". Default: "extract".}
-
 \item{stats}{Aggregation function with which the data are combined.
 Default: "mean".}
+
+\item{engine}{Deprecated. Will be removed in a future release.}
 }
 \value{
 A function that returns an indicator tibble with change intensity
@@ -58,7 +57,7 @@ aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
   read_sf() \%>\%
   get_resources(get_global_surface_water_change()) \%>\%
   calc_indicators(
-    calc_gsw_change(engine = "extract", stats = "mean")
+    calc_gsw_change(stats = "mean")
   ) \%>\%
   portfolio_long()
 

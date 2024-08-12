@@ -11,7 +11,7 @@ calc_exposed_population(
   years = c(1989:2023),
   precision_location = 1,
   precision_time = 1,
-  engine = "extract"
+  engine = NULL
 )
 }
 \arguments{
@@ -32,8 +32,7 @@ geolocation up to which events are included. Defaults to 1.}
 \item{precision_time}{A numeric indicating the precision value of the
 temporal coding up to which events are included. Defaults to 1.}
 
-\item{engine}{The preferred processing functions from either one of "zonal",
-"extract" or "exactextract" as character.}
+\item{engine}{Deprecated. Will be removed in a future release.}
 }
 \value{
 A function that returns an indicator tibble with conflict exposure

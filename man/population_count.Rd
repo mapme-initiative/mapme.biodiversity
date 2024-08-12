@@ -5,15 +5,14 @@
 \alias{calc_population_count}
 \title{Calculate population count statistics}
 \usage{
-calc_population_count(engine = "extract", stats = "sum")
+calc_population_count(stats = "sum", engine = NULL)
 }
 \arguments{
-\item{engine}{The preferred processing functions from either one of "zonal",
-"extract" or "exactextract" as character.}
-
 \item{stats}{Function to be applied to compute statistics for polygons
 either one or multiple inputs as character "min", "max", "sum", "mean", "median"
 "sd" or "var".}
+
+\item{engine}{Deprecated. Will be removed in a future release.}
 }
 \value{
 A function that returns an indicator tibble with the specified
@@ -55,7 +54,7 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   read_sf() \%>\%
   get_resources(get_worldpop(years = 2010:2020)) \%>\%
   calc_indicators(
-    calc_population_count(engine = "extract", stats = c("sum", "median"))
+    calc_population_count(stats = c("sum", "median"))
   ) \%>\%
   portfolio_long()
 

@@ -5,14 +5,13 @@
 \alias{calc_gsw_recurrence}
 \title{Calculate Global Surface Water (GSW) Recurrence}
 \usage{
-calc_gsw_recurrence(engine = "extract", min_recurrence = NULL)
+calc_gsw_recurrence(min_recurrence = NULL, engine = NULL)
 }
 \arguments{
-\item{engine}{The preferred processing functions from either one of "zonal",
-"extract" or "exactextract". Default: "extract".}
-
 \item{min_recurrence}{Threshold to define which pixels count towards the GSW
 recurrence area \verb{[0, 100]}.}
+
+\item{engine}{Deprecated. Will be removed in a future release.}
 }
 \value{
 A function that returns an indicator tibble with recurrence as
@@ -58,7 +57,7 @@ aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
   read_sf() \%>\%
   get_resources(get_global_surface_water_recurrence()) \%>\%
   calc_indicators(
-    calc_gsw_recurrence(engine = "extract", min_recurrence = 10)
+    calc_gsw_recurrence(min_recurrence = 10)
   ) \%>\%
   portfolio_long()
 

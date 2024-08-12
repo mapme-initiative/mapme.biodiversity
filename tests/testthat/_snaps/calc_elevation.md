@@ -1,7 +1,7 @@
 # srtm elevation works
 
     Code
-      result_exact$value
+      result$value
     Output
       [1] 1704.491
 

@@ -8,10 +8,9 @@
 #'  - [nasa_srtm]
 #'
 #' @name elevation
-#' @param engine The preferred processing functions from either one of "zonal",
-#'   "extract" or "exactextract" as character.
 #' @param stats Function to be applied to compute statistics for polygons either
 #'   one or multiple inputs as character "mean", "median" or "sd".
+#' @param engine Deprecated. Will be removed in a future release.
 #' @keywords indicator
 #' @returns A function that returns an indicator tibble with specified elevation
 #'   statistics as variable and corresponding values (in meters) as value.
@@ -39,14 +38,13 @@
 #'   read_sf() %>%
 #'   get_resources(get_nasa_srtm()) %>%
 #'   calc_indicators(
-#'     calc_elevation(engine = "extract", stats = c("mean", "median", "sd", "var"))
+#'     calc_elevation(stats = c("mean", "median", "stdev", "var"))
 #'   ) %>%
 #'   portfolio_long()
 #'
 #' aoi
 #' }
-calc_elevation <- function(engine = "extract",
-                           stats = "mean") {
+calc_elevation <- function(stats = "mean", engine = NULL) {
   engine <- check_engine(engine)
   stats <- check_stats(stats)
 

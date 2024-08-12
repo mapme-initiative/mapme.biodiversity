@@ -9,11 +9,10 @@
 #'  - [nelson_et_al]
 #'
 #' @name traveltime
-#' @param engine The preferred processing functions from either one of "zonal",
-#'   "extract" or "exactextract" as character.
 #' @param stats Function to be applied to compute statistics for polygons either
 #'   single or multiple inputs as character. Supported statistics are: "mean",
-#'   "median", "sd", "min", "max", "sum" "var".
+#'   "median", "stdev", "min", "max", "sum" "var".
+#' @param engine Deprecated. Will be removed in a future release.
 #' @keywords indicator
 #' @returns A function that returns an indicator tibble with city ranges and
 #'   statisics as variable and corresponding values (in minutes) as value.
@@ -41,13 +40,13 @@
 #'   read_sf() %>%
 #'   get_resources(get_nelson_et_al(ranges = "100k_200k")) %>%
 #'   calc_indicators(
-#'     calc_traveltime(engine = "extract", stats = c("min", "max"))
+#'     calc_traveltime(stats = c("min", "max"))
 #'   ) %>%
 #'   portfolio_long()
 #'
 #' aoi
 #' }
-calc_traveltime <- function(engine = "extract", stats = "mean") {
+calc_traveltime <- function(stats = "mean", engine = NULL) {
   engine <- check_engine(engine)
   stats <- check_stats(stats)
 

@@ -12,7 +12,7 @@
 #'   "extract" or "exactextract" as character.
 #' @param stats Function to be applied to compute statistics for polygons either
 #'   single or multiple inputs as character. Supported statistics are: "mean",
-#'   "median", "sd", "min", "max", "sum" "var".
+#'   "median", "stdev", "min", "max", "sum" "var".
 #' @keywords indicator
 #' @returns A function that returns an indicator tibble with minimum temperature
 #'   statistics as variables and corresponding values as value.
@@ -40,16 +40,13 @@
 #'   read_sf() %>%
 #'   get_resources(get_worldclim_min_temperature(years = 2018)) %>%
 #'   calc_indicators(
-#'     calc_temperature_min_wc(
-#'       engine = "extract",
-#'       stats = c("mean", "median")
-#'     )
+#'     calc_temperature_min_wc(stats = c("mean", "median"))
 #'   ) %>%
 #'   portfolio_long()
 #'
 #' aoi
 #' }
-calc_temperature_min_wc <- function(engine = "extract", stats = "mean") {
+calc_temperature_min_wc <- function(stats = "mean", engine = NULL) {
   engine <- check_engine(engine)
   stats <- check_stats(stats)
 
@@ -87,8 +84,7 @@ register_indicator(
 #' @param stats Function to be applied to compute statistics for polygons
 #'    either one or multiple inputs as character "min", "max", "sum", "mean", "median"
 #'    "sd" or "var".
-#' @param engine The preferred processing functions from either one of "zonal",
-#'   "extract" or "exactextract" as character.
+#' @param engine Deprecated. Will be removed in a future release.
 #'
 #' @return A data-frame
 #' @keywords internal
@@ -96,7 +92,7 @@ register_indicator(
 #' @noRd
 .calc_worldclim <- function(x,
                             worldclim,
-                            engine = "extract",
+                            engine = NULL,
                             stats = "mean",
                             unit = NULL) {
   stopifnot(!is.null(unit))

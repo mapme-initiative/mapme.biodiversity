@@ -8,8 +8,7 @@
 #'  - [mcd64a1]
 #'
 #' @name burned_area
-#' @param engine The preferred processing functions from either one of "zonal",
-#'   "extract" or "exactextract" as character.
+#' @param engine Deprecated. Will be removed in a future release.
 #' @keywords indicator
 #' @returns A function that returns an indicator tibble with variable burned
 #'   area and corresponding area (in ha) as values.
@@ -40,12 +39,12 @@
 #' ) %>%
 #'   read_sf() %>%
 #'   get_resources(get_mcd64a1(years = 2010)) %>%
-#'   calc_indicators(calc_burned_area(engine = "extract")) %>%
+#'   calc_indicators(calc_burned_area()) %>%
 #'   portfolio_long()
 #'
 #' aoi
 #' }
-calc_burned_area <- function(engine = "extract") {
+calc_burned_area <- function(engine = NULL) {
   engine <- check_engine(engine)
 
   function(x,

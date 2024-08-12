@@ -10,33 +10,14 @@ test_that("srtm elevation works", {
   nasa_srtm <- rast(nasa_srtm)
   ce <- calc_elevation()
   result <- ce(x, nasa_srtm)
-  ce <- calc_elevation(stats = c("mean", "median", "sd"))
+  ce <- calc_elevation(stats = c("mean", "median", "stdev"))
   result_multi_stat <- ce(x, nasa_srtm)
-  ce <- calc_elevation(engine = "zonal")
-  result_zonal <- ce(x, nasa_srtm)
-  ce <- calc_elevation(engine = "extract")
-  result_extract <- ce(x, nasa_srtm)
-  ce <- calc_elevation(engine = "exactextract")
-  result_exact <- ce(x, nasa_srtm)
-
   expect_silent(.check_single_asset(result))
   expect_equal(
     unique(result_multi_stat$variable),
-    c("elevation_mean", "elevation_median", "elevation_sd")
-  )
-  expect_equal(
-    names(result_zonal),
-    names(result_extract)
-  )
-  expect_equal(
-    names(result_zonal),
-    names(result_exact)
-  )
-  expect_equal(
-    result_zonal$value,
-    result_extract$value
+    c("elevation_mean", "elevation_median", "elevation_stdev")
   )
   expect_snapshot(
-    result_exact$value
+    result$value
   )
 })

@@ -15,10 +15,9 @@
 #'  - [global_surface_water_change]
 #'
 #' @name gsw_change
-#' @param engine The preferred processing functions from either one of "zonal",
-#' "extract" or "exactextract". Default: "extract".
 #' @param stats Aggregation function with which the data are combined.
 #' Default: "mean".
+#' @param engine Deprecated. Will be removed in a future release.
 #' @keywords indicator
 #' @returns A function that returns an indicator tibble with change intensity
 #'   as variable and corresponding (unitless) values as value.
@@ -46,13 +45,13 @@
 #'   read_sf() %>%
 #'   get_resources(get_global_surface_water_change()) %>%
 #'   calc_indicators(
-#'     calc_gsw_change(engine = "extract", stats = "mean")
+#'     calc_gsw_change(stats = "mean")
 #'   ) %>%
 #'   portfolio_long()
 #'
 #' aoi
 #' }
-calc_gsw_change <- function(engine = "extract", stats = "mean") {
+calc_gsw_change <- function(stats = "mean", engine = NULL) {
   engine <- check_engine(engine)
   stats <- check_stats(stats)
 

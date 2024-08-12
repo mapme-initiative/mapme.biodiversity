@@ -20,11 +20,10 @@
 #'  - [nasa_srtm]
 #'
 #' @name tri
-#' @param engine The preferred processing functions from either one of "zonal",
-#'   "extract" or "exactextract" as character.
 #' @param stats Function to be applied to compute statistics for polygons either
 #'   single or multiple inputs as character. Supported statistics are: "mean",
-#'   "median", "sd", "min", "max", "sum" "var".
+#'   "median", "stdev", "min", "max", "sum" "var".
+#' @param engine Deprecated. Will be removed in a future release.
 #' @keywords indicator
 #' @returns A function that returns an indicator tibble with tri as variable and
 #'   the respective statistic as value.
@@ -54,14 +53,12 @@
 #' ) %>%
 #'   read_sf() %>%
 #'   get_resources(get_nasa_srtm()) %>%
-#'   calc_indicators(
-#'     calc_tri(stats = c("mean", "median", "sd", "var"), engine = "extract")
-#'   ) %>%
+#'   calc_indicators(calc_tri(stats = c("mean", "median", "stdev", "var"))) %>%
 #'   portfolio_long()
 #'
 #' aoi
 #' }
-calc_tri <- function(engine = "extract", stats = "mean") {
+calc_tri <- function(stats = "mean", engine = NULL) {
   engine <- check_engine(engine)
   stats <- check_stats(stats)
 

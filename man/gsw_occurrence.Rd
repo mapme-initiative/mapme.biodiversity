@@ -5,14 +5,13 @@
 \alias{calc_gsw_occurrence}
 \title{Calculate Global Surface Water (GSW) Occurrence}
 \usage{
-calc_gsw_occurrence(engine = "extract", min_occurrence = NULL)
+calc_gsw_occurrence(min_occurrence = NULL, engine = NULL)
 }
 \arguments{
-\item{engine}{The preferred processing functions from either one of "zonal",
-"extract" or "exactextract". Default: "extract".}
-
 \item{min_occurrence}{Threshold to define which pixels count towards the GSW
 occurrence area \verb{[0, 100]}.}
+
+\item{engine}{Deprecated. Will be removed in a future release.}
 }
 \value{
 A function that returns an indicator tibble with occurrence as
@@ -57,7 +56,7 @@ aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
   read_sf() \%>\%
   get_resources(get_global_surface_water_occurrence()) \%>\%
   calc_indicators(
-    calc_gsw_occurrence(engine = "extract", min_occurrence = 10)
+    calc_gsw_occurrence(min_occurrence = 10)
   ) \%>\%
   portfolio_long()
 

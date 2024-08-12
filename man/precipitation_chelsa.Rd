@@ -5,14 +5,13 @@
 \alias{calc_precipitation_chelsa}
 \title{Calculate precipitation average based on CHELSA}
 \usage{
-calc_precipitation_chelsa(years = 1979:2018, engine = "extract")
+calc_precipitation_chelsa(years = 1979:2018, engine = NULL)
 }
 \arguments{
 \item{years}{A numeric vector indicating the years for which to calculate
 precipitation statistics.}
 
-\item{engine}{The preferred processing functions from either one of "zonal",
-"extract" or "exactextract" as character.}
+\item{engine}{Deprecated. Will be removed in a future release.}
 }
 \value{
 A function that returns an indicator tibble with variable
@@ -50,12 +49,7 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
 ) \%>\%
   read_sf() \%>\%
   get_resources(get_chelsa(years = 2010)) \%>\%
-  calc_indicators(
-    calc_precipitation_chelsa(
-      years = 2010,
-      engine = "extract"
-    )
-  ) \%>\%
+  calc_indicators(calc_precipitation_chelsa(years = 2010)) \%>\%
   portfolio_long()
 
 aoi
