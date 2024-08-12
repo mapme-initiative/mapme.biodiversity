@@ -1,6 +1,6 @@
 Package: mapme.biodiversity
 Title: Efficient Monitoring of Global Biodiversity Portfolios
-Version: 0.8.0.9012
+Version: 0.8.0.9013
 Authors@R: c(
     person("Darius A.", "Görgen", , "darius2402@web.de", role = c("aut", "cre")),
     person("Om Prakash", "Bhandari", role = "aut")
@@ -24,9 +24,9 @@ URL: https://mapme-initiative.github.io/mapme.biodiversity/index.html,
 BugReports: https://github.com/mapme-initiative/mapme.biodiversity/issues
 Depends: R (>= 3.5.0)
 SystemRequirements: GDAL (>= 3.7.0), PROJ (>= 4.8.0)
-Imports: dplyr, furrr, httr2, jsonlite, magrittr, purrr, sf, terra, tibble, 
-  tidyr
-Suggests: exactextractr, future, knitr, landscapemetrics, progressr, rmarkdown, 
+Imports: dplyr, exactextractr, furrr, httr2, jsonlite, magrittr, purrr, sf, terra, 
+  tibble, tidyr
+Suggests: future, knitr, landscapemetrics, progressr, rmarkdown, 
   rstac, rvest, testthat (>= 3.0.0)
 VignetteBuilder: knitr
 Config/Needs/website: DiagrammeR

@@ -2,6 +2,8 @@
 
 ## General
 
+- the usage of `engine` is depcrecated. Instead `exactextractr` functionality
+  is used as the sole engine to do zonal statistics. 
 - `prep_resources()` recieved additional argument `mode` to 
   get control over the reading mode (e.g. portfolio or asset)
 - resources based on WorldClim now support selecting the spatial
