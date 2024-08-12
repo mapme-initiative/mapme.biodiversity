@@ -35,15 +35,15 @@
 spds_exists <- function(path, oo = character(0), what = c("vector", "raster")) {
   what <- match.arg(what)
   util <- switch(what,
-    vector = "ogrinfo",
-    raster = "gdalinfo"
+                 vector = "ogrinfo",
+                 raster = "gdalinfo"
   )
   opts <- switch(what,
-    vector = c(
-      "-json", "-ro", "-so", "-nomd",
-      "-nocount", "-noextent", "-nogeomtype", oo
-    ),
-    raster = c("-json", "-nomd", "-norat", "-noct", oo)
+                 vector = c(
+                   "-json", "-ro", "-so", "-nomd",
+                   "-nocount", "-noextent", "-nogeomtype", oo
+                 ),
+                 raster = c("-json", "-nomd", "-norat", "-noct", oo)
   )
   if (what == "vector" && sf::sf_extSoftVersion()[["GDAL"]] < "3.7.0") {
     util <- "gdalinfo"
@@ -139,9 +139,9 @@ make_footprints <- function(srcs = NULL,
   if (inherits(srcs, "character")) {
     what <- match.arg(what)
     srcs <- switch(what,
-      vector = purrr::map2(srcs, oo, function(src, opt) .vector_footprint(src, opt)),
-      raster = purrr::map2(srcs, oo, function(src, opt) .raster_footprint(src, opt)),
-      stop("Can make footprints for vector and raster data only.")
+                   vector = purrr::map2(srcs, oo, function(src, opt) .vector_footprint(src, opt)),
+                   raster = purrr::map2(srcs, oo, function(src, opt) .raster_footprint(src, opt)),
+                   stop("Can make footprints for vector and raster data only.")
     )
     srcs <- purrr::list_rbind(srcs)
   }
@@ -191,9 +191,9 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL, mode = c
     resource <- avail_resources[[resource]]
     resource_type <- unique(resource[["type"]])
     reader <- switch(resource_type,
-      raster = .read_raster,
-      vector = .read_vector,
-      stop(sprintf("Resource type '%s' currently not supported", resource_type))
+                     raster = .read_raster,
+                     vector = .read_vector,
+                     stop(sprintf("Resource type '%s' currently not supported", resource_type))
     )
     reader(x, resource, mode)
   })
@@ -347,10 +347,22 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL, mode = c
     index <- rep(FALSE, n_timesteps)
     index[i] <- TRUE
     filenames <- names(grouped_geoms[index])
-    terra::vrt(filenames, set_names = TRUE, return_filename = TRUE, overwrite = TRUE)
+    layer_name <- tindex[["filename"]][which(tindex[["location"]] == filenames[1])]
+    vrt <- terra::vrt(filenames, set_names = TRUE, return_filename = TRUE, overwrite = TRUE)
+    .change_description(vrt, layer_name)
+    vrt
   })
   make_footprints(vrts, what = "raster")
 }
+
+.change_description <- function(vrt, layer_name) {
+  cnt <- readLines(vrt)
+  old_descr <- unlist(regmatches(cnt, gregexpr("(<Description>.*?</Description>)", cnt)))
+  new_descr <- sprintf("<Description>%s</Description>", layer_name)
+  cnt <- gsub(old_descr, new_descr, cnt)
+  writeLines(cnt, vrt)
+}
+
 
 .read_raster <- function(x, tindex, mode = "portfolio") {
   r <- rast(tindex[["location"]])
@@ -395,8 +407,8 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL, mode = c
   }
 
   util <- switch(what,
-    vector = "vectortranslate",
-    raster = "translate"
+                 vector = "vectortranslate",
+                 raster = "translate"
   )
   try(sf::gdal_utils(
     util = util,
