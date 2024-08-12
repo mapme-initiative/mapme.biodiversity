@@ -134,14 +134,16 @@
   stopifnot(agg %in% available_stats)
 
   switch(agg,
-         sum = sum,
-         mean = mean,
-         median = median,
-         sd = sd,
-         min = min,
-         max = max,
-         sum = sum,
-         var = var
+    sum = sum,
+    mean = mean,
+    median = median,
+    sd = sd,
+    stdev = sd,
+    min = min,
+    max = max,
+    sum = sum,
+    variance = var,
+    var = var
   )
 }
 

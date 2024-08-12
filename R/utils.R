@@ -109,3 +109,12 @@ check_namespace <- function(pkg, error = TRUE) {
     .after = dplyr::last_col()
   )
 }
+
+.calc_steps <- function(x) {
+  n <- nrow(x)
+  s <- 1
+  if (n > 100) {
+    s <- round(n * 0.01)
+  }
+  s
+}

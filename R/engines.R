@@ -1,7 +1,7 @@
-available_stats <- c("mean", "median", "sd", "min", "max", "sum", "var")
-available_engines <- c("zonal", "extract", "exactextract")
-
+available_stats <- c("mean", "median", "sd", "stdev", "min", "max", "sum", "var", "variance")
 #' Function to select processing engines
+#'
+#' This function is deprecated and will be removed in a future release.
 #'
 #' `check_engine()` checks if an extraction engine for zonal vector-raster
 #' operations is supported by the backend.
@@ -14,23 +14,11 @@ available_engines <- c("zonal", "extract", "exactextract")
 #' @keywords utils
 #' @name engine
 #' @export
-check_engine <- function(queried_engine) {
-  if (length(queried_engine) > 1) {
-    stop(sprintf(
-      "Please specify only one engine of: %s.",
-      paste(available_engines, collapse = ", ")
-    ))
+check_engine <- function(queried_engine = NULL) {
+  if (!is.null(queried_engine)) {
+    warning("engine argument is deprecated and will be removed in a future release.")
   }
-  if (!queried_engine %in% available_engines) {
-    stop(sprintf(
-      paste("Engine '%s' is not an available engine.",
-        "Please choose one of: %s",
-        collapse = " "
-      ),
-      queried_engine, paste(available_engines, collapse = ", ")
-    ))
-  }
-  queried_engine
+  NULL
 }
 
 #' Checks if queried statistcs are available
@@ -78,12 +66,12 @@ check_stats <- function(queried_stats) {
 #' @param raster An terra SpatRaster from which values are to be extracted.
 #' @param stats A character vector of statistics to aggregate the raster values
 #'   with.
-#' @param engine A character vector of length one specifying the engine to be
-#'   used for the extraction.
+#' @param engine Deprecated. Will be removed in a future release.
 #' @param name A character vector indicating the name to append to the columns
 #'   names.
 #' @param mode A character vector indicating in which mode to conduct the
 #'   extraction (e.g. `asset`-wise or for the whole `portfolio` at once).
+#' @param verbose A logical, indicating if informative messages should be printed.
 #' @return `select_engine` returns a tibble.
 #' @keywords utils
 #' @name engine
@@ -91,84 +79,46 @@ check_stats <- function(queried_stats) {
 select_engine <- function(x,
                           raster,
                           stats,
-                          engine,
+                          engine = NULL,
                           name = NULL,
-                          mode = "asset") {
+                          mode = "asset",
+                          verbose = mapme_options()[["verbose"]]) {
   check_stats(stats)
   check_engine(engine)
 
-  engine <- switch(engine,
-    "extract" = .engine_extract,
-    "exactextract" = .engine_exact_extract,
-    "zonal" = .engine_zonal
-  )
+  engine <- .engine_exact_extract
 
   if (mode == "asset") {
     result <- engine(x, raster, stats, name)
   } else {
-    result <- purrr::map(1:nrow(x), function(i) {
-      engine(x[i, ], raster, stats, name)
-    })
+    report_progress <- verbose && check_namespace("progressr", error = FALSE)
+    step <- .calc_steps(x)
+    if (report_progress) {
+      p <- progressr::progressor(min(nrow(x), 100))
+    }
+    raster <- terra::wrap(raster, proxy = TRUE)
+    result <- furrr::future_map(1:nrow(x), function(i) {
+      out <- engine(x[i, ], terra::unwrap(raster), stats, name)
+      if (report_progress) {
+        if (i %% step == 0) {
+          p()
+        }
+      }
+      out
+    }, .options = furrr::furrr_options(seed = TRUE, chunk_size = step))
+    result
   }
-  result
-}
-
-available_stats <- c("mean", "median", "sd", "min", "max", "sum", "var")
-available_engines <- c("zonal", "extract", "exactextract")
-
-.engine_zonal <- function(x, raster, stats, name = NULL) {
-  results <- purrr::map_dfc(stats, function(stat) {
-    out <- terra::zonal(
-      raster,
-      vect(x),
-      fun = get(stat),
-      na.rm = TRUE
-    )
-    out <- tibble(as.numeric(out))
-    names(out) <- ifelse(is.null(name), stat, paste(name, "_", stat, sep = ""))
-    out
-  })
-  results
-}
-
-.engine_extract <- function(x, raster, stats, name = NULL) {
-  results <- purrr::map_dfc(stats, function(stat) {
-    out <- terra::extract(
-      raster,
-      x,
-      fun = get(stat),
-      na.rm = TRUE,
-      ID = FALSE
-    )
-    out <- tibble(as.numeric(out))
-    names(out) <- ifelse(is.null(name), stat, paste(name, "_", stat, sep = ""))
-    out
-  })
-  results
 }
 
 .engine_exact_extract <- function(x, raster, stats, name = NULL) {
-  if (!requireNamespace("exactextractr", quietly = TRUE)) {
-    stop(paste(
-      "Needs package 'exactextractr' to be installed.",
-      "Consider installing with 'install.packages('exactextractr')"
-    ))
+  stats <- gsub("var$", "variance", stats)
+  stats <- gsub("sd$", "stdev", stats)
+
+  data <- exactextractr::exact_extract(raster, x, fun = stats, force_df = TRUE)
+
+  names(data) <- sapply(names(data), function(y) strsplit(y, "\\.")[[1]][1])
+  if (!is.null(name)) {
+    names(data) <- paste(name, "_", names(data), sep = "")
   }
-
-  results <- purrr::map_dfc(stats, function(stat) {
-    org_stat <- stat
-    if (stat %in% c("sd", "var")) {
-      stat <- ifelse(stat == "sd", "stdev", "variance")
-    }
-
-    out <- exactextractr::exact_extract(
-      raster,
-      x,
-      fun = stat
-    )
-    out <- tibble(as.numeric(out))
-    names(out) <- ifelse(is.null(name), stat, paste(name, "_", org_stat, sep = ""))
-    out
-  })
-  results
+  as_tibble(split(unname(unlist(data)), names(data)))
 }

@@ -7,11 +7,19 @@
 \alias{select_engine}
 \title{Function to select processing engines}
 \usage{
-check_engine(queried_engine)
+check_engine(queried_engine = NULL)
 
 check_stats(queried_stats)
 
-select_engine(x, raster, stats, engine, name = NULL, mode = "asset")
+select_engine(
+  x,
+  raster,
+  stats,
+  engine = NULL,
+  name = NULL,
+  mode = "asset",
+  verbose = mapme_options()[["verbose"]]
+)
 }
 \arguments{
 \item{queried_engine}{A character vector of length one indicating the engine
@@ -27,14 +35,15 @@ if they are supported by the backend}
 \item{stats}{A character vector of statistics to aggregate the raster values
 with.}
 
-\item{engine}{A character vector of length one specifying the engine to be
-used for the extraction.}
+\item{engine}{Deprecated. Will be removed in a future release.}
 
 \item{name}{A character vector indicating the name to append to the columns
 names.}
 
 \item{mode}{A character vector indicating in which mode to conduct the
 extraction (e.g. \code{asset}-wise or for the whole \code{portfolio} at once).}
+
+\item{verbose}{A logical, indicating if informative messages should be printed.}
 }
 \value{
 \code{check_engine()} returns the character of the queried engine,
@@ -46,8 +55,7 @@ Throws an error if any of the queried statistics is not supported.
 \code{select_engine} returns a tibble.
 }
 \description{
-\code{check_engine()} checks if an extraction engine for zonal vector-raster
-operations is supported by the backend.
+This function is deprecated and will be removed in a future release.
 
 \code{check_stats} checks if one or multiple statistics are supported
 for zonal vector-raster extraction by the backend.
@@ -55,5 +63,9 @@ for zonal vector-raster extraction by the backend.
 \code{select_engine} extracts zonal vector-raster statistics for supported engine
 and for one or more statistics. Columns are named according to the argument
 \code{name} plus the respective stat. Both \code{portfolio} and \code{asset} modes are supported.
+}
+\details{
+\code{check_engine()} checks if an extraction engine for zonal vector-raster
+operations is supported by the backend.
 }
 \keyword{utils}
