@@ -225,8 +225,11 @@ test_that(".read_raster works correctly", {
   temp_loc <- tempfile()
   dir.create(temp_loc, showWarnings = FALSE)
   purrr::walk(1:length(dummies), function(i) {
-    writeRaster(dummies[[i]], filename = file.path(temp_loc, paste0("2000_tile_", i, ".tif")))
-    writeRaster(dummies[[i]], filename = file.path(temp_loc, paste0("2001_tile_", i, ".tif")))
+    tmp <- dummies[[i]]
+    names(tmp) <- paste0("2000_tile_", i)
+    writeRaster(tmp, filename = file.path(temp_loc, paste0("2000_tile_", i, ".tif")))
+    names(tmp) <- paste0("2001_tile_", i)
+    writeRaster(tmp, filename = file.path(temp_loc, paste0("2001_tile_", i, ".tif")))
   })
 
   files <- list.files(temp_loc, full.names = TRUE)
@@ -238,25 +241,36 @@ test_that(".read_raster works correctly", {
   extent <- c(-180, 180, -90, 90)
   names(extent) <- c("xmin", "xmax", "ymin", "ymax")
 
-  tiled_temporal <- .read_raster(x, footprints)
+  expect_silent(fps <- .create_vrt(footprints))
+  expect_equal(nrow(fps), 2)
+  expect_equal(length(unique(st_geometry(fps))), 1)
+  tiled_temporal <- .read_raster(x, fps)
   expect_equal(names(tiled_temporal), c("2000_tile_1", "2001_tile_1"))
   expect_equal(as.vector(ext(tiled_temporal)), extent)
 
-  tiled <- .read_raster(x, footprints[grep("2001", footprints$location), ])
+  expect_silent(fps <- .create_vrt(footprints[grep("2001", footprints$location), ]))
+  expect_equal(nrow(fps), 1)
+  tiled <- .read_raster(x, fps)
   expect_equal(names(tiled), "2001_tile_1")
   expect_equal(as.vector(ext(tiled)), extent)
 
-  temporal <- .read_raster(x, footprints[grep("tile_12.tif", footprints$location), ])
+  expect_silent(fps <- .create_vrt(footprints[grep("tile_12.tif", footprints$location), ]))
+  expect_equal(nrow(fps), 2)
+  expect_equal(length(unique(st_geometry(fps))), 1)
+  temporal <- .read_raster(x, fps)
   extent[c(1:4)] <- c(90, 180, -45, 0)
   expect_equal(names(temporal), c("2000_tile_12", "2001_tile_12"))
   expect_equal(as.vector(ext(temporal)), extent)
 
-  single <- .read_raster(x, footprints[grep("2000_tile_10.tif", footprints$location), ])
+  expect_silent(fps <- .create_vrt(footprints[grep("2000_tile_10.tif", footprints$location), ]))
+  expect_equal(nrow(fps), 1)
+  single <- .read_raster(x, fps)
   extent[c(1:4)] <- c(-90, 0, -45, 0)
   expect_equal(names(single), "2000_tile_10")
   expect_equal(as.vector(ext(single)), extent)
 
-  expect_error(.read_raster(x, footprints[1:24, ]))
+  expect_error(.create_vrt(footprints[1:24, ]), "equal number of timestamps")
+  expect_error(.read_raster(x, footprints[1:24, ]), "extents do not match")
 })
 
 test_that(".read_vector works", {

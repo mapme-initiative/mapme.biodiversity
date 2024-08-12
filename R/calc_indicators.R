@@ -112,6 +112,8 @@ calc_indicators <- function(x, ...) {
     }
   }
 
+  avail_resources <- .prep_raster_resources(avail_resources)
+
   results <- furrr::future_map(1:nrow(x_chunk), function(i) {
     chunk <- x_chunk[i, ]
     resources <- prep_resources(chunk, avail_resources, req_resources, mode = "asset")
@@ -140,6 +142,7 @@ calc_indicators <- function(x, ...) {
                                  aggregation,
                                  verbose) {
   x_bbox <- st_as_sf(st_as_sfc(st_bbox(x)))
+  avail_resources <- .prep_raster_resources(avail_resources)
   resources <- prep_resources(x_bbox, avail_resources, req_resources, mode = "portfolio")
   results <- .compute(x, resources, fun, verbose)
   if (!inherits(results, "list")) {
@@ -149,6 +152,13 @@ calc_indicators <- function(x, ...) {
     .check_single_asset(results[[i]], x[i, ])
   })
   results
+}
+
+.prep_raster_resources <- function(avail_resources) {
+  purrr::map(avail_resources, function(res) {
+    if(unique(res[["type"]]) == "vector") return(res)
+    .create_vrt(res)
+  })
 }
 
 .process <- function(x, fun, avail_resources, req_resources, verbose) {

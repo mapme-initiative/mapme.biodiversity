@@ -329,23 +329,11 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL, mode = c
   bbox
 }
 
-.read_raster <- function(x, tindex, mode = "portfolio") {
-  x <- st_as_sfc(st_bbox(x))
-  if (st_crs(x) != st_crs(tindex)) {
-    x <- st_transform(x, st_crs(tindex))
-  }
-
-  matches <- .get_intersection(x, tindex)
-
-  if (nrow(matches) == 0) {
-    warning("No intersection with asset.")
-    return(NULL)
-  }
-
-  geoms <- matches[["geometry"]]
+.create_vrt <- function(tindex) {
+  geoms <- st_geometry(tindex)
   unique_geoms <- unique(geoms)
   grouped_geoms <- match(geoms, unique_geoms)
-  names(grouped_geoms) <- matches[["location"]]
+  names(grouped_geoms) <- tindex[["location"]]
   grouped_geoms <- sort(grouped_geoms)
 
   n_tiles <- length(unique(grouped_geoms))
@@ -355,28 +343,26 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL, mode = c
     stop("Did not find equal number of tiles per timestep.")
   }
 
-  vrts <- sapply(1:n_timesteps, function(i) tempfile(fileext = ".vrt"))
-  if (mode == "asset") on.exit(file.remove(vrts))
-
-  out <- purrr::map2(1:n_timesteps, vrts, function(i, vrt) {
+  vrts <- purrr::map_chr(1:n_timesteps, function(i) {
     index <- rep(FALSE, n_timesteps)
     index[i] <- TRUE
     filenames <- names(grouped_geoms[index])
-    layer_name <- tools::file_path_sans_ext(basename(filenames[1]))
-    tmp <- terra::vrt(filenames, filename = vrt)
-    names(tmp) <- layer_name
-    tmp
+    terra::vrt(filenames, set_names = TRUE, return_filename = TRUE, overwrite = TRUE)
   })
-  out <- do.call(c, out)
+  make_footprints(vrts, what = "raster")
+}
 
-  # crop the source to the extent of the current polygon
-  cropped <- try(terra::crop(out, terra::vect(x), snap = "out"))
-  if (inherits(cropped, "try-error")) {
-    warning(as.character(cropped))
-    return(NULL)
+.read_raster <- function(x, tindex, mode = "portfolio") {
+  r <- rast(tindex[["location"]])
+  if (mode == "asset") {
+    r <- try(terra::crop(r, terra::vect(x), snap = "out"))
+    if (inherits(r, "try-error")) {
+      warning(as.character(r))
+      return(NULL)
+    }
+    r[] <- terra::values(r)
   }
-  if (mode == "asset") cropped[] <- terra::values(cropped)
-  cropped
+  r
 }
 
 #### -------------------------Unexported utils------------------------------####
