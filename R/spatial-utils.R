@@ -367,6 +367,9 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL, mode = c
 .read_raster <- function(x, tindex, mode = "portfolio") {
   r <- rast(tindex[["location"]])
   if (mode == "asset") {
+    if (st_crs(x) != st_crs(r)) {
+      x <- st_transform(x, st_crs(r))
+    }
     r <- try(terra::crop(r, terra::vect(x), snap = "out"))
     if (inherits(r, "try-error")) {
       warning(as.character(r))
