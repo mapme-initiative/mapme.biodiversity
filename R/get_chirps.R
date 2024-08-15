@@ -46,13 +46,9 @@ get_chirps <- function(years = 1981:2020) {
 
 .get_chirps_urls <- function(years = 1981:2020) {
   chirps_url <- "https://data.chc.ucsb.edu/products/CHIRPS-2.0/global_monthly/cogs/"
-
-  try(chirps_list <- httr::content(httr::GET(chirps_url), as = "text"))
-
-  if (inherits(chirps_list, "try-error")) {
-    stop("Download for CHIRPS resource was unsuccesfull")
-  }
-
+  rsp <- httr2::req_perform(httr2::request(chirps_url))
+  httr2::resp_check_status(rsp)
+  chirps_list <- as.character(httr2::resp_body_html(rsp))
   chirps_list <- regmatches(chirps_list, gregexpr(chirps_list, pattern = "<a href=\"(.*?)\""))
   chirps_list <- gsub(".*\"([^`]+)\".*", "\\1", chirps_list[[1]])
   chirps_list <- grep("*.cog$", chirps_list, value = TRUE)

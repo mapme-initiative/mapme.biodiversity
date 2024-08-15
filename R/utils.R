@@ -90,12 +90,12 @@ check_namespace <- function(pkg, error = TRUE) {
   invisible(TRUE)
 }
 
-#' @importFrom httr http_error
 .has_internet <- function() {
   if (Sys.getenv("mapme_check_connection", unset = "TRUE") == "FALSE") {
     return(TRUE)
   }
-  has_internet <- !httr::http_error("www.google.com")
+  rsp <- httr2::req_perform(httr2::request("www.google.com"))
+  has_internet <- !httr2::resp_is_error(rsp)
   if (!has_internet) {
     message("There seems to be no internet connection. Cannot download resources.")
   }
