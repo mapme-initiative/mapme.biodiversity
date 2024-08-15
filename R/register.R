@@ -56,7 +56,7 @@ mapme_options <- function(..., outdir, chunk_size, retries, verbose, log_dir) {
   }
 
   if (!missing(chunk_size)) {
-    stopifnot(length(chunk_size) == 1 && is.numeric(chunk_size))
+    stopifnot(is.null(chunk_size) | (length(chunk_size) == 1 && is.numeric(chunk_size)))
     .pkgenv$chunk_size <- chunk_size
   }
 

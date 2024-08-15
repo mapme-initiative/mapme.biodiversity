@@ -6,8 +6,10 @@
   st_geometry(x) <- "geometry"
 
   x <- .split_dateline(x)
-  x <- .split_multipolygons(x, chunk_size)
-  x <- .chunk_geoms(x, chunk_size)
+  if (!is.null(chunk_size)) {
+    x <- .split_multipolygons(x, chunk_size)
+    x <- .chunk_geoms(x, chunk_size)
+  }
   .finalize_assets(x, metadata)
 }
 
