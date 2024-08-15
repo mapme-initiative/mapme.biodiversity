@@ -10,6 +10,7 @@
   parallelization now is applied to a single level (#322)
 - `chunk_size` now is properly set to 100,000 ha as per documentation (before
   it was set to 10,000 ha)
+- setting `chunk_size=NULL` is now allowed and skips chunking
 - treecover indicators now trough a message if landscapemetrics is not installed
   
 - new resources: 

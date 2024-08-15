@@ -127,6 +127,7 @@ test_that("chunking works correctly", {
   expect_equal(st_area(x), sum(st_area(x_chunked)), tolerance = 1e-4)
   expect_equal(nrow(x_chunked), 12)
   expect_equal(x, .chunk(x, chunk_size = .calc_bbox_areas(x) * 10))
+  expect_equal(x, .chunk(x, chunk_size = NULL))
 
   data <- tibble(
     datetime = "2000-01-01",
