@@ -38,7 +38,7 @@ write_portfolio <- function(x,
   data <- st_drop_geometry(dplyr::select(x, assetid, dplyr::all_of(names(inds_cols))))
   purrr::walk(names(inds_cols), function(ind) {
     tmp <- dplyr::select(data, assetid, dplyr::all_of(ind))
-    tmp <- tidyr::unnest(tmp, dplyr::all_of(ind), keep_empty = TRUE)
+    tmp <- tidyr::unnest(tmp, dplyr::all_of(ind), keep_empty = FALSE)
     tmp[["indicator"]] <- ind
     vars <- c("assetid", "indicator", "datetime", "variable", "unit", "value")
     if (!all(vars %in% names(tmp))) {

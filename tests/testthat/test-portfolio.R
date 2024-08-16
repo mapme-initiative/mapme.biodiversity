@@ -72,6 +72,9 @@ test_that("portoflio I/O works as expected", {
   expect_warning(write_portfolio(x, dsn), "Dropping")
   data <- read_portfolio(dsn)
   expect_true(!"biome2" %in% names(data))
+  suppressWarnings(inds <- read_sf(dsn, "indicators"))
+  # check NULL was not writte
+  expect_equal(nrow(inds), 1)
 })
 
 test_that(".check_portfolio works as expected", {
