@@ -12,6 +12,8 @@
   it was set to 10,000 ha)
 - setting `chunk_size=NULL` is now allowed and skips chunking
 - treecover indicators now trough a message if landscapemetrics is not installed
+- `write_portfolio()` now drops assets with `NULL` indicators instead of 
+  serializing them to disk with `NA` (#332)
   
 - new resources: 
   - `get_chelsa()`
