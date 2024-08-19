@@ -95,7 +95,7 @@ calc_precipitation_chelsa <- function(years = 1979:2018,
 
 
 register_indicator(
-  name = "precipitation_chirps",
-  description = "Statistics of CHIRPS precipitation layer",
-  resources = "chirps"
+  name = "precipitation_chelsa",
+  description = "Statistics of CHELSA precipitation layer",
+  resources = "chelsa"
 )
