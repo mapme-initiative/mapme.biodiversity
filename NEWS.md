@@ -19,9 +19,11 @@
   
 - new resources: 
   - `get_chelsa()`
+  - `get_vul_carbon()`, `get_man_carbon()`, and `get_irr_carbon()`
 - new indicators:
   - `calc_precipitation_chelsa()`
   - `calc_exposed_population()`
+  - `calc_vul_carbon()`, `calc_man_carbon()`, and `calc_irr_carbon()`
 
 ## Bug fixes
 

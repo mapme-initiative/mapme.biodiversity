@@ -71,6 +71,8 @@ Below is a list of the resources currently supported by
 | global_surface_water_seasonality | Global Surface Water - Seasonality of water occurrrence | <https://www.copernicus.eu/en/access-data> |
 | global_surface_water_transitions | Global Surface Water - Transition classes | <https://www.copernicus.eu/en/access-data> |
 | gmw | Global Mangrove Watch - Vector data of mangrove extent | CC BY 4.0 |
+| irr_carbon | Amount of carbon irrecoverably lost by a typical land use conversion event until mid-century. | CC NC 4.0 |
+| man_carbon | Amount of carbon that is manageable by humans. | CC NC 4.0 |
 | mcd64a1 | MODIS Burned Area Monthly Product (Aqua and Terra) | <https://lpdaac.usgs.gov/data/data-citation-and-policies/> |
 | nasa_grace | NASA Gravity Recovery And Climate Experiment (GRACE) - Measurments of Earth’s mass and water changes | <https://nasagrace.unl.edu/About.aspx> |
 | nasa_srtm | NASA Shuttle Radar Topography Mission (SRTM) Digital Elevation Model (DEM) | <https://lpdaac.usgs.gov/data/data-citation-and-policies/> |
@@ -78,6 +80,7 @@ Below is a list of the resources currently supported by
 | soilgrids | ISRIC - Modelled global soil property layers | CC-BY 4.0 |
 | teow | Terrestrial Ecosystems of the World (TEOW) from WWF-US | unknown |
 | ucdp_ged | UCDP Georeferenced Event Dataset (UCDP GED) | CC-BY 4.0 |
+| vul_carbon | Amount of carbon that is vulnerable to a typical land use conversion event. | CC NC 4.0 |
 | worldclim_max_temperature | WorldClim - Monthly maximum temperature 1960 - 2021 | <https://www.worldclim.org/about.html> |
 | worldclim_min_temperature | WorldClim - Monthly minimum temperature 1960 - 2021 | <https://www.worldclim.org/about.html> |
 | worldclim_precipitation | WorldClim - Monthly precipitation 1960 - 2021 | <https://www.worldclim.org/about.html> |
@@ -100,7 +103,9 @@ Next, is a list of supported indicators.
 | gsw_recurrence | Areal statistic of surface water based on reccurence threshold |
 | gsw_seasonality | Areal statistic of surface water by seasonality |
 | gsw_transitions | Areal statistics of surface water grouped by transition class |
+| irr_carbon | Statistics of irrecoverable carbon per polygon. |
 | landcover | Areal statistics grouped by landcover class |
+| man_carbon | Statistics of manageable carbon per polygon. |
 | mangroves_area | Area covered by mangroves |
 | population_count | Statistic of population counts |
 | precipitation_chelsa | Statistics of CHELSA precipitation layer |
@@ -114,6 +119,7 @@ Next, is a list of supported indicators.
 | treecover_area_and_emissions | Area of forest cover and greenhouse gas emssions caused by forest loss by year |
 | treecoverloss_emissions | Greenouse gas emissions cause by forest loss by year |
 | tri | Statistics of terrain rudgedness index based on NASA SRTM DEM |
+| vul_carbon | Statistics of vulnerable carbon per polygon. |
 
 ## Usage example
 
