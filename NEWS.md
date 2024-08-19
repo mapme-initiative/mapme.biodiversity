@@ -14,6 +14,8 @@
 - treecover indicators now trough a message if landscapemetrics is not installed
 - `write_portfolio()` now drops assets with `NULL` indicators instead of 
   serializing them to disk with `NA` (#332)
+- setting `outdir` via `mapme_options()` now probes the destination by trying
+  to write a GTiff file and errors if unsuccessful (#335)
   
 - new resources: 
   - `get_chelsa()`

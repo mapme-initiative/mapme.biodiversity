@@ -4,6 +4,7 @@ test_that("mapme_options works", {
   expect_equal(names(opts), names)
 
   expect_error(mapme_options(outdir = 1))
+  expect_error(mapme_options(outdir = "/does-not-exist"), "not writeable via GDAL")
   expect_error(mapme_options(verbose = 1))
   expect_error(mapme_options(chunk_size = "a"))
   expect_error(mapme_options(retries = "a"))
