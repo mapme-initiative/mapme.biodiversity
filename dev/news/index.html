@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.8.0.9012</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.8.0.9013</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,7 @@
 <li><p>setting <code>chunk_size=NULL</code> is now allowed and skips chunking</p></li>
 <li><p>treecover indicators now trough a message if landscapemetrics is not installed</p></li>
 <li><p><code><a href="../reference/portfolio.html">write_portfolio()</a></code> now drops assets with <code>NULL</code> indicators instead of serializing them to disk with <code>NA</code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/332" class="external-link">#332</a>)</p></li>
+<li><p>setting <code>outdir</code> via <code><a href="../reference/mapme.html">mapme_options()</a></code> now probes the destination by trying to write a GTiff file and errors if unsuccessful (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/335" class="external-link">#335</a>)</p></li>
 <li>
 <p>new resources:</p>
 <ul><li><code><a href="../reference/chelsa.html">get_chelsa()</a></code></li>
