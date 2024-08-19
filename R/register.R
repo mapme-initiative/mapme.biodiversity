@@ -17,6 +17,22 @@
   invisible()
 }
 
+.probe_dsn <- function(dsn) {
+  dst <- file.path(dsn, "mapme-probe.tif")
+  r <- terra::rast(resolution = c(180, 180))
+  r[] <- 1L:2L
+
+  status <- try(
+    writeRaster(r, dst, datatype = "INT1U", overwrite = TRUE),
+    silent = TRUE
+  )
+
+  if (inherits(status, "try-error")) {
+    msg <- sprintf("Destination '%s' is not writeable via GDAL.", dsn)
+    stop(msg)
+  }
+}
+
 #' Portfolio methods for mapme.biodiversity
 #'
 #' `mapme_options()` sets default options for mapme.biodiversity to control the
@@ -52,6 +68,7 @@
 mapme_options <- function(..., outdir, chunk_size, retries, verbose, log_dir) {
   if (!missing(outdir)) {
     stopifnot(is.null(outdir) | (is.character(outdir) && length(outdir) == 1))
+    .probe_dsn(outdir)
     .pkgenv$outdir <- outdir
   }
 
