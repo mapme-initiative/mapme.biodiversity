@@ -72,6 +72,7 @@ Below is a list of the resources currently supported by
 | global_surface_water_seasonality | Global Surface Water - Seasonality of water occurrrence                                                                    | <https://www.copernicus.eu/en/access-data>                 |
 | global_surface_water_transitions | Global Surface Water - Transition classes                                                                                  | <https://www.copernicus.eu/en/access-data>                 |
 | gmw                              | Global Mangrove Watch - Vector data of mangrove extent                                                                     | CC BY 4.0                                                  |
+| gsw_time_series                  | Global Surface Water - Yearly Time Series                                                                                  | <https://global-surface-water.appspot.com/download>        |
 | humanfootprint                   | Time series on human pressures on natural ecosystems.                                                                      | CC BY 4.0                                                  |
 | ipbes_biomes                     | Global Assessment Report on Biodiversity and Ecosystem Services division of the earth’s surface into biomes and anthromes. | CC 4.0                                                     |
 | irr_carbon                       | Amount of carbon irrecoverably lost by a typical land use conversion event until mid-century.                              | CC NC 4.0                                                  |
@@ -107,6 +108,7 @@ Next, is a list of supported indicators.
 | gsw_occurrence                | Areal statistic of surface water based on occurrence threshold                 |
 | gsw_recurrence                | Areal statistic of surface water based on reccurence threshold                 |
 | gsw_seasonality               | Areal statistic of surface water by seasonality                                |
+| gsw_time_series               | Global Surface Water - Yearly Time Series area estimation of water classes.    |
 | gsw_transitions               | Areal statistics of surface water grouped by transition class                  |
 | humanfootprint                | Statistics of the human footprint data set per polygon.                        |
 | ipbes_biomes                  | Area distibution of IBPES biomes within a polygon.                             |
