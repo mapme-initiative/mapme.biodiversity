@@ -34,7 +34,7 @@ Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-GB
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Collate: 
     'register.R'
     'calc_biome.R'
@@ -55,6 +55,7 @@ Collate:
     'get_resources.R'
     'calc_indicators.R'
     'calc_ipbes_biomes.R'
+    'calc_key_biodiversity_areas.R'
     'calc_landcover.R'
     'calc_mangroves_area.R'
     'calc_population_count.R'
@@ -83,6 +84,7 @@ Collate:
     'get_gsw.R'
     'get_hfp.R'
     'get_ipbes_biomes.R'
+    'get_key_biodiversity_areas.R'
     'get_mcd64A1.R'
     'get_nasa_grace.R'
     'get_nasa_srtm.R'
