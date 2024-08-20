@@ -18,6 +18,9 @@
 }
 
 .probe_dsn <- function(dsn) {
+  if (is.null(dsn)) {
+    return()
+  }
   dst <- file.path(dsn, "mapme-probe.tif")
   r <- terra::rast(resolution = c(180, 180))
   r[] <- 1L:2L
