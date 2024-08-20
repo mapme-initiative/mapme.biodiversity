@@ -20,6 +20,7 @@
 #' Default: `1984:2021`.
 #' @format A function returning a tibble with time series of global surface
 #' water data classes.
+#' @include register.R
 #' @export
 calc_gsw_time_series <- function(years = 1984:2021) {
   check_namespace("exactextractr")
