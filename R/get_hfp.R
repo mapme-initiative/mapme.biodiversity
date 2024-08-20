@@ -17,7 +17,7 @@
 #' It may be required to increase the timeout option to successfully download
 #' theses layers from their source location via e.g. `options(timeout = 600)`.
 #'
-#' @name humanfootprint
+#' @name humanfootprint_resource
 #' @param years A numeric vector indicating the years for which to download
 #'   the human footprint data, defaults to \code{2000:2020}.
 #' @keywords resource

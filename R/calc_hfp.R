@@ -6,9 +6,9 @@
 #' to extract zonal statistics of the human footprint data.
 #'
 #' The required resources for this indicator are:
-#'  - [humanfootprint]
+#'  - [humanfootprint_resource]
 #'
-#' @name humanfootprint
+#' @name humanfootprint_indicator
 #' @param engine The preferred processing functions from either one of "zonal",
 #'   "extract" or "exactextract" as character.
 #' @param stats Function to be applied to compute statistics for polygons either

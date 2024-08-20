@@ -71,6 +71,7 @@ Below is a list of the resources currently supported by
 | global_surface_water_seasonality | Global Surface Water - Seasonality of water occurrrence | <https://www.copernicus.eu/en/access-data> |
 | global_surface_water_transitions | Global Surface Water - Transition classes | <https://www.copernicus.eu/en/access-data> |
 | gmw | Global Mangrove Watch - Vector data of mangrove extent | CC BY 4.0 |
+| humanfootprint | Time series on human pressures on natural ecosystems. | CC BY 4.0 |
 | irr_carbon | Amount of carbon irrecoverably lost by a typical land use conversion event until mid-century. | CC NC 4.0 |
 | man_carbon | Amount of carbon that is manageable by humans. | CC NC 4.0 |
 | mcd64a1 | MODIS Burned Area Monthly Product (Aqua and Terra) | <https://lpdaac.usgs.gov/data/data-citation-and-policies/> |
@@ -103,6 +104,7 @@ Next, is a list of supported indicators.
 | gsw_recurrence | Areal statistic of surface water based on reccurence threshold |
 | gsw_seasonality | Areal statistic of surface water by seasonality |
 | gsw_transitions | Areal statistics of surface water grouped by transition class |
+| humanfootprint | Statistics of the human footprint data set per polygon. |
 | irr_carbon | Statistics of irrecoverable carbon per polygon. |
 | landcover | Areal statistics grouped by landcover class |
 | man_carbon | Statistics of manageable carbon per polygon. |
