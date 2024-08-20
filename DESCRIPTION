@@ -1,6 +1,6 @@
 Package: mapme.biodiversity
 Title: Efficient Monitoring of Global Biodiversity Portfolios
-Version: 0.8.0.9013
+Version: 0.8.0.9014
 Authors@R: c(
     person("Darius A.", "Görgen", , "darius2402@web.de", role = c("aut", "cre")),
     person("Om Prakash", "Bhandari", role = "aut")
@@ -39,6 +39,7 @@ Collate:
     'register.R'
     'calc_biome.R'
     'calc_burned_area.R'
+    'calc_carbon.R'
     'calc_deforestation_drivers.R'
     'calc_drought_indicator.R'
     'calc_ecoregion.R'
@@ -68,6 +69,7 @@ Collate:
     'calc_tri.R'
     'chunking.R'
     'engines.R'
+    'get_carbon.R'
     'get_chelsa.R'
     'get_chirps.R'
     'get_esalandcover.R'
