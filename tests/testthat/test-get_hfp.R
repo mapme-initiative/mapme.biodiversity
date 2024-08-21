@@ -1,5 +1,4 @@
 test_that("get_hfp works", {
-  skip_on_cran()
   .clear_resources()
   outdir <- file.path(tempdir(), "mapme.data")
   .copy_resource_dir(outdir)
@@ -8,6 +7,7 @@ test_that("get_hfp works", {
   mapme_options(outdir = outdir)
   expect_message(get_humanfootprint(years = 1999:2000), "target years")
 
+  skip_on_cran()
   ghfp <- get_humanfootprint(years = 2010)
   fps <- ghfp(outdir = file.path(outdir, "humanfootprint"))
   expect_silent(.check_footprints(fps))

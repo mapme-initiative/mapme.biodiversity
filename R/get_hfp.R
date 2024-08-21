@@ -94,13 +94,12 @@ get_humanfootprint <- function(years = 2000:2020) {
     article_url <- sprintf("%s?access_token=%s", article_url, token)
   }
 
-  check_transient <- function(resp) resp_status(resp) %in% c(403, 429, 503, 504)
+  is_transient <- function(resp) resp_status(resp) %in% c(403, 429, 503, 504)
   rsp <- req_perform(req_retry(request(article_url),
-    max_tries = 3,
-    is_transient = check_transient
+    max_seconds = 10,
+    is_transient = is_transient
   ))
 
-  req_perform(req_retry(request(article_url), max_tries = 3, is_transient = check_transient))
   cnt <- resp_body_json(rsp)
   data <- lapply(cnt, function(x) data.frame(filename = x[["name"]], url = x[["download_url"]]))
   data <- do.call(rbind, data)

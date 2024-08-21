@@ -164,7 +164,7 @@ register_resource(
   baseurl <- "https://zenodo.org/api/records/4091029"
   is_transient <- function(resp) resp_status(resp) %in% c(429, 503, 504)
   rsp <- req_perform(req_retry(request(baseurl),
-    max_tries = 3,
+    max_seconds = 10,
     is_transient = is_transient
   ))
   cnt <- resp_body_json(rsp)
