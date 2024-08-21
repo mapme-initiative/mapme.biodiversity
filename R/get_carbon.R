@@ -159,10 +159,15 @@ register_resource(
 
 
 #' @noRd
-#' @importFrom httr2 request req_perform resp_body_json
+#' @importFrom httr2 request req_perform req_retry resp_status resp_body_json
 .get_goldstein_url <- function(layer) {
   baseurl <- "https://zenodo.org/api/records/4091029"
-  cnt <- resp_body_json(req_perform(request(baseurl)))
+  is_transient <- function(resp) resp_status(resp) %in% c(429, 503, 504)
+  rsp <- req_perform(req_retry(request(baseurl),
+    max_tries = 3,
+    is_transient = is_transient
+  ))
+  cnt <- resp_body_json(rsp)
   files_df <- lapply(cnt[["files"]], function(x) data.frame(filename = x[["key"]], url = x[["links"]][["self"]]))
   files_df <- do.call(rbind, files_df)
   files_df <- files_df[grep(layer, files_df[["filename"]]), ]
