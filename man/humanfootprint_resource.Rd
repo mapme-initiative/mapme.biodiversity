@@ -32,9 +32,12 @@ scheme proposed by Venter et al. (2016), assigning each pixel a value between
 0 and 50, with 50 representing the theoretical value of the highest human
 pressure.
 }
-\details{
+\note{
 It may be required to increase the timeout option to successfully download
 theses layers from their source location via e.g. \code{options(timeout = 600)}.
+In case an 403 error occurs, you can create an account with Figshare and
+create an personal access token. If set as \code{FIGSHARE_PAT} environment
+variable, it will be used to authenticate.
 }
 \references{
 Mu, H., Li, X., Wen, Y. et al. A global record of annual

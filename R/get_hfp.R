@@ -13,9 +13,13 @@
 #' scheme proposed by Venter et al. (2016), assigning each pixel a value between
 #' 0 and 50, with 50 representing the theoretical value of the highest human
 #' pressure.
-#'
+#
+#' @note
 #' It may be required to increase the timeout option to successfully download
 #' theses layers from their source location via e.g. `options(timeout = 600)`.
+#' In case an 403 error occurs, you can create an account with Figshare and
+#' create an personal access token. If set as `FIGSHARE_PAT` environment
+#' variable, it will be used to authenticate.
 #'
 #' @name humanfootprint_resource
 #' @param years A numeric vector indicating the years for which to download
@@ -83,8 +87,14 @@ get_humanfootprint <- function(years = 2000:2020) {
 #' @noRd
 #' @importFrom httr2 request req_perform resp_body_json
 .get_hfp_url <- function(years) {
-  baseurl <- "https://api.figshare.com/v2/articles/16571064/files"
-  cnt <- resp_body_json(req_perform(request(baseurl)))
+  article_url <- "https://api.figshare.com/v2/articles/16571064/files"
+
+  if (Sys.getenv("FIGSHARE_PAT") != "") {
+    token <- Sys.getenv("FIGSHARE_PAT")
+    article_url <- sprintf("%s?access_token=%s", article_url, token)
+  }
+
+  cnt <- resp_body_json(req_perform(request(article_url)))
   data <- lapply(cnt, function(x) data.frame(filename = x[["name"]], url = x[["download_url"]]))
   data <- do.call(rbind, data)
   data <- data[grep("zip", data[["filename"]]), ]
