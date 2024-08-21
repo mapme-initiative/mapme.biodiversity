@@ -1,17 +1,11 @@
 test_that("calc_hfp works", {
-  skip_on_cran()
   x <- read_sf(system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
     package = "mapme.biodiversity"
   ))
-  .clear_resources()
-  outdir <- file.path(tempdir(), "mapme.data")
-  .copy_resource_dir(outdir)
-  mapme_options(outdir = outdir, verbose = FALSE)
-
-  get_resources(x, get_humanfootprint(years = 2010))
-  hfp <- prep_resources(x)[["humanfootprint"]]
+  hfp <- rast(system.file("res", "humanfootprint", "hfp2010.tif",
+    package = "mapme.biodiversity"
+  ))
   hf <- calc_humanfootprint(stats = c("mean", "median"))
-
   expect_silent(result <- hf(x, hfp))
   expect_silent(.check_single_asset(result))
   expect_equal(nrow(result), 2)
