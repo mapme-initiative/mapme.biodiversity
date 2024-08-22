@@ -18,6 +18,7 @@
   to write a GTiff file and errors if unsuccessful (#335)
   
 - new resources: 
+  - `get_biodiversity_intactness_index()`
   - `get_chelsa()`
   - `get_ipbes_biomes()`
   - `get_humanfootprint()`
@@ -28,6 +29,9 @@
   - `calc_humanfootprint()`
   - `calc_ipbes_biomes()`
   - `calc_key_biodiversity_area()`
+  - `calc_biodiversity_intactness_index ()`
+  - `calc_exposed_population()`
+  - `calc_humanfootprint()`
   - `calc_precipitation_chelsa()`
   - `calc_vul_carbon()`, `calc_man_carbon()`, and `calc_irr_carbon()`
 

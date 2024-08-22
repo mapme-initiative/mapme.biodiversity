@@ -58,6 +58,7 @@ Below is a list of the resources currently supported by
 
 | name                             | description                                                                                                                | licence                                                    |
 |:---------------------------------|:---------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------|
+| biodiversity_intactness_index    | Biodiversity Intactness Index                                                                                              | CC-BY-4.0                                                  |
 | chelsa                           | Climatologies at High resolution for the Earth Land Surface Areas (CHELSA)                                                 | Unknown - Must cite!                                       |
 | chirps                           | Climate Hazards Group InfraRed Precipitation with Station data (CHIRPS)                                                    | CC - unknown                                               |
 | esalandcover                     | Copernicus Land Monitoring Service (CLMS) 100 meter land cover product                                                     | CC-BY 4.0                                                  |
@@ -91,41 +92,42 @@ Below is a list of the resources currently supported by
 
 Next, is a list of supported indicators.
 
-| name                         | description                                                                    |
-|:-----------------------------|:-------------------------------------------------------------------------------|
-| biome                        | Areal statistics of biomes from TEOW                                           |
-| burned_area                  | Monthly burned area detected by MODIS satellites                               |
-| deforestation_drivers        | Areal statistics of deforestation drivers                                      |
-| drought_indicator            | Relative wetness statistics based on NASA GRACE                                |
-| ecoregion                    | Areal statstics of ecoregions based on TEOW                                    |
-| elevation                    | Statistics of elevation based on NASA SRTM                                     |
-| exposed_population           | Number of people exposed to conflicts based on UCDP GED                        |
-| fatalities                   | Number of fatalities by group of conflict based on UCDP GED                    |
-| gsw_change                   | Statistics of the surface water change layer by JRC                            |
-| gsw_occurrence               | Areal statistic of surface water based on occurrence threshold                 |
-| gsw_recurrence               | Areal statistic of surface water based on reccurence threshold                 |
-| gsw_seasonality              | Areal statistic of surface water by seasonality                                |
-| gsw_transitions              | Areal statistics of surface water grouped by transition class                  |
-| humanfootprint               | Statistics of the human footprint data set per polygon.                        |
-| ipbes_biomes                 | Area distibution of IBPES biomes within a polygon.                             |
-| irr_carbon                   | Statistics of irrecoverable carbon per polygon.                                |
-| key_biodiversity_areas       | Area estimation of intersection with key biodiversity areas.                   |
-| landcover                    | Areal statistics grouped by landcover class                                    |
-| man_carbon                   | Statistics of manageable carbon per polygon.                                   |
-| mangroves_area               | Area covered by mangroves                                                      |
-| population_count             | Statistic of population counts                                                 |
-| precipitation_chelsa         | Statistics of CHELSA precipitation layer                                       |
-| precipitation_chirps         | Statistics of CHIRPS precipitation layer                                       |
-| precipitation_wc             | Statistics of WorldClim precipitation layer                                    |
-| soilproperties               | Statistics of SoilGrids layers                                                 |
-| temperature_max_wc           | Statistics of WorldClim maximum temperature layer                              |
-| temperature_min_wc           | Statistics of WorldClim minimum temperature layer                              |
-| traveltime                   | Statistics of traveltime to the clostes city grouped by city category          |
-| treecover_area               | Area of forest cover by year                                                   |
-| treecover_area_and_emissions | Area of forest cover and greenhouse gas emssions caused by forest loss by year |
-| treecoverloss_emissions      | Greenouse gas emissions cause by forest loss by year                           |
-| tri                          | Statistics of terrain rudgedness index based on NASA SRTM DEM                  |
-| vul_carbon                   | Statistics of vulnerable carbon per polygon.                                   |
+| name                          | description                                                                    |
+|:------------------------------|:-------------------------------------------------------------------------------|
+| biodiversity_intactness_index | Averaged biodiversity intactness index.                                        |
+| biome                         | Areal statistics of biomes from TEOW                                           |
+| burned_area                   | Monthly burned area detected by MODIS satellites                               |
+| deforestation_drivers         | Areal statistics of deforestation drivers                                      |
+| drought_indicator             | Relative wetness statistics based on NASA GRACE                                |
+| ecoregion                     | Areal statstics of ecoregions based on TEOW                                    |
+| elevation                     | Statistics of elevation based on NASA SRTM                                     |
+| exposed_population            | Number of people exposed to conflicts based on UCDP GED                        |
+| fatalities                    | Number of fatalities by group of conflict based on UCDP GED                    |
+| gsw_change                    | Statistics of the surface water change layer by JRC                            |
+| gsw_occurrence                | Areal statistic of surface water based on occurrence threshold                 |
+| gsw_recurrence                | Areal statistic of surface water based on reccurence threshold                 |
+| gsw_seasonality               | Areal statistic of surface water by seasonality                                |
+| gsw_transitions               | Areal statistics of surface water grouped by transition class                  |
+| humanfootprint                | Statistics of the human footprint data set per polygon.                        |
+| ipbes_biomes                  | Area distibution of IBPES biomes within a polygon.                             |
+| irr_carbon                    | Statistics of irrecoverable carbon per polygon.                                |
+| key_biodiversity_areas        | Area estimation of intersection with key biodiversity areas.                   |
+| landcover                     | Areal statistics grouped by landcover class                                    |
+| man_carbon                    | Statistics of manageable carbon per polygon.                                   |
+| mangroves_area                | Area covered by mangroves                                                      |
+| population_count              | Statistic of population counts                                                 |
+| precipitation_chelsa          | Statistics of CHELSA precipitation layer                                       |
+| precipitation_chirps          | Statistics of CHIRPS precipitation layer                                       |
+| precipitation_wc              | Statistics of WorldClim precipitation layer                                    |
+| soilproperties                | Statistics of SoilGrids layers                                                 |
+| temperature_max_wc            | Statistics of WorldClim maximum temperature layer                              |
+| temperature_min_wc            | Statistics of WorldClim minimum temperature layer                              |
+| traveltime                    | Statistics of traveltime to the clostes city grouped by city category          |
+| treecover_area                | Area of forest cover by year                                                   |
+| treecover_area_and_emissions  | Area of forest cover and greenhouse gas emssions caused by forest loss by year |
+| treecoverloss_emissions       | Greenouse gas emissions cause by forest loss by year                           |
+| tri                           | Statistics of terrain rudgedness index based on NASA SRTM DEM                  |
+| vul_carbon                    | Statistics of vulnerable carbon per polygon.                                   |
 
 ## Usage example
 
@@ -140,7 +142,7 @@ library(mapme.biodiversity)
 library(sf)
 ```
 
-    ## Linking to GEOS 3.12.2, GDAL 3.9.1, PROJ 9.4.1; sf_use_s2() is TRUE
+    ## Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.3.1; sf_use_s2() is TRUE
 
 Once you have decided on an indicator you are interested in, you can
 start by making the required resource available for your portfolio.

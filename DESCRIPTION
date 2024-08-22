@@ -37,6 +37,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Collate: 
     'register.R'
+    'calc_biodiversity_intactness_index.R'
     'calc_biome.R'
     'calc_burned_area.R'
     'calc_carbon.R'
@@ -72,6 +73,7 @@ Collate:
     'calc_tri.R'
     'chunking.R'
     'engines.R'
+    'get_biodiversity_intactness_index.R'
     'get_carbon.R'
     'get_chelsa.R'
     'get_chirps.R'
