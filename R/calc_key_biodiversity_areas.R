@@ -51,7 +51,10 @@ calc_key_biodiversity_area <- function() {
            verbose = mapme_options()[["verbose"]]) {
 
     key_biodiversity_areas <- key_biodiversity_areas[[1]]
-    if (is.null(key_biodiversity_areas) | nrow(key_biodiversity_areas) == 0) {
+    if (is.null(key_biodiversity_areas)) {
+      return(NULL)
+    }
+    if (length(key_biodiversity_areas) == 0) {
       return(NULL)
     }
 
