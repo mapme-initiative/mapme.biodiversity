@@ -26,6 +26,7 @@ test_that("get_carbon works", {
 
 test_that(".get_goldstein_url works", {
   skip_on_cran()
+  skip_if_not(Sys.getenv("USER") == "darius")
   expect_silent(result <- .get_goldstein_url("Irrecoverable"))
   expect_equal(nrow(result), 2)
   filenames <- c("Irrecoverable_Carbon_2010.zip", "Irrecoverable_Carbon_2018.zip")

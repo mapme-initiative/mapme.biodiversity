@@ -1,5 +1,6 @@
 test_that("get_ipbes_biomes works", {
   skip_on_cran()
+  skip_if_not(Sys.getenv("USER") == "darius")
   gib <- get_ipbes_biomes()
   expect_silent(fps <- gib())
   expect_silent(.check_footprints(fps))
