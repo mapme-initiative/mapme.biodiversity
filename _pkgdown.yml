@@ -5,7 +5,7 @@ development:
 template:
   bootstrap: 5
   bslib:
-    fg: "#1d7990"
+    fg: "#032733"
     bg: "#F7F8F9"
     primary: "#1d7990"
     link-color: "#008c8d"
