@@ -4,9 +4,9 @@
 #' input polygon.
 #'
 #' The required resources for this indicator are:
-#'  - [key_biodiversity_areas]
+#'  - [key_biodiversity_areas_resource]
 #'
-#' @name key_biodiversity_areas
+#' @name key_biodiversity_areas_indicator
 #' @docType data
 #' @keywords indicator
 #' @format A function returning an indicator tibble with `key_biodiversity_area`

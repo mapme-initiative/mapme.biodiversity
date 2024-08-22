@@ -7,7 +7,7 @@
 #' global data set and point towards its file path on your local machine.
 #' Please find the available data under the source link given below.
 #'
-#' @name key_biodiversity_areas
+#' @name key_biodiversity_areas_resource
 #' @keywords resource
 #' @param path A character vector to the key biodiversity areas GPKG file.
 #'   Note, that the file has to be downloaded manually.
