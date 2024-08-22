@@ -50,7 +50,8 @@
 <url><loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/indicators.html</loc></url>
 <url><loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/ipbes_biome_stats.html</loc></url>
 <url><loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/ipbes_biomes.html</loc></url>
-<url><loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/key_biodiversity_areas.html</loc></url>
+<url><loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/key_biodiversity_areas_indicator.html</loc></url>
+<url><loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/key_biodiversity_areas_resource.html</loc></url>
 <url><loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/landcover.html</loc></url>
 <url><loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/make_footprints.html</loc></url>
 <url><loc>https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/make_global_grid.html</loc></url>
