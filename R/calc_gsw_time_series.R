@@ -12,9 +12,9 @@
 #' - No Water: No Water was detected.
 #'
 #' The required resources for this indicator are:
-#'  - [gsw_time_series]
+#'  - [gsw_time_series_resource]
 #'
-#' @name gsw_time_series
+#' @name gsw_time_series_indicator
 #' @keywords indicator
 #' @param years Numeric vector of years to process between 1984 and 2021.
 #' Default: `1984:2021`.

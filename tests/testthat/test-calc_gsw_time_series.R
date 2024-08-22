@@ -1,4 +1,4 @@
-test_that("gsw time series works", {
+test_that("calc_gsw_time_series works", {
   aoi <- read_sf(
     system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
                 package = "mapme.biodiversity"
