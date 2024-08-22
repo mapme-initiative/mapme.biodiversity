@@ -21,12 +21,14 @@
   - `get_chelsa()`
   - `get_ipbes_biomes()`
   - `get_humanfootprint()`
+  - `get_key_biodiversity_areas()`
   - `get_vul_carbon()`, `get_man_carbon()`, and `get_irr_carbon()`
 - new indicators:
-  - `calc_precipitation_chelsa()`
   - `calc_exposed_population()`
   - `calc_humanfootprint()`
   - `calc_ipbes_biomes()`
+  - `calc_key_biodiversity_area()`
+  - `calc_precipitation_chelsa()`
   - `calc_vul_carbon()`, `calc_man_carbon()`, and `calc_irr_carbon()`
 
 ## Bug fixes
