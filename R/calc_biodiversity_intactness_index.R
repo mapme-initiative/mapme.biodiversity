@@ -54,10 +54,6 @@ calc_biodiversity_intactness_index <- function() {
       return(NULL)
     }
 
-    if (all(unlist(global(noNA(biodiversity_intactness_index), fun = "sum")) == 0)) {
-      return(NULL)
-    }
-
     mean_bii <- exactextractr::exact_extract(biodiversity_intactness_index, x, fun = "mean")
 
     results <- tibble::tibble(
