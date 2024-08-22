@@ -9,7 +9,7 @@
 #' global data set and point towards the file path on your local machine.
 #' Please find the available data under the source link given below.
 #'
-#' @name biodiversity_intactness_index
+#' @name biodiversity_intactness_index_resource
 #' @keywords resource
 #' @param path A character vector to the biodiversity intactness index ASCII file.
 #' @returns A function that returns an `sf` footprints object.

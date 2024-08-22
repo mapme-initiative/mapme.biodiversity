@@ -3,9 +3,9 @@
 #' This function calculates the mean biodiversity intactness index for a region.
 #'
 #' The required resources for this indicator are:
-#'  - [biodiversity_intactness_index]
+#'  - [biodiversity_intactness_index_resource]
 #'
-#' @name biodiversity_intactness_index
+#' @name biodiversity_intactness_index_indicator
 #' @docType data
 #' @keywords indicator
 #' @format  A function that returns an indicator tibble with variable
