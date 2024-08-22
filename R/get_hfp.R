@@ -85,16 +85,19 @@ get_humanfootprint <- function(years = 2000:2020) {
 }
 
 #' @noRd
-#' @importFrom httr2 request req_perform resp_body_json
+#' @importFrom httr2 request req_perform req_retry resp_status resp_body_json req_headers
 .get_hfp_url <- function(years) {
-  article_url <- "https://api.figshare.com/v2/articles/16571064/files"
+  req <- request("https://api.figshare.com/v2/articles/16571064/files")
 
   if (Sys.getenv("FIGSHARE_PAT") != "") {
-    token <- Sys.getenv("FIGSHARE_PAT")
-    article_url <- sprintf("%s?access_token=%s", article_url, token)
+    token <- sprintf("token %s", Sys.getenv("FIGSHARE_PAT"))
+    req <- req_headers(req, "Authorization" = token, .redact = "Authorization")
   }
 
-  cnt <- resp_body_json(req_perform(request(article_url)))
+  is_transient <- function(resp) resp_status(resp) %in% c(403, 429, 503, 504)
+  rsp <- req_perform(req_retry(req, max_seconds = 15, is_transient = is_transient))
+
+  cnt <- resp_body_json(rsp)
   data <- lapply(cnt, function(x) data.frame(filename = x[["name"]], url = x[["download_url"]]))
   data <- do.call(rbind, data)
   data <- data[grep("zip", data[["filename"]]), ]
