@@ -5,9 +5,9 @@ development:
 template:
   bootstrap: 5
   bslib:
-    fg: "#004658"
-    bg: "#ffffff"
-    primary: "#b7dede"
+    fg: "#1d7990"
+    bg: "#F7F8F9"
+    primary: "#1d7990"
     link-color: "#008c8d"
     link-hover-color: "#de9433"
 
