@@ -18,13 +18,23 @@ test_that("get_gsw_time_series works", {
     get_gsw_time_series(years = 0),
     "The target years do not intersect with the availability of gsw_time_series."
   )
+  expect_warning(
+    get_gsw_time_series(years = c(NA, NULL, ".", 2000)),
+    "NAs introduced by coercion"
+  )
   expect_message(
-    get_gsw_time_series(years = c(NA, 1900, NULL, ".", 2000, 2000)),
+    get_gsw_time_series(years = c(1900, 2000)),
     "Some target years are not available for gsw_time_series."
   )
+  expect_silent(
+    get_gsw_time_series(years = c(2000, 2000))
+  )
 
-  gsw <- get_gsw_time_series(2000)
+  expect_silent(.check_footprints(get_gsw_time_series(2000:2001)(aoi)))
+  expect_silent(.check_footprints(get_gsw_time_series(2000)(aoi)))
+
   aoi_shift <- aoi
+  gsw <- get_gsw_time_series(2000:2001)
   st_geometry(aoi_shift) <- st_geometry(aoi) + c(0, -90)
   st_crs(aoi_shift) <- 4326
   expect_error(

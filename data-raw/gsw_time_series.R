@@ -3,7 +3,7 @@ library(mapme.indicators)
 library(terra)
 
 years <- 2000:2001
-outdir <- system.file("resources", package = "mapme.indicators")
+outdir <- system.file("res", package = "mapme.biodiversity")
 mapme_options(outdir = outdir)
 
 x <- read_sf(
@@ -16,7 +16,7 @@ get_resources(get_gsw_time_series(years = years))
 gsw_time_series <- prep_resources(x)
 gsw_time_series <- gsw_time_series [[1]]
 
-outdir <- "inst/resources/gsw_time_series"
+outdir <- "inst/res/gsw_time_series"
 dir.create(outdir, recursive = TRUE, showWarnings = FALSE)
 
 gsw_time_series <- mask(gsw_time_series, x)
