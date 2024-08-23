@@ -31,14 +31,18 @@
 #' `LATEST`. Choosing `LATEST` will result in the latest available version.
 #' @export
 get_gsw_time_series <- function(years, version = "LATEST") {
+  version <- unique(version)
   available_versions = c("VER1-0", "VER2-0", "VER3-0", "VER4-0", "VER5-0",
                          "LATEST")
-  available_years <- 1984:2021
-  years <- check_available_years(years, available_years, "gsw_time_series")
   stopifnot(version %in% available_versions)
   if(version == "LATEST") {
     version <- "VER5-0"
   }
+
+  years <- unique(years)
+  years <- years[!is.na(as.numeric(years))]
+  available_years <- 1984:2021
+  years <- check_available_years(years, available_years, "gsw_time_series")
 
   function(x,
            name = "gsw_time_series",
@@ -64,20 +68,20 @@ get_gsw_time_series <- function(years, version = "LATEST") {
 
     source_combinations <- expand.grid(years = years, ids = ids)
     urls <- purrr::map2_chr(source_combinations$years, source_combinations$ids, \(year, tile_url_id) {
-        # Warning: file naming system is different for 2021
-        separator <- ifelse(year == 2021, "_", "-")
-        sprintf(
-          "%syearlyClassification%s/yearlyClassification%s%s%s.tif",
-          baseurl, year, year, separator, tile_url_id
-        )
+      # Warning: file naming system is different for 2021
+      separator <- ifelse(year == 2021, "_", "-")
+      sprintf(
+        "%syearlyClassification%s/yearlyClassification%s%s%s.tif",
+        baseurl, year, year, separator, tile_url_id
+      )
     })
 
     fps <- grid_gsw[expand.grid(years, tile_ids = tile_ids)$tile_ids, ]
     fps[["source"]] <- urls
     make_footprints(fps,
-      filenames = paste0(version, "_", basename(fps$source)),
-      what = "raster",
-      co = c("-co", "INTERLEAVE=BAND", "-co", "COMPRESS=LZW", "-ot", "Byte")
+                    filenames = paste0(version, "_", basename(fps$source)),
+                    what = "raster",
+                    co = c("-co", "INTERLEAVE=BAND", "-co", "COMPRESS=LZW", "-ot", "Byte")
     )
   }
 }

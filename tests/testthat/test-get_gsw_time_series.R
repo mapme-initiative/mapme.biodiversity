@@ -5,7 +5,7 @@ test_that("get_gsw_time_series works", {
     )
   )
 
-  outdir <- system.file("resources", package = "mapme.indicators")
+  outdir <- system.file("res", package = "mapme.biodiversity")
   mapme_options(outdir = outdir, verbose = FALSE)
   outdir_gsw <- file.path(outdir, "gsw_time_series")
   years <- 2000:2001
@@ -19,7 +19,7 @@ test_that("get_gsw_time_series works", {
     "The target years do not intersect with the availability of gsw_time_series."
   )
   expect_message(
-    get_gsw_time_series(years = 0:2000),
+    get_gsw_time_series(years = c(NA, 1900, NULL, ".", 2000, 2000)),
     "Some target years are not available for gsw_time_series."
   )
 

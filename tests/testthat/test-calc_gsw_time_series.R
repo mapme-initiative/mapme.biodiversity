@@ -5,7 +5,7 @@ test_that("calc_gsw_time_series works", {
     )
   )
 
-  outdir <- system.file("resources", package = "mapme.indicators")
+  outdir <- system.file("res", package = "mapme.biodiversity")
   mapme_options(outdir = outdir, verbose = FALSE)
   outdir_gsw <- file.path(outdir, "gsw_time_series")
 
@@ -17,14 +17,20 @@ test_that("calc_gsw_time_series works", {
     file.path(outdir_gsw, gsw_fnames_long)
   )
 
-  years <- 2000:2001
-  aoi <- aoi %>%
-    get_resources(get_gsw_time_series(years))
+  res <- calc_indicators(
+    get_resources(
+      aoi, get_gsw_time_series(years = 2000)
+      ),
+    calc_gsw_time_series()
+  )
+  expect_equal(
+    nrow(res$gsw_timeseries [[1]]),
+    4
+  )
 
-  res <- aoi %>%
-    calc_indicators(
-      calc_gsw_time_series(years)
-    )
+  years <- 2000:2001
+  aoi <- get_resources(aoi, get_gsw_time_series(years))
+  res <- calc_indicators(aoi, calc_gsw_time_series())
   res <- res$gsw_timeseries [[1]]
 
   file.remove(

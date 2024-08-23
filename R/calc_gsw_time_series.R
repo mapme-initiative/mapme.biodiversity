@@ -16,16 +16,38 @@
 #'
 #' @name gsw_time_series_indicator
 #' @keywords indicator
-#' @param years Numeric vector of years to process between 1984 and 2021.
-#' Default: `1984:2021`.
 #' @format A function returning a tibble with time series of global surface
 #' water data classes.
 #' @include register.R
 #' @export
-calc_gsw_time_series <- function(years = 1984:2021) {
+#' @examples
+#' \dontshow{
+#' mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
+#' }
+#' \dontrun{
+#' library(sf)
+#' library(mapme.biodiversity)
+#'
+#' outdir <- file.path(tempdir(), "mapme-data")
+#' dir.create(outdir, showWarnings = FALSE)
+#'
+#' mapme_options(
+#'   outdir = outdir,
+#'   verbose = FALSE
+#' )
+#'
+#' aoi <- read_sf(
+#'   system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
+#'               package = "mapme.biodiversity"
+#' ))
+#' aoi <- get_resources(aoi, get_gsw_time_series (years = 2000:2001))
+#' aoi <- calc_indicators(calc_gsw_time_series())
+#' aoi <- portfolio_long(aoi)
+#'
+#' aoi
+#' }
+calc_gsw_time_series <- function() {
   check_namespace("exactextractr")
-  available_years <- 1984:2021
-  years <- check_available_years(years, available_years, "gsw_time_series")
 
   function(x = NULL,
            gsw_time_series,
@@ -53,8 +75,11 @@ calc_gsw_time_series <- function(years = 1984:2021) {
     idx_yr <- as.numeric(gregexpr("yearlyClassification", names(gsw_time_series))) + 20
     years_resource <- substr(names(gsw_time_series), idx_yr, idx_yr + 3)
 
-    names(gsw_time_series) <- years
+    names(gsw_time_series) <- years_resource
     coverage_fractions <- exactextractr::exact_extract(gsw_time_series, x, "frac", coverage_area = TRUE)
+    if(nlyr(gsw_time_series) == 1) {
+      names(coverage_fractions) <- paste(names(coverage_fractions), years_resource, sep = ".")
+    }
     x_total_area <- as.numeric(st_area(x)) / 10000
 
     results <- purrr::map_df(names(coverage_fractions), function(colname) {

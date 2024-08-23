@@ -9,11 +9,7 @@ A function returning a tibble with time series of global surface
 water data classes.
 }
 \usage{
-calc_gsw_time_series(years = 1984:2021)
-}
-\arguments{
-\item{years}{Numeric vector of years to process between 1984 and 2021.
-Default: \code{1984:2021}.}
+calc_gsw_time_series()
 }
 \description{
 This function calculates the total area of the global surface water time
@@ -33,6 +29,33 @@ combination of permanent and no observation.
 The required resources for this indicator are:
 \itemize{
 \item \link{gsw_time_series_resource}
+}
+}
+\examples{
+\dontshow{
+mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
+}
+\dontrun{
+library(sf)
+library(mapme.biodiversity)
+
+outdir <- file.path(tempdir(), "mapme-data")
+dir.create(outdir, showWarnings = FALSE)
+
+mapme_options(
+  outdir = outdir,
+  verbose = FALSE
+)
+
+aoi <- read_sf(
+  system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
+              package = "mapme.biodiversity"
+))
+aoi <- get_resources(aoi, get_gsw_time_series (years = 2000:2001))
+aoi <- calc_indicators(calc_gsw_time_series())
+aoi <- portfolio_long(aoi)
+
+aoi
 }
 }
 \keyword{indicator}
