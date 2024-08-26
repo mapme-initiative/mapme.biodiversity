@@ -41,7 +41,7 @@
 #'               package = "mapme.biodiversity"
 #' ))
 #' aoi <- get_resources(aoi, get_gsw_time_series (years = 2000:2001))
-#' aoi <- calc_indicators(calc_gsw_time_series())
+#' aoi <- calc_indicators(aoi, calc_gsw_time_series())
 #' aoi <- portfolio_long(aoi)
 #'
 #' aoi

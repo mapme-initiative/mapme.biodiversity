@@ -37,16 +37,16 @@ mapme_options(
   verbose = FALSE
 )
 
-lbii <- system.file("resources", "biodiversity_intactness_index", "lbii.asc",
-package = "mapme.biodiversity")
+lbii <- system.file("res", "biodiversity_intactness_index", "lbii.asc",
+                    package = "mapme.biodiversity")
 
-aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
-  package = "mapme.biodiversity"
-) \%>\%
-  read_sf() \%>\%
-  get_resources(get_biodiversity_intactness_index(lbii)) \%>\%
-  calc_indicators(calc_biodiversity_intactness_index()) \%>\%
-  portfolio_long()
+aoi <- read_sf(
+  system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
+              package = "mapme.biodiversity"
+))
+aoi <- get_resources(aoi, get_biodiversity_intactness_index(lbii))
+aoi <- calc_indicators(aoi, calc_biodiversity_intactness_index())
+aoi <- portfolio_long(aoi)
 
 aoi
 }

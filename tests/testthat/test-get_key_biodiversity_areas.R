@@ -17,6 +17,10 @@ test_that("get_key_biodiversity_areas works", {
     get_resources(aoi, get_key_biodiversity_areas(NULL)),
     "Expecting path to point towards an existing file."
   )
+  expect_error(
+    get_key_biodiversity_areas(path = "inst/resources/"),
+    "Expecting path to point towards an existing file."
+  )
 
   res <- get_resources(aoi, get_key_biodiversity_areas(sample_path))
   expect_equal(
