@@ -47,10 +47,10 @@ gsw_ts_datadir <- system.file("res/gsw_time_series", package = "mapme.biodiversi
 gsw_fnames_short <- dir(gsw_ts_datadir, pattern = ".tif$")
 gsw_fnames_long <- sub("v5_", "VER5-0_yearlyClassification", gsw_fnames_short)
 
-file.copy(
+invisible(file.copy(
  file.path(gsw_ts_datadir, gsw_fnames_short),
    file.path(outdir, "gsw_time_series", gsw_fnames_long)
-)
+))
 }
 
 mapme_options(
