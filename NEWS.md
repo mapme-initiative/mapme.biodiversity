@@ -21,6 +21,7 @@
   - `get_gsw_time_series()`
   - `get_biodiversity_intactness_index()`
   - `get_chelsa()`
+  - `get_iucn()`
   - `get_ipbes_biomes()`
   - `get_humanfootprint()`
   - `get_key_biodiversity_areas()`
@@ -31,11 +32,11 @@
   - `calc_ipbes_biomes()`
   - `calc_key_biodiversity_area()`
   - `calc_biodiversity_intactness_index ()`
-  - `calc_exposed_population()`
   - `calc_humanfootprint()`
   - `calc_slope()`
   - `calc_gsw_time_series()` 
   - `calc_precipitation_chelsa()`
+  - `calc_species_richness()`
   - `calc_vul_carbon()`, `calc_man_carbon()`, and `calc_irr_carbon()`
 
 ## Bug fixes
