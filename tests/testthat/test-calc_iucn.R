@@ -1,4 +1,4 @@
-test_that("multiplication works", {
+test_that("calc_species_richness works", {
   x <- read_sf(system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
     package = "mapme.biodiversity"
   ))
