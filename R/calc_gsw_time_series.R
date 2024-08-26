@@ -23,13 +23,7 @@
 #' @examples
 #' \dontshow{
 #' mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
-#' }
-#' \dontrun{
-#' library(mapme.biodiversity)
-#'
 #' outdir <- file.path(tempdir(), "mapme-data")
-#'
-#' \dontshow{
 #' path_gsw_ts <- file.path(outdir, "gsw_time_series")
 #' gsw_fnames_short <- dir(path_gsw_ts, pattern = ".tif$")
 #' gsw_fnames_long <- sub("v5_", "VER5-0_yearlyClassification", gsw_fnames_short)
@@ -39,6 +33,11 @@
 #'    file.path(path_gsw_ts, gsw_fnames_long)
 #' ))
 #' }
+#' \dontrun{
+#' library(sf)
+#' library(mapme.biodiversity)
+#'
+#' outdir <- file.path(tempdir(), "mapme-data")
 #'
 #' mapme_options(
 #'   outdir = outdir,
