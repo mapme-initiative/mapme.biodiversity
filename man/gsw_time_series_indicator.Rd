@@ -36,20 +36,18 @@ The required resources for this indicator are:
 mapme.biodiversity:::.copy_resource_dir(file.path(tempdir(), "mapme-data"))
 }
 \dontrun{
-library(sf)
 library(mapme.biodiversity)
 
 outdir <- file.path(tempdir(), "mapme-data")
 
 \dontshow{
-dir.create(file.path(outdir, "gsw_time_series"), showWarnings = FALSE, recursive = TRUE)
-gsw_ts_datadir <- system.file("res/gsw_time_series", package = "mapme.biodiversity")
-gsw_fnames_short <- dir(gsw_ts_datadir, pattern = ".tif$")
+path_gsw_ts <- file.path(outdir, "gsw_time_series")
+gsw_fnames_short <- dir(path_gsw_ts, pattern = ".tif$")
 gsw_fnames_long <- sub("v5_", "VER5-0_yearlyClassification", gsw_fnames_short)
 
 invisible(file.copy(
- file.path(gsw_ts_datadir, gsw_fnames_short),
-   file.path(outdir, "gsw_time_series", gsw_fnames_long)
+   file.path(path_gsw_ts, gsw_fnames_short),
+   file.path(path_gsw_ts, gsw_fnames_long)
 ))
 }
 
