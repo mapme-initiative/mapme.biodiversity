@@ -34,10 +34,10 @@
 #' ))
 #' }
 #' \dontrun{
-#' library(sf)
 #' library(mapme.biodiversity)
 #'
 #' outdir <- file.path(tempdir(), "mapme-data")
+#' dir.create(outdir, showWarnings = FALSE)
 #'
 #' mapme_options(
 #'   outdir = outdir,
