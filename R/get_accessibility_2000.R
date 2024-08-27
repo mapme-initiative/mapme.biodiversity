@@ -38,7 +38,7 @@ get_accessibility_2000 <- function() {
 register_resource(
   name = "accessibility_2000",
   description = "Accessibility data for the year 2000 from the Global Accessibility Map project",
-  licence = "unknown",
+  licence = "See JRC data policy: https://joint-research-centre.ec.europa.eu/jrc-mission-statement-work-programme/data-policy_en",
   source = "https://forobs.jrc.ec.europa.eu/gam",
   type = "raster"
 )
