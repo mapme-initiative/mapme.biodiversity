@@ -76,7 +76,9 @@
 #' @keywords indicator
 #' @returns A function that returns an indicator tibble with conflict exposure
 #'   as variable and precentage of the population as its value.
-#' @references \url{https://acleddata.com/conflict-exposure}
+#' @references Raleigh, C; C Dowd; A Tatem; A Linke; N Tejedor-Garavito; M
+#'   Bondarenko and K Kishi. 2023. Assessing and Mapping Global and Local
+#'   Conflict Exposure. Working Paper.
 #' @include register.R
 #' @export
 #' @examples

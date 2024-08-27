@@ -2,43 +2,42 @@
 
 ## General
 
-- `prep_resources()` recieved additional argument `mode` to 
+- `prep_resources()` received additional argument `mode` to 
   get control over the reading mode (e.g. portfolio or asset)
 - resources based on WorldClim now support selecting the spatial
   resolution and cover the historical timeseries starting from 1960 (#302)
 - assets are now chunked into sub-components prior to indicator calculation thus
   parallelization now is applied to a single level (#322)
 - `chunk_size` now is properly set to 100,000 ha as per documentation (before
-  it was set to 10,000 ha)
-- setting `chunk_size=NULL` is now allowed and skips chunking
-- treecover indicators now trough a message if landscapemetrics is not installed
-- `write_portfolio()` now drops assets with `NULL` indicators instead of 
-  serializing them to disk with `NA` (#332)
+  it was set to 10,000 ha) (#324)
+- setting `chunk_size=NULL` is now allowed and skips chunking (#331)
+- treecover indicators now trough a message if landscapemetrics is not 
+  installed (#325)
 - setting `outdir` via `mapme_options()` now probes the destination by trying
   to write a GTiff file and errors if unsuccessful (#335)
+- code previously using `httr` now uses `httr2` (#330)
   
 - new resources: 
-  - `get_gsw_time_series()`
-  - `get_biodiversity_intactness_index()`
-  - `get_chelsa()`
-  - `get_iucn()`
-  - `get_ipbes_biomes()`
-  - `get_humanfootprint()`
-  - `get_key_biodiversity_areas()`
-  - `get_vul_carbon()`, `get_man_carbon()`, and `get_irr_carbon()`
+  - `get_iucn()` (#359)
+  - `get_chelsa()` (#318)
+  - `get_ipbes_biomes()` (#345)
+  - `get_humanfootprint()` (#341)
+  - `get_gsw_time_series()` (#354, @karpfen)
+  - `get_key_biodiversity_areas()` (#349, @karpfen)
+  - `get_biodiversity_intactness_index()` (#351, @karpfen)
+  - `get_vul_carbon()`, `get_man_carbon()`, and `get_irr_carbon()` (#339)
 - new indicators:
-  - `calc_exposed_population()`
-  - `calc_humanfootprint()`
-  - `calc_ipbes_biomes()`
-  - `calc_key_biodiversity_area()`
-  - `calc_biodiversity_intactness_index ()`
-  - `calc_humanfootprint()`
-  - `calc_slope()`
-  - `calc_gsw_time_series()` 
-  - `calc_precipitation_chelsa()`
-  - `calc_species_richness()`
-  - `calc_vul_carbon()`, `calc_man_carbon()`, and `calc_irr_carbon()`
-
+  - `calc_slope()` (#355, @fBedecarrats)
+  - `calc_ipbes_biomes()` (#345)
+  - `calc_humanfootprint()` (#341)
+  - `calc_gsw_time_series()` (#354, @karpfen)
+  - `calc_species_richness()` (#359)
+  - `calc_exposed_population()` (#321)
+  - `calc_precipitation_chelsa()` (#318)
+  - `calc_key_biodiversity_area()` (#349, @karpfen)
+  - `calc_biodiversity_intactness_index()` (#351, @karpfen)
+  - `calc_vul_carbon()`, `calc_man_carbon()`, and `calc_irr_carbon()` (#339)
+  
 ## Bug fixes
 
 - fixes transforming asset to the CRS of raster dataset 
@@ -52,7 +51,7 @@
 
 - `.check_portfolio()` now checks if `assetid` has unique values and only 
   overrides them if this in not the case (#305)
-- `.read_raster()` now reads values into memory and removes VRT files on-exit
+- `.read_raster()` now reads values into memory and removes VRT files on-exit (#311)
 - `.fetch_resources()` now honors both creation and opening options (#315)
 - `httr` calls are replaced with the respective `httr2` equivalents (#329)
 
