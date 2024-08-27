@@ -107,23 +107,18 @@ as variable and the associated value (unitless) per year.</p>
 <span class="r-in"><span>  <span class="fu"><a href="mapme.html">get_resources</a></span><span class="op">(</span><span class="fu"><a href="humanfootprint_resource.html">get_humanfootprint</a></span><span class="op">(</span>years <span class="op">=</span> <span class="fl">2010</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="mapme.html">calc_indicators</a></span><span class="op">(</span><span class="fu">calc_humanfootprint</span><span class="op">(</span>stats <span class="op">=</span> <span class="st">"median"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="portfolio.html">portfolio_long</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Waiting 2s for retry backoff <span style="color: #00BB00;">■■■■■■■■■■■■■■■                 </span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Waiting 2s for retry backoff <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  </span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Waiting 3s for retry backoff <span style="color: #00BB00;">■■■■■■■■■■■                     </span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Waiting 3s for retry backoff <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  </span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Waiting 5s for retry backoff <span style="color: #00BB00;">■■■■■■■                         </span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Waiting 5s for retry backoff <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■          </span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Waiting 5s for retry backoff <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Waiting 6s for retry backoff <span style="color: #00BB00;">■■■■■■■■■                       </span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Waiting 6s for retry backoff <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■      </span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Waiting 6s for retry backoff <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error in req_perform(req_retry(req, max_seconds = 15, is_transient = is_transient)) : </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   HTTP 403 Forbidden.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in .check_footprints(resource, resource_name):</span> Download for resource humanfootprint failed.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> Returning unmodified portfolio.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">aoi</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'aoi' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 10 fields</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POLYGON</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -59.84866 ymin: 8.307999 xmax: -59.71 ymax: 8.364002</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  WGS 84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 11</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   WDPAID NAME     DESIG_ENG ISO3  assetid indicator datetime            variable</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>  <span style="text-decoration: underline;">41</span>057 Shell B… Managed … GUY         1 humanfoo… 2010-01-01 <span style="color: #949494;">00:00:00</span> humanfo…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 3 more variables: unit &lt;chr&gt;, value &lt;dbl&gt;, geom &lt;POLYGON [°]&gt;</span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
