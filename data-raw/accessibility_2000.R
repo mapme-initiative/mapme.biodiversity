@@ -26,5 +26,8 @@ writeRaster(access_raster,
             filename = file.path(outdir, "acc_50k.tif"),
             datatype = "INT4S",
             overwrite = TRUE,
-            wopt = list(gdal = c("COMPRESS=LZW"))
+            wopt = list(gdal = c("COMPRESS=LZW",
+                                 "BLOCKXSIZE=128",
+                                 "BLOCKYSIZE=128",
+                                 "TILED=YES"))
 )
