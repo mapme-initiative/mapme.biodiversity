@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.8.0.9015</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,8 +44,11 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="mapmebiodiversity-development-version">mapme.biodiversity (development version)<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.9.0" id="mapmebiodiversity-090">mapme.biodiversity 0.9.0<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-090"></a></h2>
 <div class="section level3">
-<h3 id="general-development-version">General<a class="anchor" aria-label="anchor" href="#general-development-version"></a></h3>
+<h3 id="general-0-9-0">General<a class="anchor" aria-label="anchor" href="#general-0-9-0"></a></h3>
 <ul><li><p><code><a href="../reference/mapme.html">prep_resources()</a></code> received additional argument <code>mode</code> to get control over the reading mode (e.g. portfolio or asset)</p></li>
 <li><p>resources based on WorldClim now support selecting the spatial resolution and cover the historical timeseries starting from 1960 (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/302" class="external-link">#302</a>)</p></li>
 <li><p>assets are now chunked into sub-components prior to indicator calculation thus parallelization now is applied to a single level (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/322" class="external-link">#322</a>)</p></li>
@@ -98,7 +101,7 @@
 </ul></li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<h3 id="bug-fixes-0-9-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9-0"></a></h3>
 <ul><li>fixes transforming asset to the CRS of raster dataset in <code><a href="../reference/deforestation_drivers.html">calc_deforestation_drivers()</a></code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/300" class="external-link">#300</a>)</li>
 <li>
 <code><a href="../reference/portfolio.html">write_portfolio()</a></code> now drops indicators with only NULL values instead of throwing an error (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/303" class="external-link">#303</a>)</li>
@@ -107,7 +110,7 @@
 <li>uses binary writing mode for <code>worldpop</code> resource on Windows (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/319" class="external-link">#319</a>)</li>
 </ul></div>
 <div class="section level3">
-<h3 id="internal-development-version">Internal<a class="anchor" aria-label="anchor" href="#internal-development-version"></a></h3>
+<h3 id="internal-0-9-0">Internal<a class="anchor" aria-label="anchor" href="#internal-0-9-0"></a></h3>
 <ul><li>
 <code>.check_portfolio()</code> now checks if <code>assetid</code> has unique values and only overrides them if this in not the case (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/305" class="external-link">#305</a>)</li>
 <li>
