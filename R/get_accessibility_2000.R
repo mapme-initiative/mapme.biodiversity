@@ -30,7 +30,8 @@ get_accessibility_2000 <- function() {
     bbox <- c(xmin = -180.0, ymin = -90.0, xmax = 180.0, ymax = 90.0)
     tile <- st_as_sf(st_as_sfc(st_bbox(bbox, crs = "EPSG:4326")))
     tile[["source"]] <- url
-    make_footprints(tile, filenames = "acc_50k.tif", what = "raster")
+    make_footprints(tile, filenames = "acc_50k.tif", what = "raster",
+                    co = c("-co", "COMPRESS=LZW", "-ot", "Int32", "-a_nodata", "-2147483647"))
   }
 }
 
