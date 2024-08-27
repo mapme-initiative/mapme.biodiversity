@@ -149,5 +149,6 @@ if (FALSE) {
 Raleigh, C; C Dowd; A Tatem; A Linke; N Tejedor-Garavito; M
 Bondarenko and K Kishi. 2023. Assessing and Mapping Global and Local
 Conflict Exposure. Working Paper.
+\url{https://acleddata.com/conflict-exposure/}
 }
 \keyword{indicator}
