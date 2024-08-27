@@ -34,6 +34,7 @@ get_accessibility_2000 <- function() {
                     co = c("-co", "COMPRESS=LZW",
                            "-co", "BLOCKXSIZE=128",
                            "-co", "BLOCKYSIZE=128",
+                           "-co", "TILED=YES",
                            "-ot", "Int32",
                            "-a_nodata", "-2147483647"))
   }
