@@ -1,5 +1,7 @@
 # mapme.biodiversity (development version)
 
+# mapme.biodiversity 0.9.0
+
 ## General
 
 - `prep_resources()` received additional argument `mode` to 
