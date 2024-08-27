@@ -5,7 +5,7 @@
 \alias{get_biodiversity_intactness_index}
 \title{Biodiversity Intactness Index}
 \source{
-\url{https://data.nhm.ac.uk/dataset/global-map-of-the-biodiversity-intactness-index-from-newbold-et-al-2016-science}
+\url{https://data.nhm.ac.uk/dataset/}
 }
 \usage{
 get_biodiversity_intactness_index(path = NULL)
