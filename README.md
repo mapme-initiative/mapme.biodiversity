@@ -56,80 +56,83 @@ remotes::install_github("https://github.com/mapme-initiative/mapme.biodiversity"
 Below is a list of the resources currently supported by
 `mapme.biodiversity`.
 
-| name                             | description                                                                                                                | licence                                                    |
-|:---------------------------------|:---------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------|
-| biodiversity_intactness_index    | Biodiversity Intactness Index                                                                                              | CC-BY-4.0                                                  |
-| chelsa                           | Climatologies at High resolution for the Earth Land Surface Areas (CHELSA)                                                 | Unknown - Must cite!                                       |
-| chirps                           | Climate Hazards Group InfraRed Precipitation with Station data (CHIRPS)                                                    | CC - unknown                                               |
-| esalandcover                     | Copernicus Land Monitoring Service (CLMS) 100 meter land cover product                                                     | CC-BY 4.0                                                  |
-| fritz_et_al                      | Drivers of deforestation in the tropics                                                                                    | CC-BY 4.0                                                  |
-| gfw_emissions                    | Global Forest Watch - CO2 Emssions caused by forest cover loss                                                             | CC-BY 4.0                                                  |
-| gfw_lossyear                     | Global Forest Watch - Year of forest cover loss occurence                                                                  | CC-BY 4.0                                                  |
-| gfw_treecover                    | Global Forest Watch - Percentage of canopy closure in 2000                                                                 | CC-BY 4.0                                                  |
-| global_surface_water_change      | Global Surface Water - Change of water occurrence intensity                                                                | <https://www.copernicus.eu/en/access-data>                 |
-| global_surface_water_occurrence  | Global Surface Water - Percentage of water occurrence                                                                      | <https://www.copernicus.eu/en/access-data>                 |
-| global_surface_water_recurrence  | Global Surface Water - Percentage of water recurrence                                                                      | <https://www.copernicus.eu/en/access-data>                 |
-| global_surface_water_seasonality | Global Surface Water - Seasonality of water occurrrence                                                                    | <https://www.copernicus.eu/en/access-data>                 |
-| global_surface_water_transitions | Global Surface Water - Transition classes                                                                                  | <https://www.copernicus.eu/en/access-data>                 |
-| gmw                              | Global Mangrove Watch - Vector data of mangrove extent                                                                     | CC BY 4.0                                                  |
-| gsw_time_series                  | Global Surface Water - Yearly Time Series                                                                                  | <https://global-surface-water.appspot.com/download>        |
-| humanfootprint                   | Time series on human pressures on natural ecosystems.                                                                      | CC BY 4.0                                                  |
-| ipbes_biomes                     | Global Assessment Report on Biodiversity and Ecosystem Services division of the earth’s surface into biomes and anthromes. | CC 4.0                                                     |
-| irr_carbon                       | Amount of carbon irrecoverably lost by a typical land use conversion event until mid-century.                              | CC NC 4.0                                                  |
-| key_biodiversity_areas           | Key Biodiversity Areas                                                                                                     | <https://www.keybiodiversityareas.org/termsofservice>      |
-| man_carbon                       | Amount of carbon that is manageable by humans.                                                                             | CC NC 4.0                                                  |
-| mcd64a1                          | MODIS Burned Area Monthly Product (Aqua and Terra)                                                                         | <https://lpdaac.usgs.gov/data/data-citation-and-policies/> |
-| nasa_grace                       | NASA Gravity Recovery And Climate Experiment (GRACE) - Measurments of Earth’s mass and water changes                       | <https://nasagrace.unl.edu/About.aspx>                     |
-| nasa_srtm                        | NASA Shuttle Radar Topography Mission (SRTM) Digital Elevation Model (DEM)                                                 | <https://lpdaac.usgs.gov/data/data-citation-and-policies/> |
-| nelson_et_al                     | Global maps of traveltime to cities                                                                                        | CC-BY 4.0                                                  |
-| soilgrids                        | ISRIC - Modelled global soil property layers                                                                               | CC-BY 4.0                                                  |
-| teow                             | Terrestrial Ecosystems of the World (TEOW) from WWF-US                                                                     | unknown                                                    |
-| ucdp_ged                         | UCDP Georeferenced Event Dataset (UCDP GED)                                                                                | CC-BY 4.0                                                  |
-| vul_carbon                       | Amount of carbon that is vulnerable to a typical land use conversion event.                                                | CC NC 4.0                                                  |
-| worldclim_max_temperature        | WorldClim - Monthly maximum temperature 1960 - 2021                                                                        | <https://www.worldclim.org/about.html>                     |
-| worldclim_min_temperature        | WorldClim - Monthly minimum temperature 1960 - 2021                                                                        | <https://www.worldclim.org/about.html>                     |
-| worldclim_precipitation          | WorldClim - Monthly precipitation 1960 - 2021                                                                              | <https://www.worldclim.org/about.html>                     |
-| worldpop                         | WorldPop - Unconstrained Global Mosaics 2000 - 2020                                                                        | CC-BY 4.0                                                  |
+| name | description | licence |
+|:---|:---|:---|
+| biodiversity_intactness_index | Biodiversity Intactness Index | CC-BY-4.0 |
+| chelsa | Climatologies at High resolution for the Earth Land Surface Areas (CHELSA) | Unknown - Must cite! |
+| chirps | Climate Hazards Group InfraRed Precipitation with Station data (CHIRPS) | CC - unknown |
+| esalandcover | Copernicus Land Monitoring Service (CLMS) 100 meter land cover product | CC-BY 4.0 |
+| fritz_et_al | Drivers of deforestation in the tropics | CC-BY 4.0 |
+| gfw_emissions | Global Forest Watch - CO2 Emssions caused by forest cover loss | CC-BY 4.0 |
+| gfw_lossyear | Global Forest Watch - Year of forest cover loss occurence | CC-BY 4.0 |
+| gfw_treecover | Global Forest Watch - Percentage of canopy closure in 2000 | CC-BY 4.0 |
+| global_surface_water_change | Global Surface Water - Change of water occurrence intensity | <https://www.copernicus.eu/en/access-data> |
+| global_surface_water_occurrence | Global Surface Water - Percentage of water occurrence | <https://www.copernicus.eu/en/access-data> |
+| global_surface_water_recurrence | Global Surface Water - Percentage of water recurrence | <https://www.copernicus.eu/en/access-data> |
+| global_surface_water_seasonality | Global Surface Water - Seasonality of water occurrrence | <https://www.copernicus.eu/en/access-data> |
+| global_surface_water_transitions | Global Surface Water - Transition classes | <https://www.copernicus.eu/en/access-data> |
+| gmw | Global Mangrove Watch - Vector data of mangrove extent | CC BY 4.0 |
+| gsw_time_series | Global Surface Water - Yearly Time Series | <https://global-surface-water.appspot.com/download> |
+| humanfootprint | Time series on human pressures on natural ecosystems. | CC BY 4.0 |
+| ipbes_biomes | Global Assessment Report on Biodiversity and Ecosystem Services division of the earth’s surface into biomes and anthromes. | CC 4.0 |
+| irr_carbon | Amount of carbon irrecoverably lost by a typical land use conversion event until mid-century. | CC NC 4.0 |
+| iucn | IUCN Species Richness Raser Dataset | <https://www.iucnredlist.org/terms/terms-of-use> |
+| key_biodiversity_areas | Key Biodiversity Areas | <https://www.keybiodiversityareas.org/termsofservice> |
+| man_carbon | Amount of carbon that is manageable by humans. | CC NC 4.0 |
+| mcd64a1 | MODIS Burned Area Monthly Product (Aqua and Terra) | <https://lpdaac.usgs.gov/data/data-citation-and-policies/> |
+| nasa_grace | NASA Gravity Recovery And Climate Experiment (GRACE) - Measurments of Earth’s mass and water changes | <https://nasagrace.unl.edu/About.aspx> |
+| nasa_srtm | NASA Shuttle Radar Topography Mission (SRTM) Digital Elevation Model (DEM) | <https://lpdaac.usgs.gov/data/data-citation-and-policies/> |
+| nelson_et_al | Global maps of traveltime to cities | CC-BY 4.0 |
+| soilgrids | ISRIC - Modelled global soil property layers | CC-BY 4.0 |
+| teow | Terrestrial Ecosystems of the World (TEOW) from WWF-US | unknown |
+| ucdp_ged | UCDP Georeferenced Event Dataset (UCDP GED) | CC-BY 4.0 |
+| vul_carbon | Amount of carbon that is vulnerable to a typical land use conversion event. | CC NC 4.0 |
+| worldclim_max_temperature | WorldClim - Monthly maximum temperature 1960 - 2021 | <https://www.worldclim.org/about.html> |
+| worldclim_min_temperature | WorldClim - Monthly minimum temperature 1960 - 2021 | <https://www.worldclim.org/about.html> |
+| worldclim_precipitation | WorldClim - Monthly precipitation 1960 - 2021 | <https://www.worldclim.org/about.html> |
+| worldpop | WorldPop - Unconstrained Global Mosaics 2000 - 2020 | CC-BY 4.0 |
 
 Next, is a list of supported indicators.
 
-| name                          | description                                                                    |
-|:------------------------------|:-------------------------------------------------------------------------------|
-| biodiversity_intactness_index | Averaged biodiversity intactness index.                                        |
-| biome                         | Areal statistics of biomes from TEOW                                           |
-| burned_area                   | Monthly burned area detected by MODIS satellites                               |
-| deforestation_drivers         | Areal statistics of deforestation drivers                                      |
-| drought_indicator             | Relative wetness statistics based on NASA GRACE                                |
-| ecoregion                     | Areal statstics of ecoregions based on TEOW                                    |
-| elevation                     | Statistics of elevation based on NASA SRTM                                     |
-| exposed_population            | Number of people exposed to conflicts based on UCDP GED                        |
-| fatalities                    | Number of fatalities by group of conflict based on UCDP GED                    |
-| gsw_change                    | Statistics of the surface water change layer by JRC                            |
-| gsw_occurrence                | Areal statistic of surface water based on occurrence threshold                 |
-| gsw_recurrence                | Areal statistic of surface water based on reccurence threshold                 |
-| gsw_seasonality               | Areal statistic of surface water by seasonality                                |
-| gsw_time_series               | Global Surface Water - Yearly Time Series area estimation of water classes.    |
-| gsw_transitions               | Areal statistics of surface water grouped by transition class                  |
-| humanfootprint                | Statistics of the human footprint data set per polygon.                        |
-| ipbes_biomes                  | Area distibution of IBPES biomes within a polygon.                             |
-| irr_carbon                    | Statistics of irrecoverable carbon per polygon.                                |
-| key_biodiversity_areas        | Area estimation of intersection with key biodiversity areas.                   |
-| landcover                     | Areal statistics grouped by landcover class                                    |
-| man_carbon                    | Statistics of manageable carbon per polygon.                                   |
-| mangroves_area                | Area covered by mangroves                                                      |
-| population_count              | Statistic of population counts                                                 |
-| precipitation_chelsa          | Statistics of CHELSA precipitation layer                                       |
-| precipitation_chirps          | Statistics of CHIRPS precipitation layer                                       |
-| precipitation_wc              | Statistics of WorldClim precipitation layer                                    |
-| soilproperties                | Statistics of SoilGrids layers                                                 |
-| temperature_max_wc            | Statistics of WorldClim maximum temperature layer                              |
-| temperature_min_wc            | Statistics of WorldClim minimum temperature layer                              |
-| traveltime                    | Statistics of traveltime to the clostes city grouped by city category          |
-| treecover_area                | Area of forest cover by year                                                   |
-| treecover_area_and_emissions  | Area of forest cover and greenhouse gas emssions caused by forest loss by year |
-| treecoverloss_emissions       | Greenouse gas emissions cause by forest loss by year                           |
-| tri                           | Statistics of terrain rudgedness index based on NASA SRTM DEM                  |
-| vul_carbon                    | Statistics of vulnerable carbon per polygon.                                   |
+| name | description |
+|:---|:---|
+| biodiversity_intactness_index | Averaged biodiversity intactness index. |
+| biome | Areal statistics of biomes from TEOW |
+| burned_area | Monthly burned area detected by MODIS satellites |
+| deforestation_drivers | Areal statistics of deforestation drivers |
+| drought_indicator | Relative wetness statistics based on NASA GRACE |
+| ecoregion | Areal statstics of ecoregions based on TEOW |
+| elevation | Statistics of elevation based on NASA SRTM |
+| exposed_population | Number of people exposed to conflicts based on UCDP GED |
+| fatalities | Number of fatalities by group of conflict based on UCDP GED |
+| gsw_change | Statistics of the surface water change layer by JRC |
+| gsw_occurrence | Areal statistic of surface water based on occurrence threshold |
+| gsw_recurrence | Areal statistic of surface water based on reccurence threshold |
+| gsw_seasonality | Areal statistic of surface water by seasonality |
+| gsw_time_series | Global Surface Water - Yearly Time Series area estimation of water classes. |
+| gsw_transitions | Areal statistics of surface water grouped by transition class |
+| humanfootprint | Statistics of the human footprint data set per polygon. |
+| ipbes_biomes | Area distibution of IBPES biomes within a polygon. |
+| irr_carbon | Statistics of irrecoverable carbon per polygon. |
+| key_biodiversity_areas | Area estimation of intersection with key biodiversity areas. |
+| landcover | Areal statistics grouped by landcover class |
+| man_carbon | Statistics of manageable carbon per polygon. |
+| mangroves_area | Area covered by mangroves |
+| population_count | Statistic of population counts |
+| precipitation_chelsa | Statistics of CHELSA precipitation layer |
+| precipitation_chirps | Statistics of CHIRPS precipitation layer |
+| precipitation_wc | Statistics of WorldClim precipitation layer |
+| slope | Statistics of slope based on NASA SRTM |
+| soilproperties | Statistics of SoilGrids layers |
+| species_richness | Species richness statistics based on user-specified raster files. |
+| temperature_max_wc | Statistics of WorldClim maximum temperature layer |
+| temperature_min_wc | Statistics of WorldClim minimum temperature layer |
+| traveltime | Statistics of traveltime to the clostes city grouped by city category |
+| treecover_area | Area of forest cover by year |
+| treecover_area_and_emissions | Area of forest cover and greenhouse gas emssions caused by forest loss by year |
+| treecoverloss_emissions | Greenouse gas emissions cause by forest loss by year |
+| tri | Statistics of terrain rudgedness index based on NASA SRTM DEM |
+| vul_carbon | Statistics of vulnerable carbon per polygon. |
 
 ## Usage example
 
@@ -144,7 +147,7 @@ library(mapme.biodiversity)
 library(sf)
 ```
 
-    ## Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.3.1; sf_use_s2() is TRUE
+    ## Linking to GEOS 3.12.2, GDAL 3.9.1, PROJ 9.4.1; sf_use_s2() is TRUE
 
 Once you have decided on an indicator you are interested in, you can
 start by making the required resource available for your portfolio.
@@ -209,7 +212,7 @@ easy as setting up a configuration file and changing the `outdir`
 argument in `mapme_options()`. While you could also decide to use
 environment variables, we recommend to set up a GDAL config file. You
 can find GDAL’s documentation on this topic
-[here](https://gdal.org/user/configoptions.html#gdal-configuration-file).
+[here](https://gdal.org/en/latest/user/configoptions.html#gdal-configuration-file).
 
 Suppose that we want to use an AWS S3 bucket that we control to write
 resource data to. Let’s assume this bucket is already set up and we wish
@@ -227,7 +230,7 @@ AWS_ACCESS_KEY_ID=<your-access-id>
 
 The connection will be handled based on GDAL’s virtual file system. You
 can find documentation on specific options for your cloud provider
-[here](https://gdal.org/user/virtual_file_systems.html#network-based-file-systems).
+[here](https://gdal.org/en/latest/user/virtual_file_systems.html#network-based-file-systems).
 
 Ideally, you would also set the following in the `.Renviron` file in
 your user’s home directory to ensure that GDAL is aware of this

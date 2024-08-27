@@ -29,16 +29,15 @@
 #'   verbose = FALSE
 #' )
 #'
-#' kbas <- system.file("resources", "key_biodiversity_areas", "kbas.gpkg",
-#'   package = "mapme.biodiversity")
-#'
-#' aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
-#'   package = "mapme.biodiversity"
-#' ) %>%
-#'   read_sf() %>%
-#'   get_resources(get_key_biodiversity_area(kbas)) %>%
-#'   calc_indicators(calc_key_biodiversity_area()) %>%
-#'   portfolio_long()
+#' aoi <- read_sf(
+#'   system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
+#'               package = "mapme.biodiversity"
+#' ))
+#' kbas <- system.file("res", "key_biodiversity_areas", "kbas.gpkg",
+#'                     package = "mapme.biodiversity")
+#' aoi <- get_resources(aoi, get_key_biodiversity_areas(kbas))
+#' aoi <- calc_indicators(aoi, calc_key_biodiversity_area())
+#' aoi <- portfolio_long(aoi)
 #'
 #' aoi
 #' }
@@ -47,7 +46,7 @@ calc_key_biodiversity_area <- function() {
            key_biodiversity_areas,
            name = "key_biodiversity_areas",
            mode = "asset",
-           aggregation = "mean",
+           aggregation = "sum",
            verbose = mapme_options()[["verbose"]]) {
 
     key_biodiversity_areas <- key_biodiversity_areas[[1]]

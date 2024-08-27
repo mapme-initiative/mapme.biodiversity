@@ -1,17 +1,16 @@
 library(dplyr)
-library(mapme.indicators)
+library(mapme.biodiversity)
+library(sf)
 library(terra)
 
 years <- 2000:2001
-outdir <- system.file("res", package = "mapme.biodiversity")
-mapme_options(outdir = outdir)
 
-x <- read_sf(
+aoi <- read_sf(
   system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
               package = "mapme.biodiversity"
   )
-) %>%
-get_resources(get_gsw_time_series(years = years))
+)
+x <- get_resources(aoi, get_gsw_time_series(years = years))
 
 gsw_time_series <- prep_resources(x)
 gsw_time_series <- gsw_time_series [[1]]
@@ -25,7 +24,8 @@ for(lyr_id in seq_len(nlyr(gsw_time_series))) {
   lyr_name <- names(gsw_time_series) [lyr_id]
   lyr_name <- sub("VER5-0_yearlyClassification", "v5_", lyr_name)
   fname <- paste0(file.path(outdir, lyr_name), ".tif")
-  gsw_time_series %>%
-    subset(lyr_id) %>%
-    writeRaster(fname)
+  lyr_subset <- subset(gsw_time_series, lyr_id)
+  writeRaster(lyr_subset, fname,
+              gdal = c("COMPRESS=LZW", "PREDICTOR=2"), datatype = "INT1U",
+              overwrite = TRUE)
 }
