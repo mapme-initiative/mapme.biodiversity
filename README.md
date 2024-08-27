@@ -212,7 +212,7 @@ easy as setting up a configuration file and changing the `outdir`
 argument in `mapme_options()`. While you could also decide to use
 environment variables, we recommend to set up a GDAL config file. You
 can find GDAL’s documentation on this topic
-[here](https://gdal.org/user/configoptions.html#gdal-configuration-file).
+[here](https://gdal.org/en/latest/user/configoptions.html#gdal-configuration-file).
 
 Suppose that we want to use an AWS S3 bucket that we control to write
 resource data to. Let’s assume this bucket is already set up and we wish
@@ -230,7 +230,7 @@ AWS_ACCESS_KEY_ID=<your-access-id>
 
 The connection will be handled based on GDAL’s virtual file system. You
 can find documentation on specific options for your cloud provider
-[here](https://gdal.org/user/virtual_file_systems.html#network-based-file-systems).
+[here](https://gdal.org/en/latest/user/virtual_file_systems.html#network-based-file-systems).
 
 Ideally, you would also set the following in the `.Renviron` file in
 your user’s home directory to ensure that GDAL is aware of this

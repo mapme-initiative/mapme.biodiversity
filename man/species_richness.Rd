@@ -47,21 +47,22 @@ outdir <- file.path(tempdir(), "mapme-data")
 dir.create(outdir, showWarnings = FALSE)
 
 mapme_options(
- outdir = outdir,
- verbose = FALSE
+  outdir = outdir,
+  verbose = FALSE
 )
 
 iucn_dir <- system.file("res", "iucn", package = "mapme.biodiversity")
 sr_rasters <- list.files(iucn_dir, pattern = "*_SR_*", full.names = TRUE)
 
 aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
- package = "mapme.biodiversity") \%>\%
- read_sf() \%>\%
- get_resources(get_iucn(sr_rasters)) \%>\%
- calc_indicators(calc_species_richness(stats = "median")) \%>\%
- portfolio_long()
+  package = "mapme.biodiversity"
+) \%>\%
+  read_sf() \%>\%
+  get_resources(get_iucn(sr_rasters)) \%>\%
+  calc_indicators(calc_species_richness(stats = "median")) \%>\%
+  portfolio_long()
 
 aoi
- }
+}
 }
 \keyword{indicator}

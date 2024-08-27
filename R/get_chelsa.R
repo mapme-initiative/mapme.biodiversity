@@ -17,7 +17,7 @@
 #' @references Karger, D.N., Conrad, O., Böhner, J., Kawohl, T., Kreft, H.,
 #'   Soria-Auza, R.W., Zimmermann, N.E., Linder, H.P. & Kessler, M. (2021)
 #'   Climatologies at high resolution for the earth’s land surface areas.
-#'   EnviDat. \doi{https://doi.org/10.16904/envidat.228.v2.}
+#'   EnviDat. \doi{https://doi.org/10.16904/envidat.228.v2.1}
 #'
 #'   Karger, D.N., Conrad, O., Böhner, J., Kawohl, T., Kreft, H., Soria-Auza,
 #'   R.W., Zimmermann, N.E., Linder, P., Kessler, M. (2017): Climatologies at high
