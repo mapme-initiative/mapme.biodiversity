@@ -23,7 +23,7 @@ access_raster <- resources$accessibility_2000
 
 # Save the cropped raster in the package inst/resources directory
 writeRaster(access_raster,
-            filename = file.path(outdir, "accessibility_2000_cropped.tif"),
+            filename = file.path(outdir, "acc_50k.tif"),
             datatype = "INT4S",
             overwrite = TRUE,
             wopt = list(gdal = c("COMPRESS=LZW"))
