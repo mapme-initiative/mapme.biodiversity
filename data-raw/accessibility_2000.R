@@ -6,7 +6,7 @@ library(mapme.biodiversity)
 x <- read_sf(system.file("extdata", "sierra_de_neiba_478140.gpkg", package = "mapme.biodiversity"))
 
 # Set output directory for cropped data
-outdir <- "inst/resources/accessibility_2000"
+outdir <- "inst/res/accessibility_2000"
 dir.create(outdir, recursive = TRUE, showWarnings = FALSE)
 
 # Set the temporary directory for processing
