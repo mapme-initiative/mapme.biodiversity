@@ -5,7 +5,6 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="mapme.biodiversity">
 <title>Quickstart • mapme.biodiversity</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
@@ -15,74 +14,53 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Quickstart">
-<meta property="og:description" content="mapme.biodiversity">
-<meta property="og:image" content="https://mapme-initiative.github.io/mapme.biodiversity/logo.png">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Quickstart">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
 
-    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary" data-bs-theme="dark"><div class="container">
-    
+
+    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.0</small>
 
-    
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="active nav-item">
-  <a class="nav-link" href="../articles/quickstart.html">Quickstart</a>
+<li class="active nav-item"><a class="nav-link" href="../articles/quickstart.html">Quickstart</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="../articles/introduction.html">Introduction</a></li>
+    <li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
+    <li><a class="dropdown-item" href="../articles/terminology.html">Terminology</a></li>
+    <li><a class="dropdown-item" href="../articles/workflow.html">Workflow</a></li>
+    <li><a class="dropdown-item" href="../articles/contributing.html">Contributing</a></li>
+  </ul>
 </li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/introduction.html">Introduction</a>
-    <a class="dropdown-item" href="../articles/installation.html">Installation</a>
-    <a class="dropdown-item" href="../articles/terminology.html">Terminology</a>
-    <a class="dropdown-item" href="../articles/workflow.html">Workflow</a>
-    <a class="dropdown-item" href="../articles/contributing.html">Contributing</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-how-to-s" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">How To's</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-how-to-s">
+<li><a class="dropdown-item" href="../articles/output-wide.html">Transform output to wide</a></li>
+  </ul>
 </li>
-<li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-how-to-s">How To's</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-how-to-s">
-    <a class="dropdown-item" href="../articles/output-wide.html">Transform output to wide</a>
-  </div>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../news/index.html">Changelog</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
-<form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
-</form>
-
-      <ul class="navbar-nav">
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/mapme-initiative/mapme.biodiversity/">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/mapme-initiative/mapme.biodiversity/"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
-    
+
   </div>
 </nav><div class="container template-article">
 
@@ -94,7 +72,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Quickstart</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/mapme-initiative/mapme.biodiversity/blob/HEAD/vignettes/quickstart.Rmd" class="external-link"><code>vignettes/quickstart.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mapme-initiative/mapme.biodiversity/blob/pkgdown-v0.9.0/vignettes/quickstart.Rmd" class="external-link"><code>vignettes/quickstart.Rmd</code></a></small>
       <div class="d-none name"><code>quickstart.Rmd</code></div>
     </div>
 
@@ -193,22 +171,21 @@ potential errors or warnings.</p>
 <code><a href="../reference/indicators.html">available_indicators()</a></code> function:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/indicators.html">available_indicators</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 25 × 3</span></span></span>
-<span><span class="co">#&gt;    name                  description                                   resources</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                         <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> biome                 Areal statistics of biomes from TEOW          <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> burned_area           Monthly burned area detected by MODIS satell… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> deforestation_drivers Areal statistics of deforestation drivers     <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> drought_indicator     Relative wetness statistics based on NASA GR… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> ecoregion             Areal statstics of ecoregions based on TEOW   <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> elevation             Statistics of elevation based on NASA SRTM    <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> fatalities            Number of fatalities by group of conflict ba… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> gsw_change            Statistics of the surface water change layer… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> gsw_occurrence        Areal statistic of surface water based on oc… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> gsw_recurrence        Areal statistic of surface water based on re… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 15 more rows</span></span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/indicators.html">available_indicators</a></span><span class="op">(</span><span class="st">"treecover_area"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 37 × 3</span></span></span>
+<span><span class="co">#&gt;    name                          description                           resources</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                 <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> biodiversity_intactness_index Averaged biodiversity intactness ind… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> biome                         Areal statistics of biomes from TEOW  <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> burned_area                   Monthly burned area detected by MODI… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> deforestation_drivers         Areal statistics of deforestation dr… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> drought_indicator             Relative wetness statistics based on… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> ecoregion                     Areal statstics of ecoregions based … <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> elevation                     Statistics of elevation based on NAS… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> exposed_population            Number of people exposed to conflict… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> fatalities                    Number of fatalities by group of con… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> gsw_change                    Statistics of the surface water chan… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 27 more rows</span></span></span>
+<span><span class="fu"><a href="../reference/indicators.html">available_indicators</a></span><span class="op">(</span><span class="st">"treecover_area"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 3</span></span></span>
 <span><span class="co">#&gt;   name           description                  resources       </span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>          </span></span>
@@ -218,7 +195,7 @@ We can learn more about this indicator and its required resources by
 using either of the commands below or, if you are viewing the online
 version, head over to the <a href="https://mapme-initiative.github.io/mapme.biodiversity/reference/treecover_area.html">treecover_area</a>
 documentation.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">?</span><span class="va">treecover_area</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/help.html" class="external-link">help</a></span><span class="op">(</span><span class="va">treecover_area</span><span class="op">)</span></span></code></pre></div>
 <p>By inspecting the help page we learned that this indicator requires
@@ -230,24 +207,23 @@ considered as forested.</p>
 <p>With that information at hand, we can start to retrieve the required
 resource. We can learn about all available resources using the
 <code><a href="../reference/resources.html">available_resources()</a></code> function:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/resources.html">available_resources</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 23 × 5</span></span></span>
-<span><span class="co">#&gt;    name                             description             licence source type </span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> chirps                           Climate Hazards Group … CC - u… https… rast…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> esalandcover                     Copernicus Land Monito… CC-BY … https… rast…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> fritz_et_al                      Drivers of deforestati… CC-BY … https… rast…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> gfw_emissions                    Global Forest Watch - … CC-BY … https… rast…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> gfw_lossyear                     Global Forest Watch - … CC-BY … https… rast…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> gfw_treecover                    Global Forest Watch - … CC-BY … https… rast…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> global_surface_water_change      Global Surface Water -… https:… https… rast…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> global_surface_water_occurrence  Global Surface Water -… https:… https… rast…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> global_surface_water_recurrence  Global Surface Water -… https:… https… rast…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> global_surface_water_seasonality Global Surface Water -… https:… https… rast…</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 13 more rows</span></span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/resources.html">available_resources</a></span><span class="op">(</span><span class="st">"gfw_treecover"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 33 × 5</span></span></span>
+<span><span class="co">#&gt;    name                            description              licence source type </span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> biodiversity_intactness_index   Biodiversity Intactness… CC-BY-… https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> chelsa                          Climatologies at High r… Unknow… https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> chirps                          Climate Hazards Group I… CC - u… https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> esalandcover                    Copernicus Land Monitor… CC-BY … https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> fritz_et_al                     Drivers of deforestatio… CC-BY … https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> gfw_emissions                   Global Forest Watch - C… CC-BY … https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> gfw_lossyear                    Global Forest Watch - Y… CC-BY … https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> gfw_treecover                   Global Forest Watch - P… CC-BY … https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> global_surface_water_change     Global Surface Water - … https:… https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> global_surface_water_occurrence Global Surface Water - … https:… https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 23 more rows</span></span></span>
+<span><span class="fu"><a href="../reference/resources.html">available_resources</a></span><span class="op">(</span><span class="st">"gfw_treecover"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 5</span></span></span>
 <span><span class="co">#&gt;   name          description                                 licence source type </span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
@@ -259,7 +235,7 @@ either of the commands below to open up the help page. If you are
 viewing the online version of this documentation, you can simply head
 over to the <a href="https://mapme-initiative.github.io/mapme.biodiversity/reference/gfw_treecover.html">gfw_treecover</a>
 resource documentation.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">?</span><span class="va">gfw_treecover</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/help.html" class="external-link">help</a></span><span class="op">(</span><span class="va">gfw_treecover</span><span class="op">)</span></span>
 <span><span class="op">?</span><span class="va">gfw_lossyear</span></span>
@@ -270,7 +246,7 @@ We will use a common interface that is used for all resources, called
 and supply one or more resource functions with their respective
 arguments. This will then download the matching resources to the output
 directory specified earlier.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mapme.html">get_resources</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">aoi</span>,</span>
 <span>  <span class="fu"><a href="../reference/gfw_treecover.html">get_gfw_treecover</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"GFC-2023-v1.11"</span><span class="op">)</span>,</span>
@@ -291,17 +267,16 @@ have been made available in the previous step, we can continue
 requesting the calculation of our desired indicator. Note the command
 below would issue an error in case a required resource has not been made
 available via <code><a href="../reference/mapme.html">get_resources()</a></code> beforehand.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mapme.html">calc_indicators</a></span><span class="op">(</span></span>
 <span>  <span class="va">aoi</span>,</span>
 <span>  <span class="fu"><a href="../reference/treecover_area.html">calc_treecover_area</a></span><span class="op">(</span>years <span class="op">=</span> <span class="fl">2000</span><span class="op">:</span><span class="fl">2023</span>, min_size <span class="op">=</span> <span class="fl">1</span>, min_cover <span class="op">=</span> <span class="fl">30</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; Found a column named 'assetid'. Overwritting its values with a unique identifier.</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
 <p>Now let’s take a look at the results. In addition to the metadata we
 are already familiar with, we see that there is an additional column
 called <code>treecover_area</code> which contains a
 <code>tibble</code>.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">aoi</span></span>
 <span><span class="co">#&gt; Simple feature collection with 1 feature and 2 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POLYGON</span></span>
@@ -316,7 +291,7 @@ called <code>treecover_area</code> which contains a
 <code>sf</code>-object that is named alike the requested indicator. For
 our single asset, this column contains a tibble with 6 rows and four
 columns. Let’s have a closer look at this object</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">aoi</span><span class="op">$</span><span class="va">treecover_area</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 24 × 4</span></span></span>
@@ -347,7 +322,7 @@ respective <a href="https://mapme-initiative.github.io/mapme.biodiversity/articl
 tutorial</a>). Especially for large portfolios, it is usually a good
 idea to keep the geometry information in a separated variable to keep
 the size of the data object relatively small.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">geoms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">aoi</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/portfolio.html">portfolio_long</a></span><span class="op">(</span><span class="va">aoi</span>, drop_geoms <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 24 × 6</span></span></span>
@@ -364,43 +339,34 @@ the size of the data object relatively small.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>       1 treecover_area 2008-01-01 <span style="color: #949494;">00:00:00</span> treecover ha    <span style="text-decoration: underline;">1</span>905.</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>       1 treecover_area 2009-01-01 <span style="color: #949494;">00:00:00</span> treecover ha    <span style="text-decoration: underline;">1</span>903.</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 14 more rows</span></span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="enabling-parallel-computing">Enabling parallel computing<a class="anchor" aria-label="anchor" href="#enabling-parallel-computing"></a>
-</h2>
+<div class="section level3">
+<h3 id="a-note-on-parallel-computing">A note on parallel computing<a class="anchor" aria-label="anchor" href="#a-note-on-parallel-computing"></a>
+</h3>
 <p><a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> follows the parallel computing
 paradigm of the <a href="https://cran.r-project.org/package=future" class="external-link"><code>{future}</code></a>
 package. That means that you as a user are in the control if and how you
 would like to set up parallel processing. Since
-<code>{mapme.biodiversity} v0.7</code> supports parallel processing on a
-nested-level. The outer level applies parallel processing to the assets
-in a portfolio, the inner level to potential chunks for polygons that
-are larger than the specified chunks size or the single components of
-assets of type <code>MULTIPOLYGON</code>.</p>
-<p>The maximum chunk size is specified in hectares via
-<code><a href="../reference/mapme.html">mapme_options()</a></code> and defaults to 100,000 ha. Polygons larger
-than this threshold will be split into chunks of roughly the same
-size.</p>
-<p>Fine-control of parallel processing is given by using future
-topologies (find more information <a href="https://cran.r-project.org/package=future/vignettes/future-3-topologies.html" class="external-link">here</a>).
-To process all assets sequentially, but allow to spawn up to 4 workers
-to process chunks in parallel you might specify:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code>{mapme.biodiversity} v0.9</code>, we apply pre-chunking to all
+assets in the portfolio. That means that assets are split up into
+components of roughly the size of <code>chunk_size</code>. These
+components can than be iterated over in parallel to speed up processing.
+Indicator values will be aggregated automatically.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org" class="external-link">future</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">sequential</span>, <span class="fu"><a href="https://future.futureverse.org/reference/tweak.html" class="external-link">tweak</a></span><span class="op">(</span><span class="va">cluster</span>, workers <span class="op">=</span> <span class="fl">6</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">cluster</span>, workers <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span></code></pre></div>
 <p>As another example, with the code below one would apply parallel
 processing of 2 assets, with each having 4 workers available to process
 chunks, thus requiring a total of 8 available cores on the host machine.
 Be sure to not request more workers than available on your machine.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://progressr.futureverse.org" class="external-link">progressr</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://future.futureverse.org/reference/tweak.html" class="external-link">tweak</a></span><span class="op">(</span><span class="va">cluster</span>, workers <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://future.futureverse.org/reference/tweak.html" class="external-link">tweak</a></span><span class="op">(</span><span class="va">cluster</span>, workers <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">cluster</span>, workers <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://progressr.futureverse.org/reference/with_progress.html" class="external-link">with_progress</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mapme.html">calc_indicators</a></span><span class="op">(</span></span>
 <span>    <span class="va">aoi</span>,</span>
-<span>    <span class="fu"><a href="../reference/treecover_area.html">calc_treecover_area</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/treecover_area_and_emissions.html">calc_treecover_area_and_emissions</a></span><span class="op">(</span></span>
 <span>      min_size <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>      min_cover <span class="op">=</span> <span class="fl">30</span></span>
 <span>    <span class="op">)</span></span>
@@ -408,6 +374,7 @@ Be sure to not request more workers than available on your machine.</p>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">sequential</span><span class="op">)</span> <span class="co"># close child processes</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="exporting-an-portfolio-object">Exporting an portfolio object<a class="anchor" aria-label="anchor" href="#exporting-an-portfolio-object"></a>
@@ -419,7 +386,7 @@ any other geospatial software. Simply point towards a non-existing file
 on your local disk to write the portfolio. You can use
 <code><a href="../reference/portfolio.html">read_portfolio()</a></code> to read back a GeoPackage written in such
 a way into R:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dsn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".gpkg"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/portfolio.html">write_portfolio</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">aoi</span>, dsn <span class="op">=</span> <span class="va">dsn</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">from_disk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/portfolio.html">read_portfolio</a></span><span class="op">(</span><span class="va">dsn</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -435,7 +402,7 @@ a way into R:</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       1 <span style="color: #949494;">&lt;tibble [24 × 4]&gt;</span> ((-71.73735 18.64734, -71.71386 18.63179, -71.69 18…</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; [1] TRUE</span></span></code></pre>
 </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
 
@@ -446,15 +413,15 @@ a way into R:</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
     </footer>
 </div>
 
-  
 
-  
+
+
 
   </body>
 </html>
