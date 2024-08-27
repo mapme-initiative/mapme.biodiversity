@@ -1,10 +1,15 @@
 Package: mapme.biodiversity
 Title: Efficient Monitoring of Global Biodiversity Portfolios
-Version: 0.8.0.9014
-Authors@R: c(
-    person("Darius A.", "Görgen", , "darius2402@web.de", role = c("aut", "cre")),
-    person("Om Prakash", "Bhandari", role = "aut")
-  )
+Version: 0.9.0.9000
+Authors@R: c(person(given = "Darius A.", 
+                    family = "G\u00F6rgen", 
+                    email =  "info@dariusgoergen.com", 
+                    role = c("aut", "cre"),
+                    comment = c(ORCID = "0009-0008-5503-7704")),
+             person(given = "Om Prakash", 
+                    family = "Bhandari", 
+                    role = "aut")
+                    )
 Description: Biodiversity areas, especially primary forest, serve a
     multitude of functions for local economy, regional functionality of
     the ecosystems as well as the global health of our planet. Recently,
@@ -57,6 +62,7 @@ Collate:
     'get_resources.R'
     'calc_indicators.R'
     'calc_ipbes_biomes.R'
+    'calc_iucn.R'
     'calc_key_biodiversity_areas.R'
     'calc_landcover.R'
     'calc_mangroves_area.R'
@@ -64,6 +70,7 @@ Collate:
     'calc_precipitation_chelsa.R'
     'calc_precipitation_chirps.R'
     'calc_precipitation_wc.R'
+    'calc_slope.R'
     'calc_soilproperties.R'
     'calc_temperature_max_wc.R'
     'calc_temperature_min_wc.R'
@@ -90,6 +97,7 @@ Collate:
     'get_gsw_time_series.R'
     'get_hfp.R'
     'get_ipbes_biomes.R'
+    'get_iucn.R'
     'get_key_biodiversity_areas.R'
     'get_mcd64A1.R'
     'get_nasa_grace.R'

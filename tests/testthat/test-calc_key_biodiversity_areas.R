@@ -9,6 +9,7 @@ test_that("calc_key_biodiversity_areas works", {
   outdir <- tempfile()
   dir.create(outdir)
   mapme_options(outdir = outdir, verbose = FALSE)
+
   get_resources(x, get_key_biodiversity_areas(path = sample_path))
   kbas <- prep_resources(x)[["key_biodiversity_areas"]]
 
@@ -24,4 +25,22 @@ test_that("calc_key_biodiversity_areas works", {
   st_geometry(x) <- st_geometry(x) + 5
   st_crs(x) <- st_crs(4326)
   expect_equal(kb(x, kbas), NULL)
+
+  mapme_options(chunk_size = 10000)
+  x <- read_sf(sample_path)
+  fname_kba <- system.file("res", "key_biodiversity_areas/kbas.gpkg",
+                           package = "mapme.biodiversity")
+  res <- get_resources(x, get_key_biodiversity_areas(path = fname_kba))
+  kbas <- calc_indicators(res, calc_key_biodiversity_area())
+  kbas <- portfolio_long(kbas, drop_geoms = TRUE)
+
+  area_kba <- st_area(read_sf(fname_kba))
+  area_kba <- as.numeric(area_kba)
+  area_kba <- area_kba / 10000
+
+  expect_equal(
+    kbas$value,
+    area_kba,
+    tolerance = 0.01
+  )
 })
