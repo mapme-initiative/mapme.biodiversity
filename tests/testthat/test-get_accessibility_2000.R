@@ -1,5 +1,4 @@
 test_that(".get_accessibility_2000 works", {
-  skip_on_cran()
 
   # Run the function and check that it returns a valid function
   ga2000 <- get_accessibility_2000()
