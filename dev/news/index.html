@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.8.0.9014</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.8.0.9015</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,42 +46,55 @@
 <h2 class="pkg-version" data-toc-text="development version" id="mapmebiodiversity-development-version">mapme.biodiversity (development version)<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-development-version"></a></h2>
 <div class="section level3">
 <h3 id="general-development-version">General<a class="anchor" aria-label="anchor" href="#general-development-version"></a></h3>
-<ul><li><p><code><a href="../reference/mapme.html">prep_resources()</a></code> recieved additional argument <code>mode</code> to get control over the reading mode (e.g. portfolio or asset)</p></li>
+<ul><li><p><code><a href="../reference/mapme.html">prep_resources()</a></code> received additional argument <code>mode</code> to get control over the reading mode (e.g. portfolio or asset)</p></li>
 <li><p>resources based on WorldClim now support selecting the spatial resolution and cover the historical timeseries starting from 1960 (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/302" class="external-link">#302</a>)</p></li>
 <li><p>assets are now chunked into sub-components prior to indicator calculation thus parallelization now is applied to a single level (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/322" class="external-link">#322</a>)</p></li>
-<li><p><code>chunk_size</code> now is properly set to 100,000 ha as per documentation (before it was set to 10,000 ha)</p></li>
-<li><p>setting <code>chunk_size=NULL</code> is now allowed and skips chunking</p></li>
-<li><p>treecover indicators now trough a message if landscapemetrics is not installed</p></li>
-<li><p><code><a href="../reference/portfolio.html">write_portfolio()</a></code> now drops assets with <code>NULL</code> indicators instead of serializing them to disk with <code>NA</code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/332" class="external-link">#332</a>)</p></li>
+<li><p><code>chunk_size</code> now is properly set to 100,000 ha as per documentation (before it was set to 10,000 ha) (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/324" class="external-link">#324</a>)</p></li>
+<li><p>setting <code>chunk_size=NULL</code> is now allowed and skips chunking (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/331" class="external-link">#331</a>)</p></li>
+<li><p>treecover indicators now trough a message if landscapemetrics is not installed (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/325" class="external-link">#325</a>)</p></li>
 <li><p>setting <code>outdir</code> via <code><a href="../reference/mapme.html">mapme_options()</a></code> now probes the destination by trying to write a GTiff file and errors if unsuccessful (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/335" class="external-link">#335</a>)</p></li>
+<li><p>code previously using <code>httr</code> now uses <code>httr2</code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/330" class="external-link">#330</a>)</p></li>
 <li>
 <p>new resources:</p>
-<ul><li><code><a href="../reference/gsw_time_series_resource.html">get_gsw_time_series()</a></code></li>
-<li><code><a href="../reference/biodiversity_intactness_index_resource.html">get_biodiversity_intactness_index()</a></code></li>
-<li><code><a href="../reference/chelsa.html">get_chelsa()</a></code></li>
-<li><code><a href="../reference/iucn.html">get_iucn()</a></code></li>
-<li><code><a href="../reference/ipbes_biomes.html">get_ipbes_biomes()</a></code></li>
-<li><code><a href="../reference/humanfootprint_resource.html">get_humanfootprint()</a></code></li>
-<li><code><a href="../reference/key_biodiversity_areas_resource.html">get_key_biodiversity_areas()</a></code></li>
+<ul><li>
+<code><a href="../reference/iucn.html">get_iucn()</a></code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/359" class="external-link">#359</a>)</li>
 <li>
-<code><a href="../reference/carbon_resources.html">get_vul_carbon()</a></code>, <code><a href="../reference/carbon_resources.html">get_man_carbon()</a></code>, and <code><a href="../reference/carbon_resources.html">get_irr_carbon()</a></code>
-</li>
+<code><a href="../reference/chelsa.html">get_chelsa()</a></code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/318" class="external-link">#318</a>)</li>
+<li>
+<code><a href="../reference/ipbes_biomes.html">get_ipbes_biomes()</a></code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/345" class="external-link">#345</a>)</li>
+<li>
+<code><a href="../reference/humanfootprint_resource.html">get_humanfootprint()</a></code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/341" class="external-link">#341</a>)</li>
+<li>
+<code><a href="../reference/gsw_time_series_resource.html">get_gsw_time_series()</a></code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/354" class="external-link">#354</a>, <a href="https://github.com/karpfen" class="external-link">@karpfen</a>)</li>
+<li>
+<code><a href="../reference/key_biodiversity_areas_resource.html">get_key_biodiversity_areas()</a></code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/349" class="external-link">#349</a>, <a href="https://github.com/karpfen" class="external-link">@karpfen</a>)</li>
+<li>
+<code><a href="../reference/biodiversity_intactness_index_resource.html">get_biodiversity_intactness_index()</a></code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/351" class="external-link">#351</a>, <a href="https://github.com/karpfen" class="external-link">@karpfen</a>)</li>
+<li>
+<code><a href="../reference/carbon_resources.html">get_vul_carbon()</a></code>, <code><a href="../reference/carbon_resources.html">get_man_carbon()</a></code>, and <code><a href="../reference/carbon_resources.html">get_irr_carbon()</a></code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/339" class="external-link">#339</a>)</li>
 </ul></li>
 <li>
 <p>new indicators:</p>
-<ul><li><code><a href="../reference/exposed_population.html">calc_exposed_population()</a></code></li>
-<li><code><a href="../reference/humanfootprint_indicator.html">calc_humanfootprint()</a></code></li>
-<li><code><a href="../reference/ipbes_biome_stats.html">calc_ipbes_biomes()</a></code></li>
-<li><code><a href="../reference/key_biodiversity_areas_indicator.html">calc_key_biodiversity_area()</a></code></li>
-<li><code><a href="../reference/biodiversity_intactness_index_indicator.html">calc_biodiversity_intactness_index ()</a></code></li>
-<li><code><a href="../reference/humanfootprint_indicator.html">calc_humanfootprint()</a></code></li>
-<li><code><a href="../reference/slope.html">calc_slope()</a></code></li>
-<li><code><a href="../reference/gsw_time_series_indicator.html">calc_gsw_time_series()</a></code></li>
-<li><code><a href="../reference/precipitation_chelsa.html">calc_precipitation_chelsa()</a></code></li>
-<li><code><a href="../reference/species_richness.html">calc_species_richness()</a></code></li>
+<ul><li>
+<code><a href="../reference/slope.html">calc_slope()</a></code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/355" class="external-link">#355</a>, <a href="https://github.com/fBedecarrats" class="external-link">@fBedecarrats</a>)</li>
 <li>
-<code><a href="../reference/carbon_indicators.html">calc_vul_carbon()</a></code>, <code><a href="../reference/carbon_indicators.html">calc_man_carbon()</a></code>, and <code><a href="../reference/carbon_indicators.html">calc_irr_carbon()</a></code>
-</li>
+<code><a href="../reference/ipbes_biome_stats.html">calc_ipbes_biomes()</a></code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/345" class="external-link">#345</a>)</li>
+<li>
+<code><a href="../reference/humanfootprint_indicator.html">calc_humanfootprint()</a></code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/341" class="external-link">#341</a>)</li>
+<li>
+<code><a href="../reference/gsw_time_series_indicator.html">calc_gsw_time_series()</a></code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/354" class="external-link">#354</a>, <a href="https://github.com/karpfen" class="external-link">@karpfen</a>)</li>
+<li>
+<code><a href="../reference/species_richness.html">calc_species_richness()</a></code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/359" class="external-link">#359</a>)</li>
+<li>
+<code><a href="../reference/exposed_population.html">calc_exposed_population()</a></code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/321" class="external-link">#321</a>)</li>
+<li>
+<code><a href="../reference/precipitation_chelsa.html">calc_precipitation_chelsa()</a></code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/318" class="external-link">#318</a>)</li>
+<li>
+<code><a href="../reference/key_biodiversity_areas_indicator.html">calc_key_biodiversity_area()</a></code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/349" class="external-link">#349</a>, <a href="https://github.com/karpfen" class="external-link">@karpfen</a>)</li>
+<li>
+<code><a href="../reference/biodiversity_intactness_index_indicator.html">calc_biodiversity_intactness_index()</a></code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/351" class="external-link">#351</a>, <a href="https://github.com/karpfen" class="external-link">@karpfen</a>)</li>
+<li>
+<code><a href="../reference/carbon_indicators.html">calc_vul_carbon()</a></code>, <code><a href="../reference/carbon_indicators.html">calc_man_carbon()</a></code>, and <code><a href="../reference/carbon_indicators.html">calc_irr_carbon()</a></code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/339" class="external-link">#339</a>)</li>
 </ul></li>
 </ul></div>
 <div class="section level3">
@@ -98,7 +111,7 @@
 <ul><li>
 <code>.check_portfolio()</code> now checks if <code>assetid</code> has unique values and only overrides them if this in not the case (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/305" class="external-link">#305</a>)</li>
 <li>
-<code>.read_raster()</code> now reads values into memory and removes VRT files on-exit</li>
+<code>.read_raster()</code> now reads values into memory and removes VRT files on-exit (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/311" class="external-link">#311</a>)</li>
 <li>
 <code>.fetch_resources()</code> now honors both creation and opening options (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/315" class="external-link">#315</a>)</li>
 <li>

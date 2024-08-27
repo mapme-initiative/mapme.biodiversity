@@ -30,7 +30,7 @@
 
     <a class="navbar-brand me-2" href="index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.8.0.9014</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.8.0.9015</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -481,7 +481,7 @@
 <div class="section level2">
 <h2 id="using-cloud-storages">Using cloud storages<a class="anchor" aria-label="anchor" href="#using-cloud-storages"></a>
 </h2>
-<p><a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> leverages GDAL’s capabilities for data I/O. For users of this package, that means that integrating a cloud storage is as easy as setting up a configuration file and changing the <code>outdir</code> argument in <code><a href="reference/mapme.html">mapme_options()</a></code>. While you could also decide to use environment variables, we recommend to set up a GDAL config file. You can find GDAL’s documentation on this topic <a href="https://gdal.org/user/configoptions.html#gdal-configuration-file" class="external-link">here</a>.</p>
+<p><a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> leverages GDAL’s capabilities for data I/O. For users of this package, that means that integrating a cloud storage is as easy as setting up a configuration file and changing the <code>outdir</code> argument in <code><a href="reference/mapme.html">mapme_options()</a></code>. While you could also decide to use environment variables, we recommend to set up a GDAL config file. You can find GDAL’s documentation on this topic <a href="https://gdal.org/en/latest/user/configoptions.html#gdal-configuration-file" class="external-link">here</a>.</p>
 <p>Suppose that we want to use an AWS S3 bucket that we control to write resource data to. Let’s assume this bucket is already set up and we wish to refer to it in our R code as <code>mapme-data</code>. The GDAL configuration file should look something like this:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="kw">[credentials]</span></span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a></span>
@@ -489,7 +489,7 @@
 <span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="dt">path</span><span class="ot">=</span><span class="st">/vsis3/mapme-data</span></span>
 <span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="dt">AWS_SECRET_ACCESS_KEY</span><span class="ot">=</span><span class="st">&lt;your-access-key&gt;</span></span>
 <span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="dt">AWS_ACCESS_KEY_ID</span><span class="ot">=</span><span class="st">&lt;your-access-id&gt;</span></span></code></pre></div>
-<p>The connection will be handled based on GDAL’s virtual file system. You can find documentation on specific options for your cloud provider <a href="https://gdal.org/user/virtual_file_systems.html#network-based-file-systems" class="external-link">here</a>.</p>
+<p>The connection will be handled based on GDAL’s virtual file system. You can find documentation on specific options for your cloud provider <a href="https://gdal.org/en/latest/user/virtual_file_systems.html#network-based-file-systems" class="external-link">here</a>.</p>
 <p>Ideally, you would also set the following in the <code>.Renviron</code> file in your user’s home directory to ensure that GDAL is aware of this configuration when an R session is started:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="dt">GDAL_CONFIG_FILE </span><span class="ot">=</span><span class="st"> "&lt;path-to-your-config-file&gt;"</span></span></code></pre></div>
 <p>Then, in your scripts set the <code>outdir</code> option to the value specified with the <code>path</code> variable in the configuration file:</p>
