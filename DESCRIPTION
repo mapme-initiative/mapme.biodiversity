@@ -1,10 +1,15 @@
 Package: mapme.biodiversity
 Title: Efficient Monitoring of Global Biodiversity Portfolios
 Version: 0.8.0.9015
-Authors@R: c(
-    person("Darius A.", "Görgen", , "darius2402@web.de", role = c("aut", "cre")),
-    person("Om Prakash", "Bhandari", role = "aut")
-  )
+Authors@R: c(person(given = "Darius A.", 
+                    family = "G\u00F6rgen", 
+                    email =  "info@dariusgoergen.com", 
+                    role = c("aut", "cre"),
+                    comment = c(ORCID = "0009-0008-5503-7704")),
+             person(given = "Om Prakash", 
+                    family = "Bhandari", 
+                    role = "aut")
+                    )
 Description: Biodiversity areas, especially primary forest, serve a
     multitude of functions for local economy, regional functionality of
     the ecosystems as well as the global health of our planet. Recently,
