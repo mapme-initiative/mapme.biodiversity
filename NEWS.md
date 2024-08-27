@@ -1,5 +1,11 @@
 # mapme.biodiversity (development version)
 
+## General
+- new resources: 
+  - `get_accessibility_2000()` (#365, @fBedecarrats)
+- new indicators:
+  - `calc_traveltime_2000()` (#365, @fBedecarrats)
+
 # mapme.biodiversity 0.9.0
 
 ## General
