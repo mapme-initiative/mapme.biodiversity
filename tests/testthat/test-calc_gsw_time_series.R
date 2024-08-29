@@ -5,13 +5,14 @@ test_that("calc_gsw_time_series works", {
     )
   )
 
-  outdir <- system.file("res", package = "mapme.biodiversity")
+  .clear_resources()
+  outdir <- file.path(tempdir(), "mapme.data")
+  .copy_resource_dir(outdir)
   mapme_options(outdir = outdir, verbose = FALSE)
   outdir_gsw <- file.path(outdir, "gsw_time_series")
 
   gsw_fnames_short <- dir(outdir_gsw, pattern = ".tif$")
   gsw_fnames_long <- sub("v5_", "VER5-0_yearlyClassification", gsw_fnames_short)
-
   file.copy(
     file.path(outdir_gsw, gsw_fnames_short),
     file.path(outdir_gsw, gsw_fnames_long)
