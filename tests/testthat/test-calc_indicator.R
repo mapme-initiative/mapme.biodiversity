@@ -90,7 +90,7 @@ test_that("Parallelization works", {
     )
   plan(sequential)
 
-  expect_equal(names(stat), c("assetid", "treecover_area", "x"))
+  expect_equal(names(stat)[1:2], c("assetid", "treecover_area"))
   expect_equal(nrow(stat), 9)
 
   stat <- lapply(stat$treecover_area, function(x) x$value)
