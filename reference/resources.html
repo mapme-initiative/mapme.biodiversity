@@ -17,7 +17,7 @@ information such as the source and the licence."><meta property="og:image" conte
 
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,7 @@ information such as the source and the licence."><meta property="og:image" conte
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Register or list resources in mapme.biodiversity</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mapme-initiative/mapme.biodiversity/blob/pkgdown-v0.9.0/R/register.R" class="external-link"><code>R/register.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mapme-initiative/mapme.biodiversity/blob/main/R/register.R" class="external-link"><code>R/register.R</code></a></small>
       <div class="d-none name"><code>resources.Rd</code></div>
     </div>
 
@@ -125,20 +125,20 @@ resource.</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span><span class="fu">available_resources</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 34 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 35 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    name                          description                licence source type </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> biodiversity_intactness_index Biodiversity Intactness I… CC-BY-… https… rast…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> chelsa                        Climatologies at High res… Unknow… https… rast…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> chirps                        Climate Hazards Group Inf… CC - u… https… rast…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> esalandcover                  Copernicus Land Monitorin… CC-BY … https… rast…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> fritz_et_al                   Drivers of deforestation … CC-BY … https… rast…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> gfw_emissions                 Global Forest Watch - CO2… CC-BY … https… rast…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> gfw_lossyear                  Global Forest Watch - Yea… CC-BY … https… rast…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> gfw_treecover                 Global Forest Watch - Per… CC-BY … https… rast…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> accessibility_2000            Accessibility data for th… See JR… https… rast…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> biodiversity_intactness_index Biodiversity Intactness I… CC-BY-… https… rast…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> chelsa                        Climatologies at High res… Unknow… https… rast…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> chirps                        Climate Hazards Group Inf… CC - u… https… rast…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> esalandcover                  Copernicus Land Monitorin… CC-BY … https… rast…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> fritz_et_al                   Drivers of deforestation … CC-BY … https… rast…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> gfw_emissions                 Global Forest Watch - CO2… CC-BY … https… rast…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> gfw_lossyear                  Global Forest Watch - Yea… CC-BY … https… rast…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> gfw_treecover                 Global Forest Watch - Per… CC-BY … https… rast…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> global_surface_water_change   Global Surface Water - Ch… https:… https… rast…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 24 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> gfw_treecover                 Global Forest Watch - Per… CC-BY … https… rast…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 25 more rows</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
