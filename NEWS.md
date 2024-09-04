@@ -1,5 +1,18 @@
 # mapme.biodiversity (development version)
 
+## General
+
+- new resources:
+  - `get_acled()`
+- new indicators:
+  - `calc_fatalities_acled()`
+  - `calc_fatalities_ucdp()` (renamed)
+  - `calc_exposed_population_acled()`
+  - `calc_exposed_population_ucdp()` (renamed)
+  
+- `calc_fatalities_ucdp()` now returns a sparse timeseries, e.g. asset-months
+  with now fatalities are omitted.
+
 # mapme.biodiversity 0.9.1
 
 ## General

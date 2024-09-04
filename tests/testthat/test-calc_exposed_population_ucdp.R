@@ -1,4 +1,4 @@
-test_that("conflict_exposure works", {
+test_that("conflict_exposure_ucdp works", {
   x <- read_sf(
     system.file("extdata", "burundi.gpkg",
       package = "mapme.biodiversity"
@@ -12,16 +12,16 @@ test_that("conflict_exposure works", {
     package = "mapme.biodiversity"
   )))
 
-  expect_error(calc_exposed_population(distance = -1), "distance")
-  expect_error(calc_exposed_population(distance = c(1, 2)), "distance")
-  expect_error(calc_exposed_population(violence_types = 4, "violence_type"))
-  expect_error(calc_exposed_population(years = 1988), "years")
-  expect_error(calc_exposed_population(precision_location = 8), "precision_location")
-  expect_error(calc_exposed_population(precision_time = 8), "precision_time")
-  expect_error(calc_exposed_population(engine = "NA"), "engine")
+  expect_error(calc_exposed_population_ucdp(distance = -1), "distance")
+  expect_error(calc_exposed_population_ucdp(distance = c(1, 2)), "distance")
+  expect_error(calc_exposed_population_ucdp(violence_types = 4, "violence_type"))
+  expect_error(calc_exposed_population_ucdp(years = 1988), "years")
+  expect_error(calc_exposed_population_ucdp(precision_location = 8), "precision_location")
+  expect_error(calc_exposed_population_ucdp(precision_time = 8), "precision_time")
+  expect_error(calc_exposed_population_ucdp(engine = "NA"), "engine")
 
 
-  cce <- calc_exposed_population(
+  cce <- calc_exposed_population_ucdp(
     distance = 10000,
     violence_types = 1:3,
     years = 2000,
@@ -33,7 +33,7 @@ test_that("conflict_exposure works", {
   expect_equal(cce(x, ucdp_ged, NULL), NULL)
   expect_equal(cce(x, ucdp_ged, worldpop), NULL)
 
-  cce <- calc_exposed_population(
+  cce <- calc_exposed_population_ucdp(
     distance = 10000,
     violence_types = 1:3,
     years = 1991:1992,
@@ -58,7 +58,7 @@ test_that("conflict_exposure works", {
     "ppp_2005_1km_Aggregated"
   )
 
-  cce <- calc_exposed_population(
+  cce <- calc_exposed_population_ucdp(
     distance = 10000,
     years = 2005:2006,
     precision_location = 4,

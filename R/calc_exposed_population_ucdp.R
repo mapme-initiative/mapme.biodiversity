@@ -58,7 +58,7 @@
 #'   but specific dates are not provided
 #'
 #'
-#' @name exposed_population
+#' @name exposed_population_ucdp
 #' @param distance A numeric of length 1 indicating the buffer size around
 #'   included conflict events to calculate the exposed population.
 #' @param violence_types A numeric vector indicating the types of violence
@@ -121,12 +121,12 @@
 #'   aoi
 #' }
 #' }
-calc_exposed_population <- function(distance = 5000,
-                                    violence_types = 1:3,
-                                    years = c(1989:2023),
-                                    precision_location = 1,
-                                    precision_time = 1,
-                                    engine = "extract") {
+calc_exposed_population_ucdp <- function(distance = 5000,
+                                         violence_types = 1:3,
+                                         years = c(1989:2023),
+                                         precision_location = 1,
+                                         precision_time = 1,
+                                         engine = "extract") {
   stopifnot(length(distance) == 1 && distance > 0)
   if (!all(violence_types %in% 1:3)) {
     stop("Argument violence_types must be an numeric vector with values between 1 and 3.")
@@ -144,7 +144,7 @@ calc_exposed_population <- function(distance = 5000,
   function(x,
            ucdp_ged = NULL,
            worldpop = NULL,
-           name = "exposed_population",
+           name = "exposed_population_ucdp",
            mode = "asset",
            aggregation = "sum",
            verbose = mapme_options()[["verbose"]]) {
@@ -176,7 +176,7 @@ calc_exposed_population <- function(distance = 5000,
       dplyr::select(date_start) %>%
       dplyr::mutate(year = format(as.Date(date_start), "%Y")) %>%
       dplyr::group_by(year) %>%
-      dplyr::summarise(geom = st_intersection(st_union(st_buffer(geom, dist = distance)), x))
+      dplyr::summarise(geom = st_intersection(st_make_valid(st_union(st_buffer(geom, dist = distance))), x))
 
     wpop_years <- as.numeric(substr(names(worldpop), 5, 8))
 
@@ -209,7 +209,7 @@ calc_exposed_population <- function(distance = 5000,
 
 
 register_indicator(
-  name = "exposed_population",
+  name = "exposed_population_ucdp",
   description = "Number of people exposed to conflicts based on UCDP GED",
   resources = c("ucdp_ged", "worldpop")
 )

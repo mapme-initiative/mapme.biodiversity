@@ -48,7 +48,7 @@
 #'   but specific dates are not provided
 #'
 #'
-#' @name fatalities
+#' @name fatalities_ucpd
 #' @param years A numeric vector indicating the years for which to summarize
 #'    fatalities.
 #' @param precision_location A numeric indicating precision value for the
@@ -95,9 +95,9 @@
 #'
 #' aoi
 #' }
-calc_fatalities <- function(years = 1989:2023,
-                            precision_location = 1,
-                            precision_time = 1) {
+calc_fatalities_ucdp <- function(years = 1989:2023,
+                                 precision_location = 1,
+                                 precision_time = 1) {
   years <- check_available_years(years, c(1989:2023), "ucdp_ged")
 
   if (!precision_location %in% 1:7) {
@@ -110,7 +110,7 @@ calc_fatalities <- function(years = 1989:2023,
 
   function(x,
            ucdp_ged = NULL,
-           name = "fatalities",
+           name = "fatalities_ucdp",
            mode = "asset",
            aggregation = "sum",
            verbose = mapme_options()[["verbose"]]) {
@@ -122,49 +122,45 @@ calc_fatalities <- function(years = 1989:2023,
     }
     ucdp_ged <- ucdp_ged[[1]]
 
-    months_tibble <- tidyr::expand_grid(
-      year = as.character(years),
-      month = sprintf("%02d", 1:12),
-      type_of_violence = as.character(1:3)
+    ucdp_ged <- ucdp_ged[unlist(st_contains(x, ucdp_ged)), ]
+    ucdp_ged <- dplyr::select(
+      st_drop_geometry(ucdp_ged),
+      tidyr::starts_with("deaths_"),
+      type_of_violence,
+      date_prec,
+      where_prec,
+      date_start
     )
 
-    ucdp_ged %>%
-      st_drop_geometry() %>%
-      dplyr::select(
-        tidyr::starts_with("deaths_"),
-        type_of_violence,
-        date_prec,
-        where_prec,
-        date_start
-      ) %>%
-      dplyr::filter(
-        where_prec <= precision_location,
-        date_prec <= precision_time
-      ) %>%
-      dplyr::select(-date_prec, -where_prec) %>%
-      dplyr::mutate(
-        date_start = as.Date(date_start),
-        year = format(date_start, "%Y"),
-        month = format(date_start, "%m")
-      ) %>%
-      dplyr::filter(year %in% years) %>%
-      dplyr::summarise(
-        dplyr::across(
-          dplyr::starts_with("deaths_"),
-          ~ sum(as.numeric(.x))
-        ),
-        event_count = dplyr::n(),
-        .by = c(year, month, type_of_violence)
-      ) %>%
-      dplyr::right_join(months_tibble, by = c("year", "month", "type_of_violence")) %>%
-      dplyr::mutate(dplyr::across(
-        dplyr::starts_with(c("deaths_", "event_")),
-        ~ tidyr::replace_na(.x, 0)
-      )) %>%
-      dplyr::mutate(
-        deaths_total = rowSums(dplyr::across(dplyr::starts_with("deaths_")))
-      ) %>%
-      dplyr::mutate(month = as.Date(paste0(year, "-", month, "-01"))) %>%
+    ucdp_ged <- dplyr::filter(
+      ucdp_ged,
+      where_prec <= precision_location,
+      date_prec <= precision_time
+    )
+
+    ucdp_ged <- dplyr::mutate(
+      ucdp_ged,
+      date_start = as.Date(date_start),
+      year = format(date_start, "%Y"),
+      month = format(date_start, "%m")
+    )
+    ucdp_ged <- dplyr::filter(ucdp_ged, year %in% years)
+
+    fatalities <- dplyr::summarise(
+      ucdp_ged,
+      dplyr::across(
+        dplyr::starts_with("deaths_"),
+        ~ sum(as.numeric(.x))
+      ),
+      event_count = dplyr::n(),
+      .by = c(year, month, type_of_violence)
+    )
+
+    fatalities <- dplyr::mutate(
+      fatalities,
+      deaths_total = rowSums(dplyr::across(dplyr::starts_with("deaths_"))),
+      month = as.Date(paste0(year, "-", month, "-01"))
+    ) %>%
       dplyr::select(-year, -deaths_a, -deaths_b) %>%
       dplyr::relocate(event_count, .after = dplyr::last_col()) %>%
       dplyr::arrange(month, type_of_violence) %>%
@@ -182,12 +178,14 @@ calc_fatalities <- function(years = 1989:2023,
         value = value
       ) %>%
       dplyr::select(datetime, variable, unit, value)
+
+    fatalities
   }
 }
 
 
 register_indicator(
-  name = "fatalities",
+  name = "fatalities_ucdp",
   description = "Number of fatalities by group of conflict based on UCDP GED",
   resources = "ucdp_ged"
 )
