@@ -124,7 +124,11 @@ get_acled <- function(
       return(filename)
     })
 
-    fps <- make_footprints(srcs = acled_yearly, what = "vector")
+    bbox <- c(xmin = -180.0, ymin = -90.0, xmax = 180.0, ymax = 90.0)
+    fps <- st_as_sfc(st_bbox(bbox, crs = "EPSG:4326"))
+    fps <- st_as_sf(rep(fps, length(acled_yearly)))
+    fps[["source"]] <- acled_yearly
+    fps <- make_footprints(fps, what = "vector")
   }
 }
 
