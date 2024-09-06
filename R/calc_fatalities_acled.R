@@ -148,7 +148,7 @@ calc_fatalities_acled <- function(
           acled,
           year, month, stratum,
         ),
-        fatalities = sum(fatalities, na.rm = TRUE)
+        fatalities = sum(as.numeric(fatalities), na.rm = TRUE)
       )
     )
 
