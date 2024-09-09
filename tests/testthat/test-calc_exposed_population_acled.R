@@ -82,4 +82,12 @@ test_that("calc_conflict_exposure_acled works", {
   expect_silent(.check_single_asset(result))
   expect_equal(nrow(result), 2)
   expect_identical(result$value[1], result$value[2])
+
+  cce <- calc_exposed_population_acled(filter_category = "sub_event_type")
+  expect_silent(result <- cce(x, acled[1], worldpop))
+  expect_equal(nrow(result), 1)
+
+  cce <- calc_exposed_population_acled(filter_category = "disorder_type")
+  expect_silent(result <- cce(x, acled[1], worldpop))
+  expect_equal(nrow(result), 1)
 })

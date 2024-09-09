@@ -165,7 +165,7 @@ calc_exposed_population_acled <- function(
     stopifnot(filter_category %in% .acled_categories)
     if (filter_category == "event_type") {
       types <- .acled_event_types
-    } else if (filter_category == "event_sub_type") {
+    } else if (filter_category == "sub_event_type") {
       types <- .acled_sub_event_types
     } else {
       types <- .acled_disorder_types
@@ -223,8 +223,10 @@ calc_exposed_population_acled <- function(
       acled <- dplyr::mutate(
         acled,
         stratum = gsub(" ", "_", tolower(stratum))
-      ) %>%
-        dplyr::filter(stratum %in% filter_types)
+      )
+      if (!is.null(filter_types)) {
+        acled <- dplyr::filter(acled, stratum %in% filter_types)
+      }
     }
 
     if (nrow(acled) == 0) {
@@ -267,7 +269,7 @@ calc_exposed_population_acled <- function(
 
 .acled_categories <- c(
   "event_type",
-  "event_sub_type",
+  "sub_event_type",
   "disorder_type"
 )
 
