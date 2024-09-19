@@ -1,5 +1,5 @@
 pandoc: 3.1.11
-pkgdown: 2.1.0
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   contributing: contributing.html
@@ -9,7 +9,7 @@ articles:
   quickstart: quickstart.html
   terminology: terminology.html
   workflow: workflow.html
-last_built: 2024-09-18T04:13Z
+last_built: 2024-09-19T04:12Z
 urls:
   reference: https://mapme-initiative.github.io/mapme.biodiversity/reference
   article: https://mapme-initiative.github.io/mapme.biodiversity/articles
