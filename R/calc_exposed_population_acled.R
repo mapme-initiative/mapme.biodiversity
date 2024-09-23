@@ -62,6 +62,11 @@
 #'   - political_violence
 #'   - strategic_developments
 #'
+#' You may supply buffer distances for each of the event categories. Custom
+#' buffers will then be drawn per category. Supply a single value if you
+#' do not wish do differentiate between categories. Otherwise, supply a
+#' vector of distances equal to the length of included categories.
+#'
 #' You may apply quality filters based on the precision of the geolocation
 #' of events and the temporal precision. By default, these are set to only
 #' include events with the highest precision scores.
@@ -87,13 +92,16 @@
 #'   is chosen
 #'
 #' @name calc_exposed_population_acled
-#' @param distance A numeric of length 1 indicating the buffer size around
-#'   included conflict events to calculate the exposed population.
-#' @param filter_category A character indicating the category of events
-#'   to which apply a filter. Defaults to NULL, meaning that no filter
-#'   is applied.
+#' @param distance A numeric vector indicating the buffer radius in meters.
+#'   If length is 1, the same buffer size around included conflict events is
+#'   drawn. Otherwise, it must be equal to the length of included categories
+#'   selected with \code{filter_types}.
+#' @param filter_category A character indicating the categories to be used
+#'   to calculate the exposed population by. Defaults to `event_type` meaning
+#'   one estimation per event type will be returned.
 #' @param filter_types A character vector of event types of the respective
-#'   category to retain. Defaults to NULL, meaning that no filter is applied.
+#'   category specified in `filter_category` to retain. Defaults to NULL,
+#'   meaning that no filter is applied and all types are retained.
 #' @param years A numeric vector indicating for which years to calculate
 #'   the exposed population. Restricted to available years for ACLED.
 #'   For years not intersecting with available WorldPop layers, the first layer
@@ -102,8 +110,6 @@
 #'   geolocation up to which events are included. Defaults to 1.
 #' @param precision_time A numeric indicating the precision value of the
 #'   temporal coding up to which events are included. Defaults to 1.
-#' @param engine The preferred processing functions from either one of "zonal",
-#'   "extract" or "exactextract" as character.
 #' @keywords indicator
 #' @returns A function that returns an indicator tibble with conflict exposure
 #'   as variable and precentage of the population as its value.
@@ -153,26 +159,22 @@
 #' }
 calc_exposed_population_acled <- function(
     distance = 5000,
-    filter_category = NULL,
+    filter_category = c("event_type", "sub_event_type", "disorder_type"),
     filter_types = NULL,
     years = c(1997:2024),
     precision_location = 1,
-    precision_time = 1,
-    engine = "extract") {
-  stopifnot(length(distance) == 1 && distance > 0)
-
-  if (!is.null(filter_category)) {
-    stopifnot(filter_category %in% .acled_categories)
-    if (filter_category == "event_type") {
-      types <- .acled_event_types
-    } else if (filter_category == "sub_event_type") {
-      types <- .acled_sub_event_types
-    } else {
-      types <- .acled_disorder_types
-    }
-    if (!is.null(filter_types)) {
-      stopifnot(all(filter_types %in% types))
-    }
+    precision_time = 1) {
+  check_namespace("exactextractr")
+  filter_category <- match.arg(filter_category)
+  if (filter_category == "event_type") {
+    types <- .acled_event_types
+  } else if (filter_category == "sub_event_type") {
+    types <- .acled_sub_event_types
+  } else {
+    types <- .acled_disorder_types
+  }
+  if (!is.null(filter_types)) {
+    stopifnot(all(filter_types %in% types))
   }
 
   if (!precision_location %in% 1:3) {
@@ -181,8 +183,31 @@ calc_exposed_population_acled <- function(
   if (!precision_time %in% 1:3) {
     stop("Argument precision_time must be a single numeric between 1 and 3.")
   }
+
+  if (length(distance) > 1) {
+    if (is.null(filter_category)) {
+      stop("filter_category cannot be NULL if per-class distances are specified.")
+    }
+    if (is.null(filter_types)) {
+      if (length(types) != length(distance)) {
+        msg <- c(
+          "Wrong number of distances specified for filter_category `%s`!\n",
+          "Total number of categories is %s."
+        )
+        stop(sprintf(msg, c(filter_category, length(types))))
+      }
+    } else {
+      if (length(filter_types) != length(distance)) {
+        msg <- c(
+          "Wrong number of distances specified for filter_types!\n",
+          "Total number of selected categories is %d."
+        )
+        stop(sprintf(msg, length(filter_types)))
+      }
+    }
+  }
+
   years <- check_available_years(years, c(1997:2024), "exposed_population_acled")
-  engine <- check_engine(engine)
 
   function(x,
            acled = NULL,
@@ -199,7 +224,12 @@ calc_exposed_population_acled <- function(
 
     acled <- st_sf(purrr::list_rbind(acled))
     acled <- acled[unlist(st_contains(x, acled)), ]
-    acled <- dplyr::filter(acled, year %in% years)
+    acled <- dplyr::filter(
+      acled,
+      year %in% years,
+      geo_precision <= precision_location,
+      time_precision <= precision_time
+    )
 
     if (nrow(acled) == 0) {
       return(NULL)
@@ -207,64 +237,84 @@ calc_exposed_population_acled <- function(
 
     acled <- dplyr::select(
       acled,
-      time_precision,
-      geo_precision,
-      event_date,
+      year,
       stratum = !!filter_category
     )
 
-    acled <- dplyr::filter(
+    acled <- dplyr::mutate(
       acled,
-      geo_precision <= precision_location,
-      time_precision <= precision_time
+      stratum = gsub(" ", "_", tolower(stratum))
     )
 
-    if ("stratum" %in% names(acled)) {
-      acled <- dplyr::mutate(
-        acled,
-        stratum = gsub(" ", "_", tolower(stratum))
+    if (is.null(filter_types)) {
+      acled$distance <- distance
+    } else {
+      acled <- dplyr::filter(acled, stratum %in% filter_types)
+      distance_df <- data.frame(
+        stratum = filter_types,
+        distance = distance
       )
-      if (!is.null(filter_types)) {
-        acled <- dplyr::filter(acled, stratum %in% filter_types)
-      }
+      acled <- dplyr::left_join(acled, distance_df, by = "stratum")
     }
 
     if (nrow(acled) == 0) {
       return(NULL)
     }
 
-    acled_yearly <- dplyr::select(acled, event_date) %>%
-      dplyr::mutate(year = format(as.Date(event_date), "%Y")) %>%
-      dplyr::group_by(year) %>%
-      dplyr::summarise(geom = st_intersection(st_make_valid(st_union(st_buffer(geom, dist = distance))), x))
+    acled <- st_buffer(acled, acled$distance)
 
-    wpop_years <- as.numeric(substr(names(worldpop), 5, 8))
+    # one multi-polygon per year and stratum
+    acled_yearly <- dplyr::select(acled, year, stratum) %>%
+      dplyr::group_by(year, stratum) %>%
+      dplyr::summarise(geom = st_intersection(st_make_valid(st_union(geom)), x))
 
-    exposures <- purrr::map(years, function(y) {
-      acled <- dplyr::filter(acled_yearly, year == y)
-      if (nrow(acled) == 0) {
-        return(NULL)
-      }
-      if (y %in% wpop_years) {
-        index <- which(wpop_years == y)
-      } else {
-        index <- ifelse(y < wpop_years[1], 1, length(wpop_years))
-      }
+    # one multi-polygon per year, irrespective of stratum (total exposed pop)
+    acled_yearly_total <- dplyr::summarise(acled_yearly, geom = st_intersection(st_make_valid(st_union(geom)), x))
+    acled_yearly_total$stratum <- "total"
+    acled_yearly <- rbind(acled_yearly, acled_yearly_total)
 
-      pop <- worldpop[[index]]
-      exposed_pop <- select_engine(acled, pop, stats = "sum", engine = engine)[["sum"]]
-      tibble::tibble(
-        datetime = as.POSIXct(as.Date(paste0(y, "-01-01"), "%Y-%m-%d")),
-        variable = "exposed_population_acled",
-        unit = "count",
-        value = exposed_pop
-      )
-    })
-    if (all(sapply(exposures, is.null))) {
+    .calc_exp_pop(
+      acled_yearly,
+      worldpop,
+      years
+    )
+  }
+}
+
+.calc_exp_pop <- function(polys, popr, years) {
+  year <- NULL
+  stopifnot("year" %in% names(polys))
+  wpop_years <- as.numeric(substr(names(popr), 5, 8))
+
+  exposures <- purrr::map(years, function(y) {
+    polys_year <- dplyr::filter(polys, year == y)
+    if (nrow(polys_year) == 0) {
       return(NULL)
     }
-    purrr::list_rbind(exposures)
+    if (y %in% wpop_years) {
+      index <- which(wpop_years == y)
+    } else {
+      index <- ifelse(y < wpop_years[1], 1, length(wpop_years))
+    }
+
+    pop <- popr[[index]]
+    exposed_pop <- exactextractr::exact_extract(
+      pop, polys_year,
+      fun = "sum", progress = FALSE
+    )
+
+    tibble::tibble(
+      datetime = as.POSIXct(as.Date(paste0(y, "-01-01"), "%Y-%m-%d")),
+      variable = paste0("exposed_population_", polys_year$stratum),
+      unit = "count",
+      value = exposed_pop
+    )
+  })
+
+  if (all(sapply(exposures, is.null))) {
+    return(NULL)
   }
+  purrr::list_rbind(exposures)
 }
 
 .acled_categories <- c(

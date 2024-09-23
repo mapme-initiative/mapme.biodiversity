@@ -6,24 +6,26 @@
 \usage{
 calc_exposed_population_acled(
   distance = 5000,
-  filter_category = NULL,
+  filter_category = c("event_type", "sub_event_type", "disorder_type"),
   filter_types = NULL,
   years = c(1997:2024),
   precision_location = 1,
-  precision_time = 1,
-  engine = "extract"
+  precision_time = 1
 )
 }
 \arguments{
-\item{distance}{A numeric of length 1 indicating the buffer size around
-included conflict events to calculate the exposed population.}
+\item{distance}{A numeric vector indicating the buffer radius in meters.
+If length is 1, the same buffer size around included conflict events is
+drawn. Otherwise, it must be equal to the length of included categories
+selected with \code{filter_types}.}
 
-\item{filter_category}{A character indicating the category of events
-to which apply a filter. Defaults to NULL, meaning that no filter
-is applied.}
+\item{filter_category}{A character indicating the categories to be used
+to calculate the exposed population by. Defaults to \code{event_type} meaning
+one estimation per event type will be returned.}
 
 \item{filter_types}{A character vector of event types of the respective
-category to retain. Defaults to NULL, meaning that no filter is applied.}
+category specified in \code{filter_category} to retain. Defaults to NULL,
+meaning that no filter is applied and all types are retained.}
 
 \item{years}{A numeric vector indicating for which years to calculate
 the exposed population. Restricted to available years for ACLED.
@@ -35,9 +37,6 @@ geolocation up to which events are included. Defaults to 1.}
 
 \item{precision_time}{A numeric indicating the precision value of the
 temporal coding up to which events are included. Defaults to 1.}
-
-\item{engine}{The preferred processing functions from either one of "zonal",
-"extract" or "exactextract" as character.}
 }
 \value{
 A function that returns an indicator tibble with conflict exposure
@@ -113,6 +112,11 @@ filter can be applied are either "event_type", "event_sub_type", or
 \item strategic_developments
 }
 }
+
+You may supply buffer distances for each of the event categories. Custom
+buffers will then be drawn per category. Supply a single value if you
+do not wish do differentiate between categories. Otherwise, supply a
+vector of distances equal to the length of included categories.
 
 You may apply quality filters based on the precision of the geolocation
 of events and the temporal precision. By default, these are set to only

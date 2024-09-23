@@ -10,13 +10,14 @@ calc_exposed_population_ucdp(
   violence_types = 1:3,
   years = c(1989:2023),
   precision_location = 1,
-  precision_time = 1,
-  engine = "extract"
+  precision_time = 1
 )
 }
 \arguments{
-\item{distance}{A numeric of length 1 indicating the buffer size around
-included conflict events to calculate the exposed population.}
+\item{distance}{A numeric vector indicating the buffer size around
+included conflict events to calculate the exposed population. Either of
+length 1 to apply for all types of events, or discrete values for
+each category included in \code{violence_types}.}
 
 \item{violence_types}{A numeric vector indicating the types of violence
 to be included (see Details).}
@@ -31,9 +32,6 @@ geolocation up to which events are included. Defaults to 1.}
 
 \item{precision_time}{A numeric indicating the precision value of the
 temporal coding up to which events are included. Defaults to 1.}
-
-\item{engine}{The preferred processing functions from either one of "zonal",
-"extract" or "exactextract" as character.}
 }
 \value{
 A function that returns an indicator tibble with conflict exposure

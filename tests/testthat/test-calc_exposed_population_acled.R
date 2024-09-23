@@ -12,10 +12,24 @@ test_that("calc_conflict_exposure_acled works", {
     package = "mapme.biodiversity"
   )))
 
-  expect_error(calc_exposed_population_acled(distance = -1), "distance")
-  expect_error(calc_exposed_population_acled(distance = c(1, 2)), "distance")
-  expect_error(calc_exposed_population_acled(filter_category = "other"), "filter_category")
-  expect_error(calc_exposed_population_acled(filter_category = "event_type", filter_types = "other"), "filter_types")
+  expect_silent(calc_exposed_population_acled(distance = 1))
+  expect_error(calc_exposed_population_acled(distance = c(1, 2)), "Wrong number")
+  expect_silent(calc_exposed_population_acled(distance = 1:6))
+  expect_error(calc_exposed_population_acled(filter_category = "other"), "arg")
+  expect_error(
+    calc_exposed_population_acled(
+      filter_category = "event_type", filter_types = "other"
+    ),
+    "filter_types"
+  )
+  expect_silent(calc_exposed_population_acled(filter_types = c("battles", "riots")))
+  expect_silent(calc_exposed_population_acled(distance = 1:2, filter_types = c("battles", "riots")))
+  expect_error(
+    calc_exposed_population_acled(
+      distance = 1:3, filter_types = c("battles", "riots")
+    ),
+    "Total number"
+  )
   expect_error(calc_exposed_population_acled(precision_location = 4), "precision_location")
   expect_error(calc_exposed_population_acled(precision_time = 4), "precision_time")
   expect_error(calc_exposed_population_acled(years = 1996), "years")
@@ -40,8 +54,8 @@ test_that("calc_conflict_exposure_acled works", {
   )
   result_default <- cce(x = x, acled, worldpop)
   expect_silent(.check_single_asset(result_default))
-  expect_equal(nrow(result_default), 1)
-  expect_equal(result_default$value, 1790830)
+  expect_equal(nrow(result_default), 7)
+  expect_equal(result_default$value[7], 1788220, tolerance = 1e-4)
 
   acled2 <- list(dplyr::filter(acled[[1]], event_type == "Battles"))
   cce <- calc_exposed_population_acled(
@@ -64,12 +78,11 @@ test_that("calc_conflict_exposure_acled works", {
   )
   result_battles <- cce(x, acled2, worldpop)
   expect_silent(.check_single_asset(result_battles))
-  expect_equal(nrow(result_battles), 1)
-  expect_equal(result_battles$value, 227249)
-
+  expect_equal(nrow(result_battles), 2)
+  expect_equal(unique(result_battles$value), 227035, tolerance = 1e-4)
 
   acled2 <- acled[[1]]
-  acled2$event_date <- as.POSIXct(acled2$event_date) + 1 * 365 * 24 * 60 * 60
+  acled2$year <- 2001
   acled <- list(acled[[1]], acled2)
 
   cce <- calc_exposed_population_acled(
@@ -78,16 +91,25 @@ test_that("calc_conflict_exposure_acled works", {
     precision_location = 3,
     precision_time = 3
   )
+
   result <- cce(x, acled, worldpop)
   expect_silent(.check_single_asset(result))
-  expect_equal(nrow(result), 2)
-  expect_identical(result$value[1], result$value[2])
+  expect_equal(nrow(result), 14)
+  expect_identical(result$value[1], result$value[8])
 
   cce <- calc_exposed_population_acled(filter_category = "sub_event_type")
   expect_silent(result <- cce(x, acled[1], worldpop))
-  expect_equal(nrow(result), 1)
+  expect_equal(nrow(result), 6)
 
   cce <- calc_exposed_population_acled(filter_category = "disorder_type")
   expect_silent(result <- cce(x, acled[1], worldpop))
-  expect_equal(nrow(result), 1)
+  expect_equal(nrow(result), 4)
+
+  cce <- calc_exposed_population_acled(
+    distance = c(5000, 10000),
+    filter_category = "event_type",
+    filter_types = c("riots", "explosions/remote_violence")
+  )
+  expect_silent(result <- cce(x, acled[1], worldpop))
+  expect_equal(nrow(result), 3)
 })

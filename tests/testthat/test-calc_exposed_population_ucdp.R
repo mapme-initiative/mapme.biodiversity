@@ -12,14 +12,14 @@ test_that("conflict_exposure_ucdp works", {
     package = "mapme.biodiversity"
   )))
 
-  expect_error(calc_exposed_population_ucdp(distance = -1), "distance")
+  expect_silent(calc_exposed_population_ucdp(distance = 1))
   expect_error(calc_exposed_population_ucdp(distance = c(1, 2)), "distance")
+  expect_silent(calc_exposed_population_ucdp(violence_types = 1:2, distance = c(1, 2)))
   expect_error(calc_exposed_population_ucdp(violence_types = 4, "violence_type"))
   expect_error(calc_exposed_population_ucdp(years = 1988), "years")
   expect_error(calc_exposed_population_ucdp(precision_location = 8), "precision_location")
   expect_error(calc_exposed_population_ucdp(precision_time = 8), "precision_time")
   expect_error(calc_exposed_population_ucdp(engine = "NA"), "engine")
-
 
   cce <- calc_exposed_population_ucdp(
     distance = 10000,
@@ -46,9 +46,8 @@ test_that("conflict_exposure_ucdp works", {
   expect_equal(cce(x, ucdp2, worldpop), NULL)
   result <- cce(x, ucdp_ged, worldpop)
   expect_silent(.check_single_asset(result))
-  expect_equal(nrow(result), 2)
-  expect_equal(result$value, c(875551, 124199))
-
+  expect_equal(nrow(result), 5)
+  expect_equal(result$value[c(3, 5)], c(873211, 123397), tolerance = 1e-4)
 
   ucdp_ged[[1]]$date_start <- as.POSIXct(ucdp_ged[[1]]$date_start) + 14 * 365 * 24 * 60 * 60
 
@@ -66,6 +65,19 @@ test_that("conflict_exposure_ucdp works", {
   )
   result <- cce(x, ucdp_ged, worldpop)
   expect_silent(.check_single_asset(result))
-  expect_equal(nrow(result), 2)
-  expect_equal(result$value, c(1006881, 142832))
+  expect_equal(nrow(result), 5)
+  expect_equal(result$value[c(3, 5)], c(1004191, 141910), tolerance = 1e-4)
+
+  cce <- calc_exposed_population_ucdp(
+    distance = c(10000, 10000),
+    violence_types = c(1, 3),
+    years = 2005:2006,
+    precision_location = 4,
+    precision_time = 4
+  )
+
+  result <- cce(x, ucdp_ged, worldpop)
+  expect_silent(.check_single_asset(result))
+  expect_equal(nrow(result), 5)
+  expect_equal(result$value[c(3, 5)], c(1004191, 141910), tolerance = 1e-4)
 })
