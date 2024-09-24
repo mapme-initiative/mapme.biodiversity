@@ -177,22 +177,27 @@ portfolio_wide <- function(x, indicators = NULL, drop_geoms = FALSE) {
 
   indicators_wide <- purrr::map(indicators, function(indicator) {
     indicator_assets <- x[[indicator]]
-    purrr::map(indicator_assets, function(asset) {
+    indicator_assets <- purrr::map(indicator_assets, function(asset) {
+      if (is.null(asset)) {
+        return(NULL)
+      }
       asset[["indicator"]] <- indicator
       tidyr::pivot_wider(
         asset,
         names_from = c(indicator, datetime, variable, unit),
         names_sep = "_", values_from = value
       )
-    }) %>%
-      purrr::list_rbind()
-  }) %>%
-    purrr::list_cbind() %>%
-    dplyr::mutate(assetid = x[["assetid"]])
+    })
+    names(indicator_assets) <- x[["assetid"]]
+    purrr::list_rbind(indicator_assets, names_to = "assetid")
+  })
+
+  indicators_wide <- purrr::reduce(indicators_wide, dplyr::left_join, by = "assetid")
+  indicators_wide[["assetid"]] <- as.numeric(indicators_wide[["assetid"]])
 
   x_wide <- x %>%
     dplyr::select(-{{ indicators }}) %>%
-    dplyr::left_join(indicators_wide, by = dplyr::join_by(assetid))
+    dplyr::left_join(indicators_wide, by = "assetid")
 
   if (!drop_geoms) {
     x_wide <- .geom_last(st_as_sf(x_wide))
