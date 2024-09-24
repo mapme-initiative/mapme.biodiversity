@@ -31,7 +31,7 @@ test_that(".calc_fatalities_ucpd works", {
 
   conf_types <- c("state_based_conflict", "non_state_conflict", "one_sided_violence")
   death_types <- c("deaths_civilians", "deaths_unknown", "deaths_total")
-  vars <- paste(rep(conf_types, each = length(death_types)), death_types, sep = "_")
+  vars <- paste("fatalities", rep(conf_types, each = length(death_types)), death_types, sep = "_")
 
   expect_silent(.check_single_asset(result_default))
   expect_equal(unique(result_default$variable), vars[7:9])

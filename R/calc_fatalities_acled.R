@@ -152,11 +152,18 @@ calc_fatalities_acled <- function(
       )
     )
 
+    fatalities_total <- fatalities %>%
+      dplyr::group_by(year, month) %>%
+      dplyr::summarise(fatalities = sum(as.numeric(fatalities), na.rm = TRUE)) %>%
+      dplyr::ungroup() %>%
+      dplyr::mutate(stratum = "total")
+
+    fatalities <- rbind(fatalities, fatalities_total)
 
     fatalities <- dplyr::mutate(
       fatalities,
       datetime = as.Date(paste0(year, "-", month, "-01"), format = "%Y-%m-%d"),
-      variable = gsub(" ", "_", tolower(stratum)),
+      variable = paste0("fatalities_", gsub(" ", "_", tolower(stratum))),
       unit = "count",
       value = fatalities
     )
