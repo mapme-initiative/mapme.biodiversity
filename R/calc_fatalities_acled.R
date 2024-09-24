@@ -138,22 +138,21 @@ calc_fatalities_acled <- function(
     acled <- dplyr::mutate(
       acled,
       event_date = as.Date(event_date),
-      year = format(event_date, "%Y"),
-      month = format(event_date, "%m")
+      year = format(event_date, "%Y")
     )
 
     fatalities <- dplyr::ungroup(
       dplyr::summarise(
         dplyr::group_by(
           acled,
-          year, month, stratum,
+          year, stratum,
         ),
         fatalities = sum(as.numeric(fatalities), na.rm = TRUE)
       )
     )
 
     fatalities_total <- fatalities %>%
-      dplyr::group_by(year, month) %>%
+      dplyr::group_by(year) %>%
       dplyr::summarise(fatalities = sum(as.numeric(fatalities), na.rm = TRUE)) %>%
       dplyr::ungroup() %>%
       dplyr::mutate(stratum = "total")
@@ -162,7 +161,7 @@ calc_fatalities_acled <- function(
 
     fatalities <- dplyr::mutate(
       fatalities,
-      datetime = as.Date(paste0(year, "-", month, "-01"), format = "%Y-%m-%d"),
+      datetime = as.Date(paste0(year, "-01-01"), format = "%Y-%m-%d"),
       variable = paste0("fatalities_", gsub(" ", "_", tolower(stratum))),
       unit = "count",
       value = fatalities

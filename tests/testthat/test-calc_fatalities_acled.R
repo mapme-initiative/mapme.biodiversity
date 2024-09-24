@@ -55,42 +55,42 @@ test_that("calc_fatalitites_acled works", {
   expect_equal(sum(result_event$value), sum(result_disorder$value))
 
   events <- c(
-    "fatalities_violence_against_civilians",
-    "fatalities_riots",
     "fatalities_explosions/remote_violence",
+    "fatalities_riots",
+    "fatalities_violence_against_civilians",
     "fatalities_total"
   )
   expect_equal(unique(result_event$variable), events)
 
   events <- c(
-    "fatalities_government_regains_territory",
-    "fatalities_attack",
     "fatalities_abduction/forced_disappearance",
-    "fatalities_peaceful_protest",
     "fatalities_air/drone_strike",
+    "fatalities_attack",
+    "fatalities_government_regains_territory",
+    "fatalities_peaceful_protest",
     "fatalities_total"
   )
   expect_equal(unique(result_sub$variable), events)
 
   events <- c(
-    "fatalities_strategic_developments",
-    "fatalities_political_violence",
     "fatalities_demonstrations",
+    "fatalities_political_violence",
+    "fatalities_strategic_developments",
     "fatalities_total"
   )
   expect_equal(unique(result_disorder$variable), events)
 
   cf <- calc_fatalities_acled(years = 2000, precision_location = 3, precision_time = 3)
   result_all <- cf(x, list(acled))
-  expect_equal(nrow(result_all), 33)
+  expect_equal(nrow(result_all), 7)
   expect_equal(sum(result_all$value), 791 * 2)
   events <- c(
+    "fatalities_battles",
+    "fatalities_explosions/remote_violence",
+    "fatalities_protests",
     "fatalities_riots",
     "fatalities_strategic_developments",
     "fatalities_violence_against_civilians",
-    "fatalities_explosions/remote_violence",
-    "fatalities_protests",
-    "fatalities_battles",
     "fatalities_total"
   )
   expect_equal(unique(result_all$variable), events)

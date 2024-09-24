@@ -141,8 +141,7 @@ calc_fatalities_ucdp <- function(years = 1989:2023,
     ucdp_ged <- dplyr::mutate(
       ucdp_ged,
       date_start = as.Date(date_start),
-      year = format(date_start, "%Y"),
-      month = format(date_start, "%m")
+      year = format(date_start, "%Y")
     )
     ucdp_ged <- dplyr::filter(ucdp_ged, year %in% years)
 
@@ -153,17 +152,17 @@ calc_fatalities_ucdp <- function(years = 1989:2023,
         ~ sum(as.numeric(.x))
       ),
       event_count = dplyr::n(),
-      .by = c(year, month, type_of_violence)
+      .by = c(year, type_of_violence)
     )
 
     fatalities <- dplyr::mutate(
       fatalities,
       deaths_total = rowSums(dplyr::across(dplyr::starts_with("deaths_"))),
-      month = as.Date(paste0(year, "-", month, "-01"))
+      year = as.Date(paste0(year, "-01-01"))
     ) %>%
-      dplyr::select(-year, -deaths_a, -deaths_b) %>%
+      dplyr::select(-deaths_a, -deaths_b) %>%
       dplyr::relocate(event_count, .after = dplyr::last_col()) %>%
-      dplyr::arrange(month, type_of_violence) %>%
+      dplyr::arrange(year, type_of_violence) %>%
       dplyr::mutate(type_of_violence = dplyr::case_when(
         type_of_violence == 1 ~ "state_based_conflict",
         type_of_violence == 2 ~ "non_state_conflict",
@@ -172,7 +171,7 @@ calc_fatalities_ucdp <- function(years = 1989:2023,
       tibble::as_tibble() %>%
       tidyr::pivot_longer(cols = tidyr::starts_with("death"), names_to = "type_of_death") %>%
       dplyr::mutate(
-        datetime = as.POSIXct(paste0(month, "T00:00:00Z")),
+        datetime = as.POSIXct(paste0(year, "T00:00:00Z")),
         variable = paste0("fatalities_", type_of_violence, "_", type_of_death),
         unit = "count",
         value = value
