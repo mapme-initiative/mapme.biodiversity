@@ -1,5 +1,10 @@
 # mapme.biodiversity (development version)
 
+## Bug fixes
+
+- fixes `portfolio_wide()` throwing an error when single assets with `NULL` 
+  values are present 
+
 # mapme.biodiversity 0.9.1
 
 ## General
