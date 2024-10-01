@@ -47,6 +47,8 @@
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
 <ul><li>fixes <code><a href="../reference/portfolio.html">portfolio_wide()</a></code> throwing an error when single assets with <code>NULL</code> values are present</li>
+<li>
+<code><a href="../reference/mangroves_area.html">calc_mangroves_area()</a></code> returned NULL if invalid geometries were encountered Now it tries to repair geometries and return the area of valid geometries (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/375" class="external-link">#375</a>)</li>
 </ul></div>
 </div>
     <div class="section level2">
