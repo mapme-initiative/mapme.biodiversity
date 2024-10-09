@@ -423,10 +423,6 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL, mode = c
 }
 
 .get_intersection <- function(x, tindex) {
-  org <- sf::sf_use_s2()
-  suppressMessages(sf::sf_use_s2(FALSE))
-  on.exit(suppressMessages(sf::sf_use_s2(org)))
-
   suppressMessages(targets <- st_intersects(x, tindex, sparse = FALSE))
   tindex[which(colSums(targets) > 0), ]
 }
