@@ -10,8 +10,6 @@ test_that("calc_indicator works", {
   .copy_resource_dir(outdir)
   mapme_options(outdir = outdir, verbose = FALSE)
 
-  mapme_options(outdir = outdir, verbose = FALSE)
-
   x <- get_resources(
     x,
     get_gfw_treecover(version = "GFC-2023-v1.11"),
@@ -232,29 +230,27 @@ test_that(".read_raster works correctly", {
   files <- list.files(temp_loc, full.names = TRUE)
   footprints <- make_footprints(files, what = "raster")
   footprints[["location"]] <- files
-  x <- st_bbox(dummy) %>%
-    st_as_sfc() %>%
-    st_as_sf()
-  extent <- c(-180, 180, -90, 90)
-  names(extent) <- c("xmin", "xmax", "ymin", "ymax")
+  extent1 <- c(xmin=-179.9, xmax=179.9, ymin=-89.9, ymax=89.9)
+  extent2 <- c(xmin=-180, xmax=180, ymin=-90, ymax=90)
+  x <- st_as_sfc(st_bbox(extent1, crs = "EPSG:4326"))
 
   tiled_temporal <- .read_raster(x, footprints)
   expect_equal(names(tiled_temporal), c("2000_tile_1", "2001_tile_1"))
-  expect_equal(as.vector(ext(tiled_temporal)), extent)
+  expect_equal(as.vector(ext(tiled_temporal)), extent2)
 
   tiled <- .read_raster(x, footprints[grep("2001", footprints$location), ])
   expect_equal(names(tiled), "2001_tile_1")
-  expect_equal(as.vector(ext(tiled)), extent)
+  expect_equal(as.vector(ext(tiled)), extent2)
 
   temporal <- .read_raster(x, footprints[grep("tile_12.tif", footprints$location), ])
-  extent[c(1:4)] <- c(90, 180, -45, 0)
+  extent1[c(1:4)] <- c(90, 180, -45, 0)
   expect_equal(names(temporal), c("2000_tile_12", "2001_tile_12"))
-  expect_equal(as.vector(ext(temporal)), extent)
+  expect_equal(as.vector(ext(temporal)), extent1)
 
   single <- .read_raster(x, footprints[grep("2000_tile_10.tif", footprints$location), ])
-  extent[c(1:4)] <- c(-90, 0, -45, 0)
+  extent1[c(1:4)] <- c(-90, 0, -45, 0)
   expect_equal(names(single), "2000_tile_10")
-  expect_equal(as.vector(ext(single)), extent)
+  expect_equal(as.vector(ext(single)), extent1)
 
   expect_error(.read_raster(x, footprints[1:24, ]))
 })
@@ -289,4 +285,3 @@ test_that(".check_single_asset works correctly", {
   obj <- tibble(datetime = 1, variable = 1, unit = 1, value = 1)
   expect_identical(.check_single_asset(obj, asset), obj)
 })
-de
