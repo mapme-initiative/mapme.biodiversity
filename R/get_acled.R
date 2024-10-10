@@ -9,13 +9,8 @@
 #' by the public.*
 #'
 #' In order to access data from the ACLED API, you first must register an
-#' an account. Detailed instructions are found here
-#' \url{www.acleddata.com/knowledge-base/acled-access-guide/}.
-#'
-#' Note, that the ACLED API used here provides a *living database* with
-#' single events being altered or removed altogether over time. Learn more
-#' at \url{www.acleddata.com/knowledge-base/keeping-acled-data-updated/}.
-#'
+#' an account. Note, that the ACLED API used here provides a *living database*
+#' with single events being altered or removed altogether over time.
 #'
 #' @name acled
 #' @param years A numeric vector specifying the years for which to make
@@ -30,7 +25,7 @@
 #'   are obscured by conflict dataset scope conditions, sources, and coding
 #'   choices. Humanit Soc Sci Commun 10, 74 (2023).
 #'   \doi{https://doi.org/10.1057/s41599-023-01559-4}
-#' @source Armed Conflict Location & Event Data Project (ACLED); \url{www.acleddata.com.}
+#' @source Armed Conflict Location & Event Data Project (ACLED).
 #' @include register.R
 #' @importFrom httr2 request req_perform resp_check_status resp_body_json
 #' @export
@@ -144,7 +139,7 @@ get_acled <- function(
 register_resource(
   name = "acled",
   description = "Armed Conflict Location & Event Data (ACLED)",
-  licence = "www.acleddata.com/terms-of-use/",
-  source = "www.acleddata.com/data/",
+  licence = "Visit acleddata.com",
+  source = "Visit acleddata.com",
   type = "vector"
 )

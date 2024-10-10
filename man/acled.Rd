@@ -5,7 +5,7 @@
 \alias{get_acled}
 \title{Armed Conflict Location & Event Data (ACLED)}
 \source{
-Armed Conflict Location & Event Data Project (ACLED); \url{www.acleddata.com.}
+Armed Conflict Location & Event Data Project (ACLED).
 }
 \usage{
 get_acled(
@@ -40,12 +40,8 @@ by the public.}
 }
 \details{
 In order to access data from the ACLED API, you first must register an
-an account. Detailed instructions are found here
-\url{www.acleddata.com/knowledge-base/acled-access-guide/}.
-
-Note, that the ACLED API used here provides a \emph{living database} with
-single events being altered or removed altogether over time. Learn more
-at \url{www.acleddata.com/knowledge-base/keeping-acled-data-updated/}.
+an account. Note, that the ACLED API used here provides a \emph{living database}
+with single events being altered or removed altogether over time.
 }
 \references{
 Raleigh, C., Kishi, R. & Linke, A. Political instability patterns

@@ -59,7 +59,7 @@ Below is a list of the resources currently supported by
 | name | description | licence |
 |:---|:---|:---|
 | accessibility_2000 | Accessibility data for the year 2000 from the Global Accessibility Map project | See JRC data policy: <https://joint-research-centre.ec.europa.eu/jrc-mission-statement-work-programme/data-policy_en> |
-| acled | Armed Conflict Location & Event Data (ACLED) | www.acleddata.com/terms-of-use/ |
+| acled | Armed Conflict Location & Event Data (ACLED) | Visit acleddata.com |
 | biodiversity_intactness_index | Biodiversity Intactness Index | CC-BY-4.0 |
 | chelsa | Climatologies at High resolution for the Earth Land Surface Areas (CHELSA) | Unknown - Must cite! |
 | chirps | Climate Hazards Group InfraRed Precipitation with Station data (CHIRPS) | CC - unknown |
