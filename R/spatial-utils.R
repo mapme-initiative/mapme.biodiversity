@@ -421,3 +421,21 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL, mode = c
   suppressMessages(targets <- st_intersects(x, tindex, sparse = FALSE))
   tindex[which(colSums(targets) > 0), ]
 }
+
+.try_make_valid <- function(x) {
+  s2_org <- sf_use_s2()
+  on.exit(sf_use_s2(s2_org))
+  sf_use_s2(TRUE)
+
+  x <- st_make_valid(x, split_crossing_edges = TRUE)
+  is_valid <- st_is_valid(x)
+  if (sum(!is_valid) > 0) {
+    x[!is_valid, ] <- st_make_valid(x[!is_valid, ], split_crossing_edges = TRUE)
+  }
+  is_valid2 <- st_is_valid(x[!is_valid, ])
+  is_valid[!is_valid] <- is_valid2
+  if (any(!is_valid)) {
+    x <- x[is_valid, ]
+  }
+  x
+}

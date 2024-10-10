@@ -76,6 +76,7 @@ Collate:
     'calc_precipitation_chelsa.R'
     'calc_precipitation_chirps.R'
     'calc_precipitation_wc.R'
+    'calc_proximity.R'
     'calc_slope.R'
     'calc_soilproperties.R'
     'calc_temperature_max_wc.R'
