@@ -158,6 +158,17 @@ test_that("portfolio helpers work as expected", {
   expect_true(inherits(out, "sf"))
   expect_true(all(c(vars[1:2], "biome2") %in% names(out)))
 
+  x <- rbind(x, x)
+  x$assetid <- 1:2
+  x$biome2 <- list(x$biome2[[1]], NULL)
+  expect_silent(out <- portfolio_wide(x))
+  expect_equal(nrow(out), 2)
+  expect_equal(out$`biome_2000-01-01_biome_ha`[2], 1)
+  expect_true(is.na(out$`biome2_2000-01-01_biome_ha`[2]))
+  expect_silent(out <- portfolio_long(x))
+  expect_equal(nrow(out), 3)
+  expect_equal(out$value, c(1, 1, 1))
+
   x$biome <- list(NULL)
   expect_silent(portfolio_long(x))
   expect_silent(portfolio_wide(x))

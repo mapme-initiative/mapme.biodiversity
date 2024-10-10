@@ -53,7 +53,10 @@ calc_mangroves_area <- function() {
     }
 
     results <- purrr::map(1:length(gmw), function(j) {
-      intersected <- suppressWarnings(st_intersection(gmw[[j]], x))
+      mangroves <- st_make_valid(gmw[[j]])
+      intersected <- suppressWarnings(st_intersection(mangroves, x))
+      intersected <- st_make_valid(intersected)
+      intersected <- intersected[st_is_valid(intersected), ]
       area <- sum(as.numeric(st_area(intersected)), na.rm = TRUE) / 10000
       year <- strsplit(names(gmw[j]), "_|.gpkg")[[1]][3]
 
