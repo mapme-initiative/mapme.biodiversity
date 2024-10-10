@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.1.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.2.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,8 +44,11 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="mapmebiodiversity-development-version">mapme.biodiversity (development version)<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.9.2" id="mapmebiodiversity-092">mapme.biodiversity 0.9.2<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-092"></a></h2>
 <div class="section level3">
-<h3 id="general-development-version">General<a class="anchor" aria-label="anchor" href="#general-development-version"></a></h3>
+<h3 id="general-0-9-2">General<a class="anchor" aria-label="anchor" href="#general-0-9-2"></a></h3>
 <ul><li>new resources:
 <ul><li><code><a href="../reference/acled.html">get_acled()</a></code></li>
 </ul></li>
@@ -61,13 +64,13 @@
 <code><a href="../reference/fatalities_ucpd.html">calc_fatalities_ucdp()</a></code> now returns a sparse timeseries, e.g. asset-months with now fatalities are omitted.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<h3 id="bug-fixes-0-9-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9-2"></a></h3>
 <ul><li>fixes <code><a href="../reference/portfolio.html">portfolio_wide()</a></code> throwing an error when single assets with <code>NULL</code> values are present</li>
 <li>
 <code><a href="../reference/mangroves_area.html">calc_mangroves_area()</a></code> returned NULL if invalid geometries were encountered Now it tries to repair geometries and return the area of valid geometries (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/375" class="external-link">#375</a>)</li>
 </ul></div>
 <div class="section level3">
-<h3 id="internal-development-version">Internal<a class="anchor" aria-label="anchor" href="#internal-development-version"></a></h3>
+<h3 id="internal-0-9-2">Internal<a class="anchor" aria-label="anchor" href="#internal-0-9-2"></a></h3>
 <ul><li>
 <code>.get_intersection()</code> now assumes both <code>x</code> and <code>tindex</code> to be represented by oriented rings on the sphere (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/378" class="external-link">#378</a>)</li>
 </ul></div>
