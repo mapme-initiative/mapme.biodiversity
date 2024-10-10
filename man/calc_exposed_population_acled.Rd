@@ -61,7 +61,7 @@ The required resources for this indicator are:
 }
 
 Events in ACLED are classified according to the schema described extensively
-in their codebook (\url{https://acleddata.com/knowledge-base/codebook/}).
+in their codebook (\url{www.acleddata.com/knowledge-base/codebook/}).
 You may filter for certain types of events. The categories for which a
 filter can be applied are either "event_type", "event_sub_type", or
 "disorder_type". These are translated into the following categories:

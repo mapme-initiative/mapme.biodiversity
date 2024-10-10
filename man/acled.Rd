@@ -41,11 +41,11 @@ by the public.}
 \details{
 In order to access data from the ACLED API, you first must register an
 an account. Detailed instructions are found here
-\url{https://acleddata.com/knowledge-base/acled-access-guide/}.
+\url{www.acleddata.com/knowledge-base/acled-access-guide/}.
 
 Note, that the ACLED API used here provides a \emph{living database} with
 single events being altered or removed altogether over time. Learn more
-at \url{https://acleddata.com/knowledge-base/keeping-acled-data-updated/}.
+at \url{www.acleddata.com/knowledge-base/keeping-acled-data-updated/}.
 }
 \references{
 Raleigh, C., Kishi, R. & Linke, A. Political instability patterns

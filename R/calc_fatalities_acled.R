@@ -3,7 +3,7 @@
 #' The indicator aggregated the number of fatalities within a given asset
 #' on a monthly cadence stratified either by event type, sub-event type or disorder
 #' type. To learn about the different categorisation ACLED uses to encode events
-#' please consult ACLED's codebook (\url{https://acleddata.com/knowledge-base/codebook/#acled-events}).
+#' please consult ACLED's codebook (\url{www.acleddata.com/knowledge-base/codebook/#acled-events}).
 #'
 #' The required resources for this indicator are:
 #'  - [acled]

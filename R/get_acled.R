@@ -10,11 +10,11 @@
 #'
 #' In order to access data from the ACLED API, you first must register an
 #' an account. Detailed instructions are found here
-#' \url{https://acleddata.com/knowledge-base/acled-access-guide/}.
+#' \url{www.acleddata.com/knowledge-base/acled-access-guide/}.
 #'
 #' Note, that the ACLED API used here provides a *living database* with
 #' single events being altered or removed altogether over time. Learn more
-#' at \url{https://acleddata.com/knowledge-base/keeping-acled-data-updated/}.
+#' at \url{www.acleddata.com/knowledge-base/keeping-acled-data-updated/}.
 #'
 #'
 #' @name acled
@@ -144,7 +144,7 @@ get_acled <- function(
 register_resource(
   name = "acled",
   description = "Armed Conflict Location & Event Data (ACLED)",
-  licence = "https://acleddata.com/terms-of-use/",
-  source = "https://acleddata.com/data/",
+  licence = "www.acleddata.com/terms-of-use/",
+  source = "www.acleddata.com/data/",
   type = "vector"
 )
