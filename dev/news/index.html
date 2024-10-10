@@ -45,6 +45,22 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="mapmebiodiversity-development-version">mapme.biodiversity (development version)<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-development-version"></a></h2>
 <div class="section level3">
+<h3 id="general-development-version">General<a class="anchor" aria-label="anchor" href="#general-development-version"></a></h3>
+<ul><li>new resources:
+<ul><li><code><a href="../reference/acled.html">get_acled()</a></code></li>
+</ul></li>
+<li>new indicators:
+<ul><li><code><a href="../reference/fatalities_acled.html">calc_fatalities_acled()</a></code></li>
+<li>
+<code><a href="../reference/fatalities_ucpd.html">calc_fatalities_ucdp()</a></code> (renamed)</li>
+<li><code><a href="../reference/calc_exposed_population_acled.html">calc_exposed_population_acled()</a></code></li>
+<li>
+<code><a href="../reference/exposed_population_ucdp.html">calc_exposed_population_ucdp()</a></code> (renamed)</li>
+</ul></li>
+<li>
+<code><a href="../reference/fatalities_ucpd.html">calc_fatalities_ucdp()</a></code> now returns a sparse timeseries, e.g. asset-months with now fatalities are omitted.</li>
+</ul></div>
+<div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
 <ul><li>fixes <code><a href="../reference/portfolio.html">portfolio_wide()</a></code> throwing an error when single assets with <code>NULL</code> values are present</li>
 <li>
@@ -118,7 +134,7 @@
 <li>
 <code><a href="../reference/species_richness.html">calc_species_richness()</a></code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/359" class="external-link">#359</a>)</li>
 <li>
-<code><a href="../reference/exposed_population.html">calc_exposed_population()</a></code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/321" class="external-link">#321</a>)</li>
+<code>calc_exposed_population()</code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/321" class="external-link">#321</a>)</li>
 <li>
 <code><a href="../reference/precipitation_chelsa.html">calc_precipitation_chelsa()</a></code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/318" class="external-link">#318</a>)</li>
 <li>
