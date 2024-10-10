@@ -13,10 +13,12 @@
 <url><loc>https://mapme-initiative.github.io/mapme.biodiversity/index.html</loc></url>
 <url><loc>https://mapme-initiative.github.io/mapme.biodiversity/news/index.html</loc></url>
 <url><loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/accessibility_2000.html</loc></url>
+<url><loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/acled.html</loc></url>
 <url><loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/biodiversity_intactness_index_indicator.html</loc></url>
 <url><loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/biodiversity_intactness_index_resource.html</loc></url>
 <url><loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/biome.html</loc></url>
 <url><loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/burned_area.html</loc></url>
+<url><loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/calc_exposed_population_acled.html</loc></url>
 <url><loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/carbon_indicators.html</loc></url>
 <url><loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/carbon_resources.html</loc></url>
 <url><loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/check_available_years.html</loc></url>
@@ -29,8 +31,9 @@
 <url><loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/elevation.html</loc></url>
 <url><loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/engine.html</loc></url>
 <url><loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/esalandcover.html</loc></url>
-<url><loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/exposed_population.html</loc></url>
-<url><loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/fatalities.html</loc></url>
+<url><loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/exposed_population_ucdp.html</loc></url>
+<url><loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/fatalities_acled.html</loc></url>
+<url><loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/fatalities_ucpd.html</loc></url>
 <url><loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/fritz_et_al.html</loc></url>
 <url><loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/gfw_emissions.html</loc></url>
 <url><loc>https://mapme-initiative.github.io/mapme.biodiversity/reference/gfw_lossyear.html</loc></url>

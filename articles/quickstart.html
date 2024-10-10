@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,7 +72,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Quickstart</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/mapme-initiative/mapme.biodiversity/blob/v0.9.1/vignettes/quickstart.Rmd" class="external-link"><code>vignettes/quickstart.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mapme-initiative/mapme.biodiversity/blob/main/vignettes/quickstart.Rmd" class="external-link"><code>vignettes/quickstart.Rmd</code></a></small>
       <div class="d-none name"><code>quickstart.Rmd</code></div>
     </div>
 
@@ -171,7 +171,7 @@ potential errors or warnings.</p>
 <code><a href="../reference/indicators.html">available_indicators()</a></code> function:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/indicators.html">available_indicators</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 38 × 3</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 40 × 3</span></span></span>
 <span><span class="co">#&gt;    name                          description                           resources</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                 <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>   </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> biodiversity_intactness_index Averaged biodiversity intactness ind… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
@@ -181,10 +181,10 @@ potential errors or warnings.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> drought_indicator             Relative wetness statistics based on… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> ecoregion                     Areal statstics of ecoregions based … <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> elevation                     Statistics of elevation based on NAS… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> exposed_population            Number of people exposed to conflict… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> fatalities                    Number of fatalities by group of con… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> gsw_change                    Statistics of the surface water chan… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 28 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> exposed_population_acled      Number of people exposed to conflict… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> exposed_population_ucdp       Number of people exposed to conflict… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> fatalities_acled              Number of fatalities by event type b… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 30 more rows</span></span></span>
 <span><span class="fu"><a href="../reference/indicators.html">available_indicators</a></span><span class="op">(</span><span class="st">"treecover_area"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 3</span></span></span>
 <span><span class="co">#&gt;   name           description                  resources       </span></span>
@@ -209,20 +209,20 @@ resource. We can learn about all available resources using the
 <code><a href="../reference/resources.html">available_resources()</a></code> function:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/resources.html">available_resources</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 34 × 5</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 35 × 5</span></span></span>
 <span><span class="co">#&gt;    name                          description                licence source type </span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> accessibility_2000            Accessibility data for th… See JR… https… rast…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> biodiversity_intactness_index Biodiversity Intactness I… CC-BY-… https… rast…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> chelsa                        Climatologies at High res… Unknow… https… rast…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> chirps                        Climate Hazards Group Inf… CC - u… https… rast…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> esalandcover                  Copernicus Land Monitorin… CC-BY … https… rast…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> fritz_et_al                   Drivers of deforestation … CC-BY … https… rast…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> gfw_emissions                 Global Forest Watch - CO2… CC-BY … https… rast…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> gfw_lossyear                  Global Forest Watch - Yea… CC-BY … https… rast…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> gfw_treecover                 Global Forest Watch - Per… CC-BY … https… rast…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> global_surface_water_change   Global Surface Water - Ch… https:… https… rast…</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 24 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> acled                         Armed Conflict Location &amp;… Visit … Visit… vect…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> biodiversity_intactness_index Biodiversity Intactness I… CC-BY-… https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> chelsa                        Climatologies at High res… Unknow… https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> chirps                        Climate Hazards Group Inf… CC - u… https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> esalandcover                  Copernicus Land Monitorin… CC-BY … https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> fritz_et_al                   Drivers of deforestation … CC-BY … https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> gfw_emissions                 Global Forest Watch - CO2… CC-BY … https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> gfw_lossyear                  Global Forest Watch - Yea… CC-BY … https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> gfw_treecover                 Global Forest Watch - Per… CC-BY … https… rast…</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 25 more rows</span></span></span>
 <span><span class="fu"><a href="../reference/resources.html">available_resources</a></span><span class="op">(</span><span class="st">"gfw_treecover"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 5</span></span></span>
 <span><span class="co">#&gt;   name          description                                 licence source type </span></span>
@@ -413,7 +413,7 @@ a way into R:</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer>
