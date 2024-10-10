@@ -33,7 +33,7 @@ get_gfw_emissions <- function() {
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]]) {
     index_file <- system.file("extdata", "greenhouse_index.geosjon", package = "mapme.biodiversity")
-    spatialindex <- st_read(index_file, quiet = TRUE)
+    spatialindex <- st_read(index_file, quiet = TRUE, check_ring_dir = TRUE)
 
     row_ids <- unique(unlist(st_intersects(x, spatialindex)))
     tile_str <- spatialindex$tile_id[row_ids]

@@ -6,6 +6,10 @@
   values are present 
 - `calc_mangroves_area()` returned NULL if invalid geometries were encountered
   Now it tries to repair geometries and return the area of valid geometries (#375)
+  
+## Internal 
+- `.get_intersection()` now assumes both `x` and `tindex` to be represented by 
+  oriented rings on the sphere (#378)
 
 # mapme.biodiversity 0.9.1
 

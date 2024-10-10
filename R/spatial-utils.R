@@ -244,6 +244,10 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL, mode = c
 }
 
 .read_vector <- function(x, tindex, mode = "portfolio") {
+  x <- st_as_sfc(st_bbox(x))
+  if (st_crs(x) != st_crs(tindex)) {
+    x <- st_transform(x, st_crs(tindex))
+  }
   matches <- .get_intersection(x, tindex)
 
   if (nrow(matches) == 0) {
@@ -254,7 +258,7 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL, mode = c
   paths <- matches[["location"]]
 
   vectors <- purrr::map(paths, function(path) {
-    tmp <- try(read_sf(path, wkt_filter = st_as_text(st_as_sfc(st_bbox(x)))), silent = TRUE)
+    tmp <- try(read_sf(path, wkt_filter = st_as_text(x)), silent = TRUE)
     if (inherits(tmp, "try-error")) {
       warning(tmp)
       return(NULL)
@@ -423,10 +427,10 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL, mode = c
 }
 
 .get_intersection <- function(x, tindex) {
-  org <- sf::sf_use_s2()
-  suppressMessages(sf::sf_use_s2(FALSE))
-  on.exit(suppressMessages(sf::sf_use_s2(org)))
-
+  # https://github.com/r-spatial/sf/issues/2441
+  org <- getOption("s2_oriented")
+  options(s2_oriented=TRUE)
+  on.exit(options(s2_oriented=org))
   suppressMessages(targets <- st_intersects(x, tindex, sparse = FALSE))
   tindex[which(colSums(targets) > 0), ]
 }
