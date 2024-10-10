@@ -58,9 +58,11 @@
 #'   but specific dates are not provided
 #'
 #'
-#' @name exposed_population
-#' @param distance A numeric of length 1 indicating the buffer size around
-#'   included conflict events to calculate the exposed population.
+#' @name exposed_population_ucdp
+#' @param distance A numeric vector indicating the buffer size around
+#'   included conflict events to calculate the exposed population. Either of
+#'   length 1 to apply for all types of events, or discrete values for
+#'   each category included in `violence_types`.
 #' @param violence_types A numeric vector indicating the types of violence
 #'  to be included (see Details).
 #' @param years A numeric vector indicating for which years to calculate
@@ -71,8 +73,6 @@
 #'   geolocation up to which events are included. Defaults to 1.
 #' @param precision_time A numeric indicating the precision value of the
 #'   temporal coding up to which events are included. Defaults to 1.
-#' @param engine The preferred processing functions from either one of "zonal",
-#'   "extract" or "exactextract" as character.
 #' @keywords indicator
 #' @returns A function that returns an indicator tibble with conflict exposure
 #'   as variable and precentage of the population as its value.
@@ -121,13 +121,12 @@
 #'   aoi
 #' }
 #' }
-calc_exposed_population <- function(distance = 5000,
-                                    violence_types = 1:3,
-                                    years = c(1989:2023),
-                                    precision_location = 1,
-                                    precision_time = 1,
-                                    engine = "extract") {
-  stopifnot(length(distance) == 1 && distance > 0)
+calc_exposed_population_ucdp <- function(distance = 5000,
+                                         violence_types = 1:3,
+                                         years = c(1989:2023),
+                                         precision_location = 1,
+                                         precision_time = 1) {
+  check_namespace("exactextractr")
   if (!all(violence_types %in% 1:3)) {
     stop("Argument violence_types must be an numeric vector with values between 1 and 3.")
   }
@@ -137,18 +136,23 @@ calc_exposed_population <- function(distance = 5000,
   if (!precision_time %in% 1:5) {
     stop("Argument precision_time must be a single numeric between 1 and 5.")
   }
-  years <- check_available_years(years, c(1989:2023), "exposed_population")
-  engine <- check_engine(engine)
 
+  if (length(distance) > 1) {
+    if (length(distance) != length(violence_types)) {
+      stop("distance must be of equal length to `violence_types`.")
+    }
+  }
+  years <- check_available_years(years, c(1989:2023), "exposed_population")
 
   function(x,
            ucdp_ged = NULL,
            worldpop = NULL,
-           name = "exposed_population",
+           name = "exposed_population_ucdp",
            mode = "asset",
            aggregation = "sum",
            verbose = mapme_options()[["verbose"]]) {
-    date_prec <- where_prec <- date_start <- year <- type_of_violence <- NULL
+    date_prec <- where_prec <- date_start <- NULL
+    year <- type_of_violence <- stratum <- NULL
 
     if (is.null(ucdp_ged) | is.null(worldpop)) {
       return(NULL)
@@ -157,6 +161,7 @@ calc_exposed_population <- function(distance = 5000,
     # filter ucdp
     ucdp_ged <- ucdp_ged[[1]]
     ucdp_ged <- ucdp_ged[unlist(st_contains(x, ucdp_ged)), ]
+
     if (nrow(ucdp_ged) == 0) {
       return(NULL)
     }
@@ -173,43 +178,51 @@ calc_exposed_population <- function(distance = 5000,
         date_prec <= precision_time,
         type_of_violence %in% violence_types
       ) %>%
-      dplyr::select(date_start) %>%
-      dplyr::mutate(year = format(as.Date(date_start), "%Y")) %>%
-      dplyr::group_by(year) %>%
-      dplyr::summarise(geom = st_intersection(st_union(st_buffer(geom, dist = distance)), x))
-
-    wpop_years <- as.numeric(substr(names(worldpop), 5, 8))
-
-    exposures <- purrr::map(years, function(y) {
-      ucdp <- dplyr::filter(ucdp_yearly, year == y)
-      if (nrow(ucdp) == 0) {
-        return(NULL)
-      }
-      if (y %in% wpop_years) {
-        index <- which(wpop_years == y)
-      } else {
-        index <- ifelse(y < wpop_years[1], 1, length(wpop_years))
-      }
-
-      pop <- worldpop[[index]]
-      exposed_pop <- select_engine(ucdp, pop, stats = "sum", engine = engine)[["sum"]]
-      tibble::tibble(
-        datetime = as.POSIXct(as.Date(paste0(y, "-01-01"), "%Y-%m-%d")),
-        variable = "exposed_population",
-        unit = "count",
-        value = exposed_pop
+      dplyr::select(date_start, type_of_violence) %>%
+      dplyr::mutate(
+        year = format(as.Date(date_start), "%Y"),
+        type_of_violence = as.integer(type_of_violence)
       )
-    })
-    if (all(sapply(exposures, is.null))) {
-      return(NULL)
-    }
-    purrr::list_rbind(exposures)
+
+    distance_df <- data.frame(
+      type_of_violence = violence_types,
+      distance = distance
+    )
+    ucdp_yearly <- dplyr::left_join(ucdp_yearly, distance_df, by = "type_of_violence")
+
+    ucdp_yearly <- dplyr::mutate(
+      ucdp_yearly,
+      stratum = dplyr::case_when(
+        type_of_violence == 1 ~ "state-based",
+        type_of_violence == 2 ~ "non-state",
+        type_of_violence == 3 ~ "one-sided"
+      )
+    ) %>%
+      dplyr::select(year, distance, stratum)
+
+    ucdp_yearly <- st_buffer(ucdp_yearly, ucdp_yearly$distance)
+
+    # one multi-polygon per year and stratum
+    ucdp_yearly <- dplyr::select(ucdp_yearly, year, stratum) %>%
+      dplyr::group_by(year, stratum) %>%
+      dplyr::summarise(geom = st_intersection(st_make_valid(st_union(geom)), x))
+
+    # one multi-polygon per year, irrespective of stratum (total exposed pop)
+    ucdp_yearly_total <- dplyr::summarise(ucdp_yearly, geom = st_intersection(st_make_valid(st_union(geom)), x))
+    ucdp_yearly_total$stratum <- "total"
+    ucdp_yearly <- rbind(ucdp_yearly, ucdp_yearly_total)
+
+    .calc_exp_pop(
+      ucdp_yearly,
+      worldpop,
+      years
+    )
   }
 }
 
 
 register_indicator(
-  name = "exposed_population",
+  name = "exposed_population_ucdp",
   description = "Number of people exposed to conflicts based on UCDP GED",
   resources = c("ucdp_ged", "worldpop")
 )

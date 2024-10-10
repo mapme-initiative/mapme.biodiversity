@@ -59,6 +59,7 @@ Below is a list of the resources currently supported by
 | name | description | licence |
 |:---|:---|:---|
 | accessibility_2000 | Accessibility data for the year 2000 from the Global Accessibility Map project | See JRC data policy: <https://joint-research-centre.ec.europa.eu/jrc-mission-statement-work-programme/data-policy_en> |
+| acled | Armed Conflict Location & Event Data (ACLED) | <https://acleddata.com/terms-of-use/> |
 | biodiversity_intactness_index | Biodiversity Intactness Index | CC-BY-4.0 |
 | chelsa | Climatologies at High resolution for the Earth Land Surface Areas (CHELSA) | Unknown - Must cite! |
 | chirps | Climate Hazards Group InfraRed Precipitation with Station data (CHIRPS) | CC - unknown |
@@ -104,8 +105,10 @@ Next, is a list of supported indicators.
 | drought_indicator | Relative wetness statistics based on NASA GRACE |
 | ecoregion | Areal statstics of ecoregions based on TEOW |
 | elevation | Statistics of elevation based on NASA SRTM |
-| exposed_population | Number of people exposed to conflicts based on UCDP GED |
-| fatalities | Number of fatalities by group of conflict based on UCDP GED |
+| exposed_population_acled | Number of people exposed to conflicts based on ACLED |
+| exposed_population_ucdp | Number of people exposed to conflicts based on UCDP GED |
+| fatalities_acled | Number of fatalities by event type based on ACLED. |
+| fatalities_ucdp | Number of fatalities by group of conflict based on UCDP GED |
 | gsw_change | Statistics of the surface water change layer by JRC |
 | gsw_occurrence | Areal statistic of surface water based on occurrence threshold |
 | gsw_recurrence | Areal statistic of surface water based on reccurence threshold |
