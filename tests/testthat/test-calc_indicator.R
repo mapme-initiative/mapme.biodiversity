@@ -256,6 +256,7 @@ test_that(".read_raster works correctly", {
 })
 
 test_that(".read_vector works", {
+  skip_on_cran()
   if (sf::sf_extSoftVersion()[["GDAL"]] < "3.7.0") skip()
   v <- system.file("extdata", "burundi.gpkg", package = "mapme.biodiversity")
   x <- st_as_sf(st_as_sfc(st_bbox(read_sf(v))))
