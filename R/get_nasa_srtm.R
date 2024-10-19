@@ -48,7 +48,7 @@ get_nasa_srtm <- function() {
       st_as_sf(st_as_sfc(bbox))
     })
     fps <- st_as_sf(purrr::list_rbind(fps))
-    fps[["source"]] <- paste0("/vsicurl/", urls)
+    fps[["source"]] <- paste0("/vsicurl?pc_url_signing=yes&url=", urls)
     make_footprints(fps, what = "raster", co = c("-co", "COMPRESS=DEFLATE"))
   }
 }

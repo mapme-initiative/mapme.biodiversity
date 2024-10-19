@@ -1,5 +1,10 @@
 # mapme.biodiversity (development version)
 
+## Bug fixes
+
+- `get_nasa_srtm()` now uses GDAL's VSI path option `pc_url_signing=yes` to
+  sign URLs from Microsoft Planetary Computer (#383)
+
 # mapme.biodiversity 0.9.2
 
 ## General
