@@ -4,6 +4,11 @@
 
 - `get_nasa_srtm()` now uses GDAL's VSI path option `pc_url_signing=yes` to
   sign URLs from Microsoft Planetary Computer (#383)
+  
+## Internal
+
+- test for `.read_vector()` now copies input GPKG to a directory with write
+  permissions to avoid CRAN check failures when included in a read only directory
 
 # mapme.biodiversity 0.9.2
 

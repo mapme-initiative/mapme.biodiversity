@@ -230,8 +230,8 @@ test_that(".read_raster works correctly", {
   files <- list.files(temp_loc, full.names = TRUE)
   footprints <- make_footprints(files, what = "raster")
   footprints[["location"]] <- files
-  extent1 <- c(xmin=-179.9, xmax=179.9, ymin=-89.9, ymax=89.9)
-  extent2 <- c(xmin=-180, xmax=180, ymin=-90, ymax=90)
+  extent1 <- c(xmin = -179.9, xmax = 179.9, ymin = -89.9, ymax = 89.9)
+  extent2 <- c(xmin = -180, xmax = 180, ymin = -90, ymax = 90)
   x <- st_as_sfc(st_bbox(extent1, crs = "EPSG:4326"))
 
   tiled_temporal <- .read_raster(x, footprints)
@@ -256,9 +256,15 @@ test_that(".read_raster works correctly", {
 })
 
 test_that(".read_vector works", {
-  skip_on_cran()
   if (sf::sf_extSoftVersion()[["GDAL"]] < "3.7.0") skip()
-  v <- system.file("extdata", "burundi.gpkg", package = "mapme.biodiversity")
+
+  # copy to directory with w permissions, as ogrinfo otherwise fails on CRAN
+  org <- system.file("extdata", "burundi.gpkg", package = "mapme.biodiversity")
+  outdir <- tempfile()
+  dir.create(outdir)
+  v <- file.path(outdir, basename(org))
+  file.copy(org, v)
+
   x <- st_as_sf(st_as_sfc(st_bbox(read_sf(v))))
   fps <- make_footprints(v, what = "vector")
   fps[["location"]] <- v
