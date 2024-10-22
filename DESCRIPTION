@@ -114,6 +114,7 @@ Collate:
     'get_soilgrids.R'
     'get_teow.R'
     'get_ucdp_ged.R'
+    'get_wdpa.R'
     'get_worldclim.R'
     'get_worldpop.R'
     'mapme.biodiversity-pkg.R'

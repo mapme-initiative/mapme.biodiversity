@@ -210,8 +210,7 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL, mode = c
   }
 
   bboxs <- purrr::map_vec(layers_info, .vector_bbox)
-  bbox <- st_as_sf(st_union(bboxs))
-  st_geometry(bbox) <- "geometry"
+  bbox <- st_sf(geometry = st_as_sfc(st_bbox(st_union(bboxs)))) # ordered for S2
   bbox["source"] <- src
   bbox
 }
@@ -328,7 +327,7 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL, mode = c
       ymin = coords$lowerLeft[[2]],
       ymax = coords$upperLeft[[2]]
     ), crs = crs)
-    bbox <- st_as_sf(st_as_sfc(bbox))
+    bbox <- st_sf(geometry = st_as_sfc(st_bbox(bbox))) # ordered for S2
   }
   bbox
 }
@@ -429,8 +428,8 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL, mode = c
 .get_intersection <- function(x, tindex) {
   # https://github.com/r-spatial/sf/issues/2441
   org <- getOption("s2_oriented")
-  options(s2_oriented=TRUE)
-  on.exit(options(s2_oriented=org))
+  options(s2_oriented = TRUE)
+  on.exit(options(s2_oriented = org))
   suppressMessages(targets <- st_intersects(x, tindex, sparse = FALSE))
   tindex[which(colSums(targets) > 0), ]
 }
