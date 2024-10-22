@@ -34,6 +34,7 @@
 #'
 spds_exists <- function(path, oo = character(0), what = c("vector", "raster")) {
   what <- match.arg(what)
+  path <- normalizePath(path, mustWork = FALSE)
   util <- switch(what,
     vector = "ogrinfo",
     raster = "gdalinfo"
@@ -138,6 +139,7 @@ make_footprints <- function(srcs = NULL,
 
   if (inherits(srcs, "character")) {
     what <- match.arg(what)
+    srcs <- normalizePath(srcs, mustWork = FALSE)
     srcs <- switch(what,
       vector = purrr::map2(srcs, oo, function(src, opt) .vector_footprint(src, opt)),
       raster = purrr::map2(srcs, oo, function(src, opt) .raster_footprint(src, opt)),
@@ -390,7 +392,9 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL, mode = c
                       what = c("vector", "raster")) {
   what <- match.arg(what)
   stopifnot(is.character(source) && length(source) == 1)
+  source <- normalizePath(source, mustWork = FALSE)
   stopifnot(is.character(destination) && length(destination) == 1)
+  destination <- normalizePath(destination, mustWork = FALSE)
   stopifnot(is.null(opts) || is.character(opts))
   if (is.null(opts)) opts <- character(0)
 
