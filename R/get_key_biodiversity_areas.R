@@ -25,7 +25,7 @@
 #' @export
 get_key_biodiversity_areas <- function(path = NULL) {
 
-  if(is.null(path) || !file.exists(path) || file.info(path) [["isdir"]]) {
+  if(is.null(path) || !spds_exists(path, what = "raster")) {
     stop("Expecting path to point towards an existing file.")
   }
 

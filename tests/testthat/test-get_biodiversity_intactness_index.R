@@ -5,15 +5,15 @@ test_that("get_biodiversity_intactness_index works", {
 
   expect_error(
     get_biodiversity_intactness_index(NULL),
-    "Expecting path to point towards an existing file."
+    "Expecting path to point towards an existing '.asc' file."
   )
   expect_error(
     get_biodiversity_intactness_index(),
-    "Expecting path to point towards an existing file."
+    "Expecting path to point towards an existing '.asc' file."
   )
   expect_error(
     get_biodiversity_intactness_index(sample_path),
-    "Unexpected file extension: path must point towards a '.asc' file."
+    "Expecting path to point towards an existing '.asc' file."
   )
 
   x <- read_sf(sample_path)

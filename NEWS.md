@@ -1,5 +1,10 @@
 # mapme.biodiversity (development version)
 
+## General
+
+- `get_biodiversity_intactness_index()`, `get_iucn()`, and `get_key_biodiversity_areas()`
+  now use `spds_exists()` to check if input files exist
+
 # mapme.biodiversity 0.9.3
 
 ## Bug fixes

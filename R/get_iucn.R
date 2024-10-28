@@ -21,7 +21,7 @@
 #' @include register.R
 #' @export
 get_iucn <- function(paths = NULL) {
-  if (is.null(paths) || !all(file.exists(paths)) || !all(endsWith(paths, ".tif"))) {
+  if (is.null(paths) || !all(endsWith(paths, ".tif")) || !all(sapply(paths, spds_exists, what = "raster"))) {
     stop("Expecting paths to point towards existing GTiff files.")
   }
 
