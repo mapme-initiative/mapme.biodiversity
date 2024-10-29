@@ -71,7 +71,8 @@ test_that(".split_multipolygons works", {
 
 test_that(".make_grid works", {
   bbox <- c(xmin = -10.0, ymin = -10.0, xmax = 10.0, ymax = 10.0)
-  x <- st_sf(st_as_sfc(st_bbox(bbox)),
+  x <- st_sf(
+    my_geom = st_as_sfc(st_bbox(bbox)),
     crs = st_crs("EPSG:4326"),
     assetid = 1
   )
@@ -80,6 +81,7 @@ test_that(".make_grid works", {
   expect_equal(unique(x2$assetid), 1)
   expect_equal(st_bbox(x), st_bbox(x2))
   expect_equal(st_crs(x), st_crs(x2))
+  expect_equal(attr(x2, "sf_col"), "my_geom")
 })
 
 test_that(".chunk_geoms works", {
@@ -99,17 +101,19 @@ test_that(".chunk_geoms works", {
 
 test_that(".finalize_assets works correctly", {
   bbox <- c(xmin = -10.0, ymin = -10.0, xmax = 10.0, ymax = 10.0)
-  x <- st_sf(st_as_sfc(st_bbox(bbox)),
+  x <- st_sf(
+    my_geom = st_as_sfc(st_bbox(bbox)),
     crs = st_crs("EPSG:4326"),
     assetid = 1, var = "variable"
   )
   meta <- st_drop_geometry(x)
   x2 <- x[, "assetid"]
   x2 <- .make_grid(x2, .calc_bbox_areas(x) / 4)
-  expect_silent(x3 <- .finalize_assets(x2, meta))
+  expect_silent(x3 <- .finalize_assets(x2, meta, "my_geom"))
   expect_true(inherits(x3, "sf"))
   expect_equal(x3$assetid, rep(1, 4))
   expect_equal(x3$var, rep("variable", 4))
+  expect_equal(attr(x3, "sf_col"), "my_geom")
 })
 
 test_that("chunking works correctly", {
@@ -121,11 +125,12 @@ test_that("chunking works correctly", {
   )
   x$assetid <- 1
   x <- .geom_last(x)
-  st_geometry(x) <- "geometry"
+  st_geometry(x) <- "my_geom"
   x_chunked <- .chunk(x, chunk_size = .calc_bbox_areas(x) / 16)
   expect_equal(st_bbox(x), st_bbox(x_chunked), tolerance = 1e-4)
   expect_equal(st_area(x), sum(st_area(x_chunked)), tolerance = 1e-4)
   expect_equal(nrow(x_chunked), 12)
+  expect_equal(attr(x_chunked, "sf_col"), "my_geom")
   expect_equal(x, .chunk(x, chunk_size = .calc_bbox_areas(x) * 10))
   expect_equal(x, .chunk(x, chunk_size = NULL))
 

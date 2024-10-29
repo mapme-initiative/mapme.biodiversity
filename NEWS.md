@@ -5,6 +5,17 @@
 - `get_biodiversity_intactness_index()`, `get_iucn()`, and `get_key_biodiversity_areas()`
   now use `spds_exists()` to check if input files exist
 
+## Internal
+
+- the `sf_col` attribute value is now retained throughout the portfolio checks
+  and chunking routines
+
+- `.raster_bbox()` now only uses the `cornerCoordinates` output from `gdalinfo`
+  to derive a bounding box (#385)
+  
+- bounding boxes for raster and vector resources are now derived via `st_as_sfc(st_bbox(x))`
+  to ensure that they are oriented correctly when using S2 (#377 and #385)
+
 # mapme.biodiversity 0.9.3
 
 ## Bug fixes

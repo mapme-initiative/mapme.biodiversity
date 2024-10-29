@@ -210,8 +210,7 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL, mode = c
   }
 
   bboxs <- purrr::map_vec(layers_info, .vector_bbox)
-  bbox <- st_as_sf(st_union(bboxs))
-  st_geometry(bbox) <- "geometry"
+  bbox <- st_sf(geometry = st_as_sfc(st_bbox(st_union(bboxs)))) # ordered for S2
   bbox["source"] <- src
   bbox
 }
@@ -310,26 +309,14 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL, mode = c
 
 .raster_bbox <- function(info) {
   crs <- st_crs(info[["coordinateSystem"]][["wkt"]])
-
-  bbox <- try(
-    {
-      poly <- jsonlite::toJSON(info[["wgs84Extent"]], auto_unbox = TRUE)
-      bbox <- st_read(poly, quiet = TRUE)
-      st_transform(bbox, crs)
-    },
-    silent = TRUE
-  )
-
-  if (inherits(bbox, "try-error") || st_is_empty(bbox)) {
-    coords <- info[["cornerCoordinates"]]
-    bbox <- st_bbox(c(
-      xmin = coords$lowerLeft[[1]],
-      xmax = coords$upperRight[[1]],
-      ymin = coords$lowerLeft[[2]],
-      ymax = coords$upperLeft[[2]]
-    ), crs = crs)
-    bbox <- st_as_sf(st_as_sfc(bbox))
-  }
+  coords <- info[["cornerCoordinates"]]
+  bbox <- st_bbox(c(
+    xmin = coords$lowerLeft[[1]],
+    xmax = coords$upperRight[[1]],
+    ymin = coords$lowerLeft[[2]],
+    ymax = coords$upperLeft[[2]]
+  ), crs = crs)
+  bbox <- st_sf(geometry = st_as_sfc(st_bbox(bbox))) # ordered for S2
   bbox
 }
 
@@ -429,8 +416,8 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL, mode = c
 .get_intersection <- function(x, tindex) {
   # https://github.com/r-spatial/sf/issues/2441
   org <- getOption("s2_oriented")
-  options(s2_oriented=TRUE)
-  on.exit(options(s2_oriented=org))
+  options(s2_oriented = TRUE)
+  on.exit(options(s2_oriented = org))
   suppressMessages(targets <- st_intersects(x, tindex, sparse = FALSE))
   tindex[which(colSums(targets) > 0), ]
 }
