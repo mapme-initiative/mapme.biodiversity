@@ -49,6 +49,12 @@
 <ul><li>
 <code><a href="../reference/biodiversity_intactness_index_resource.html">get_biodiversity_intactness_index()</a></code>, <code><a href="../reference/iucn.html">get_iucn()</a></code>, and <code><a href="../reference/key_biodiversity_areas_resource.html">get_key_biodiversity_areas()</a></code> now use <code><a href="../reference/spds_exists.html">spds_exists()</a></code> to check if input files exist</li>
 </ul></div>
+<div class="section level3">
+<h3 id="internal-development-version">Internal<a class="anchor" aria-label="anchor" href="#internal-development-version"></a></h3>
+<ul><li><p>the <code>sf_col</code> attribute value is now retained throughout the portfolio checks and chunking routines</p></li>
+<li><p><code>.raster_bbox()</code> now only uses the <code>cornerCoordinates</code> output from <code>gdalinfo</code> to derive a bounding box (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/385" class="external-link">#385</a>)</p></li>
+<li><p>bounding boxes for raster and vector resources are now derived via <code>st_as_sfc(st_bbox(x))</code> to ensure that they are oriented correctly when using S2 (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/377" class="external-link">#377</a> and <a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/385" class="external-link">#385</a>)</p></li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.9.3" id="mapmebiodiversity-093">mapme.biodiversity 0.9.3<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-093"></a></h2><p class="text-muted">CRAN release: 2024-10-21</p>
