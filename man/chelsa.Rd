@@ -8,11 +8,11 @@
 \url{https://envicloud.wsl.ch/#/?prefix=chelsa/chelsa_V2/GLOBAL/}
 }
 \usage{
-get_chelsa(years = 1979:2018)
+get_chelsa(years = 1979:2019)
 }
 \arguments{
 \item{years}{A numeric vector of the years to make CHELSA monthly precipitation
-layers available for. Must be greater 1979, defaults to \code{c(1979:2018)}.}
+layers available for. Must be greater 1979, defaults to \code{c(1979:2019)}.}
 }
 \value{
 A function that returns an \code{sf} footprint object.

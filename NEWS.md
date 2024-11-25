@@ -4,6 +4,8 @@
 
 - `get_biodiversity_intactness_index()`, `get_iucn()`, and `get_key_biodiversity_areas()`
   now use `spds_exists()` to check if input files exist
+- `get_chelsa()` now supports precipitation layers for 2019
+- changes bucket URL for `get_chelsa()` to `https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/monthly/pr`
 
 ## Internal
 
