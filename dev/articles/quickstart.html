@@ -95,7 +95,7 @@ and have familiarized yourself with the terminology used in the package.
 If you are unfamiliar with the terminology used here, please head over
 to the <a href="https://mapme-initiative.github.io/mapme.biodiversity/articles/terminology.html">Terminology</a>
 article to learn about the most important concepts.</p>
-<p>The idealized workflow for using <a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a>
+<p>The idealized workflow for using <a href="https://mapme-initiative.github.io/mapme.biodiversity/">mapme.biodiversity</a>
 consists of the following steps:</p>
 <ul>
 <li>prepare your sf-object containing only geometries of type
@@ -112,14 +112,14 @@ spatial data format to use it with other geospatial software</li>
 <div class="section level2">
 <h2 id="getting-started">Getting started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
 </h2>
-<p>First, we will load the <a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> and the
+<p>First, we will load the <a href="https://mapme-initiative.github.io/mapme.biodiversity/">mapme.biodiversity</a> and the
 <a href="https://r-spatial.github.io/sf/" class="external-link">sf</a> package for handling spatial vector data. For tabular
 data handling, we will also load the <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> and
 <a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a> packages. Then, we will read an internal GeoPackage
 which includes part of the geometry of a protected area in the Dominican
 Republic from the WDPA database.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mapme-initiative.github.io/mapme.biodiversity/">mapme.biodiversity</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
@@ -343,7 +343,7 @@ the size of the data object relatively small.</p>
 <div class="section level3">
 <h3 id="a-note-on-parallel-computing">A note on parallel computing<a class="anchor" aria-label="anchor" href="#a-note-on-parallel-computing"></a>
 </h3>
-<p><a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> follows the parallel computing
+<p><a href="https://mapme-initiative.github.io/mapme.biodiversity/">mapme.biodiversity</a> follows the parallel computing
 paradigm of the <a href="https://cran.r-project.org/package=future" class="external-link"><code>{future}</code></a>
 package. That means that you as a user are in the control if and how you
 would like to set up parallel processing. Since
