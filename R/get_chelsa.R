@@ -10,7 +10,7 @@
 #'
 #' @name chelsa
 #' @param years A numeric vector of the years to make CHELSA monthly precipitation
-#'   layers available for. Must be greater 1979, defaults to `c(1979:2018)`.
+#'   layers available for. Must be greater 1979, defaults to `c(1979:2019)`.
 #' @keywords resource
 #' @returns A function that returns an `sf` footprint object.
 #' @source \url{https://envicloud.wsl.ch/#/?prefix=chelsa/chelsa_V2/GLOBAL/}
@@ -25,8 +25,8 @@
 #'   170122. \doi{https://doi.org/10.1038/sdata.2017.122}
 #' @include register.R
 #' @export
-get_chelsa <- function(years = 1979:2018) {
-  years <- check_available_years(years, 1979:2018, "chelsa")
+get_chelsa <- function(years = 1979:2019) {
+  years <- check_available_years(years, 1979:2019, "chelsa")
 
   function(x,
            name = "chelsa",
@@ -44,8 +44,8 @@ get_chelsa <- function(years = 1979:2018) {
   }
 }
 
-.get_chelsa_urls <- function(years = 1979:2018) {
-  url <- "https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V2/GLOBAL/monthly/pr/"
+.get_chelsa_urls <- function(years = 1979:2019) {
+  url <- "https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/monthly/pr/"
   files <- paste(sprintf("%02d", 1:12), rep(years, each = 12), sep = "_")
   files <- sprintf("CHELSA_pr_%s_V.2.1.tif", files)
   paste("/vsicurl/", url, files, sep = "")
