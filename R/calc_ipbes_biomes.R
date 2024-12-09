@@ -91,7 +91,7 @@ register_indicator(
     "wetlands",
     "urban and semi-urban areas",
     "cultivated areas",
-    "cyrosphere",
+    "cryosphere",
     "aquaculture areas",
     "inland surface waters and water bodies",
     "shelf ecosystems",
