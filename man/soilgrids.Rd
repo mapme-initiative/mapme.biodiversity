@@ -25,7 +25,7 @@ A function that returns an \code{sf} footprint object.
 SoilGrids is a project combining global observation data with
 machine learning to map the spatial distribution of soil properties across
 the globe. It is produced at a spatial resolution of 250 meters and each
-parameters is mapped at different depths. In order to be able to assess
+parameter is mapped at different depths. In order to be able to assess
 prediction uncertainty, besides the mean and median prediction, the 0.05 and
 0.95 percentile predictions are available.
 The following parameters are available:
@@ -64,9 +64,9 @@ Each parameter and depth is available for the following statistics:
 }
 }
 \references{
-Hengl T, Mendes de Jesus J, Heuvelink GBM, Ruiperez Gonzalez M,
-Kilibarda M, et al. (2017) SoilGrids250m: Global gridded soil information
-based on machine learning. PLOS ONE 12(2): e0169748.
-\doi{https://doi.org/10.1371/journal.pone.0169748}
+Poggio, L., de Sousa, L. M., Batjes, N. H., Heuvelink, G. B. M.,
+Kempen, B., Ribeiro, E., and Rossiter, D.: SoilGrids 2.0: producing soil
+information for the globe with quantified spatial uncertainty, SOIL, 7,
+217–240, 2021. \doi{https://doi.org/10.5194/soil-7-217-2021}
 }
 \keyword{resource}
