@@ -31,6 +31,5 @@ Please find the available data under the source link given below.
 \references{
 IUCN (2024). The IUCN Red List of Threatened Species.
 \url{https://www.iucnredlist.org}
-\doi{https://doi.org/10.1038/s41597-022-01284-8}
 }
 \keyword{resource}
