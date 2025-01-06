@@ -10,7 +10,14 @@ A function returning an indicator tibble with \code{proximity_wdpa}
 as variable and the minimal distance (in meters) as value.
 }
 \usage{
-calc_proximity_wdpa(asset_column = NULL)
+calc_proximity_wdpa(asset_column = NULL, aggregation_fun = "min")
+}
+\arguments{
+\item{asset_column}{Column name of the original geometry of the asset.}
+
+\item{aggregation_fun}{Aggregation function to apply to the results of the
+proximity analysis. Allowed values: \link{min, max, median, mean, sd}.
+Default: 'min'.}
 }
 \description{
 This function calculates the distance to the closest WDPA within an area
