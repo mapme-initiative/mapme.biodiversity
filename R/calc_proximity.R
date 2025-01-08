@@ -1,4 +1,4 @@
-.calc_proximity <- function(x, y, b, aggregation) {
+.calc_proximity <- function(x, y, b) {
   if (!length(y)) {
     return(NULL)
   }
@@ -6,7 +6,7 @@
   if (nrow(y) == 0) return(NULL)
   y <- st_make_valid(y)
   dists <- as.numeric(unlist(st_distance(x, y)))
-  do.call(get(aggregation), list(dists))
+  min(dists)
 }
 #' Calculate Proximity to Key Biodiversity Areas
 #'
@@ -27,10 +27,6 @@
 #' column.
 #'
 #' @name proximity_kba
-#' @param asset_column Column name of the original geometry of the asset.
-#' @param aggregation_fun Aggregation function to apply to the results of the
-#' proximity analysis. Allowed values: [min, max, median, mean, sd].
-#' Default: 'min'.
 #' @docType data
 #' @keywords indicator
 #' @format A function returning an indicator tibble with `proximity_kba`
@@ -79,25 +75,17 @@
 #'
 #' aoi
 #' }
-calc_proximity_kba <- function(asset_column = NULL, aggregation_fun = "min") {
+calc_proximity_kba <- function(asset_column = NULL) {
   if (is.null(asset_column)) {
     msg <- "'asset_column' must be set to a geometry column."
     stop(msg)
-  }
-  if(length(aggregation_fun) != 1) {
-    stop("'aggregation_fun' must contain exactly one argument.")
-  }
-  allowed_agg_funs <- c("min", "max", "median", "mean", "sd")
-  if(!aggregation_fun %in% allowed_agg_funs) {
-    stop(sprintf("'aggregation_fun' must be one of: [%s].",
-                 paste0(allowed_agg_funs, collapse = ", ")))
   }
 
   function(x = NULL,
            key_biodiversity_areas,
            name = "proximity_kba",
            mode = "asset",
-           aggregation = aggregation_fun,
+           aggregation = "min",
            verbose = mapme_options()[["verbose"]]) {
     if (any(is.null(x), is.null(key_biodiversity_areas))) {
       return(NULL)
@@ -114,7 +102,7 @@ calc_proximity_kba <- function(asset_column = NULL, aggregation_fun = "min") {
     asset <- x[[asset_column]]
     buffer <- st_geometry(x)
     kbas <- key_biodiversity_areas[[1]]
-    distance <- .calc_proximity(asset, kbas, buffer, aggregation)
+    distance <- .calc_proximity(asset, kbas, buffer)
 
     if (is.null(distance)) {
       return(NULL)
@@ -154,10 +142,6 @@ register_indicator(
 #' column.
 #'
 #' @name proximity_wdpa
-#' @param asset_column Column name of the original geometry of the asset.
-#' @param aggregation_fun Aggregation function to apply to the results of the
-#' proximity analysis. Allowed values: [min, max, median, mean, sd].
-#' Default: 'min'.
 #' @docType data
 #' @keywords indicator
 #' @format A function returning an indicator tibble with `proximity_wdpa`
@@ -202,25 +186,17 @@ register_indicator(
 #'
 #' aoi
 #' }
-calc_proximity_wdpa <- function(asset_column = NULL, aggregation_fun = "min") {
+calc_proximity_wdpa <- function(asset_column = NULL) {
   if (is.null(asset_column)) {
     msg <- "'asset_column' must be set to a geometry column."
     stop(msg)
-  }
-  if(length(aggregation_fun) != 1) {
-    stop("'aggregation_fun' must contain exactly one argument.")
-  }
-  allowed_agg_funs <- c("min", "max", "median", "mean", "sd")
-  if(!aggregation_fun %in% allowed_agg_funs) {
-    stop(sprintf("'aggregation_fun' must be one of: [%s].",
-                 paste0(allowed_agg_funs, collapse = ", ")))
   }
 
   function(x = NULL,
            wdpa,
            name = "proximity_wdpa",
            mode = "asset",
-           aggregation = aggregation_fun,
+           aggregation = "min",
            verbose = mapme_options()[["verbose"]]) {
     if (any(is.null(x), is.null(wdpa))) {
       return(NULL)
@@ -237,7 +213,7 @@ calc_proximity_wdpa <- function(asset_column = NULL, aggregation_fun = "min") {
     asset <- x[[asset_column]]
     buffer <- st_geometry(x)
     wdpa <- wdpa[[1]]
-    distance <- .calc_proximity(asset, wdpa, buffer, aggregation)
+    distance <- .calc_proximity(asset, wdpa, buffer)
 
     if (is.null(distance)) {
       return(NULL)
