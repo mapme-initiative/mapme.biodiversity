@@ -82,13 +82,16 @@ Below is a list of the resources currently supported by
 | key_biodiversity_areas | Key Biodiversity Areas | <https://www.keybiodiversityareas.org/termsofservice> |
 | man_carbon | Amount of carbon that is manageable by humans. | CC NC 4.0 |
 | mcd64a1 | MODIS Burned Area Monthly Product (Aqua and Terra) | <https://lpdaac.usgs.gov/data/data-citation-and-policies/> |
+| mean_species_abundance | Mean Species Abundance | CC-BY-4.0 |
 | nasa_grace | NASA Gravity Recovery And Climate Experiment (GRACE) - Measurments of Earth’s mass and water changes | <https://nasagrace.unl.edu/About.aspx> |
 | nasa_srtm | NASA Shuttle Radar Topography Mission (SRTM) Digital Elevation Model (DEM) | <https://lpdaac.usgs.gov/data/data-citation-and-policies/> |
 | nelson_et_al | Global maps of traveltime to cities | CC-BY 4.0 |
 | soilgrids | ISRIC - Modelled global soil property layers | CC-BY 4.0 |
+| star | Species Threat Abatement and Restoration (STAR) layers | <https://www.ibat-alliance.org/terms> |
 | teow | Terrestrial Ecosystems of the World (TEOW) from WWF-US | unknown |
 | ucdp_ged | UCDP Georeferenced Event Dataset (UCDP GED) | CC-BY 4.0 |
 | vul_carbon | Amount of carbon that is vulnerable to a typical land use conversion event. | CC NC 4.0 |
+| wdpa | World Database on Protected Areas | <https://www.protectedplanet.net/en/legal> |
 | worldclim_max_temperature | WorldClim - Monthly maximum temperature 1960 - 2021 | <https://www.worldclim.org/about.html> |
 | worldclim_min_temperature | WorldClim - Monthly minimum temperature 1960 - 2021 | <https://www.worldclim.org/about.html> |
 | worldclim_precipitation | WorldClim - Monthly precipitation 1960 - 2021 | <https://www.worldclim.org/about.html> |
@@ -122,13 +125,17 @@ Next, is a list of supported indicators.
 | landcover | Areal statistics grouped by landcover class |
 | man_carbon | Statistics of manageable carbon per polygon. |
 | mangroves_area | Area covered by mangroves |
+| mean_species_abundance | Averaged mean species abundance. |
 | population_count | Statistic of population counts |
 | precipitation_chelsa | Statistics of CHELSA precipitation layer |
 | precipitation_chirps | Statistics of CHIRPS precipitation layer |
 | precipitation_wc | Statistics of WorldClim precipitation layer |
+| proximity_kba | Distance (in meters) to the closest KBA within an area of influence. |
+| proximity_wdpa | Distance (in meters) to the closest WDPA within an area of influence. |
 | slope | Statistics of slope based on NASA SRTM |
 | soilproperties | Statistics of SoilGrids layers |
 | species_richness | Species richness statistics based on user-specified raster files. |
+| star | Species threat abatement and restoration (STAR) zonal statistics |
 | temperature_max_wc | Statistics of WorldClim maximum temperature layer |
 | temperature_min_wc | Statistics of WorldClim minimum temperature layer |
 | traveltime | Statistics of traveltime to the clostes city grouped by city category |
