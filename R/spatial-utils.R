@@ -426,20 +426,28 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL, mode = c
   tindex[which(colSums(targets) > 0), ]
 }
 
-.try_make_valid <- function(x) {
-  s2_org <- sf_use_s2()
-  on.exit(sf_use_s2(s2_org))
-  sf_use_s2(TRUE)
+.try_make_valid <- function(geom) {
+  stopifnot(inherits(geom, "sf"))
+  is_invalid <- !st_is_valid(geom)
 
-  x <- st_make_valid(x, split_crossing_edges = TRUE)
-  is_valid <- st_is_valid(x)
-  if (sum(!is_valid) > 0) {
-    x[!is_valid, ] <- st_make_valid(x[!is_valid, ], split_crossing_edges = TRUE)
+  if (!all(!is_invalid)) {
+    geom[is_invalid, ] <- st_make_valid(geom[is_invalid, ])
+    still_invalid <- !st_is_valid(geom[is_invalid, ])
+    still_invalid <- which(is_invalid)[still_invalid]
+
+    if (length(still_invalid) > 0) {
+      geom <- geom[-still_invalid, ]
+    }
   }
-  is_valid2 <- st_is_valid(x[!is_valid, ])
-  is_valid[!is_valid] <- is_valid2
-  if (any(!is_valid)) {
-    x <- x[is_valid, ]
+
+  types <- st_geometry_type(geom)
+  if (any(types == "GEOMETRYCOLLECTION")) {
+    cols <- geom[types == "GEOMETRYCOLLECTION", ]
+    cols <- suppressWarnings(st_cast(cols))
+    types2 <- st_geometry_type(cols)
+    cols <- cols[types2 %in% c("POLYGON", "MULTIPOLYGON"), ]
+    geom <- rbind(geom[types != "GEOMETRYCOLLECTION", ], cols)
   }
-  x
+
+  geom
 }
