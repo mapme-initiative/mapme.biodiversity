@@ -64,10 +64,10 @@ test_that("test make_footprints works", {
   file.copy(resource_dir, temp_loc, recursive = TRUE)
   outdir <- file.path(tempdir(), "mapme.biodiversity", "res")
 
-  tifs <- list.files(file.path(outdir, "worldpop"),
+  tifs <- normalizePath(list.files(file.path(outdir, "worldpop"),
     pattern = ".tif$",
     recursive = TRUE, full.names = TRUE
-  )
+  ), mustWork = FALSE)
 
   fps <- make_footprints(tifs, what = "raster")
   expect_true(inherits(fps, "sf"))

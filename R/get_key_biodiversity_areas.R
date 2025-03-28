@@ -24,21 +24,32 @@
 #' @include register.R
 #' @export
 get_key_biodiversity_areas <- function(path = NULL) {
-
   if(is.null(path) || !spds_exists(path, what = "raster")) {
     stop("Expecting path to point towards an existing file.")
   }
 
   function(
-    x,
-    name = "key_biodiversity_areas",
-    type = "vector",
-    outdir = mapme_options()[["outdir"]],
-    verbose = mapme_options()[["verbose"]]) {
+      x,
+      name = "key_biodiversity_areas",
+      type = "vector",
+      outdir = mapme_options()[["outdir"]],
+      verbose = mapme_options()[["verbose"]]) {
+    bbox <- st_bbox(c(xmin = -180.0, xmax = 180.0, ymin = -80.0, ymax = 82.0), crs = "EPSG:4326")
+    tile <- st_as_sf(st_as_sfc(st_bbox(bbox)))
 
-    bbox <- c(xmin = -180.0, ymin = -90.0, xmax = 180.0, ymax = 90.0)
-    tile <- st_as_sf(st_as_sfc(st_bbox(bbox, crs = "EPSG:4326")))
-    tile[["source"]] <- path
+    if (!is.null(outdir)) {
+      dsn <- file.path(outdir, basename(path))
+      tile[["source"]] <- dsn
+      if (spds_exists(dsn)) {
+        return(make_footprints(tile, what = "vector"))
+      }
+    } else {
+      dsn <- file.path(tempdir(), basename(path))
+      tile[["source"]] <- dsn
+    }
+
+    x <- .try_make_valid(read_sf(path))
+    write_sf(x, dsn = dsn)
     make_footprints(tile, what = "vector")
   }
 }
