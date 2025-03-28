@@ -8,11 +8,11 @@
 \url{https://figshare.com/articles/figure/An_annual_global_terrestrial_Human_Footprint_dataset_from_2000_to_2018/16571064}
 }
 \usage{
-get_humanfootprint(years = 2000:2020)
+get_humanfootprint(years = 2000:2022)
 }
 \arguments{
 \item{years}{A numeric vector indicating the years for which to download
-the human footprint data, defaults to \code{2000:2020}.}
+the human footprint data, defaults to \code{2000:2022}.}
 }
 \value{
 A function that returns an \code{sf} footprint object.
@@ -21,7 +21,7 @@ A function that returns an \code{sf} footprint object.
 This resource is part of the publication by Mu et al. (2022) "A global
 record of annual terrestrial Human Footprint dataset from 2000 to 2018".
 It is calculated based on 8 variables representing human pressures on
-natural ecosystems collected at a yearly cadence between 2000 and 2020
+natural ecosystems collected at a yearly cadence between 2000 and 2022
 sampled at a 1km spatial resolution. The variables are used are
 the expansion of built environments (expressed as percentage of built-up
 areas within a grid cell), population density (aggregated at the gridd cell),
