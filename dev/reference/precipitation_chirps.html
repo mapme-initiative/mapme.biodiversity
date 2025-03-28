@@ -108,29 +108,15 @@ precipitation and sum of precipitation (in mm) as value.</p>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="portfolio.html">portfolio_long</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in httr2::req_perform(httr2::request(chirps_url)) : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Failed to perform HTTP request.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Caused by error in `curl::curl_fetch_memory()`:</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Timeout was reached [data.chc.ucsb.edu]: Failed to connect to data.chc.ucsb.edu port 443 after 10002 ms: Timeout was reached</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in .check_footprints(resource, resource_name):</span> Download for resource chirps failed.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> Returning unmodified portfolio.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">aoi</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 12 features and 8 fields</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POLYGON</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  WGS 84</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 12 × 9</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    WDPAID ISO3  assetid indicator       datetime            variable unit  value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> <span style="text-decoration: underline;">478</span>140 DOM         1 precipitation_… 2010-01-01 <span style="color: #949494;">00:00:00</span> precipi… mm      102</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> <span style="text-decoration: underline;">478</span>140 DOM         1 precipitation_… 2010-02-01 <span style="color: #949494;">00:00:00</span> precipi… mm      129</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> <span style="text-decoration: underline;">478</span>140 DOM         1 precipitation_… 2010-03-01 <span style="color: #949494;">00:00:00</span> precipi… mm      199</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> <span style="text-decoration: underline;">478</span>140 DOM         1 precipitation_… 2010-04-01 <span style="color: #949494;">00:00:00</span> precipi… mm      827</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> <span style="text-decoration: underline;">478</span>140 DOM         1 precipitation_… 2010-05-01 <span style="color: #949494;">00:00:00</span> precipi… mm     <span style="text-decoration: underline;">1</span>067</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> <span style="text-decoration: underline;">478</span>140 DOM         1 precipitation_… 2010-06-01 <span style="color: #949494;">00:00:00</span> precipi… mm     <span style="text-decoration: underline;">1</span>220</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> <span style="text-decoration: underline;">478</span>140 DOM         1 precipitation_… 2010-07-01 <span style="color: #949494;">00:00:00</span> precipi… mm      878</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> <span style="text-decoration: underline;">478</span>140 DOM         1 precipitation_… 2010-08-01 <span style="color: #949494;">00:00:00</span> precipi… mm      588</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> <span style="text-decoration: underline;">478</span>140 DOM         1 precipitation_… 2010-09-01 <span style="color: #949494;">00:00:00</span> precipi… mm      582</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> <span style="text-decoration: underline;">478</span>140 DOM         1 precipitation_… 2010-10-01 <span style="color: #949494;">00:00:00</span> precipi… mm      560</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> <span style="text-decoration: underline;">478</span>140 DOM         1 precipitation_… 2010-11-01 <span style="color: #949494;">00:00:00</span> precipi… mm      683</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> <span style="text-decoration: underline;">478</span>140 DOM         1 precipitation_… 2010-12-01 <span style="color: #949494;">00:00:00</span> precipi… mm       59</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1 more variable: geom &lt;POLYGON [°]&gt;</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'aoi' not found</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
