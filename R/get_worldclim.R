@@ -58,7 +58,7 @@ get_worldclim_min_temperature <- function(years = 2000:2018,
 #' @export
 get_worldclim_max_temperature <- function(years = 2000:2018,
                                           resolution = c("2.5m", "5m", "10m")) {
-  years <- check_available_years(years, 2000:2018, "tmax")
+  years <- check_available_years(years, 1960:2021, "tmax")
   resolution <- match.arg(resolution)
 
   function(x,
