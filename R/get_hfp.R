@@ -6,7 +6,7 @@
 #' natural ecosystems collected at a yearly cadence between 2000 and 2022
 #' sampled at a 1km spatial resolution. The variables are used are
 #' the expansion of built environments (expressed as percentage of built-up
-#' areas within a grid cell), population density (aggregated at the gridd cell),
+#' areas within a grid cell), population density (aggregated at the grid cell),
 #' nighttime lights, crop and pasture lands, roads and railways (excluding trails
 #' and minor roads), and navigable waterways (compares waterways with nighttime
 #' lights dataset). The human footprint was then calculated based on a weighting
@@ -88,8 +88,9 @@ get_humanfootprint <- function(years = 2000:2022) {
 #' @importFrom httr2 request req_perform req_retry resp_status resp_body_json req_headers
 .get_hfp_url <- function(years) {
   req <- request("https://api.figshare.com/v2/articles/16571064/files?page_size=1000")
-  req <- req |>
-    req_headers(page = 1, page_size = 2)
+  # req <- req |>
+  #   req_headers(page = 1, page_size = 2)
+  req <- req_headers(req, page = 1, page_size = 2)
 
   if (Sys.getenv("FIGSHARE_PAT") != "") {
     token <- sprintf("token %s", Sys.getenv("FIGSHARE_PAT"))
