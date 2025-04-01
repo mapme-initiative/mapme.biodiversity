@@ -84,12 +84,22 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
+<div class="section level3">
+<h3 id="stable-version">Stable version<a class="anchor" aria-label="anchor" href="#stable-version"></a>
+</h3>
 <p>The package and its dependencies can be installed from CRAN via:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"mapme.biodiversity"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>Windows and macOS binary packages are available from here.</p>
+</div>
+<div class="section level3">
+<h3 id="development-version">Development version<a class="anchor" aria-label="anchor" href="#development-version"></a>
+</h3>
 <p>To install the development version, use the following command:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"https://github.com/mapme-initiative/mapme.biodiversity"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Logic.html" class="external-link">isFALSE</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://remotes.r-lib.org" class="external-link">"remotes"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"https://github.com/mapme-initiative/mapme.biodiversity"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="available-resources-and-indicators">Available resources and indicators<a class="anchor" aria-label="anchor" href="#available-resources-and-indicators"></a>
@@ -97,9 +107,9 @@
 <p>Below is a list of the resources currently supported by <code>mapme.biodiversity</code>.</p>
 <table class="table">
 <colgroup>
-<col width="33%">
-<col width="33%">
-<col width="33%">
+<col width="12%">
+<col width="44%">
+<col width="42%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">name</th>
@@ -288,8 +298,8 @@
 <p>Next, is a list of supported indicators.</p>
 <table class="table">
 <colgroup>
-<col width="50%">
-<col width="50%">
+<col width="27%">
+<col width="72%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">name</th>
@@ -466,7 +476,7 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mapme-initiative.github.io/mapme.biodiversity/">mapme.biodiversity</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="do">## Linking to GEOS 3.13.0, GDAL 3.9.2, PROJ 9.5.0; sf_use_s2() is TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="do">## Linking to GEOS 3.13.0, GDAL 3.10.1, PROJ 9.5.1; sf_use_s2() is TRUE</span></span></code></pre></div>
 <p>Once you have decided on an indicator you are interested in, you can start by making the required resource available for your portfolio. Using <code><a href="reference/mapme.html">mapme_options()</a></code> you can set an output directory, control the maximum size of polygons before they are chunked into smaller parts, and control the verbosity of the package.</p>
 <p>A portfolio is represented by an sf-object. It is required for the object to only contain geometries of type <code>POLYGON</code> and <code>MULTIPOLYGON</code> as assets. We can request the download of a resource for the spatial extent of our portfolio by using the <code><a href="reference/mapme.html">get_resources()</a></code> function. We simply supply our portfolio and one or more resource functions. Once the resources were made available, we can query the calculation of an indicator by using the <code><a href="reference/mapme.html">calc_indicators()</a></code> function. This function also expects the portfolio as input and one or more indicator functions. Once the indicator has been calculated for all assets in a portfolio, the data is returned as a nested list column to the original portfolio object. The output of each indicator is standardized to common format, consisting of a tibble with columns <code>datetime</code>, <code>variable</code>, <code>unit</code>, and <code>value</code>. We can transform the the data to long format by using <code><a href="reference/portfolio.html">portfolio_long()</a></code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -484,50 +494,52 @@
 <span>    <span class="fu"><a href="reference/gfw_emissions.html">get_gfw_emissions</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="reference/mapme.html">calc_indicators</a></span><span class="op">(</span><span class="fu"><a href="reference/treecover_area_and_emissions.html">calc_treecover_area_and_emissions</a></span><span class="op">(</span>years <span class="op">=</span> <span class="fl">2016</span><span class="op">:</span><span class="fl">2017</span>, min_size <span class="op">=</span> <span class="fl">1</span>, min_cover <span class="op">=</span> <span class="fl">30</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="reference/portfolio.html">portfolio_long</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">aoi</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="do">## Simple feature collection with 4 features and 8 fields</span></span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="do">## Geometry type: POLYGON</span></span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="do">## Dimension:     XY</span></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="do">## Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span></span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="do">## Geodetic CRS:  WGS 84</span></span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="do">## # A tibble: 4 × 9</span></span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="do">##   WDPAID ISO3  assetid indicator        datetime            variable unit  value</span></span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="do">##    &lt;dbl&gt; &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;            &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt;</span></span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="do">## 1 478140 DOM         1 treecover_area_… 2016-01-01 00:00:00 emissio… Mg    4296.</span></span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="do">## 2 478140 DOM         1 treecover_area_… 2016-01-01 00:00:00 treecov… ha    2370.</span></span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="do">## 3 478140 DOM         1 treecover_area_… 2017-01-01 00:00:00 emissio… Mg    4970.</span></span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="do">## 4 478140 DOM         1 treecover_area_… 2017-01-01 00:00:00 treecov… ha    2358.</span></span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="do">## # ℹ 1 more variable: geom &lt;POLYGON [°]&gt;</span></span></code></pre></div>
+<span>  <span class="fu"><a href="reference/portfolio.html">portfolio_long</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="do">## R package 'landscapemetrics' recommended.</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="do">## Please install via `install.packages('landscapemetrics')`FALSE</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">aoi</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="do">## Simple feature collection with 4 features and 8 fields</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="do">## Geometry type: POLYGON</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="do">## Dimension:     XY</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="do">## Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="do">## Geodetic CRS:  WGS 84</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="do">## # A tibble: 4 × 9</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="do">##   WDPAID ISO3  assetid indicator        datetime            variable unit  value</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="do">##    &lt;dbl&gt; &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;            &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt;</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="do">## 1 478140 DOM         1 treecover_area_… 2016-01-01 00:00:00 emissio… Mg    4296.</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="do">## 2 478140 DOM         1 treecover_area_… 2016-01-01 00:00:00 treecov… ha    2370.</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="do">## 3 478140 DOM         1 treecover_area_… 2017-01-01 00:00:00 emissio… Mg    4970.</span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="do">## 4 478140 DOM         1 treecover_area_… 2017-01-01 00:00:00 treecov… ha    2358.</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="do">## # ℹ 1 more variable: geom &lt;POLYGON [°]&gt;</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="using-cloud-storages">Using cloud storages<a class="anchor" aria-label="anchor" href="#using-cloud-storages"></a>
 </h2>
 <p><a href="https://mapme-initiative.github.io/mapme.biodiversity/">mapme.biodiversity</a> leverages GDAL’s capabilities for data I/O. For users of this package, that means that integrating a cloud storage is as easy as setting up a configuration file and changing the <code>outdir</code> argument in <code><a href="reference/mapme.html">mapme_options()</a></code>. While you could also decide to use environment variables, we recommend to set up a GDAL config file. You can find GDAL’s documentation on this topic <a href="https://gdal.org/en/latest/user/configoptions.html#gdal-configuration-file" class="external-link">here</a>.</p>
 <p>Suppose that we want to use an AWS S3 bucket that we control to write resource data to. Let’s assume this bucket is already set up and we wish to refer to it in our R code as <code>mapme-data</code>. The GDAL configuration file should look something like this:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="kw">[credentials]</span></span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="kw">[.mapme-data]</span></span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="dt">path</span><span class="ot">=</span><span class="st">/vsis3/mapme-data</span></span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="dt">AWS_SECRET_ACCESS_KEY</span><span class="ot">=</span><span class="st">&lt;your-access-key&gt;</span></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="dt">AWS_ACCESS_KEY_ID</span><span class="ot">=</span><span class="st">&lt;your-access-id&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="kw">[credentials]</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="kw">[.mapme-data]</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="dt">path</span><span class="ot">=</span><span class="st">/vsis3/mapme-data</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="dt">AWS_SECRET_ACCESS_KEY</span><span class="ot">=</span><span class="st">&lt;your-access-key&gt;</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="dt">AWS_ACCESS_KEY_ID</span><span class="ot">=</span><span class="st">&lt;your-access-id&gt;</span></span></code></pre></div>
 <p>The connection will be handled based on GDAL’s virtual file system. You can find documentation on specific options for your cloud provider <a href="https://gdal.org/en/latest/user/virtual_file_systems.html#network-based-file-systems" class="external-link">here</a>.</p>
 <p>Ideally, you would also set the following in the <code>.Renviron</code> file in your user’s home directory to ensure that GDAL is aware of this configuration when an R session is started:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="dt">GDAL_CONFIG_FILE </span><span class="ot">=</span><span class="st"> "&lt;path-to-your-config-file&gt;"</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="dt">GDAL_CONFIG_FILE </span><span class="ot">=</span><span class="st"> "&lt;path-to-your-config-file&gt;"</span></span></code></pre></div>
 <p>Then, in your scripts set the <code>outdir</code> option to the value specified with the <code>path</code> variable in the configuration file:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/mapme.html">mapme_options</a></span><span class="op">(</span>outdir <span class="op">=</span> <span class="st">"/vsis3/mapme-data"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="a-note-on-parallel-computing">A note on parallel computing<a class="anchor" aria-label="anchor" href="#a-note-on-parallel-computing"></a>
 </h2>
 <p><a href="https://mapme-initiative.github.io/mapme.biodiversity/">mapme.biodiversity</a> follows the parallel computing paradigm of the <a href="https://cran.r-project.org/package=future" class="external-link"><code>{future}</code></a> package. That means that you as a user are in the control if and how you would like to set up parallel processing. Since <code>{mapme.biodiversity} v0.9</code>, we apply pre-chunking to all assets in the portfolio. That means that assets are split up into components of roughly the size of <code>chunk_size</code>. These components can than be iterated over in parallel to speed up processing. Indicator values will be aggregated automatically.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org" class="external-link">future</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">cluster</span>, workers <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span></code></pre></div>
 <p>As another example, with the code below one would apply parallel processing of 2 assets, with each having 4 workers available to process chunks, thus requiring a total of 8 available cores on the host machine. Be sure to not request more workers than available on your machine.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://progressr.futureverse.org" class="external-link">progressr</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">cluster</span>, workers <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
@@ -543,6 +555,10 @@
 <span><span class="op">}</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">sequential</span><span class="op">)</span> <span class="co"># close child processes</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="more-info">More info<a class="anchor" aria-label="anchor" href="#more-info"></a>
+</h2>
 <p>Head over to the <a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">online documentation</a> find more detailed information about the package.</p>
 </div>
 </div>

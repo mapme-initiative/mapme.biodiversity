@@ -118,7 +118,7 @@ branch!</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">git</span> branch add-elevation</span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">git</span> checkout add-elevation</span></code></pre></div>
 <p>Below, we will assume that you develop your extension to the package
-in R Studio. The general guidelines to follow also apply if you choose
+in RStudio. The general guidelines to follow also apply if you choose
 different tooling for your development process, however, it will not be
 covered in this vignette. We assume that all R development dependencies
 are installed. The easiest way to ensure this is using
@@ -178,7 +178,7 @@ are associated with at least one indicator calculation. The very first
 step to adding a resource is to create a new file that will be holding
 the required code.<br>
 Once you checked out to the new branch and having the project opened in
-R Studio, adapt the following command to open the a new resource
+RStudio, adapt the following command to open the a new resource
 file:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/file.edit.html" class="external-link">file.edit</a></span><span class="op">(</span><span class="st">"R/get_&lt;your-new-resource&gt;.R"</span><span class="op">)</span></span>
@@ -397,7 +397,7 @@ returns another function. The outer level exposes user-facing arguments
 and checks that they are correctly specified, while the inner level is
 required to follow a specified signature and returns a tibble.</p>
 <p>Once you checked out to the new branch and having the project opened
-in R Studio, adapt the following command to open the a new indicator
+in RStudio, adapt the following command to open the a new indicator
 file:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/file.edit.html" class="external-link">file.edit</a></span><span class="op">(</span><span class="st">"R/calc_&lt;your-new-indicator&gt;.R"</span><span class="op">)</span></span>
@@ -520,7 +520,7 @@ on the <code>mode</code> specified for processing, it is a single tibble
 for <code>mode = "asset"</code>, or a list of tibbles equal to the rows
 of <code>x</code> in case <code>mode = "portfolio"</code>.</p>
 <p>You may use helper functions provided by the package for a common
-interface e.g. for vector-raster zonal statistics (e.g. by using
+interface e.g. for vector-raster zonal statistics (e.g. by using
 <code><a href="../reference/engine.html">select_engine()</a></code>).</p>
 <p>You are encouraged to write your own helper function that are needed
 for your indicator processor. These should be located in the same file
