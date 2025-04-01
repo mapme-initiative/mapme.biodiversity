@@ -3,10 +3,10 @@
 #' This resource is part of the publication by Mu et al. (2022) "A global
 #' record of annual terrestrial Human Footprint dataset from 2000 to 2018".
 #' It is calculated based on 8 variables representing human pressures on
-#' natural ecosystems collected at a yearly cadence between 2000 and 2020
+#' natural ecosystems collected at a yearly cadence between 2000 and 2022
 #' sampled at a 1km spatial resolution. The variables are used are
 #' the expansion of built environments (expressed as percentage of built-up
-#' areas within a grid cell), population density (aggregated at the gridd cell),
+#' areas within a grid cell), population density (aggregated at the grid cell),
 #' nighttime lights, crop and pasture lands, roads and railways (excluding trails
 #' and minor roads), and navigable waterways (compares waterways with nighttime
 #' lights dataset). The human footprint was then calculated based on a weighting
@@ -23,7 +23,7 @@
 #'
 #' @name humanfootprint_resource
 #' @param years A numeric vector indicating the years for which to download
-#'   the human footprint data, defaults to \code{2000:2020}.
+#'   the human footprint data, defaults to \code{2000:2022}.
 #' @keywords resource
 #' @returns A function that returns an `sf` footprint object.
 #' @references Mu, H., Li, X., Wen, Y. et al. A global record of annual
@@ -33,8 +33,8 @@
 #' @importFrom utils unzip download.file
 #' @include register.R
 #' @export
-get_humanfootprint <- function(years = 2000:2020) {
-  available_years <- 2000:2020
+get_humanfootprint <- function(years = 2000:2022) {
+  available_years <- 2000:2022
   years <- check_available_years(
     years, available_years, "humanfootprint"
   )
@@ -87,7 +87,10 @@ get_humanfootprint <- function(years = 2000:2020) {
 #' @noRd
 #' @importFrom httr2 request req_perform req_retry resp_status resp_body_json req_headers
 .get_hfp_url <- function(years) {
-  req <- request("https://api.figshare.com/v2/articles/16571064/files")
+  req <- request("https://api.figshare.com/v2/articles/16571064/files?page_size=1000")
+  # req <- req |>
+  #   req_headers(page = 1, page_size = 2)
+  req <- req_headers(req, page = 1, page_size = 2)
 
   if (Sys.getenv("FIGSHARE_PAT") != "") {
     token <- sprintf("token %s", Sys.getenv("FIGSHARE_PAT"))

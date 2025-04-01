@@ -3,8 +3,11 @@ title: "Contributing"
 output: rmarkdown::html_vignette
 vignette: >
  %\VignetteIndexEntry{Contributing}
- %\VignetteEngine{knitr::rmarkdown}
  %\VignetteEncoding{UTF-8}
+ %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r, include = FALSE}
@@ -16,50 +19,53 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-If you are reading this vignette you are most probably to contribute to the `{mapme.biodiversity}`
-package. This is great news and we are very happy to receive Pull-Requests
-extending the package's functionality! Below you will find important in-depth
-information about how to add resources and indicators to make the process
-as seamless as possible for both you and the package's maintainers. Please make
-sure to read and understand this guide before opening a PR. If in doubt, especially
-if you feel that the framework does not support your use case, always
-feel free to raise an issue and we will happily discuss how we can support your
-ideas. If you have not already done so, make sure to read the [Terminology](terminology.html)
-vignette to get familiar with the most important concepts of this package.
+If you are reading this vignette you are most probably to contribute to
+the `{mapme.biodiversity}` package. This is great news and we are very
+happy to receive Pull-Requests extending the package's functionality!
+Below you will find important in-depth information about how to add
+resources and indicators to make the process as seamless as possible for
+both you and the package's maintainers. Please make sure to read and
+understand this guide before opening a PR. If in doubt, especially if
+you feel that the framework does not support your use case, always feel
+free to raise an issue and we will happily discuss how we can support
+your ideas. If you have not already done so, make sure to read the
+[Terminology](terminology.html) vignette to get familiar with the most
+important concepts of this package.
 
-Note that we use the [tidyverse style guide](https://style.tidyverse.org/) 
-for the package. That specifically means that function and variable names should 
-follow the snake case pattern. We also use the arrow assignment operator (`<-`). 
-When submitting a PR that does not consistently follow the tidyverse style guide, 
-the maintainers of the package might change the code to adhere to this code style
-without further notice before accepting the PR. 
+Note that we use the [tidyverse style
+guide](https://style.tidyverse.org/) for the package. That specifically
+means that function and variable names should follow the snake case
+pattern. We also use the arrow assignment operator (`<-`). When
+submitting a PR that does not consistently follow the tidyverse style
+guide, the maintainers of the package might change the code to adhere to
+this code style without further notice before accepting the PR.
 
 # Getting started
 
-Ideally, you clone the GitHub repository via the git command in a command line
-on Linux and MacOS systems or via the GitHub Desktop application on Windows.
-On Linux, the command would look like this:
+Ideally, you clone the GitHub repository via the git command in a
+command line on Linux and MacOS systems or via the GitHub Desktop
+application on Windows. On Linux, the command would look like this:
 
-```bash
+``` bash
 git clone https://github.com/mapme-initiative/mapme.biodiversity
 ```
 
 We do not accept pushes to main, thus the first step would be to create
-a specific branch for your extension. In this tutorial, we will pretend to 
-re-implement the `nasa_srtm` resource and the associated `elevation` 
-indicator, so we will create a branch reflecting this. Don't forget to check out
-to the newly created branch!
+a specific branch for your extension. In this tutorial, we will pretend
+to re-implement the `nasa_srtm` resource and the associated `elevation`
+indicator, so we will create a branch reflecting this. Don't forget to
+check out to the newly created branch!
 
 ```{bash, eval = FALSE}
 git branch add-elevation
 git checkout add-elevation
 ```
 
-Below, we will assume that you develop your extension to the package in R Studio.
-The general guidelines to follow also apply if you choose different tooling 
-for your development process, however, it will not be covered in this vignette.
-We assume that all R development dependencies are installed. The easiest way to 
-ensure this is using `{devtools}`:
+Below, we will assume that you develop your extension to the package in
+RStudio. The general guidelines to follow also apply if you choose
+different tooling for your development process, however, it will not be
+covered in this vignette. We assume that all R development dependencies
+are installed. The easiest way to ensure this is using `{devtools}`:
 
 ```{r, eval=FALSE}
 devtools::install_dev_deps()
@@ -69,30 +75,42 @@ devtools::install_dev_deps()
 
 ## Checklist
 
-- [ ] Create a file for all necessary code to download your resource (`R/get_<resource_name>.R`)
-- [ ] Include roxygen documentation for your resource following the provided template
-- [ ] Create outer-level function for user facing arguments
-- [ ] Check user-specified arguments (if any) for correctness
-- [ ] Create inner-level function with standard arguments
-- [ ] Match the spatio-temporal extent of the portfolio with your resource
-- [ ] Create a footprint object via `make_footprints()` for resources matching the portfolio
-- [ ] Include opening (-oo) and creation (-co) options for your resources as needed
-- [ ] Write a testthat script testing all the newly added functionality and write it to `test/testthat/test-get_<resource_name>.R`
-- [ ] Add a small example data set of your resource to `inst/res/<resource_name>`
-- [ ] Add the script producing the sample resources to `data-raw`
-- [ ] Add useful information about the resource to the register via `register_resource()`
-- [ ] Added a new dependency? Make sure to include a supporting statement for that dependency in your PR!
+-   [ ] Create a file for all necessary code to download your resource
+    (`R/get_<resource_name>.R`)
+-   [ ] Include roxygen documentation for your resource following the
+    provided template
+-   [ ] Create outer-level function for user facing arguments
+-   [ ] Check user-specified arguments (if any) for correctness
+-   [ ] Create inner-level function with standard arguments
+-   [ ] Match the spatio-temporal extent of the portfolio with your
+    resource
+-   [ ] Create a footprint object via `make_footprints()` for resources
+    matching the portfolio
+-   [ ] Include opening (-oo) and creation (-co) options for your
+    resources as needed
+-   [ ] Write a testthat script testing all the newly added
+    functionality and write it to
+    `test/testthat/test-get_<resource_name>.R`
+-   [ ] Add a small example data set of your resource to
+    `inst/res/<resource_name>`
+-   [ ] Add the script producing the sample resources to `data-raw`
+-   [ ] Add useful information about the resource to the register via
+    `register_resource()`
+-   [ ] Added a new dependency? Make sure to include a supporting
+    statement for that dependency in your PR!
 
 ## Overview of adding a resource
 
-A resource is a supported dataset that can be made available from a user's perspective
-by specifying one or more functions to `get_resources()`. Currently, the package 
-supports only raster and vector resources. If you wish to submit the support of 
-a new resource, please be aware that we will only accept new resources if they are
-associated with at least one indicator calculation. The very first step to
-adding a resource is to create a new file that will be holding the required code.  
-Once you checked out to the new branch and having the project opened in R Studio, 
-adapt the following command to open the a new resource file:
+A resource is a supported dataset that can be made available from a
+user's perspective by specifying one or more functions to
+`get_resources()`. Currently, the package supports only raster and
+vector resources. If you wish to submit the support of a new resource,
+please be aware that we will only accept new resources if they are
+associated with at least one indicator calculation. The very first step
+to adding a resource is to create a new file that will be holding the
+required code.\
+Once you checked out to the new branch and having the project opened in
+RStudio, adapt the following command to open the a new resource file:
 
 ```{r open_resource_file, eval = FALSE}
 file.edit("R/get_<your-new-resource>.R")
@@ -101,15 +119,15 @@ file.edit("R/get_<your-new-resource>.R")
 
 ## Documenting the new resource
 
-In the first part of a resource function, make sure to include detailed 
-documentation. This documentation should explain what this resource represents, 
-where it comes from (including a citation), and the user-facging arguments that 
-should be specified during runtime. 
+In the first part of a resource function, make sure to include detailed
+documentation. This documentation should explain what this resource
+represents, where it comes from (including a citation), and the
+user-facging arguments that should be specified during runtime.
 
-Importantly, this documentation **MUST** receive the roxygen tag 
-`@keywords resource`, so that the documentation will be identified as a resource. 
-Also, add the bare name of the resource as the `@name` tag (e.g. in the case
-of our example that translates to `@name nasa_srtm`).
+Importantly, this documentation **MUST** receive the roxygen tag
+`@keywords resource`, so that the documentation will be identified as a
+resource. Also, add the bare name of the resource as the `@name` tag
+(e.g. in the case of our example that translates to `@name nasa_srtm`).
 
 ```{r, eval=FALSE}
 #' Short title
@@ -127,22 +145,23 @@ of our example that translates to `@name nasa_srtm`).
 #' @export
 ```
 
-The last two tags are important to add as well. The include statement is 
-mandatory for the register functionality (more on that below) to be loaded
-before your resource function. The export tag is important so that the resource
-is actually exposed to the users of the package.
+The last two tags are important to add as well. The include statement is
+mandatory for the register functionality (more on that below) to be
+loaded before your resource function. The export tag is important so
+that the resource is actually exposed to the users of the package.
 
 ## Constructing a resource function - Outer level
 
-Resource functions are constructed as closures, i.e. functions that return a function.
-The outer level exposes arguments to be set by users of the function to fine-control
-the flow of the function. Note, it is important to check the user input in this
-outer level for correctness so that warning/error messages in case of any
-miss specifications are thrown immediately.
+Resource functions are constructed as closures, i.e. functions that
+return a function. The outer level exposes arguments to be set by users
+of the function to fine-control the flow of the function. Note, it is
+important to check the user input in this outer level for correctness so
+that warning/error messages in case of any miss specifications are
+thrown immediately.
 
-For `nasa_srtm`, this outer level does not look really exciting becuase there
-are no user-facing arguments to be checked (we will see how to check
-user-facing arguments when constructing the indicator below):
+For `nasa_srtm`, this outer level does not look really exciting becuase
+there are no user-facing arguments to be checked (we will see how to
+check user-facing arguments when constructing the indicator below):
 
 ```{r, eval=FALSE}
 get_nasa_srtm <- function() {
@@ -150,17 +169,18 @@ get_nasa_srtm <- function() {
 }
 ```
 
-Note, that there are some exported helper functions for re-occurring argument 
-checks that you are free to use (e.g. `check_available_years()` in case
-you query the user for a temporal time frame).
-The arguments defined in the outer level of the resource function are then 
-ready to be used in the inner level, that we will have a look at next.
+Note, that there are some exported helper functions for re-occurring
+argument checks that you are free to use (e.g. `check_available_years()`
+in case you query the user for a temporal time frame). The arguments
+defined in the outer level of the resource function are then ready to be
+used in the inner level, that we will have a look at next.
 
 ## Constructing a resource function - Inner level
 
-The inner level of a resource function has a mandatory function signature that
-will be checked during run-time. Your function is required to exactly specify 
-the below signature. For the `nasa_srtm` resource, this looks like this:
+The inner level of a resource function has a mandatory function
+signature that will be checked during run-time. Your function is
+required to exactly specify the below signature. For the `nasa_srtm`
+resource, this looks like this:
 
 ```{r, eval=FALSE}
 function(x,
@@ -172,127 +192,141 @@ function(x,
 }
 ```
 
-The `x` argument here represents the portfolio object handed over by the user 
-when calling `get_resources()` which is an `sf`-object and can thus be used 
-to derive the spatial extent of the portfolio. Next, comes the name and the 
-type of the resource which is required for the backend to correctly handle the 
-output and log the resource once it has been made available. 
+The `x` argument here represents the portfolio object handed over by the
+user when calling `get_resources()` which is an `sf`-object and can thus
+be used to derive the spatial extent of the portfolio. Next, comes the
+name and the type of the resource which is required for the backend to
+correctly handle the output and log the resource once it has been made
+available.
 
-The other arguments should default to the their respective output values of 
-`mapme_options()` and represent a character vector for the output directory, 
-a logical to control the verbosity. Note, that the output directory might 
-be `NULL` in case a user wishes to access data directly from a remote source. 
-We will look into how these things come together now as we peak into constructing 
-the actual body of a resource function.
+The other arguments should default to the their respective output values
+of `mapme_options()` and represent a character vector for the output
+directory, a logical to control the verbosity. Note, that the output
+directory might be `NULL` in case a user wishes to access data directly
+from a remote source. We will look into how these things come together
+now as we peak into constructing the actual body of a resource function.
 
 ## Constructing a resource function - Body
 
-The expected output of a resource function is an `sf`-object with geometries 
-representing the bounding box for single resource elements (e.g. tiles in case
-of a raster resource). We provide you with functionality to seamlessly produce 
-such a footprint object via `make_footprints()`. Note, this function either
-excepts a character vector to GDAL readable data sources or an `sf` object.
-In case you provide a charachter vector, the bounding box information will be
-retrieved automatically. This comes with a performance penalty for remote sources,
-because each file has to be opened once, so always opt for constructing an `sf`
-object in the resource function, if feasible.
+The expected output of a resource function is an `sf`-object with
+geometries representing the bounding box for single resource elements
+(e.g. tiles in case of a raster resource). We provide you with
+functionality to seamlessly produce such a footprint object via
+`make_footprints()`. Note, this function either excepts a character
+vector to GDAL readable data sources or an `sf` object. In case you
+provide a charachter vector, the bounding box information will be
+retrieved automatically. This comes with a performance penalty for
+remote sources, because each file has to be opened once, so always opt
+for constructing an `sf` object in the resource function, if feasible.
 
-The footprints `sf` object is expected to contain a column called `source` that
-points to a GDAL readable data source and the geometries to correspond to 
-the bounding box of each single resource element. You might opt to supply
-a `filename` argument to `make_footprints()`. This defaults to `basename(srcs[["source]])`,
-so you might supply a better suited filename, i.e. in the case the source location
-ends with an API key value, or similar. 
+The footprints `sf` object is expected to contain a column called
+`source` that points to a GDAL readable data source and the geometries
+to correspond to the bounding box of each single resource element. You
+might opt to supply a `filename` argument to `make_footprints()`. This
+defaults to `basename(srcs[["source]])`, so you might supply a better
+suited filename, i.e. in the case the source location ends with an API
+key value, or similar.
 
-Next to specifying if the the resource you wish to turn into a footprint object 
-represents a raster or vector resource, you can specify opening and creation 
-options. Opening options are relevant if opening a remote source requires 
-location or driver dependent options (e.g. specifying non-standard columns names 
-for longitude/latitude with the CSV driver). Creation options are relevant 
-if a user specified a `outdir` argument and and refer to the arguments used by 
-[`gdal_translate`](https://gdal.org/programs/gdal_translate.html). These should
-specifically specify data type and compression algorithms for raster resources, 
-but you are otherwise free to optimize the data layout for efficient access.
+Next to specifying if the the resource you wish to turn into a footprint
+object represents a raster or vector resource, you can specify opening
+and creation options. Opening options are relevant if opening a remote
+source requires location or driver dependent options (e.g. specifying
+non-standard columns names for longitude/latitude with the CSV driver).
+Creation options are relevant if a user specified a `outdir` argument
+and and refer to the arguments used by
+[`gdal_translate`](https://gdal.org/programs/gdal_translate.html). These
+should specifically specify data type and compression algorithms for
+raster resources, but you are otherwise free to optimize the data layout
+for efficient access.
 
-Both `oo` and `co` can be specified as a single character vector, in which
-case the same options are applied to all elements of a resource, or as a list
-in order to accommodate file specific options.
+Both `oo` and `co` can be specified as a single character vector, in
+which case the same options are applied to all elements of a resource,
+or as a list in order to accommodate file specific options.
 
-Use the `verbose` argument to decide if informative messages should be printed,
-e.g. to inform users about download progress. Errors or warnings should be emitted
-in either case. 
+Use the `verbose` argument to decide if informative messages should be
+printed, e.g. to inform users about download progress. Errors or
+warnings should be emitted in either case.
 
-If there is no intersection between the `x` object and your resource, make sure
-to return `NULL` as early as possible. 
+If there is no intersection between the `x` object and your resource,
+make sure to return `NULL` as early as possible.
 
 ## Adding sample resource for package internal testing
 
-We ask you to provide a small subset of your resource to `inst/res/resource_name`
-so that indicators that depend on the resource can be tested without the need
-to actual download the resource. 
+We ask you to provide a small subset of your resource to
+`inst/res/resource_name` so that indicators that depend on the resource
+can be tested without the need to actual download the resource.
 
-Because there are some restrictions to the final size of the package, we ask you 
-to put substantial effort in reducing the size of the files to a minimum. 
-This includes cropping all resource samples to the spatial extent of the polygon 
-provided in `inst/extdata/sierra_de_neibe_478140.gpkg` or a polygon of similar 
-size supplied by you in case it the spatial extent does not intersect with your 
-resource. 
+Because there are some restrictions to the final size of the package, we
+ask you to put substantial effort in reducing the size of the files to a
+minimum. This includes cropping all resource samples to the spatial
+extent of the polygon provided in
+`inst/extdata/sierra_de_neibe_478140.gpkg` or a polygon of similar size
+supplied by you in case it the spatial extent does not intersect with
+your resource.
 
-For raster resources, if the original raster is encoded as float, consider 
-changing the data type to integer by introducing a scale factor. Also, please 
-use a compression algorithm to further reduce the file size. For vector resources, 
-consider reducing the number of vertices in case the geometries are very complex. 
+For raster resources, if the original raster is encoded as float,
+consider changing the data type to integer by introducing a scale
+factor. Also, please use a compression algorithm to further reduce the
+file size. For vector resources, consider reducing the number of
+vertices in case the geometries are very complex.
 
-Finally, put your processing script of the resource into `data-raw` to 
+Finally, put your processing script of the resource into `data-raw` to
 ensure reproducibility. Then, you are required to write a unit-test for
-your resource function, which should execute as much of your code as possible
-without actually conducting a download. 
+your resource function, which should execute as much of your code as
+possible without actually conducting a download.
 
 ## A note on dependencies for resources
 
-Note, that a resource **SHALL NOT** add additional dependencies to the package. If
-you add dependencies we require you to add a supporting statement to your PR
-explaining why these dependencies are needed and why other approaches would fail.
-Before accepting your PR, we might request you to change your code to remove 
-these dependencies, if it is feasible to achieve the same functionality without.
+Note, that a resource **SHALL NOT** add additional dependencies to the
+package. If you add dependencies we require you to add a supporting
+statement to your PR explaining why these dependencies are needed and
+why other approaches would fail. Before accepting your PR, we might
+request you to change your code to remove these dependencies, if it is
+feasible to achieve the same functionality without.
 
 # Adding an indicator
 
-The process of adding an indicator is very similar to the one for resources.
-However, some input-output requirements are different. Note, that in case
-that you added a new resource we also expect a new indicator taking advantage of
-that resource in your PR. 
+The process of adding an indicator is very similar to the one for
+resources. However, some input-output requirements are different. Note,
+that in case that you added a new resource we also expect a new
+indicator taking advantage of that resource in your PR.
 
-As you will see, there are two new important concepts to have in mind when
-adding an indicator. These are the processing mode and computational engines.
-We will briefly explain these concepts below, however, you can also head over
-to the [Terminology](terminology.html) vignette if you are interested in a more
-comprehensive definition of these two terms.
+As you will see, there are two new important concepts to have in mind
+when adding an indicator. These are the processing mode and
+computational engines. We will briefly explain these concepts below,
+however, you can also head over to the [Terminology](terminology.html)
+vignette if you are interested in a more comprehensive definition of
+these two terms.
 
 ## Checklist
 
-- [ ] Create a file for all necessary code compute your indicator (`R/calc_<indicator_name>.R`)
-- [ ] Create outer-level function for user facing arguments
-- [ ] Check user-specified arguments (if any) for correctness
-- [ ] Create inner-level function with standard arguments
-- [ ] If applicable, implement both, asset and portfolio based processing modes
-- [ ] Return a tibble in long format with standardized column names
-- [ ] Write a testthat script testing all the newly added functionality write it to `test/testthat/test-calc_<indicator_name>.R`
-- [ ] Added a new dependency? Make sure to include a supporting statement for that dependency in your PR!
+-   [ ] Create a file for all necessary code compute your indicator
+    (`R/calc_<indicator_name>.R`)
+-   [ ] Create outer-level function for user facing arguments
+-   [ ] Check user-specified arguments (if any) for correctness
+-   [ ] Create inner-level function with standard arguments
+-   [ ] If applicable, implement both, asset and portfolio based
+    processing modes
+-   [ ] Return a tibble in long format with standardized column names
+-   [ ] Write a testthat script testing all the newly added
+    functionality write it to
+    `test/testthat/test-calc_<indicator_name>.R`
+-   [ ] Added a new dependency? Make sure to include a supporting
+    statement for that dependency in your PR!
 
 ## Overview of adding a new indicator
 
-An indicator is a logical routine depending on one or more resources that
-extracts numeric outputs for all assets in a portfolio. From a user's 
-perspective, indicators are processed via the `calc_indicators()` function.
-You as a developer will have to construct an indicator function as a 
-closure, e.g. a function that returns another function. The outer level
-exposes user-facing arguments and checks that they are correctly specified,
-while the inner level is required to follow a specified signature and returns
-a tibble.
+An indicator is a logical routine depending on one or more resources
+that extracts numeric outputs for all assets in a portfolio. From a
+user's perspective, indicators are processed via the `calc_indicators()`
+function. You as a developer will have to construct an indicator
+function as a closure, e.g. a function that returns another function.
+The outer level exposes user-facing arguments and checks that they are
+correctly specified, while the inner level is required to follow a
+specified signature and returns a tibble.
 
-Once you checked out to the new branch and having the project opened in R Studio, 
-adapt the following command to open the a new indicator file:
+Once you checked out to the new branch and having the project opened in
+RStudio, adapt the following command to open the a new indicator file:
 
 ```{r open_indicator_file, eval = FALSE}
 file.edit("R/calc_<your-new-indicator>.R")
@@ -301,13 +335,14 @@ file.edit("R/calc_<your-new-indicator>.R")
 
 ## Documenting the new indicator
 
-In the first part of an indicator function, make sure to include detailed 
-documentation. This documentation should explain which resources are required
-to calculate the indicator, the user-facing arguments that 
-should be specified during runtime and the structure of the output tibble. 
-Importantly, this documentation **MUST** receive the roxygen tag 
-`@keywords indicator`, so that the documentation will be identified as an indicator. 
-Also, add the bare name of the indicator as the `@name` tag (e.g. `@name elevation`).
+In the first part of an indicator function, make sure to include
+detailed documentation. This documentation should explain which
+resources are required to calculate the indicator, the user-facing
+arguments that should be specified during runtime and the structure of
+the output tibble. Importantly, this documentation **MUST** receive the
+roxygen tag `@keywords indicator`, so that the documentation will be
+identified as an indicator. Also, add the bare name of the indicator as
+the `@name` tag (e.g. `@name elevation`).
 
 ```{r, eval=FALSE}
 #' Short title
@@ -325,19 +360,19 @@ Also, add the bare name of the indicator as the `@name` tag (e.g. `@name elevati
 #' @export
 ```
 
-The last two tags are important to add as well. The include statement is 
-mandatory for the register functionality (more on that below) to be loaded
-before your indicator function. The export tag is important so that the resource
-is actually exposed to the users of the package.
-
+The last two tags are important to add as well. The include statement is
+mandatory for the register functionality (more on that below) to be
+loaded before your indicator function. The export tag is important so
+that the resource is actually exposed to the users of the package.
 
 ## Constructing an indicator function - Outer level
 
-Indicator functions are constructed as closures, i.e. functions that return a function.
-The outer level exposes arguments to be set by users of the function to fine-control
-the flow of the function. Note, it is important to check the user input in this
-outer level for correctness so that warning/error messages in case of any
-miss specifications are thrown immediately.
+Indicator functions are constructed as closures, i.e. functions that
+return a function. The outer level exposes arguments to be set by users
+of the function to fine-control the flow of the function. Note, it is
+important to check the user input in this outer level for correctness so
+that warning/error messages in case of any miss specifications are
+thrown immediately.
 
 For `elevation`, this outer level could look something like this:
 
@@ -351,16 +386,18 @@ calc_elevation <- function(engine = "extract",
 }
 ```
 
-There are some exported helper functions for re-occurring argument checks that
-you are free to use (e.g. `check_engine()`). Note, that the arguments defined 
-this way in the outer level of the indicator function are then ready to be used 
-in the inner level that we will have a look at next.
+There are some exported helper functions for re-occurring argument
+checks that you are free to use (e.g. `check_engine()`). Note, that the
+arguments defined this way in the outer level of the indicator function
+are then ready to be used in the inner level that we will have a look at
+next.
 
 ## Constructing an indicator function - Inner level
 
-The inner level of an indicator function has a mandatory function signature that
-will be checked during run-time. Your function is required to exactly specify 
-the below signature. For the `elevation` indicator, this looks like this:
+The inner level of an indicator function has a mandatory function
+signature that will be checked during run-time. Your function is
+required to exactly specify the below signature. For the `elevation`
+indicator, this looks like this:
 
 ```{r, eval=FALSE}
 function(x,
@@ -373,32 +410,34 @@ function(x,
 }
 ```
 
-The `x` argument here represents the portfolio object handed over by the user 
-when calling `get_resources()` which is an `sf`-object with `'POLYGON'` as features.
-Next, comes the name(s) of the required resource(s) and the name of the indicator.
-What follows is the computation mode, that must be one of `"asset"` or `"portfolio"`.
+The `x` argument here represents the portfolio object handed over by the
+user when calling `get_resources()` which is an `sf`-object with
+`'POLYGON'` as features. Next, comes the name(s) of the required
+resource(s) and the name of the indicator. What follows is the
+computation mode, that must be one of `"asset"` or `"portfolio"`.
 
-We realized, that for large (potentially global) portfolios, depending on the
-spatial resolution of a resource, different processing modes substantially
-impact the time needed for a computation. For high to medium resolution raster
-resources, processing on the asset level benefits computation time. However,
-spatially cropping coarse resolution datasets for a high number of assets
-introduces significant overhead, thus processing these resources on a 
-portfolio level is more efficient.
+We realized, that for large (potentially global) portfolios, depending
+on the spatial resolution of a resource, different processing modes
+substantially impact the time needed for a computation. For high to
+medium resolution raster resources, processing on the asset level
+benefits computation time. However, spatially cropping coarse resolution
+datasets for a high number of assets introduces significant overhead,
+thus processing these resources on a portfolio level is more efficient.
 
-If neither of the two processing modes lead to satisfactory processing times for 
-your indicator, please leave an issue/comment to discuss the addition of 
-another processing mode with the maintainers of the package. 
+If neither of the two processing modes lead to satisfactory processing
+times for your indicator, please leave an issue/comment to discuss the
+addition of another processing mode with the maintainers of the package.
 
-The argument `aggregation` governs how chunked results for large polygons are
-to be combined into a single indicator. In case uses supply polygons larger
-than the specified code path or assets of type `MULTIPOLYGON`, a code path
-is triggered that splits assets into sub-components. The aggregation method
-specifies which statistic is used to combine values that share the same values
-in the remaining indicator columns (i.e. `datetime`, `variable`, and `unit`).
-The `stat` keyword is a special keyword used for indicators where statistics are
-specified by the user and will trigger to select the respective statistic
-as the aggregation statistic (e.g. take the sum of sums).
+The argument `aggregation` governs how chunked results for large
+polygons are to be combined into a single indicator. In case uses supply
+polygons larger than the specified code path or assets of type
+`MULTIPOLYGON`, a code path is triggered that splits assets into
+sub-components. The aggregation method specifies which statistic is used
+to combine values that share the same values in the remaining indicator
+columns (i.e. `datetime`, `variable`, and `unit`). The `stat` keyword is
+a special keyword used for indicators where statistics are specified by
+the user and will trigger to select the respective statistic as the
+aggregation statistic (e.g. take the sum of sums).
 
 The available statistics are:
 
@@ -406,48 +445,51 @@ The available statistics are:
 mapme.biodiversity:::available_stats
 ```
 
-The argument `verbose` defaults to the corresponding package-wide option and 
-should control the verbosity of you indicator function.
+The argument `verbose` defaults to the corresponding package-wide option
+and should control the verbosity of you indicator function.
 
 ## Constructing an indicator function - Body
 
-The expected output of an indicator function is a tibble. Depending on the 
-`mode` specified for processing, it is a single tibble for `mode = "asset"`,
-or a list of tibbles equal to the rows of `x` in case `mode = "portfolio"`.
+The expected output of an indicator function is a tibble. Depending on
+the `mode` specified for processing, it is a single tibble for
+`mode = "asset"`, or a list of tibbles equal to the rows of `x` in case
+`mode = "portfolio"`.
 
-You may use helper functions provided by the package for a common interface e.g.
-for vector-raster zonal statistics (e.g. by using `select_engine()`).
+You may use helper functions provided by the package for a common
+interface e.g. for vector-raster zonal statistics (e.g. by using
+`select_engine()`).
 
-You are encouraged to write your own helper function that are needed for your
-indicator processor. These should be located in the same file as the main 
-processor, start with a dot and should not be exported. 
+You are encouraged to write your own helper function that are needed for
+your indicator processor. These should be located in the same file as
+the main processor, start with a dot and should not be exported.
 
-If you wish to include roxygen documentation for your helpers, make sure to
-add the `@keywords internal` and `@noRd` tags to your functions. If you feel
-that one or more of your helper functions would be of benefit to more that just 
-one indicator, please comment in and issue/pull-request to discuss with the 
-package maintainers if your helper function could be moved to `R/utils.R`.
+If you wish to include roxygen documentation for your helpers, make sure
+to add the `@keywords internal` and `@noRd` tags to your functions. If
+you feel that one or more of your helper functions would be of benefit
+to more that just one indicator, please comment in and
+issue/pull-request to discuss with the package maintainers if your
+helper function could be moved to `R/utils.R`.
 
-Use the `verbose` argument to decide if informative messages should be printed,
-e.g. to inform users about processing progress. Errors or warnings should be emitted
-in either case. 
+Use the `verbose` argument to decide if informative messages should be
+printed, e.g. to inform users about processing progress. Errors or
+warnings should be emitted in either case.
 
-If there is no intersection between the `x` object and the required resources,
-or for any other reason why your indicator might not be calculated with the
-given configuration, make sure to return `NA` as early as possible. 
-
+If there is no intersection between the `x` object and the required
+resources, or for any other reason why your indicator might not be
+calculated with the given configuration, make sure to return `NA` as
+early as possible.
 
 ## Adding units tests for an indicator
 
-You are required to add unit tests for your indicator using the package internal
-example data sets for resources. Make sure to properly test for miss-specification
-of user-facing arguments and also check for the correctness of numerical results
-of your indicator.
+You are required to add unit tests for your indicator using the package
+internal example data sets for resources. Make sure to properly test for
+miss-specification of user-facing arguments and also check for the
+correctness of numerical results of your indicator.
 
-You might not need to construct a portfolio from scratch to test you indicator
-function. Instead, you can directly call the returned function on an appropriate
-polygon with the respective required resource. For the `elevation` indicator,
-this looks like this:
+You might not need to construct a portfolio from scratch to test you
+indicator function. Instead, you can directly call the returned function
+on an appropriate polygon with the respective required resource. For the
+`elevation` indicator, this looks like this:
 
 ```{r, eval=FALSE}
 x <- read_sf(system.file(

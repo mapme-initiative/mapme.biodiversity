@@ -53,32 +53,6 @@
   .try_make_valid(polys)
 }
 
-.try_make_valid <- function(geom) {
-  stopifnot(inherits(geom, "sf"))
-  is_invalid <- !st_is_valid(geom)
-
-  if (!all(!is_invalid)) {
-    geom[is_invalid, ] <- st_make_valid(geom[is_invalid, ])
-    still_invalid <- !st_is_valid(geom[is_invalid, ])
-    still_invalid <- which(is_invalid)[still_invalid]
-
-    if (length(still_invalid) > 0) {
-      geom <- geom[-still_invalid, ]
-    }
-  }
-
-  types <- st_geometry_type(geom)
-  if (any(types == "GEOMETRYCOLLECTION")) {
-    cols <- geom[types == "GEOMETRYCOLLECTION", ]
-    cols <- suppressWarnings(st_cast(cols))
-    types2 <- st_geometry_type(cols)
-    cols <- cols[types2 %in% c("POLYGON", "MULTIPOLYGON"), ]
-    geom <- rbind(geom[types != "GEOMETRYCOLLECTION", ], cols)
-  }
-
-  geom
-}
-
 .split_multipolygons <- function(x, chunk_size) {
   stopifnot(inherits(x, "sf") && "assetid" %in% names(x) && "chunked" %in% names(x))
   is_smaller <- .calc_bbox_areas(x) < chunk_size
