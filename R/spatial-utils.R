@@ -34,7 +34,13 @@
 #'
 spds_exists <- function(path, oo = character(0), what = c("vector", "raster")) {
   what <- match.arg(what)
-  path <- normalizePath(path, mustWork = FALSE)
+  # path <- normalizePath(path, mustWork = FALSE)
+  # On Windows this would add drive letter ('C:\\', etc.) at the beginning of the path,
+  # which is wrong for remote paths like '/vsicurl/https://...'
+  norm_path <- try(normalizePath(path, mustWork = TRUE), silent = TRUE)
+  if (!inherits(norm_path, "try-error")) {
+    path <- norm_path
+  }
   util <- switch(what,
     vector = "ogrinfo",
     raster = "gdalinfo"

@@ -7,6 +7,8 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
+  markdown: 
+    wrap: 72
 ---
 
 ```{r, include = FALSE}
@@ -18,37 +20,42 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-In the following we will demonstrate an idealized workflow based on a subset
-of the Global Forest Watch (GFW) data set that is delivered together with this 
-package. You can follow along the code snippets below to reproduce the results. 
-Please note that to reduce the time it takes to process this vignette, we will 
-not download any resources from the internet. In a real use case, thus processing 
-time might substantially increase because resources have to be downloaded and 
-real portfolios might be larger than the one created in this example. 
+In the following we will demonstrate an idealized workflow based on a
+subset of the Global Forest Watch (GFW) data set that is delivered
+together with this package. You can follow along the code snippets below
+to reproduce the results. Please note that to reduce the time it takes
+to process this vignette, we will not download any resources from the
+internet. In a real use case, thus processing time might substantially
+increase because resources have to be downloaded and real portfolios
+might be larger than the one created in this example.
 
-This vignette assumes that you have already followed the steps in 
+This vignette assumes that you have already followed the steps in
 [Installation](https://mapme-initiative.github.io/mapme.biodiversity/articles/installation.html)
-and have familiarized yourself with the terminology used in the package. If you 
-are unfamiliar with the terminology used here, please head over to the 
+and have familiarized yourself with the terminology used in the package.
+If you are unfamiliar with the terminology used here, please head over
+to the
 [Terminology](https://mapme-initiative.github.io/mapme.biodiversity/articles/terminology.html)
-article to learn about the most important concepts. 
+article to learn about the most important concepts.
 
-The idealized workflow for using `{mapme.biodiversity}` consists of the following
-steps:
+The idealized workflow for using `{mapme.biodiversity}` consists of the
+following steps:
 
-- prepare your sf-object containing only geometries of type `'POLYGON'` or `'MULTIPOLYGON'`
-- decide which indicator(s) you wish to calculate and make the required resource(s) available
-- conduct your indicator calculation, which adds a nested list column to your portfolio object
-- continue your analysis in R or decide to export your results to a spatial data format to use it with
-  other geospatial software
+-   prepare your sf-object containing only geometries of type
+    `'POLYGON'` or `'MULTIPOLYGON'`
+-   decide which indicator(s) you wish to calculate and make the
+    required resource(s) available
+-   conduct your indicator calculation, which adds a nested list column
+    to your portfolio object
+-   continue your analysis in R or decide to export your results to a
+    spatial data format to use it with other geospatial software
 
 # Getting started
 
-First, we will load the `{mapme.biodiversity}` and the `{sf}` package for handling
-spatial vector data. For tabular data handling, we will also load the `{dplyr}` 
-and `{tidyr}` packages. Then, we will read an internal GeoPackage which includes 
-part of the geometry of a protected area in the Dominican Republic from the 
-WDPA database.
+First, we will load the `{mapme.biodiversity}` and the `{sf}` package
+for handling spatial vector data. For tabular data handling, we will
+also load the `{dplyr}` and `{tidyr}` packages. Then, we will read an
+internal GeoPackage which includes part of the geometry of a protected
+area in the Dominican Republic from the WDPA database.
 
 ```{r setup, message=FALSE}
 library(mapme.biodiversity)
@@ -67,11 +74,11 @@ aoi <- st_simplify(aoi, preserveTopology = TRUE, dTolerance = 500)
 
 # Setting standard option
 
-We use the `mapme_options()` function and set some arguments, such as the
-output directory, that are important to govern the subsequent processing.
-For this, we create a temporary directory. Internally, to save time on
-downloading when building this vignette, we copied already existing files
-to that output location (code not shown here).
+We use the `mapme_options()` function and set some arguments, such as
+the output directory, that are important to govern the subsequent
+processing. For this, we create a temporary directory. Internally, to
+save time on downloading when building this vignette, we copied already
+existing files to that output location (code not shown here).
 
 ```{r init-data-dir, echo=FALSE}
 outdir <- file.path(tempdir(), "mapme-resources")
@@ -88,60 +95,64 @@ mapme_options(
 )
 ```
 
-The `outdir` argument points towards a directory on the local file system of your 
-machine. All downloaded resources will be written to respective directories nested 
-within `outdir`. 
+The `outdir` argument points towards a directory on the local file
+system of your machine. All downloaded resources will be written to
+respective directories nested within `outdir`.
 
-Once you request a specific resource for your portfolio, only those files will be 
-downloaded that are missing to match its spatio-temporal extent. This behavior 
-is beneficial, e.g. in case you share the `outdir` between different projects to 
-ensure that only resources matching your current portfolio are returned.
+Once you request a specific resource for your portfolio, only those
+files will be downloaded that are missing to match its spatio-temporal
+extent. This behavior is beneficial, e.g. in case you share the `outdir`
+between different projects to ensure that only resources matching your
+current portfolio are returned.
 
-The `verbose` logical controls whether or not the package
-will print informative messages during the calculations. Note, 
-that even if set to `FALSE`, the package will inform users about any potential 
-errors or warnings.
+The `verbose` logical controls whether or not the package will print
+informative messages during the calculations. Note, that even if set to
+`FALSE`, the package will inform users about any potential errors or
+warnings.
 
 # Getting the right resources
 
-You can check which indicators are available via the `available_indicators()`
-function:
+You can check which indicators are available via the
+`available_indicators()` function:
 
 ```{r query-indicator}
 available_indicators()
 available_indicators("treecover_area")
 ```
 
-Say, we are interested in the `treecover_area` indicator.
-We can learn more about this indicator and its required resources by using
-either of the commands below or, if you are viewing the online version, head
-over to the [treecover_area](https://mapme-initiative.github.io/mapme.biodiversity/reference/treecover_area.html) documentation.
+Say, we are interested in the `treecover_area` indicator. We can learn
+more about this indicator and its required resources by using either of
+the commands below or, if you are viewing the online version, head over
+to the
+[treecover_area](https://mapme-initiative.github.io/mapme.biodiversity/reference/treecover_area.html)
+documentation.
 
 ```{r help-indicator, eval = FALSE}
 ?treecover_area
 help(treecover_area)
 ```
 
-By inspecting the help page we learned that this indicator requires the 
-`gfw_treecover` and `gfw_lossyear` resources and it requires to specify three 
-extra arguments: the years for which to calculate treecover, the minimum size
-of patches to be considered as forest and the minimum canopy coverage of a single
-pixel to be considered as forested.
+By inspecting the help page we learned that this indicator requires the
+`gfw_treecover` and `gfw_lossyear` resources and it requires to specify
+three extra arguments: the years for which to calculate treecover, the
+minimum size of patches to be considered as forest and the minimum
+canopy coverage of a single pixel to be considered as forested.
 
-With that information at hand, we can start to retrieve the required resource. 
-We can learn about all available resources using the `available_resources()` 
-function:
+With that information at hand, we can start to retrieve the required
+resource. We can learn about all available resources using the
+`available_resources()` function:
 
 ```{r query-resources}
 available_resources()
 available_resources("gfw_treecover")
 ```
 
-For the purpose of this vignette, we are going to download both, the `gfw_treecover`
-and `gfw_lossyear` resources. We can get more detailed information about a given 
-resource, by using either of the commands below to open up the help page. If 
-you are viewing the  online version of this documentation, you can simply head 
-over to the [gfw_treecover](https://mapme-initiative.github.io/mapme.biodiversity/reference/gfw_treecover.html)
+For the purpose of this vignette, we are going to download both, the
+`gfw_treecover` and `gfw_lossyear` resources. We can get more detailed
+information about a given resource, by using either of the commands
+below to open up the help page. If you are viewing the online version of
+this documentation, you can simply head over to the
+[gfw_treecover](https://mapme-initiative.github.io/mapme.biodiversity/reference/gfw_treecover.html)
 resource documentation.
 
 ```{r help-resource, eval = FALSE}
@@ -151,11 +162,12 @@ help(gfw_treecover)
 help(gfw_lossyear)
 ```
 
-We can now make the required resources available for our portfolio. We will
-use a common interface that is used for all resources, called `get_resources()`.
-We have to specify our portfolio object and supply one or more resource functions
-with their respective arguments. This will then download the matching resources
-to the output directory specified earlier.
+We can now make the required resources available for our portfolio. We
+will use a common interface that is used for all resources, called
+`get_resources()`. We have to specify our portfolio object and supply
+one or more resource functions with their respective arguments. This
+will then download the matching resources to the output directory
+specified earlier.
 
 ```{r get-gfw}
 aoi <- get_resources(
@@ -165,20 +177,20 @@ aoi <- get_resources(
 )
 ```
 
-
 # Calculate specific indicators
 
-The next step consists of calculating specific indicators. Note that each 
-indicator requires one or more resources that were made available via the 
-`get_resources()` function explained above. You will have to re-run this 
-function in every new R session, but note that data that is already available
-will not be re-downloaded. 
+The next step consists of calculating specific indicators. Note that
+each indicator requires one or more resources that were made available
+via the `get_resources()` function explained above. You will have to
+re-run this function in every new R session, but note that data that is
+already available will not be re-downloaded.
 
-Here, we are going to calculate the `treecover_area` indicator which is based 
-on the resources from GFW. Since the resources have been made available in the 
-previous step, we can continue requesting the calculation of our desired indicator. 
-Note the command below would issue an error in case a required resource has not 
-been made available via `get_resources()` beforehand.
+Here, we are going to calculate the `treecover_area` indicator which is
+based on the resources from GFW. Since the resources have been made
+available in the previous step, we can continue requesting the
+calculation of our desired indicator. Note the command below would issue
+an error in case a required resource has not been made available via
+`get_resources()` beforehand.
 
 ```{r calc-indicator}
 aoi <- calc_indicators(
@@ -187,26 +199,28 @@ aoi <- calc_indicators(
 )
 ```
 
-Now let's take a look at the results. In addition to the metadata we are 
+Now let's take a look at the results. In addition to the metadata we are
 already familiar with, we see that there is an additional column called
-`treecover_area` which contains a `tibble`. 
+`treecover_area` which contains a `tibble`.
 
 ```{r print-aoi}
 aoi
 ```
 
-The indicator is represented as a nested-list column in our `sf`-object that is 
-named alike the requested indicator. For our single asset, this column contains 
-a tibble with 6 rows and four columns. Let's have a closer look at this object
+The indicator is represented as a nested-list column in our `sf`-object
+that is named alike the requested indicator. For our single asset, this
+column contains a tibble with `r nrow(aoi$treecover_area[[1]])` rows and
+four columns. Let's have a closer look at this object
 
 ```{r print-indicator}
 aoi$treecover_area
 ```
 
-The tibble follows a standard output format, which is the same for all indicators.
-Each indicator is represented as a tibble with the four columns `datetime`, 
-`variable`, `unit`, and `value`. In case of the `treecover_area` indicator, 
-the variable is called `treecover` and is expressed in `ha`.
+The tibble follows a standard output format, which is the same for all
+indicators. Each indicator is represented as a tibble with the four
+columns `datetime`, `variable`, `unit`, and `value`. In case of the
+`treecover_area` indicator, the variable is called `treecover` and is
+expressed in `ha`.
 
 Let's quickly visualize the results:
 
@@ -221,11 +235,12 @@ plot(value ~ datetime, data,
 )
 ```
 
-If you wish to change the layout of an portfolio, you can use `portfolio_long()`
-and `portfolio_wide()` (see the respective [online tutorial](https://mapme-initiative.github.io/mapme.biodiversity/articles/output-wide.html)). 
-Especially for large portfolios, it is usually a good idea to keep the geometry 
-information in a separated variable to keep the size of the data object relatively 
-small.
+If you wish to change the layout of an portfolio, you can use
+`portfolio_long()` and `portfolio_wide()` (see the respective [online
+tutorial](https://mapme-initiative.github.io/mapme.biodiversity/articles/output-wide.html)).
+Especially for large portfolios, it is usually a good idea to keep the
+geometry information in a separated variable to keep the size of the
+data object relatively small.
 
 ```{r long-drop-geoms}
 geoms <- st_geometry(aoi)
@@ -235,23 +250,23 @@ portfolio_long(aoi, drop_geoms = TRUE)
 ## A note on parallel computing
 
 `{mapme.biodiversity}` follows the parallel computing paradigm of the
-[`{future}`](https://cran.r-project.org/package=future) package. That means 
-that you as a user are in the control if and how you would like to set up 
-parallel processing. Since `{mapme.biodiversity} v0.9`, we apply pre-chunking
-to all assets in the portfolio. That means that assets are split up into
-components of roughly the size of `chunk_size`. These components can than be
-iterated over in parallel to speed up processing. Indicator values will
-be aggregated automatically.
+[`{future}`](https://cran.r-project.org/package=future) package. That
+means that you as a user are in the control if and how you would like to
+set up parallel processing. Since `{mapme.biodiversity} v0.9`, we apply
+pre-chunking to all assets in the portfolio. That means that assets are
+split up into components of roughly the size of `chunk_size`. These
+components can than be iterated over in parallel to speed up processing.
+Indicator values will be aggregated automatically.
 
 ```{r parallel-1, eval = FALSE}
 library(future)
 plan(cluster, workers = 6)
 ```
 
-As another example, with the code below one would apply parallel processing of 2 
-assets, with each having 4 workers available to process chunks, thus requiring 
-a total of 8 available cores on the host machine. Be sure to not request
-more workers than available on your machine.
+As another example, with the code below one would apply parallel
+processing of 2 assets, with each having 4 workers available to process
+chunks, thus requiring a total of 8 available cores on the host machine.
+Be sure to not request more workers than available on your machine.
 
 ```{r parallel, eval = FALSE}
 library(progressr)
@@ -273,12 +288,12 @@ plan(sequential) # close child processes
 
 # Exporting an portfolio object
 
-You can use the `write_portfolio()` function to save a processed 
-portfolio object to disk as a `GeoPackage`. This allows sharing your data with 
-contributors who might not be using R, but any other geospatial software. 
-Simply point towards a non-existing file on your local disk to write the portfolio. 
-You can use `read_portfolio()` to read back a GeoPackage written in such a way
-into R:
+You can use the `write_portfolio()` function to save a processed
+portfolio object to disk as a `GeoPackage`. This allows sharing your
+data with contributors who might not be using R, but any other
+geospatial software. Simply point towards a non-existing file on your
+local disk to write the portfolio. You can use `read_portfolio()` to
+read back a GeoPackage written in such a way into R:
 
 ```{r write-portfolio}
 dsn <- tempfile(fileext = ".gpkg")
@@ -290,4 +305,3 @@ from_disk
 ```{r delete-dsn, echo=FALSE}
 file.remove(dsn)
 ```
-
