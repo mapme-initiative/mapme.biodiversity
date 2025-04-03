@@ -1,7 +1,7 @@
 #' UCDP Georeferenced Event Dataset (UCDP GED)
 #'
 #' This resource distributed by the Uppsala Conflict Data Program (UCDP) constitutes
-#' its most diaggregated dataset on individual events of organized violence.
+#' its most disaggregated dataset on individual events of organized violence.
 #' It encodes the different actors involved, is spatially disaggregated down
 #' to village levels anc currently covers the time period of 1989 to 2021.
 #' Older versions of the data set can be downloaded, but users are recommended

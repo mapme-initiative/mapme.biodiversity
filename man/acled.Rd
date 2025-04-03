@@ -23,7 +23,7 @@ ACLED data available (between 1997 and today). Defaults to 2000.}
 
 \item{email}{Email addressed used to register with ACLED (see Details).}
 
-\item{accept_terms}{A logical indicating if you agree to abid by ACLED's terms
+\item{accept_terms}{A logical indicating if you agree to abide by ACLED's terms
 of use. Defaults to FALSE, thus must be manually set to TRUE.}
 }
 \value{

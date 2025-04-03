@@ -74,7 +74,7 @@ calc_ipbes_biomes <- function() {
 
 register_indicator(
   name = "ipbes_biomes",
-  description = "Area distibution of IBPES biomes within a polygon.",
+  description = "Area distribution of IBPES biomes within a polygon.",
   resources = "ipbes_biomes"
 )
 

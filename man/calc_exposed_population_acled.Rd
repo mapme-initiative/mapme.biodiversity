@@ -40,7 +40,7 @@ temporal coding up to which events are included. Defaults to 1.}
 }
 \value{
 A function that returns an indicator tibble with conflict exposure
-as variable and precentage of the population as its value.
+as variable and percentage of the population as its value.
 }
 \description{
 The indicator calculates the population exposed to conflict events within a

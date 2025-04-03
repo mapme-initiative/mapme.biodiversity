@@ -52,7 +52,7 @@ exactly the same either way, the one might be just more friendly to
 humans than to computers. If you are familiar with the R tidyverse, you
 might also have heard of the term *tidy* data. In terms of tabular data
 you can imagine *tidy* data to be referring to data in a long table
-which naturally fulfills the following requirements:
+which naturally fulfils the following requirements:
 
 -   each variable has its own column
 -   each observation has its own row
@@ -193,7 +193,7 @@ portfolio_long(aoi, indicators = "precipitation_wc")
 Instead of 9 rows, we get a tibble with 108 rows (9 assets \* 12), with
 the metadata for each asset with the geometry column and other identifying 
 values being repeated 12 times each. For very large portfolios, this data layout 
-might be very memory intensive. In these cases it might be more favorable to 
+might be very memory intensive. In these cases it might be more favourable to 
 transform the portfolio to a wide layout.
 
 ```{r fun-prec-to-wide}

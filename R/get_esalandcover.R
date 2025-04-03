@@ -14,7 +14,7 @@
 #' @references © European Union, Copernicus Land Monitoring Service (year),
 #' European Environment Agency (EEA)", f.ex. in 2018: “© European Union,
 #' Copernicus Land Monitoring Service 2018, European Environment Agency (EEA)
-#' @source \url{https://lcviewer.vito.be/download}
+#' @source \url{https://www.nazka.be/en/offline}
 #' @include register.R
 #' @export
 get_esalandcover <- function(years = 2015:2019) {

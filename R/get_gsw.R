@@ -267,7 +267,7 @@ get_global_surface_water_occurrence <- function(version = "v1_4_2021") {
     "Global Surface Water - Change of water occurrence intensity",
     "Global Surface Water - Percentage of water occurrence",
     "Global Surface Water - Percentage of water recurrence",
-    "Global Surface Water - Seasonality of water occurrrence",
+    "Global Surface Water - Seasonality of water occurrence",
     "Global Surface Water - Transition classes"
   )
 )

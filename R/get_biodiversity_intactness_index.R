@@ -1,6 +1,6 @@
 #' Biodiversity Intactness Index
 #'
-#' The variable is the modeled average abundance of originally-present species,
+#' The variable is the modelled average abundance of originally-present species,
 #' relative to their abundance in an intact ecosystem. Please refer to
 #' Newbold et al. (2016) for all details, and please cite it when using these
 #' data.

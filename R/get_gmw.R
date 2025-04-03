@@ -18,7 +18,7 @@
 #' Thomas N., Hardy A., Itoh T., Shimada M. and Finlayson C.M. (2018). The Global
 #' Mangrove Watch – a New 2010 Global Baseline of Mangrove Extent. Remote Sensing
 #' 10(10): 1669. doi:10.3390/rs10101669.
-#' @source \url{https://data.unep-wcmc.org/datasets/45}
+#' @source \url{https://habitats.oceanplus.org/}
 #' @include register.R
 #' @export
 get_gmw <- function(years = c(1996, 2007:2010, 2015:2020)) {

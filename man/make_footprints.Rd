@@ -19,7 +19,7 @@ or raster sources, then internal footprint functions are called, or an
 sf object which will be appended for filenames and potential options.}
 
 \item{filenames}{A character vector indicating the filenames of the source
-data sets if they were written to a destionation. Defaults to \code{basename(srcs)}
+data sets if they were written to a destination. Defaults to \code{basename(srcs)}
 in case of character type or \code{basename(srcs[["source"]])} in case of
 an sf object.}
 

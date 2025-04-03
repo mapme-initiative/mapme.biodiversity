@@ -30,8 +30,8 @@ make_global_grid <- function(xmin = -180, xmax = 170, dx = 10,
 
 #' Helper to check yearly availability
 #'
-#' Use this function to check if a specifed vector of years intersects
-#' with the yearly availablity of a resource.
+#' Use this function to check if a specified vector of years intersects
+#' with the yearly availability of a resource.
 #'
 #' @param target_years Numeric indicating the target year.
 #' @param available_years Numeric indicating the available years.

@@ -15,7 +15,7 @@
 #'   "median", "sd", "min", "max", "sum" "var".
 #' @docType data
 #' @keywords indicator
-#' @returns A function that returns an indicator tibble with precipition
+#' @returns A function that returns an indicator tibble with precipitation
 #'   statistics as variable and corresponding values as value.
 #' @include register.R
 #' @export
