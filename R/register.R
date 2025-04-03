@@ -39,7 +39,7 @@
 #' Portfolio methods for mapme.biodiversity
 #'
 #' `mapme_options()` sets default options for mapme.biodiversity to control the
-#' behavior of downstream functions. Mainly, the output path as well as the
+#' behaviour of downstream functions. Mainly, the output path as well as the
 #' chunk size (in ha), can be set. Additionally, the verbosity can be set and
 #' the path to a log directory can be controlled. Might be extended by other
 #' options in the future.

@@ -1,6 +1,6 @@
 #' Drivers of deforestation for tropical forests
 #'
-#' This resource is produced by a neirest-neighbour matching of a crowd-sourced
+#' This resource is produced by a nearest-neighbour matching of a crowd-sourced
 #' campaign to map dominant driver of forest loss based on visual interpretation
 #' of VHR images matched with Global Forest Loss data by Hansen (2013) version
 #' 1.7 The forest loss layer was re sampled to a resolution of 100 and 1.000

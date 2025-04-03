@@ -124,6 +124,6 @@ calc_ecoregion <- function() {
 
 register_indicator(
   name = "ecoregion",
-  description = "Areal statstics of ecoregions based on TEOW",
+  description = "Areal statistics of ecoregions based on TEOW",
   resources = "teow"
 )

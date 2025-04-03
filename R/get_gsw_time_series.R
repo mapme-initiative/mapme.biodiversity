@@ -67,7 +67,7 @@ get_gsw_time_series <- function(years, version = "LATEST") {
     ids <- sapply(tile_ids, function(n) .get_gsw_ts_tile_id(grid_gsw[n, ]))
 
     source_combinations <- expand.grid(years = years, ids = ids)
-    urls <- purrr::map2_chr(source_combinations$years, source_combinations$ids, \(year, tile_url_id) {
+    urls <- purrr::map2_chr(source_combinations$years, source_combinations$ids, function(year, tile_url_id) {
       # Warning: file naming system is different for 2021
       separator <- ifelse(year == 2021, "_", "-")
       sprintf(

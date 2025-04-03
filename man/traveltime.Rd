@@ -17,7 +17,7 @@ single or multiple inputs as character. Supported statistics are: "mean",
 }
 \value{
 A function that returns an indicator tibble with city ranges and
-statisics as variable and corresponding values (in minutes) as value.
+statistics as variable and corresponding values (in minutes) as value.
 }
 \description{
 Accessibility is the ease with which larger cities can be reached from a

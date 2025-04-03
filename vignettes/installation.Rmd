@@ -23,7 +23,7 @@ on your system. Our recommendation is to follow the `{sf}` installation instruct
 While the package supports sequentially downloading all supported resources,
 we include the option to provide a path to an [aria2](https://aria2.github.io/) executable 
 to speed up downloads based on parallel processing. We expect that 
-the path to the executable binary is known to the user and we test if it is acually executable.
+the path to the executable binary is known to the user and we test if it is actually executable.
 
 Given that the above requirements are met, installing the `{mapme.biodiversity}` 
 current CRAN release is then achieved through the following function call: 

@@ -16,7 +16,7 @@
 #'   "median", "sd", "min", "max", "sum" "var".
 #' @keywords indicator
 #' @returns A function that returns an indicator tibble with city ranges and
-#'   statisics as variable and corresponding values (in minutes) as value.
+#'   statistics as variable and corresponding values (in minutes) as value.
 #' @include register.R
 #' @export
 #' @examples
@@ -92,6 +92,6 @@ calc_traveltime <- function(engine = "extract", stats = "mean") {
 
 register_indicator(
   name = "traveltime",
-  description = "Statistics of traveltime to the clostes city grouped by city category",
+  description = "Statistics of traveltime to the closests city grouped by city category",
   resources = "nelson_et_al"
 )

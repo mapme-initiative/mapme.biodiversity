@@ -62,7 +62,7 @@ calc_gsw_occurrence <- function(engine = "extract", min_occurrence = NULL) {
 
   function(x,
            global_surface_water_occurrence = NULL,
-           name = "gsw_occurence",
+           name = "gsw_occurrence",
            mode = "asset",
            aggregation = "sum",
            verbose = mapme_options()[["verbose"]]) {

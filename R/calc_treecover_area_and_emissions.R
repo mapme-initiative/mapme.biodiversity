@@ -19,7 +19,7 @@
 #'   considered forest in the year 2000.
 #' @keywords indicator
 #' @returns A function that returns an indicator tibble with variables treecover
-#'   and emissions ind corresponding values (in ha and Mg) as value.
+#'   and emissions and corresponding values (in ha and Mg) as value.
 #' @include register.R
 #' @export
 #' @examples
@@ -144,7 +144,7 @@ calc_treecover_area_and_emissions <- function(years = 2000:2023,
 
 register_indicator(
   name = "treecover_area_and_emissions",
-  description = "Area of forest cover and greenhouse gas emssions caused by forest loss by year",
+  description = "Area of forest cover and greenhouse gas emissions caused by forest loss by year",
   resources = c(
     "gfw_treecover",
     "gfw_lossyear",

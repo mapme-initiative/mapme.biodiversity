@@ -122,7 +122,7 @@ file.edit("R/get_<your-new-resource>.R")
 In the first part of a resource function, make sure to include detailed
 documentation. This documentation should explain what this resource
 represents, where it comes from (including a citation), and the
-user-facging arguments that should be specified during runtime.
+user-facing arguments that should be specified during runtime.
 
 Importantly, this documentation **MUST** receive the roxygen tag
 `@keywords resource`, so that the documentation will be identified as a
@@ -159,7 +159,7 @@ important to check the user input in this outer level for correctness so
 that warning/error messages in case of any miss specifications are
 thrown immediately.
 
-For `nasa_srtm`, this outer level does not look really exciting becuase
+For `nasa_srtm`, this outer level does not look really exciting because
 there are no user-facing arguments to be checked (we will see how to
 check user-facing arguments when constructing the indicator below):
 
@@ -214,7 +214,7 @@ geometries representing the bounding box for single resource elements
 functionality to seamlessly produce such a footprint object via
 `make_footprints()`. Note, this function either excepts a character
 vector to GDAL readable data sources or an `sf` object. In case you
-provide a charachter vector, the bounding box information will be
+provide a character vector, the bounding box information will be
 retrieved automatically. This comes with a performance penalty for
 remote sources, because each file has to be opened once, so always opt
 for constructing an `sf` object in the resource function, if feasible.

@@ -62,7 +62,7 @@ get_gfw_lossyear <- function(version = "GFC-2023-v1.11") {
 
 register_resource(
   name = "gfw_lossyear",
-  description = "Global Forest Watch - Year of forest cover loss occurence",
+  description = "Global Forest Watch - Year of forest cover loss occurrence",
   licence = "CC-BY 4.0",
   source = "https://data.globalforestwatch.org/documents/tree-cover-loss/explore",
   type = "raster"

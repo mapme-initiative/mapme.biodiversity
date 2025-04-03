@@ -27,8 +27,8 @@
 #'   centroid point of ADM1
 #' - value 5: is used in different cases if the source refers to parts of a
 #'   country which are larger than ADM1, but smaller than the entire country;
-#'   if two locations are mentioned a representiative point in between is
-#'   selected; if the location mentioned is an non-independend island; if
+#'   if two locations are mentioned a representative point in between is
+#'   selected; if the location mentioned is an non-independent island; if
 #'   the location is not very specifically mentioned or in relation to another
 #'   location
 #' - value 6: the location mentioned refers to an entire country and its
@@ -39,12 +39,12 @@
 #'
 #' For temporal precision there are levels 1 to 5 with decreasing precision:
 #' - value 1: if the exact date of an event is known
-#' - value 2: if start and enddates for events are of unspecified character,
+#' - value 2: if start and end dates for events are of unspecified character,
 #'   spanning more than one calendar day though no longer than six days
 #' - value 3: if when start and end dates for events are specified to a certain
 #'   week, but specific dates are not provided
 #' - value 4: if start and end dates for events are specified to a certain month
-#' - value 5: if start and enddates for events are specified to a certain year,
+#' - value 5: if start and end dates for events are specified to a certain year,
 #'   but specific dates are not provided
 #'
 #'

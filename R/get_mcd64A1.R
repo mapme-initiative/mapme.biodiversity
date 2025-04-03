@@ -4,7 +4,7 @@
 #' a monthly, global gridded 500 meter (m) product containing per-pixel
 #' burned-area and quality information. The MCD64A1 burned-area mapping approach
 #' employs 500 m Moderate Resolution Imaging Spectroradiometer (MODIS) Surface
-#' Reflectance imagery coupled with 1 kilometer (km) MODIS active fire observations.
+#' Reflectance imagery coupled with 1 kilometre (km) MODIS active fire observations.
 #'
 #' The algorithm uses a burn sensitive Vegetation Index (VI) to create dynamic
 #' thresholds that are applied to the composite data. The VI is derived from

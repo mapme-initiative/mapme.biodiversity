@@ -89,6 +89,6 @@ calc_traveltime_2000 <- function(engine = "extract", stats = "mean") {
 
 register_indicator(
   name = "traveltime_2000",
-  description = "Statistics of traveltime to the clostest city in 2000",
+  description = "Statistics of traveltime to the closests city in 2000",
   resources = "accessibility_2000"
 )

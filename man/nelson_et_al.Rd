@@ -41,7 +41,7 @@ The following ranges to nearby cities are available:
 }
 }
 \note{
-Note, that the figshare server applies a rather restrictive rate limit
+Note, that the 'figshare' server applies a rather restrictive rate limit
 thus frequently resulting in opaque error codes (see \url{https://github.com/mapme-initiative/mapme.biodiversity/issues/308}).
 Please set GDAL configuration options to sensible values in case
 you are running into this issue, e.g.: \code{Sys.setenv("GDAL_HTTP_MAX_RETRY" = "5", "GDAL_HTTP_RETRY_DELAY" = "15")}.
