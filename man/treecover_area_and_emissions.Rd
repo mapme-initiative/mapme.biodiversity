@@ -22,7 +22,7 @@ considered forest in the year 2000.}
 }
 \value{
 A function that returns an indicator tibble with variables treecover
-and emissions ind corresponding values (in ha and Mg) as value.
+and emissions and corresponding values (in ha and Mg) as value.
 }
 \description{
 This functions allows to efficiently calculate the treecover and emissions

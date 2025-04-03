@@ -101,7 +101,7 @@ respective directories nested within `outdir`.
 
 Once you request a specific resource for your portfolio, only those
 files will be downloaded that are missing to match its spatio-temporal
-extent. This behavior is beneficial, e.g. in case you share the `outdir`
+extent. This behaviour is beneficial, e.g. in case you share the `outdir`
 between different projects to ensure that only resources matching your
 current portfolio are returned.
 

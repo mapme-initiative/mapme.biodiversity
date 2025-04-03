@@ -81,7 +81,7 @@ spds_exists <- function(path, oo = character(0), what = c("vector", "raster")) {
 #'  or raster sources, then internal footprint functions are called, or an
 #'  sf object which will be appended for filenames and potential options.
 #' @param filenames A character vector indicating the filenames of the source
-#'   data sets if they were written to a destionation. Defaults to `basename(srcs)`
+#'   data sets if they were written to a destination. Defaults to `basename(srcs)`
 #'   in case of character type or `basename(srcs[["source"]])` in case of
 #'   an sf object.
 #' @param what A character vector indicating if the files are vector or raster

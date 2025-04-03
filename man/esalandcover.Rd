@@ -5,7 +5,7 @@
 \alias{get_esalandcover}
 \title{ESA Copernicus Global Land Cover layer}
 \source{
-\url{https://lcviewer.vito.be/download}
+\url{https://www.nazka.be/en/offline}
 }
 \usage{
 get_esalandcover(years = 2015:2019)

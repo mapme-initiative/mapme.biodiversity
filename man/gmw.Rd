@@ -6,7 +6,7 @@
 \alias{get_gmw}
 \title{Global Mangrove Extent Polygon}
 \source{
-\url{https://data.unep-wcmc.org/datasets/45}
+\url{https://habitats.oceanplus.org/}
 }
 \usage{
 get_gmw(years = c(1996, 2007:2010, 2015:2020))

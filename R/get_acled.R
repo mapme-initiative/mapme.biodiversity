@@ -17,7 +17,7 @@
 #'   ACLED data available (between 1997 and today). Defaults to 2000.
 #' @param key ACLED API key obtained by registering with ACLED (see Details).
 #' @param email Email addressed used to register with ACLED (see Details).
-#' @param accept_terms A logical indicating if you agree to abid by ACLED's terms
+#' @param accept_terms A logical indicating if you agree to abide by ACLED's terms
 #'   of use. Defaults to FALSE, thus must be manually set to TRUE.
 #' @keywords resource
 #' @returns A function that returns an `sf` footprint object.

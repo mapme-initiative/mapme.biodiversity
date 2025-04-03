@@ -35,7 +35,7 @@ temporal coding up to which events are included. Defaults to 1.}
 }
 \value{
 A function that returns an indicator tibble with conflict exposure
-as variable and precentage of the population as its value.
+as variable and percentage of the population as its value.
 }
 \description{
 The indicator calculates the population exposed to conflict events within a
@@ -79,8 +79,8 @@ division, such as a province (ADM1), the GED uses the coordinates for the
 centroid point of ADM1
 \item value 5: is used in different cases if the source refers to parts of a
 country which are larger than ADM1, but smaller than the entire country;
-if two locations are mentioned a representiative point in between is
-selected; if the location mentioned is an non-independend island; if
+if two locations are mentioned a representative point in between is
+selected; if the location mentioned is an non-independent island; if
 the location is not very specifically mentioned or in relation to another
 location
 \item value 6: the location mentioned refers to an entire country and its
@@ -93,12 +93,12 @@ point of a certain water area or estimated coordinates
 For temporal precision there are levels 1 to 5 with decreasing precision:
 \itemize{
 \item value 1: if the exact date of an event is known
-\item value 2: if start and enddates for events are of unspecified character,
+\item value 2: if start and end dates for events are of unspecified character,
 spanning more than one calendar day though no longer than six days
 \item value 3: if when start and end dates for events are specified to a certain
 week, but specific dates are not provided
 \item value 4: if start and end dates for events are specified to a certain month
-\item value 5: if start and enddates for events are specified to a certain year,
+\item value 5: if start and end dates for events are specified to a certain year,
 but specific dates are not provided
 }
 }

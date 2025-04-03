@@ -14,7 +14,7 @@ check_available_years(target_years, available_years, indicator)
 \item{indicator}{A character vector with target resource/indicator name.}
 }
 \description{
-Use this function to check if a specifed vector of years intersects
-with the yearly availablity of a resource.
+Use this function to check if a specified vector of years intersects
+with the yearly availability of a resource.
 }
 \keyword{utils}

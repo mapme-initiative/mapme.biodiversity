@@ -1,4 +1,4 @@
-# mapme.biodiversity (development version)
+# mapme.biodiversity 0.9.4
 
 ## General
 
@@ -124,7 +124,7 @@
 - `.check_portfolio()` now checks if `assetid` has unique values and only 
   overrides them if this in not the case (#305)
 - `.read_raster()` now reads values into memory and removes VRT files on-exit (#311)
-- `.fetch_resources()` now honors both creation and opening options (#315)
+- `.fetch_resources()` now honours both creation and opening options (#315)
 - `httr` calls are replaced with the respective `httr2` equivalents (#329)
 
 # mapme.biodiversity 0.8.0
@@ -180,8 +180,8 @@
 
 - exports `prep_resources()` to prepare resources for single assets
 - exports `portfolio_long()` and `portfolio_wide()` to automatically
-  un-nest indicator columns and change the data layout to either long or wide
-- changes the behavior of `write_portfolio()` to serialize portfolios to 
+  unnest indicator columns and change the data layout to either long or wide
+- changes the behaviour of `write_portfolio()` to serialize portfolios to 
   GDAL supported spatial formats in either long or wide format and deprecates
   `read_portfolio()`
 - introduces option `chunk_size` to `mapme_options()` to control the size
@@ -217,7 +217,7 @@
 
 - improves output of `available_resources()` and `available_indicators()`
 - introduces `mapme_options()` to add fine-control of the packages behaviour
-- deprecates `init_portfolio()` in favor of `mapme_options()`
+- deprecates `init_portfolio()` in favour of `mapme_options()`
 - exports helper functions for third parties to extend the package for custom
   resources and indicators:
   - `check_available_years()`
@@ -521,7 +521,7 @@ only writing to the temporal directory (#22).
   - worldclim
   - worldpop
 * initial supported indicators are: 
-  - acessibility
+  - accessibility
   - biome
   - chirpsprec
   - drought_indicator
