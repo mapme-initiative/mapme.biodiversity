@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Quickstart">
 </head>
 <body>
@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,7 +94,7 @@ and have familiarized yourself with the terminology used in the package.
 If you are unfamiliar with the terminology used here, please head over
 to the <a href="https://mapme-initiative.github.io/mapme.biodiversity/articles/terminology.html">Terminology</a>
 article to learn about the most important concepts.</p>
-<p>The idealized workflow for using <a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a>
+<p>The idealized workflow for using <a href="https://mapme-initiative.github.io/mapme.biodiversity/">mapme.biodiversity</a>
 consists of the following steps:</p>
 <ul>
 <li>prepare your sf-object containing only geometries of type
@@ -111,14 +111,14 @@ spatial data format to use it with other geospatial software</li>
 <div class="section level2">
 <h2 id="getting-started">Getting started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
 </h2>
-<p>First, we will load the <a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> and the
+<p>First, we will load the <a href="https://mapme-initiative.github.io/mapme.biodiversity/">mapme.biodiversity</a> and the
 <a href="https://r-spatial.github.io/sf/" class="external-link">sf</a> package for handling spatial vector data. For tabular
 data handling, we will also load the <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> and
 <a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a> packages. Then, we will read an internal GeoPackage
 which includes part of the geometry of a protected area in the Dominican
 Republic from the WDPA database.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mapme-initiative.github.io/mapme.biodiversity/">mapme.biodiversity</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
@@ -156,7 +156,7 @@ local file system of your machine. All downloaded resources will be
 written to respective directories nested within <code>outdir</code>.</p>
 <p>Once you request a specific resource for your portfolio, only those
 files will be downloaded that are missing to match its spatio-temporal
-extent. This behavior is beneficial, e.g. in case you share the
+extent. This behaviour is beneficial, e.g. in case you share the
 <code>outdir</code> between different projects to ensure that only
 resources matching your current portfolio are returned.</p>
 <p>The <code>verbose</code> logical controls whether or not the package
@@ -179,7 +179,7 @@ potential errors or warnings.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> burned_area                   Monthly burned area detected by MODI… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> deforestation_drivers         Areal statistics of deforestation dr… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> drought_indicator             Relative wetness statistics based on… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> ecoregion                     Areal statstics of ecoregions based … <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> ecoregion                     Areal statistics of ecoregions based… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> elevation                     Statistics of elevation based on NAS… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> exposed_population_acled      Number of people exposed to conflict… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> exposed_population_ucdp       Number of people exposed to conflict… <span style="color: #949494;">&lt;tibble&gt;</span> </span></span>
@@ -289,7 +289,7 @@ called <code>treecover_area</code> which contains a
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       1 <span style="color: #949494;">&lt;tibble [24 × 4]&gt;</span> ((-71.73735 18.64734, -71.71386 18.63179, -71.69 18…</span></span></code></pre></div>
 <p>The indicator is represented as a nested-list column in our
 <code>sf</code>-object that is named alike the requested indicator. For
-our single asset, this column contains a tibble with 6 rows and four
+our single asset, this column contains a tibble with 24 rows and four
 columns. Let’s have a closer look at this object</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">aoi</span><span class="op">$</span><span class="va">treecover_area</span></span>
@@ -342,7 +342,7 @@ the size of the data object relatively small.</p>
 <div class="section level3">
 <h3 id="a-note-on-parallel-computing">A note on parallel computing<a class="anchor" aria-label="anchor" href="#a-note-on-parallel-computing"></a>
 </h3>
-<p><a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> follows the parallel computing
+<p><a href="https://mapme-initiative.github.io/mapme.biodiversity/">mapme.biodiversity</a> follows the parallel computing
 paradigm of the <a href="https://cran.r-project.org/package=future" class="external-link"><code>{future}</code></a>
 package. That means that you as a user are in the control if and how you
 would like to set up parallel processing. Since
@@ -409,7 +409,7 @@ a way into R:</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by <a href="http://dariusgoergen.com/" class="external-link">Darius A. Görgen</a>, Om Prakash Bhandari.</p>
+  <p>Developed by <a href="http://dariusgoergen.com/" class="external-link">Darius A. Görgen</a>, Om Prakash Bhandari, Sven Bergtold, <a href="https://mapme-initiative.org/" class="external-link">MAPME-Initiative</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">

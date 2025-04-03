@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Contributing">
 </head>
 <body>
@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,7 +82,7 @@
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>If you are reading this vignette you are most probably to contribute
-to the <a href="https://mapme-initiative.github.io/mapme.biodiversity/index.html">mapme.biodiversity</a> package. This is great news and
+to the <a href="https://mapme-initiative.github.io/mapme.biodiversity/">mapme.biodiversity</a> package. This is great news and
 we are very happy to receive Pull-Requests extending the package’s
 functionality! Below you will find important in-depth information about
 how to add resources and indicators to make the process as seamless as
@@ -117,7 +117,7 @@ branch!</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">git</span> branch add-elevation</span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">git</span> checkout add-elevation</span></code></pre></div>
 <p>Below, we will assume that you develop your extension to the package
-in R Studio. The general guidelines to follow also apply if you choose
+in RStudio. The general guidelines to follow also apply if you choose
 different tooling for your development process, however, it will not be
 covered in this vignette. We assume that all R development dependencies
 are installed. The easiest way to ensure this is using
@@ -177,7 +177,7 @@ are associated with at least one indicator calculation. The very first
 step to adding a resource is to create a new file that will be holding
 the required code.<br>
 Once you checked out to the new branch and having the project opened in
-R Studio, adapt the following command to open the a new resource
+RStudio, adapt the following command to open the a new resource
 file:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/file.edit.html" class="external-link">file.edit</a></span><span class="op">(</span><span class="st">"R/get_&lt;your-new-resource&gt;.R"</span><span class="op">)</span></span>
@@ -189,7 +189,7 @@ file:</p>
 <p>In the first part of a resource function, make sure to include
 detailed documentation. This documentation should explain what this
 resource represents, where it comes from (including a citation), and the
-user-facging arguments that should be specified during runtime.</p>
+user-facing arguments that should be specified during runtime.</p>
 <p>Importantly, this documentation <strong>MUST</strong> receive the
 roxygen tag <code>@keywords resource</code>, so that the documentation
 will be identified as a resource. Also, add the bare name of the
@@ -224,7 +224,7 @@ important to check the user input in this outer level for correctness so
 that warning/error messages in case of any miss specifications are
 thrown immediately.</p>
 <p>For <code>nasa_srtm</code>, this outer level does not look really
-exciting becuase there are no user-facing arguments to be checked (we
+exciting because there are no user-facing arguments to be checked (we
 will see how to check user-facing arguments when constructing the
 indicator below):</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -276,7 +276,7 @@ single resource elements (e.g. tiles in case of a raster resource). We
 provide you with functionality to seamlessly produce such a footprint
 object via <code><a href="../reference/make_footprints.html">make_footprints()</a></code>. Note, this function either
 excepts a character vector to GDAL readable data sources or an
-<code>sf</code> object. In case you provide a charachter vector, the
+<code>sf</code> object. In case you provide a character vector, the
 bounding box information will be retrieved automatically. This comes
 with a performance penalty for remote sources, because each file has to
 be opened once, so always opt for constructing an <code>sf</code> object
@@ -396,7 +396,7 @@ returns another function. The outer level exposes user-facing arguments
 and checks that they are correctly specified, while the inner level is
 required to follow a specified signature and returns a tibble.</p>
 <p>Once you checked out to the new branch and having the project opened
-in R Studio, adapt the following command to open the a new indicator
+in RStudio, adapt the following command to open the a new indicator
 file:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/file.edit.html" class="external-link">file.edit</a></span><span class="op">(</span><span class="st">"R/calc_&lt;your-new-indicator&gt;.R"</span><span class="op">)</span></span>
@@ -519,7 +519,7 @@ on the <code>mode</code> specified for processing, it is a single tibble
 for <code>mode = "asset"</code>, or a list of tibbles equal to the rows
 of <code>x</code> in case <code>mode = "portfolio"</code>.</p>
 <p>You may use helper functions provided by the package for a common
-interface e.g. for vector-raster zonal statistics (e.g. by using
+interface e.g. for vector-raster zonal statistics (e.g. by using
 <code><a href="../reference/engine.html">select_engine()</a></code>).</p>
 <p>You are encouraged to write your own helper function that are needed
 for your indicator processor. These should be located in the same file
@@ -581,7 +581,7 @@ on an appropriate polygon with the respective required resource. For the
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by <a href="http://dariusgoergen.com/" class="external-link">Darius A. Görgen</a>, Om Prakash Bhandari.</p>
+  <p>Developed by <a href="http://dariusgoergen.com/" class="external-link">Darius A. Görgen</a>, Om Prakash Bhandari, Sven Bergtold, <a href="https://mapme-initiative.org/" class="external-link">MAPME-Initiative</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
