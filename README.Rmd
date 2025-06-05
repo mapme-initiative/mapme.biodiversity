@@ -144,4 +144,4 @@ plan(sequential) # close child processes
 
 ## More info
 
-Head over to the [online documentation](https://mapme-initiative.github.io/mapme.biodiversity/index.html) find more detailed information about the package.
+Head over to the [online documentation](https://mapme-initiative.github.io/mapme.biodiversity/index.html) to find more detailed information about the package.
