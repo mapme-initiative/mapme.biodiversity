@@ -40,15 +40,15 @@
 #' ) %>%
 #'   read_sf() %>%
 #'   get_resources(
-#'     get_gfw_treecover(version = "GFC-2023-v1.11"),
-#'     get_gfw_lossyear(version = "GFC-2023-v1.11")
+#'     get_gfw_treecover(version = "GFC-2024-v1.12"),
+#'     get_gfw_lossyear(version = "GFC-2024-v1.12")
 #'   ) %>%
 #'   calc_indicators(calc_treecover_area(years = 2016:2017, min_size = 1, min_cover = 30)) %>%
 #'   portfolio_long()
 #'
 #' aoi
 #' }
-calc_treecover_area <- function(years = 2000:2023,
+calc_treecover_area <- function(years = 2000:2024,
                                 min_size = 10,
                                 min_cover = 35) {
   check_namespace("exactextractr")
