@@ -62,7 +62,7 @@ Otherwise users are advised to use the respective single indicator functions.</p
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">calc_treecover_area_and_emissions</span><span class="op">(</span></span>
-<span>  years <span class="op">=</span> <span class="fl">2000</span><span class="op">:</span><span class="fl">2023</span>,</span>
+<span>  years <span class="op">=</span> <span class="fl">2000</span><span class="op">:</span><span class="fl">2024</span>,</span>
 <span>  min_size <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  min_cover <span class="op">=</span> <span class="fl">35</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -117,8 +117,8 @@ and emissions and corresponding values (in ha and Mg) as value.</p>
 <span class="r-in"><span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="mapme.html">get_resources</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="gfw_treecover.html">get_gfw_treecover</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"GFC-2023-v1.11"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    <span class="fu"><a href="gfw_lossyear.html">get_gfw_lossyear</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"GFC-2023-v1.11"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="gfw_treecover.html">get_gfw_treecover</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"GFC-2024-v1.12"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="gfw_lossyear.html">get_gfw_lossyear</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"GFC-2024-v1.12"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    <span class="fu"><a href="gfw_emissions.html">get_gfw_emissions</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="mapme.html">calc_indicators</a></span><span class="op">(</span></span></span>
@@ -127,21 +127,20 @@ and emissions and corresponding values (in ha and Mg) as value.</p>
 <span class="r-in"><span>  <span class="fu"><a href="portfolio.html">portfolio_long</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Resource 'gfw_treecover' is already available.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Resource 'gfw_lossyear' is already available.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Error in df[[what]][index] &lt;- as.numeric(my_sum) : </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   NAs are not allowed in subscripted assignments</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>All indicator columns contained 'NULL'.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">aoi</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 4 features and 8 fields</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 3 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POLYGON</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  WGS 84</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 9</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   WDPAID ISO3  assetid indicator        datetime            variable unit  value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">478</span>140 DOM         1 treecover_area_… 2016-01-01 <span style="color: #949494;">00:00:00</span> emissio… Mg    <span style="text-decoration: underline;">4</span>296.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> <span style="text-decoration: underline;">478</span>140 DOM         1 treecover_area_… 2016-01-01 <span style="color: #949494;">00:00:00</span> treecov… ha    <span style="text-decoration: underline;">2</span>370.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> <span style="text-decoration: underline;">478</span>140 DOM         1 treecover_area_… 2017-01-01 <span style="color: #949494;">00:00:00</span> emissio… Mg    <span style="text-decoration: underline;">4</span>970.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> <span style="text-decoration: underline;">478</span>140 DOM         1 treecover_area_… 2017-01-01 <span style="color: #949494;">00:00:00</span> treecov… ha    <span style="text-decoration: underline;">2</span>358.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1 more variable: geom &lt;POLYGON [°]&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   WDPAID ISO3  assetid                                                      geom</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>                                             <span style="color: #949494; font-style: italic;">&lt;POLYGON [°]&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">478</span>140 DOM         1 ((-71.76134 18.66333, -71.76067 18.66267, -71.75932 18.6…</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
