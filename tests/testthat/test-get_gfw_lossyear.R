@@ -12,5 +12,5 @@ test_that(".get_gfw_lossyear works", {
   expect_silent(.check_resource_fun(gl))
   expect_silent(fps <- gl(x))
   expect_silent(.check_footprints(fps))
-  expect_equal(fps$filename, "Hansen_GFC-2023-v1.11_lossyear_20N_080W.tif")
+  expect_equal(fps$filename, "Hansen_GFC-2024-v1.12_lossyear_20N_080W.tif")
 })
