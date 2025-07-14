@@ -207,7 +207,6 @@ portfolio_wide <- function(x, indicators = NULL, drop_geoms = FALSE) {
 
 .check_portfolio <- function(x, verbose = mapme_options()[["verbose"]]) {
   stopifnot(inherits(x, "sf"))
-  if (nrow(x) == 0L) stop("Empty portfolio")
 
   sf_col <- attr(x, "sf_column")
   if (st_crs(x) != st_crs(4326)) {
