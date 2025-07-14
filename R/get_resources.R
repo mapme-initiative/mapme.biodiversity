@@ -184,7 +184,6 @@ get_resources <- function(x, ...) {
       }
       warning(msg, call. = FALSE)
       resource <- resource[is_available, ]
-      if (nrow(resource) == 0L) resource <- NULL
     }
   }
   return(resource)
