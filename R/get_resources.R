@@ -173,6 +173,7 @@ get_resources <- function(x, ...) {
       not_available_resource <- resource[!is_available, ]
       msg <- sprintf("%d out of %d resources are not available for %s",
                      nrow(not_available_resource), nrow(resource), name)
+      log_dir <- mapme_options()[["log_dir"]]
       if (!is.null(log_dir)) {
         dsn <- file.path(log_dir, paste0(Sys.Date(), "_", name,
                                          "_mapme-error-resources.gpkg"))
