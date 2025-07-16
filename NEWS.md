@@ -5,6 +5,14 @@
 -   `get_gfw_treecover()` and `get_gfw_lossyear()` updated to version "GFC-2024-v1.12" ([416](https://github.com/mapme-initiative/mapme.biodiversity/issues/416))
 -   `calc_treecover_area()`, `calc_treecover_area_and_emissions()` and `calc_treecoverloss_emissions()` updated to include the year 2024 ([416](https://github.com/mapme-initiative/mapme.biodiversity/issues/416))
 
+## Internal
+
+-   The internal function `.has_internet()` now delegates to `curl::has_internet()`
+
+## Bug fixes
+
+-   The internal function `.fetch_resource()` now correctly takes into account the resources that could not be retrieved and reports them
+
 # mapme.biodiversity 0.9.4
 
 ## General
