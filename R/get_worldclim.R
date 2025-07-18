@@ -144,7 +144,7 @@ get_worldclim_precipitation <- function(years = 1960:2024,
 
   zipfile <- sprintf(zipfile, res, var, start[index], end[index])
 
-  url <- file.path(base_url, res, zipfile)
+  url <- file.path(base_url, zipfile)
 
   months <- sprintf("%02d", 1:12)
   dates <- sprintf("%s-%s", year, months)
