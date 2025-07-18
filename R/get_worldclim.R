@@ -135,7 +135,7 @@ get_worldclim_precipitation <- function(years = 1960:2024,
   stopifnot(length(year) == 1 && year %in% 1960:2024)
   stopifnot(length(var) == 1 && var %in% c("prec", "tmin", "tmax"))
 
-  base_url <- "https://geodata.ucdavis.edu/climate/worldclim/2_1/hist/cts4.06/"
+  base_url <- "https://geodata.ucdavis.edu/climate/worldclim/2_1/hist/cts4.09/"
   zipfile <- "wc2.1_cruts4.06_%s_%s_%s-%s.zip"
 
   start <- c(1960, 1970, 1980, 1990, 2000, 2010, 2020)
