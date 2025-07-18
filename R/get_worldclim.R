@@ -149,7 +149,7 @@ get_worldclim_precipitation <- function(years = 1960:2024,
   months <- sprintf("%02d", 1:12)
   dates <- sprintf("%s-%s", year, months)
   tifs <- sprintf("wc2.1_cruts4.09_%s_%s_%s.tif", res, var, dates)
-  file.path("/vsizip//vsicurl", url, tifs)
+  file.path("/vsizip/vsicurl", url, tifs)
 }
 
 
