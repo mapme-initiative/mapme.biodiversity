@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.4.9001</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.4.9002</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,6 +50,15 @@
 <code><a href="../reference/gfw_treecover.html">get_gfw_treecover()</a></code> and <code><a href="../reference/gfw_lossyear.html">get_gfw_lossyear()</a></code> updated to version “GFC-2024-v1.12” (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/416" class="external-link">416</a>)</li>
 <li>
 <code><a href="../reference/treecover_area.html">calc_treecover_area()</a></code>, <code><a href="../reference/treecover_area_and_emissions.html">calc_treecover_area_and_emissions()</a></code> and <code><a href="../reference/treecoverloss_emissions.html">calc_treecoverloss_emissions()</a></code> updated to include the year 2024 (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/416" class="external-link">416</a>)</li>
+</ul></div>
+<div class="section level3">
+<h3 id="internal-development-version">Internal<a class="anchor" aria-label="anchor" href="#internal-development-version"></a></h3>
+<ul><li>The internal function <code>.has_internet()</code> now delegates to <code><a href="https://jeroen.r-universe.dev/curl/reference/nslookup.html" class="external-link">curl::has_internet()</a></code>
+</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<ul><li>The internal function <code>.fetch_resource()</code> now correctly takes into account the resources that could not be retrieved and reports them (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/433" class="external-link">433</a>)</li>
 </ul></div>
 </div>
     <div class="section level2">
