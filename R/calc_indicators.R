@@ -99,10 +99,10 @@ calc_indicators <- function(x, ...) {
   x_chunk <- .chunk(x, chunk_size)
 
   n <- nrow(x_chunk)
-  s <- 1
-  if (n > 100) {
+  s <- 1L
+  if (n > 100L) {
     s <- round(n * 0.01)
-    n <- 100
+    n <- 100L
   }
 
   if (verbose) {
@@ -111,14 +111,14 @@ calc_indicators <- function(x, ...) {
       p <- progressr::progressor(n)
     }
   }
-
-  results <- furrr::future_map(1:nrow(x_chunk), function(i) {
+  # results <- furrr::future_map(1:nrow(x_chunk), function(i) {
+  results <- furrr::future_map(seq_len(nrow(x_chunk)), function(i) {
     chunk <- x_chunk[i, ]
     resources <- prep_resources(chunk, avail_resources, req_resources, mode = "asset")
     result <- .compute(chunk, resources, fun, verbose)
 
     if (verbose && has_progressr) {
-      if (i %% s == 0) {
+      if (i %% s == 0L) {
         p()
       }
     }

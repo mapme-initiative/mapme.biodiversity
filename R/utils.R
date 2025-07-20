@@ -90,16 +90,23 @@ check_namespace <- function(pkg, error = TRUE) {
   invisible(TRUE)
 }
 
+#' @importFrom curl has_internet
 .has_internet <- function() {
   if (Sys.getenv("mapme_check_connection", unset = "TRUE") == "FALSE") {
     return(TRUE)
   }
-  rsp <- httr2::req_perform(httr2::request("www.google.com"))
-  has_internet <- !httr2::resp_is_error(rsp)
+  # The has_internet function tests for internet connectivity by performing a dns lookup.
+  # If a proxy server is detected, it will also check for connectivity by connecting via the proxy.
+  #
+  # don't use this ad-hoc code
+  # rsp <- httr2::req_perform(httr2::request("www.google.com"))
+  # has_internet <- !httr2::resp_is_error(rsp)
+  # delegate to curl::has_internet
+  has_internet <- curl::has_internet()
   if (!has_internet) {
     message("There seems to be no internet connection. Cannot download resources.")
   }
-  has_internet
+  return(has_internet)
 }
 
 .geom_last <- function(data) {
