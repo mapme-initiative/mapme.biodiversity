@@ -11,7 +11,7 @@
 
 ## Bug fixes
 
--   The internal function `.fetch_resource()` now correctly takes into account the resources that could not be retrieved and reports them
+-   The internal function `.fetch_resource()` now correctly takes into account the resources that could not be retrieved and reports them ([433](https://github.com/mapme-initiative/mapme.biodiversity/issues/433))
 
 # mapme.biodiversity 0.9.4
 
