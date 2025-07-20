@@ -42,7 +42,7 @@ URL: https://mapme-initiative.github.io/mapme.biodiversity/, https://github.com/
 BugReports: https://github.com/mapme-initiative/mapme.biodiversity/issues
 Depends: R (>= 3.5.0)
 SystemRequirements: GDAL (>= 3.7.0), PROJ (>= 4.8.0)
-Imports: dplyr, furrr, httr2, jsonlite, magrittr, purrr, sf, terra, tibble, 
+Imports: curl, dplyr, furrr, httr2, jsonlite, magrittr, purrr, sf, terra, tibble, 
   tidyr
 Suggests: exactextractr, future, knitr, landscapemetrics, progressr, rmarkdown, 
   rstac, rvest, testthat (>= 3.0.0)
