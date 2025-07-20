@@ -90,6 +90,7 @@ check_namespace <- function(pkg, error = TRUE) {
   invisible(TRUE)
 }
 
+#' @importFrom curl has_internet
 .has_internet <- function() {
   if (Sys.getenv("mapme_check_connection", unset = "TRUE") == "FALSE") {
     return(TRUE)

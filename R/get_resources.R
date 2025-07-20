@@ -178,8 +178,11 @@ get_resources <- function(x, ...) {
         dsn <- file.path(log_dir, paste0(Sys.Date(), "_", name,
                                          "_mapme-error-resources.gpkg"))
         # drop list columns to write GPKG
-        sf::st_write(subset(not_available_resource, select = -c(oo, co)),
-                     dsn, append = TRUE, quiet = TRUE)
+        not_available_resource <- not_available_resource[,
+                                  setdiff(names(not_available_resource), c("oo", "co"))]
+        # sf::st_write(subset(not_available_resource, select = -c(oo, co)),
+        #              dsn, append = TRUE, quiet = TRUE)
+        sf::st_write(not_available_resource, dsn, append = TRUE, quiet = TRUE)
         msg <- paste(msg, sprintf("The list can be found in %s", dsn), sep = "\n")
       }
       warning(msg, call. = FALSE)
