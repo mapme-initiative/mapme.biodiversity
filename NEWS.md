@@ -1,9 +1,10 @@
-# mapme.biodiversity 0.9.4.9002
+# mapme.biodiversity 0.9.4.9003
 
 ## General
 
 -   `get_gfw_treecover()` and `get_gfw_lossyear()` updated to version "GFC-2024-v1.12" ([416](https://github.com/mapme-initiative/mapme.biodiversity/issues/416))
 -   `calc_treecover_area()`, `calc_treecover_area_and_emissions()` and `calc_treecoverloss_emissions()` updated to include the year 2024 ([416](https://github.com/mapme-initiative/mapme.biodiversity/issues/416))
+-   `get_esalandcover()` has been adapted to download data from a new source in a format compatible with the previous version ([430](https://github.com/mapme-initiative/mapme.biodiversity/issues/430))
 
 ## Internal
 
