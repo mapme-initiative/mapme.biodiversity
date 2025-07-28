@@ -75,15 +75,15 @@ check_available_years <- function(target_years,
 check_namespace <- function(pkg, error = TRUE) {
   verb <- ifelse(error, "required", "recommended")
   if (!requireNamespace(pkg, quietly = TRUE)) {
-    msg <- paste("R package '%s' %s.\n",
+    msg <- paste("R package '%s' is %s.\n",
       "Please install via `install.packages('%s')`",
       sep = ""
     )
     msg <- sprintf(msg, pkg, verb, pkg)
     if (error) {
-      stop(msg, .call = FALSE)
+      stop(msg, call. = FALSE)
     } else {
-      message(msg, .call = FALSE)
+      message(msg)
       return(invisible(FALSE))
     }
   }
