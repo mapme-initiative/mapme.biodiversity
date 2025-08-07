@@ -1,4 +1,4 @@
-# mapme.biodiversity 0.9.4.9003
+# mapme.biodiversity 0.9.4.9004
 
 ## General
 
@@ -13,6 +13,7 @@
 ## Bug fixes
 
 -   The internal function `.fetch_resource()` now correctly takes into account the resources that could not be retrieved and reports them ([433](https://github.com/mapme-initiative/mapme.biodiversity/issues/433))
+-   Fixed messages from the `check_namespace()` function
 
 # mapme.biodiversity 0.9.4
 
