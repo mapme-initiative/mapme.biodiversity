@@ -18,6 +18,12 @@ area.}
 \value{
 A function that returns an indicator tibble with variable treecover
 and corresponding area (in ha) as value.
+
+If the \link{gfw_treecover} resource for an asset contains only zeros (no trees at all,
+e.g. big water body like an ocean or a sea),
+the \code{NULL} value is returned instead of the indicator tibble.
+If it doesn't contain any pixels with value >=  \code{min_cover}, indicator tibble
+reports area of zero hectares.
 }
 \description{
 This functions allows to efficiently calculate treecover statistics for
