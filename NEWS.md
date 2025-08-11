@@ -1,19 +1,20 @@
-# mapme.biodiversity 0.9.4.9004
+# mapme.biodiversity 0.9.4.9005
 
 ## General
 
 -   `get_gfw_treecover()` and `get_gfw_lossyear()` updated to version "GFC-2024-v1.12" ([416](https://github.com/mapme-initiative/mapme.biodiversity/issues/416))
 -   `calc_treecover_area()`, `calc_treecover_area_and_emissions()` and `calc_treecoverloss_emissions()` updated to include the year 2024 ([416](https://github.com/mapme-initiative/mapme.biodiversity/issues/416))
 -   `get_esalandcover()` has been adapted to download data from a new source in a format compatible with the previous version ([430](https://github.com/mapme-initiative/mapme.biodiversity/issues/430))
+-   modified `calc_treecover_area()` to return zero area and not NULL when tree cover \< `min_cover` ([413](https://github.com/mapme-initiative/mapme.biodiversity/issues/413))
 
 ## Internal
 
--   The internal function `.has_internet()` now delegates to `curl::has_internet()`
+-   internal function `.has_internet()` now delegates to `curl::has_internet()`
 
 ## Bug fixes
 
--   The internal function `.fetch_resource()` now correctly takes into account the resources that could not be retrieved and reports them ([433](https://github.com/mapme-initiative/mapme.biodiversity/issues/433))
--   Fixed messages from the `check_namespace()` function
+-   internal function `.fetch_resource()` now correctly takes into account the resources that could not be retrieved and reports them ([433](https://github.com/mapme-initiative/mapme.biodiversity/issues/433))
+-   fixed messages from the `check_namespace()` function
 
 # mapme.biodiversity 0.9.4
 

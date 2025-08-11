@@ -17,6 +17,13 @@
 #' @keywords indicator
 #' @returns A function that returns an indicator tibble with variable treecover
 #'   and corresponding area (in ha) as value.
+#'
+#' If the [gfw_treecover] resource for an asset contains only zeros (no trees at all,
+#'   e.g. big water body like an ocean or a sea),
+#'   the \code{NULL} value is returned instead of the indicator tibble.
+#' If it doesn't contain any pixels with value >=  \code{min_cover}, indicator tibble
+#'   reports area of zero hectares.
+#'
 #' @include register.R
 #' @export
 #' @examples
@@ -133,6 +140,7 @@ calc_treecover_area <- function(years = 2000:2024,
   }
 }
 
+# helper functions
 
 .prep_gfw_data <- function(data, min_size) {
   # retain only forest pixels and set area to ha
@@ -146,7 +154,6 @@ calc_treecover_area <- function(years = 2000:2024,
 
   data[data[["patches"]] %in% keep_patches, ]
 }
-
 
 .sum_gfw <- function(data, what = "coverage_area", max_year = 2023) {
   # calculate loss area by year
@@ -165,8 +172,8 @@ calc_treecover_area <- function(years = 2000:2024,
 .gfw_check_years <- function(years, indicator) {
   if (any(years < 2000)) {
     msg <- paste("Cannot calculate %s statistics ",
-      "for years smaller than 2000.",
-      sep = ""
+                 "for years smaller than 2000.",
+                 sep = ""
     )
     msg <- sprintf(msg, indicator)
     warning(msg)
@@ -179,17 +186,25 @@ calc_treecover_area <- function(years = 2000:2024,
 }
 
 .gfw_empty_raster <- function(gfw, min_cover) {
-  minmax <- unique(as.vector(terra::minmax(gfw)))
-  if (length(minmax) > 1 && max(minmax) >= min_cover) {
+  minmax <- as.vector(terra::minmax(gfw))
+  minmax[is.na(minmax)] <- 0.0
+  minmax <- unique(minmax)
+  # if (length(minmax) > 1 && max(minmax) >= min_cover) {
+  #   return(FALSE)
+  # }
+  # TRUE
+  if (length(minmax) == 1L && max(minmax) == 0.0) {
+    # only 0 values, no trees
+    return(TRUE)
+  } else {
     return(FALSE)
   }
-  TRUE
 }
 
 .gfw_check_min_cover <- function(min_cover, indicator) {
   msg <- paste("Argument 'min_cover' for indicator '%s' ",
-    "must be a numeric value between 0 and 100.",
-    sep = ""
+               "must be a numeric value between 0 and 100.",
+               sep = ""
   )
   msg <- sprintf(msg, indicator)
   if (length(min_cover) != 1) stop(msg, call. = FALSE)
@@ -213,7 +228,10 @@ calc_treecover_area <- function(years = 2000:2024,
 }
 
 .gfw_calc_patches <- function(gfw) {
-  if (!requireNamespace("landscapemetrics", quietly = TRUE)) {
+  vmax <- max(terra::minmax(gfw))
+  # vmax == 0 if no values in raster > min_cover, can't use
+  # landscapemetrics::get_patches(), it raises an error
+  if (!requireNamespace("landscapemetrics", quietly = TRUE) || vmax == 0) {
     patched <- terra::patches(gfw, directions = 4, zeroAsNA = TRUE)
   } else {
     patched <- landscapemetrics::get_patches(gfw, class = 1, direction = 4)[[1]][[1]]
@@ -221,18 +239,14 @@ calc_treecover_area <- function(years = 2000:2024,
   patched
 }
 
-
 .gfw_prep_rasters <- function(x, treecover, lossyear, emissions, cover) {
-  # binarize the treecover layer based on mcover argument
+  # binarize the treecover layer based on min_cover argument
+  rcl<- matrix(c(NA, NA, 0,
+                 0, cover, 0,
+                 cover, 100, 1), ncol = 3, byrow = TRUE)
   binary_treecover <- terra::classify(treecover,
-    rcl = matrix(c(
-      NA, NA, 0,
-      0, cover, 0,
-      cover, 100, 1
-    ), ncol = 3, byrow = TRUE),
-    include.lowest = TRUE
-  )
-
+                                      rcl = rcl,
+                                      right = FALSE, others = NA)
   # mask lossyear
   lossyear <- terra::mask(lossyear, binary_treecover)
   lossyear <- terra::ifel(lossyear == 0, NA, lossyear)
@@ -257,7 +271,6 @@ calc_treecover_area <- function(years = 2000:2024,
   gfw
 }
 
-
 register_indicator(
   name = "treecover_area",
   description = "Area of forest cover by year",
@@ -266,3 +279,129 @@ register_indicator(
     "gfw_lossyear"
   )
 )
+
+
+# old version
+#
+# .prep_gfw_data <- function(data, min_size) {
+#   # retain only forest pixels and set area to ha
+#   data <- data[data[["treecover"]] == 1, ]
+#   data[["coverage_area"]] <- data[["coverage_area"]] / 10000 # to ha
+#
+#   # exclude patches smaller than threshold
+#   patch_sizes <- by(data[["coverage_area"]], data[["patches"]], sum)
+#   keep_patches <- names(patch_sizes)[which(patch_sizes > min_size)]
+#   keep_patches <- as.numeric(keep_patches)
+#
+#   data[data[["patches"]] %in% keep_patches, ]
+# }
+#
+#
+# .sum_gfw <- function(data, what = "coverage_area", max_year = 2023) {
+#   # calculate loss area by year
+#   df <- data.frame(years = 2000:max_year, var = 0)
+#   names(df)[2] <- what
+#   my_sum <- by(data[[what]], data[["lossyear"]], sum, na.rm = TRUE)
+#   sum_years <- as.numeric(names(my_sum))
+#   sum_years <- sum_years + 2000
+#
+#   index <- match(sum_years, df[["years"]])
+#   df[[what]][index] <- as.numeric(my_sum)
+#
+#   df
+# }
+#
+# .gfw_check_years <- function(years, indicator) {
+#   if (any(years < 2000)) {
+#     msg <- paste("Cannot calculate %s statistics ",
+#       "for years smaller than 2000.",
+#       sep = ""
+#     )
+#     msg <- sprintf(msg, indicator)
+#     warning(msg)
+#   }
+#   years <- years[years >= 2000]
+#   if (length(years) == 0) {
+#     stop("GFW not available for the selected time range.")
+#   }
+#   return(years)
+# }
+#
+# .gfw_empty_raster <- function(gfw, min_cover) {
+#   minmax <- unique(as.vector(terra::minmax(gfw)))
+#   if (length(minmax) > 1 && max(minmax) >= min_cover) {
+#     return(FALSE)
+#   }
+#   TRUE
+# }
+#
+# .gfw_check_min_cover <- function(min_cover, indicator) {
+#   msg <- paste("Argument 'min_cover' for indicator '%s' ",
+#     "must be a numeric value between 0 and 100.",
+#     sep = ""
+#   )
+#   msg <- sprintf(msg, indicator)
+#   if (length(min_cover) != 1) stop(msg, call. = FALSE)
+#   if (!is.numeric(min_cover)) stop(msg, call. = FALSE)
+#   if (min_cover < 0 || min_cover > 100) {
+#     stop(msg, call. = FALSE)
+#   }
+#   min_cover
+# }
+#
+# .gfw_check_min_size <- function(min_size, indicator) {
+#   msg <- paste(
+#     "Argument 'min_size' for indicator '%s' must be ",
+#     "a numeric value greater 0.",
+#     sep = ""
+#   )
+#   msg <- sprintf(msg, indicator)
+#   if (length(min_size) != 1) stop(msg, call. = FALSE)
+#   if (!is.numeric(min_size) || min_size <= 0) stop(msg, call. = FALSE)
+#   min_size
+# }
+#
+# .gfw_calc_patches <- function(gfw) {
+#   if (!requireNamespace("landscapemetrics", quietly = TRUE)) {
+#     patched <- terra::patches(gfw, directions = 4, zeroAsNA = TRUE)
+#   } else {
+#     patched <- landscapemetrics::get_patches(gfw, class = 1, direction = 4)[[1]][[1]]
+#   }
+#   patched
+# }
+#
+#
+# .gfw_prep_rasters <- function(x, treecover, lossyear, emissions, cover) {
+#   # binarize the treecover layer based on mcover argument
+#   binary_treecover <- terra::classify(treecover,
+#     rcl = matrix(c(
+#       NA, NA, 0,
+#       0, cover, 0,
+#       cover, 100, 1
+#     ), ncol = 3, byrow = TRUE),
+#     include.lowest = TRUE
+#   )
+#
+#   # mask lossyear
+#   lossyear <- terra::mask(lossyear, binary_treecover)
+#   lossyear <- terra::ifel(lossyear == 0, NA, lossyear)
+#   # create patches
+#   patched <- .gfw_calc_patches(binary_treecover)
+#
+#   if (!missing(emissions)) {
+#     if (terra::ncell(emissions) != terra::ncell(treecover)) {
+#       emissions <- terra::resample(
+#         emissions, treecover,
+#         method = "bilinear"
+#       )
+#     }
+#     emissions <- terra::mask(emissions, lossyear)
+#     gfw <- c(binary_treecover, lossyear, patched, emissions)
+#     names(gfw) <- c("treecover", "lossyear", "patches", "emissions")
+#   } else {
+#     # prepare return raster
+#     gfw <- c(binary_treecover, lossyear, patched)
+#     names(gfw) <- c("treecover", "lossyear", "patches")
+#   }
+#   gfw
+# }

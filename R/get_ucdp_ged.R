@@ -51,7 +51,7 @@ get_ucdp_ged <- function(version = "latest") {
            verbose = mapme_options()[["verbose"]]) {
     version_ged <- paste0("ged", gsub("\\.", "", version), "-csv.zip")
 
-    base_url <- "/vsizip/vsicurl/https://ucdp.uu.se/downloads/ged/"
+    base_url <- "/vsizip//vsicurl/https://ucdp.uu.se/downloads/ged/"
     url <- paste0(base_url, version_ged)
     switch(version,
       "19.1" = {
