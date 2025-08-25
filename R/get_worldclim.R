@@ -12,10 +12,11 @@
 #'
 #' @name worldclim_min_temperature
 #' @param years A numeric vector indicating for which years to make the
-#'   resource available.
-#' @param resolution A character vector indicating the desired resolution.
+#'   resource available. Defaults to 2000:2024.
+#' @param resolution A character vector indicating the desired resolution:
+#' "2.5m", "5m", or "10m".
 #' @keywords resource
-#' @returns A function that returns a character of file paths.
+#' @returns A function that returns an `sf` footprint object.
 #' @source \url{https://www.worldclim.org/data/index.html}
 #' @importFrom utils unzip
 #' @include register.R
@@ -48,10 +49,11 @@ get_worldclim_min_temperature <- function(years = 2000:2024,
 #'
 #' @name worldclim_max_temperature
 #' @param years A numeric vector indicating for which years to make the
-#'   resource available.
-#' @param resolution A character vector indicating the desired resolution.
+#'   resource available. Defaults to 2000:2024.
+#' @param resolution A character vector indicating the desired resolution:
+#' "2.5m", "5m", or "10m".
 #' @keywords resource
-#' @returns  A character of file paths.
+#' @returns  A function that returns an `sf` footprint object.
 #' @source \url{https://www.worldclim.org/data/index.html}
 #' @importFrom utils unzip
 #' @include register.R
