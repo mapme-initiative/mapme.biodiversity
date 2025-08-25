@@ -207,8 +207,8 @@ portfolio_wide <- function(x, indicators = NULL, drop_geoms = FALSE) {
 
 .check_portfolio <- function(x, verbose = mapme_options()[["verbose"]]) {
   stopifnot(inherits(x, "sf"))
-  sf_col <- attr(x, "sf_column")
 
+  sf_col <- attr(x, "sf_column")
   if (st_crs(x) != st_crs(4326)) {
     message("CRS of x is not EPSG:4326. Attempting to transform.")
     x <- st_transform(x, 4326)

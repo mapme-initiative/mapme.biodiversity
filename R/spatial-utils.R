@@ -195,8 +195,11 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL, mode = c
     stop("Some requested resources are not available.")
   }
 
-  out <- purrr::map(resources, function(resource) {
-    resource <- avail_resources[[resource]]
+  out <- purrr::map(resources, function(resource_name) {
+    resource <- avail_resources[[resource_name]]
+    if (nrow(resource) == 0L) {
+      stop(sprintf("Resource %s is empty", resource_name), call. = FALSE)
+    }
     resource_type <- unique(resource[["type"]])
     reader <- switch(resource_type,
       raster = .read_raster,

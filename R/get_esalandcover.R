@@ -11,27 +11,35 @@
 #'   resource available.
 #' @keywords resource
 #' @returns A function that returns an `sf` footprint object.
-#' @references © European Union, Copernicus Land Monitoring Service (year),
-#' European Environment Agency (EEA)", f.ex. in 2018: “© European Union,
-#' Copernicus Land Monitoring Service 2018, European Environment Agency (EEA)
-#' @source \url{https://www.nazka.be/en/offline}
+#' @details
+#' This function mimics the behavior of the original `get_esalandcover()` function by
+#' downloading the parts of the global raster that correspond to the 20° x 20° tiles used
+#' previously. The files are named the same as before. This allows other code that uses
+#' this resource to remain unchanged.
+#' @references Buchhorn, M., Lesiv, M., Tsendbazar, N.-E., Herold, M., Bertels, L.,
+#' & Smets, B. (2020). Copernicus Global Land Cover Layers - Collection 2.
+#' Remote Sensing, 12(6), 1044.
+#' \url{https://doi.org/10.3390/rs12061044}
+#' @source \url{https://zenodo.org/records/3939050}
 #' @include register.R
 #' @export
-get_esalandcover <- function(years = 2015:2019) {
-  years <- check_available_years(years, c(2015:2019), "esalandcover")
+get_esalandcover <- function(years = 2015L:2019L) {
+  years <- check_available_years(years, c(2015L:2019L), "esalandcover")
 
   function(x,
            name = "esalandcover",
            type = "raster",
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]]) {
+
     # make the ESA grid and construct urls for intersecting tiles
     grid_esa <- make_global_grid(
-      xmin = -180, xmax = 180, dx = 20,
-      ymin = -60, ymax = 80, dy = 20
+      xmin = -180.0, xmax = 180.0, dx = 20.0,
+      ymin = -60.0, ymax = 80.0, dy = 20.0
     )
-    tile_ids <- unique(unlist(st_intersects(x, grid_esa)))
-    if (length(tile_ids) == 0) {
+    # find requoired (intersecting) tiles
+    tile_ids <- unique(unlist(sf::st_intersects(x, grid_esa)))
+    if (length(tile_ids) == 0L) {
       stop(paste("The extent of the portfolio does not ",
         "intersect with the Land Cover grid.",
         sep = ""
@@ -39,25 +47,23 @@ get_esalandcover <- function(years = 2015:2019) {
     }
     # create all urls for target years and per tile
     fps <- purrr::map(tile_ids, function(id) {
-      urls <- purrr::map_chr(years, .get_esa_url, tile = grid_esa[id, ])
-      fp <- st_as_sf(rep(st_as_sfc(grid_esa[id, ]), length(urls)))
+      urls <- purrr::map_chr(years, .get_esa_url)
+      filenames <- purrr::map_chr(years, .get_esa_filename, tile = grid_esa[id, ])
+      # options will define the part of global raster to retrieve
+      # options <- purrr::map(years, .get_esa_option, tile = grid_esa[id, ])
+      options <- rep(.get_esa_option(tile = grid_esa[id, ]), length.out = length(urls))
+      fp <- sf::st_as_sf(rep(sf::st_as_sfc(grid_esa[id, ]), length(urls)))
       fp[["source"]] <- urls
-
-      filenames <- purrr::map_chr(basename(urls), function(x) {
-        x <- strsplit(x, "-|_")[[1]]
-        paste0(x[1], "_", x[3], "_", x[5], "_", x[6], ".tif")
-      })
-
       fp[["filename"]] <- filenames
+      fp[["oo"]] <- options
       fp
     })
 
-    fps <- st_as_sf(purrr::list_rbind(fps))
+    fps <- sf::st_as_sf(purrr::list_rbind(fps))
     co <- c("-of", "COG", "-co", "COMPRESS=DEFLATE")
-    fps <- make_footprints(fps, filenames = fps[["filename"]], what = "raster", co = co)
-    does_exist <- purrr::map_lgl(fps[["source"]], spds_exists, what = "raster")
-    fps <- fps[does_exist, ]
-    if (length(fps) == 0) {
+
+    fps <- make_footprints(fps, filenames = fps[["filename"]], what = "raster", co = co, oo = fps[["oo"]])
+    if (length(fps) == 0L) {
       return(NULL)
     }
     fps
@@ -66,16 +72,35 @@ get_esalandcover <- function(years = 2015:2019) {
 
 #' Helper function to create ESA land cover urls
 #'
+#' @param year A single numeric value indicating the target year
+#'
+#' @return A character vector
+#' @keywords internal
+#' @noRd
+.get_esa_url <- function(year) {
+  urls <- c(
+    "https://zenodo.org/records/3939038/files/PROBAV_LC100_global_v3.0.1_2015-base_Discrete-Classification-map_EPSG-4326.tif",
+    "https://zenodo.org/records/3518026/files/PROBAV_LC100_global_v3.0.1_2016-conso_Discrete-Classification-map_EPSG-4326.tif",
+    "https://zenodo.org/records/3518036/files/PROBAV_LC100_global_v3.0.1_2017-conso_Discrete-Classification-map_EPSG-4326.tif",
+    "https://zenodo.org/records/3518038/files/PROBAV_LC100_global_v3.0.1_2018-conso_Discrete-Classification-map_EPSG-4326.tif",
+    "https://zenodo.org/records/3939050/files/PROBAV_LC100_global_v3.0.1_2019-nrt_Discrete-Classification-map_EPSG-4326.tif"
+  )
+  # match(year, 2015L:2019L)
+  # names(urls) <- as.character(2015:2019)
+  return(urls[match(year, 2015L:2019L)])
+}
+
+#' Helper function to create ESA land cover filenames
+#'
 #' @param tile An sf object representing the spatial extent of the a tile
 #' @param year A single numeric value indicating the target year
 #'
 #' @return A character vector
 #' @keywords internal
 #' @noRd
-.get_esa_url <- function(tile, year) {
+.get_esa_filename <- function(tile, year) {
   min_x <- st_bbox(tile)[1]
   max_y <- st_bbox(tile)[4]
-
   # prepare tile names
   if (min_x < 0) {
     min_x <- paste0("W", sprintf("%03i", abs(min_x)))
@@ -89,35 +114,23 @@ get_esalandcover <- function(years = 2015:2019) {
   }
 
   grid <- paste0(min_x, max_y)
-
-  if (year %in% c(2015:2019)) {
-    if (year == 2015) {
-      paste0(
-        "/vsicurl/https://s3-eu-west-1.amazonaws.com/vito.landcover.global/v3.0.1/",
-        year, "/", grid, "/", grid, "_PROBAV_LC100_global_v3.0.1_", year,
-        "-base_Discrete-Classification-map_EPSG-4326.tif"
-      )
-    } else if (year == 2019) {
-      paste0(
-        "/vsicurl/https://s3-eu-west-1.amazonaws.com/vito.landcover.global/v3.0.1/",
-        year, "/", grid, "/", grid, "_PROBAV_LC100_global_v3.0.1_", year,
-        "-nrt_Discrete-Classification-map_EPSG-4326.tif"
-      )
-    } else {
-      paste0(
-        "/vsicurl/https://s3-eu-west-1.amazonaws.com/vito.landcover.global/v3.0.1/",
-        year, "/", grid, "/", grid, "_PROBAV_LC100_global_v3.0.1_", year,
-        "-conso_Discrete-Classification-map_EPSG-4326.tif"
-      )
-    }
-  } else {
-    warning(sprintf(
-      "Copernicus land cover not available for target year %s", year
-    ))
-    return(NULL)
-  }
+  filename <- sprintf("%s_LC100_v3.0.1_%s.tif", grid, year)
+  return(filename)
 }
 
+#' Helper function to create ESA land cover GDAL options
+#'
+#' @param tile An sf object representing the spatial extent of the a tile
+#'
+#' @return A character vector
+#' @keywords internal
+#' @noRd
+.get_esa_option <- function(tile) {
+  bb <- sf::st_bbox(tile)
+  ext <- sprintf("%f", as.numeric(bb[c("xmin", "ymax", "xmax", "ymin")]))
+  opt <- c("-projwin", ext)
+  return(list(opt))
+}
 
 register_resource(
   name = "esalandcover",
