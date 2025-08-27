@@ -35,12 +35,7 @@
 spds_exists <- function(path, oo = character(0), what = c("vector", "raster")) {
   what <- match.arg(what)
   # path <- normalizePath(path, mustWork = FALSE)
-  # On Windows this would add drive letter ('C:\\', etc.) at the beginning of the path,
-  # which is wrong for remote paths like '/vsicurl/https://...'
-  norm_path <- try(normalizePath(path, mustWork = TRUE), silent = TRUE)
-  if (!inherits(norm_path, "try-error")) {
-    path <- norm_path
-  }
+  path <- .normalize_source_path(path)
   util <- switch(what,
     vector = "ogrinfo",
     raster = "gdalinfo"
@@ -145,7 +140,8 @@ make_footprints <- function(srcs = NULL,
 
   if (inherits(srcs, "character")) {
     what <- match.arg(what)
-    srcs <- normalizePath(srcs, mustWork = FALSE)
+    # srcs <- normalizePath(srcs, mustWork = FALSE)
+    srcs <- .normalize_source_path(srcs)
     srcs <- switch(what,
       vector = purrr::map2(srcs, oo, function(src, opt) .vector_footprint(src, opt)),
       raster = purrr::map2(srcs, oo, function(src, opt) .raster_footprint(src, opt)),
@@ -394,15 +390,16 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL, mode = c
   .geom_last(data)
 }
 
-
 .get_spds <- function(source = NULL,
                       destination = NULL,
                       opts = NULL,
                       what = c("vector", "raster")) {
   what <- match.arg(what)
   stopifnot(is.character(source) && length(source) == 1)
-  source <- normalizePath(source, mustWork = FALSE)
+  # source <- normalizePath(source, mustWork = FALSE)
+  source <- .normalize_source_path(source)
   stopifnot(is.character(destination) && length(destination) == 1)
+  # the destination will in general *NOT* exist, so we must use mustWork = FALSE
   destination <- normalizePath(destination, mustWork = FALSE)
   stopifnot(is.null(opts) || is.character(opts))
   if (is.null(opts)) opts <- character(0)
@@ -459,4 +456,16 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL, mode = c
   }
 
   geom
+}
+
+.normalize_source_path <- function(path) {
+  # On Windows this would add drive letter ('C:\\', etc.) at the beginning of the path,
+  # which is wrong for remote paths like '/vsicurl/https://...'.
+  # Since the source file *MUST* exist, we can use mustWork = TRUE.
+  # In general, it is *NOT* recommended to use mustWork = FALSE.
+  norm_path <- try(normalizePath(path, mustWork = TRUE), silent = TRUE)
+  if (!inherits(norm_path, "try-error")) {
+    path <- norm_path
+  }
+  return(path)
 }

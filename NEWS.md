@@ -1,4 +1,4 @@
-# mapme.biodiversity 0.9.4.9005
+# mapme.biodiversity 0.9.4.9006
 
 ## General
 
@@ -15,6 +15,7 @@
 
 -   internal function `.fetch_resource()` now correctly takes into account the resources that could not be retrieved and reports them ([433](https://github.com/mapme-initiative/mapme.biodiversity/issues/433))
 -   fixed messages from the `check_namespace()` function
+-   fixed the way `normalizePath()` is ised so it works correctly on Windows ([446](https://github.com/mapme-initiative/mapme.biodiversity/issues/446))
 
 # mapme.biodiversity 0.9.4
 

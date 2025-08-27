@@ -1,6 +1,6 @@
 Package: mapme.biodiversity
 Title: Efficient Monitoring of Global Biodiversity Portfolios
-Version: 0.9.4.9005
+Version: 0.9.4.9006
 Authors@R: c(person(given = "Darius A.", 
                     family = "G\u00F6rgen", 
                     role = "aut",
