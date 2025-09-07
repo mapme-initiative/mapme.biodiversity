@@ -1,4 +1,4 @@
-# mapme.biodiversity 0.9.4.9007
+# mapme.biodiversity 0.9.4.9008
 
 ## General
 
@@ -10,7 +10,8 @@
 ## Internal
 
 -   internal function `.has_internet()` now delegates to `curl::has_internet()`
--   added function `.check_system_requirements()` that checks on package load if system requirements (GDAL and PROJ versions) are met and warns if not
+-   added function `.check_system_requirements()` that checks on package load if system requirements (GDAL and PROJ versions) are met, and warns if not
+-   use `utils::compareVersion()` instead of simple '\<' to check the GDAL system library version
 
 ## Bug fixes
 
