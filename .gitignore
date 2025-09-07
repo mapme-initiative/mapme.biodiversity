@@ -53,7 +53,7 @@ rsconnect/
 ## Add any custom .gitignore items below
 
 # folder with development related stuff
-develop/
+develop
 
 # renv related files and folders
 renv.lock

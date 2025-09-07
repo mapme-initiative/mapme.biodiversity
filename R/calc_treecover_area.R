@@ -243,7 +243,8 @@ calc_treecover_area <- function(years = 2000:2024,
   # binarize the treecover layer based on min_cover argument
   rcl<- matrix(c(NA, NA, 0,
                  0, cover, 0,
-                 cover, 100, 1), ncol = 3, byrow = TRUE)
+                 cover, 100.001, 1), ncol = 3, byrow = TRUE)
+  # need vale > 100 to include 100 with 'right = FALSE'
   binary_treecover <- terra::classify(treecover,
                                       rcl = rcl,
                                       right = FALSE, others = NA)

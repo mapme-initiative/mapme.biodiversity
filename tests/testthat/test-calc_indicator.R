@@ -24,7 +24,7 @@ test_that("calc_indicator works", {
   expect_equal(names(stat), c("datetime", "variable", "unit", "value"))
   expect_equal(format(stat$datetime, "%Y"), as.character(2000:2005))
   expect_equal(stat$value,
-    c(1990.911, 1990.618, 1988.929, 1957.669, 1949.169, 1945.333),
+    c(1997.659, 1997.145, 1995.457, 1961.845, 1952.464, 1948.261),
     tolerance = 1e-3
   )
 })

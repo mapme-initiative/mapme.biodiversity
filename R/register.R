@@ -14,6 +14,7 @@
     log_dir = NULL,
     verbose = TRUE
   )
+  .check_system_requirements()
   invisible()
 }
 
@@ -312,3 +313,17 @@ available_indicators <- function(indicators = NULL) {
 .clear_resources <- function() {
   .pkgenv$avail_resources <- list()
 }
+
+.check_system_requirements <- function() {
+  chk <- mapply(.compare_sf_version, c("GDAL", "PROJ"), c("3.7.0", "4.8.0"))
+  invisible()
+}
+
+.compare_sf_version <- function(lib, target) {
+  installed_version <- sf::sf_extSoftVersion()[[lib]]
+  if (utils::compareVersion(installed_version, target) < 0) {
+    msg <- sprintf("%s system library version (%s) < %s", lib, installed_version, target)
+    warning(msg, call. = FALSE)
+  }
+}
+
