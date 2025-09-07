@@ -63,9 +63,9 @@ test_that("test gfw utils", {
     "patches", "emissions", "coverage_area"
   ))
 
-  expect_silent(area <- .sum_gfw(df, "coverage_area"))
+  expect_silent(area <- .sum_gfw(df, "coverage_area", 2023))
   expect_equal(names(area), c("years", "coverage_area"))
-  expect_silent(emis <- .sum_gfw(df, "emissions"))
+  expect_silent(emis <- .sum_gfw(df, "emissions", 2023))
   expect_equal(names(emis), c("years", "emissions"))
 })
 

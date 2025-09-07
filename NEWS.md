@@ -1,4 +1,4 @@
-# mapme.biodiversity 0.9.4.9006
+# mapme.biodiversity 0.9.4.9007
 
 ## General
 
@@ -10,12 +10,14 @@
 ## Internal
 
 -   internal function `.has_internet()` now delegates to `curl::has_internet()`
+-   added function `.check_system_requirements()` that checks on package load if system requirements (GDAL and PROJ versions) are met and warns if not
 
 ## Bug fixes
 
 -   internal function `.fetch_resource()` now correctly takes into account the resources that could not be retrieved and reports them ([433](https://github.com/mapme-initiative/mapme.biodiversity/issues/433))
 -   fixed messages from the `check_namespace()` function
--   fixed the way `normalizePath()` is ised so it works correctly on Windows ([446](https://github.com/mapme-initiative/mapme.biodiversity/issues/446))
+-   fixed the way `normalizePath()` is used so it works correctly on Windows ([446](https://github.com/mapme-initiative/mapme.biodiversity/issues/446))
+-   fixed `calc_treecover_area()` to correctly handle the full tree cover (100%) ([451](https://github.com/mapme-initiative/mapme.biodiversity/issues/451))
 
 # mapme.biodiversity 0.9.4
 
