@@ -155,7 +155,7 @@ calc_treecover_area <- function(years = 2000:2024,
   data[data[["patches"]] %in% keep_patches, ]
 }
 
-.sum_gfw <- function(data, what = "coverage_area", max_year = 2023) {
+.sum_gfw <- function(data, what, max_year) {
   # calculate loss area by year
   df <- data.frame(years = 2000:max_year, var = 0)
   names(df)[2] <- what
@@ -244,7 +244,7 @@ calc_treecover_area <- function(years = 2000:2024,
   rcl<- matrix(c(NA, NA, 0,
                  0, cover, 0,
                  cover, 100.001, 1), ncol = 3, byrow = TRUE)
-  # need vale > 100 to include 100 with 'right = FALSE'
+  # need value > 100 to include 100 with 'right = FALSE'
   binary_treecover <- terra::classify(treecover,
                                       rcl = rcl,
                                       right = FALSE, others = NA)

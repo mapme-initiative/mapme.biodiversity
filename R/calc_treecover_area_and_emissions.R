@@ -102,7 +102,7 @@ calc_treecover_area_and_emissions <- function(years = 2000:2024,
         data <- .prep_gfw_data(data, min_size)
         losses <- .sum_gfw(data, "coverage_area", max_year)
         names(losses)[2] <- "loss"
-        emissions <- .sum_gfw(data, "emissions")
+        emissions <- .sum_gfw(data, "emissions", max_year)
 
         org_coverage <- sum(data[["coverage_area"]])
 
