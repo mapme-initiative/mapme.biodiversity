@@ -4,8 +4,15 @@
 \alias{teow}
 \alias{get_teow}
 \title{Terrestrial Ecoregions of the World (TEOW) Polygon}
+\source{
+\url{https://files.worldwildlife.org/wwfcmsprod/files/Publication/file/6kcchn7e3u_official_teow.zip}
+}
 \usage{
-get_teow()
+get_teow(path = NULL)
+}
+\arguments{
+\item{path}{A character vector to the Terrestrial Ecoregions of the World (TEOW)
+zip file. Note, that the file has to be downloaded manually.}
 }
 \value{
 A function that returns an \code{sf} footprint object.
