@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,6 +42,35 @@
       <small>Source: <a href="https://github.com/mapme-initiative/mapme.biodiversity/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.9.5" id="mapmebiodiversity-095">mapme.biodiversity 0.9.5<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-095"></a></h2>
+<div class="section level3">
+<h3 id="general-0-9-5">General<a class="anchor" aria-label="anchor" href="#general-0-9-5"></a></h3>
+<ul><li>
+<code><a href="../reference/gfw_treecover.html">get_gfw_treecover()</a></code> and <code><a href="../reference/gfw_lossyear.html">get_gfw_lossyear()</a></code> updated to version “GFC-2024-v1.12” (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/416" class="external-link">416</a>)</li>
+<li>
+<code><a href="../reference/treecover_area.html">calc_treecover_area()</a></code>, <code><a href="../reference/treecover_area_and_emissions.html">calc_treecover_area_and_emissions()</a></code> and <code><a href="../reference/treecoverloss_emissions.html">calc_treecoverloss_emissions()</a></code> updated to include the year 2024 (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/416" class="external-link">416</a>)</li>
+<li>
+<code><a href="../reference/esalandcover.html">get_esalandcover()</a></code> has been adapted to download data from a new source in a format compatible with the previous version (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/430" class="external-link">430</a>)</li>
+<li>modified <code><a href="../reference/treecover_area.html">calc_treecover_area()</a></code> to return zero area and not NULL when tree cover &lt; <code>min_cover</code> (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/413" class="external-link">413</a>)</li>
+<li>
+<code><a href="../reference/teow.html">get_teow()</a></code> now requires users to manually download the file (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/450" class="external-link">450</a>)</li>
+</ul></div>
+<div class="section level3">
+<h3 id="internal-0-9-5">Internal<a class="anchor" aria-label="anchor" href="#internal-0-9-5"></a></h3>
+<ul><li>internal function <code>.has_internet()</code> now delegates to <code><a href="https://jeroen.r-universe.dev/curl/reference/nslookup.html" class="external-link">curl::has_internet()</a></code>
+</li>
+<li>added function <code>.check_system_requirements()</code> that checks on package load if system requirements (GDAL and PROJ versions) are met, and warns if not</li>
+<li>use <code><a href="https://rdrr.io/r/utils/compareVersion.html" class="external-link">utils::compareVersion()</a></code> instead of simple ‘&lt;’ to check the GDAL system library version</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-9-5">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9-5"></a></h3>
+<ul><li>internal function <code>.fetch_resource()</code> now correctly takes into account the resources that could not be retrieved and reports them (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/433" class="external-link">433</a>)</li>
+<li>fixed messages from the <code><a href="../reference/check_namespace.html">check_namespace()</a></code> function</li>
+<li>fixed the way <code><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath()</a></code> is used so it works correctly on Windows (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/446" class="external-link">446</a>)</li>
+<li>fixed <code><a href="../reference/treecover_area.html">calc_treecover_area()</a></code> to correctly handle the full tree cover (100%) (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/451" class="external-link">451</a>)</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.9.4" id="mapmebiodiversity-094">mapme.biodiversity 0.9.4<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-094"></a></h2><p class="text-muted">CRAN release: 2025-04-28</p>
 <div class="section level3">
@@ -576,7 +605,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>
