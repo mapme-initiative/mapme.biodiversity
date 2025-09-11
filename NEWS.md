@@ -1,4 +1,4 @@
-# mapme.biodiversity 0.9.4.9007
+# mapme.biodiversity 0.9.5
 
 ## General
 
@@ -6,11 +6,13 @@
 -   `calc_treecover_area()`, `calc_treecover_area_and_emissions()` and `calc_treecoverloss_emissions()` updated to include the year 2024 ([416](https://github.com/mapme-initiative/mapme.biodiversity/issues/416))
 -   `get_esalandcover()` has been adapted to download data from a new source in a format compatible with the previous version ([430](https://github.com/mapme-initiative/mapme.biodiversity/issues/430))
 -   modified `calc_treecover_area()` to return zero area and not NULL when tree cover \< `min_cover` ([413](https://github.com/mapme-initiative/mapme.biodiversity/issues/413))
+-   `get_teow()` now requires users to manually download the file ([450](https://github.com/mapme-initiative/mapme.biodiversity/issues/450))
 
 ## Internal
 
 -   internal function `.has_internet()` now delegates to `curl::has_internet()`
--   added function `.check_system_requirements()` that checks on package load if system requirements (GDAL and PROJ versions) are met and warns if not
+-   added function `.check_system_requirements()` that checks on package load if system requirements (GDAL and PROJ versions) are met, and warns if not
+-   use `utils::compareVersion()` instead of simple '\<' to check the GDAL system library version
 
 ## Bug fixes
 

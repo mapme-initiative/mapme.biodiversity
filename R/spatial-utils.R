@@ -47,7 +47,8 @@ spds_exists <- function(path, oo = character(0), what = c("vector", "raster")) {
     ),
     raster = c("-json", "-nomd", "-norat", "-noct", oo)
   )
-  if (what == "vector" && sf::sf_extSoftVersion()[["GDAL"]] < "3.7.0") {
+  if (what == "vector" &&
+      (utils::compareVersion(sf::sf_extSoftVersion()[["GDAL"]], "3.7.0") < 0)) {
     util <- "gdalinfo"
     opts <- oo
   }

@@ -8,7 +8,7 @@ test_that("biome computation works", {
   outdir <- file.path(tempdir(), "mapme.data")
   .copy_resource_dir(outdir)
   mapme_options(outdir = outdir, verbose = FALSE)
-  get_resources(x, get_teow())
+  get_resources(x, get_teow("test.zip"))
   teow <- prep_resources(x)[["teow"]]
 
   cb <- calc_biome()
