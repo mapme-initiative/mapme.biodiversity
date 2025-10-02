@@ -28,7 +28,7 @@
 #' @returns A function that returns an `sf` footprint object.
 #' @references Mu, H., Li, X., Wen, Y. et al. A global record of annual
 #' terrestrial Human Footprint dataset from 2000 to 2018. Sci Data 9, 176 (2022).
-#' \doi{https://doi.org/10.1038/s41597-022-01284-8}
+#' \doi{doi:10.1038/s41597-022-01284-8}
 #' @source \url{https://figshare.com/articles/figure/An_annual_global_terrestrial_Human_Footprint_dataset_from_2000_to_2018/16571064}
 #' @importFrom utils unzip download.file
 #' @include register.R

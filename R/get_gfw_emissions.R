@@ -22,7 +22,7 @@
 #' @returns A function that returns an `sf` footprint object.
 #' @references Harris, N.L., Gibbs, D.A., Baccini, A. et al. Global maps of
 #' twenty-first century forest carbon fluxes. Nat. Clim. Chang. 11, 234–240
-#' (2021). https://doi.org/10.1038/s41558-020-00976-6
+#' (2021). \doi{doi:10.1038/s41558-020-00976-6}
 #' @source \url{https://data.globalforestwatch.org/datasets/gfw::forest-greenhouse-gas-emissions/about}
 #' @include register.R
 #' @export

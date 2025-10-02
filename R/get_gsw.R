@@ -22,7 +22,7 @@
 #' @returns A function that returns an `sf` footprint object.
 #' @references Pekel, JF., Cottam, A., Gorelick, N. et al. High-resolution
 #' mapping of global surface water and its long-term changes. Nature 540,
-#' 418–422 (2016). https://doi.org/10.1038/nature20584
+#' 418–422 (2016). \doi{doi:10.1038/nature20584}
 #' @source \url{https://global-surface-water.appspot.com/}
 #' @include register.R
 #' @export
@@ -70,7 +70,7 @@ get_global_surface_water_change <- function(version = "v1_4_2021") {
 #' @returns  A character of file paths.
 #' @references Pekel, JF., Cottam, A., Gorelick, N. et al. High-resolution
 #' mapping of global surface water and its long-term changes. Nature 540,
-#' 418–422 (2016). https://doi.org/10.1038/nature20584
+#' 418–422 (2016). \doi{doi:10.1038/nature20584}
 #' @source \url{https://global-surface-water.appspot.com/}
 #' @include register.R
 #' @export
@@ -106,7 +106,7 @@ get_global_surface_water_transitions <- function(version = "v1_4_2021") {
 #' @returns  A character of file paths.
 #' @references Pekel, JF., Cottam, A., Gorelick, N. et al. High-resolution
 #' mapping of global surface water and its long-term changes. Nature 540,
-#' 418–422 (2016). https://doi.org/10.1038/nature20584
+#' 418–422 (2016). \doi{doi:10.1038/nature20584}
 #' @source \url{https://global-surface-water.appspot.com/}
 #' @include register.R
 #' @export
@@ -145,7 +145,7 @@ get_global_surface_water_seasonality <- function(version = "v1_4_2021") {
 #' @returns  A character of file paths.
 #' @references Pekel, JF., Cottam, A., Gorelick, N. et al. High-resolution
 #' mapping of global surface water and its long-term changes. Nature 540,
-#' 418–422 (2016). https://doi.org/10.1038/nature20584
+#' 418–422 (2016). \doi{doi:10.1038/nature20584}
 #' @source \url{https://global-surface-water.appspot.com/}
 #' @include register.R
 #' @export
@@ -183,7 +183,7 @@ get_global_surface_water_recurrence <- function(version = "v1_4_2021") {
 #' @returns  A character of file paths.
 #' @references Pekel, JF., Cottam, A., Gorelick, N. et al. High-resolution
 #' mapping of global surface water and its long-term changes. Nature 540,
-#' 418–422 (2016). https://doi.org/10.1038/nature20584
+#' 418–422 (2016). \doi{doi:10.1038/nature20584}
 #' @source \url{https://global-surface-water.appspot.com/}
 #' @include register.R
 #' @export

@@ -42,6 +42,6 @@ variable, it will be used to authenticate.
 \references{
 Mu, H., Li, X., Wen, Y. et al. A global record of annual
 terrestrial Human Footprint dataset from 2000 to 2018. Sci Data 9, 176 (2022).
-\doi{https://doi.org/10.1038/s41597-022-01284-8}
+\doi{doi:10.1038/s41597-022-01284-8}
 }
 \keyword{resource}

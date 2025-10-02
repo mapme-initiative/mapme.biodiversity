@@ -32,6 +32,6 @@ Powell, G. V. N., Underwood, E. C., D’Amico, J. A., Itoua, I., Strand, H. E.,
 Morrison, J. C., Loucks, C. J., Allnutt, T. F., Ricketts, T. H., Kura, Y., Lamoreux,
 J. F., Wettengel, W. W., Hedao, P., Kassem, K. R. 2001. Terrestrial ecoregions of
 the world: a new map of life on Earth. Bioscience 51(11):933-938.
-\doi{https://doi.org/10.1641/0006-3568(2001)051[0933:TEOTWA]2.0.CO;2}
+\doi{doi:10.1641/0006-3568(2001)051[0933:TEOTWA]2.0.CO;2}
 }
 \keyword{resource}
