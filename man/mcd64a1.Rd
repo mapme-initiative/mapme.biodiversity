@@ -38,6 +38,6 @@ additional special values reserved for missing data and water grid cells.
 Giglio, L., C. Justice, L. Boschetti, D. Roy. MODIS/Terra+Aqua
 Burned Area Monthly L3 Global 500m SIN Grid V061. 2021, distributed by
 NASA EOSDIS Land Processes Distributed Active Archive Center.
-\doi{https://doi.org/10.5067/MODIS/MCD64A1.061}
+\doi{doi:10.5067/MODIS/MCD64A1.061}
 }
 \keyword{resource}

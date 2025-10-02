@@ -45,8 +45,8 @@
 #' @references Poggio, L., de Sousa, L. M., Batjes, N. H., Heuvelink, G. B. M.,
 #'   Kempen, B., Ribeiro, E., and Rossiter, D.: SoilGrids 2.0: producing soil
 #'   information for the globe with quantified spatial uncertainty, SOIL, 7,
-#'   217–240, 2021. \doi{https://doi.org/10.5194/soil-7-217-2021}
-#' @source \url{https://www.isric.org/explore/soilgrids}
+#'   217–240, 2021. \doi{doi:10.5194/soil-7-217-2021}
+#' @source \url{https://isric.org/explore/soilgrids}
 #' @include register.R
 #' @export
 get_soilgrids <- function(layers, depths, stats) {

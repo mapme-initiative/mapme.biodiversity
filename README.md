@@ -88,9 +88,9 @@ Below is a list of the resources currently supported by
 | iucn | IUCN Species Richness Raser Dataset | <https://www.iucnredlist.org/terms/terms-of-use> |
 | key_biodiversity_areas | Key Biodiversity Areas | <https://www.keybiodiversityareas.org/termsofservice> |
 | man_carbon | Amount of carbon that is manageable by humans. | CC NC 4.0 |
-| mcd64a1 | MODIS Burned Area Monthly Product (Aqua and Terra) | <https://lpdaac.usgs.gov/data/data-citation-and-policies/> |
+| mcd64a1 | MODIS Burned Area Monthly Product (Aqua and Terra) | <https://www.earthdata.nasa.gov/engage/open-data-services-software-policies/data-use-guidance> |
 | nasa_grace | NASA Gravity Recovery And Climate Experiment (GRACE) - Measurments of Earth’s mass and water changes | <https://nasagrace.unl.edu/About.aspx> |
-| nasa_srtm | NASA Shuttle Radar Topography Mission (SRTM) Digital Elevation Model (DEM) | <https://lpdaac.usgs.gov/data/data-citation-and-policies/> |
+| nasa_srtm | NASA Shuttle Radar Topography Mission (SRTM) Digital Elevation Model (DEM) | <https://www.earthdata.nasa.gov/engage/open-data-services-software-policies/data-use-guidance> |
 | nelson_et_al | Global maps of traveltime to cities | CC-BY 4.0 |
 | soilgrids | ISRIC - Modelled global soil property layers | CC-BY 4.0 |
 | teow | Terrestrial Ecosystems of the World (TEOW) from WWF-US | unknown |

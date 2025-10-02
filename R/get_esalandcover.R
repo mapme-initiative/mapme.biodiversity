@@ -19,7 +19,7 @@
 #' @references Buchhorn, M., Lesiv, M., Tsendbazar, N.-E., Herold, M., Bertels, L.,
 #' & Smets, B. (2020). Copernicus Global Land Cover Layers - Collection 2.
 #' Remote Sensing, 12(6), 1044.
-#' \url{https://doi.org/10.3390/rs12061044}
+#' \doi{doi:10.3390/rs12061044}
 #' @source \url{https://zenodo.org/records/3939050}
 #' @include register.R
 #' @export

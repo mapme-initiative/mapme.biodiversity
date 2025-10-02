@@ -37,6 +37,6 @@ where 0 represents surface water loss and 200 represents surface water gain.
 \references{
 Pekel, JF., Cottam, A., Gorelick, N. et al. High-resolution
 mapping of global surface water and its long-term changes. Nature 540,
-418–422 (2016). https://doi.org/10.1038/nature20584
+418–422 (2016). \doi{doi:10.1038/nature20584}
 }
 \keyword{resource}

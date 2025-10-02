@@ -16,7 +16,7 @@
 #' @references Tim Newbold; Lawrence Hudson; Andy Arnell; Sara Contu et al.
 #'   (2016). Global map of the Biodiversity Intactness Index, from Newbold et al.
 #'   (2016) Science \[Data set\]. Natural History Museum.
-#'   \doi{https://doi.org/10.5519/0009936}
+#'   \doi{doi:10.5519/0009936}
 #' @include register.R
 #' @export
 get_biodiversity_intactness_index <- function(path = NULL) {

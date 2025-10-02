@@ -46,6 +46,6 @@ mitigated through adaptive management.
 \references{
 Noon, M.L., Goldstein, A., Ledezma, J.C. et al. Mapping the
 irrecoverable carbon in Earth’s ecosystems. Nat Sustain 5, 37–46 (2022).
-https://doi.org/10.1038/s41893-021-00803-6
+\doi{doi:10.1038/s41893-021-00803-6}
 }
 \keyword{resource}
