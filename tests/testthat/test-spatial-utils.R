@@ -112,7 +112,9 @@ test_that(".read_raster works correctly", {
 })
 
 test_that(".read_vector works", {
-  if (sf::sf_extSoftVersion()[["GDAL"]] < "3.7.0") skip()
+  if (utils::compareVersion(sf::sf_extSoftVersion()[["GDAL"]], "3.7.0") < 0) {
+    skip("GDAL < 3.7.0")
+  }
 
   # copy to directory with w permissions, as ogrinfo otherwise fails on CRAN
   org <- system.file("extdata", "burundi.gpkg", package = "mapme.biodiversity")
@@ -133,7 +135,9 @@ test_that(".read_vector works", {
 })
 
 test_that("can get info from zipped vector resource", {
-  if (sf::sf_extSoftVersion()[["GDAL"]] < "3.7.0") skip("GDAL < 3.7.0")
+  if (utils::compareVersion(sf::sf_extSoftVersion()[["GDAL"]], "3.7.0") < 0) {
+    skip("GDAL < 3.7.0")
+  }
   if (packageVersion("sf") == "1.0.18") skip("sf == '1.0.18'")
   f <- system.file("extdata", "gfw_sample.gpkg",
     package = "mapme.biodiversity"

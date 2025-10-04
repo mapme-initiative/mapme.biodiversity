@@ -1,4 +1,5 @@
 test_that("get_carbon works", {
+  skip_on_cran()
   outdir <- file.path(tempdir(), "mapme.data")
   .copy_resource_dir(outdir)
 

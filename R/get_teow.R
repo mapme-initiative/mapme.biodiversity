@@ -10,31 +10,55 @@
 #'
 #' @name teow
 #' @keywords resource
+#' @param path A character vector to the Terrestrial Ecoregions of the World (TEOW)
+#'   zip file. Note, that the file has to be downloaded manually.
 #' @returns  A function that returns an `sf` footprint object.
 #' @references Olson, D. M., Dinerstein, E., Wikramanayake, E. D., Burgess, N. D.,
 #' Powell, G. V. N., Underwood, E. C., D’Amico, J. A., Itoua, I., Strand, H. E.,
 #' Morrison, J. C., Loucks, C. J., Allnutt, T. F., Ricketts, T. H., Kura, Y., Lamoreux,
 #' J. F., Wettengel, W. W., Hedao, P., Kassem, K. R. 2001. Terrestrial ecoregions of
 #' the world: a new map of life on Earth. Bioscience 51(11):933-938.
-#' \doi{https://doi.org/10.1641/0006-3568(2001)051[0933:TEOTWA]2.0.CO;2}
-#' @importFrom utils unzip
+#' \doi{doi:10.1641/0006-3568(2001)051[0933:TEOTWA]2.0.CO;2}
+#' @source \url{https://files.worldwildlife.org/wwfcmsprod/files/Publication/file/6kcchn7e3u_official_teow.zip}
 #' @include register.R
 #' @export
-get_teow <- function() {
+# get_teow <- function() {
+#   function(x,
+#            name = "teow",
+#            type = "vector",
+#            outdir = mapme_options()[["outdir"]],
+#            verbose = mapme_options()[["verbose"]]) {
+#     url <- paste(
+#       "/vsizip//vsicurl/",
+#       "https://files.worldwildlife.org/wwfcmsprod/files/",
+#       "Publication/file/6kcchn7e3u_official_teow.zip/",
+#       "official/wwf_terr_ecos.shp",
+#       sep = ""
+#     )
+#     bbox <- c(xmin = -180.0, ymin = -90.0, xmax = 180.0, ymax = 84.0)
+#     tile <- st_as_sf(st_as_sfc(st_bbox(bbox, crs = "EPSG:4326")))
+#     tile[["source"]] <- url
+#     make_footprints(tile, filenames = "wwf_terr_ecos.gpkg", what = "vector")
+#   }
+# }
+
+get_teow <- function(path = NULL) {
+  if (is.null(path) || !endsWith(tolower(path), ".zip")) {
+    stop("Expecting path to point towards an existing '.zip' file.")
+  }
+
   function(x,
            name = "teow",
            type = "vector",
            outdir = mapme_options()[["outdir"]],
            verbose = mapme_options()[["verbose"]]) {
-    url <- paste(
-      "/vsizip//vsicurl/",
-      "https://files.worldwildlife.org/wwfcmsprod/files/",
-      "Publication/file/6kcchn7e3u_official_teow.zip/",
-      "official/wwf_terr_ecos.shp",
-      sep = ""
+    url <- paste0(
+      "/vsizip/",
+      path,
+      "/official/wwf_terr_ecos.shp"
     )
     bbox <- c(xmin = -180.0, ymin = -90.0, xmax = 180.0, ymax = 84.0)
-    tile <- st_as_sf(st_as_sfc(st_bbox(bbox, crs = "EPSG:4326")))
+    tile <- sf::st_as_sf(sf::st_as_sfc(sf::st_bbox(bbox, crs = "EPSG:4326")))
     tile[["source"]] <- url
     make_footprints(tile, filenames = "wwf_terr_ecos.gpkg", what = "vector")
   }

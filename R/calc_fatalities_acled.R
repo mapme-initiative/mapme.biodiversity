@@ -48,7 +48,7 @@
 #' @references Raleigh, C., Kishi, R. & Linke, A. Political instability patterns
 #'   are obscured by conflict dataset scope conditions, sources, and coding
 #'   choices. Humanit Soc Sci Commun 10, 74 (2023).
-#'   \doi{https://doi.org/10.1057/s41599-023-01559-4}
+#'   \doi{doi:10.1057/s41599-023-01559-4}
 #' @include register.R
 #' @export
 #' @examples

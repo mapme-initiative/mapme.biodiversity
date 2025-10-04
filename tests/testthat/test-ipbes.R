@@ -8,6 +8,7 @@ test_that("get_ipbes_biomes works", {
 })
 
 test_that("calc_ipbes_biomes works", {
+  skip_on_cran()
   x <- read_sf(system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
     package = "mapme.biodiversity"
   ))

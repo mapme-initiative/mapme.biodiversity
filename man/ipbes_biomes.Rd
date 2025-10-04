@@ -52,6 +52,6 @@ K. Ichii, J. Liu, S. M. Subramanian, G. F. Midgley, P. Miloslavich, Z.
 Molnár, D. Obura, A. Pfaff, S. Polasky, A. Purvis, J. Razzaque, B. Reyers, R.
 Roy Chowdhury, Y. J. Shin, I. J. Visseren-Hamakers, K. J. Willis, and C. N.
 Zayas (eds.). IPBES secretariat, Bonn, Germany. 56 pages.
-https://doi.org/10.5281/zenodo.3553579
+\doi{doi:10.5281/zenodo.3553579}
 }
 \keyword{resource}

@@ -11,7 +11,7 @@
 #' @returns A function that returns an `sf` footprint object.
 #' @references NASA JPL (2020). NASADEM Merged DEM Global 1 arc second V001.
 #'   NASA EOSDIS Land Processes DAAC. Accessed 2023-07-01 from
-#'   \doi{https://doi.org/10.5067/MEaSUREs/NASADEM/NASADEM_HGT.001}
+#'   \doi{doi:10.5067/MEaSUREs/NASADEM/NASADEM_HGT.001}
 #' @source \url{https://planetarycomputer.microsoft.com/dataset/nasadem}
 #' @include register.R
 #' @export

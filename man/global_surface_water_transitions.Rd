@@ -45,6 +45,6 @@ change for each pixel. The raster files have integer cell values between
 \references{
 Pekel, JF., Cottam, A., Gorelick, N. et al. High-resolution
 mapping of global surface water and its long-term changes. Nature 540,
-418–422 (2016). https://doi.org/10.1038/nature20584
+418–422 (2016). \doi{doi:10.1038/nature20584}
 }
 \keyword{resource}

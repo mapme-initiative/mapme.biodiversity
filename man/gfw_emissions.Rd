@@ -35,6 +35,6 @@ emissions for areas where no data is available.
 \references{
 Harris, N.L., Gibbs, D.A., Baccini, A. et al. Global maps of
 twenty-first century forest carbon fluxes. Nat. Clim. Chang. 11, 234–240
-(2021). https://doi.org/10.1038/s41558-020-00976-6
+(2021). \doi{doi:10.1038/s41558-020-00976-6}
 }
 \keyword{resource}

@@ -19,7 +19,7 @@
 #' @references Buchhorn, M., Lesiv, M., Tsendbazar, N.-E., Herold, M., Bertels, L.,
 #' & Smets, B. (2020). Copernicus Global Land Cover Layers - Collection 2.
 #' Remote Sensing, 12(6), 1044.
-#' \url{https://doi.org/10.3390/rs12061044}
+#' \doi{doi:10.3390/rs12061044}
 #' @source \url{https://zenodo.org/records/3939050}
 #' @include register.R
 #' @export
@@ -79,18 +79,16 @@ get_esalandcover <- function(years = 2015L:2019L) {
 #' @noRd
 .get_esa_url <- function(year) {
   urls <- c(
-    "https://zenodo.org/records/3939038/files/PROBAV_LC100_global_v3.0.1_2015-base_Discrete-Classification-map_EPSG-4326.tif",
-    "https://zenodo.org/records/3518026/files/PROBAV_LC100_global_v3.0.1_2016-conso_Discrete-Classification-map_EPSG-4326.tif",
-    "https://zenodo.org/records/3518036/files/PROBAV_LC100_global_v3.0.1_2017-conso_Discrete-Classification-map_EPSG-4326.tif",
-    "https://zenodo.org/records/3518038/files/PROBAV_LC100_global_v3.0.1_2018-conso_Discrete-Classification-map_EPSG-4326.tif",
-    "https://zenodo.org/records/3939050/files/PROBAV_LC100_global_v3.0.1_2019-nrt_Discrete-Classification-map_EPSG-4326.tif"
+    "/vsicurl/https://zenodo.org/records/3939038/files/PROBAV_LC100_global_v3.0.1_2015-base_Discrete-Classification-map_EPSG-4326.tif",
+    "/vsicurl/https://zenodo.org/records/3518026/files/PROBAV_LC100_global_v3.0.1_2016-conso_Discrete-Classification-map_EPSG-4326.tif",
+    "/vsicurl/https://zenodo.org/records/3518036/files/PROBAV_LC100_global_v3.0.1_2017-conso_Discrete-Classification-map_EPSG-4326.tif",
+    "/vsicurl/https://zenodo.org/records/3518038/files/PROBAV_LC100_global_v3.0.1_2018-conso_Discrete-Classification-map_EPSG-4326.tif",
+    "/vsicurl/https://zenodo.org/records/3939050/files/PROBAV_LC100_global_v3.0.1_2019-nrt_Discrete-Classification-map_EPSG-4326.tif"
   )
-  # match(year, 2015L:2019L)
-  # names(urls) <- as.character(2015:2019)
   return(urls[match(year, 2015L:2019L)])
 }
 
-#' Helper function to create ESA land cover filenames
+#' Helper function to create ESA land cover file names
 #'
 #' @param tile An sf object representing the spatial extent of the a tile
 #' @param year A single numeric value indicating the target year

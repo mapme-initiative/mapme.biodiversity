@@ -1,7 +1,7 @@
 test_that(".get_teow works", {
   skip_on_cran()
 
-  gteow <- get_teow()
+  gteow <- get_teow("test.zip")
   expect_silent(.check_resource_fun(gteow))
   fps <- gteow()
   expect_silent(.check_footprints(fps))
