@@ -111,9 +111,28 @@ register_indicator(
     values = FALSE
   )
 
-  layer <- paste0("worldclim_", strsplit(names(worldclim), "_")[[1]][3])
-  datetime <- unlist(lapply(names(worldclim), function(x) strsplit(x, "_")[[1]][4]))
-  datetime <- as.POSIXct(paste0(datetime, "-01T00:00:00Z"))
+  # Cache band names once
+  band_names <- names(worldclim)
+
+  # Extract variable name either for 4.06 or 4.09
+  var <- regmatches(band_names[1], regexpr("(prec|tmin|tmax)", band_names[1]))
+  # give informative message if fails
+  if (length(var) == 0) {
+    stop("Cannot parse variable from band name: ", band_names[1])
+  }
+  # Layer name
+  layer <- paste0("worldclim_", var)
+                             # CHANGED: was hard-coded split on "_" token
+
+  # Extract YYYY-MM and convert to POSIXct
+  bn <- basename(band_names)
+  dates <- sub(".*(\\d{4}-\\d{2}).*", "\\1", bn)
+  if (any(!grepl("^\\d{4}-\\d{2}$", dates))) {
+    stop("Unexpected WorldClim band names: ", paste(unique(bn), collapse = ", "))
+  }
+  iso_dates <- paste0(dates, "-01T00:00:00Z")
+  datetime <- as.POSIXct(iso_dates, format = "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
+
 
   results <- select_engine(
     x = x,
