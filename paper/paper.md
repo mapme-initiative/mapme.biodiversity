@@ -35,22 +35,13 @@ reduce forest cover loss.
 
 # Statement of need
 
-To prevent biodiversity losses at scale, conservation researchers require area-based
-indicators that monitor the state of portfolios of intervention areas over time.
-However, relevant spatial data resources are scattered across data repositories
-and servers for which access patterns can differ significantly. Most other
-software usually focuses on the analysis of a single (group of) data resource,
-increasing the cognitive burden on researchers who have to learn multiple interfaces
-and put substantial efforts into harmonizing output structures.
+To prevent biodiversity loss at scale, conservation researchers and practitioners require area-based indicators derived from diverse spatial datasets. Monitoring efforts often involve sets of intervention areas that must be tracked consistently over time. However, relevant data sources are dispersed across multiple repositories and platforms, each with distinct access protocols, formats, and documentation standards.
 
-The \texttt{mapme.biodiversity} \texttt{R} package provides a single access pattern
-to a diverse set of conservation related data resources from diverse sources.
-It provides a common interface to derive area-based indicators for conservation
-portfolios in a standardized output format. Further workflows and analysis of the
-indicators can be conducted in the \texttt{R} computing environment or with
-other tools of one's liking through the serialization of data to standard spatial
-formats. It thus helps individuals and groups active in conservation research
-to streamline their spatial data acqusition process.
+Most existing tools focus on a specific data source or domain, offering limited interoperability and requiring users to learn multiple interfaces. This fragmentation imposes a high cognitive and technical burden, especially on users who are not remote sensing specialists but need spatial data for research, monitoring, or policy evaluation.
+
+The \texttt{mapme.biodiversity} \texttt{R} package provides a unified interface to access and process a wide range of spatial datasets relevant to conservation and environmental management. It enables users to derive standardized, area-based indicators at scale, supports reproducible workflows in \texttt{R}, and facilitates integration with other tools via export to standard spatial formats.
+
+Originally developed for conservation monitoring, the package has also found applications in adjacent domains such as agriculture, rural development, food security, and infrastructure planning. It offers a transparent and auditable alternative to proprietary platform-as-a-service (PaaS) solutions like Google Earth Engine or Microsoft Planetary Computer, which may be inaccessible to users in low-connectivity settings, non-academic institutions, or those requiring long-term reproducibility not guaranteed by commercial platforms.
 
 # Applications
 
