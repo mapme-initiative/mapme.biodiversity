@@ -51,6 +51,12 @@ At the Kreditanstalt für Wiederaufbau (KfW) and the Agence Française de Dével
 
 # Comparison with other software packages
 
+Different software tools address related needs in conservation monitoring and biodiversity assessment. The Digital Observatory for Protected Areas (\texttt{DOPA}) provides a centralized, server-based system developed by the European Commission to compute global protected-area indicators through standardized, automated workflows [@juffe-bignoli_delivering_2024]. In contrast, mapme.biodiversity offers an R-native, decentralized framework that enables users to reproduce similar area-based analyses locally, adapt them to specific contexts, and extend them with additional datasets. Both share the goal of consistent and transparent indicator production, but differ in scale, accessibility, and infrastructure dependency.
+
+The \texttt{wdpar}  \texttt{R} package facilitates access to and cleaning of spatial data from the World Database on Protected Areas [@hanson_wdpar_2022]. \texttt{mapme.biodiversity} is commonly used alongside \texttt{wdpar} to compute diverse environmental indicators from multiple sources on these cleaned protected area boundaries.
+
+The Global Forest Watch (\texttt{GFW}) API, developed by the World Resources Institute, provides access to selected global forest monitoring datasets such as tree cover, loss, gain, biomass, and fire activity derived from satellite products like Hansen et al. [-@hansen_high-resolution_2013]. It allows users to delegate computations to a remote cloud infrastructure on these datasets and retrieve aggregated statistics for defined areas. \texttt{mapme.biodiversity} instead performs all processing locally or on user-managed servers and is designed to handle a wider set of environmental and socio-economic data sources.
+
 - JRC's DOPA: https://www.preprints.org/manuscript/202408.1146/v1 & https://github.com/giacomo-gcad/dopa_workflow/
 - wdpar: https://github.com/prioritizr/wdpar
 - Red List Indices: https://github.com/red-list-ecosystem/rle_indices
