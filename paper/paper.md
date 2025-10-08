@@ -9,10 +9,32 @@ authors:
   - name: Darius A. Görgen
     orcid: 0009-0008-5503-7704
     affiliation: 1
+  - name: Zivan Karaman
+    orcid: 0009-0008-5503-7704
+    affiliation: 2
+  - name: Andreas Petutschnig
+    orcid: 0000-0001-5029-2425
+    affiliation: 4
+  - name: Johannes Schielein
+    orcid: 0000-0001-6286-0688
+    affiliation: 3
+  - name: Florent Bédécarrats
+    orcid: 0000-0003-1001-5540
+    affiliation: 5
 affiliations:
  - name: Department of Landscape Ecology, University of Münster, Germany
    index: 1
-date: "05 Juni 2025"
+ - name: Independent consultant, France
+   index: 2
+ - name: KfW Development Bank, Bonn, Germany
+   index: 3
+ - name: Department of Landscape Ecology, University of Münster, Germany
+   index: 1
+ - name: Department of Landscape Ecology, University of Münster, Germany
+   index: 1
+ - name: UMI SOURCE, Universit' Paris-Saclay, UVSQ, IRD, Guyancourt, France
+   index: 5
+date: "09 October 2025"
 bibliography: paper.bib
 output: rticles::joss_article
 journal: JOSS
@@ -66,7 +88,7 @@ Key features include:
 - **Extensibility**: the framework allows users to add datasets add datasets and create their own indicators to meet specific research, monitoring or evaluation needs.
 - **Interoperability**: outputs in standard geospatial formats, compatible with external GIS and statistical software.
 
-The following minimal example illustrates the typical workflow:
+The following minimal example illustrates a typical workflow:
 
 ```r
 library(mapme.biodiversity)
@@ -95,10 +117,10 @@ versions are available on an online code repository (<https://github.com/mapme-i
 
 # Acknowledgments
 
-Author Darius A. Görgen was funded by the generous support of the Kreditanstalt für Wiederaufbau (KfW).
+The development and maintenance of the \texttt{mapme.biodiversity} package have been funded by the KfW German Development Bank. The authors thank all users and contributors who provided feedback and suggestions that helped improve the package.
 
 # Conflict of interest
 
-The authors declares no conflict of interest.
+This software was developed through collaboration between KfW staff, contracted developers, and independent researchers. Darius A. Görgen, Zivan Karaman, and Andreas Petutschnig contributed to the development under KfW funding; Johannes Schielein is employed by KfW; and Florent Bédécarrats uses the package for research purposes. The authors declare that these roles did not influence the design, implementation, or presentation of the software.
 
 # References
