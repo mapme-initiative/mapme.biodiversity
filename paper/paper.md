@@ -45,10 +45,9 @@ Originally developed for conservation monitoring, the package has also found app
 
 # Applications
 
-- KfW: Impact evaluations (Melvin)
-- KfW: Reporting to Ministry (Johannes/Sven)
-- IRD: Research projects & capacity development (Florent)
-- WWF and others?
+As an open-source package, the full range of \texttt{mapme.biodiversity} applications is difficult to track. However, download statistics indicate substantial usage, with 19,599 downloads from CRAN between January 2019 and September 2025. The package is actively used by several institutions for both operational and research purposes.
+
+At the Kreditanstalt für Wiederaufbau (KfW) and the Agence Française de Développement (AFD) -- the German and French public development banks for international development -- it is used for internal impact evaluations and reporting on funded conservation and development programs. At the French National Research Institute for Sustainable Development (IRD), it is used in research on policy evaluation and in projects aimed at strengthening research capacity in the Global South, including ongoing work in Madagascar and Senegal.
 
 # Comparison with other software packages
 
