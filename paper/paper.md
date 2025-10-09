@@ -45,7 +45,7 @@ published: unpublished
 
 # Summary
 
-The \texttt{mapme.biodiversity} \texttt{R} package provides an open and reproducible framework for computing biodiversity-related indicators from multiple global geospatial datasets. It streamlines access, preprocessing, and analysis of spatial data to produce standardized, area-based metrics that can be used for conservation monitoring, policy evaluation, and research. The package integrates established R tools for spatial data handling and parallel processing, supports both local and cloud-based workflows, and allows users to extend functionality with new datasets and indicators. By enabling reproducible and scalable analyses across diverse regions and themes, \texttt{mapme.biodiversity} helps bridge the gap between raw geospatial information and decision-relevant biodiversity indicators.
+The \texttt{mapme.biodiversity} \texttt{R} package provides an open and reproducible framework for computing biodiversity-related indicators from multiple global geospatial datasets. It streamlines access, preprocessing, and analysis of spatial data to produce standardized, area-based metrics that can be used for conservation monitoring, policy evaluation, and research. The package integrates existing R tools for spatial data handling and parallel processing, supports both local and cloud-based workflows, and allows users to extend functionality with new datasets and indicators. By enabling reproducible and scalable analyses across diverse regions and themes, \texttt{mapme.biodiversity} helps bridge the gap between raw geospatial information and decision-relevant biodiversity indicators.
 
 # Statement of need
 
@@ -117,8 +117,8 @@ versions are available on an online code repository (<https://github.com/mapme-i
 
 The development and maintenance of the \texttt{mapme.biodiversity} package have been funded by the KfW German Development Bank. The authors thank all users and contributors who provided feedback and suggestions that helped improve the package.
 
-# Conflict of interest
+# Conflicts of interest
 
-This software was developed through collaboration between KfW staff, contracted developers, and independent researchers. Darius A. Görgen, Zivan Karaman, and Andreas Petutschnig contributed to the development under KfW funding; Johannes Schielein is employed by KfW; and Florent Bédécarrats uses the package for research purposes. The authors declare that these roles did not influence the design, implementation, or presentation of the software.
+This software was developed through collaboration between KfW staff, contracted developers, and independent researchers. Darius A. Görgen, Zivan Karaman, and Andreas Petutschnig contributed to the development under KfW funding; Johannes Schielein is employed by KfW; and Florent Bédécarrats uses the package for research activities, some of which are funded by the KfW. The KfW supports the aforementioned software development and research activities as a part of its mandate from the German State to support environment protection and sustainable development in less privileged countries. In this framework, the KfW sponsors the development of tools and studies to further enhance knowledge, accountability and evaluation on results of the policies it finances. The authors declare that KfW support enabled their work on the \texttt{mapme.biodiversity} package and did not hinder in any way the accuracy, reliability or performance of this software, nor the objectivity with which it is presented in the present article. 
 
 # References
