@@ -91,7 +91,8 @@ The following minimal example illustrates a typical workflow:
 ```r
 library(mapme.biodiversity)
 # Define one or several areas of interest
-aoi_path <- system.file("extdata", "gfw_sample.gpkg", package = "mapme.biodiversity")
+aoi_path <- system.file("extdata", "gfw_sample.gpkg", 
+package = "mapme.biodiversity")
 aoi <- sf::read_sf(aoi_path)
 # Get the resource data
 res <- get_resources(aoi,
@@ -105,7 +106,8 @@ ind <- calc_indicators(res,
 out <- portfolio_long(ind)
 # plot the results
 plot(out$datetime, out$value, col =  "blue", pch = 16, xlab = "year",
-     ylab = sprintf("%s (%s)", out$variable[1], out$unit[1]), main =  "Treecover loss")
+     ylab = sprintf("%s (%s)", out$variable[1], out$unit[1]), 
+     main =  "Treecover loss")
 ```
 
 # Availability
