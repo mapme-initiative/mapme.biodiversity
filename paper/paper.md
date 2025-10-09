@@ -14,31 +14,29 @@ authors:
     affiliation: 2
   - name: Andreas Petutschnig
     orcid: 0000-0001-5029-2425
-    affiliation: 4
-  - name: Johannes Schielein
-    orcid: 0000-0001-6286-0688
     affiliation: 3
   - name: Florent Bédécarrats
     orcid: 0000-0003-1001-5540
+    affiliation: 4
+  - name: Johannes Schielein
+    orcid: 0000-0001-6286-0688
     affiliation: 5
 affiliations:
  - name: Department of Landscape Ecology, University of Münster, Germany
    index: 1
  - name: Independent consultant, France
    index: 2
- - name: KfW Development Bank, Bonn, Germany
+ - name: Department of Geoinformatics, University of Salzburg, Austria
    index: 3
- - name: Department of Landscape Ecology, University of Münster, Germany
-   index: 1
- - name: Department of Landscape Ecology, University of Münster, Germany
-   index: 1
- - name: UMI SOURCE, Universit' Paris-Saclay, UVSQ, IRD, Guyancourt, France
+ - name: UMI SOURCE, Université Paris-Saclay, UVSQ, IRD, Guyancourt, France
+   index: 4
+ - name: KfW Development Bank, Bonn, Germany
    index: 5
 date: "09 October 2025"
-bibliography: paper.bib
 output: rticles::joss_article
 journal: JOSS
-link-citations: yes
+bibliography: paper.bib
+link-citations: true
 year: 2025
 software_repository_url: www.github.com/mapme-initiative/mapme.biodiversity
 submitted: unsubmitted
