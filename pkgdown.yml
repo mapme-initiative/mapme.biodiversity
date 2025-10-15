@@ -13,6 +13,3 @@ last_built: 2025-10-13T04:15Z
 urls:
   reference: https://mapme-initiative.github.io/mapme.biodiversity/reference
   article: https://mapme-initiative.github.io/mapme.biodiversity/articles
-template:
-  assets:
-    - extras
