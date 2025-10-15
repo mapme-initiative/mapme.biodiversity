@@ -75,6 +75,8 @@ The \texttt{MODIStsp} \texttt{R} package [@busetto_modistsp_2016] provides tools
 
 The \texttt{sits} \texttt{R} package [@simoes_satellite_2021] prprocesses satellite imagery from Landsat, Sentinel, or MODIS. It builds time-series data cubes from these surface reflectance images and applies machine-learning models to classify land cover. Its inputs are direct measurements from Earth observation sensors, requiring modeling of reflectance dynamics over time. In contrast, \texttt{mapme.biodiversity}  relies on derived geospatial products that already summarize physical or biological processes (e.g., forest loss, fire occurrence, precipitation, population density) and uses them to compute area-based indicators over user-defined areas.
 
+\texttt{BON in a Box}, developed by the Group on Earth Observations Biodiversity Observation Network (GEO BON), is an open platform for biodiversity monitoring and indicator computation [@griffith_boninabox_2025]. It enables users to assemble and share modular workflows that generate Essential Biodiversity Variables and policy-relevant indicators aligned with the Kunming–Montreal Global Biodiversity Framework. While \texttt{mapme.biodiversity} focuses on reproducible computation of area-based indicators within R, BON in a Box emphasizes cross-language interoperability and integration with national biodiversity monitoring systems. Griffith et al. (2025, Table S2, p. 18) explicitly identify \texttt{mapme.biodiversity} as an R package suitable for integration as a pipeline within BON in a Box.
+
 # Functionality and Example Usage
 
 Key features include:
