@@ -216,14 +216,15 @@ ind <- calc_indicators(res,
                                            min_size = 1, min_cover = 30))
 # Save portfolio data to GeoPackage
 write_portfolio(ind, "example.gpkg")
-# Transform into a more suitable format
+# Transform into long format for plotting
 out <- portfolio_long(ind)
 # plot the results
 plot(out$datetime, out$value, col =  "blue", pch = 16, xlab = "year",
      ylab = sprintf("%s (%s)", out$variable[1], out$unit[1]),
      main =  "Treecover loss")
 ```
-![Treecover Loss Time-Series Plot](Figure1.png)
+
+![Treecover Loss Time-Series Plot](Figure1.svg){#treecover width="60%"}
 
 # Availability
 
