@@ -223,7 +223,8 @@ plot(out$datetime, out$value, col =  "blue", pch = 16, xlab = "year",
      ylab = sprintf("%s (%s)", out$variable[1], out$unit[1]),
      main =  "Treecover loss")
 ```
-![Treecover Loss Time-Series Plot](Figure1.png)
+
+![Treecover Loss Time-Series Plot](Figure1.svg){#treecover width="60%"}
 
 # Availability
 
