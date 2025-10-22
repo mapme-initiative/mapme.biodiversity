@@ -45,8 +45,7 @@ Below is a list of the resources currently supported by `mapme.biodiversity`.
 knitr::kable(mapme.biodiversity::available_resources()[, c("name", "description", "licence")])
 ```
 
-A more detailed list of these resources can be found in [this](extras/mapme.biodiversity_resources.xlsx) Excel file.
-
+A more detailed list of these resources can be found in [this](https://github.com/mapme-initiative/mapme.biodiversity/raw/refs/heads/main/extras/mapme.biodiversity_resources.xlsx) Excel file.
 
 Next, is a list of supported indicators.
 
@@ -147,4 +146,4 @@ plan(sequential) # close child processes
 
 ## More info
 
-Head over to the [online documentation](https://mapme-initiative.github.io/mapme.biodiversity/index.html) to find more detailed information about the package.
+In addition to extensive [online documentation](https://mapme-initiative.github.io/mapme.biodiversity) that provides detailed information about the package, `mapme.biodiversity` provides an applied [workshop](https://github.com/mapme-initiative/demo-madeira) example using real-world data showcasing the usage of the package to estimate changes in forest cover caused by flooding as a consequence of dam building at the Madeira river in Rondônia, Brazil.
