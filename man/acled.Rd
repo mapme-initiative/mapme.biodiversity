@@ -9,7 +9,7 @@ Armed Conflict Location & Event Data Project (ACLED).
 }
 \usage{
 get_acled(
-  years,
+  years = 1997,
   email = Sys.getenv("ACLED_EMAIL"),
   password = Sys.getenv("ACLED_PASSWORD"),
   accept_terms = FALSE
