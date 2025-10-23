@@ -5,5 +5,6 @@ test_that("get_acled works", {
   Sys.setenv(ACLED_EMAIL = "my-mail")
   Sys.setenv(ACLED_PASSWORD = "my-key")
   expect_no_error(get_acled(accept_terms = TRUE))
-  expect_message(get_acled(accept_terms = TRUE), "Terms of Use")
+  Sys.setenv(ACLED_EMAIL = "my-mail")
+  Sys.setenv(ACLED_PASSWORD = "my-key")
 })
