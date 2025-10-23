@@ -26,9 +26,9 @@ authors:
 affiliations:
  - name: Department of Landscape Ecology, University of Münster, Germany
    index: 1
- - name: Unknown
+ - name: Department of Geodetic Engineering, University of Bonn, Germany
    index: 2
- - name: Department of Geoinformatics, University of Salzburg, Austria
+ - name: adesso SE, Dortmund, Germany
    index: 3
  - name: Independent consultant, France
    index: 4
@@ -36,7 +36,7 @@ affiliations:
    index: 5
  - name: KfW Development Bank, Bonn, Germany
    index: 6
-date: "09 October 2025"
+date: "22 October 2025"
 output: rticles::joss_article
 journal: JOSS
 bibliography: paper.bib
@@ -91,7 +91,7 @@ Originally developed for conservation monitoring, the package has also
 found applications in adjacent domains such as agriculture, rural
 development, food security, and infrastructure planning. It offers a
 transparent and auditable alternative to proprietary
-platform-as-a-service (PaaS) solutions like Google Earth Engine or
+platform-as-a-service solutions like Google Earth Engine or
 Microsoft Planetary Computer, which may be inaccessible to users in
 low-connectivity settings, non-academic institutions, or those requiring
 long-term reproducibility not guaranteed by commercial platforms.
@@ -100,12 +100,13 @@ long-term reproducibility not guaranteed by commercial platforms.
 
 As an open-source package, the full range of \texttt{mapme.biodiversity}
 applications is difficult to track. However, download statistics
-indicate substantial usage, with 19,599 downloads from CRAN between
-April 2022 and September 2025. The package is actively used by several
-institutions for both operational and research purposes.
+indicate substantial usage, with 19,599 downloads from the Comprehensive 
+R Archive Network (CRAN) between April 2022 and September 2025. 
+The package is actively used by several institutions for both operational 
+and research purposes.
 
 At the Kreditanstalt für Wiederaufbau (KfW) and the Agence Française de
-Développement (AFD) -- the German and French public development banks
+Développement -- the German and French public development banks
 for international development -- it is used for internal impact
 evaluations and reporting on funded conservation and development
 programs. At the French National Research Institute for Sustainable
@@ -117,7 +118,7 @@ including ongoing work in Madagascar and Senegal.
 
 Different software tools address related needs in conservation
 monitoring and biodiversity assessment. The Digital Observatory for
-Protected Areas (\texttt{DOPA}) provides a centralized, server-based
+Protected Areas provides a centralized, server-based
 system developed by the European Commission to compute global
 protected-area indicators through standardized, automated workflows
 [@juffe-bignoli_delivering_2024]. In contrast, mapme.biodiversity offers
@@ -230,7 +231,7 @@ plot(out$datetime, out$value, col =  "blue", pch = 16, xlab = "year",
 
 The \texttt{mapme.biodiversity} \texttt{R} package is implemented as an
 extension package to the \texttt{R} statistical computing environment
-[@rcore]. It is available on the Comprehensive R Archive Network (CRAN)
+[@rcore]. It is available on the CRAN
 [@mapme]. Development versions are available on an online code
 repository (<https://github.com/mapme-initiative/mapme.biodiversity>).
 In addition to extensive [online
@@ -252,19 +253,12 @@ that helped improve the package.
 # Conflicts of interest
 
 This software was developed through collaboration between KfW staff,
-contracted developers, and independent researchers. Darius A. Görgen,
-Zivan Karaman, and Andreas Petutschnig contributed to the development
-under KfW funding; Johannes Schielein is employed by KfW; and Florent
-Bédécarrats uses the package for research activities, some of which are
-funded by the KfW. The KfW supports the aforementioned software
-development and research activities as a part of its mandate from the
-German State to support environment protection and sustainable
-development in less privileged countries. In this framework, the KfW
-sponsors the development of tools and studies to further enhance
-knowledge, accountability and evaluation on results of the policies it
-finances. The authors declare that KfW support enabled their work on the
-\texttt{mapme.biodiversity} package and did not hinder in any way the
-accuracy, reliability or performance of this software, nor the
+contracted developers, and independent researchers. DG, OB, ZK, and AP
+contributed to the development under KfW funding; JS is employed by KfW;
+and FB uses the package for research activities, some of which are
+funded by the KfW. The authors declare that KfW support enabled their
+work on the \texttt{mapme.biodiversity} package and did not hinder in
+any way the accuracy, reliability or performance of this software, nor the
 objectivity with which it is presented in the present article.
 
 # References

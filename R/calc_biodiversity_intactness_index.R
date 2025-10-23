@@ -57,7 +57,7 @@ calc_biodiversity_intactness_index <- function() {
     mean_bii <- exactextractr::exact_extract(biodiversity_intactness_index, x, fun = "mean")
 
     results <- tibble::tibble(
-      datetime = as.POSIXct("2005-01-01T00:00:00Z"),
+      datetime = as.POSIXct("2015-01-01T00:00:00Z"),
       variable = "biodiversity_intactness_index",
       unit = "unitless",
       value = mean_bii
