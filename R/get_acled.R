@@ -34,10 +34,18 @@
 #' @importFrom httr2 request req_perform resp_body_json
 #' @export
 get_acled <- function(
-    years,
+    years = 1997,
     email = Sys.getenv("ACLED_EMAIL"),
     password = Sys.getenv("ACLED_PASSWORD"),
     accept_terms = FALSE) {
+
+  if (is.null(mapme_options()[["outdir"]])) {
+    warning(paste(
+      "ACLED layers must be downloaded from the source location",
+      "irrespective if `outdir` was specified or not."
+    ))
+  }
+
   # check input arguments
   if (!accept_terms) {
     msg <- "Please read and agree to ACLED's Terms of Use here:\nhttps://acleddata.com/terms-and-conditions"
