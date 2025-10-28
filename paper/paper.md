@@ -253,12 +253,16 @@ that helped improve the package.
 # Conflicts of interest
 
 This software was developed through collaboration between KfW staff,
-contracted developers, and independent researchers. DG, OB, ZK, and AP
-contributed to the development under KfW funding; JS is employed by KfW;
-and FB uses the package for research activities, some of which are
-funded by the KfW. The authors declare that KfW support enabled their
-work on the \texttt{mapme.biodiversity} package and did not hinder in
-any way the accuracy, reliability or performance of this software, nor the
-objectivity with which it is presented in the present article.
+contracted developers, and independent researchers. DG, OB, ZK, and
+AP contributed to the development under KfW funding; JS is employed
+by KfW; and FB uses the package for research activities, some of
+which are funded by the KfW. This KfW funding was not provided in
+pursuit of corporate interests, but following the public mandate KfW
+receives from the German State to support environment protection and
+sustainable development. The authors declare that KfW support did
+not hinder in any way the accuracy, reliability or performance of
+this software, nor the objectivity with which it is presented in the
+present article. All views expressed in this paper are those of the
+authors and do not necessarily reflect those of KfW.
 
 # References
