@@ -36,18 +36,9 @@ affiliations:
    index: 5
  - name: KfW Development Bank, Bonn, Germany
    index: 6
-date: "22 October 2025"
-output: rticles::joss_article
-journal: JOSS
+date: 03 November 2025
 bibliography: paper.bib
-link-citations: true
-year: 2025
 software_repository_url: www.github.com/mapme-initiative/mapme.biodiversity
-submitted: unsubmitted
-published: unpublished
-editor_options: 
-  markdown: 
-    wrap: 72
 ---
 
 # Summary
