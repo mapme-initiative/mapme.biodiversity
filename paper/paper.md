@@ -78,93 +78,46 @@ to derive standardized, area-based indicators at scale, supports
 reproducible workflows in \texttt{R}, and facilitates integration with
 other tools via export to standard spatial formats.
 
-Originally developed for conservation monitoring, the package has also
-found applications in adjacent domains such as agriculture, rural
-development, food security, and infrastructure planning. It offers a
-transparent and auditable alternative to proprietary
-platform-as-a-service solutions like Google Earth Engine or
-Microsoft Planetary Computer, which may be inaccessible to users in
-low-connectivity settings, non-academic institutions, or those requiring
-long-term reproducibility not guaranteed by commercial platforms.
-
 # Applications
 
-As an open-source package, the full range of \texttt{mapme.biodiversity}
-applications is difficult to track. However, download statistics
-indicate substantial usage, with 19,599 downloads from the Comprehensive 
-R Archive Network (CRAN) between April 2022 and September 2025. 
 The package is actively used by several institutions for both operational 
-and research purposes.
-
-At the Kreditanstalt für Wiederaufbau (KfW) and the Agence Française de
-Développement -- the German and French public development banks
-for international development -- it is used for internal impact
-evaluations and reporting on funded conservation and development
-programs. At the French National Research Institute for Sustainable
-Development (IRD), it is used in research on policy evaluation and in
-projects aimed at strengthening research capacity in the Global South,
-including ongoing work in Madagascar and Senegal.
+and research purposes. At the Kreditanstalt für Wiederaufbau (KfW) and 
+the Agence Française de Développement -- the German and French public 
+development banks for international development -- it is used for 
+internal impact evaluations and reporting on funded conservation and 
+development programs. At the French National Research Institute for 
+Sustainable Development (IRD), it is used in research on policy evaluation 
+and in projects aimed at strengthening research capacity in the Global 
+South, including ongoing work in Madagascar and Senegal.
 
 # Comparison with other software packages
 
-Different software tools address related needs in conservation
-monitoring and biodiversity assessment. The Digital Observatory for
-Protected Areas provides a centralized, server-based
-system developed by the European Commission to compute global
+The Digital Observatory for Protected Areas provides a centralized, 
+server-based system developed by the European Commission to compute global
 protected-area indicators through standardized, automated workflows
-[@juffe-bignoli_delivering_2024]. In contrast, mapme.biodiversity offers
+[@juffe-bignoli_delivering_2024]. In contrast, \texttt{mapme.biodiversity} offers
 an R-native, decentralized framework that enables users to reproduce
 similar area-based analyses locally, adapt them to specific contexts,
-and extend them with additional datasets. Both share the goal of
-consistent and transparent indicator production, but differ in scale,
-accessibility, and infrastructure dependency.
+and extend them with additional datasets.
 
-The \texttt{wdpar} \texttt{R} package facilitates access to and cleaning
-of spatial data from the World Database on Protected Areas
-[@hanson_wdpar_2022]. \texttt{mapme.biodiversity} is commonly used
-alongside \texttt{wdpar} to compute diverse environmental indicators
-from multiple sources on these cleaned protected area boundaries.
-
-The Global Forest Watch (\texttt{GFW}) API, developed by the World
-Resources Institute, provides access to selected global forest
-monitoring datasets such as tree cover, loss, gain, biomass, and fire
-activity derived from satellite products like Hansen et al.
-[-@hansen_high-resolution_2013]. It allows users to delegate
-computations to a remote cloud infrastructure on these datasets and
-retrieve aggregated statistics for defined areas.
-\texttt{mapme.biodiversity} instead performs all processing locally or
-on user-managed servers and is designed to handle a wider set of
-environmental and socio-economic data sources.
-
-The \texttt{MODIStsp} \texttt{R} package [@busetto_modistsp_2016]
-provides tools to download, mosaic, reproject, and subset a wide range
-of satellite products, including vegetation indices, land surface
-temperature, albedo, and burned areas—listed in its product catalog. It
-focuses exclusively on MODIS products.
-
-The \texttt{sits} \texttt{R} package [@simoes_satellite_2021]
-prprocesses satellite imagery from Landsat, Sentinel, or MODIS. It
-builds time-series data cubes from these surface reflectance images and
-applies machine-learning models to classify land cover. Its inputs are
-direct measurements from Earth observation sensors, requiring modeling
-of reflectance dynamics over time. In contrast,
-\texttt{mapme.biodiversity} relies on derived geospatial products that
-already summarize physical or biological processes (e.g., forest loss,
-fire occurrence, precipitation, population density) and uses them to
-compute area-based indicators over user-defined areas.
+The Global Forest Watch (\texttt{GFW}) API, developed by the World 
+Resource Institute, provides access to selected global forest monitoring 
+datasets such as tree cover, loss, gain, biomass, and fire activity 
+derived from satellite products like Hansen et al. [-@hansen_high-resolution_2013]. 
+It allows users to delegate computations to a remote cloud infrastructure and 
+retrieve aggregated  statistics for defined areas. \texttt{mapme.biodiversity} 
+instead performs all processing locally or on user-managed servers and is 
+designed to handle a wider set of environmental and socio-economic data sources.
 
 \texttt{BON in a Box}, developed by the Group on Earth Observations
 Biodiversity Observation Network (GEO BON), is an open platform for
-biodiversity monitoring and indicator computation
-[@griffith_bon_2024]. It enables users to assemble and share
-modular workflows that generate Essential Biodiversity Variables and
-policy-relevant indicators aligned with the Kunming–Montreal Global
-Biodiversity Framework. While \texttt{mapme.biodiversity} focuses on
-reproducible computation of area-based indicators within R, BON in a Box
-emphasizes cross-language interoperability and integration with national
-biodiversity monitoring systems. Griffith et al. (2025, Table S2, p. 18)
-explicitly identify \texttt{mapme.biodiversity} as an R package suitable
-for integration as a pipeline within BON in a Box.
+biodiversity monitoring and indicator computation[@griffith_bon_2024]. 
+It enables users to assemble and share modular workflows that generate 
+Essential Biodiversity Variables and policy-relevant indicators aligned 
+with the Kunming–Montreal Global Biodiversity Framework. While \texttt{mapme.biodiversity} 
+focuses on reproducible computation of area-based indicators within R, 
+BON in a Box emphasizes cross-language interoperability and integration 
+with national biodiversity monitoring systems.
 
 # Functionality and Example Usage
 
@@ -180,10 +133,10 @@ Key features include:
     handling (\texttt{terra}, \texttt{sf}), data manipulation
     (\texttt{dplyr}), and parallel processing (\texttt{future}) and
     progress monitoring (\texttt{progressr}) to handle large datasets.
-    Supports multiple any vector area of interest as input, enabling the
+    Supports multiple area of interest as input, enabling the
     processing of many regions of interest in a single run.
 -   **Reproducibility**: supports standardized, modular, scriptable
-    workflows to make analyses replication, auditing and sharing.
+    workflows to enable replication of analysis, auditing and sharing.
 -   **Extensibility**: the framework allows users to add datasets add
     datasets and create their own indicators to meet specific research,
     monitoring or evaluation needs.
@@ -247,10 +200,7 @@ This software was developed through collaboration between KfW staff,
 contracted developers, and independent researchers. DG, OB, ZK, and
 AP contributed to the development under KfW funding; JS is employed
 by KfW; and FB uses the package for research activities, some of
-which are funded by the KfW. This KfW funding was not provided in
-pursuit of corporate interests, but following the public mandate KfW
-receives from the German State to support environment protection and
-sustainable development. The authors declare that KfW support did
+which are funded by the KfW. The authors declare that KfW support did
 not hinder in any way the accuracy, reliability or performance of
 this software, nor the objectivity with which it is presented in the
 present article. All views expressed in this paper are those of the
