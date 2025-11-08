@@ -1,0 +1,127 @@
+# Calculate number of fatalities of conflict events from ACLED
+
+The indicator aggregated the number of fatalities within a given asset
+on a monthly cadence stratified either by event type, sub-event type or
+disorder type. To learn about the different categorisation ACLED uses to
+encode events please consult ACLED's codebook.
+
+## Usage
+
+``` r
+calc_fatalities_acled(
+  years = 2000,
+  stratum = c("event_type", "sub_event_type", "disorder_type"),
+  precision_location = 1,
+  precision_time = 1
+)
+```
+
+## Arguments
+
+- years:
+
+  A numeric vector indicating the years for which to summarize
+  fatalities.
+
+- stratum:
+
+  A character vector indicating the stratification to be applied. Should
+  be one of "event_type", "sub_event_type", or "disorder_type". Defaults
+  to "event_type".
+
+- precision_location:
+
+  A numeric indicating precision value for the geolocation up to which
+  events are included. Defaults to 1.
+
+- precision_time:
+
+  A numeric indicating the precision value of the temporal coding up to
+  which events are included. Defaults to 1.
+
+## Value
+
+A function that returns an indicator tibble with the type of violence as
+variable and counts of civilian fatalities as value.
+
+## Details
+
+The required resources for this indicator are:
+
+- [acled](https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/acled.md)
+
+You may apply quality filters based on the precision of the geolocation
+of events and the temporal precision. By default, these are set to only
+include events with the highest precision scores.
+
+For geo-precision there are levels 1 to 3 with decreasing accuracy:
+
+- value 1: the source reporting indicates a particular town, and
+  coordinates are available for that town
+
+- value 2: the source material indicates that activity took place in a
+  small part of a region, and mentions a general area or if an activity
+  occurs near a town or a city, the event is coded to a town with
+  geo-referenced coordinates to represent that area
+
+- value 3: a larger region is mentioned, the closest natural location
+  noted in reporting (like “border area,” “forest,” or “sea,” among
+  others) – or a provincial capital is used if no other information at
+  all is available
+
+For temporal precision there are levels 1 to 3 with decreasing
+precision:
+
+- value 1: the source material includes an actual date of an event
+
+- value 2: the source material indicates that an event happened sometime
+  during the week or within a similar period of time
+
+- value 3: the source material only indicates that an event took place
+  sometime during a month (i.e. in the past two or three weeks, or in
+  January), without reference to the particular date, the month
+  mid-point is chosen
+
+## References
+
+Raleigh, C., Kishi, R. & Linke, A. Political instability patterns are
+obscured by conflict dataset scope conditions, sources, and coding
+choices. Humanit Soc Sci Commun 10, 74 (2023).
+[doi:10.1057/s41599-023-01559-4](https://doi.org/10.1057/s41599-023-01559-4)
+
+## Examples
+
+``` r
+# \dontrun{
+library(sf)
+library(mapme.biodiversity)
+
+outdir <- file.path(tempdir(), "mapme-data")
+dir.create(outdir, showWarnings = FALSE)
+
+mapme_options(
+  outdir = outdir,
+  verbose = FALSE,
+  chunk_size = 1e8
+)
+
+aoi <- system.file("extdata", "burundi.gpkg",
+  package = "mapme.biodiversity"
+) %>%
+  read_sf() %>%
+  get_resources(get_acled(years = 2020)) %>%
+  calc_indicators(
+    calc_fatalities_acled(
+      years = 2020,
+      precision_location = 1,
+      precision_time = 1
+    )
+  ) %>%
+  portfolio_long()
+#> Error in get_acled(years = 2020): Please read and agree to ACLED's Terms of Use here:
+#> https://acleddata.com/terms-and-conditions
+
+aoi
+#> Error: object 'aoi' not found
+# }
+```
