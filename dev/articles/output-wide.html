@@ -285,23 +285,6 @@ argument:</p>
 i.e. precipitation statistics from <a href="https://www.worldclim.org/" class="external-link">WorldClim</a>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mapme.html">get_resources</a></span><span class="op">(</span><span class="va">aoi</span>, <span class="fu"><a href="../reference/worldclim_precipitation.html">get_worldclim_precipitation</a></span><span class="op">(</span>years <span class="op">=</span> <span class="fl">2018</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in sf::gdal_utils(util = util, source = source, destination = destination,  : </span></span>
-<span><span class="co">#&gt;   gdal_utils translate: an error occured</span></span>
-<span><span class="co">#&gt; Warning in CPL_gdaltranslate(source, destination, options, oo, config_options,</span></span>
-<span><span class="co">#&gt; : GDAL Error 1: In file ./port/cpl_vsil_gzip.cpp, at line 1207, decompression</span></span>
-<span><span class="co">#&gt; failed with z_err = -1, return = 0</span></span>
-<span><span class="co">#&gt; Warning in CPL_gdaltranslate(source, destination, options, oo, config_options,</span></span>
-<span><span class="co">#&gt; : GDAL Error 1: TIFFFillStrip:Read error at scanline 4294967295; got 0 bytes,</span></span>
-<span><span class="co">#&gt; expected 626</span></span>
-<span><span class="co">#&gt; Warning in CPL_gdaltranslate(source, destination, options, oo, config_options,</span></span>
-<span><span class="co">#&gt; : GDAL Error 1: TIFFReadEncodedStrip() failed.</span></span>
-<span><span class="co">#&gt; Warning in CPL_gdaltranslate(source, destination, options, oo, config_options,</span></span>
-<span><span class="co">#&gt; : GDAL Error 1:</span></span>
-<span><span class="co">#&gt; /vsizip//vsicurl/https://geodata.ucdavis.edu/climate/worldclim/2_1/hist/cts4.09//wc2.1_cruts4.09_2.5m_prec_2010-2019.zip/wc2.1_cruts4.09_2.5m_prec_2018-08.tif,</span></span>
-<span><span class="co">#&gt; band 1: IReadBlock failed at X offset 0, Y offset 0: TIFFReadEncodedStrip()</span></span>
-<span><span class="co">#&gt; failed.</span></span>
-<span><span class="co">#&gt; Warning in CPL_gdaltranslate(source, destination, options, oo, config_options,</span></span>
-<span><span class="co">#&gt; : GDAL Error 1: cpl_unzOpenCurrentFile() failed</span></span>
 <span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mapme.html">calc_indicators</a></span><span class="op">(</span><span class="va">aoi</span>, <span class="fu"><a href="../reference/precipitation_wc.html">calc_precipitation_wc</a></span><span class="op">(</span>stats <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">aoi</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Simple feature collection with 9 features and 3 fields</span></span>

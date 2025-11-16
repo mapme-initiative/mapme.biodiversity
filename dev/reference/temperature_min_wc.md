@@ -62,15 +62,27 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
     )
   ) %>%
   portfolio_long()
-#> Warning: GDAL Message 1: HTTP response code on https://geodata.ucdavis.edu/climate/worldclim/2_1/hist/cts4.09//wc2.1_cruts4.09_2.5m_tmin_2010-2019.zip: 0
-#> Warning: 12 out of 12 resources are not available for worldclim_min_temperature
-#> Error in (function (.x, .f, ..., .progress = FALSE) {    map_("list", .x, .f, ..., .progress = .progress)})(.x = 1L, .f = function (...) {    {        ...furrr_chunk_seeds_i <- ...furrr_chunk_seeds_env[["i"]]        ...furrr_chunk_seeds_env[["i"]] <- ...furrr_chunk_seeds_i +             1L        assign(x = ".Random.seed", value = ...furrr_chunk_seeds[[...furrr_chunk_seeds_i]],             envir = globalenv(), inherits = FALSE)    }    NULL    ...furrr_out <- ...furrr_fn(...)    ...furrr_out}): ℹ In index: 1.
-#> Caused by error in `purrr::map()`:
-#> ℹ In index: 1.
-#> Caused by error:
-#> ! Resource worldclim_min_temperature is empty
 
 aoi
-#> Error: object 'aoi' not found
+#> Simple feature collection with 24 features and 8 fields
+#> Geometry type: POLYGON
+#> Dimension:     XY
+#> Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931
+#> Geodetic CRS:  WGS 84
+#> # A tibble: 24 × 9
+#>    WDPAID ISO3  assetid indicator       datetime            variable unit  value
+#>     <dbl> <chr>   <int> <chr>           <dttm>              <chr>    <chr> <dbl>
+#>  1 478140 DOM         1 temperature_mi… 2018-01-01 00:00:00 worldcl… C      9.25
+#>  2 478140 DOM         1 temperature_mi… 2018-01-01 00:00:00 worldcl… C      9   
+#>  3 478140 DOM         1 temperature_mi… 2018-02-01 00:00:00 worldcl… C      9.12
+#>  4 478140 DOM         1 temperature_mi… 2018-02-01 00:00:00 worldcl… C      9   
+#>  5 478140 DOM         1 temperature_mi… 2018-03-01 00:00:00 worldcl… C     10.1 
+#>  6 478140 DOM         1 temperature_mi… 2018-03-01 00:00:00 worldcl… C     10   
+#>  7 478140 DOM         1 temperature_mi… 2018-04-01 00:00:00 worldcl… C     11.2 
+#>  8 478140 DOM         1 temperature_mi… 2018-04-01 00:00:00 worldcl… C     11   
+#>  9 478140 DOM         1 temperature_mi… 2018-05-01 00:00:00 worldcl… C     12.2 
+#> 10 478140 DOM         1 temperature_mi… 2018-05-01 00:00:00 worldcl… C     12   
+#> # ℹ 14 more rows
+#> # ℹ 1 more variable: geom <POLYGON [°]>
 # }
 ```

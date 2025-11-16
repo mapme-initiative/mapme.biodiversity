@@ -222,23 +222,6 @@ precipitation statistics from [WorldClim](https://www.worldclim.org/).
 
 ``` r
 aoi <- get_resources(aoi, get_worldclim_precipitation(years = 2018))
-#> Error in sf::gdal_utils(util = util, source = source, destination = destination,  : 
-#>   gdal_utils translate: an error occured
-#> Warning in CPL_gdaltranslate(source, destination, options, oo, config_options,
-#> : GDAL Error 1: In file ./port/cpl_vsil_gzip.cpp, at line 1207, decompression
-#> failed with z_err = -1, return = 0
-#> Warning in CPL_gdaltranslate(source, destination, options, oo, config_options,
-#> : GDAL Error 1: TIFFFillStrip:Read error at scanline 4294967295; got 0 bytes,
-#> expected 626
-#> Warning in CPL_gdaltranslate(source, destination, options, oo, config_options,
-#> : GDAL Error 1: TIFFReadEncodedStrip() failed.
-#> Warning in CPL_gdaltranslate(source, destination, options, oo, config_options,
-#> : GDAL Error 1:
-#> /vsizip//vsicurl/https://geodata.ucdavis.edu/climate/worldclim/2_1/hist/cts4.09//wc2.1_cruts4.09_2.5m_prec_2010-2019.zip/wc2.1_cruts4.09_2.5m_prec_2018-08.tif,
-#> band 1: IReadBlock failed at X offset 0, Y offset 0: TIFFReadEncodedStrip()
-#> failed.
-#> Warning in CPL_gdaltranslate(source, destination, options, oo, config_options,
-#> : GDAL Error 1: cpl_unzOpenCurrentFile() failed
 aoi <- calc_indicators(aoi, calc_precipitation_wc(stats = "mean"))
 print(aoi)
 #> Simple feature collection with 9 features and 3 fields
