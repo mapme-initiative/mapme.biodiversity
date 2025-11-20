@@ -222,20 +222,6 @@ precipitation statistics from [WorldClim](https://www.worldclim.org/).
 
 ``` r
 aoi <- get_resources(aoi, get_worldclim_precipitation(years = 2018))
-#> Warning in CPL_gdaltranslate(source, destination, options, oo, config_options,
-#> : GDAL Error 1:
-#> /vsizip//vsicurl/https://geodata.ucdavis.edu/climate/worldclim/2_1/hist/cts4.09//wc2.1_cruts4.09_2.5m_prec_2010-2019.zip/wc2.1_cruts4.09_2.5m_prec_2018-08.tif:
-#> In file ./port/cpl_vsil_gzip.cpp, at line 1207, decompression failed with z_err
-#> = -1, return = 49000
-#> Warning in CPL_gdaltranslate(source, destination, options, oo, config_options,
-#> : GDAL Error 1:
-#> /vsizip//vsicurl/https://geodata.ucdavis.edu/climate/worldclim/2_1/hist/cts4.09//wc2.1_cruts4.09_2.5m_prec_2010-2019.zip/wc2.1_cruts4.09_2.5m_prec_2018-08.tif:
-#> TIFFFetchDirectory:/vsizip//vsicurl/https://geodata.ucdavis.edu/climate/worldclim/2_1/hist/cts4.09//wc2.1_cruts4.09_2.5m_prec_2010-2019.zip/wc2.1_cruts4.09_2.5m_prec_2018-08.tif:
-#> Can not read TIFF directory count
-#> Warning in CPL_gdaltranslate(source, destination, options, oo, config_options,
-#> : GDAL Error 1:
-#> /vsizip//vsicurl/https://geodata.ucdavis.edu/climate/worldclim/2_1/hist/cts4.09//wc2.1_cruts4.09_2.5m_prec_2010-2019.zip/wc2.1_cruts4.09_2.5m_prec_2018-08.tif:
-#> TIFFReadDirectory:Failed to read directory at offset 22147918
 aoi <- calc_indicators(aoi, calc_precipitation_wc(stats = "mean"))
 print(aoi)
 #> Simple feature collection with 9 features and 3 fields
