@@ -23,14 +23,14 @@
 Source:
 [`DESCRIPTION`](https://github.com/mapme-initiative/mapme.biodiversity/blob/main/DESCRIPTION)
 
-Görgen D, Bhandari O (2025). *mapme.biodiversity: Efficient Monitoring
+Görgen D, Bhandari O (2026). *mapme.biodiversity: Efficient Monitoring
 of Global Biodiversity Portfolios*. R package version 0.9.5.9000,
 <https://mapme-initiative.github.io/mapme.biodiversity/>.
 
     @Manual{,
       title = {mapme.biodiversity: Efficient Monitoring of Global Biodiversity Portfolios},
       author = {Darius A. Görgen and Om Prakash Bhandari},
-      year = {2025},
+      year = {2026},
       note = {R package version 0.9.5.9000},
       url = {https://mapme-initiative.github.io/mapme.biodiversity/},
     }
