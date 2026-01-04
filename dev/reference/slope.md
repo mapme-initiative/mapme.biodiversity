@@ -58,20 +58,13 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   ) %>%
   portfolio_long()
 #> Resource 'nasa_srtm' is already available.
+#> Error : HTTP content type response 'text/html' not defined for this operation.
+#> Error in (function (x, name = "nasa_srtm", type = "raster", outdir = mapme_options()[["outdir"]],  : 
+#>   Download for NASA SRTM resource was unsuccesfull
+#> Error in .check_footprints(resource, resource_name): Download for resource nasa_srtm failed.
+#> Returning unmodified portfolio.
 
 aoi
-#> Simple feature collection with 4 features and 8 fields
-#> Geometry type: POLYGON
-#> Dimension:     XY
-#> Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931
-#> Geodetic CRS:  WGS 84
-#> # A tibble: 4 × 9
-#>   WDPAID ISO3  assetid indicator datetime            variable     unit    value
-#>    <dbl> <chr>   <int> <chr>     <dttm>              <chr>        <chr>   <dbl>
-#> 1 478140 DOM         1 slope     2000-02-01 00:00:00 slope_mean   degrees 17.8 
-#> 2 478140 DOM         1 slope     2000-02-01 00:00:00 slope_median degrees 17.0 
-#> 3 478140 DOM         1 slope     2000-02-01 00:00:00 slope_sd     degrees  9.93
-#> 4 478140 DOM         1 slope     2000-02-01 00:00:00 slope_var    degrees 98.6 
-#> # ℹ 1 more variable: geom <POLYGON [°]>
+#> Error: object 'aoi' not found
 # }
 ```
