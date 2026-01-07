@@ -3,7 +3,7 @@
 #' This resource is part of the publication by Mu et al. (2022) "A global
 #' record of annual terrestrial Human Footprint dataset from 2000 to 2018".
 #' It is calculated based on 8 variables representing human pressures on
-#' natural ecosystems collected at a yearly cadence between 2000 and 2022
+#' natural ecosystems collected at a yearly cadence between 2000 and 2024
 #' sampled at a 1km spatial resolution. The variables are used are
 #' the expansion of built environments (expressed as percentage of built-up
 #' areas within a grid cell), population density (aggregated at the grid cell),
@@ -23,7 +23,7 @@
 #'
 #' @name humanfootprint_resource
 #' @param years A numeric vector indicating the years for which to download
-#'   the human footprint data, defaults to \code{2000:2022}.
+#'   the human footprint data, defaults to \code{2000:2024}.
 #' @keywords resource
 #' @returns A function that returns an `sf` footprint object.
 #' @references Mu, H., Li, X., Wen, Y. et al. A global record of annual
@@ -33,8 +33,8 @@
 #' @importFrom utils unzip download.file
 #' @include register.R
 #' @export
-get_humanfootprint <- function(years = 2000:2022) {
-  available_years <- 2000:2022
+get_humanfootprint <- function(years = 2000:2024) {
+  available_years <- 2000:2024
   years <- check_available_years(
     years, available_years, "humanfootprint"
   )

@@ -77,7 +77,8 @@ get_nelson_et_al <- function(ranges = "20k_50k") {
 .get_traveltime_url <- function(range, filenames, verbose = TRUE) {
   urls <- unlist(lapply(range, function(x) {
     index <- .nelson_df$index[.nelson_df$range == x]
-    paste0("/vsicurl/https://figshare.com/ndownloader/files/", index)
+    # paste0("/vsicurl/https://figshare.com/ndownloader/files/", index)
+    paste0("/vsicurl/https://api.figshare.com/v2/file/download/", index)
   }))
 
   bbox <- c(xmin = -180., ymin = -60., xmax = 180., ymax = 85.)
