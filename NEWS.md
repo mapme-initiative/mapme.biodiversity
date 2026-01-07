@@ -1,3 +1,10 @@
+# mapme.biodiversity 0.9.5.9001
+
+## General
+
+-   modified `get_nelson_et_al()` to cope with Figshare asynchronous download mechanism ([474](https://github.com/mapme-initiative/mapme.biodiversity/issues/474))
+-   updated `get_humanfootprint()` to accept years up to 2024
+
 # mapme.biodiversity 0.9.5.9000
 
 ## General
