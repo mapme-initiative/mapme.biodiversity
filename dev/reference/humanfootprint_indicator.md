@@ -58,17 +58,21 @@ aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
   get_resources(get_humanfootprint(years = 2010)) %>%
   calc_indicators(calc_humanfootprint(stats = "median")) %>%
   portfolio_long()
+#> Waiting 5s for retry backoff ■■■■■■■                         
+#> Waiting 5s for retry backoff ■■■■■■■■■■■■■■■                 
+#> Waiting 5s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 
+#> Waiting 14s for retry backoff ■■■                             
+#> Waiting 14s for retry backoff ■■■■■■■■                        
+#> Waiting 14s for retry backoff ■■■■■■■■■■■■■■■                 
+#> Waiting 14s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■          
+#> Waiting 14s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■    
+#> Waiting 14s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 
+#> Error in req_perform(req_retry(req, max_seconds = 15, is_transient = is_transient)) : 
+#>   HTTP 403 Forbidden.
+#> Error in .check_footprints(resource, resource_name): Download for resource humanfootprint failed.
+#> Returning unmodified portfolio.
 
 aoi
-#> Simple feature collection with 1 feature and 10 fields
-#> Geometry type: POLYGON
-#> Dimension:     XY
-#> Bounding box:  xmin: -59.84866 ymin: 8.307999 xmax: -59.71 ymax: 8.364002
-#> Geodetic CRS:  WGS 84
-#> # A tibble: 1 × 11
-#>   WDPAID NAME     DESIG_ENG ISO3  assetid indicator datetime            variable
-#>    <dbl> <chr>    <chr>     <chr>   <int> <chr>     <dttm>              <chr>   
-#> 1  41057 Shell B… Managed … GUY         1 humanfoo… 2010-01-01 00:00:00 humanfo…
-#> # ℹ 3 more variables: unit <chr>, value <dbl>, geom <POLYGON [°]>
+#> Error: object 'aoi' not found
 # }
 ```
