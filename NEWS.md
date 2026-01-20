@@ -1,3 +1,17 @@
+# mapme.biodiversity 0.9.5.9002
+
+## General
+
+-   a message showing the package version number is now printed when the package is attached
+-   the default output path in the `tempdir()` now follows the pattern '*mapme-data-...*' for better visibility
+-   a new argument `delay`, indicating the interval between successive retries, has been added to the `mapme_options()` function
+-   the `mapme_options()` function arguments `delay` and `retries` now command the GDAL configuration options `GDAL_HTTP_RETRY_DELAY` and `GDAL_HTTP_MAX_RETRY`, so it is not necessary to set them using `Sys.setenv()` (see [441](https://github.com/mapme-initiative/mapme.biodiversity/issues/441))
+
+## Internal
+
+-   modified internal function `.fetch_resource()` to include GDAL options in the list of resources it failed to fetch
+-   the functions `get_mcd64a1()` and `get_nasa_srtm(),` that download data from Microsoft Planetary Computer, now use a more efficient URL signing scheme, which should reduce the risk of hitting the rate limitations (see [441](https://github.com/mapme-initiative/mapme.biodiversity/issues/441))
+
 # mapme.biodiversity 0.9.5.9001
 
 ## General

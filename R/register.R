@@ -5,16 +5,18 @@
 .pkgenv$avail_resources <- list()
 
 .onLoad <- function(libname, pkgname) {
-  outdir <- tempfile()
+  outdir <- tempfile(pattern = "mapme-data-")
   dir.create(outdir, showWarnings = FALSE)
   mapme_options(
     outdir = outdir,
     chunk_size = 100000,
-    retries = 3,
+    retries = 3L,
+    delay = 10L,
     log_dir = NULL,
     verbose = TRUE
   )
   .check_system_requirements()
+  packageStartupMessage(paste(pkgname, packageVersion(pkgname)))
   invisible()
 }
 
@@ -42,7 +44,9 @@
 #' `mapme_options()` sets default options for mapme.biodiversity to control the
 #' behaviour of downstream functions. Mainly, the output path as well as the
 #' chunk size (in ha), can be set. Additionally, the verbosity can be set and
-#' the path to a log directory can be controlled. Might be extended by other
+#' the path to a log directory can be controlled. It also allow to set the number of
+#' retries  and the delay between the successive retries when retrieving the resources.
+#' Might be extended by other
 #' options in the future.
 #'
 #' @param ... ignored
@@ -52,14 +56,24 @@
 #'   If it lies above the value `chunk_size`, splitting and chunking is considered.
 #'   An asset will be processes as-is with an bounding box area below the specified
 #'   value.
-#' @param retries A numeric of length one indicating the number or re-tries
-#'   the package should attempt to make a resource available. Defaults to 3.
+#' @param retries An integer of length one indicating the number of retries
+#'   the package should attempt to make a resource available.
+#'   This commands the GDAL option `GDAL_HTTP_MAX_RETRY` (see
+#'   [here](https://gdal.org/en/stable/user/configoptions.html#:~:text=GDAL_HTTP_MAX_RETRY)).
+#'   Defaults to 3.
+#' @param delay An integer of length one indicating the number of seconds
+#'   the package should wait between the successive retries.
+#'   This commands the GDAL option `GDAL_HTTP_RETRY_DELAY`  (see
+#'   [here](https://gdal.org/en/stable/user/configoptions.html#:~:text=GDAL_HTTP_RETRY_DELAY)).
+#'   Defaults to 10.
 #' @param verbose A logical, indicating if informative messages should be printed.
 #' @param log_dir A character path pointing toward a GDAL-writable destination
 #'   used to log erroneous assets. Defaults to NULL, meaning that erroneous
-#'   assets will not be serialized to disk. If specified, a GPKG named
+#'   assets will not be serialized to disk. If specified, a GPKG file named
 #'   `file.path(log_dir, paste0(Sys.Date(), "_mapme-error-assets.gpkg"))` will
-#'   be created and appended to in case of erroneous assets.
+#'   be created and appended to in case of erroneous assets. In the case some of the
+#'   resources could not be downloaded, their list will be written to a GPKG file named
+#'   `file.path(log_dir, paste0(Sys.Date(), "_", {resource_name}, "_mapme-error-resources.gpkg"))`.
 #' @return `mapme_options()` returns a list of options if no arguments are
 #'   specified. Otherwise sets matching arguments to new values in the package's
 #'   internal environment.
@@ -69,7 +83,7 @@
 #' @examples
 #' library(mapme.biodiversity)
 #' mapme_options()
-mapme_options <- function(..., outdir, chunk_size, retries, verbose, log_dir) {
+mapme_options <- function(..., outdir, chunk_size, retries, delay, verbose, log_dir) {
   if (!missing(outdir)) {
     stopifnot(is.null(outdir) | (is.character(outdir) && length(outdir) == 1))
     .probe_dsn(outdir)
@@ -83,7 +97,12 @@ mapme_options <- function(..., outdir, chunk_size, retries, verbose, log_dir) {
 
   if (!missing(retries)) {
     stopifnot(length(retries) == 1 && is.numeric(retries))
-    .pkgenv$retries <- retries
+    .pkgenv$retries <- max(as.integer(retries), 0L) # make sure it is non-negative
+  }
+
+  if (!missing(delay)) {
+    stopifnot(length(delay) == 1 && is.numeric(delay))
+    .pkgenv$delay <- max(as.integer(delay), 0L) # make sure it is non-negative
   }
 
   if (!missing(verbose)) {
@@ -101,6 +120,7 @@ mapme_options <- function(..., outdir, chunk_size, retries, verbose, log_dir) {
       outdir = .pkgenv$outdir,
       chunk_size = .pkgenv$chunk_size,
       retries = .pkgenv$retries,
+      delay = .pkgenv$delay,
       verbose = .pkgenv$verbose,
       log_dir = .pkgenv$log_dir
     ))

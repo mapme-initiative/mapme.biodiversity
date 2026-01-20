@@ -460,8 +460,8 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL, mode = c
 }
 
 .normalize_source_path <- function(path) {
-  # On Windows this would add drive letter ('C:\\', etc.) at the beginning of the path,
-  # which is wrong for remote paths like '/vsicurl/https://...'.
+  # On Windows, 'normalizePath()' would add drive letter ('C:\\', etc.) at the beginning
+  # of the path, which is wrong for remote paths like '/vsicurl/https://...'.
   # Since the source file *MUST* exist, we can use mustWork = TRUE.
   # In general, it is *NOT* recommended to use mustWork = FALSE.
   norm_path <- try(normalizePath(path, mustWork = TRUE), silent = TRUE)
@@ -469,4 +469,38 @@ prep_resources <- function(x, avail_resources = NULL, resources = NULL, mode = c
     path <- norm_path
   }
   return(path)
+}
+
+.init_gdal_http <- function() {
+  # Get GDAL HTTP configuration options if already set
+  gdal_env <- Sys.getenv(c("GDAL_HTTP_MAX_RETRY",
+                           "GDAL_HTTP_RETRY_DELAY",
+                           "GDAL_DISABLE_READDIR_ON_OPEN"),
+                         unset = NA)
+  read_dir <- gdal_env["GDAL_DISABLE_READDIR_ON_OPEN"]
+  if (is.na(read_dir)) read_dir <- "EMPTY_DIR"
+  retries <- as.integer(gdal_env["GDAL_HTTP_MAX_RETRY"])
+  delay <- as.integer(gdal_env["GDAL_HTTP_RETRY_DELAY"])
+  # Set to max between already set and mapme_options()
+  retries <- max(retries, mapme_options()[["retries"]], na.rm = TRUE)
+  delay <- max(delay, mapme_options()[["delay"]], na.rm = TRUE)
+  # update mapme_options
+  mapme_options(
+    retries = retries,
+    delay = delay
+  )
+  # Set GDAL HTTP configuration options
+  Sys.setenv(GDAL_HTTP_MAX_RETRY = retries,
+             GDAL_HTTP_RETRY_DELAY = delay,
+             GDAL_DISABLE_READDIR_ON_OPEN = read_dir)
+
+  # Sys.setenv(
+  #   CPL_VSIL_CURL_ALLOWED_EXTENSIONS = ".tif",
+  #   GDAL_HTTP_MAX_RETRY = "10",
+  #   GDAL_HTTP_RETRY_DELAY = "2",
+  #   GDAL_DISABLE_READDIR_ON_OPEN = "YES" (shuold be "TRUE"?)
+  #   GDAL_DISABLE_READDIR_ON_OPEN = "EMPTY_DIR"
+  # )
+
+  invisible()
 }

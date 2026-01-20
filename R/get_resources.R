@@ -17,6 +17,8 @@ get_resources <- function(x, ...) {
   if (!.has_internet()) {
     return(invisible(x))
   }
+  # initiate GDAL environment variables
+  .init_gdal_http()
   funs <- purrr::map(list(...), function(fun) .check_resource_fun(fun))
   for (fun in funs) .get_single_resource(x, fun)
   invisible(x)
@@ -68,7 +70,8 @@ get_resources <- function(x, ...) {
     type = args[["type"]],
     outdir = outdir,
     verbose = opts[["verbose"]],
-    retries = opts[["retries"]]
+    retries = opts[["retries"]],
+    delay = opts[["delay"]]
   )
 
   resource <- .set_precision(resource)
@@ -120,7 +123,8 @@ get_resources <- function(x, ...) {
                             type = NULL,
                             outdir = mapme_options()[["outdir"]],
                             verbose = mapme_options()[["verbose"]],
-                            retries = mapme_options()[["retries"]]) {
+                            retries = mapme_options()[["retries"]],
+                            delay = mapme_options()[["delay"]]) {
 
   stopifnot(inherits(resource, "sf"), type %in% c("raster", "vector"))
 
@@ -146,7 +150,7 @@ get_resources <- function(x, ...) {
     furrr::future_iwalk(resource, function(x, i) {
       attempts <- 0L
 
-      while (attempts < retries) {
+      while (attempts <= retries) {
         attempts <- attempts + 1L
 
         is_available <- .get_spds(
@@ -155,9 +159,10 @@ get_resources <- function(x, ...) {
           opts = unlist(c(x[["co"]], x[["oo"]])),
           what = x[["type"]]
         )
-
         if (is_available) {
-          attempts <- retries
+          attempts <- retries + 1L
+        } else {
+          Sys.sleep(delay)
         }
       }
 
@@ -171,21 +176,23 @@ get_resources <- function(x, ...) {
     is_available <- sapply(resource[["location"]], spds_exists, what = type)
     if (isFALSE(all(is_available))) {
       not_available_resource <- resource[!is_available, ]
-      msg <- sprintf("%d out of %d resources are not available for %s",
+      msg <- sprintf("%d out of %d resources are not available for '%s'",
                      nrow(not_available_resource), nrow(resource), name)
       log_dir <- mapme_options()[["log_dir"]]
       if (!is.null(log_dir)) {
         dsn <- file.path(log_dir, paste0(Sys.Date(), "_", name,
                                          "_mapme-error-resources.gpkg"))
         # drop list columns to write GPKG
+        not_available_resource[["opts"]] <- apply(not_available_resource, 1, FUN = function(x) {
+          paste(unlist(c(x[["co"]], x[["oo"]])), collapse = "|")
+        })
         not_available_resource <- not_available_resource[,
                                   setdiff(names(not_available_resource), c("oo", "co"))]
-        # sf::st_write(subset(not_available_resource, select = -c(oo, co)),
-        #              dsn, append = TRUE, quiet = TRUE)
         sf::st_write(not_available_resource, dsn, append = TRUE, quiet = TRUE)
-        msg <- paste(msg, sprintf("The list can be found in %s", dsn), sep = "\n")
+        msg <- paste(msg, sprintf("The list can be found in '%s'", dsn), sep = "\n")
       }
-      warning(msg, call. = FALSE)
+      msg <- paste("***** WARNING *****", msg, sep = "\n")
+      message(msg)
       resource <- resource[is_available, ]
     }
   }
