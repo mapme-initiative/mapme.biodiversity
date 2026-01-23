@@ -42,6 +42,7 @@ aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
   get_resources(get_ipbes_biomes()) %>%
   calc_indicators(calc_ipbes_biomes()) %>%
   portfolio_long()
+#> Warning: GDAL Message 1: HTTP response code on https://zenodo.org/records/3975694/files/IPBES_UoA_biomes_JK.AUX: 504
 
 aoi
 #> Simple feature collection with 2 features and 10 fields
