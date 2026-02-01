@@ -42,13 +42,18 @@ aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
   get_resources(get_ipbes_biomes()) %>%
   calc_indicators(calc_ipbes_biomes()) %>%
   portfolio_long()
-#> Warning: GDAL Message 1: HTTP response code on https://zenodo.org/records/3975694/files/IPBES_UoA_biomes_JK.tif: 503
-#> Error in st_sf(x, ..., agr = agr, sf_column_name = sf_column_name) : 
-#>   no simple features geometry column present
-#> Error in .check_footprints(resource, resource_name): Download for resource ipbes_biomes failed.
-#> Returning unmodified portfolio.
 
 aoi
-#> Error: object 'aoi' not found
+#> Simple feature collection with 2 features and 10 fields
+#> Geometry type: POLYGON
+#> Dimension:     XY
+#> Bounding box:  xmin: -59.84866 ymin: 8.307999 xmax: -59.71 ymax: 8.364002
+#> Geodetic CRS:  WGS 84
+#> # A tibble: 2 × 11
+#>   WDPAID NAME     DESIG_ENG ISO3  assetid indicator datetime            variable
+#>    <dbl> <chr>    <chr>     <chr>   <int> <chr>     <dttm>              <chr>   
+#> 1  41057 Shell B… Managed … GUY         1 ipbes_bi… 2019-01-01 00:00:00 tropica…
+#> 2  41057 Shell B… Managed … GUY         1 ipbes_bi… 2019-01-01 00:00:00 shelf_e…
+#> # ℹ 3 more variables: unit <chr>, value <dbl>, geom <POLYGON [°]>
 # }
 ```
