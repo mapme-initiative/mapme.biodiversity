@@ -43,7 +43,7 @@ BugReports: https://github.com/mapme-initiative/mapme.biodiversity/issues
 Depends: R (>= 3.5.0)
 SystemRequirements: GDAL (>= 3.7.0), PROJ (>= 4.8.0)
 Imports: curl, dplyr, furrr, httr2, jsonlite, magrittr, purrr, sf, terra, tibble, 
-  tidyr
+  tidyr, utils
 Suggests: exactextractr, future, knitr, landscapemetrics, progressr, rmarkdown, 
   rstac, rvest, testthat (>= 3.0.0)
 VignetteBuilder: knitr

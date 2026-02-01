@@ -16,7 +16,7 @@
     verbose = TRUE
   )
   .check_system_requirements()
-  packageStartupMessage(paste(pkgname, packageVersion(pkgname)))
+  packageStartupMessage(paste(pkgname, utils::packageVersion(pkgname)))
   invisible()
 }
 
