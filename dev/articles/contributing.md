@@ -458,6 +458,7 @@ The available statistics are:
 
 ``` r
 mapme.biodiversity:::available_stats
+#> mapme.biodiversity 0.9.5.9002
 #> [1] "mean"   "median" "sd"     "min"    "max"    "sum"    "var"
 ```
 
