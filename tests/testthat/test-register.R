@@ -1,6 +1,6 @@
 test_that("mapme_options works", {
   opts <- mapme_options()
-  names <- c("outdir", "chunk_size", "retries", "verbose", "log_dir")
+  names <- c("outdir", "chunk_size", "retries", "delay", "verbose", "log_dir")
   expect_equal(names(opts), names)
 
   expect_error(mapme_options(outdir = 1))

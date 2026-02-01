@@ -9,7 +9,7 @@
 \alias{prep_resources}
 \title{Portfolio methods for mapme.biodiversity}
 \usage{
-mapme_options(..., outdir, chunk_size, retries, verbose, log_dir)
+mapme_options(..., outdir, chunk_size, retries, delay, verbose, log_dir)
 
 get_resources(x, ...)
 
@@ -33,16 +33,27 @@ If it lies above the value \code{chunk_size}, splitting and chunking is consider
 An asset will be processes as-is with an bounding box area below the specified
 value.}
 
-\item{retries}{A numeric of length one indicating the number or re-tries
-the package should attempt to make a resource available. Defaults to 3.}
+\item{retries}{An integer of length one indicating the number of retries
+the package should attempt to make a resource available.
+This commands the GDAL option \code{GDAL_HTTP_MAX_RETRY} (see
+\href{https://gdal.org/en/stable/user/configoptions.html#:~:text=GDAL_HTTP_MAX_RETRY}{here}).
+Defaults to 3.}
+
+\item{delay}{An integer of length one indicating the number of seconds
+the package should wait between the successive retries.
+This commands the GDAL option \code{GDAL_HTTP_RETRY_DELAY}  (see
+\href{https://gdal.org/en/stable/user/configoptions.html#:~:text=GDAL_HTTP_RETRY_DELAY}{here}).
+Defaults to 10.}
 
 \item{verbose}{A logical, indicating if informative messages should be printed.}
 
 \item{log_dir}{A character path pointing toward a GDAL-writable destination
 used to log erroneous assets. Defaults to NULL, meaning that erroneous
-assets will not be serialized to disk. If specified, a GPKG named
+assets will not be serialized to disk. If specified, a GPKG file named
 \code{file.path(log_dir, paste0(Sys.Date(), "_mapme-error-assets.gpkg"))} will
-be created and appended to in case of erroneous assets.}
+be created and appended to in case of erroneous assets. In the case some of the
+resources could not be downloaded, their list will be written to a GPKG file named
+\code{file.path(log_dir, paste0(Sys.Date(), "_", {resource_name}, "_mapme-error-resources.gpkg"))}.}
 
 \item{x}{An \code{sf} object with features of type \code{"POLYGON"}}
 
@@ -73,7 +84,9 @@ resources as \code{sf} and \code{SpatRaster}-objects.
 \code{mapme_options()} sets default options for mapme.biodiversity to control the
 behaviour of downstream functions. Mainly, the output path as well as the
 chunk size (in ha), can be set. Additionally, the verbosity can be set and
-the path to a log directory can be controlled. Might be extended by other
+the path to a log directory can be controlled. It also allow to set the number of
+retries  and the delay between the successive retries when retrieving the resources.
+Might be extended by other
 options in the future.
 
 \code{get_resources()} data sets required for the

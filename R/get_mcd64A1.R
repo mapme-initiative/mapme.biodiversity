@@ -51,8 +51,20 @@ get_mcd64a1 <- function(years = 2000:2022) {
     if (inherits(items, "try-error")) {
       stop("Download for MCD64A1 resource was unsuccesfull")
     }
+    # "secret" option to revert to the old method of MPC URL signing
+    if (getOption("mapme_biodiversity_MPC_sign_old", default = FALSE)) {
+      urls <- paste0("/vsicurl?pc_url_signing=yes&url=",
+                     rstac::assets_url(items, asset_names = "Burn_Date"))
+      file_names <- basename(urls)
+    } else {
+      signed_urls <- rstac::items_sign_planetary_computer(items,
+                                                          subscription_key = Sys.getenv("PC_SDK_SUBSCRIPTION_KEY")) %>%
+        rstac::assets_url(asset_names = "Burn_Date")
+      urls <- paste0("/vsicurl/", signed_urls)
+      file_names <- basename(rstac::assets_url(items, asset_names = "Burn_Date"))
+    }
 
-    urls <- rstac::assets_url(items, asset_names = "Burn_Date")
+    # urls <- rstac::assets_url(items, asset_names = "Burn_Date")
     if (length(urls) == 0) {
       stop("The extent of the portfolio does not intersect with the SRTM grid.")
     }
@@ -64,10 +76,12 @@ get_mcd64a1 <- function(years = 2000:2022) {
       st_as_sf(st_as_sfc(bbox))
     })
     fps <- st_as_sf(purrr::list_rbind(fps))
-    fps[["source"]] <- paste0("/vsicurl?pc_url_signing=yes&url=", urls)
+    # fps[["source"]] <- paste0("/vsicurl?pc_url_signing=yes&url=", urls)
+    fps[["source"]] <- urls
     fps <- st_transform(fps, "+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +R=6371007.181 +units=m +no_defs")
     make_footprints(
       fps,
+      filenames = file_names,
       what = "raster",
       co = c("-co", "COMPRESS=DEFLATE", "-of", "COG"),
       precision = 1e3
