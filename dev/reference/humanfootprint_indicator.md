@@ -59,11 +59,12 @@ aoi <- system.file("extdata", "shell_beach_protected_area_41057_B.gpkg",
   calc_indicators(calc_humanfootprint(stats = "median")) %>%
   portfolio_long()
 #> Waiting 5s for retry backoff ■■■■■■■                         
-#> Waiting 5s for retry backoff ■■■■■■■■■■■■                    
+#> Waiting 5s for retry backoff ■■■■■■■■■■                      
+#> Waiting 5s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   
 #> Waiting 5s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 
 #> Waiting 14s for retry backoff ■■■■■■■                         
-#> Waiting 14s for retry backoff ■■■■■■■■■■■■■■                  
-#> Waiting 14s for retry backoff ■■■■■■■■■■■■■■■■■■■■■           
+#> Waiting 14s for retry backoff ■■■■■■■■■■■■■                   
+#> Waiting 14s for retry backoff ■■■■■■■■■■■■■■■■■■■■            
 #> Waiting 14s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■     
 #> Waiting 14s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 
 #> Error in req_perform(req_retry(req, max_seconds = 15, is_transient = is_transient)) : 
