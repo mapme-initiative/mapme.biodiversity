@@ -48,22 +48,18 @@ reproducible framework for computing biodiversity-related indicators
 from multiple global geospatial datasets. It streamlines access,
 preprocessing, and analysis of spatial data to produce standardized,
 area-based metrics that can be used for conservation monitoring, policy
-evaluation, and research. The package integrates existing R tools for
-spatial data handling and parallel processing, supports both local and
-cloud-based workflows, and allows users to extend functionality with new
-datasets and indicators. By enabling reproducible and scalable analyses
-across diverse regions and themes, \texttt{mapme.biodiversity} helps
-bridge the gap between raw geospatial information and decision-relevant
+evaluation, and research. By enabling reproducible, scalable, and extendable 
+analyses across thematic datasets, \texttt{mapme.biodiversity} helps
+to bridge the gap between raw geospatial information and decision-relevant
 biodiversity indicators.
 
 # Statement of need
 
 To prevent biodiversity loss at scale, conservation researchers and
 practitioners require area-based indicators derived from diverse spatial
-datasets. Monitoring efforts often involve sets of intervention areas
-that must be tracked consistently over time. However, relevant data
-sources are dispersed across multiple repositories and platforms, each
-with distinct access protocols, formats, and documentation standards.
+datasets. However, relevant data sources are dispersed across multiple 
+repositories and platforms, each with distinct access protocols, 
+formats, and documentation standards.
 
 Most existing tools focus on a specific data source or domain, offering
 limited interoperability and requiring users to learn multiple
@@ -78,19 +74,7 @@ to derive standardized, area-based indicators at scale, supports
 reproducible workflows in \texttt{R}, and facilitates integration with
 other tools via export to standard spatial formats.
 
-# Applications
-
-The package is actively used by several institutions for both operational 
-and research purposes. At the Kreditanstalt für Wiederaufbau (KfW) and 
-the Agence Française de Développement -- the German and French public 
-development banks for international development -- it is used for 
-internal impact evaluations and reporting on funded conservation and 
-development programs. At the French National Research Institute for 
-Sustainable Development (IRD), it is used in research on policy evaluation 
-and in projects aimed at strengthening research capacity in the Global 
-South, including ongoing work in Madagascar and Senegal.
-
-# Comparison with other software packages
+# State of the field
 
 The Digital Observatory for Protected Areas provides a centralized, 
 server-based system developed by the European Commission to compute global
@@ -119,7 +103,29 @@ focuses on reproducible computation of area-based indicators within R,
 BON in a Box emphasizes cross-language interoperability and integration 
 with national biodiversity monitoring systems.
 
-# Functionality and Example Usage
+
+# Research Impact Statement
+
+The package is actively used by several institutions for both operational 
+and research purposes. At the Kreditanstalt für Wiederaufbau (KfW) and 
+the Agence Française de Développement -- the German and French public 
+development banks for international development -- it is used for 
+internal impact evaluations and reporting on funded conservation and 
+development programs. At the French National Research Institute for 
+Sustainable Development (IRD), the package is used in policy evaluation projects 
+and in initiatives aimed at strengthening research capacity in the Global South, 
+notably in Madagascar and Senegal. For instance, \texttt{mapme.biodiversity} is 
+a central to the pre-analysis plans and ongoing empirical studies evaluating the 
+impacts of protected areas on deforestation, including a registered study 
+accepted at PLOS ONE [@ramiandrisoa2026]. The software has been incorporated into 
+training materials used for capacity-building activities with government analysts 
+and researchers, including workshops delivered to evaluation teams at the Ministry 
+of Economy and Finance in Madagascar and to graduate students and early-career 
+researchers at the University of Antananarivo (see online materials at 
+[BETSAKA](https://betsaka.github.io/statcap_impact_training/)).
+
+
+# Software design
 
 Key features include:
 
@@ -177,15 +183,18 @@ The \texttt{mapme.biodiversity} \texttt{R} package is implemented as an
 extension package to the \texttt{R} statistical computing environment
 [@rcore]. It is available on the CRAN
 [@mapme]. Development versions are available on an online code
-repository (<https://github.com/mapme-initiative/mapme.biodiversity>).
-In addition to extensive [online
-documentation](https://mapme-initiative.github.io/mapme.biodiversity)
+[repository](https://github.com/mapme-initiative/mapme.biodiversity).
+In addition to extensive online
+[documentation](https://mapme-initiative.github.io/mapme.biodiversity)
 that provides detailed information about the package,
 \texttt{mapme.biodiversity} provides an applied
-[workshop](https://github.com/mapme-initiative/demo-madeira) example
-using real-world data showcasing the usage of the package to estimate
-changes in forest cover caused by flooding as a consequence of dam
-building at the Madeira river in Rondônia, Brazil. 
+[workshop](https://github.com/mapme-initiative/demo-madeira)
+using a real-world use-case scenario.
+
+# AI usage disclosure
+
+No generative AI tools were used in the development of this software, the writing
+of this manuscript, or the preparation of supporting materials.
 
 # Acknowledgments
 
