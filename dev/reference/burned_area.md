@@ -69,13 +69,13 @@ aoi
 #>     <dbl> <chr>   <int> <chr>       <dttm>              <chr>    <chr>     <dbl>
 #>  1 478140 DOM         1 burned_area 2010-12-01 00:00:00 burned_… ha    2.91e-318
 #>  2 478140 DOM         1 burned_area 2010-11-01 00:00:00 burned_… ha    2.91e-318
-#>  3 478140 DOM         1 burned_area 2010-10-01 00:00:00 burned_… ha    7.10e-318
-#>  4 478140 DOM         1 burned_area 2010-09-01 00:00:00 burned_… ha    7.10e-318
+#>  3 478140 DOM         1 burned_area 2010-10-01 00:00:00 burned_… ha    2.92e-318
+#>  4 478140 DOM         1 burned_area 2010-09-01 00:00:00 burned_… ha    2.92e-318
 #>  5 478140 DOM         1 burned_area 2010-08-01 00:00:00 burned_… ha    2.91e-318
 #>  6 478140 DOM         1 burned_area 2010-07-01 00:00:00 burned_… ha    2.91e-318
-#>  7 478140 DOM         1 burned_area 2010-06-01 00:00:00 burned_… ha    3.75e-318
-#>  8 478140 DOM         1 burned_area 2010-05-01 00:00:00 burned_… ha    5.66e-317
-#>  9 478140 DOM         1 burned_area 2010-04-01 00:00:00 burned_… ha    4.74e-317
+#>  7 478140 DOM         1 burned_area 2010-06-01 00:00:00 burned_… ha    2.91e-318
+#>  8 478140 DOM         1 burned_area 2010-05-01 00:00:00 burned_… ha    3.13e-318
+#>  9 478140 DOM         1 burned_area 2010-04-01 00:00:00 burned_… ha    3.09e-318
 #> 10 478140 DOM         1 burned_area 2010-03-01 00:00:00 burned_… ha    4.28e+  1
 #> 11 478140 DOM         1 burned_area 2010-02-01 00:00:00 burned_… ha    2.91e-318
 #> 12 478140 DOM         1 burned_area 2010-01-01 00:00:00 burned_… ha    2.91e-318
