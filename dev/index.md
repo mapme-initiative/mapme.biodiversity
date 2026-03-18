@@ -150,10 +150,6 @@ library(mapme.biodiversity)
 library(sf)
 ```
 
-``` R
-## Linking to GEOS 3.13.0, GDAL 3.8.5, PROJ 9.5.1; sf_use_s2() is TRUE
-```
-
 Once you have decided on an indicator you are interested in, you can
 start by making the required resource available for your portfolio.
 Using
@@ -196,7 +192,17 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.
   ) %>%
   calc_indicators(calc_treecover_area_and_emissions(years = 2016:2017, min_size = 1, min_cover = 30)) %>%
   portfolio_long()
+```
 
+``` R
+## Resource 'gfw_treecover' is already available.
+
+## Resource 'gfw_lossyear' is already available.
+
+## Resource 'gfw_emissions' is already available.
+```
+
+``` r
 aoi
 ```
 

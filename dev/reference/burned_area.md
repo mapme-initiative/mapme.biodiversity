@@ -74,8 +74,8 @@ aoi
 #>  5 478140 DOM         1 burned_area 2010-08-01 00:00:00 burned_… ha    2.91e-318
 #>  6 478140 DOM         1 burned_area 2010-07-01 00:00:00 burned_… ha    2.91e-318
 #>  7 478140 DOM         1 burned_area 2010-06-01 00:00:00 burned_… ha    2.91e-318
-#>  8 478140 DOM         1 burned_area 2010-05-01 00:00:00 burned_… ha    3.13e-318
-#>  9 478140 DOM         1 burned_area 2010-04-01 00:00:00 burned_… ha    3.09e-318
+#>  8 478140 DOM         1 burned_area 2010-05-01 00:00:00 burned_… ha    3.02e-318
+#>  9 478140 DOM         1 burned_area 2010-04-01 00:00:00 burned_… ha    3.00e-318
 #> 10 478140 DOM         1 burned_area 2010-03-01 00:00:00 burned_… ha    4.28e+  1
 #> 11 478140 DOM         1 burned_area 2010-02-01 00:00:00 burned_… ha    2.91e-318
 #> 12 478140 DOM         1 burned_area 2010-01-01 00:00:00 burned_… ha    2.91e-318
