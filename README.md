@@ -305,6 +305,18 @@ with_progress({
 plan(sequential) # close child processes
 ```
 
+## How to contribute
+
+Contributions to the package are very welcome. If you want to contribute
+a new resource or indicator, please check out the [developer
+guidelines](https://mapme-initiative.github.io/mapme.biodiversity/articles/contributing.html)
+for more information on how to implement a new resource or indicator. If
+you want to contribute to the package in any other way or seek support
+from the community, please open an
+[issue](https://github.com/mapme-initiative/mapme.biodiversity/issues)
+or consider opening a
+[discussion](https://github.com/mapme-initiative/mapme.biodiversity/discussions).
+
 ## More info
 
 In addition to extensive [online
