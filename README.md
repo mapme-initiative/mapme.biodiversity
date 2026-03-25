@@ -1,15 +1,6 @@
-
 <!-- badges: start -->
 
-[![status](https://joss.theoj.org/papers/0d1960441cd29c1a250366db291c96c9/status.svg)](https://joss.theoj.org/papers/0d1960441cd29c1a250366db291c96c9)
-[![R-CMD-check](https://github.com/mapme-initiative/mapme.biodiversity/actions/workflows/R-CMD-check.yaml/badge.svg?branch=main)](https://github.com/mapme-initiative/mapme.biodiversity/actions)
-[![Coverage
-Status](https://img.shields.io/codecov/c/github/mapme-initiative/mapme.biodiversity/master.svg)](https://app.codecov.io/github/mapme-initiative/mapme.biodiversity?branch=main)
-[![CRAN
-status](https://badges.cranchecks.info/worst/mapme.biodiversity.svg)](https://cran.r-project.org/web/checks/check_results_mapme.biodiversity.html)
-[![CRAN
-version](https://www.r-pkg.org/badges/version/mapme.biodiversity)](https://CRAN.R-project.org/package=mapme.biodiversity)
-[![License](https://img.shields.io/badge/License-GPL%20(%3E=3)-brightgreen.svg?style=flat)](https://choosealicense.com/licenses/gpl-3.0/)
+[![status](https://joss.theoj.org/papers/0d1960441cd29c1a250366db291c96c9/status.svg)](https://joss.theoj.org/papers/0d1960441cd29c1a250366db291c96c9) [![R-CMD-check](https://github.com/mapme-initiative/mapme.biodiversity/actions/workflows/R-CMD-check.yaml/badge.svg?branch=main)](https://github.com/mapme-initiative/mapme.biodiversity/actions) [![Coverage Status](https://img.shields.io/codecov/c/github/mapme-initiative/mapme.biodiversity/master.svg)](https://app.codecov.io/github/mapme-initiative/mapme.biodiversity?branch=main) [![CRAN status](https://badges.cranchecks.info/worst/mapme.biodiversity.svg)](https://cran.r-project.org/web/checks/check_results_mapme.biodiversity.html) [![CRAN version](https://www.r-pkg.org/badges/version/mapme.biodiversity)](https://CRAN.R-project.org/package=mapme.biodiversity) [![License](https://img.shields.io/badge/License-GPL%20(%3E=3)-brightgreen.svg?style=flat)](https://choosealicense.com/licenses/gpl-3.0/)
 
 <!-- badges: end -->
 
@@ -17,26 +8,9 @@ version](https://www.r-pkg.org/badges/version/mapme.biodiversity)](https://CRAN.
 
 ## About
 
-Biodiversity areas, especially primary forests, provide multiple
-ecosystem services for the local population and the planet as a whole.
-The rapid expansion of human land use into natural ecosystems and the
-impacts of the global climate crisis put natural ecosystems and the
-global biodiversity under threat.
+Biodiversity areas, especially primary forests, provide multiple ecosystem services for the local population and the planet as a whole. The rapid expansion of human land use into natural ecosystems and the impacts of the global climate crisis put natural ecosystems and the global biodiversity under threat.
 
-The mapme.biodiversity package helps to analyse a number of biodiversity
-related indicators and biodiversity threats based on freely available
-geodata-sources such as the Global Forest Watch. It supports
-computational efficient routines and heavy parallel computing in
-cloud-infrastructures such as AWS or Microsoft Azure using in the
-statistical programming language R. The package allows for the analysis
-of global biodiversity portfolios with a thousand or millions of AOIs
-which is normally only possible on dedicated platforms such as the
-Google Earth Engine. It provides the possibility to e.g. analyse the
-World Database of Protected Areas (WDPA) for a number of relevant
-indicators. The primary use case of this package is to support
-scientific analysis and data science for individuals and organizations
-who seek to preserve the planet biodiversity. Its development is funded
-by the German Development Bank KfW.
+The `{mapme.biodiversity}` package helps to analyse a number of biodiversity related indicators and biodiversity threats based on freely available geodata-sources such as the Global Forest Watch. It supports computational efficient routines and heavy parallel computing in cloud-infrastructures such as AWS or Microsoft Azure using in the statistical programming language R. The package allows for the analysis of global biodiversity portfolios with a thousand or millions of AOIs which is normally only possible on dedicated platforms such as the Google Earth Engine. It provides the possibility to e.g. analyse the World Database of Protected Areas (WDPA) for a number of relevant indicators. The primary use case of this package is to support scientific analysis and data science for individuals and organizations who seek to preserve the planet biodiversity. Its development is funded by the German Development Bank KfW.
 
 ## Installation
 
@@ -61,10 +35,7 @@ remotes::install_github("https://github.com/mapme-initiative/mapme.biodiversity"
 
 ## Available resources and indicators
 
-Below is a list of the resources currently supported by
-`mapme.biodiversity`.
-
-    ## mapme.biodiversity 0.9.5.9002
+Below is a list of the resources currently supported by `{mapme.biodiversity}`.
 
 | name | description | licence |
 |:---|:---|:---|
@@ -104,9 +75,7 @@ Below is a list of the resources currently supported by
 | worldclim_precipitation | WorldClim - Monthly precipitation 1960 - 2024 | <https://www.worldclim.org/about.html> |
 | worldpop | WorldPop - Unconstrained Global Mosaics 2000 - 2020 | CC-BY 4.0 |
 
-A more detailed list of these resources can be found in
-[this](https://github.com/mapme-initiative/mapme.biodiversity/raw/refs/heads/main/extras/mapme.biodiversity_resources.xlsx)
-Excel file.
+A more detailed list of these resources can be found in [this](https://github.com/mapme-initiative/mapme.biodiversity/raw/refs/heads/main/extras/mapme.biodiversity_resources.xlsx) Excel file.
 
 Next, is a list of supported indicators.
 
@@ -155,41 +124,16 @@ Next, is a list of supported indicators.
 
 ## Usage example
 
-`{mapme.biodiversity}` works by constructing a portfolio from an sf
-object. Specific raster and vector resource matching the spatio-temporal
-extent of the portfolio are made available locally. Once all required
-resources are available, indicators can be calculated individually for
-each asset in the portfolio.
+`{mapme.biodiversity}` works by constructing a portfolio from an sf object. Specific raster and vector resource matching the spatio-temporal extent of the portfolio are made available locally. Once all required resources are available, indicators can be calculated individually for each asset in the portfolio.
+
+Once you have decided on an indicator you are interested in, you can start by making the required resource available for your portfolio. Using `mapme_options()` you can set an output directory, control the maximum size of polygons before they are chunked into smaller parts, and control the verbosity of the package.
+
+A portfolio is represented by an sf-object. It is required for the object to only contain geometries of type `POLYGON` and `MULTIPOLYGON` as assets. We can request the download of a resource for the spatial extent of our portfolio by using the `get_resources()` function. We simply supply our portfolio and one or more resource functions. Once the resources were made available, we can query the calculation of an indicator by using the `calc_indicators()` function. This function also expects the portfolio as input and one or more indicator functions. Once the indicator has been calculated for all assets in a portfolio, the data is returned as a nested list column to the original portfolio object. The output of each indicator is standardized to common format, consisting of a tibble with columns `datetime`, `variable`, `unit`, and `value`. We can transform the the data to long format by using `portfolio_long()`.
 
 ``` r
 library(mapme.biodiversity)
 library(sf)
-```
 
-    ## Linking to GEOS 3.14.1, GDAL 3.12.2, PROJ 9.7.0; sf_use_s2() is TRUE
-
-Once you have decided on an indicator you are interested in, you can
-start by making the required resource available for your portfolio.
-Using `mapme_options()` you can set an output directory, control the
-maximum size of polygons before they are chunked into smaller parts, and
-control the verbosity of the package.
-
-A portfolio is represented by an sf-object. It is required for the
-object to only contain geometries of type `POLYGON` and `MULTIPOLYGON`
-as assets. We can request the download of a resource for the spatial
-extent of our portfolio by using the `get_resources()` function. We
-simply supply our portfolio and one or more resource functions. Once the
-resources were made available, we can query the calculation of an
-indicator by using the `calc_indicators()` function. This function also
-expects the portfolio as input and one or more indicator functions. Once
-the indicator has been calculated for all assets in a portfolio, the
-data is returned as a nested list column to the original portfolio
-object. The output of each indicator is standardized to common format,
-consisting of a tibble with columns `datetime`, `variable`, `unit`, and
-`value`. We can transform the the data to long format by using
-`portfolio_long()`.
-
-``` r
 mapme_options(
   outdir = system.file("res", package = "mapme.biodiversity"),
   chunk_size = 1e6, # in ha
@@ -209,34 +153,27 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.
 aoi
 ```
 
-    ## Simple feature collection with 4 features and 8 fields
-    ## Geometry type: POLYGON
-    ## Dimension:     XY
-    ## Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931
-    ## Geodetic CRS:  WGS 84
-    ## # A tibble: 4 × 9
-    ##   WDPAID ISO3  assetid indicator        datetime            variable unit  value
-    ##    <dbl> <chr>   <int> <chr>            <dttm>              <chr>    <chr> <dbl>
-    ## 1 478140 DOM         1 treecover_area_… 2016-01-01 00:00:00 emissio… Mg    4296.
-    ## 2 478140 DOM         1 treecover_area_… 2016-01-01 00:00:00 treecov… ha    2372.
-    ## 3 478140 DOM         1 treecover_area_… 2017-01-01 00:00:00 emissio… Mg    4970.
-    ## 4 478140 DOM         1 treecover_area_… 2017-01-01 00:00:00 treecov… ha    2360.
-    ## # ℹ 1 more variable: geom <POLYGON [°]>
+```         
+## Simple feature collection with 4 features and 8 fields
+## Geometry type: POLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931
+## Geodetic CRS:  WGS 84
+## # A tibble: 4 × 9
+##   WDPAID ISO3  assetid indicator        datetime            variable unit  value
+##    <dbl> <chr>   <int> <chr>            <dttm>              <chr>    <chr> <dbl>
+## 1 478140 DOM         1 treecover_area_… 2016-01-01 00:00:00 emissio… Mg    4296.
+## 2 478140 DOM         1 treecover_area_… 2016-01-01 00:00:00 treecov… ha    2372.
+## 3 478140 DOM         1 treecover_area_… 2017-01-01 00:00:00 emissio… Mg    4970.
+## 4 478140 DOM         1 treecover_area_… 2017-01-01 00:00:00 treecov… ha    2360.
+## # ℹ 1 more variable: geom <POLYGON [°]>
+```
 
 ## Using cloud storages
 
-`{mapme.biodiversity}` leverages GDAL’s capabilities for data I/O. For
-users of this package, that means that integrating a cloud storage is as
-easy as setting up a configuration file and changing the `outdir`
-argument in `mapme_options()`. While you could also decide to use
-environment variables, we recommend to set up a GDAL config file. You
-can find GDAL’s documentation on this topic
-[here](https://gdal.org/en/latest/user/configoptions.html#gdal-configuration-file).
+`{mapme.biodiversity}` leverages GDAL’s capabilities for data I/O. For users of this package, that means that integrating a cloud storage is as easy as setting up a configuration file and changing the `outdir` argument in `mapme_options()`. While you could also decide to use environment variables, we recommend to set up a GDAL config file. You can find GDAL’s documentation on this topic [here](https://gdal.org/en/latest/user/configoptions.html#gdal-configuration-file).
 
-Suppose that we want to use an AWS S3 bucket that we control to write
-resource data to. Let’s assume this bucket is already set up and we wish
-to refer to it in our R code as `mapme-data`. The GDAL configuration
-file should look something like this:
+Suppose that we want to use an AWS S3 bucket that we control to write resource data to. Let’s assume this bucket is already set up and we wish to refer to it in our R code as `mapme-data`. The GDAL configuration file should look something like this:
 
 ``` ini
 [credentials]
@@ -247,20 +184,15 @@ AWS_SECRET_ACCESS_KEY=<your-access-key>
 AWS_ACCESS_KEY_ID=<your-access-id>
 ```
 
-The connection will be handled based on GDAL’s virtual file system. You
-can find documentation on specific options for your cloud provider
-[here](https://gdal.org/en/latest/user/virtual_file_systems.html#network-based-file-systems).
+The connection will be handled based on GDAL’s virtual file system. You can find documentation on specific options for your cloud provider [here](https://gdal.org/en/latest/user/virtual_file_systems.html#network-based-file-systems).
 
-Ideally, you would also set the following in the `.Renviron` file in
-your user’s home directory to ensure that GDAL is aware of this
-configuration when an R session is started:
+Ideally, you would also set the following in the `.Renviron` file in your user’s home directory to ensure that GDAL is aware of this configuration when an R session is started:
 
 ``` ini
 GDAL_CONFIG_FILE = "<path-to-your-config-file>"
 ```
 
-Then, in your scripts set the `outdir` option to the value specified
-with the `path` variable in the configuration file:
+Then, in your scripts set the `outdir` option to the value specified with the `path` variable in the configuration file:
 
 ``` r
 mapme_options(outdir = "/vsis3/mapme-data")
@@ -268,24 +200,14 @@ mapme_options(outdir = "/vsis3/mapme-data")
 
 ## A note on parallel computing
 
-`{mapme.biodiversity}` follows the parallel computing paradigm of the
-[`{future}`](https://cran.r-project.org/package=future) package. That
-means that you as a user are in the control if and how you would like to
-set up parallel processing. Since `{mapme.biodiversity} v0.9`, we apply
-pre-chunking to all assets in the portfolio. That means that assets are
-split up into components of roughly the size of `chunk_size`. These
-components can than be iterated over in parallel to speed up processing.
-Indicator values will be aggregated automatically.
+`{mapme.biodiversity}` follows the parallel computing paradigm of the [`{future}`](https://cran.r-project.org/package=future) package. That means that you as a user are in the control if and how you would like to set up parallel processing. Since `{mapme.biodiversity} v0.9`, we apply pre-chunking to all assets in the portfolio. That means that assets are split up into components of roughly the size of `chunk_size`. These components can than be iterated over in parallel to speed up processing. Indicator values will be aggregated automatically.
 
 ``` r
 library(future)
 plan(cluster, workers = 6)
 ```
 
-As another example, with the code below one would apply parallel
-processing of 2 assets, with each having 4 workers available to process
-chunks, thus requiring a total of 8 available cores on the host machine.
-Be sure to not request more workers than available on your machine.
+As another example, with the code below one would apply parallel processing of 2 assets, with each having 4 workers available to process chunks, thus requiring a total of 8 available cores on the host machine. Be sure to not request more workers than available on your machine.
 
 ``` r
 library(progressr)
@@ -307,23 +229,8 @@ plan(sequential) # close child processes
 
 ## How to contribute
 
-Contributions to the package are very welcome. If you want to contribute
-a new resource or indicator, please check out the [developer
-guidelines](https://mapme-initiative.github.io/mapme.biodiversity/articles/contributing.html)
-for more information on how to implement a new resource or indicator. If
-you want to contribute to the package in any other way or seek support
-from the community, please open an
-[issue](https://github.com/mapme-initiative/mapme.biodiversity/issues)
-or consider opening a
-[discussion](https://github.com/mapme-initiative/mapme.biodiversity/discussions).
+Contributions to the package are very welcome. If you want to contribute a new resource or indicator, please check out the [developer guidelines](https://mapme-initiative.github.io/mapme.biodiversity/articles/contributing.html) for more information on how to implement a new resource or indicator. If you want to contribute to the package in any other way or seek support from the community, please open an [issue](https://github.com/mapme-initiative/mapme.biodiversity/issues) or consider opening a [discussion](https://github.com/mapme-initiative/mapme.biodiversity/discussions).
 
 ## More info
 
-In addition to extensive [online
-documentation](https://mapme-initiative.github.io/mapme.biodiversity)
-that provides detailed information about the package,
-`mapme.biodiversity` provides an applied
-[workshop](https://github.com/mapme-initiative/demo-madeira) example
-using real-world data showcasing the usage of the package to estimate
-changes in forest cover caused by flooding as a consequence of dam
-building at the Madeira river in Rondônia, Brazil.
+In addition to extensive [online documentation](https://mapme-initiative.github.io/mapme.biodiversity) that provides detailed information about the package, `mapme.biodiversity` provides an applied [workshop](https://github.com/mapme-initiative/demo-madeira) example using real-world data showcasing the usage of the package to estimate changes in forest cover caused by flooding as a consequence of dam building at the Madeira river in Rondônia, Brazil.

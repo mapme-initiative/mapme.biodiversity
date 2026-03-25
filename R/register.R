@@ -4,6 +4,10 @@
 .pkgenv$indicators <- list()
 .pkgenv$avail_resources <- list()
 
+.onAttach <- function(libname, pkgname) {
+  packageStartupMessage(paste(pkgname, utils::packageVersion(pkgname)))
+}
+
 .onLoad <- function(libname, pkgname) {
   outdir <- tempfile(pattern = "mapme-data-")
   dir.create(outdir, showWarnings = FALSE)
@@ -16,7 +20,6 @@
     verbose = TRUE
   )
   .check_system_requirements()
-  packageStartupMessage(paste(pkgname, utils::packageVersion(pkgname)))
   invisible()
 }
 
