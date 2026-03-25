@@ -49,6 +49,10 @@ remotes::install_github("https://github.com/mapme-initiative/mapme.biodiversity"
 Below is a list of the resources currently supported by
 `mapme.biodiversity`.
 
+``` R
+## mapme.biodiversity 0.9.5.9002
+```
+
 | name                             | description                                                                                                                | licence                                                                                                               |
 |:---------------------------------|:---------------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------|
 | accessibility_2000               | Accessibility data for the year 2000 from the Global Accessibility Map project                                             | See JRC data policy: <https://joint-research-centre.ec.europa.eu/jrc-mission-statement-work-programme/data-policy_en> |
@@ -150,6 +154,10 @@ library(mapme.biodiversity)
 library(sf)
 ```
 
+``` R
+## Linking to GEOS 3.14.1, GDAL 3.12.2, PROJ 9.7.0; sf_use_s2() is TRUE
+```
+
 Once you have decided on an indicator you are interested in, you can
 start by making the required resource available for your portfolio.
 Using
@@ -192,17 +200,7 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.
   ) %>%
   calc_indicators(calc_treecover_area_and_emissions(years = 2016:2017, min_size = 1, min_cover = 30)) %>%
   portfolio_long()
-```
 
-``` R
-## Resource 'gfw_treecover' is already available.
-
-## Resource 'gfw_lossyear' is already available.
-
-## Resource 'gfw_emissions' is already available.
-```
-
-``` r
 aoi
 ```
 
@@ -306,6 +304,18 @@ with_progress({
 
 plan(sequential) # close child processes
 ```
+
+## How to contribute
+
+Contributions to the package are very welcome. If you want to contribute
+a new resource or indicator, please check out the [developer
+guidelines](https://mapme-initiative.github.io/mapme.biodiversity/articles/contributing.html)
+for more information on how to implement a new resource or indicator. If
+you want to contribute to the package in any other way or seek support
+from the community, please open an
+[issue](https://github.com/mapme-initiative/mapme.biodiversity/issues)
+or consider opening a
+[discussion](https://github.com/mapme-initiative/mapme.biodiversity/discussions).
 
 ## More info
 
