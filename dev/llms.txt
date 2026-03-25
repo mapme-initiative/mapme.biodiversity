@@ -8,20 +8,22 @@ The rapid expansion of human land use into natural ecosystems and the
 impacts of the global climate crisis put natural ecosystems and the
 global biodiversity under threat.
 
-The mapme.biodiversity package helps to analyse a number of biodiversity
-related indicators and biodiversity threats based on freely available
-geodata-sources such as the Global Forest Watch. It supports
-computational efficient routines and heavy parallel computing in
-cloud-infrastructures such as AWS or Microsoft Azure using in the
-statistical programming language R. The package allows for the analysis
-of global biodiversity portfolios with a thousand or millions of AOIs
-which is normally only possible on dedicated platforms such as the
-Google Earth Engine. It provides the possibility to e.g. analyse the
-World Database of Protected Areas (WDPA) for a number of relevant
-indicators. The primary use case of this package is to support
-scientific analysis and data science for individuals and organizations
-who seek to preserve the planet biodiversity. Its development is funded
-by the German Development Bank KfW.
+The
+[mapme.biodiversity](https://mapme-initiative.github.io/mapme.biodiversity/)
+package helps to analyse a number of biodiversity related indicators and
+biodiversity threats based on freely available geodata-sources such as
+the Global Forest Watch. It supports computational efficient routines
+and heavy parallel computing in cloud-infrastructures such as AWS or
+Microsoft Azure using in the statistical programming language R. The
+package allows for the analysis of global biodiversity portfolios with a
+thousand or millions of AOIs which is normally only possible on
+dedicated platforms such as the Google Earth Engine. It provides the
+possibility to e.g. analyse the World Database of Protected Areas (WDPA)
+for a number of relevant indicators. The primary use case of this
+package is to support scientific analysis and data science for
+individuals and organizations who seek to preserve the planet
+biodiversity. Its development is funded by the German Development Bank
+KfW.
 
 ## Installation
 
@@ -47,11 +49,7 @@ remotes::install_github("https://github.com/mapme-initiative/mapme.biodiversity"
 ## Available resources and indicators
 
 Below is a list of the resources currently supported by
-`mapme.biodiversity`.
-
-``` R
-## mapme.biodiversity 0.9.5.9002
-```
+[mapme.biodiversity](https://mapme-initiative.github.io/mapme.biodiversity/).
 
 | name                             | description                                                                                                                | licence                                                                                                               |
 |:---------------------------------|:---------------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------|
@@ -149,15 +147,6 @@ made available locally. Once all required resources are available,
 indicators can be calculated individually for each asset in the
 portfolio.
 
-``` r
-library(mapme.biodiversity)
-library(sf)
-```
-
-``` R
-## Linking to GEOS 3.14.1, GDAL 3.12.2, PROJ 9.7.0; sf_use_s2() is TRUE
-```
-
 Once you have decided on an indicator you are interested in, you can
 start by making the required resource available for your portfolio.
 Using
@@ -185,6 +174,9 @@ data to long format by using
 [`portfolio_long()`](https://mapme-initiative.github.io/mapme.biodiversity/dev/reference/portfolio.md).
 
 ``` r
+library(mapme.biodiversity)
+library(sf)
+
 mapme_options(
   outdir = system.file("res", package = "mapme.biodiversity"),
   chunk_size = 1e6, # in ha
@@ -204,21 +196,19 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.
 aoi
 ```
 
-``` R
-## Simple feature collection with 4 features and 8 fields
-## Geometry type: POLYGON
-## Dimension:     XY
-## Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931
-## Geodetic CRS:  WGS 84
-## # A tibble: 4 × 9
-##   WDPAID ISO3  assetid indicator        datetime            variable unit  value
-##    <dbl> <chr>   <int> <chr>            <dttm>              <chr>    <chr> <dbl>
-## 1 478140 DOM         1 treecover_area_… 2016-01-01 00:00:00 emissio… Mg    4296.
-## 2 478140 DOM         1 treecover_area_… 2016-01-01 00:00:00 treecov… ha    2372.
-## 3 478140 DOM         1 treecover_area_… 2017-01-01 00:00:00 emissio… Mg    4970.
-## 4 478140 DOM         1 treecover_area_… 2017-01-01 00:00:00 treecov… ha    2360.
-## # ℹ 1 more variable: geom <POLYGON [°]>
-```
+    ## Simple feature collection with 4 features and 8 fields
+    ## Geometry type: POLYGON
+    ## Dimension:     XY
+    ## Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931
+    ## Geodetic CRS:  WGS 84
+    ## # A tibble: 4 × 9
+    ##   WDPAID ISO3  assetid indicator        datetime            variable unit  value
+    ##    <dbl> <chr>   <int> <chr>            <dttm>              <chr>    <chr> <dbl>
+    ## 1 478140 DOM         1 treecover_area_… 2016-01-01 00:00:00 emissio… Mg    4296.
+    ## 2 478140 DOM         1 treecover_area_… 2016-01-01 00:00:00 treecov… ha    2372.
+    ## 3 478140 DOM         1 treecover_area_… 2017-01-01 00:00:00 emissio… Mg    4970.
+    ## 4 478140 DOM         1 treecover_area_… 2017-01-01 00:00:00 treecov… ha    2360.
+    ## # ℹ 1 more variable: geom <POLYGON [°]>
 
 ## Using cloud storages
 
