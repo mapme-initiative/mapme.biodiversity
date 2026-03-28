@@ -65,20 +65,20 @@ aoi
 #> Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931
 #> Geodetic CRS:  WGS 84
 #> # A tibble: 12 × 9
-#>    WDPAID ISO3  assetid indicator   datetime            variable unit      value
-#>     <dbl> <chr>   <int> <chr>       <dttm>              <chr>    <chr>     <dbl>
-#>  1 478140 DOM         1 burned_area 2010-12-01 00:00:00 burned_… ha    2.91e-318
-#>  2 478140 DOM         1 burned_area 2010-11-01 00:00:00 burned_… ha    2.91e-318
-#>  3 478140 DOM         1 burned_area 2010-10-01 00:00:00 burned_… ha    2.92e-318
-#>  4 478140 DOM         1 burned_area 2010-09-01 00:00:00 burned_… ha    2.92e-318
-#>  5 478140 DOM         1 burned_area 2010-08-01 00:00:00 burned_… ha    2.91e-318
-#>  6 478140 DOM         1 burned_area 2010-07-01 00:00:00 burned_… ha    2.91e-318
-#>  7 478140 DOM         1 burned_area 2010-06-01 00:00:00 burned_… ha    2.91e-318
-#>  8 478140 DOM         1 burned_area 2010-05-01 00:00:00 burned_… ha    3.02e-318
-#>  9 478140 DOM         1 burned_area 2010-04-01 00:00:00 burned_… ha    3.00e-318
-#> 10 478140 DOM         1 burned_area 2010-03-01 00:00:00 burned_… ha    4.28e+  1
-#> 11 478140 DOM         1 burned_area 2010-02-01 00:00:00 burned_… ha    2.91e-318
-#> 12 478140 DOM         1 burned_area 2010-01-01 00:00:00 burned_… ha    2.91e-318
+#>    WDPAID ISO3  assetid indicator   datetime            variable    unit  value
+#>     <dbl> <chr>   <int> <chr>       <dttm>              <chr>       <chr> <dbl>
+#>  1 478140 DOM         1 burned_area 2010-12-01 00:00:00 burned_area ha      0  
+#>  2 478140 DOM         1 burned_area 2010-11-01 00:00:00 burned_area ha      0  
+#>  3 478140 DOM         1 burned_area 2010-10-01 00:00:00 burned_area ha      0  
+#>  4 478140 DOM         1 burned_area 2010-09-01 00:00:00 burned_area ha      0  
+#>  5 478140 DOM         1 burned_area 2010-08-01 00:00:00 burned_area ha      0  
+#>  6 478140 DOM         1 burned_area 2010-07-01 00:00:00 burned_area ha      0  
+#>  7 478140 DOM         1 burned_area 2010-06-01 00:00:00 burned_area ha      0  
+#>  8 478140 DOM         1 burned_area 2010-05-01 00:00:00 burned_area ha      0  
+#>  9 478140 DOM         1 burned_area 2010-04-01 00:00:00 burned_area ha      0  
+#> 10 478140 DOM         1 burned_area 2010-03-01 00:00:00 burned_area ha     42.8
+#> 11 478140 DOM         1 burned_area 2010-02-01 00:00:00 burned_area ha      0  
+#> 12 478140 DOM         1 burned_area 2010-01-01 00:00:00 burned_area ha      0  
 #> # ℹ 1 more variable: geom <POLYGON [°]>
 # }
 ```
