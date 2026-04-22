@@ -15,7 +15,7 @@ authors:
     orcid: 0000-0001-5029-2425
     affiliation: 3
   - name: Zivan Karaman
-    orcid: 0009-0008-5503-7704
+    orcid: 0000-0002-8933-4589
     affiliation: 4
   - name: Florent Bédécarrats
     orcid: 0000-0003-1001-5540
