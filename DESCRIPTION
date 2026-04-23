@@ -1,6 +1,6 @@
 Package: mapme.biodiversity
 Title: Efficient Monitoring of Global Biodiversity Portfolios
-Version: 0.9.å
+Version: 0.9.6
 Authors@R: c(person(given = "Darius A.", 
                     family = "G\u00F6rgen", 
                     role = "aut",
@@ -15,9 +15,10 @@ Authors@R: c(person(given = "Darius A.",
              person(given = "Sven", 
                     family = "Bergtold", 
                     email =  "sven.bergtold@gmail.com",
-                    role = "ctb",
+                    role = "ctb"),
              person(given = "Zivan", 
-                    family = "Karaman", 
+                    family = "Karaman",
+                    email =  "zivan.karaman@gmail.com",
                     role = c("ctb", "cre"),
                     comment = c(ORCID = "0000-0002-8933-4589")),
              person(given = "MAPME-Initiative",
@@ -52,7 +53,7 @@ Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-GB
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Collate: 
     'register.R'
     'calc_biodiversity_intactness_index.R'
