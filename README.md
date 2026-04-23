@@ -63,9 +63,11 @@ remotes::install_github("https://github.com/mapme-initiative/mapme.biodiversity"
 Below is a list of the resources currently supported by
 `mapme.biodiversity`.
 
+    ## mapme.biodiversity 0.9.6
+
 | name | description | licence |
 |:---|:---|:---|
-| accessibility_2000 | Accessibility data for the year 2000 from the Global Accessibility Map project | See JRC data policy: <https://joint-research-centre.ec.europa.eu/jrc-mission-statement-work-programme/data-policy_en> |
+| accessibility_2000 | Accessibility data for the year 2000 from the Global Accessibility Map project | See JRC data policy: <https://joint-research-centre.ec.europa.eu/about-us/service-standards-and-principles/data-policy_en> |
 | acled | Armed Conflict Location & Event Data (ACLED) | Visit acleddata.com |
 | biodiversity_intactness_index | Biodiversity Intactness Index | CC-BY-4.0 |
 | chelsa | Climatologies at High resolution for the Earth Land Surface Areas (CHELSA) | Unknown - Must cite! |
@@ -305,7 +307,7 @@ plan(sequential) # close child processes
 ## More info
 
 In addition to extensive [online
-documentation](https://mapme-initiative.github.io/mapme.biodiversity)
+documentation](https://mapme-initiative.github.io/mapme.biodiversity/)
 that provides detailed information about the package,
 `mapme.biodiversity` provides an applied
 [workshop](https://github.com/mapme-initiative/demo-madeira) example
