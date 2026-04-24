@@ -21,6 +21,7 @@
     verbose = TRUE
   )
   .check_system_requirements()
+  invisible()
 }
 
 .probe_dsn <- function(dsn) {
