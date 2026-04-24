@@ -3,7 +3,7 @@ output: github_document
 ---
 
 <!-- badges: start -->
-
+[![status](https://joss.theoj.org/papers/0d1960441cd29c1a250366db291c96c9/status.svg)](https://joss.theoj.org/papers/0d1960441cd29c1a250366db291c96c9)
 [![R-CMD-check](https://github.com/mapme-initiative/mapme.biodiversity/actions/workflows/R-CMD-check.yaml/badge.svg?branch=main)](https://github.com/mapme-initiative/mapme.biodiversity/actions) [![Coverage Status](https://img.shields.io/codecov/c/github/mapme-initiative/mapme.biodiversity/master.svg)](https://app.codecov.io/github/mapme-initiative/mapme.biodiversity?branch=main) [![CRAN status](https://badges.cranchecks.info/worst/mapme.biodiversity.svg)](https://cran.r-project.org/web/checks/check_results_mapme.biodiversity.html) [![CRAN version](https://www.r-pkg.org/badges/version/mapme.biodiversity)](https://CRAN.R-project.org/package=mapme.biodiversity) [![License](https://img.shields.io/badge/License-GPL%20(%3E=3)-brightgreen.svg?style=flat)](https://choosealicense.com/licenses/gpl-3.0/)
 
 <!-- badges: end -->
@@ -14,7 +14,7 @@ output: github_document
 
 Biodiversity areas, especially primary forests, provide multiple ecosystem services for the local population and the planet as a whole. The rapid expansion of human land use into natural ecosystems and the impacts of the global climate crisis put natural ecosystems and the global biodiversity under threat.
 
-The mapme.biodiversity package helps to analyse a number of biodiversity related indicators and biodiversity threats based on freely available geodata-sources such as the Global Forest Watch. It supports computational efficient routines and heavy parallel computing in cloud-infrastructures such as AWS or Microsoft Azure using in the statistical programming language R. The package allows for the analysis of global biodiversity portfolios with a thousand or millions of AOIs which is normally only possible on dedicated platforms such as the Google Earth Engine. It provides the possibility to e.g. analyse the World Database of Protected Areas (WDPA) for a number of relevant indicators. The primary use case of this package is to support scientific analysis and data science for individuals and organizations who seek to preserve the planet biodiversity. Its development is funded by the German Development Bank KfW.
+The `{mapme.biodiversity}` package helps to analyse a number of biodiversity related indicators and biodiversity threats based on freely available geodata-sources such as the Global Forest Watch. It supports computational efficient routines and heavy parallel computing in cloud-infrastructures such as AWS or Microsoft Azure using in the statistical programming language R. The package allows for the analysis of global biodiversity portfolios with a thousand or millions of AOIs which is normally only possible on dedicated platforms such as the Google Earth Engine. It provides the possibility to e.g. analyse the World Database of Protected Areas (WDPA) for a number of relevant indicators. The primary use case of this package is to support scientific analysis and data science for individuals and organizations who seek to preserve the planet biodiversity. Its development is funded by the German Development Bank KfW.
 
 ## Installation
 
@@ -39,7 +39,13 @@ remotes::install_github("https://github.com/mapme-initiative/mapme.biodiversity"
 
 ## Available resources and indicators
 
-Below is a list of the resources currently supported by `mapme.biodiversity`.
+```{r libraries, echo=FALSE}
+# silently load the required libraries
+suppressPackageStartupMessages(library(mapme.biodiversity))
+suppressPackageStartupMessages(library(sf))
+```
+
+Below is a list of the resources currently supported by `{mapme.biodiversity}`.
 
 ```{r available_resources, echo = FALSE}
 knitr::kable(mapme.biodiversity::available_resources()[, c("name", "description", "licence")])
@@ -57,16 +63,14 @@ knitr::kable(mapme.biodiversity::available_indicators()[, c("name", "description
 
 `{mapme.biodiversity}` works by constructing a portfolio from an sf object. Specific raster and vector resource matching the spatio-temporal extent of the portfolio are made available locally. Once all required resources are available, indicators can be calculated individually for each asset in the portfolio.
 
-```{r resources}
-library(mapme.biodiversity)
-library(sf)
-```
-
 Once you have decided on an indicator you are interested in, you can start by making the required resource available for your portfolio. Using `mapme_options()` you can set an output directory, control the maximum size of polygons before they are chunked into smaller parts, and control the verbosity of the package.
 
 A portfolio is represented by an sf-object. It is required for the object to only contain geometries of type `POLYGON` and `MULTIPOLYGON` as assets. We can request the download of a resource for the spatial extent of our portfolio by using the `get_resources()` function. We simply supply our portfolio and one or more resource functions. Once the resources were made available, we can query the calculation of an indicator by using the `calc_indicators()` function. This function also expects the portfolio as input and one or more indicator functions. Once the indicator has been calculated for all assets in a portfolio, the data is returned as a nested list column to the original portfolio object. The output of each indicator is standardized to common format, consisting of a tibble with columns `datetime`, `variable`, `unit`, and `value`. We can transform the the data to long format by using `portfolio_long()`.
 
 ```{r calculation}
+library(mapme.biodiversity)
+library(sf)
+
 mapme_options(
   outdir = system.file("res", package = "mapme.biodiversity"),
   chunk_size = 1e6, # in ha
@@ -143,6 +147,16 @@ with_progress({
 
 plan(sequential) # close child processes
 ```
+
+## How to contribute
+
+Contributions to the package are very welcome. If you want to contribute a 
+new resource or indicator, please check out the 
+[developer guidelines](https://mapme-initiative.github.io/mapme.biodiversity/articles/contributing.html) 
+for more information on how to implement a new resource or indicator. If you want 
+to contribute to the package in any other way or seek support from the community, 
+please open an [issue](https://github.com/mapme-initiative/mapme.biodiversity/issues) 
+or consider opening a [discussion](https://github.com/mapme-initiative/mapme.biodiversity/discussions).
 
 ## More info
 
