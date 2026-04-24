@@ -19,7 +19,7 @@ by the public."><meta property="og:image" content="https://mapme-initiative.gith
 
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,9 +68,9 @@ by the public.</em></p>
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_acled</span><span class="op">(</span></span>
-<span>  years <span class="op">=</span> <span class="fl">2000</span>,</span>
-<span>  key <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"ACLED_ACCESS_KEY"</span><span class="op">)</span>,</span>
-<span>  email <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"ACLED_ACCESS_EMAIL"</span><span class="op">)</span>,</span>
+<span>  years <span class="op">=</span> <span class="fl">1997</span>,</span>
+<span>  email <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"ACLED_EMAIL"</span><span class="op">)</span>,</span>
+<span>  password <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"ACLED_PASSWORD"</span><span class="op">)</span>,</span>
 <span>  accept_terms <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -85,15 +85,15 @@ by the public.</em></p>
 
 <dl><dt id="arg-years">years<a class="anchor" aria-label="anchor" href="#arg-years"></a></dt>
 <dd><p>A numeric vector specifying the years for which to make
-ACLED data available (between 1997 and today). Defaults to 2000.</p></dd>
-
-
-<dt id="arg-key">key<a class="anchor" aria-label="anchor" href="#arg-key"></a></dt>
-<dd><p>ACLED API key obtained by registering with ACLED (see Details).</p></dd>
+ACLED data available (between 1997 and today).</p></dd>
 
 
 <dt id="arg-email">email<a class="anchor" aria-label="anchor" href="#arg-email"></a></dt>
 <dd><p>Email addressed used to register with ACLED (see Details).</p></dd>
+
+
+<dt id="arg-password">password<a class="anchor" aria-label="anchor" href="#arg-password"></a></dt>
+<dd><p>Password used to register with ACLED (see Details).</p></dd>
 
 
 <dt id="arg-accept-terms">accept_terms<a class="anchor" aria-label="anchor" href="#arg-accept-terms"></a></dt>
@@ -107,8 +107,12 @@ of use. Defaults to FALSE, thus must be manually set to TRUE.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>In order to access data from the ACLED API, you first must register an
-an account. Note, that the ACLED API used here provides a <em>living database</em>
+    <p>In order to access data from the ACLED API, you first must register
+an account. Make sure you register with your institutional domain
+(e.g., organization, university, or company) email address rather than
+your personal email address, in order to be able to use the API,
+as explained <a href="https://acleddata.com/myacled-faqs" class="external-link">here</a>.
+Note that the ACLED API provides a <em>living database</em>
 with single events being altered or removed altogether over time.</p>
     </div>
     <div class="section level2">
@@ -124,11 +128,11 @@ choices. Humanit Soc Sci Commun 10, 74 (2023).
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by <a href="http://dariusgoergen.com/" class="external-link">Darius A. Görgen</a>, Om Prakash Bhandari, Sven Bergtold, <a href="https://mapme-initiative.org/" class="external-link">MAPME-Initiative</a>.</p>
+  <p>Developed by <a href="http://dariusgoergen.com/" class="external-link">Darius A. Görgen</a>, Om Prakash Bhandari, Zivan Karaman, <a href="https://mapme-initiative.org/" class="external-link">MAPME-Initiative</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

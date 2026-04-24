@@ -1,0 +1,100 @@
+# Introduction
+
+## Objectives
+
+[mapme.biodiversity](https://mapme-initiative.github.io/mapme.biodiversity/)
+facilitates statistical data analysis for protected areas around the
+globe. It supports a high number of biodiversity related datasets and
+associated indicators that can be utilized to monitor and evaluate the
+effectiveness of protection efforts. Several indicators are available at
+regular intervals for almost two decades (2000 to 2020). This allows
+users to analyse spatial and temporal dynamics of their biodiversity
+portfolios. The package abstracts repetitive tasks, such as temporal and
+spatial selection of resources. This allows a seamless approach to
+quantitative data analysis even for very large (potentially global)
+portfolios where users are enabled to focus on the aims of their
+analysis. The package has been tested on Microsoft Azure’s cloud
+infrastructure as well as on local machines. The internal framework was
+designed to allow an easy process to provide extensions in the form of
+custom resources and indicators, unlocking the potential for a future
+growth in supported datasets. We thus highly appreciate Pull-Requests
+contributing new resources/indicators. For geographic data analysis, the
+package uses [sf](https://r-spatial.github.io/sf/) for operation of
+vector data and [terra](https://rspatial.org/) for raster data.
+
+## mapme.biodiversity package
+
+[mapme.biodiversity](https://mapme-initiative.github.io/mapme.biodiversity/)
+provides a standardized interface to download and analyse a great
+variety of biodiversity related spatial datasets allowing users to focus
+on the aims of their analysis. The sometimes cumbersome process of
+handling different spatial data formats and the spatial and temporal
+selection is handled internally. Many organizations provide value-added
+datasets related to biodiversity. These organizations often use
+different technology stacks to distribute their data.
+[mapme.biodiversity](https://mapme-initiative.github.io/mapme.biodiversity/)
+contains simple routines to communicate with these different backends to
+provide a seamless access to the data. Once the desired resources have
+been made available locally, users can decide which indicators they want
+to calculate and fine-control of these routines is provided.
+
+## Functionalities
+
+Currently, the package offers several functionalities, which should
+ideally be used in a consecutive order to realize a seamless analysis
+workflow:
+
+1.  construct a portfolio based on an
+    [sf](https://r-spatial.github.io/sf/) object
+2.  get resources for the spatio-temporal extent of the portfolio
+3.  calculate indicators based on the available resources for each asset
+    in the portfolio
+4.  write the results to disk as a GeoPackage and use it with other
+    Geo-Spatial software, or
+5.  conduct your statistical analysis in R
+
+## Inputs, Outputs
+
+- an [sf](https://r-spatial.github.io/sf/) object containing only
+  geometries of type `'POLYGON'` with arbitrary metadata
+
+- raster and vector resources matching the spatio-temporal extent of the
+  portfolio will be downloaded and made available locally. These are
+  necessary inputs for the subsequent calculation of indicators, but the
+  raw resource also can be used, e.g. for custom visualizations or
+  analysis. Importantly, the same resource directory can be used for
+  different portfolios or analysis runs, because the *matching resources
+  are figured out during run time*. Thus, there is no need to store
+  multiple copies of the input resources.
+
+- the results of the indicator calculation will be added to the
+  portfolio object as *nested list columns*. This approach makes it
+  feasible to support a variety of indicators with differently shaped
+  outputs (e.g. time variant vs. invariant indicators). When the
+  analysis is done in R, this does not pose serious limitations, because
+  the desired indicator can easily be unnested via
+  [`tidyr::unnest()`](https://tidyr.tidyverse.org/reference/unnest.html).
+  However, if the data was to be shared to use it in other geospatial
+  software (e.g.  QGIS), a routine to write a portfolio object as a
+  GeoPackage to disk is provided. Each indicator will be written to an
+  independent table and a unique identifier allows joining the
+  attributes with the geometries later.
+
+## Limitations
+
+- a potential limiting factor for now is the processing of single very
+  large polygons. While the [terra](https://rspatial.org/) package
+  provides a memory-save framework to process large raster extents, RAM
+  overflows could occur when several large polygons are processed in
+  parallel. We advise to process very large polygons sequentially.
+
+- we took a great effort to evaluate efficient processing routines for
+  each indicator. If you submit a new indicator using a more efficient
+  routine than currently implemented in the package, please contact the
+  maintainers via e-mail, issue or pull-request and we will happily
+  discuss the options how to integrate your routine into the wider
+  framework
+
+We are planning to add new features and to extend the functionality of
+[mapme.biodiversity](https://mapme-initiative.github.io/mapme.biodiversity/)
+to address these limitations best possible.

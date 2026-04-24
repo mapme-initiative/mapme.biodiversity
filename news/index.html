@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mapme.biodiversity</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,6 +42,37 @@
       <small>Source: <a href="https://github.com/mapme-initiative/mapme.biodiversity/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.9.5.9002" id="mapmebiodiversity-0959002">mapme.biodiversity 0.9.5.9002<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-0959002"></a></h2>
+<div class="section level3">
+<h3 id="general-0-9-5-9002">General<a class="anchor" aria-label="anchor" href="#general-0-9-5-9002"></a></h3>
+<ul><li>a message showing the package version number is now printed when the package is attached</li>
+<li>the default output path in the <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code> now follows the pattern ‘<em>mapme-data-…</em>’ for better visibility</li>
+<li>a new argument <code>delay</code>, indicating the interval between successive retries, has been added to the <code><a href="../reference/mapme.html">mapme_options()</a></code> function</li>
+<li>the <code><a href="../reference/mapme.html">mapme_options()</a></code> function arguments <code>delay</code> and <code>retries</code> now command the GDAL configuration options <code>GDAL_HTTP_RETRY_DELAY</code> and <code>GDAL_HTTP_MAX_RETRY</code>, so it is not necessary to set them using <code><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv()</a></code> (see <a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/441" class="external-link">441</a>)</li>
+</ul></div>
+<div class="section level3">
+<h3 id="internal-0-9-5-9002">Internal<a class="anchor" aria-label="anchor" href="#internal-0-9-5-9002"></a></h3>
+<ul><li>modified internal function <code>.fetch_resource()</code> to include GDAL options in the list of resources it failed to fetch</li>
+<li>the functions <code><a href="../reference/mcd64a1.html">get_mcd64a1()</a></code> and <code>get_nasa_srtm(),</code> that download data from Microsoft Planetary Computer, now use a more efficient URL signing scheme, which should reduce the risk of hitting the rate limitations (see <a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/441" class="external-link">441</a>)</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.9.5.9001" id="mapmebiodiversity-0959001">mapme.biodiversity 0.9.5.9001<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-0959001"></a></h2>
+<div class="section level3">
+<h3 id="general-0-9-5-9001">General<a class="anchor" aria-label="anchor" href="#general-0-9-5-9001"></a></h3>
+<ul><li>modified <code><a href="../reference/nelson_et_al.html">get_nelson_et_al()</a></code> to cope with Figshare asynchronous download mechanism (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/474" class="external-link">474</a>)</li>
+<li>updated <code><a href="../reference/humanfootprint_resource.html">get_humanfootprint()</a></code> to accept years up to 2024</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.9.5.9000" id="mapmebiodiversity-0959000">mapme.biodiversity 0.9.5.9000<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-0959000"></a></h2>
+<div class="section level3">
+<h3 id="general-0-9-5-9000">General<a class="anchor" aria-label="anchor" href="#general-0-9-5-9000"></a></h3>
+<ul><li>modified <code><a href="../reference/acled.html">get_acled()</a></code> to align with the new ACLED API version (<a href="https://github.com/mapme-initiative/mapme.biodiversity/issues/440" class="external-link">440</a>)</li>
+<li>updated tests related to ACLED resource to reflect the changes in the <code><a href="../reference/acled.html">get_acled()</a></code> function</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.9.5" id="mapmebiodiversity-095">mapme.biodiversity 0.9.5<a class="anchor" aria-label="anchor" href="#mapmebiodiversity-095"></a></h2><p class="text-muted">CRAN release: 2025-10-06</p>
 <div class="section level3">
@@ -601,11 +632,11 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by <a href="http://dariusgoergen.com/" class="external-link">Darius A. Görgen</a>, Om Prakash Bhandari, Sven Bergtold, <a href="https://mapme-initiative.org/" class="external-link">MAPME-Initiative</a>.</p>
+  <p>Developed by <a href="http://dariusgoergen.com/" class="external-link">Darius A. Görgen</a>, Om Prakash Bhandari, Zivan Karaman, <a href="https://mapme-initiative.org/" class="external-link">MAPME-Initiative</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

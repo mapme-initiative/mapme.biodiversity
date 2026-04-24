@@ -1,0 +1,80 @@
+# Terminology
+
+Here we present a quick introduction to the most important terminologies
+and concepts used throughout this tutorial:
+
+- **Portfolio**: We define a portfolio as the collection of single
+  assets in an [sf](https://r-spatial.github.io/sf/) object. The package
+  does only allow assets with geometries of type `'POLYGON'` or
+  `'MULTIPOLYGON'` to be included in the object. We expect the data to
+  be in geodetic, i.e. unprojected, coordinates. In case the CRS of the
+  portfolio is projected, we will attempt to transform to `EPSG:4326`.
+  Any metadata that is needed for your analysis is allowed in the
+  columns of the object and will be retained throughout the workflow so
+  that you can access it once you have calculated your indicators. The
+  package will add a *nested list columns* for each indicator to the
+  portfolio `sf`-object. Portfolio-wide arguments that govern the
+  processing workflow, are set using the
+  [`mapme_options()`](https://mapme-initiative.github.io/mapme.biodiversity/reference/mapme.md)
+  config functions.
+
+- **Resources**: A resource is a supported dataset that can be
+  downloaded via the
+  [`get_resources()`](https://mapme-initiative.github.io/mapme.biodiversity/reference/mapme.md)
+  function. A resource represents either a raster or a vector data set.
+  Vector datasets are saved to disk as GeoPackages. Raster datasets can
+  be tiled so that only tiles that cover the spatial extent of the
+  portfolio will be downloaded. Global raster resources will be
+  downloaded completely. Additionally, some raster resources are
+  time-invariant (e.g. a `nasa_srtm`), others contain a temporal
+  dimension (e.g. `esalandcover`). If a raster resource contains a
+  temporal dimension, only those rasters intersecting with user supplied
+  time-frame will be downloaded. To learn about resources and their
+  arguments simply query the help-page for that resource (e.g. via
+  [`?gfw_treecover`](https://mapme-initiative.github.io/mapme.biodiversity/reference/gfw_treecover.md)).
+
+- **Indicators**: An indicator calculates a tabular output for all
+  assets in a portfolio. Every indicator requires one or more resources
+  to be available locally and will inform you about any missing
+  resources. Custom arguments might be set for some indicators, but
+  sensible defaults have been set. The package will inform you about any
+  misspecification of arguments. To learn more about a specific
+  indicator and its required arguments, simply query the help-page
+  (e.g. via
+  [`?treecover_area`](https://mapme-initiative.github.io/mapme.biodiversity/reference/treecover_area.md)).
+  The output for indicators is standardized and is represented by a
+  tibble with columns `datetime`, `variable`, `unit`, and `value`.
+  Indicators are appended to the portfolio as *nested list columns*. For
+  assets where no sensible values can be calculated (e.g. for polygons
+  over the ocean and the `treecover_area` indicator), `NULL` will be
+  returned.
+
+- **Engines**: Several indicators support different engines for the
+  extraction of the numeric outputs. Currently, these engines are based
+  on either
+  [`terra::zonal()`](https://rspatial.github.io/terra/reference/zonal.html),
+  [`terra::extract()`](https://rspatial.github.io/terra/reference/extract.html),
+  or
+  [`exactextractr::exact_extract()`](https://isciences.gitlab.io/exactextractr/reference/exact_extract.html).
+  We took great care to set these engines to sensible defaults. However,
+  to customize your workflow you can choose to use a different engine
+  instead.
+
+- **Processing Modes**: The processing mode is an important concept if
+  you wish to extend the package with a new indicator, but not so much
+  if you simply want to use it for your statistical analysis. For most
+  indicators the default processing mode is equal to `'asset'`, meaning
+  that for each asset in the portfolio the required input resources are
+  matched to the spatio-temporal extent of that specific asset and then
+  the indicator calculation is conducted. For some resources/indicators
+  this is not the most efficient approach. These are most commonly very
+  coarse resolution raster resources where a cropping of many relatively
+  small assets would lead to an increased overhead and as a result very
+  long processing times. For these indicators, the default processing
+  mode is set to `'portfolio'`, meaning that the indicator is first
+  calculated for the complete spatio-temporal extent of the portfolio
+  and then the extraction is conducted for every single asset. If you
+  want to open a pull-request for a new indicator for which neither of
+  these two approaches yields satisfactory performance, please contact
+  the package maintainers to discuss your use-case in order to evaluate
+  if another processing mode can be added.
