@@ -6,6 +6,7 @@
 
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage(paste(pkgname, utils::packageVersion(pkgname)))
+  invisible()
 }
 
 .onLoad <- function(libname, pkgname) {
@@ -20,7 +21,6 @@
     verbose = TRUE
   )
   .check_system_requirements()
-  invisible()
 }
 
 .probe_dsn <- function(dsn) {

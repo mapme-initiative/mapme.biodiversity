@@ -160,9 +160,4 @@ or consider opening a [discussion](https://github.com/mapme-initiative/mapme.bio
 
 ## More info
 
-In addition to extensive [online documentation](https://mapme-initiative.github.io/mapme.biodiversity) 
-that provides detailed information about the package, `mapme.biodiversity` 
-provides an applied [workshop](https://github.com/mapme-initiative/demo-madeira) 
-example using real-world data showcasing the usage of the package to estimate 
-changes in forest cover caused by flooding as a consequence of dam building at 
-the Madeira river in Rondônia, Brazil.
+In addition to extensive [online documentation](https://mapme-initiative.github.io/mapme.biodiversity/) that provides detailed information about the package, `mapme.biodiversity` provides an applied [workshop](https://github.com/mapme-initiative/demo-madeira) example using real-world data showcasing the usage of the package to estimate changes in forest cover caused by flooding as a consequence of dam building at the Madeira river in Rondônia, Brazil.
