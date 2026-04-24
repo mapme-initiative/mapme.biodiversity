@@ -1,6 +1,6 @@
 # Changelog
 
-## mapme.biodiversity 0.9.5.9002
+## mapme.biodiversity 0.9.6
 
 ### General
 
@@ -20,6 +20,20 @@
   `GDAL_HTTP_MAX_RETRY`, so it is not necessary to set them using
   [`Sys.setenv()`](https://rdrr.io/r/base/Sys.setenv.html) (see
   [441](https://github.com/mapme-initiative/mapme.biodiversity/issues/441))
+- modified
+  [`get_nelson_et_al()`](https://mapme-initiative.github.io/mapme.biodiversity/reference/nelson_et_al.md)
+  to cope with Figshare asynchronous download mechanism
+  ([474](https://github.com/mapme-initiative/mapme.biodiversity/issues/474))
+- updated
+  [`get_humanfootprint()`](https://mapme-initiative.github.io/mapme.biodiversity/reference/humanfootprint_resource.md)
+  to accept years up to 2024
+- modified
+  [`get_acled()`](https://mapme-initiative.github.io/mapme.biodiversity/reference/acled.md)
+  to align with the new ACLED API version
+  ([440](https://github.com/mapme-initiative/mapme.biodiversity/issues/440))
+- updated tests related to ACLED resource to reflect the changes in the
+  [`get_acled()`](https://mapme-initiative.github.io/mapme.biodiversity/reference/acled.md)
+  function
 
 ### Internal
 
@@ -31,30 +45,6 @@
   Computer, now use a more efficient URL signing scheme, which should
   reduce the risk of hitting the rate limitations (see
   [441](https://github.com/mapme-initiative/mapme.biodiversity/issues/441))
-
-## mapme.biodiversity 0.9.5.9001
-
-### General
-
-- modified
-  [`get_nelson_et_al()`](https://mapme-initiative.github.io/mapme.biodiversity/reference/nelson_et_al.md)
-  to cope with Figshare asynchronous download mechanism
-  ([474](https://github.com/mapme-initiative/mapme.biodiversity/issues/474))
-- updated
-  [`get_humanfootprint()`](https://mapme-initiative.github.io/mapme.biodiversity/reference/humanfootprint_resource.md)
-  to accept years up to 2024
-
-## mapme.biodiversity 0.9.5.9000
-
-### General
-
-- modified
-  [`get_acled()`](https://mapme-initiative.github.io/mapme.biodiversity/reference/acled.md)
-  to align with the new ACLED API version
-  ([440](https://github.com/mapme-initiative/mapme.biodiversity/issues/440))
-- updated tests related to ACLED resource to reflect the changes in the
-  [`get_acled()`](https://mapme-initiative.github.io/mapme.biodiversity/reference/acled.md)
-  function
 
 ## mapme.biodiversity 0.9.5
 
