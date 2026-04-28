@@ -2,6 +2,8 @@
 
 ## mapme.biodiversity 0.9.6
 
+CRAN release: 2026-04-27
+
 ### General
 
 - a message showing the package version number is now printed when the
