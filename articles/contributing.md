@@ -55,6 +55,7 @@ are installed. The easiest way to ensure this is using
 [devtools](https://devtools.r-lib.org/):
 
 ``` r
+
 devtools::install_dev_deps()
 ```
 
@@ -111,6 +112,7 @@ Once you checked out to the new branch and having the project opened in
 RStudio, adapt the following command to open the a new resource file:
 
 ``` r
+
 file.edit("R/get_<your-new-resource>.R")
 # e.g. file.edit("R/get_soildgrids.R")
 ```
@@ -128,6 +130,7 @@ resource. Also, add the bare name of the resource as the `@name` tag
 (e.g. in the case of our example that translates to `@name nasa_srtm`).
 
 ``` r
+
 #' Short title
 #'
 #' One or more description paragraphs might follow here. Please describe
@@ -162,6 +165,7 @@ there are no user-facing arguments to be checked (we will see how to
 check user-facing arguments when constructing the indicator below):
 
 ``` r
+
 get_nasa_srtm <- function() {
   # .... inner function level
 }
@@ -182,6 +186,7 @@ required to exactly specify the below signature. For the `nasa_srtm`
 resource, this looks like this:
 
 ``` r
+
 function(x,
          name = "nasa_srtm",
          type = "raster",
@@ -341,6 +346,7 @@ Once you checked out to the new branch and having the project opened in
 RStudio, adapt the following command to open the a new indicator file:
 
 ``` r
+
 file.edit("R/calc_<your-new-indicator>.R")
 # e.g. file.edit("R/calc_precipitation")
 ```
@@ -357,6 +363,7 @@ identified as an indicator. Also, add the bare name of the indicator as
 the `@name` tag (e.g. `@name elevation`).
 
 ``` r
+
 #' Short title
 #'
 #' One or more description paragraphs might follow here. Please describe
@@ -389,6 +396,7 @@ thrown immediately.
 For `elevation`, this outer level could look something like this:
 
 ``` r
+
 calc_elevation <- function(engine = "extract",
                            stats = "mean") {
   engine <- check_engine(engine)
@@ -413,6 +421,7 @@ required to exactly specify the below signature. For the `elevation`
 indicator, this looks like this:
 
 ``` r
+
 function(x,
          nasa_srtm = NULL,
          name = "elevation",
@@ -457,6 +466,7 @@ aggregation statistic (e.g. take the sum of sums).
 The available statistics are:
 
 ``` r
+
 mapme.biodiversity:::available_stats
 #> [1] "mean"   "median" "sd"     "min"    "max"    "sum"    "var"
 ```
@@ -508,6 +518,7 @@ on an appropriate polygon with the respective required resource. For the
 `elevation` indicator, this looks like this:
 
 ``` r
+
 x <- read_sf(system.file(
   "extdata", "sierra_de_neiba_478140.gpkg",
   package = "mapme.biodiversity"

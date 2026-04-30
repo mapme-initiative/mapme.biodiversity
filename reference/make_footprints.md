@@ -67,6 +67,7 @@ spatial footprint.
 ## Examples
 
 ``` r
+
 # a vector resource
 # requires GDAL >= 3.7.0
 if (FALSE) {

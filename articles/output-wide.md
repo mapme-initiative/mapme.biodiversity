@@ -1,6 +1,7 @@
 # How To: Transform indicator output to wide-format
 
 ``` r
+
 library(sf)
 library(dplyr)
 library(tidyr)
@@ -73,6 +74,7 @@ argument, we split the original single polygon into 9 distinct polygons
 to simulate a realistic portfolio consisting of multiple assets.
 
 ``` r
+
 aoi <- read_sf(
   system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
     package = "mapme.biodiversity"
@@ -104,6 +106,7 @@ al. resource as well as requesting the calculation of the respective
 indicator.
 
 ``` r
+
 outdir <- file.path(tempdir(), "mapme-resources")
 dir.create(outdir, showWarnings = FALSE)
 
@@ -143,6 +146,7 @@ Let’s observe how the `traveltime` indicator looks like in this
 instance:
 
 ``` r
+
 print(aoi$traveltime[[1]])
 #> # A tibble: 1 × 4
 #>   datetime            variable                  unit    value
@@ -158,6 +162,7 @@ its value. We can now use either of two functions to transform the
 portfolio to long or wide formats:
 
 ``` r
+
 portfolio_long(aoi)
 #> Simple feature collection with 9 features and 6 fields
 #> Geometry type: POLYGON
@@ -209,6 +214,7 @@ We could serialize the object to disk in either format by calling
 with the respective `format` argument:
 
 ``` r
+
 dsn_long <- tempfile(fileext = ".gpkg")
 dsn_wide <- tempfile(fileext = ".gpkg")
 write_portfolio(aoi, dsn_long, format = "long", quiet = TRUE)
@@ -221,6 +227,7 @@ Let’s continue to query an indicator which has a multi-row output, i.e.
 precipitation statistics from [WorldClim](https://www.worldclim.org/).
 
 ``` r
+
 aoi <- get_resources(aoi, get_worldclim_precipitation(years = 2018))
 aoi <- calc_indicators(aoi, calc_precipitation_wc(stats = "mean"))
 print(aoi)
@@ -249,6 +256,7 @@ however, the differences in the shape of the indicator tibble when we
 take a closer look for a specific asset:
 
 ``` r
+
 print(aoi$precipitation_wc[[1]])
 #> # A tibble: 12 × 4
 #>    datetime            variable            unit  value
@@ -273,6 +281,7 @@ transform this table to long format, this time specifically requesting
 to only extract the `precipitation_wc` indicators:
 
 ``` r
+
 portfolio_long(aoi, indicators = "precipitation_wc")
 #> Simple feature collection with 108 features and 7 fields
 #> Geometry type: POLYGON
@@ -304,6 +313,7 @@ cases it might be more favourable to transform the portfolio to a wide
 layout.
 
 ``` r
+
 portfolio_wide(aoi, indicators = "precipitation_wc")
 #> Simple feature collection with 9 features and 14 fields
 #> Geometry type: POLYGON
@@ -347,6 +357,7 @@ it is not desired to include certain indicators you will have to subset
 the portfolio as indicated in the following code block:
 
 ``` r
+
 dsn <- tempfile(fileext = ".gpkg")
 write_portfolio(select(aoi, traveltime), dsn, quiet = TRUE)
 ```

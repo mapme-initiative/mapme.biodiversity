@@ -20,6 +20,7 @@ current CRAN release is then achieved through the following function
 call:
 
 ``` r
+
 install.packages("mapme.biodiversity")
 ```
 
@@ -27,6 +28,7 @@ You can install the latest development version from GitHub via the
 following call:
 
 ``` r
+
 remotes::install_github("mapme-initiative/mapme.biodiversity")
 ```
 
@@ -36,5 +38,6 @@ functionality. Simply load the package for your R session with the
 library call:
 
 ``` r
+
 library(mapme.biodiversity)
 ```

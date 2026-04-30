@@ -21,7 +21,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/mapme-initiative/mapme.biodiversity/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/mapme-initiative/mapme.biodiversity/blob/v0.9.6/DESCRIPTION)
 
 Görgen D, Bhandari O (2026). *mapme.biodiversity: Efficient Monitoring
 of Global Biodiversity Portfolios*. R package version 0.9.6,
