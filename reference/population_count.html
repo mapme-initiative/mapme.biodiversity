@@ -49,7 +49,7 @@ median, sd or var) is/are returned."><meta property="og:image" content="https://
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Calculate population count statistics</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mapme-initiative/mapme.biodiversity/blob/main/R/calc_population_count.R" class="external-link"><code>R/calc_population_count.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mapme-initiative/mapme.biodiversity/blob/JOSS/R/calc_population_count.R" class="external-link"><code>R/calc_population_count.R</code></a></small>
       <div class="d-none name"><code>population_count.Rd</code></div>
     </div>
 
@@ -108,12 +108,12 @@ populations statistics as variable and the corresponding values as value.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"sierra_de_neiba_478140_2.gpkg"</span>,</span></span>
 <span class="r-in"><span>  package <span class="op">=</span> <span class="st">"mapme.biodiversity"</span></span></span>
-<span class="r-in"><span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="mapme.html">get_resources</a></span><span class="op">(</span><span class="fu"><a href="worldpop.html">get_worldpop</a></span><span class="op">(</span>years <span class="op">=</span> <span class="fl">2010</span><span class="op">:</span><span class="fl">2020</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op">%&gt;%</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="mapme.html">get_resources</a></span><span class="op">(</span><span class="fu"><a href="worldpop.html">get_worldpop</a></span><span class="op">(</span>years <span class="op">=</span> <span class="fl">2010</span><span class="op">:</span><span class="fl">2020</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="mapme.html">calc_indicators</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="fu">calc_population_count</span><span class="op">(</span>engine <span class="op">=</span> <span class="st">"extract"</span>, stats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sum"</span>, <span class="st">"median"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op">%&gt;%</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="portfolio.html">portfolio_long</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">aoi</span></span></span>

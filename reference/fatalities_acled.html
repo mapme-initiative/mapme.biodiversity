@@ -45,7 +45,7 @@ please consult ACLED's codebook."><meta property="og:image" content="https://map
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Calculate number of fatalities of conflict events from ACLED</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mapme-initiative/mapme.biodiversity/blob/main/R/calc_fatalities_acled.R" class="external-link"><code>R/calc_fatalities_acled.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mapme-initiative/mapme.biodiversity/blob/JOSS/R/calc_fatalities_acled.R" class="external-link"><code>R/calc_fatalities_acled.R</code></a></small>
       <div class="d-none name"><code>fatalities_acled.Rd</code></div>
     </div>
 
@@ -144,16 +144,16 @@ choices. Humanit Soc Sci Commun 10, 74 (2023).
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"burundi.gpkg"</span>,</span></span>
 <span class="r-in"><span>  package <span class="op">=</span> <span class="st">"mapme.biodiversity"</span></span></span>
-<span class="r-in"><span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="mapme.html">get_resources</a></span><span class="op">(</span><span class="fu"><a href="acled.html">get_acled</a></span><span class="op">(</span>years <span class="op">=</span> <span class="fl">2020</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op">%&gt;%</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="mapme.html">get_resources</a></span><span class="op">(</span><span class="fu"><a href="acled.html">get_acled</a></span><span class="op">(</span>years <span class="op">=</span> <span class="fl">2020</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="mapme.html">calc_indicators</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="fu">calc_fatalities_acled</span><span class="op">(</span></span></span>
 <span class="r-in"><span>      years <span class="op">=</span> <span class="fl">2020</span>,</span></span>
 <span class="r-in"><span>      precision_location <span class="op">=</span> <span class="fl">1</span>,</span></span>
 <span class="r-in"><span>      precision_time <span class="op">=</span> <span class="fl">1</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op">%&gt;%</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="portfolio.html">portfolio_long</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in get_acled(years = 2020):</span> Please read and agree to ACLED's Terms of Use here:</span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> https://acleddata.com/terms-and-conditions</span>
