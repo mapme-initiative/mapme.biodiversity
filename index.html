@@ -80,13 +80,34 @@
 <p>The <a href="https://mapme-initiative.github.io/mapme.biodiversity/">mapme.biodiversity</a> package helps to analyse a number of biodiversity related indicators and biodiversity threats based on freely available geodata-sources such as the Global Forest Watch. It supports computational efficient routines and heavy parallel computing in cloud-infrastructures such as AWS or Microsoft Azure using in the statistical programming language R. The package allows for the analysis of global biodiversity portfolios with a thousand or millions of AOIs which is normally only possible on dedicated platforms such as the Google Earth Engine. It provides the possibility to e.g. analyse the World Database of Protected Areas (WDPA) for a number of relevant indicators. The primary use case of this package is to support scientific analysis and data science for individuals and organizations who seek to preserve the planet biodiversity. Its development is funded by the German Development Bank KfW.</p>
 </div>
 <div class="section level2">
+<h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
+</h2>
+<p>If you use <code>mapme.biodiversity</code> in your work, please cite as:</p>
+<blockquote>
+<p>Görgen, D. A. and Bhandari, O. P. and Petutschnig, A. and Karaman, Z. and Bédécarrats, F. and Schielein, J., (2026). mapme.biodiversity: Efficient Monitoring of Global Biodiversity Portfolios. Journal of Open Source Software, 11(121), 10166, <a href="https://doi.org/10.21105/joss.10166" class="external-link uri">https://doi.org/10.21105/joss.10166</a>.</p>
+</blockquote>
+<p>BibTex:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bibtex"><code class="sourceCode bibtex"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="va">@article</span>{</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  <span class="ot">G</span>ö<span class="ot">rgen2026</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="dt">doi</span> = {10.21105/joss.10166},</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="dt">url</span> = {https://doi.org/10.21105/joss.10166},</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  <span class="dt">year</span> = {2026}, <span class="st">publisher</span> = {The Open Journal},</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  <span class="dt">volume</span> = {11},</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  <span class="dt">number</span> = {121},</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>  <span class="dt">pages</span> = {10166},</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>  <span class="dt">author</span> = {Görgen, Darius A. and Bhandari, Om Prakash and Petutschnig, Andreas and Karaman, Zivan and Bédécarrats, Florent and Schielein, Johannes},</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>  <span class="dt">title</span> = {mapme.biodiversity: {Efficient} {Monitoring} of {Global} {Biodiversity} {Portfolios}},</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>  <span class="dt">journal</span> = {Journal of Open Source Software} }</span></code></pre></div>
+<p>Also make sure to properly cite the original data sources that you use in your analysis. The relevant citations can be found in the documentation of the respective resource functions.</p>
+</div>
+<div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <div class="section level3">
 <h3 id="stable-version">Stable version<a class="anchor" aria-label="anchor" href="#stable-version"></a>
 </h3>
 <p>The package and its dependencies can be installed from CRAN via:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"mapme.biodiversity"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>Windows and macOS binary packages are available from here.</p>
 </div>
@@ -94,7 +115,7 @@
 <h3 id="development-version">Development version<a class="anchor" aria-label="anchor" href="#development-version"></a>
 </h3>
 <p>To install the development version, use the following command:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Logic.html" class="external-link">isFALSE</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://remotes.r-lib.org" class="external-link">"remotes"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"https://github.com/mapme-initiative/mapme.biodiversity"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -103,7 +124,6 @@
 <h2 id="available-resources-and-indicators">Available resources and indicators<a class="anchor" aria-label="anchor" href="#available-resources-and-indicators"></a>
 </h2>
 <p>Below is a list of the resources currently supported by <a href="https://mapme-initiative.github.io/mapme.biodiversity/">mapme.biodiversity</a>.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="do">## mapme.biodiversity 0.9.6</span></span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="33%">
@@ -485,30 +505,30 @@
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"sierra_de_neiba_478140_2.gpkg"</span>, package <span class="op">=</span> <span class="st">"mapme.biodiversity"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"sierra_de_neiba_478140_2.gpkg"</span>, package <span class="op">=</span> <span class="st">"mapme.biodiversity"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/mapme.html">get_resources</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="reference/gfw_treecover.html">get_gfw_treecover</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"GFC-2023-v1.11"</span><span class="op">)</span>,</span>
 <span>    <span class="fu"><a href="reference/gfw_lossyear.html">get_gfw_lossyear</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"GFC-2023-v1.11"</span><span class="op">)</span>,</span>
 <span>    <span class="fu"><a href="reference/gfw_emissions.html">get_gfw_emissions</a></span><span class="op">(</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="reference/mapme.html">calc_indicators</a></span><span class="op">(</span><span class="fu"><a href="reference/treecover_area_and_emissions.html">calc_treecover_area_and_emissions</a></span><span class="op">(</span>years <span class="op">=</span> <span class="fl">2016</span><span class="op">:</span><span class="fl">2017</span>, min_size <span class="op">=</span> <span class="fl">1</span>, min_cover <span class="op">=</span> <span class="fl">30</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/mapme.html">calc_indicators</a></span><span class="op">(</span><span class="fu"><a href="reference/treecover_area_and_emissions.html">calc_treecover_area_and_emissions</a></span><span class="op">(</span>years <span class="op">=</span> <span class="fl">2016</span><span class="op">:</span><span class="fl">2017</span>, min_size <span class="op">=</span> <span class="fl">1</span>, min_cover <span class="op">=</span> <span class="fl">30</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/portfolio.html">portfolio_long</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">aoi</span></span></code></pre></div>
-<pre><code><span><span class="co">## Simple feature collection with 4 features and 8 fields</span></span>
-<span><span class="co">## Geometry type: POLYGON</span></span>
-<span><span class="co">## Dimension:     XY</span></span>
-<span><span class="co">## Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span></span>
-<span><span class="co">## Geodetic CRS:  WGS 84</span></span>
-<span><span class="co">## # A tibble: 4 × 9</span></span>
-<span><span class="co">##   WDPAID ISO3  assetid indicator        datetime            variable unit  value</span></span>
-<span><span class="co">##    &lt;dbl&gt; &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;            &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">## 1 478140 DOM         1 treecover_area_… 2016-01-01 00:00:00 emissio… Mg    4296.</span></span>
-<span><span class="co">## 2 478140 DOM         1 treecover_area_… 2016-01-01 00:00:00 treecov… ha    2372.</span></span>
-<span><span class="co">## 3 478140 DOM         1 treecover_area_… 2017-01-01 00:00:00 emissio… Mg    4970.</span></span>
-<span><span class="co">## 4 478140 DOM         1 treecover_area_… 2017-01-01 00:00:00 treecov… ha    2360.</span></span>
-<span><span class="co">## # ℹ 1 more variable: geom &lt;POLYGON [°]&gt;</span></span></code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="do">## Simple feature collection with 4 features and 8 fields</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="do">## Geometry type: POLYGON</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="do">## Dimension:     XY</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="do">## Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="do">## Geodetic CRS:  WGS 84</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="do">## # A tibble: 4 × 9</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="do">##   WDPAID ISO3  assetid indicator        datetime            variable unit  value</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="do">##    &lt;dbl&gt; &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;            &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt;</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="do">## 1 478140 DOM         1 treecover_area_… 2016-01-01 00:00:00 emissio… Mg    4296.</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="do">## 2 478140 DOM         1 treecover_area_… 2016-01-01 00:00:00 treecov… ha    2372.</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="do">## 3 478140 DOM         1 treecover_area_… 2017-01-01 00:00:00 emissio… Mg    4970.</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="do">## 4 478140 DOM         1 treecover_area_… 2017-01-01 00:00:00 treecov… ha    2360.</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="do">## # ℹ 1 more variable: geom &lt;POLYGON [°]&gt;</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="using-cloud-storages">Using cloud storages<a class="anchor" aria-label="anchor" href="#using-cloud-storages"></a>

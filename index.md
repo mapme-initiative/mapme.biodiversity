@@ -25,6 +25,36 @@ individuals and organizations who seek to preserve the planet
 biodiversity. Its development is funded by the German Development Bank
 KfW.
 
+## Citation
+
+If you use `mapme.biodiversity` in your work, please cite as:
+
+> Görgen, D. A. and Bhandari, O. P. and Petutschnig, A. and Karaman, Z.
+> and Bédécarrats, F. and Schielein, J., (2026). mapme.biodiversity:
+> Efficient Monitoring of Global Biodiversity Portfolios. Journal of
+> Open Source Software, 11(121), 10166,
+> <https://doi.org/10.21105/joss.10166>.
+
+BibTex:
+
+``` bibtex
+@article{
+  Görgen2026,
+  doi = {10.21105/joss.10166},
+  url = {https://doi.org/10.21105/joss.10166},
+  year = {2026}, publisher = {The Open Journal},
+  volume = {11},
+  number = {121},
+  pages = {10166},
+  author = {Görgen, Darius A. and Bhandari, Om Prakash and Petutschnig, Andreas and Karaman, Zivan and Bédécarrats, Florent and Schielein, Johannes},
+  title = {mapme.biodiversity: {Efficient} {Monitoring} of {Global} {Biodiversity} {Portfolios}},
+  journal = {Journal of Open Source Software} }
+```
+
+Also make sure to properly cite the original data sources that you use
+in your analysis. The relevant citations can be found in the
+documentation of the respective resource functions.
+
 ## Installation
 
 ### Stable version
@@ -52,10 +82,6 @@ remotes::install_github("https://github.com/mapme-initiative/mapme.biodiversity"
 
 Below is a list of the resources currently supported by
 [mapme.biodiversity](https://mapme-initiative.github.io/mapme.biodiversity/).
-
-``` R
-## mapme.biodiversity 0.9.6
-```
 
 | name | description | licence |
 |:---|:---|:---|
@@ -190,32 +216,34 @@ mapme_options(
   verbose = FALSE
 )
 
-aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") %>%
-  sf::read_sf() %>%
+aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg", package = "mapme.biodiversity") |>
+  sf::read_sf() |>
   get_resources(
     get_gfw_treecover(version = "GFC-2023-v1.11"),
     get_gfw_lossyear(version = "GFC-2023-v1.11"),
     get_gfw_emissions()
-  ) %>%
-  calc_indicators(calc_treecover_area_and_emissions(years = 2016:2017, min_size = 1, min_cover = 30)) %>%
+  ) |>
+  calc_indicators(calc_treecover_area_and_emissions(years = 2016:2017, min_size = 1, min_cover = 30)) |>
   portfolio_long()
 
 aoi
 ```
 
-    ## Simple feature collection with 4 features and 8 fields
-    ## Geometry type: POLYGON
-    ## Dimension:     XY
-    ## Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931
-    ## Geodetic CRS:  WGS 84
-    ## # A tibble: 4 × 9
-    ##   WDPAID ISO3  assetid indicator        datetime            variable unit  value
-    ##    <dbl> <chr>   <int> <chr>            <dttm>              <chr>    <chr> <dbl>
-    ## 1 478140 DOM         1 treecover_area_… 2016-01-01 00:00:00 emissio… Mg    4296.
-    ## 2 478140 DOM         1 treecover_area_… 2016-01-01 00:00:00 treecov… ha    2372.
-    ## 3 478140 DOM         1 treecover_area_… 2017-01-01 00:00:00 emissio… Mg    4970.
-    ## 4 478140 DOM         1 treecover_area_… 2017-01-01 00:00:00 treecov… ha    2360.
-    ## # ℹ 1 more variable: geom <POLYGON [°]>
+``` R
+## Simple feature collection with 4 features and 8 fields
+## Geometry type: POLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -71.80933 ymin: 18.57668 xmax: -71.33201 ymax: 18.69931
+## Geodetic CRS:  WGS 84
+## # A tibble: 4 × 9
+##   WDPAID ISO3  assetid indicator        datetime            variable unit  value
+##    <dbl> <chr>   <int> <chr>            <dttm>              <chr>    <chr> <dbl>
+## 1 478140 DOM         1 treecover_area_… 2016-01-01 00:00:00 emissio… Mg    4296.
+## 2 478140 DOM         1 treecover_area_… 2016-01-01 00:00:00 treecov… ha    2372.
+## 3 478140 DOM         1 treecover_area_… 2017-01-01 00:00:00 emissio… Mg    4970.
+## 4 478140 DOM         1 treecover_area_… 2017-01-01 00:00:00 treecov… ha    2360.
+## # ℹ 1 more variable: geom <POLYGON [°]>
+```
 
 ## Using cloud storages
 
