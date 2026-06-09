@@ -57,7 +57,6 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
     calc_slope(stats = c("mean", "median", "sd", "var"), engine = "extract")
   ) %>%
   portfolio_long()
-#> Resource 'nasa_srtm' is already available.
 
 aoi
 #> Simple feature collection with 4 features and 8 fields
