@@ -1,3 +1,9 @@
+# mapme.biodiversity 0.9.6.9000
+
+## General
+
+-   modified `get_acled()` to align with the new ACLED API version that uses cursors for pagination ([492](https://github.com/mapme-initiative/mapme.biodiversity/issues/492))
+
 # mapme.biodiversity 0.9.6
 
 ## General
