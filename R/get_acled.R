@@ -73,6 +73,7 @@ get_acled <- function(
            verbose = mapme_options()[["verbose"]]) {
     # token authorization url
     .token_url <- "https://acleddata.com/oauth/token"
+
     acled_yearly <- purrr::map_chr(years, function(year) {
       filename <- sprintf("acled_events_%s.gpkg", year)
       # make full path to output file
@@ -89,7 +90,7 @@ get_acled <- function(
       base_url <- "https://acleddata.com/api/acled/read"
       req <- httr2::request(base_url)
       # add year as query parameter
-      req <- httr2::req_url_query(req, year = year)
+      req <- httr2::req_url_query(req, with_total = TRUE, year = year)
       # authenticate the request
       req <- httr2::req_oauth_password(
         req,
@@ -97,39 +98,37 @@ get_acled <- function(
         username = email,
         password = password
       )
-      # prepare for page iteration
-      next_page <- TRUE
-      page <- 1
-      data_lst <- NULL
+      # prepare for cursor/page iteration
+      next_cursor <- 0L
+      page <- 1L
       running_count <- 0L
-      # iterate pages
-      while (next_page) {
-        req <- httr2::req_url_query(req, page = page)
+      data_lst <- NULL
+      # iterate cursors/pages
+      while (!is.null(next_cursor)) {
+        req <- httr2::req_url_query(req, cursor = next_cursor)
         resp <- httr2::req_perform(req)
         cnt <- httr2::resp_body_json(resp, simplifyVector = TRUE, flatten = TRUE)
-        # check if we still have some data
-        count <- cnt$count
-        if (count == 0L) {
-          next_page <- FALSE
-          next
-        }
-        # increment running count
-        running_count <- running_count + count
         # get data as data.frame
         events <- cnt$data
+        # get the records count
+        count <- nrow(events)
+        # increment running count
+        running_count <- running_count + count
         # store events data.frame in list
-        if (page == 1) {
-          data_lst <- list(events)
+        if (page == 1L) {
           total_count <- cnt$total_count
+          data_lst <- list(events)
         } else {
           data_lst[[page]] <- events
         }
         # increment page number
-        page <- page + 1
+        page <- page + 1L
+        # check if we still have some data
+        next_cursor <- cnt$next_cursor
       }
       # check everything OK
       if (running_count != total_count) {
-        msg <- sprintf("ACLED API returned only %d events out of %d.", running_count, total_count)
+        msg <- sprintf("ACLED API returned %d events out of %d.", running_count, total_count)
         stop(msg)
       }
       if (is.null(data_lst)) {
@@ -153,6 +152,7 @@ get_acled <- function(
       sf::write_sf(data, filename)
       return(filename)
     })
+
     # make footprint
     bbox <- c(xmin = -180.0, ymin = -90.0, xmax = 180.0, ymax = 90.0)
     fps <- sf::st_as_sfc(sf::st_bbox(bbox, crs = "EPSG:4326"))
