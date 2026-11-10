@@ -37,6 +37,7 @@ A logical, TRUE if the file exists, FALSE if it does not.
 ## Examples
 
 ``` r
+
 # a vector resource
 vec <- system.file("shape/nc.shp", package = "sf")
 spds_exists(vec, what = "vector")

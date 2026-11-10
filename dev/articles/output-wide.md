@@ -1,6 +1,7 @@
 # How To: Transform indicator output to wide-format
 
 ``` r
+
 library(sf)
 library(dplyr)
 library(tidyr)
@@ -73,6 +74,7 @@ argument, we split the original single polygon into 9 distinct polygons
 to simulate a realistic portfolio consisting of multiple assets.
 
 ``` r
+
 aoi <- read_sf(
   system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
     package = "mapme.biodiversity"
@@ -104,6 +106,7 @@ al. resource as well as requesting the calculation of the respective
 indicator.
 
 ``` r
+
 outdir <- file.path(tempdir(), "mapme-resources")
 dir.create(outdir, showWarnings = FALSE)
 
@@ -143,6 +146,7 @@ Let’s observe how the `traveltime` indicator looks like in this
 instance:
 
 ``` r
+
 print(aoi$traveltime[[1]])
 #> # A tibble: 1 × 4
 #>   datetime            variable                  unit    value
@@ -158,6 +162,7 @@ its value. We can now use either of two functions to transform the
 portfolio to long or wide formats:
 
 ``` r
+
 portfolio_long(aoi)
 #> Simple feature collection with 9 features and 6 fields
 #> Geometry type: POLYGON
@@ -209,6 +214,7 @@ We could serialize the object to disk in either format by calling
 with the respective `format` argument:
 
 ``` r
+
 dsn_long <- tempfile(fileext = ".gpkg")
 dsn_wide <- tempfile(fileext = ".gpkg")
 write_portfolio(aoi, dsn_long, format = "long", quiet = TRUE)
@@ -221,6 +227,7 @@ Let’s continue to query an indicator which has a multi-row output, i.e.
 precipitation statistics from [WorldClim](https://www.worldclim.org/).
 
 ``` r
+
 aoi <- get_resources(aoi, get_worldclim_precipitation(years = 2018))
 aoi <- calc_indicators(aoi, calc_precipitation_wc(stats = "mean"))
 print(aoi)
@@ -249,22 +256,23 @@ however, the differences in the shape of the indicator tibble when we
 take a closer look for a specific asset:
 
 ``` r
+
 print(aoi$precipitation_wc[[1]])
 #> # A tibble: 12 × 4
 #>    datetime            variable            unit  value
 #>    <dttm>              <chr>               <chr> <dbl>
-#>  1 2018-01-01 00:00:00 worldclim_prec_mean mm     21  
-#>  2 2018-02-01 00:00:00 worldclim_prec_mean mm     21.3
-#>  3 2018-03-01 00:00:00 worldclim_prec_mean mm     61.3
-#>  4 2018-04-01 00:00:00 worldclim_prec_mean mm     83.9
-#>  5 2018-05-01 00:00:00 worldclim_prec_mean mm    334. 
-#>  6 2018-06-01 00:00:00 worldclim_prec_mean mm     49.1
-#>  7 2018-07-01 00:00:00 worldclim_prec_mean mm     73.5
-#>  8 2018-08-01 00:00:00 worldclim_prec_mean mm    133. 
-#>  9 2018-09-01 00:00:00 worldclim_prec_mean mm    210. 
-#> 10 2018-10-01 00:00:00 worldclim_prec_mean mm    125. 
-#> 11 2018-11-01 00:00:00 worldclim_prec_mean mm     60.3
-#> 12 2018-12-01 00:00:00 worldclim_prec_mean mm     20.2
+#>  1 2018-01-01 00:00:00 worldclim_prec_mean mm      NaN
+#>  2 2018-02-01 00:00:00 worldclim_prec_mean mm      NaN
+#>  3 2018-03-01 00:00:00 worldclim_prec_mean mm      NaN
+#>  4 2018-04-01 00:00:00 worldclim_prec_mean mm      NaN
+#>  5 2018-05-01 00:00:00 worldclim_prec_mean mm      NaN
+#>  6 2018-06-01 00:00:00 worldclim_prec_mean mm      NaN
+#>  7 2018-07-01 00:00:00 worldclim_prec_mean mm      NaN
+#>  8 2018-08-01 00:00:00 worldclim_prec_mean mm      NaN
+#>  9 2018-09-01 00:00:00 worldclim_prec_mean mm      NaN
+#> 10 2018-10-01 00:00:00 worldclim_prec_mean mm      NaN
+#> 11 2018-11-01 00:00:00 worldclim_prec_mean mm      NaN
+#> 12 2018-12-01 00:00:00 worldclim_prec_mean mm      NaN
 ```
 
 For a single asset, we obtain a tibble with 12 rows (for each month in
@@ -273,6 +281,7 @@ transform this table to long format, this time specifically requesting
 to only extract the `precipitation_wc` indicators:
 
 ``` r
+
 portfolio_long(aoi, indicators = "precipitation_wc")
 #> Simple feature collection with 108 features and 7 fields
 #> Geometry type: POLYGON
@@ -282,16 +291,16 @@ portfolio_long(aoi, indicators = "precipitation_wc")
 #> # A tibble: 108 × 8
 #>    assetid traveltime       indicator   datetime            variable unit  value
 #>      <int> <list>           <chr>       <dttm>              <chr>    <chr> <dbl>
-#>  1       1 <tibble [1 × 4]> precipitat… 2018-01-01 00:00:00 worldcl… mm     21  
-#>  2       1 <tibble [1 × 4]> precipitat… 2018-02-01 00:00:00 worldcl… mm     21.3
-#>  3       1 <tibble [1 × 4]> precipitat… 2018-03-01 00:00:00 worldcl… mm     61.3
-#>  4       1 <tibble [1 × 4]> precipitat… 2018-04-01 00:00:00 worldcl… mm     83.9
-#>  5       1 <tibble [1 × 4]> precipitat… 2018-05-01 00:00:00 worldcl… mm    334. 
-#>  6       1 <tibble [1 × 4]> precipitat… 2018-06-01 00:00:00 worldcl… mm     49.1
-#>  7       1 <tibble [1 × 4]> precipitat… 2018-07-01 00:00:00 worldcl… mm     73.5
-#>  8       1 <tibble [1 × 4]> precipitat… 2018-08-01 00:00:00 worldcl… mm    133. 
-#>  9       1 <tibble [1 × 4]> precipitat… 2018-09-01 00:00:00 worldcl… mm    210. 
-#> 10       1 <tibble [1 × 4]> precipitat… 2018-10-01 00:00:00 worldcl… mm    125. 
+#>  1       1 <tibble [1 × 4]> precipitat… 2018-01-01 00:00:00 worldcl… mm      NaN
+#>  2       1 <tibble [1 × 4]> precipitat… 2018-02-01 00:00:00 worldcl… mm      NaN
+#>  3       1 <tibble [1 × 4]> precipitat… 2018-03-01 00:00:00 worldcl… mm      NaN
+#>  4       1 <tibble [1 × 4]> precipitat… 2018-04-01 00:00:00 worldcl… mm      NaN
+#>  5       1 <tibble [1 × 4]> precipitat… 2018-05-01 00:00:00 worldcl… mm      NaN
+#>  6       1 <tibble [1 × 4]> precipitat… 2018-06-01 00:00:00 worldcl… mm      NaN
+#>  7       1 <tibble [1 × 4]> precipitat… 2018-07-01 00:00:00 worldcl… mm      NaN
+#>  8       1 <tibble [1 × 4]> precipitat… 2018-08-01 00:00:00 worldcl… mm      NaN
+#>  9       1 <tibble [1 × 4]> precipitat… 2018-09-01 00:00:00 worldcl… mm      NaN
+#> 10       1 <tibble [1 × 4]> precipitat… 2018-10-01 00:00:00 worldcl… mm      NaN
 #> # ℹ 98 more rows
 #> # ℹ 1 more variable: x <POLYGON [°]>
 ```
@@ -304,6 +313,7 @@ cases it might be more favourable to transform the portfolio to a wide
 layout.
 
 ``` r
+
 portfolio_wide(aoi, indicators = "precipitation_wc")
 #> Simple feature collection with 9 features and 14 fields
 #> Geometry type: POLYGON
@@ -313,15 +323,15 @@ portfolio_wide(aoi, indicators = "precipitation_wc")
 #> # A tibble: 9 × 15
 #>   assetid traveltime       precipitation_wc_2018-01-01_…¹ precipitation_wc_201…²
 #>     <dbl> <list>                                    <dbl>                  <dbl>
-#> 1       1 <tibble [1 × 4]>                           21                     21.3
-#> 2       2 <tibble [1 × 4]>                           25.8                   24.4
+#> 1       1 <tibble [1 × 4]>                          NaN                    NaN  
+#> 2       2 <tibble [1 × 4]>                           29                     27.2
 #> 3       3 <tibble [1 × 4]>                           24.4                   24.0
 #> 4       4 <tibble [1 × 4]>                           31.9                   28.0
 #> 5       5 <tibble [1 × 4]>                           28.5                   28.2
-#> 6       6 <tibble [1 × 4]>                           17.5                   19.7
+#> 6       6 <tibble [1 × 4]>                           18.9                   21.1
 #> 7       7 <tibble [1 × 4]>                           24.4                   24.2
 #> 8       8 <tibble [1 × 4]>                           19.3                   21.0
-#> 9       9 <tibble [1 × 4]>                           14.2                   17.3
+#> 9       9 <tibble [1 × 4]>                          NaN                    NaN  
 #> # ℹ abbreviated names: ¹​`precipitation_wc_2018-01-01_worldclim_prec_mean_mm`,
 #> #   ²​`precipitation_wc_2018-02-01_worldclim_prec_mean_mm`
 #> # ℹ 11 more variables:
@@ -347,6 +357,7 @@ it is not desired to include certain indicators you will have to subset
 the portfolio as indicated in the following code block:
 
 ``` r
+
 dsn <- tempfile(fileext = ".gpkg")
 write_portfolio(select(aoi, traveltime), dsn, quiet = TRUE)
 ```

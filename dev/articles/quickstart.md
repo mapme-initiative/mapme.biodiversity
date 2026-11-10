@@ -44,6 +44,7 @@ internal GeoPackage which includes part of the geometry of a protected
 area in the Dominican Republic from the WDPA database.
 
 ``` r
+
 library(mapme.biodiversity)
 library(sf)
 library(dplyr)
@@ -72,6 +73,7 @@ building this vignette, we copied already existing files to that output
 location (code not shown here).
 
 ``` r
+
 outdir <- file.path(tempdir(), "mapme-resources")
 dir.create(outdir, showWarnings = FALSE)
 
@@ -103,6 +105,7 @@ You can check which indicators are available via the
 function:
 
 ``` r
+
 available_indicators()
 #> # A tibble: 40 × 3
 #>    name                          description                           resources
@@ -133,6 +136,7 @@ to the
 documentation.
 
 ``` r
+
 ?treecover_area
 help(treecover_area)
 ```
@@ -149,6 +153,7 @@ resource. We can learn about all available resources using the
 function:
 
 ``` r
+
 available_resources()
 #> # A tibble: 35 × 5
 #>    name                          description                licence source type 
@@ -180,6 +185,7 @@ this documentation, you can simply head over to the
 resource documentation.
 
 ``` r
+
 ?gfw_treecover
 help(gfw_treecover)
 ?gfw_lossyear
@@ -194,6 +200,7 @@ functions with their respective arguments. This will then download the
 matching resources to the output directory specified earlier.
 
 ``` r
+
 aoi <- get_resources(
   x = aoi,
   get_gfw_treecover(version = "GFC-2023-v1.11"),
@@ -220,6 +227,7 @@ an error in case a required resource has not been made available via
 beforehand.
 
 ``` r
+
 aoi <- calc_indicators(
   aoi,
   calc_treecover_area(years = 2000:2023, min_size = 1, min_cover = 30)
@@ -231,6 +239,7 @@ already familiar with, we see that there is an additional column called
 `treecover_area` which contains a `tibble`.
 
 ``` r
+
 aoi
 #> Simple feature collection with 1 feature and 2 fields
 #> Geometry type: POLYGON
@@ -249,6 +258,7 @@ column contains a tibble with 24 rows and four columns. Let’s have a
 closer look at this object
 
 ``` r
+
 aoi$treecover_area
 #> [[1]]
 #> # A tibble: 24 × 4
@@ -288,6 +298,7 @@ geometry information in a separated variable to keep the size of the
 data object relatively small.
 
 ``` r
+
 geoms <- st_geometry(aoi)
 portfolio_long(aoi, drop_geoms = TRUE)
 #> # A tibble: 24 × 6
@@ -319,6 +330,7 @@ components can than be iterated over in parallel to speed up processing.
 Indicator values will be aggregated automatically.
 
 ``` r
+
 library(future)
 plan(cluster, workers = 6)
 ```
@@ -329,6 +341,7 @@ chunks, thus requiring a total of 8 available cores on the host machine.
 Be sure to not request more workers than available on your machine.
 
 ``` r
+
 library(progressr)
 
 plan(cluster, workers = 2)
@@ -358,6 +371,7 @@ non-existing file on your local disk to write the portfolio. You can use
 to read back a GeoPackage written in such a way into R:
 
 ``` r
+
 dsn <- tempfile(fileext = ".gpkg")
 write_portfolio(x = aoi, dsn = dsn, quiet = TRUE)
 from_disk <- read_portfolio(dsn, quiet = TRUE)

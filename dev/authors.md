@@ -10,9 +10,9 @@
 - **Andreas Petutschnig**. Contributor.
   [](https://orcid.org/0000-0001-5029-2425)
 
-- **Sven Bergtold**. Contributor, maintainer.
+- **Sven Bergtold**. Contributor.
 
-- **Zivan Karaman**. Contributor.
+- **Zivan Karaman**. Contributor, maintainer.
   [](https://orcid.org/0000-0002-8933-4589)
 
 - **[MAPME-Initiative](https://mapme-initiative.org/)**. Copyright
@@ -24,13 +24,13 @@ Source:
 [`DESCRIPTION`](https://github.com/mapme-initiative/mapme.biodiversity/blob/main/DESCRIPTION)
 
 Görgen D, Bhandari O (2026). *mapme.biodiversity: Efficient Monitoring
-of Global Biodiversity Portfolios*. R package version 0.9.5.9002,
+of Global Biodiversity Portfolios*. R package version 0.9.6.9000,
 <https://mapme-initiative.github.io/mapme.biodiversity/>.
 
     @Manual{,
       title = {mapme.biodiversity: Efficient Monitoring of Global Biodiversity Portfolios},
       author = {Darius A. Görgen and Om Prakash Bhandari},
       year = {2026},
-      note = {R package version 0.9.5.9002},
+      note = {R package version 0.9.6.9000},
       url = {https://mapme-initiative.github.io/mapme.biodiversity/},
     }

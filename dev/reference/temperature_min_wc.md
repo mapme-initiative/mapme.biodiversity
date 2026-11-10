@@ -72,16 +72,16 @@ aoi
 #> # A tibble: 24 × 9
 #>    WDPAID ISO3  assetid indicator       datetime            variable unit  value
 #>     <dbl> <chr>   <int> <chr>           <dttm>              <chr>    <chr> <dbl>
-#>  1 478140 DOM         1 temperature_mi… 2018-01-01 00:00:00 worldcl… C      9.25
-#>  2 478140 DOM         1 temperature_mi… 2018-01-01 00:00:00 worldcl… C      9   
-#>  3 478140 DOM         1 temperature_mi… 2018-02-01 00:00:00 worldcl… C      9.12
-#>  4 478140 DOM         1 temperature_mi… 2018-02-01 00:00:00 worldcl… C      9   
-#>  5 478140 DOM         1 temperature_mi… 2018-03-01 00:00:00 worldcl… C     10.1 
-#>  6 478140 DOM         1 temperature_mi… 2018-03-01 00:00:00 worldcl… C     10   
-#>  7 478140 DOM         1 temperature_mi… 2018-04-01 00:00:00 worldcl… C     11.2 
-#>  8 478140 DOM         1 temperature_mi… 2018-04-01 00:00:00 worldcl… C     11   
-#>  9 478140 DOM         1 temperature_mi… 2018-05-01 00:00:00 worldcl… C     12.2 
-#> 10 478140 DOM         1 temperature_mi… 2018-05-01 00:00:00 worldcl… C     12   
+#>  1 478140 DOM         1 temperature_mi… 2018-01-01 00:00:00 worldcl… C      10.1
+#>  2 478140 DOM         1 temperature_mi… 2018-01-01 00:00:00 worldcl… C      10  
+#>  3 478140 DOM         1 temperature_mi… 2018-02-01 00:00:00 worldcl… C      10.2
+#>  4 478140 DOM         1 temperature_mi… 2018-02-01 00:00:00 worldcl… C      10  
+#>  5 478140 DOM         1 temperature_mi… 2018-03-01 00:00:00 worldcl… C      10.1
+#>  6 478140 DOM         1 temperature_mi… 2018-03-01 00:00:00 worldcl… C      10  
+#>  7 478140 DOM         1 temperature_mi… 2018-04-01 00:00:00 worldcl… C      11.1
+#>  8 478140 DOM         1 temperature_mi… 2018-04-01 00:00:00 worldcl… C      11  
+#>  9 478140 DOM         1 temperature_mi… 2018-05-01 00:00:00 worldcl… C      12.6
+#> 10 478140 DOM         1 temperature_mi… 2018-05-01 00:00:00 worldcl… C      13  
 #> # ℹ 14 more rows
 #> # ℹ 1 more variable: geom <POLYGON [°]>
 # }
