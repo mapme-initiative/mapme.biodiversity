@@ -90,7 +90,7 @@ CRAN release: 2025-10-06
 ### Internal
 
 - internal function `.has_internet()` now delegates to
-  [`curl::has_internet()`](https://jeroen.r-universe.dev/curl/reference/nslookup.html)
+  [`curl::has_internet()`](https://rdrr.io/pkg/curl/man/nslookup.html)
 - added function `.check_system_requirements()` that checks on package
   load if system requirements (GDAL and PROJ versions) are met, and
   warns if not
