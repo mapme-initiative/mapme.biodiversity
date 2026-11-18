@@ -61,7 +61,7 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   ) %>%
   portfolio_long()
 #> Error in httr2::req_perform(httr2::request(chirps_url)) : 
-#>   HTTP 429 Too Many Requests.
+#>   HTTP 404 Not Found.
 #> Error in .check_footprints(resource, resource_name): Download for resource chirps failed.
 #> Returning unmodified portfolio.
 
