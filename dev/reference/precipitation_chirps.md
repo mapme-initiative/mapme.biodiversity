@@ -61,10 +61,7 @@ aoi <- system.file("extdata", "sierra_de_neiba_478140_2.gpkg",
   ) %>%
   portfolio_long()
 #> Error in httr2::req_perform(httr2::request(chirps_url)) : 
-#>   Failed to perform HTTP request.
-#> Caused by error in `curl::curl_fetch_memory()`:
-#> ! Timeout was reached [data.chc.ucsb.edu]:
-#> Connection timed out after 10002 milliseconds
+#>   HTTP 404 Not Found.
 #> Error in .check_footprints(resource, resource_name): Download for resource chirps failed.
 #> Returning unmodified portfolio.
 
